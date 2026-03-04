@@ -14,7 +14,7 @@ interface VerifyOutput {
   rawOutput: string;
 }
 
-function parseDafnyOutput(
+export function parseDafnyOutput(
   stdout: string,
   stderr: string
 ): { errors: string[]; warnings: string[] } {

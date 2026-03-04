@@ -22,22 +22,22 @@ interface CompileOutput {
   rawOutput: string;
 }
 
-const PYTHON_EXCLUDE_FILES = ["_dafny.py", "__pycache__"];
-const PYTHON_STRIP_PATTERNS = [
+export const PYTHON_EXCLUDE_FILES = ["_dafny.py", "__pycache__"];
+export const PYTHON_STRIP_PATTERNS = [
   /^from _dafny import.*$/gm,
   /^import _dafny.*$/gm,
   /^import _System.*$/gm,
   /^from _System import.*$/gm,
 ];
 
-const GO_EXCLUDE_FILES = ["dafny.go", "System_.go"];
-const GO_EXCLUDE_DIRS = ["dafny", "System_"];
-const GO_STRIP_PATTERNS = [
+export const GO_EXCLUDE_FILES = ["dafny.go", "System_.go"];
+export const GO_EXCLUDE_DIRS = ["dafny", "System_"];
+export const GO_STRIP_PATTERNS = [
   /^\s*_dafny\s+"[^"]*dafny".*$/gm,
   /^\s*_System\s+"[^"]*System_".*$/gm,
 ];
 
-function stripBoilerplate(content: string, target: Target): string {
+export function stripBoilerplate(content: string, target: Target): string {
   const patterns = target === "py" ? PYTHON_STRIP_PATTERNS : GO_STRIP_PATTERNS;
   let result = content;
   for (const pattern of patterns) {
@@ -48,7 +48,7 @@ function stripBoilerplate(content: string, target: Target): string {
   return result.trim() + "\n";
 }
 
-function shouldExclude(filePath: string, target: Target): boolean {
+export function shouldExclude(filePath: string, target: Target): boolean {
   const name = basename(filePath);
 
   if (target === "py") {
@@ -65,7 +65,7 @@ function shouldExclude(filePath: string, target: Target): boolean {
   return false;
 }
 
-async function collectFiles(
+export async function collectFiles(
   dir: string,
   base: string,
   target: Target
