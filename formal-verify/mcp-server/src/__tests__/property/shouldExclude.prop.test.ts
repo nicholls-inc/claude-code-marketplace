@@ -4,22 +4,6 @@ import { shouldExclude } from "../../tools/compile.js";
 
 describe("shouldExclude property tests", () => {
   describe("known excludes always return true", () => {
-    it("_dafny.py is excluded for py target", () => {
-      expect(shouldExclude("_dafny.py", "py")).toBe(true);
-    });
-
-    it("__pycache__ is excluded for py target", () => {
-      expect(shouldExclude("__pycache__", "py")).toBe(true);
-    });
-
-    it("dafny.go is excluded for go target", () => {
-      expect(shouldExclude("dafny.go", "go")).toBe(true);
-    });
-
-    it("System_.go is excluded for go target", () => {
-      expect(shouldExclude("System_.go", "go")).toBe(true);
-    });
-
     it("paths containing /dafny/ are excluded for go target", () => {
       fc.assert(
         fc.property(

@@ -107,8 +107,8 @@ export async function dafnyCompile(
 
     const targetFlag = input.target === "py" ? "py" : "go";
     const result = await runDafny(tempDir, [
-      "build",
-      `--target:${targetFlag}`,
+      "translate",
+      targetFlag,
       "/work/program.dfy",
     ]);
 
@@ -121,7 +121,11 @@ export async function dafnyCompile(
       };
     }
 
-    if (result.exitCode !== 0) {
+    // Collect output files from the temp directory
+    const files = await collectFiles(tempDir, "", input.target);
+    const outputFiles = files.filter((f) => !f.path.endsWith(".dfy"));
+
+    if (result.exitCode !== 0 && outputFiles.length === 0) {
       const errorLines = (result.stdout + "\n" + result.stderr)
         .split("\n")
         .filter((l) => /Error/i.test(l))
@@ -137,12 +141,6 @@ export async function dafnyCompile(
         rawOutput: (result.stdout + "\n" + result.stderr).trim(),
       };
     }
-
-    // Collect output files from the temp directory
-    const files = await collectFiles(tempDir, "", input.target);
-
-    // Exclude the original .dfy file from results
-    const outputFiles = files.filter((f) => !f.path.endsWith(".dfy"));
 
     return {
       success: true,

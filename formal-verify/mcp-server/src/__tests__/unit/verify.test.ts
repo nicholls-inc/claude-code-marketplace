@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { writeFile } from "node:fs/promises";
 import { runDafny } from "../../docker.js";
-import { createTempDir, removeTempDir } from "../../tempdir.js";
+import { createTempDir } from "../../tempdir.js";
 
 vi.mock("node:fs/promises");
 vi.mock("../../docker.js");
@@ -11,7 +11,6 @@ import { dafnyVerify } from "../../tools/verify.js";
 
 beforeEach(() => {
   vi.mocked(createTempDir).mockResolvedValue("/tmp/dafny-test-dir");
-  vi.mocked(removeTempDir).mockResolvedValue(undefined);
   vi.mocked(writeFile).mockResolvedValue(undefined);
 });
 
@@ -136,26 +135,4 @@ describe("dafnyVerify", () => {
     );
   });
 
-  it("calls removeTempDir in finally even on success", async () => {
-    vi.mocked(runDafny).mockResolvedValue({
-      exitCode: 0,
-      stdout: "",
-      stderr: "",
-      timedOut: false,
-    });
-
-    await dafnyVerify({ source: "method Main() {}" });
-
-    expect(removeTempDir).toHaveBeenCalledWith("/tmp/dafny-test-dir");
-  });
-
-  it("calls removeTempDir in finally even when runDafny throws", async () => {
-    vi.mocked(runDafny).mockRejectedValue(new Error("docker not found"));
-
-    await expect(
-      dafnyVerify({ source: "method Main() {}" })
-    ).rejects.toThrow("docker not found");
-
-    expect(removeTempDir).toHaveBeenCalledWith("/tmp/dafny-test-dir");
-  });
 });

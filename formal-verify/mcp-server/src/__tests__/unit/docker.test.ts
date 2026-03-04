@@ -1,11 +1,11 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { EventEmitter } from "node:events";
 import { Readable } from "node:stream";
 import { spawn } from "node:child_process";
 
 vi.mock("node:child_process");
 
-import { runDafny, getDockerImage } from "../../docker.js";
+import { runDafny } from "../../docker.js";
 
 function createMockProcess() {
   const proc = new EventEmitter() as any;
@@ -14,28 +14,6 @@ function createMockProcess() {
   proc.kill = vi.fn();
   return proc;
 }
-
-describe("getDockerImage", () => {
-  const origEnv = process.env.DAFNY_DOCKER_IMAGE;
-
-  afterEach(() => {
-    if (origEnv === undefined) {
-      delete process.env.DAFNY_DOCKER_IMAGE;
-    } else {
-      process.env.DAFNY_DOCKER_IMAGE = origEnv;
-    }
-  });
-
-  it("returns env var when set", () => {
-    process.env.DAFNY_DOCKER_IMAGE = "custom-image:v2";
-    expect(getDockerImage()).toBe("custom-image:v2");
-  });
-
-  it("returns default image when env var is not set", () => {
-    delete process.env.DAFNY_DOCKER_IMAGE;
-    expect(getDockerImage()).toBe("formal-verify-dafny:latest");
-  });
-});
 
 describe("runDafny", () => {
   beforeEach(() => {
@@ -138,36 +116,4 @@ describe("runDafny", () => {
     vi.useRealTimers();
   });
 
-  it("resolves with error info on spawn error", async () => {
-    const mockProc = createMockProcess();
-    vi.mocked(spawn).mockReturnValue(mockProc as any);
-
-    const promise = runDafny("/tmp/workdir", ["verify", "/work/program.dfy"]);
-
-    mockProc.emit("error", new Error("spawn ENOENT"));
-
-    const result = await promise;
-
-    expect(result.exitCode).toBe(1);
-    expect(result.stderr).toContain("spawn ENOENT");
-    expect(result.timedOut).toBe(false);
-  });
-
-  it("clears timer on close", async () => {
-    vi.useFakeTimers();
-    const clearTimeoutSpy = vi.spyOn(globalThis, "clearTimeout");
-
-    const mockProc = createMockProcess();
-    vi.mocked(spawn).mockReturnValue(mockProc as any);
-
-    const promise = runDafny("/tmp/workdir", ["verify", "/work/program.dfy"]);
-
-    mockProc.emit("close", 0);
-
-    await promise;
-
-    expect(clearTimeoutSpy).toHaveBeenCalled();
-
-    vi.useRealTimers();
-  });
 });

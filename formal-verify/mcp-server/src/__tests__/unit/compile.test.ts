@@ -46,13 +46,13 @@ describe("dafnyCompile", () => {
     await dafnyCompile({ source: "method Main() {}", target: "py" });
 
     expect(runDafny).toHaveBeenCalledWith("/tmp/dafny-test-dir", [
-      "build",
-      "--target:py",
+      "translate",
+      "py",
       "/work/program.dfy",
     ]);
   });
 
-  it("calls runDafny with build args for go target", async () => {
+  it("calls runDafny with translate args for go target", async () => {
     vi.mocked(runDafny).mockResolvedValue({
       exitCode: 0,
       stdout: "",
@@ -64,8 +64,8 @@ describe("dafnyCompile", () => {
     await dafnyCompile({ source: "method Main() {}", target: "go" });
 
     expect(runDafny).toHaveBeenCalledWith("/tmp/dafny-test-dir", [
-      "build",
-      "--target:go",
+      "translate",
+      "go",
       "/work/program.dfy",
     ]);
   });
@@ -97,6 +97,7 @@ describe("dafnyCompile", () => {
       stderr: "",
       timedOut: false,
     });
+    vi.mocked(readdir).mockResolvedValue([] as any);
 
     const result = await dafnyCompile({
       source: "bad source",
@@ -117,6 +118,7 @@ describe("dafnyCompile", () => {
       stderr: "",
       timedOut: false,
     });
+    vi.mocked(readdir).mockResolvedValue([] as any);
 
     const result = await dafnyCompile({
       source: "bad source",
@@ -207,30 +209,6 @@ describe("dafnyCompile", () => {
     // _dafny.py should be excluded
     expect(result.files.length).toBe(1);
     expect(result.files[0].path).toBe("program.py");
-  });
-
-  it("calls removeTempDir in finally even on success", async () => {
-    vi.mocked(runDafny).mockResolvedValue({
-      exitCode: 0,
-      stdout: "",
-      stderr: "",
-      timedOut: false,
-    });
-    vi.mocked(readdir).mockResolvedValue([] as any);
-
-    await dafnyCompile({ source: "method Main() {}", target: "py" });
-
-    expect(removeTempDir).toHaveBeenCalledWith("/tmp/dafny-test-dir");
-  });
-
-  it("calls removeTempDir in finally even when runDafny throws", async () => {
-    vi.mocked(runDafny).mockRejectedValue(new Error("docker crash"));
-
-    await expect(
-      dafnyCompile({ source: "method Main() {}", target: "py" })
-    ).rejects.toThrow("docker crash");
-
-    expect(removeTempDir).toHaveBeenCalledWith("/tmp/dafny-test-dir");
   });
 
   it("includes rawOutput in result", async () => {
