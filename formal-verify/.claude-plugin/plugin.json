@@ -1,0 +1,14 @@
+{
+  "name": "formal-verify",
+  "version": "1.0.0",
+  "description": "Formal verification for Python/Go via Dafny",
+  "mcpServers": {
+    "dafny": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/dist/index.js"],
+      "env": {
+        "DAFNY_DOCKER_IMAGE": "formal-verify-dafny:latest"
+      }
+    }
+  }
+}

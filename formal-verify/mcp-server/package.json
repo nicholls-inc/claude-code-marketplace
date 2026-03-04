@@ -1,0 +1,26 @@
+{
+  "name": "formal-verify-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Dafny formal verification",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run --exclude 'src/__tests__/e2e/**'",
+    "test:watch": "vitest --exclude 'src/__tests__/e2e/**'",
+    "test:e2e": "vitest run --include 'src/__tests__/e2e/**'"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/uuid": "^10.0.0",
+    "fast-check": "^4.1.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.1"
+  }
+}

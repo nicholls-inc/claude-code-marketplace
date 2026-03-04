@@ -1,0 +1,5 @@
+node_modules/
+dist/
+*.dfy
+/tmp/dafny-*
+.DS_Store
