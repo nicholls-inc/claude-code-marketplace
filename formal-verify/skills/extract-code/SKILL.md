@@ -34,6 +34,7 @@ After successful compilation, review the extracted code and warn about:
 | `_dafny.` references remain in output | "Some Dafny runtime types remain in output. These need manual replacement with native equivalents." Provide a mapping table. |
 | Large generated code (>200 lines) | "Complex Dafny programs produce verbose output. Review for idiomatic patterns in your target language." |
 | `{:extern}` methods in the original source | "Extern methods were not verified—their implementations are trust boundaries. You must provide implementations for these." |
+| `ensures` clauses present in Dafny source | "Your verified postconditions can be translated to property-based tests. See Step 4.5 below." |
 
 ### Step 4: Present Clean Output
 
@@ -59,12 +60,77 @@ For each output file, present:
 | `dafny.Map` | `map[K]V` |
 | `dafny.Set` | Custom or `map[T]bool` |
 
+### Step 4.5: Generate Property-Based Test Suggestions
+
+Analyze the Dafny source's `ensures` clauses and translate them into property-based test code for the target language. This bridges the abstraction gap between verified Dafny specifications and the extracted code, which may use different types, precision, or mutability semantics.
+
+**For Python (using Hypothesis):**
+
+Generate `@given` decorated test functions that encode each postcondition. For example, given a verified sort function with `ensures forall i :: 0 <= i < |result| - 1 ==> result[i] <= result[i+1]` and `ensures multiset(result) == multiset(input)`:
+
+```python
+from hypothesis import given
+import hypothesis.strategies as st
+
+@given(st.lists(st.integers()))
+def test_sort_is_ordered(xs):
+    result = verified_sort(xs)
+    for i in range(len(result) - 1):
+        assert result[i] <= result[i + 1]
+
+@given(st.lists(st.integers()))
+def test_sort_is_permutation(xs):
+    result = verified_sort(xs)
+    assert sorted(result) == sorted(xs)
+```
+
+**For Go (using rapid):**
+
+Generate `rapid.Check` test functions. For example:
+
+```go
+func TestSortOrdered(t *testing.T) {
+    rapid.Check(t, func(t *rapid.T) {
+        xs := rapid.SliceOf(rapid.Int()).Draw(t, "xs")
+        result := VerifiedSort(xs)
+        for i := 0; i < len(result)-1; i++ {
+            if result[i] > result[i+1] {
+                t.Fatalf("not sorted at index %d", i)
+            }
+        }
+    })
+}
+```
+
+**Divergence Warning Table:**
+
+When translating postconditions, watch for these semantic gaps between Dafny and the target language:
+
+| Detected Divergence | Warning |
+|---|---|
+| Dafny `int` (unbounded) vs fixed-width target integers | Add overflow tests with boundary values (MAX_INT, MIN_INT) |
+| Dafny `real` vs target `float` | Floating-point loses precision — add epsilon-tolerance tests |
+| Dafny `seq` vs mutable list/slice | Aliasing bugs possible — test with shared references |
+| `{:extern}` methods in source | Extern implementations not verified — write focused unit tests |
+| Dafny `BigRational` compiled output | Runtime type not native — may need type assertions |
+
 ### Step 5: Integration Guidance
 
 Provide brief guidance on:
 - How to integrate the extracted code into an existing project
 - Any formatting/linting to apply (`black`/`gofmt`)
 - Test suggestions to validate the extracted code matches the verified behavior
+
+**Abstraction Gap Checklist:**
+
+Present this checklist to the user and flag any items that are especially relevant given the extracted code:
+
+- [ ] All property-based tests from Step 4.5 pass
+- [ ] Boundary values tested (empty inputs, maximum sizes, zero, negative)
+- [ ] Type mapping replacements do not alter behavior (especially BigRational -> float)
+- [ ] No `_dafny.` runtime references remain
+- [ ] If extern methods exist, their implementations are tested independently
+- [ ] Integration tests cover the function in its actual calling context
 
 ## Arguments
 
