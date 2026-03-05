@@ -44,6 +44,18 @@ If verification fails, analyze the errors and apply these repair strategies:
 | "assertion might not hold" | The assertion is wrong or needs intermediate lemma support |
 | "cannot prove termination" | Add explicit `decreases` clause |
 
+#### Interpret Difficulty Metrics
+
+After each `dafny_verify` call, check the response for a `difficulty` field. If present, interpret the metrics:
+
+- **Solver time**: If `solverTimeMs > 10000` (10s), flag as computationally expensive and suggest simplifying the spec or breaking into smaller lemmas
+- **Resource count**: If `resourceCount > 500000`, warn about high resource usage and proof fragility across Dafny versions
+- **Proof hints**: If `proofHintCount > 5`, note moderate/high proof complexity
+- **Empty lemma bodies**: If `emptyLemmaBodyCount > 0`, flag that these may indicate trivially true properties — review needed
+- **Trivial proof**: If `trivialProof` is true AND the spec has meaningful postconditions, note that property-based testing would have sufficed
+
+If the `difficulty` field is absent (older server version), skip this section gracefully.
+
 **Maximum 5 verification attempts.** On each attempt:
 1. Show the current errors
 2. Explain your repair strategy
@@ -67,6 +79,18 @@ If verification succeeds, present:
 - The full verified Dafny program
 - Summary of what was proven
 - Any proof artifacts added (lemmas, ghost variables) with explanations
+- A difficulty summary (if the `difficulty` field was present in the `dafny_verify` response):
+
+**Proof Difficulty Summary:**
+| Metric | Value | Assessment |
+|--------|-------|------------|
+| Solver time | {X}ms | Low (<2s) / Medium (2-10s) / High (>10s) |
+| Resource count | {N} | Low (<100K) / Medium (100K-500K) / High (>500K) |
+| Proof hints needed | {N} | Minimal (0) / Moderate (1-5) / Heavy (>5) |
+| Empty lemma bodies | {N} | OK (0) / Review needed (>0) |
+| Overall | Trivial/Moderate/Complex | — |
+
+If overall assessment is Trivial, add the note: "Consider using `/lightweight-verify` for similar future functions."
 
 If all 5 attempts fail, present:
 - The best version achieved
