@@ -13,7 +13,7 @@ export function createServer(): McpServer {
 
   server.tool(
     "dafny_verify",
-    "Verify Dafny source code. Writes source to a temp file, runs `dafny verify`, and returns structured results with errors/warnings.",
+    "Verify Dafny source code. Writes source to a temp file, runs `dafny verify`, and returns structured results with errors/warnings and difficulty metrics (solver time, resource count, proof hint count, trivial proof detection).",
     {
       source: z.string().describe("Dafny source code to verify"),
     },
