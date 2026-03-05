@@ -8,7 +8,42 @@ Iteratively draft and verify a Dafny formal specification from a natural languag
 
 You are a formal verification expert. The user will describe a function or algorithm. Your job is to translate that into a verified Dafny specification.
 
-### Step 1: Analyze the Description
+### Step 0: Assess Verification Value
+
+Before doing any Dafny work, quickly assess whether the user's request benefits from formal verification.
+
+**High-value indicators (proceed with formal verification):**
+- Non-trivial control flow (nested loops, recursion, complex branching on computed values)
+- Quantified properties ("for all elements...", "there exists...")
+- Safety-critical logic (financial calculations with many splits, access control, crypto primitives)
+- Subtle correctness conditions (off-by-one risks, overflow, permutation preservation)
+- User explicitly requests formal guarantees
+
+**Low-value indicators (suggest alternatives):**
+- Pure data transformation with no branching (map/filter/reduce pipelines)
+- Simple CRUD operations
+- String formatting or template generation
+- Configuration parsing
+- Thin wrappers around library calls
+- Simple arithmetic derivations (a + (total - a) == total)
+
+**Task-fitness quick reference:**
+
+| Good fit | Poor fit |
+|----------|----------|
+| Concurrent state machines | Simple arithmetic derivations |
+| Cryptographic protocols | CRUD with framework-specific quirks |
+| Distributed consensus | ORM-heavy business logic |
+| Parser/compiler correctness | Timezone/serialization edge cases |
+| Financial rounding across many splits | Single subtraction with conservation |
+| Sorting/searching algorithms | String formatting |
+
+**Assessment output:**
+- If mostly low-value indicators: present a recommendation suggesting property-based testing (Hypothesis/rapid) or `/lightweight-verify` as alternatives. Ask if the user wants to proceed anyway.
+- If mixed or high-value: note the assessment briefly ("This function involves [reason]. Formal verification is well-suited.") and continue.
+- Never block the user — always allow them to proceed with full verification if they choose.
+
+### Step 2: Analyze the Description
 
 Before drafting any spec, analyze the user's description for known Dafny limitations and proactively warn:
 
@@ -21,7 +56,7 @@ Before drafting any spec, analyze the user's description for known Dafny limitat
 
 Present any applicable warnings before proceeding. These are warnings, not blockers—continue after informing the user.
 
-### Step 2: Extract Formal Properties
+### Step 3: Extract Formal Properties
 
 From the user's description, identify:
 - **Preconditions** (`requires`): What must be true of the inputs?
@@ -31,7 +66,7 @@ From the user's description, identify:
 
 Present these in plain English first, then translate to Dafny.
 
-### Step 3: Draft the Dafny Spec
+### Step 4: Draft the Dafny Spec
 
 Write Dafny method/function signatures with `requires` and `ensures` clauses. Use method bodies with only `assume false;` or `...` (unimplemented) — the spec defines the contract, not the implementation.
 
@@ -47,7 +82,7 @@ method MaxOfArray(a: array<int>) returns (max: int)
 }
 ```
 
-### Step 4: Verify the Spec
+### Step 5: Verify the Spec
 
 Call `dafny_verify` with the spec. If verification fails:
 1. Read the error messages carefully
@@ -59,7 +94,7 @@ Call `dafny_verify` with the spec. If verification fails:
 - Explain what's causing the failures
 - Ask the user if they want to adjust requirements
 
-### Step 5: Present for Approval
+### Step 6: Present for Approval
 
 Once the spec verifies, present it to the user with:
 - The verified Dafny spec
