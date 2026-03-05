@@ -72,8 +72,16 @@ describe("MCP Protocol", () => {
       expect(parsed).toHaveProperty("errors");
       expect(parsed).toHaveProperty("warnings");
       expect(parsed).toHaveProperty("rawOutput");
+      expect(parsed).toHaveProperty("difficulty");
       expect(parsed.success).toBe(true);
       expect(parsed.errors).toEqual([]);
+      expect(parsed.difficulty).toEqual(
+        expect.objectContaining({
+          proofHintCount: expect.any(Number),
+          emptyLemmaBodyCount: expect.any(Number),
+          trivialProof: expect.any(Boolean),
+        })
+      );
     });
   });
 

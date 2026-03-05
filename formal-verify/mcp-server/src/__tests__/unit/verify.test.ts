@@ -60,6 +60,14 @@ describe("dafnyVerify", () => {
 
     expect(result.success).toBe(true);
     expect(result.errors).toEqual([]);
+    expect(result).toHaveProperty("difficulty");
+    expect(result.difficulty).toEqual(
+      expect.objectContaining({
+        proofHintCount: expect.any(Number),
+        emptyLemmaBodyCount: expect.any(Number),
+        trivialProof: expect.any(Boolean),
+      })
+    );
   });
 
   it("returns failure when exitCode is 0 but errors are parsed", async () => {
@@ -105,6 +113,13 @@ describe("dafnyVerify", () => {
     expect(result.errors).toEqual([
       "Verification timed out after 120 seconds",
     ]);
+    expect(result.difficulty).toEqual({
+      solverTimeMs: null,
+      resourceCount: null,
+      proofHintCount: 0,
+      emptyLemmaBodyCount: 0,
+      trivialProof: false,
+    });
   });
 
   it("includes raw output from stdout and stderr", async () => {
