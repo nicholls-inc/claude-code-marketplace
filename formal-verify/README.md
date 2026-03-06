@@ -65,6 +65,15 @@ Compile verified Dafny to Python or Go, with boilerplate stripped.
 /extract-code to go
 ```
 
+#### `/lightweight-verify` — Lightweight Verification Alternatives
+
+For functions where full formal verification is overkill, generate lightweight verification artifacts: design-by-contract assertions, property-based tests, or documented runtime invariant checks.
+
+```
+/lightweight-verify "function that returns the maximum element of a non-empty integer list" python
+/lightweight-verify "binary search on a sorted array returning the index or -1" go
+```
+
 ### Orchestrator Agent
 
 For end-to-end workflows, use the `verify-orchestrator` agent which chains all three skills:
