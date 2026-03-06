@@ -1,13 +1,13 @@
 {
-  "name": "formal-verify",
+  "name": "crosscheck",
   "version": "1.0.0",
-  "description": "Formal verification for Python/Go via Dafny",
+  "description": "Crosscheck Claude's code with Dafny formal verification for Python/Go",
   "mcpServers": {
     "dafny": {
       "command": "node",
       "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/dist/index.js"],
       "env": {
-        "DAFNY_DOCKER_IMAGE": "formal-verify-dafny:latest"
+        "DAFNY_DOCKER_IMAGE": "crosscheck-dafny:latest"
       }
     }
   }

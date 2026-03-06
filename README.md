@@ -4,9 +4,9 @@ A collection of Claude Code plugins for enhanced development workflows.
 
 ## Plugins
 
-### [formal-verify](./formal-verify/)
+### [crosscheck](./crosscheck/)
 
-Formal verification for Python/Go via [Dafny](https://dafny.org/). The LLM proposes Dafny specs and implementations, the Dafny verifier acts as a hard correctness gate, and only verified code gets extracted to the target language.
+Crosscheck Claude's code claims with [Dafny](https://dafny.org/) formal verification. The LLM proposes Dafny specs and implementations, the Dafny verifier acts as a hard correctness gate, and only verified code gets extracted to the target language.
 
 **Skills:** `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`
 **Agent:** `verify-orchestrator`
@@ -24,7 +24,7 @@ Meta prompts that help you discover and install curated GitHub Copilot agents, i
 Each plugin is self-contained. Point Claude Code at the plugin directory:
 
 ```bash
-claude plugin add /path/to/formal-verify
+claude plugin add /path/to/crosscheck
 claude plugin add /path/to/awesome-copilot
 ```
 

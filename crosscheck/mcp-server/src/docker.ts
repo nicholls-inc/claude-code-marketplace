@@ -10,7 +10,7 @@ interface DockerResult {
 }
 
 export function getDockerImage(): string {
-  return process.env.DAFNY_DOCKER_IMAGE || "formal-verify-dafny:latest";
+  return process.env.DAFNY_DOCKER_IMAGE || "crosscheck-dafny:latest";
 }
 
 export async function runDafny(
