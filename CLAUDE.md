@@ -1,21 +1,26 @@
-# Formal Verify
+# Claude Code Plugin Marketplace
 
-Formal verification plugin for Claude Code. Generates provably correct Python/Go code using Dafny as a verification backend.
+A collection of Claude Code plugins. Each plugin is a self-contained directory with its own skills, agents, and optional MCP server.
 
-## Architecture
+## Plugins
+
+### formal-verify (`formal-verify/`)
+
+Formal verification plugin. Generates provably correct Python/Go code using Dafny as a verification backend.
 
 - **MCP server** (`formal-verify/mcp-server/`): TypeScript server exposing three tools — `dafny_verify`, `dafny_compile`, `dafny_cleanup`
 - **Docker isolation**: Dafny 4.11.0 runs in a sandboxed container (no network, 512MB memory, 120s timeout)
-- **Skills** (`formal-verify/skills/`): `/spec-iterate`, `/generate-verified`, `/extract-code`
+- **Skills** (`formal-verify/skills/`): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`
 - **Orchestrator agent** (`formal-verify/agents/verify-orchestrator.md`): End-to-end workflow automation
 
-## Workflow
+### awesome-copilot (`awesome-copilot/`)
 
-1. User describes a function → `/spec-iterate` generates a verified Dafny specification
-2. `/generate-verified` implements the spec with loop invariants, lemmas, etc.
-3. `/extract-code` compiles to Python or Go, strips Dafny boilerplate, delivers clean output
+Meta prompts for discovering and installing curated GitHub Copilot customizations.
 
-## Development
+- **Skills** (`awesome-copilot/skills/`): `/suggest-agents`, `/suggest-instructions`, `/suggest-prompts`, `/suggest-skills`
+- **Agent** (`awesome-copilot/agents/project-scaffold.md`): End-to-end project scaffolding
+
+## Development — formal-verify
 
 ```bash
 cd formal-verify/mcp-server
