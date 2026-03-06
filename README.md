@@ -27,11 +27,15 @@ Meta prompts that help you discover and install curated GitHub Copilot agents, i
 
 ## Installation
 
-Each plugin is self-contained. Point Claude Code at the plugin directory:
+Add the marketplace, then install plugins:
 
 ```bash
-claude --plugin-dir ./crosscheck
-claude --plugin-dir ./awesome-copilot
+# Add the marketplace
+claude plugin marketplace add nicholls/claude-code-marketplace
+
+# Install plugins
+claude plugin install crosscheck@nicholls
+claude plugin install awesome-copilot@nicholls
 ```
 
 See each plugin's README for prerequisites and setup details.
