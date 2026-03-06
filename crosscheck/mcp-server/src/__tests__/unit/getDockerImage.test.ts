@@ -23,11 +23,11 @@ describe("getDockerImage", () => {
 
   it("returns the default image when DAFNY_DOCKER_IMAGE is not set", () => {
     delete process.env.DAFNY_DOCKER_IMAGE;
-    expect(getDockerImage()).toBe("formal-verify-dafny:latest");
+    expect(getDockerImage()).toBe("crosscheck-dafny:latest");
   });
 
   it("returns the default image when DAFNY_DOCKER_IMAGE is an empty string", () => {
     process.env.DAFNY_DOCKER_IMAGE = "";
-    expect(getDockerImage()).toBe("formal-verify-dafny:latest");
+    expect(getDockerImage()).toBe("crosscheck-dafny:latest");
   });
 });

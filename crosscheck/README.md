@@ -1,6 +1,6 @@
-# formal-verify — Claude Code Plugin
+# crosscheck — Claude Code Plugin
 
-Formal verification for Python/Go via Dafny. The LLM proposes Dafny specs and implementations, the Dafny verifier acts as a hard correctness gate, and only verified code gets extracted to the target language. No Dafny artifacts are committed—only clean Python/Go output.
+Crosscheck Claude's code claims with Dafny formal verification. The LLM proposes Dafny specs and implementations, the Dafny verifier acts as a hard correctness gate, and only verified code gets extracted to the target language. No Dafny artifacts are committed—only clean Python/Go output.
 
 ## Prerequisites
 
@@ -31,7 +31,7 @@ npm run build
 Point Claude Code at this plugin directory:
 
 ```bash
-claude --plugin-dir ./formal-verify
+claude --plugin-dir ./crosscheck
 ```
 
 ## Usage
@@ -103,7 +103,7 @@ The plugin exposes three MCP tools:
 
 ```bash
 # Verify Docker image works
-docker run formal-verify-dafny:latest --version
+docker run crosscheck-dafny:latest --version
 
 # Run MCP server smoke tests
 ./scripts/test-mcp.sh

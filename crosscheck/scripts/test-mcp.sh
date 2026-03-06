@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Smoke test for the formal-verify MCP server.
+# Smoke test for the crosscheck MCP server.
 # Prerequisites: npm run build in mcp-server/, Docker image built.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -10,7 +10,7 @@ SERVER="node ${SCRIPT_DIR}/../mcp-server/dist/index.js"
 # Helper: send JSON-RPC request and capture response
 send_request() {
   local request="$1"
-  echo "${request}" | DAFNY_DOCKER_IMAGE="${DAFNY_DOCKER_IMAGE:-formal-verify-dafny:latest}" ${SERVER} 2>/dev/null
+  echo "${request}" | DAFNY_DOCKER_IMAGE="${DAFNY_DOCKER_IMAGE:-crosscheck-dafny:latest}" ${SERVER} 2>/dev/null
 }
 
 echo "=== Test 1: Initialize ==="

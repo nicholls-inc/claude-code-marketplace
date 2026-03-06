@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: formal-verify/mcp-server
+        working-directory: crosscheck/mcp-server
     steps:
       - uses: actions/checkout@v6
 
@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          cache-dependency-path: formal-verify/mcp-server/package-lock.json
+          cache-dependency-path: crosscheck/mcp-server/package-lock.json
 
       - run: npm ci
       - run: npm run build

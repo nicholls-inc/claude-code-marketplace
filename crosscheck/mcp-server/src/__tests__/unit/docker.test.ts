@@ -39,7 +39,7 @@ describe("runDafny", () => {
       "--cpus=1",
       "-v",
       "/tmp/workdir:/work",
-      "formal-verify-dafny:latest",
+      "crosscheck-dafny:latest",
       "verify",
       "/work/program.dfy",
     ]);

@@ -7,7 +7,7 @@ import { dafnyCleanup } from "./tools/cleanup.js";
 
 export function createServer(): McpServer {
   const server = new McpServer({
-    name: "formal-verify-dafny",
+    name: "crosscheck-dafny",
     version: "1.0.0",
   });
 

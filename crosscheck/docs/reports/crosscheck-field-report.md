@@ -1,4 +1,4 @@
-# Formal Verify Plugin — Field Report
+# Crosscheck Plugin — Field Report
 
 **Task:** Split charging session events across month boundaries for billing attribution
 **Date:** 2026-03-05

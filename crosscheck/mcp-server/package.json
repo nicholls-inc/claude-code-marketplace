@@ -1,7 +1,7 @@
 {
-  "name": "formal-verify-mcp-server",
+  "name": "crosscheck-mcp-server",
   "version": "1.0.0",
-  "description": "MCP server for Dafny formal verification",
+  "description": "MCP server for Dafny crosscheck verification",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
