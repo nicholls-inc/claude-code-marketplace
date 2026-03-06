@@ -38,7 +38,7 @@ claude --plugin-dir ./crosscheck
 
 ### Skills
 
-Three independent skills for granular control:
+Four independent skills for granular control:
 
 #### `/spec-iterate` — Specification Refinement
 
@@ -99,15 +99,25 @@ The plugin exposes three MCP tools:
 - **Boilerplate stripping**: Compiled output has Dafny runtime imports and files removed automatically
 - **No Dafny artifacts committed**: Only clean Python/Go output is the deliverable
 
-## Testing
+## Development
 
 ```bash
-# Verify Docker image works
-docker run crosscheck-dafny:latest --version
-
-# Run MCP server smoke tests
-./scripts/test-mcp.sh
+cd mcp-server
+npm install
+npm run build              # TypeScript -> dist/
+npm test                   # Unit, integration, property, MCP tests (vitest)
+npm run test:e2e           # End-to-end tests (requires Docker)
+../scripts/build-docker.sh # Build Dafny Docker image
+../scripts/test-mcp.sh     # Smoke tests
 ```
+
+### Key conventions
+
+- ES modules (`"type": "module"` in package.json)
+- Strict TypeScript (ES2022 target, Node16 module resolution)
+- Zod for runtime validation of tool inputs
+- vitest with fast-check for property-based testing
+- Docker image name configured via `DAFNY_DOCKER_IMAGE` env var (default: `crosscheck-dafny:latest`)
 
 ## Known Limitations
 
