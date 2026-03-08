@@ -13,6 +13,13 @@ Crosscheck plugin. Crosschecks Claude's code claims using Dafny as a verificatio
 - **Skills** (`crosscheck/skills/`): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`
 - **Orchestrator agent** (`crosscheck/agents/verify-orchestrator.md`): End-to-end workflow automation
 
+### semiformal (`semiformal/`)
+
+Semi-formal reasoning plugin. Structures Claude's code analysis with explicit premises, execution traces, and formal conclusions.
+
+- **Skills** (`semiformal/skills/`): `/reason`, `/analyze-code`, `/compare-patches`, `/locate-fault`, `/trace-execution`
+- **Orchestrator agent** (`semiformal/agents/reasoning-orchestrator.md`): Automatic task classification and skill routing
+
 ### awesome-copilot (`awesome-copilot/`)
 
 Meta prompts for discovering and installing curated GitHub Copilot customizations.
