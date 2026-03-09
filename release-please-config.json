@@ -1,0 +1,21 @@
+{
+  "packages": {
+    "crosscheck": {
+      "release-type": "node",
+      "package-name": "crosscheck",
+      "component": "crosscheck",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "mcp-server/package.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  }
+}
