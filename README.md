@@ -31,7 +31,7 @@ Add the marketplace, then install plugins:
 
 ```bash
 # Add the marketplace
-claude plugin marketplace add nicholls/claude-code-marketplace
+claude plugin marketplace add nicholls-inc/claude-code-marketplace
 
 # Install plugins
 claude plugin install crosscheck@nicholls
