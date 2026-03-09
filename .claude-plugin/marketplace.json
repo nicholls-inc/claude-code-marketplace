@@ -16,6 +16,11 @@
       "name": "awesome-copilot",
       "source": "./awesome-copilot",
       "description": "Meta prompts that help you discover and install curated GitHub Copilot agents, instructions, prompts, and skills from the awesome-copilot repository."
+    },
+    {
+      "name": "semiformal",
+      "source": "./semiformal",
+      "description": "Semi-formal reasoning for structured code analysis with explicit premises, execution traces, and formal conclusions"
     }
   ]
 }
