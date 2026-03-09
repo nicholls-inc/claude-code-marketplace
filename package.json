@@ -1,0 +1,13 @@
+{
+  "name": "claude-code-marketplace",
+  "private": true,
+  "scripts": {
+    "prepare": "husky",
+    "lint:commit": "commitlint --from=HEAD~1 --to=HEAD --verbose"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7"
+  }
+}

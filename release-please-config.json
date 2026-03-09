@@ -1,4 +1,5 @@
 {
+  "bootstrap-sha": "1c18bf08b2c7a89dc54cbc496258be40b57a300d",
   "packages": {
     "crosscheck": {
       "release-type": "node",
@@ -7,12 +8,12 @@
       "extra-files": [
         {
           "type": "json",
-          "path": ".claude-plugin/plugin.json",
+          "path": "crosscheck/.claude-plugin/plugin.json",
           "jsonpath": "$.version"
         },
         {
           "type": "json",
-          "path": "mcp-server/package.json",
+          "path": "crosscheck/mcp-server/package.json",
           "jsonpath": "$.version"
         }
       ]

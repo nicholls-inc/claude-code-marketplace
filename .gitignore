@@ -2,3 +2,4 @@
 !.sisyphus/plans/
 !.sisyphus/plans/**
 .claude/worktrees/
+node_modules/
