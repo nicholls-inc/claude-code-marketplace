@@ -1,0 +1,4 @@
+.sisyphus/*
+!.sisyphus/plans/
+!.sisyphus/plans/**
+.claude/worktrees/
