@@ -1,5 +1,4 @@
 {
-  "bootstrap-sha": "1c18bf08b2c7a89dc54cbc496258be40b57a300d",
   "packages": {
     "crosscheck": {
       "release-type": "node",
