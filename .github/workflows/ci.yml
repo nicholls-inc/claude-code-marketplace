@@ -1,13 +1,15 @@
-name: Test
+name: CI
 
 on:
   push:
     branches: [main]
+    paths: ["crosscheck/**"]
   pull_request:
     branches: [main]
+    paths: ["crosscheck/**"]
 
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,5 +24,8 @@ jobs:
           cache-dependency-path: crosscheck/mcp-server/package-lock.json
 
       - run: npm ci
+      # TODO: make blocking after lint violations are fixed
+      - run: npm run lint
+        continue-on-error: true
       - run: npm run build
       - run: npm test
