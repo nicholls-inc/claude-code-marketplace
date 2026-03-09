@@ -1,0 +1,6 @@
+{
+  "name": "crosscheck",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Crosscheck Claude code claims with Dafny formal verification"
+}
