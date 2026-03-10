@@ -45,7 +45,7 @@ See each plugin's README for prerequisites and setup details.
 ```bash
 cd crosscheck/mcp-server
 npm install
-npm run build              # TypeScript → dist/
+npm run build              # Type-check + esbuild bundle → dist/index.js
 npm test                   # Unit, integration, property, MCP tests (vitest)
 npm run test:e2e           # End-to-end tests (requires Docker)
 ../scripts/build-docker.sh # Build Dafny Docker image
