@@ -8,6 +8,8 @@ The agent, Byfuglien (/ˈbʌflɪn/), checks Claude's claims like their namesake 
 
 ![dustin-byfuglien-18-gifs-6](https://github.com/user-attachments/assets/ae56a511-ee9f-4b9f-bb73-110262dfd115)
 
+Crosscheck was inspired by three research papers: [Agentic Code Reasoning](https://arxiv.org/abs/2603.01896) (Ugare & Chandra, 2026), which demonstrated that structured semi-formal reasoning dramatically improves LLM accuracy on patch equivalence, fault localization, and code question answering; [Abductive Vibe Coding](https://arxiv.org/abs/2601.01199) (Murphy, Babikian & Chechik, 2026), whose hierarchical claim trees and Goal Structuring Notation informed the `/rationale` skill; and [Vibe Coding Needs Vibe Reasoning](https://arxiv.org/abs/2511.00202) (Mitchell & Shaaban, 2025), whose autoformalization and continuous verification proposals shaped the `/suggest-specs` and `/check-regressions` skills.
+
 ## Prerequisites
 
 - **Docker** — required to run the Dafny verifier in an isolated container
