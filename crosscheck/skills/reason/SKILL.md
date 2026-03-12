@@ -28,9 +28,15 @@ Before making ANY claims about code behavior, explore the codebase and document 
 For each relevant code element, document a numbered premise:
 
 ```
-PREMISE P[N]: [What the code does — one factual observation]
+PREMISE P[N] [STATIC|SEMANTIC|BEHAVIORAL|FORMAL]: [What the code does — one factual observation]
   Evidence: [file:line] — [specific code snippet or behavior observed]
 ```
+
+**Claim classification tags** — tag each premise with its verification class:
+- `[STATIC]` — verified by reading code (file:line evidence present)
+- `[SEMANTIC]` — requires domain knowledge or subjective judgment
+- `[BEHAVIORAL]` — requires running code to verify
+- `[FORMAL]` — could be machine-verified via Dafny (use `/spec-iterate` for proof)
 
 Rules for premises:
 - Every premise MUST cite a specific file:line location
@@ -79,10 +85,12 @@ This reveals mutations and dependencies that inspection of a single function mis
 For each relevant code path, trace through it step by step, linking back to the premises:
 
 ```
-CLAIM C[N]: [What happens when this path executes]
+CLAIM C[N] [STATIC|SEMANTIC|BEHAVIORAL]: [What happens when this path executes]
   Trace: [entry point] -> [call 1 at file:line] -> [call 2 at file:line] -> [result]
   Depends on: P[N], P[M]
 ```
+
+Tag claims with the same classification tags as premises.
 
 Rules for claims:
 - Each claim MUST reference the premises it depends on
@@ -145,6 +153,22 @@ Present a concise human-readable summary of the finding. This should be 2-5 sent
 - The answer to the original question
 - The key evidence that led to the conclusion
 - Any caveats or remaining uncertainties
+
+### Step 7: Verification Checklist
+
+Present this checklist alongside the conclusion:
+
+```
+## Verification Checklist
+
+- [ ] Spot-check these premises: [list 2-3 most critical P[N] with file:line]
+- [ ] Framework/library assumptions: [list any assumed behaviors]
+- [ ] Alternative hypotheses ruled out: [list with reasoning]
+- [ ] Unverified claims requiring running code: [list any [BEHAVIORAL] items]
+- [ ] Claims suitable for formal verification: [list any [FORMAL] items]
+```
+
+Fill in each bracketed item from the analysis above. The `[BEHAVIORAL]` and `[FORMAL]` items are drawn from the claim classification tags.
 
 ## Arguments
 

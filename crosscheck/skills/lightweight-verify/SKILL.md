@@ -206,7 +206,22 @@ Based on the user's choice (or your recommendation if they defer), generate:
    - Absence of runtime errors (index out of bounds, integer overflow) is proven
    - Properties are checked statically at compile time, not at runtime
 
-### Step 5: Upgrade Path
+### Step 5: Verification Checklist
+
+Present this checklist alongside the generated artifacts:
+
+```
+## Verification Checklist
+
+- [ ] Contracts match intended behavior (review pre/postconditions table)
+- [ ] Property-based tests cover edge cases (empty, boundary, negative)
+- [ ] Runtime checks enabled in appropriate environments
+- [ ] Properties that would benefit from full formal verification: [list candidates]
+```
+
+Fill in the bracketed items based on the contracts identified in Step 2.
+
+### Step 6: Upgrade Path
 
 Present guidance for upgrading to full formal verification later:
 

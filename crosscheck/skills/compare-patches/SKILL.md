@@ -25,11 +25,17 @@ Read both patches and the relevant test files, then document:
 
 ```
 PREMISES (state what each patch does):
-P1: Patch 1 modifies [file(s)] by [specific change description]
-P2: Patch 2 modifies [file(s)] by [specific change description]
-P3: The FAIL_TO_PASS tests check [specific behavior being tested]
-P4: The PASS_TO_PASS tests check [specific behavior, if relevant]
+P1 [STATIC]: Patch 1 modifies [file(s)] by [specific change description]
+P2 [STATIC]: Patch 2 modifies [file(s)] by [specific change description]
+P3 [STATIC]: The FAIL_TO_PASS tests check [specific behavior being tested]
+P4 [STATIC]: The PASS_TO_PASS tests check [specific behavior, if relevant]
 ```
+
+**Claim classification tags** — tag each premise and claim with its verification class:
+- `[STATIC]` — verified by reading code (file:line evidence present)
+- `[SEMANTIC]` — requires domain knowledge or subjective judgment
+- `[BEHAVIORAL]` — requires running code to verify
+- `[FORMAL]` — could be machine-verified via Dafny (use `/spec-iterate` for proof)
 
 CRITICAL: Read the actual test implementations, don't guess from test names.
 
@@ -41,9 +47,9 @@ For each relevant test, trace execution through BOTH patches:
 ANALYSIS OF TEST BEHAVIOR:
 
 For FAIL_TO_PASS test(s):
-  Claim 1.1: With Patch 1 applied, test [name] will [PASS/FAIL]
+  Claim 1.1 [STATIC|BEHAVIORAL]: With Patch 1 applied, test [name] will [PASS/FAIL]
           because [trace through the code behavior]
-  Claim 1.2: With Patch 2 applied, test [name] will [PASS/FAIL]
+  Claim 1.2 [STATIC|BEHAVIORAL]: With Patch 2 applied, test [name] will [PASS/FAIL]
           because [trace through the code behavior]
   Comparison: [SAME/DIFFERENT] outcome
 
@@ -105,6 +111,20 @@ CONFIDENCE: [HIGH/MEDIUM/LOW]
 - HIGH: All execution paths fully traced, all tests analyzed
 - MEDIUM: Most paths traced, some library behavior assumed
 - LOW: Key paths rely on unverified assumptions
+```
+
+### Step 7: Verification Checklist
+
+Present this checklist alongside the conclusion:
+
+```
+## Verification Checklist
+
+- [ ] Both patches were traced through ALL relevant tests (not just a subset)
+- [ ] Name shadowing checked at all scopes
+- [ ] Edge cases analyzed are ones that actual tests exercise
+- [ ] Framework/library behavior assumptions: [list]
+- [ ] Claims requiring running code to verify: [list any [BEHAVIORAL] items]
 ```
 
 ### Key Principles

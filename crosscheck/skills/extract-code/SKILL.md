@@ -131,6 +131,8 @@ Present this checklist to the user and flag any items that are especially releva
 - [ ] No `_dafny.` runtime references remain
 - [ ] If extern methods exist, their implementations are tested independently
 - [ ] Integration tests cover the function in its actual calling context
+- [ ] Dafny limitation gaps don't affect your use case (IO, concurrency, float precision)
+- [ ] Informally-stated requirements not in the Dafny spec are covered by other tests
 
 ## Arguments
 

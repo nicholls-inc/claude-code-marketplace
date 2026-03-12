@@ -21,10 +21,16 @@ Read the failing test and establish formal premises about what it expects:
 - What are the explicit assertions / expected exceptions?
 - What is the expected behavior vs. the observed failure mode?
 
-State these as formal PREMISES:
-  PREMISE T1: The test calls X.method(args) and expects [behavior]
-  PREMISE T2: The test asserts [condition]
-  PREMISE T3: The test expects [return value / exception / state]
+State these as formal PREMISES (with classification tags):
+  PREMISE T1 [STATIC]: The test calls X.method(args) and expects [behavior]
+  PREMISE T2 [STATIC]: The test asserts [condition]
+  PREMISE T3 [STATIC|BEHAVIORAL]: The test expects [return value / exception / state]
+
+**Claim classification tags** — tag each premise and claim with its verification class:
+- `[STATIC]` — verified by reading code (file:line evidence present)
+- `[SEMANTIC]` — requires domain knowledge or subjective judgment
+- `[BEHAVIORAL]` — requires running code to verify
+- `[FORMAL]` — could be machine-verified via Dafny (use `/spec-iterate` for proof)
   ...
 ```
 
@@ -84,9 +90,9 @@ For each code path traced, identify where the implementation could diverge from 
 For each code path traced, identify where the implementation
 could diverge from the test's expectations:
 
-CLAIM D1: At [file:line], [code] would produce [behavior]
+CLAIM D1 [STATIC|BEHAVIORAL]: At [file:line], [code] would produce [behavior]
          which contradicts PREMISE T[N] because [reason]
-CLAIM D2: At [file:line], [code] would produce [behavior]
+CLAIM D2 [STATIC|BEHAVIORAL]: At [file:line], [code] would produce [behavior]
          which contradicts PREMISE T[N] because [reason]
 ...
 ```
@@ -124,6 +130,20 @@ Present a concise summary:
 - The most likely root cause (Rank 1) with a plain-English explanation
 - Why the crash site (if different) is a symptom, not the cause
 - Suggested fix direction
+
+### Step 6: Verification Checklist
+
+Present this checklist alongside the summary:
+
+```
+## Verification Checklist
+
+- [ ] All four phases completed (none skipped)
+- [ ] Top-ranked prediction traces back through CLAIM -> PREMISE chain
+- [ ] Crash site vs. root cause distinction made explicit
+- [ ] Alternative fault locations considered: [list Rank 2+ predictions]
+- [ ] Claims requiring running code to confirm: [list any [BEHAVIORAL] items]
+```
 
 ### Key Principles
 

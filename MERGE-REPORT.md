@@ -238,17 +238,18 @@ All three reviews agree on what to avoid:
 
 ## Implementation Priority
 
-| Priority | Change | Effort | Impact | Part of Merge? |
-|----------|--------|--------|--------|----------------|
-| **1** | Merge semiformal skills into crosscheck directory | Medium | High | Yes — structural |
-| **2** | Unified orchestrator with combined routing table | Medium | High | Yes — structural |
-| **3** | Skill consolidation (merge /reason + /analyze-code) | Low | Medium | Yes — reduces context |
-| **4** | Compress skill descriptions into references/ | Low | Medium | Yes — reduces context |
-| **5** | Verification checklist output for all skills | Low | High | Post-merge enhancement |
-| **6** | Claim classification tags ([STATIC]/[SEMANTIC]/[BEHAVIORAL]/[FORMAL]) | Low | High | Post-merge enhancement |
-| **7** | Trust boundary tracking in orchestrator | Low | High | Post-merge enhancement |
-| **8** | Spec registry + `/check-regressions` | Medium | High | Post-merge new feature |
-| **9** | `/suggest-specs` autoformalization | Medium | High | Post-merge new feature |
-| **10** | `/rationale` structured claim trees | Medium | Medium | Defer until 1-9 stable |
+| Priority | Change | Effort | Impact | Status |
+|----------|--------|--------|--------|--------|
+| **1** | Merge semiformal skills into crosscheck directory | Medium | High | DONE |
+| **2** | Unified Byfuglien orchestrator with combined routing table | Medium | High | DONE |
+| **3** | Skill consolidation (merge /reason + /analyze-code) | Low | Medium | DONE |
+| **4** | Verification checklist output for all skills (Findings 1+5 merged) | Low | High | DONE |
+| **5** | Claim classification tags ([STATIC]/[SEMANTIC]/[BEHAVIORAL]/[FORMAL]) | Low | High | DONE |
+| **6** | Spec registry + `/check-regressions` | Medium | High | Future |
+| **7** | `/suggest-specs` autoformalization | Medium | High | Future |
+| **8** | `/rationale` structured claim trees | Medium | Medium | Future |
 
-Items 1-4 are the merge itself. Items 5-7 are low-effort, high-impact improvements informed by the papers. Items 8-9 are the highest-leverage new features. Item 10 is the long-term vision.
+**Notes:**
+- Item 4 merged original Findings 1 (verification checklists) and 5 (trust boundary tracking) — they are the same concept applied to different skill families. `/extract-code` already had a partial checklist (Abstraction Gap Checklist); the other 7 skills now have checklists too.
+- Original item 4 (compress skill descriptions into references/) was dropped — skills only load into context when invoked by the user, so there's no context overhead from verbose SKILL.md files.
+- Items 6-8 require new skills and infrastructure (spec registry manifest, new SKILL.md files). Deferred until the merged plugin is stable.

@@ -38,8 +38,8 @@ CONFIDENCE: [high/medium/low]
 **After reading:**
 ```
 OBSERVATIONS from [filename]:
-  O[N]: [Key observation about the code, with line numbers]
-  O[N]: [Another observation, with line numbers]
+  O[N] [STATIC|SEMANTIC|BEHAVIORAL]: [Key observation about the code, with line numbers]
+  O[N] [STATIC|SEMANTIC|BEHAVIORAL]: [Another observation, with line numbers]
 
 HYPOTHESIS UPDATE:
   H[N]: [CONFIRMED | REFUTED | REFINED] - [Explanation]
@@ -51,6 +51,12 @@ UNRESOLVED:
 NEXT ACTION RATIONALE: [Why reading another file, or why
                         enough evidence to conclude]
 ```
+
+**Claim classification tags** — tag each observation with its verification class:
+- `[STATIC]` — verified by reading code (file:line evidence present)
+- `[SEMANTIC]` — requires domain knowledge or subjective judgment
+- `[BEHAVIORAL]` — requires running code to verify
+- `[FORMAL]` — could be machine-verified via Dafny (use `/spec-iterate` for proof)
 
 ### Step 3: Build Call Sequence
 
@@ -122,6 +128,20 @@ Return value: [what ultimately gets returned to the caller]
 COMPLETENESS: [FULL / PARTIAL]
 - FULL: All calls traced to leaf functions or documented external boundaries
 - PARTIAL: [list what was not traced and why]
+```
+
+### Step 7: Verification Checklist
+
+Present this checklist alongside the execution summary:
+
+```
+## Verification Checklist
+
+- [ ] All calls traced to leaf functions or documented external boundaries
+- [ ] Dynamic dispatch resolved to actual runtime types (not interfaces)
+- [ ] Name shadowing checked at every scope
+- [ ] External boundary assumptions: [list with basis]
+- [ ] Observations requiring running code to confirm: [list any [BEHAVIORAL] items]
 ```
 
 ### Key Principles

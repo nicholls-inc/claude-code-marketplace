@@ -110,6 +110,10 @@ Every result must pass these quality gates before delivery:
 - **Evidence grounding** — every factual claim cites a specific `file:line` reference; reject claims that say "probably" or "likely" without code evidence
 - **Alternative hypothesis check** — at least one alternative considered and ruled out with evidence; if missing, add it before delivering
 - **Confidence level** — HIGH/MEDIUM/LOW stated with justification
+- **Claim classification** — premises and claims are tagged with `[STATIC]`/`[SEMANTIC]`/`[BEHAVIORAL]`/`[FORMAL]`
+
+**For all output:**
+- **Verification checklist present** — output includes a Verification Checklist section with all bracketed items filled in from the analysis
 
 If any gate fails, re-execute the skill with explicit instructions to address the gap.
 
