@@ -4,7 +4,7 @@ _A Claude Code Plugin_
 
 Crosscheck Claude's code claims using two complementary approaches: **formal verification** via Dafny for provably correct Python/Go code, and **semi-formal reasoning** for structured code analysis with evidence-grounded certificates.
 
-The agent, Byfuglien, checks Claude's claims like their namesake checks opponents:
+The agent, Byfuglien, checks Claude's claims like their namesake checked opponents:
 
 ![dustin-byfuglien-18-gifs-6](https://github.com/user-attachments/assets/ae56a511-ee9f-4b9f-bb73-110262dfd115)
 
