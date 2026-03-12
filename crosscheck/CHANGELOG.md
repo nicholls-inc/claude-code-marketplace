@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v1.0.2...crosscheck-v2.0.0) (2026-03-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* **crosscheck:** semiformal/ directory deleted; all skills moved to crosscheck/skills/.
+
+### Features
+
+* **crosscheck:** add spec registry, regression detection, and structured adequacy skills ([#36](https://github.com/nicholls-inc/claude-code-marketplace/issues/36)) ([19a88c8](https://github.com/nicholls-inc/claude-code-marketplace/commit/19a88c8341b2c1d0a6425d01fee06f6027c30d96))
+
 ## [1.0.2](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v1.0.1...crosscheck-v1.0.2) (2026-03-10)
 
 
