@@ -1,12 +1,5 @@
 # Changelog
 
-## [2.0.1](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.0.0...crosscheck-v2.0.1) (2026-03-12)
-
-
-### Bug Fixes
-
-* **crosscheck:** fix agent description ([bbd5679](https://github.com/nicholls-inc/claude-code-marketplace/commit/bbd567995ac51faab405fdf230c8e851b199d03d))
-
 ## [2.0.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v1.0.2...crosscheck-v2.0.0) (2026-03-12)
 
 
