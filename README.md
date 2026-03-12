@@ -6,13 +6,16 @@ A collection of Claude Code plugins. Each plugin is a self-contained directory w
 
 ### [crosscheck](./crosscheck/)
 
-Crosscheck Claude's code claims with [Dafny](https://dafny.org/) formal verification. The LLM proposes Dafny specs and implementations, the Dafny verifier acts as a hard correctness gate, and only verified code gets extracted to the target language. No Dafny artifacts are committed — only clean Python/Go output.
+Crosschecks Claude's code claims using [Dafny](https://dafny.org/) formal verification for provably correct Python/Go code, plus semi-formal reasoning for structured code analysis.
 
 | | |
 |---|---|
-| **Skills** | `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify` |
-| **Agent** | `verify-orchestrator` — end-to-end workflow automation |
-| **MCP tools** | `dafny_verify`, `dafny_compile`, `dafny_cleanup` |
+| **MCP server** | `dafny_verify`, `dafny_compile`, `dafny_cleanup` |
+| **Docker isolation** | Dafny 4.11.0 in a sandboxed container (no network, 512 MB memory, 120 s timeout) |
+| **Formal verification skills** | `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify` |
+| **Spec management & adequacy skills** | `/check-regressions`, `/suggest-specs`, `/rationale` |
+| **Semi-formal reasoning skills** | `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution` |
+| **Agent** | `byfuglien` — unified task classification, skill routing, and output validation |
 
 **Prerequisites:** Docker, Node.js >= 18
 
@@ -59,3 +62,10 @@ npm run test:e2e           # End-to-end tests (requires Docker)
 - Zod for runtime validation of tool inputs
 - vitest with fast-check for property-based testing
 - Docker image name configured via `DAFNY_DOCKER_IMAGE` env var (default: `crosscheck-dafny:latest`)
+
+### Dafny limitations to keep in mind
+
+- No IO/networking verification — requires `{:extern}` trust boundaries
+- No concurrency modeling — sequential correctness only
+- Go output uses type erasure to `interface{}` — may need type assertions
+- `real` type compiles to `_dafny.BigRational`, not native floats
