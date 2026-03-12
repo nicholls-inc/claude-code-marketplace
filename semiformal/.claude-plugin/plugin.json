@@ -1,5 +1,0 @@
-{
-  "name": "semiformal",
-  "version": "1.0.0",
-  "description": "Semi-formal reasoning skills that structure Claude's code analysis with explicit premises, execution traces, and formal conclusions — preventing unsupported claims and improving accuracy on code verification, fault localization, and question answering tasks."
-}
