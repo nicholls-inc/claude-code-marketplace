@@ -15,7 +15,7 @@ Crosschecks Claude's code claims using [Dafny](https://dafny.org/) formal verifi
 | **Formal verification skills** | `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify` |
 | **Spec management & adequacy skills** | `/check-regressions`, `/suggest-specs`, `/rationale` |
 | **Semi-formal reasoning skills** | `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution` |
-| **Agent** | `byfuglien` — unified task classification, skill routing, and output validation |
+| **Agent** | `byfuglien` (/ˈbʌflɪn/) — unified task classification, skill routing, and output validation |
 
 **Prerequisites:** Docker, Node.js >= 18
 
