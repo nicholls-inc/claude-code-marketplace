@@ -114,6 +114,33 @@ When translating postconditions, watch for these semantic gaps between Dafny and
 | `{:extern}` methods in source | Extern implementations not verified — write focused unit tests |
 | Dafny `BigRational` compiled output | Runtime type not native — may need type assertions |
 
+### Step 5.5: Register Spec (Optional)
+
+After successful extraction, offer to register the verified spec in the project's spec registry (`.crosscheck/specs.json`). This enables `/check-regressions` to detect when future code changes invalidate the verified properties.
+
+**If the registry file does not exist:**
+- Ask: "Would you like to create a spec registry? This enables `/check-regressions` to detect when future edits break verified properties."
+- If yes, create `.crosscheck/specs.json` with `{"version": 1, "specs": []}` and proceed
+
+**If the registry exists:**
+- Ask: "Would you like to register this spec in the registry for regression detection?"
+
+**If the user agrees**, add an entry with:
+- `id`: A slug derived from the Dafny method name (e.g., `MaxOfArray` → `max-of-array`)
+- `function`: The Dafny method/function name
+- `description`: Brief natural-language description of what the spec verifies
+- `dafnySource`: Path to the Dafny source file (if saved) or note that it was inline
+- `dafnySourceHash`: SHA-256 hash of the Dafny source content
+- `extractedCode.file`: Path to the extracted code file
+- `extractedCode.function`: Function name in the extracted code
+- `extractedCode.language`: `"python"` or `"go"`
+- `constraint`: `"hard"` (default — must pass `dafny_verify` on re-check)
+- `lastVerified`: Current ISO 8601 timestamp
+- `difficulty`: Metrics from the verification run (solver time, resource count, proof hints, trivial flag)
+- `trustBoundaries`: Collected from the Abstraction Gap Checklist — any items that represent ongoing trust assumptions
+
+See `skills/check-regressions/references/registry-schema.md` for the full schema reference.
+
 ### Step 5: Integration Guidance
 
 Provide brief guidance on:
@@ -131,6 +158,8 @@ Present this checklist to the user and flag any items that are especially releva
 - [ ] No `_dafny.` runtime references remain
 - [ ] If extern methods exist, their implementations are tested independently
 - [ ] Integration tests cover the function in its actual calling context
+- [ ] Dafny limitation gaps don't affect your use case (IO, concurrency, float precision)
+- [ ] Informally-stated requirements not in the Dafny spec are covered by other tests
 
 ## Arguments
 

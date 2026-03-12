@@ -103,6 +103,22 @@ Once the spec verifies, present it to the user with:
 
 Wait for user approval before considering the spec final.
 
+### Step 7: Verification Checklist
+
+Present this checklist to the user alongside the approved spec:
+
+```
+## Verification Checklist
+
+After approving this spec, verify:
+- [ ] Spec captures all intended behavior (review each `requires`/`ensures` clause)
+- [ ] No informally-stated requirements were left out of the formalization
+- [ ] `{:extern}` trust boundaries identified (if any)
+- [ ] Dafny limitation gaps acknowledged: [list any IO/concurrency/float gaps]
+```
+
+Fill in the bracketed items with specifics from the current spec. This checklist surfaces what Dafny *didn't* prove — the trust boundaries between formal guarantees and assumptions.
+
 ## Arguments
 
 The user's natural language description of the function/algorithm to specify.

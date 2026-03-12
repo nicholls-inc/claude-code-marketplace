@@ -97,6 +97,20 @@ If all 5 attempts fail, present:
 - Remaining verification errors with explanations
 - Suggestions for simplifying the spec or implementation
 
+### Step 6: Verification Checklist
+
+Present this checklist alongside the verified implementation:
+
+```
+## Verification Checklist
+
+Before proceeding to extraction, verify:
+- [ ] All postconditions are meaningful (no trivially-true ensures clauses)
+- [ ] Proof complexity is acceptable (review difficulty summary table)
+- [ ] Empty lemma bodies reviewed (if any flagged)
+- [ ] Target-language pitfalls noted (`real` types, generics, underscore identifiers)
+```
+
 ## Arguments
 
 Optionally, the Dafny spec to implement. If not provided, assumes the spec was established in the current conversation via `/spec-iterate`.

@@ -2,7 +2,7 @@
 
 _A Claude Code Plugin_
 
-Crosscheck Claude's code claims with Dafny formal verification. The LLM proposes Dafny specs and implementations, the Dafny verifier acts as a hard correctness gate, and only verified code gets extracted to the target language. No Dafny artifacts are committed—only clean Python/Go output.
+Crosscheck Claude's code claims using two complementary approaches: **formal verification** via Dafny for provably correct Python/Go code, and **semi-formal reasoning** for structured code analysis with evidence-grounded certificates.
 
 The agent, Byfuglien, checks Claude's claims like their namesake checks opponents:
 
@@ -42,9 +42,9 @@ claude --plugin-dir ./crosscheck
 
 ## Usage
 
-### Skills
+### Skills — Formal Verification
 
-Four independent skills for granular control:
+Four skills for Dafny-backed formal verification:
 
 #### `/spec-iterate` — Specification Refinement
 
@@ -80,13 +80,96 @@ For functions where full formal verification is overkill, generate lightweight v
 /lightweight-verify "binary search on a sorted array returning the index or -1" go
 ```
 
-### Orchestrator Agent
+### Skills — Semi-formal Reasoning
 
-For end-to-end workflows, use the `verify-orchestrator` agent which chains all three skills:
+Four skills for structured code analysis, adapted from the "Agentic Code Reasoning" paper (Ugare & Chandra, Meta, 2026). Semi-formal reasoning forces evidence gathering, execution tracing, and alternative hypothesis checking before any conclusion — preventing unsupported claims and confirmation bias.
 
-1. Spec refinement until user approves
-2. Verified implementation until Dafny accepts
-3. Code extraction to target language
+**Key results from the paper:**
+- Patch equivalence: 78%-88% accuracy (curated), 93% on real-world patches
+- Code question answering: 87% accuracy on RubberDuckBench (+9pp over standard)
+- Fault localization: +5-12pp over standard reasoning
+
+#### `/reason` — Semi-formal Code Reasoning
+
+General-purpose structured reasoning for any code question. Produces an evidence-backed certificate with premises, execution traces, alternative hypothesis checks, and formal conclusions. Includes optional deep-analysis mode with function trace tables and data flow analysis for code behavior questions.
+
+```
+/reason "Is this function thread-safe?" src/cache.py
+/reason "What does this function actually do?" src/utils.ts:42
+/reason "Will this refactor change the public API behavior?"
+```
+
+#### `/compare-patches` — Patch Equivalence Verification
+
+Determine whether two code patches are semantically equivalent by tracing execution through the test suite.
+
+```
+/compare-patches
+```
+
+#### `/locate-fault` — Fault Localization
+
+Locate the root cause of a failing test using 4-phase structured analysis: test semantics, code path tracing, divergence analysis, and ranked predictions.
+
+```
+/locate-fault "test_year_before_1000 fails with AttributeError" tests/test_dateformat.py
+```
+
+#### `/trace-execution` — Execution Path Tracing
+
+Hypothesis-driven execution path tracing that builds complete call graphs from entry point to leaf functions.
+
+```
+/trace-execution "format(value, format_string)" django/utils/dateformat.py
+/trace-execution "What happens when UserService.authenticate() is called with an expired token?"
+```
+
+### Skills — Spec Management & Adequacy
+
+Three skills for ongoing spec management and bridging formal/informal verification:
+
+#### `/check-regressions` — Regression Detection
+
+Scan the spec registry for verified Dafny specs whose associated source files have changed. Re-verify affected specs and report which properties still hold.
+
+```
+/check-regressions
+/check-regressions max-of-array
+/check-regressions --hard-only
+```
+
+#### `/suggest-specs` — Specification Discovery
+
+Analyze code to propose candidate formal specifications. Identifies functions that would benefit from verification and generates natural-language spec proposals.
+
+```
+/suggest-specs src/billing/calc.py
+/suggest-specs merge_intervals
+/suggest-specs
+```
+
+#### `/rationale` — Structured Adequacy Argument
+
+Build a hierarchical claim tree arguing that code adequately satisfies requirements. Each leaf is classified by verification method (formal, behavioral, static, semantic) and verified where possible.
+
+```
+/rationale src/sort.py "must return a sorted permutation of the input"
+/rationale billing/calc.py:42 "energy conservation: period1 + period2 == total"
+```
+
+### Orchestrator Agent — Byfuglien
+
+The `byfuglien` agent is the unified orchestrator. It classifies tasks, routes to the appropriate skill, and validates output quality. Named after Dustin Byfuglien — the crosschecking enforcer.
+
+For formal verification tasks, it runs the full pipeline: spec refinement → verified implementation → code extraction. For reasoning tasks, it selects the right analysis skill and enforces evidence standards.
+
+## Core Principles — Semi-formal Reasoning
+
+1. Every claim must cite file:line evidence
+2. Always read actual code — never guess from function names
+3. Check alternative hypotheses before concluding
+4. The structured format IS the reasoning process, not just output formatting
+5. Name resolution matters — check for shadowing at every scope
 
 ## MCP Tools
 
@@ -104,6 +187,7 @@ The plugin exposes three MCP tools:
 - **Source as string**: LLM passes Dafny code directly; the MCP server handles all file I/O internally
 - **Boilerplate stripping**: Compiled output has Dafny runtime imports and files removed automatically
 - **No Dafny artifacts committed**: Only clean Python/Go output is the deliverable
+- **On-demand skill loading**: The Byfuglien agent reads skill SKILL.md files on-demand via the Read tool, keeping baseline context lean
 
 ## Development
 

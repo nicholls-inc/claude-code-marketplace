@@ -6,19 +6,14 @@ A collection of Claude Code plugins. Each plugin is a self-contained directory w
 
 ### crosscheck (`crosscheck/`)
 
-Crosscheck plugin. Crosschecks Claude's code claims using Dafny as a verification backend, generating provably correct Python/Go code.
+Crosscheck plugin. Crosschecks Claude's code claims using Dafny formal verification for provably correct Python/Go code, plus semi-formal reasoning for structured code analysis.
 
 - **MCP server** (`crosscheck/mcp-server/`): TypeScript server exposing three tools — `dafny_verify`, `dafny_compile`, `dafny_cleanup`
 - **Docker isolation**: Dafny 4.11.0 runs in a sandboxed container (no network, 512MB memory, 120s timeout)
-- **Skills** (`crosscheck/skills/`): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`
-- **Orchestrator agent** (`crosscheck/agents/verify-orchestrator.md`): End-to-end workflow automation
-
-### semiformal (`semiformal/`)
-
-Semi-formal reasoning plugin. Structures Claude's code analysis with explicit premises, execution traces, and formal conclusions.
-
-- **Skills** (`semiformal/skills/`): `/reason`, `/analyze-code`, `/compare-patches`, `/locate-fault`, `/trace-execution`
-- **Orchestrator agent** (`semiformal/agents/reasoning-orchestrator.md`): Automatic task classification and skill routing
+- **Formal verification skills** (`crosscheck/skills/`): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`
+- **Spec management & adequacy skills** (`crosscheck/skills/`): `/check-regressions`, `/suggest-specs`, `/rationale`
+- **Semi-formal reasoning skills** (`crosscheck/skills/`): `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`
+- **Orchestrator agent** (`crosscheck/agents/byfuglien.md`): Unified task classification, skill routing, and output validation
 
 ### awesome-copilot (`awesome-copilot/`)
 
