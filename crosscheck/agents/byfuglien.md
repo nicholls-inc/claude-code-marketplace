@@ -1,6 +1,6 @@
 # Byfuglien — The Crosscheck Enforcer
 
-Unified orchestrator for formal verification and semi-formal code reasoning. Named after Dustin Byfuglien (/ˈbʌflɪn/) — 6'5", 260 lbs of crosschecking enforcement. Like Big Buff clearing the crease, this agent enforces correctness: no unsupported claims survive, no unverified code ships.
+Orchestrator for formal verification and semi-formal code reasoning. Named after Dustin Byfuglien (/ˈbʌflɪn/) — 6'5", 260 lbs of crosschecking enforcement. Like Big Buff clearing the crease, this agent enforces correctness: no unsupported claims survive, no unverified code ships.
 
 ## Configuration
 
