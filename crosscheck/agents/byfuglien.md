@@ -25,6 +25,14 @@ maxTurns: 30
 | `/generate-verified` | Implement Dafny code that satisfies a verified spec |
 | `/extract-code` | Compile verified Dafny to Python/Go with boilerplate stripped |
 | `/lightweight-verify` | Design-by-contract, property-based tests, documented invariants (no Dafny) |
+| `/check-regressions` | Detect when code changes invalidate previously-verified Dafny specs |
+| `/suggest-specs` | Propose candidate specifications by analyzing code patterns |
+
+### Bridging Formal and Semi-formal
+
+| Skill | What it does |
+|-------|-------------|
+| `/rationale` | Build a hierarchical adequacy argument with mixed verification methods |
 
 ### Semi-formal Reasoning (evidence-grounded analysis)
 
@@ -48,6 +56,9 @@ Classify the user's request to determine which skill to invoke.
 | CRUD / IO-heavy | Database queries, HTTP handlers, file processing | `/lightweight-verify` (IO cannot be formally verified) |
 | Concurrency | Thread pools, async coordinators, message passing | `/lightweight-verify` (Dafny cannot model concurrency) |
 | Floating-point math | Scientific computing, ML inference | `/lightweight-verify` (Dafny `real` !== IEEE 754) |
+| Regression check | "Did my changes break anything?", "Check verified specs", pre-commit review | `/check-regressions` |
+| Spec discovery | "What should I verify?", "Suggest specs", reviewing new code | `/suggest-specs` |
+| Adequacy argument | "Is this code adequate?", "Build a rationale", code + informal requirements | `/rationale` |
 | Code questions | "What does X do?", "Is there a difference?", "Do we need this?" | `/reason` |
 | Patch comparison | Two diffs, two patches, "compare these changes" | `/compare-patches` |
 | Bug/fault finding | "Why does this fail?", stack traces, unexpected behavior | `/locate-fault` |
@@ -88,6 +99,9 @@ Read the selected skill's SKILL.md file and follow its methodology exactly:
 - For `/generate-verified`: read `skills/generate-verified/SKILL.md`
 - For `/extract-code`: read `skills/extract-code/SKILL.md`
 - For `/lightweight-verify`: read `skills/lightweight-verify/SKILL.md`
+- For `/check-regressions`: read `skills/check-regressions/SKILL.md`
+- For `/suggest-specs`: read `skills/suggest-specs/SKILL.md`
+- For `/rationale`: read `skills/rationale/SKILL.md`
 - For `/reason`: read `skills/reason/SKILL.md`
 - For `/compare-patches`: read `skills/compare-patches/SKILL.md`
 - For `/locate-fault`: read `skills/locate-fault/SKILL.md`
@@ -104,6 +118,13 @@ Every result must pass these quality gates before delivery:
 - Target-language pitfalls checked (`real` types, generics, underscore identifiers)
 - Clean output with no `_dafny.` references remaining
 - Difficulty metrics reviewed (flag trivial proofs, high resource usage)
+
+**For spec management and adequacy output (`/check-regressions`, `/suggest-specs`, `/rationale`):**
+- **Registry consistency** — `/check-regressions` results match the current state of `.crosscheck/specs.json`
+- **Proposal quality** — `/suggest-specs` proposals are grounded in actual code patterns, not generic suggestions
+- **Claim tree soundness** — `/rationale` tree structure is valid: if all leaves hold, the root holds
+- **Classification accuracy** — leaf claims tagged with the correct verification method (`[FORMAL]`/`[BEHAVIORAL]`/`[STATIC]`/`[SEMANTIC]`)
+- **Actionable output** — every proposal or claim has a clear next step (skill to run, test to execute, or judgment to make)
 
 **For semi-formal reasoning output:**
 - **Certificate completeness** — all required sections present and filled in

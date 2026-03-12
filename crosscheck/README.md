@@ -118,6 +118,39 @@ Hypothesis-driven execution path tracing that builds complete call graphs from e
 /trace-execution "What happens when UserService.authenticate() is called with an expired token?"
 ```
 
+### Skills — Spec Management & Adequacy
+
+Three skills for ongoing spec management and bridging formal/informal verification:
+
+#### `/check-regressions` — Regression Detection
+
+Scan the spec registry for verified Dafny specs whose associated source files have changed. Re-verify affected specs and report which properties still hold.
+
+```
+/check-regressions
+/check-regressions max-of-array
+/check-regressions --hard-only
+```
+
+#### `/suggest-specs` — Specification Discovery
+
+Analyze code to propose candidate formal specifications. Identifies functions that would benefit from verification and generates natural-language spec proposals.
+
+```
+/suggest-specs src/billing/calc.py
+/suggest-specs merge_intervals
+/suggest-specs
+```
+
+#### `/rationale` — Structured Adequacy Argument
+
+Build a hierarchical claim tree arguing that code adequately satisfies requirements. Each leaf is classified by verification method (formal, behavioral, static, semantic) and verified where possible.
+
+```
+/rationale src/sort.py "must return a sorted permutation of the input"
+/rationale billing/calc.py:42 "energy conservation: period1 + period2 == total"
+```
+
 ### Orchestrator Agent — Byfuglien
 
 The `byfuglien` agent is the unified orchestrator. It classifies tasks, routes to the appropriate skill, and validates output quality. Named after Dustin Byfuglien — the crosschecking enforcer.

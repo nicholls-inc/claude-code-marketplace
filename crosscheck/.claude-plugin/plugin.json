@@ -1,6 +1,6 @@
 {
   "name": "crosscheck",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Crosscheck Claude's code claims — formal verification via Dafny for provably correct Python/Go, plus semi-formal reasoning for structured code analysis, fault localization, and patch comparison",
   "mcpServers": {
     "dafny": {
