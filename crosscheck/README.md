@@ -4,7 +4,7 @@ _A Claude Code Plugin_
 
 Crosscheck Claude's code claims using two complementary approaches: **formal verification** via Dafny for provably correct Python/Go code, and **semi-formal reasoning** for structured code analysis with evidence-grounded certificates.
 
-The agent, Byfuglien, checks Claude's claims like their namesake checked opponents:
+The agent, Byfuglien (/ˈbʌflɪn/), checks Claude's claims like their namesake checked opponents:
 
 ![dustin-byfuglien-18-gifs-6](https://github.com/user-attachments/assets/ae56a511-ee9f-4b9f-bb73-110262dfd115)
 
@@ -157,7 +157,7 @@ Build a hierarchical claim tree arguing that code adequately satisfies requireme
 /rationale billing/calc.py:42 "energy conservation: period1 + period2 == total"
 ```
 
-### Orchestrator Agent — Byfuglien
+### Orchestrator Agent — Byfuglien (/ˈbʌflɪn/)
 
 The `byfuglien` agent is the unified orchestrator. It classifies tasks, routes to the appropriate skill, and validates output quality. Named after Dustin Byfuglien — the crosschecking enforcer.
 
