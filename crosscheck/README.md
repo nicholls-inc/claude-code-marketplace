@@ -1,6 +1,12 @@
-# crosscheck — Claude Code Plugin
+# Crosscheck
+
+_A Claude Code Plugin_
 
 Crosscheck Claude's code claims with Dafny formal verification. The LLM proposes Dafny specs and implementations, the Dafny verifier acts as a hard correctness gate, and only verified code gets extracted to the target language. No Dafny artifacts are committed—only clean Python/Go output.
+
+The agent, Byfuglien, checks Claude's claims like their namesake checks NHL players:
+
+![dustin-byfuglien-18-gifs-6](https://github.com/user-attachments/assets/ae56a511-ee9f-4b9f-bb73-110262dfd115)
 
 ## Prerequisites
 
