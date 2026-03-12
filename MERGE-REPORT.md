@@ -38,12 +38,14 @@ Replace both orchestrators with a single **`crosscheck-orchestrator`** agent tha
 User request
     │
     ▼
-crosscheck-orchestrator (unified)
+Byfuglien (unified orchestrator)
     │
     ├─ Formal verification tasks ──► /spec-iterate → /generate-verified → /extract-code
     ├─ Lightweight verification ───► /lightweight-verify
+    ├─ Regression detection ───────► /check-regressions
+    ├─ Spec discovery ─────────────► /suggest-specs
+    ├─ Adequacy argument ──────────► /rationale
     ├─ Code reasoning tasks ───────► /reason
-    ├─ Code Q&A ───────────────────► /analyze-code
     ├─ Patch comparison ───────────► /compare-patches
     ├─ Bug hunting ────────────────► /locate-fault
     └─ Execution tracing ──────────► /trace-execution
@@ -56,7 +58,10 @@ The unified orchestrator combines both existing orchestrators' task-fitness tabl
 | Algorithms with subtle invariants | Sorting, search, DP, safety-critical | `/spec-iterate` → full pipeline |
 | Safety-critical logic | Access control, financial, crypto | `/spec-iterate` → full pipeline |
 | Simple transformations, CRUD, IO | Map/filter, DB, HTTP handlers | `/lightweight-verify` |
-| Code questions | "What does X do?", "Is there a difference?" | `/analyze-code` |
+| Regression check | "Did my changes break anything?", pre-commit review | `/check-regressions` |
+| Spec discovery | "What should I verify?", reviewing new code | `/suggest-specs` |
+| Adequacy argument | "Is this code adequate?", code + requirements | `/rationale` |
+| Code questions | "What does X do?", "Is there a difference?" | `/reason` |
 | Patch/diff comparison | Two diffs, "compare these changes" | `/compare-patches` |
 | Bug/fault finding | "Why does this fail?", stack traces | `/locate-fault` |
 | Execution tracing | "What happens when?", "Trace the flow" | `/trace-execution` |
@@ -76,7 +81,7 @@ The 9 skills can be reduced to **6** without losing capability:
 
 5. **Keep all 4 crosscheck skills as-is** — they form a coherent pipeline.
 
-Result: **8 skills** (4 crosscheck + 4 semiformal, down from 9).
+Result: **11 skills** (4 formal verification + 3 spec management/adequacy + 4 semiformal reasoning).
 
 #### C. Skill Description Compression
 
@@ -91,29 +96,37 @@ Each semiformal skill prompt is 100-300 lines of detailed templates. To reduce c
 ```
 crosscheck/
 ├── .claude-plugin/
-│   └── plugin.json                     # Updated: description covers both capabilities
+│   └── plugin.json                     # v2.1.0, description covers all capabilities
 ├── agents/
-│   └── crosscheck-orchestrator.md      # Unified orchestrator (replaces both)
+│   └── byfuglien.md                   # Unified orchestrator (replaces both originals)
 ├── mcp-server/                         # Unchanged
 │   └── ...
 ├── skills/
-│   ├── spec-iterate/                   # Unchanged
-│   ├── generate-verified/              # Unchanged
-│   ├── extract-code/                   # Unchanged
-│   ├── lightweight-verify/             # Unchanged
-│   ├── reason/                         # Merged from semiformal (reason + analyze-code)
+│   ├── spec-iterate/                   # Formal verification
+│   ├── generate-verified/              # Formal verification
+│   ├── extract-code/                   # Formal verification (+ Step 5.5 registry)
+│   ├── lightweight-verify/             # Formal verification (lightweight)
+│   ├── check-regressions/             # Spec management — regression detection
+│   │   ├── SKILL.md
+│   │   └── references/
+│   │       └── registry-schema.md
+│   ├── suggest-specs/                  # Spec management — autoformalization
+│   │   └── SKILL.md
+│   ├── rationale/                      # Bridging — structured adequacy arguments
+│   │   └── SKILL.md
+│   ├── reason/                         # Semi-formal (merged reason + analyze-code)
 │   │   ├── SKILL.md
 │   │   └── references/
 │   │       └── reasoning-templates.md
-│   ├── compare-patches/                # Moved from semiformal
+│   ├── compare-patches/                # Semi-formal — patch equivalence
 │   │   ├── SKILL.md
 │   │   └── references/
 │   │       └── comparison-templates.md
-│   ├── locate-fault/                   # Moved from semiformal
+│   ├── locate-fault/                   # Semi-formal — fault localization
 │   │   ├── SKILL.md
 │   │   └── references/
 │   │       └── fault-localization-templates.md
-│   └── trace-execution/               # Moved from semiformal
+│   └── trace-execution/               # Semi-formal — execution tracing
 │       ├── SKILL.md
 │       └── references/
 │           └── tracing-templates.md
@@ -121,8 +134,7 @@ crosscheck/
 │   └── reports/                        # Unchanged
 ├── scripts/                            # Unchanged
 ├── README.md                           # Updated
-├── CHANGELOG.md                        # Updated
-└── package.json                        # Updated
+└── package.json                        # v2.1.0
 ```
 
 #### E. Plugin Identity
@@ -132,7 +144,7 @@ Update `plugin.json`:
 ```json
 {
   "name": "crosscheck",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Crosscheck Claude's code claims — formal verification via Dafny for provably correct Python/Go, plus semi-formal reasoning for structured code analysis, fault localization, and patch comparison."
 }
 ```
@@ -245,11 +257,11 @@ All three reviews agree on what to avoid:
 | **3** | Skill consolidation (merge /reason + /analyze-code) | Low | Medium | DONE |
 | **4** | Verification checklist output for all skills (Findings 1+5 merged) | Low | High | DONE |
 | **5** | Claim classification tags ([STATIC]/[SEMANTIC]/[BEHAVIORAL]/[FORMAL]) | Low | High | DONE |
-| **6** | Spec registry + `/check-regressions` | Medium | High | Future |
-| **7** | `/suggest-specs` autoformalization | Medium | High | Future |
-| **8** | `/rationale` structured claim trees | Medium | Medium | Future |
+| **6** | Spec registry + `/check-regressions` | Medium | High | DONE |
+| **7** | `/suggest-specs` autoformalization | Medium | High | DONE |
+| **8** | `/rationale` structured claim trees | Medium | Medium | DONE |
 
 **Notes:**
 - Item 4 merged original Findings 1 (verification checklists) and 5 (trust boundary tracking) — they are the same concept applied to different skill families. `/extract-code` already had a partial checklist (Abstraction Gap Checklist); the other 7 skills now have checklists too.
 - Original item 4 (compress skill descriptions into references/) was dropped — skills only load into context when invoked by the user, so there's no context overhead from verbose SKILL.md files.
-- Items 6-8 require new skills and infrastructure (spec registry manifest, new SKILL.md files). Deferred until the merged plugin is stable.
+- Items 6-8: Added spec registry with `.crosscheck/specs.json` manifest, `/check-regressions` for regression detection, `/suggest-specs` for autoformalization, and `/rationale` for structured adequacy arguments. `/extract-code` updated with Step 5.5 to register specs in the registry.
