@@ -2,7 +2,7 @@
 
 Crosscheck Claude's code claims using two complementary approaches: **formal verification** via Dafny for provably correct Python/Go code, and **semi-formal reasoning** for structured code analysis with evidence-grounded certificates.
 
-The agent, Byfuglien (/ˈbʌflɪn/), checks Claude's claims like their namesake checked opponents.
+The agent, Byfuglien (/ˈbʌflɪn/), checks Claude's claims like their namesake checked opponents: no unsupported claims survive, no unverified code ships.
 
 ![03122-ezgif com-optimize](https://github.com/user-attachments/assets/260bd90a-59d1-4d5e-aada-4411d2db397b)
 
