@@ -28,6 +28,14 @@ Field report plugin. Generates structured performance reports on plugins, skills
 
 - **Skills** (`field-report/skills/`): `/field-report`
 
+### pit-crew (`pit-crew/`)
+
+Autonomous agent scheduling for GitHub issues.
+
+- **Go CLI** (`pit-crew/cli/`): Scans GitHub issues, manages work queue, launches Claude sessions in isolated git worktrees
+- **Skills** (`pit-crew/skills/`): `/fix-bug`, `/implement-feature`
+- **Config**: `.pit-crew.yml` per target repo
+
 ## Development — crosscheck
 
 ```bash
