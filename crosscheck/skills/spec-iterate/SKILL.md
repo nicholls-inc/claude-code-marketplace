@@ -1,3 +1,14 @@
+---
+name: spec-iterate
+description: >-
+  Draft and verify a Dafny formal specification from a natural language description.
+  Produces a verified spec with preconditions, postconditions, and invariants.
+  Use when the user wants to formally specify a function, algorithm, or correctness
+  property. Triggers: "specify", "formal spec", "write a spec", "preconditions",
+  "postconditions", "verify properties".
+argument-hint: "[natural language description of the function to specify]"
+---
+
 # /spec-iterate — Dafny Specification Refinement
 
 ## Description

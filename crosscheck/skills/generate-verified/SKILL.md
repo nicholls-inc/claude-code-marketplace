@@ -1,3 +1,13 @@
+---
+name: generate-verified
+description: >-
+  Generate a Dafny implementation body that satisfies a verified spec. Iteratively
+  adds proof hints, loop invariants, and lemmas until the verifier accepts.
+  Use after /spec-iterate produces an approved spec. Triggers: "implement the spec",
+  "generate verified code", "prove the implementation".
+argument-hint: "[optional: Dafny spec to implement]"
+---
+
 # /generate-verified — Verified Dafny Implementation
 
 ## Description

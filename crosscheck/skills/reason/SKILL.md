@@ -1,3 +1,13 @@
+---
+name: reason
+description: >-
+  General-purpose semi-formal code reasoning that structures analysis into an
+  evidence-driven certificate. Forces premise gathering, execution tracing, and
+  alternative hypothesis checking before conclusions. Use for any code question:
+  "Is this correct?", "Will this break?", "What does this do?", "Is this safe?".
+  Triggers: "reason about", "is this correct", "will this break", "what does this do".
+argument-hint: "[code question or claim] [optional: file paths]"
+---
 # /reason — Semi-formal Code Reasoning
 
 ## Description

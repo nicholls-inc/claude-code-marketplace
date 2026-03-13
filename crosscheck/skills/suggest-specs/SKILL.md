@@ -1,3 +1,14 @@
+---
+name: suggest-specs
+description: >-
+  Analyze code to propose candidate formal specifications. Identifies functions that
+  would benefit from verification and generates natural-language preconditions,
+  postconditions, and invariants. Lowers the barrier to entry for /spec-iterate.
+  Triggers: "suggest specs", "what should I verify", "find verification targets",
+  "propose specifications".
+argument-hint: "[optional: file path, function name, or directory]"
+---
+
 # /suggest-specs — Specification Discovery
 
 ## Description
