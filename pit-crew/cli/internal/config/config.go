@@ -4,10 +4,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"text/template"
 	"time"
 
 	"gopkg.in/yaml.v3"
 )
+
+const minTimeout = 30 * time.Second
 
 const defaultClaudeTemplate = "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"
 
@@ -80,8 +83,20 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("concurrency must be greater than 0")
 	}
 
-	if _, err := time.ParseDuration(c.Timeout); err != nil {
+	if c.MaxTurns <= 0 {
+		return fmt.Errorf("max_turns must be greater than 0")
+	}
+
+	dur, err := time.ParseDuration(c.Timeout)
+	if err != nil {
 		return fmt.Errorf("timeout must be a valid duration: %w", err)
+	}
+	if dur < minTimeout {
+		return fmt.Errorf("timeout must be at least %s", minTimeout)
+	}
+
+	if _, err := template.New("cfg").Parse(c.Claude.Template); err != nil {
+		return fmt.Errorf("claude.template is not a valid Go template: %w", err)
 	}
 
 	for name, task := range c.Tasks {

@@ -136,13 +136,44 @@ func (m *Manager) copyClaudeConfig(worktreePath string) error {
 }
 
 // Remove removes a git worktree and its branch.
+// It looks up the branch name from `git worktree list --porcelain` before removal
+// to correctly handle branch names containing path separators (e.g., "fix/issue-42").
 func (m *Manager) Remove(ctx context.Context, worktreePath string) error {
+	// Look up the branch name before removing the worktree, because
+	// filepath.Base() would incorrectly truncate "fix/issue-42" to "issue-42".
+	branchName := m.branchForWorktree(ctx, worktreePath)
+
 	if _, err := m.Runner.Run(ctx, "git", "worktree", "remove", worktreePath, "--force"); err != nil {
 		return fmt.Errorf("git worktree remove: %w", err)
 	}
-	// Best-effort branch deletion
-	m.Runner.Run(ctx, "git", "branch", "-d", filepath.Base(worktreePath)) //nolint:errcheck
+	// Best-effort branch deletion using the real branch name
+	if branchName != "" {
+		m.Runner.Run(ctx, "git", "branch", "-d", branchName) //nolint:errcheck
+	}
 	return nil
+}
+
+// branchForWorktree looks up the branch name for a worktree path by parsing
+// `git worktree list --porcelain`. Returns empty string if not found.
+func (m *Manager) branchForWorktree(ctx context.Context, worktreePath string) string {
+	out, err := m.Runner.Run(ctx, "git", "worktree", "list", "--porcelain")
+	if err != nil {
+		return ""
+	}
+	// Normalize the target path for comparison
+	absTarget := worktreePath
+	if !filepath.IsAbs(worktreePath) {
+		absTarget = filepath.Join(m.RepoRoot, worktreePath)
+	}
+	absTarget = filepath.Clean(absTarget)
+
+	for _, wt := range parsePorcelain(string(out)) {
+		candidate := filepath.Clean(wt.Path)
+		if candidate == absTarget {
+			return wt.Branch
+		}
+	}
+	return ""
 }
 
 // List returns all git worktrees by parsing `git worktree list --porcelain`.
@@ -195,8 +226,13 @@ func parsePorcelain(output string) []WorktreeInfo {
 }
 
 // copyFile copies a single file src → dst, creating parent dirs as needed.
+// It preserves the source file's permissions.
 func copyFile(src, dst string) error {
 	if err := os.MkdirAll(filepath.Dir(dst), 0o755); err != nil {
+		return err
+	}
+	srcInfo, err := os.Stat(src)
+	if err != nil {
 		return err
 	}
 	in, err := os.Open(src)
@@ -204,7 +240,7 @@ func copyFile(src, dst string) error {
 		return err
 	}
 	defer in.Close()
-	out, err := os.Create(dst)
+	out, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, srcInfo.Mode())
 	if err != nil {
 		return err
 	}

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"log"
 	"regexp"
 	"strings"
 	"sync"
@@ -117,25 +118,33 @@ func (r *Runner) runJob(ctx context.Context, job queue.Job) string {
 	// Create worktree
 	worktreePath, err := r.Worktree.Create(ctx, branchName)
 	if err != nil {
-		r.Queue.Update(job.ID, queue.StateFailed, fmt.Sprintf("create worktree: %v", err)) //nolint:errcheck
+		if updateErr := r.Queue.Update(job.ID, queue.StateFailed, fmt.Sprintf("create worktree: %v", err)); updateErr != nil {
+			log.Printf("warn: failed to update job %s state: %v", job.ID, updateErr)
+		}
 		return "failed"
 	}
 
 	// Build and launch claude command
 	cmd, args, err := buildCommand(r.Config, &job)
 	if err != nil {
-		r.Queue.Update(job.ID, queue.StateFailed, fmt.Sprintf("build command: %v", err)) //nolint:errcheck
+		if updateErr := r.Queue.Update(job.ID, queue.StateFailed, fmt.Sprintf("build command: %v", err)); updateErr != nil {
+			log.Printf("warn: failed to update job %s state: %v", job.ID, updateErr)
+		}
 		return "failed"
 	}
 
 	runErr := r.Runner.RunProcess(ctx, worktreePath, cmd, args...)
 
 	if runErr != nil {
-		r.Queue.Update(job.ID, queue.StateFailed, runErr.Error()) //nolint:errcheck
+		if updateErr := r.Queue.Update(job.ID, queue.StateFailed, runErr.Error()); updateErr != nil {
+			log.Printf("warn: failed to update job %s state: %v", job.ID, updateErr)
+		}
 		return "failed"
 	}
 
-	r.Queue.Update(job.ID, queue.StateCompleted, "") //nolint:errcheck
+	if updateErr := r.Queue.Update(job.ID, queue.StateCompleted, ""); updateErr != nil {
+		log.Printf("warn: failed to update job %s state: %v", job.ID, updateErr)
+	}
 	return "completed"
 }
 
@@ -184,6 +193,7 @@ func slugify(s string) string {
 	clean = strings.Trim(clean, "-")
 	if len(clean) > 20 {
 		clean = clean[:20]
+		clean = strings.TrimRight(clean, "-")
 	}
 	if clean == "" {
 		clean = "task"

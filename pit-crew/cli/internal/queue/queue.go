@@ -23,6 +23,29 @@ const (
 	StateCancelled JobState = "cancelled"
 )
 
+// validTransitions defines the allowed state transitions. Each key is a current
+// state and the value is the set of states it may transition to.
+var validTransitions = map[JobState]map[JobState]bool{
+	StatePending: {
+		StateRunning:   true,
+		StateCancelled: true,
+	},
+	StateRunning: {
+		StateCompleted: true,
+		StateFailed:    true,
+		StateCancelled: true,
+	},
+	StateFailed: {
+		StatePending: true, // allow retry
+	},
+	// Terminal states: no transitions out of completed or cancelled.
+	StateCompleted: {},
+	StateCancelled: {},
+}
+
+// ErrInvalidTransition is returned when a state transition is not allowed.
+var ErrInvalidTransition = errors.New("invalid state transition")
+
 type Job struct {
 	ID        string     `json:"id"`
 	IssueURL  string     `json:"issue_url"`
@@ -95,6 +118,16 @@ func (q *Queue) Update(id string, state JobState, errMsg string) error {
 			if jobs[i].ID != id {
 				continue
 			}
+
+			// Validate state transition.
+			allowed, knownState := validTransitions[jobs[i].State]
+			if !knownState {
+				return fmt.Errorf("%w: unknown current state %s for job %s", ErrInvalidTransition, jobs[i].State, id)
+			}
+			if !allowed[state] {
+				return fmt.Errorf("%w: cannot move job %s from %s to %s", ErrInvalidTransition, id, jobs[i].State, state)
+			}
+
 			now := time.Now().UTC()
 			jobs[i].State = state
 			switch state {
@@ -121,7 +154,13 @@ func (q *Queue) Update(id string, state JobState, errMsg string) error {
 }
 
 func (q *Queue) List() ([]Job, error) {
-	return q.readAllJobs()
+	var jobs []Job
+	err := q.withRLock(func() error {
+		var readErr error
+		jobs, readErr = q.readAllJobs()
+		return readErr
+	})
+	return jobs, err
 }
 
 func (q *Queue) ListByState(state JobState) ([]Job, error) {
@@ -191,6 +230,19 @@ func (q *Queue) withLock(fn func() error) error {
 	return fn()
 }
 
+func (q *Queue) withRLock(fn func() error) error {
+	lock := flock.New(q.lockPath)
+	if err := lock.RLock(); err != nil {
+		return err
+	}
+	defer func() {
+		if unlockErr := lock.Unlock(); unlockErr != nil {
+			log.Printf("warn: failed to unlock queue: %v", unlockErr)
+		}
+	}()
+	return fn()
+}
+
 func (q *Queue) readAllJobs() ([]Job, error) {
 	f, err := os.Open(q.path)
 	if err != nil {
@@ -201,9 +253,14 @@ func (q *Queue) readAllJobs() ([]Job, error) {
 	}
 	defer f.Close()
 
-	jobs := make([]Job, 0)
+	var (
+		jobs     = make([]Job, 0)
+		lineNum  int
+		skipped  int
+	)
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
+		lineNum++
 		line := strings.TrimSpace(scanner.Text())
 		if line == "" {
 			continue
@@ -211,7 +268,8 @@ func (q *Queue) readAllJobs() ([]Job, error) {
 
 		var job Job
 		if err := json.Unmarshal([]byte(line), &job); err != nil {
-			log.Printf("warn: skipping malformed queue entry: %v", err)
+			skipped++
+			log.Printf("warn: skipping malformed queue entry at line %d: %v (content: %s)", lineNum, err, line)
 			continue
 		}
 		jobs = append(jobs, job)
@@ -219,6 +277,10 @@ func (q *Queue) readAllJobs() ([]Job, error) {
 
 	if err := scanner.Err(); err != nil {
 		return nil, err
+	}
+
+	if skipped > 0 {
+		return jobs, fmt.Errorf("%d malformed queue entries skipped", skipped)
 	}
 
 	return jobs, nil

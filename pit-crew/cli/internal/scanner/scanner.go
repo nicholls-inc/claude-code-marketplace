@@ -117,7 +117,7 @@ func (s *Scanner) hasExcludedLabel(issue ghIssue, excluded map[string]bool) bool
 }
 
 func (s *Scanner) hasBranch(ctx context.Context, issueNum int) bool {
-	for _, prefix := range []string{"fix", "feat"} {
+	for _, prefix := range branchPrefixes {
 		pattern := fmt.Sprintf("%s/issue-%d-*", prefix, issueNum)
 		out, err := s.CmdRunner.Run(ctx, "git", "ls-remote", "--heads", "origin", pattern)
 		// git ls-remote output is "<hash>\t<refname>" — must contain a tab to be valid
@@ -128,20 +128,41 @@ func (s *Scanner) hasBranch(ctx context.Context, issueNum int) bool {
 	return false
 }
 
+// branchPrefixes lists the branch name prefixes pit-crew uses when creating
+// worktree branches. Both hasBranch and hasOpenPR use this list so they stay
+// in sync.
+var branchPrefixes = []string{"fix", "feat"}
+
 func (s *Scanner) hasOpenPR(ctx context.Context, issueNum int) bool {
-	search := fmt.Sprintf("#%d", issueNum)
-	out, err := s.CmdRunner.Run(ctx, "gh", "pr", "list",
-		"--repo", s.Config.Repo,
-		"--search", search,
-		"--state", "open",
-		"--json", "number",
-		"--limit", "1")
-	if err != nil {
-		return false
+	// Search for PRs whose head branch matches pit-crew's naming convention.
+	// Using "head:" qualifier limits the search to the branch name rather than
+	// matching "#N" anywhere in the PR title/body (which caused false positives).
+	for _, prefix := range branchPrefixes {
+		search := fmt.Sprintf("head:%s/issue-%d-", prefix, issueNum)
+		out, err := s.CmdRunner.Run(ctx, "gh", "pr", "list",
+			"--repo", s.Config.Repo,
+			"--search", search,
+			"--state", "open",
+			"--json", "number,headRefName",
+			"--limit", "5")
+		if err != nil {
+			continue
+		}
+		var prs []struct {
+			Number      int    `json:"number"`
+			HeadRefName string `json:"headRefName"`
+		}
+		if err := json.Unmarshal(out, &prs); err != nil {
+			continue
+		}
+		// Verify the head branch actually matches the expected pattern to guard
+		// against search-API approximations.
+		branchPrefix := fmt.Sprintf("%s/issue-%d-", prefix, issueNum)
+		for _, pr := range prs {
+			if strings.HasPrefix(pr.HeadRefName, branchPrefix) {
+				return true
+			}
+		}
 	}
-	var prs []struct{ Number int }
-	if err := json.Unmarshal(out, &prs); err != nil {
-		return false
-	}
-	return len(prs) > 0
+	return false
 }

@@ -150,66 +150,58 @@ tasks:
 	}
 }
 
-func TestValidateMissingRepo(t *testing.T) {
-	cfg := &Config{
+func validConfig() *Config {
+	return &Config{
+		Repo: "owner/name",
 		Tasks: map[string]Task{
 			"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
 		},
 		Concurrency: 2,
+		MaxTurns:    50,
 		Timeout:     "30m",
+		Claude: ClaudeConfig{
+			Command:  "claude",
+			Template: defaultClaudeTemplate,
+		},
 	}
+}
+
+func TestValidateMissingRepo(t *testing.T) {
+	cfg := validConfig()
+	cfg.Repo = ""
 
 	err := cfg.Validate()
 	requireErrorContains(t, err, "repo")
 }
 
 func TestValidateEmptyTasks(t *testing.T) {
-	cfg := &Config{
-		Repo:        "owner/name",
-		Concurrency: 2,
-		Timeout:     "30m",
-	}
+	cfg := validConfig()
+	cfg.Tasks = nil
 
 	err := cfg.Validate()
 	requireErrorContains(t, err, "tasks")
 }
 
 func TestValidateZeroConcurrency(t *testing.T) {
-	cfg := &Config{
-		Repo: "owner/name",
-		Tasks: map[string]Task{
-			"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
-		},
-		Concurrency: 0,
-		Timeout:     "30m",
-	}
+	cfg := validConfig()
+	cfg.Concurrency = 0
 
 	err := cfg.Validate()
 	requireErrorContains(t, err, "concurrency")
 }
 
 func TestValidateInvalidTimeout(t *testing.T) {
-	cfg := &Config{
-		Repo: "owner/name",
-		Tasks: map[string]Task{
-			"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
-		},
-		Concurrency: 2,
-		Timeout:     "invalid",
-	}
+	cfg := validConfig()
+	cfg.Timeout = "invalid"
 
 	err := cfg.Validate()
 	requireErrorContains(t, err, "timeout")
 }
 
 func TestValidateTaskMissingLabels(t *testing.T) {
-	cfg := &Config{
-		Repo: "owner/name",
-		Tasks: map[string]Task{
-			"fix-bugs": {Skill: "fix-bug"},
-		},
-		Concurrency: 2,
-		Timeout:     "30m",
+	cfg := validConfig()
+	cfg.Tasks = map[string]Task{
+		"fix-bugs": {Skill: "fix-bug"},
 	}
 
 	err := cfg.Validate()
@@ -217,13 +209,9 @@ func TestValidateTaskMissingLabels(t *testing.T) {
 }
 
 func TestValidateTaskMissingSkill(t *testing.T) {
-	cfg := &Config{
-		Repo: "owner/name",
-		Tasks: map[string]Task{
-			"fix-bugs": {Labels: []string{"bug"}},
-		},
-		Concurrency: 2,
-		Timeout:     "30m",
+	cfg := validConfig()
+	cfg.Tasks = map[string]Task{
+		"fix-bugs": {Labels: []string{"bug"}},
 	}
 
 	err := cfg.Validate()
@@ -244,4 +232,182 @@ func TestLoadFileNotFound(t *testing.T) {
 	if err == nil {
 		t.Fatalf("expected error for missing file")
 	}
+}
+
+func TestValidateZeroMaxTurns(t *testing.T) {
+	cfg := validConfig()
+	cfg.MaxTurns = 0
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "max_turns")
+}
+
+func TestValidateNegativeMaxTurns(t *testing.T) {
+	cfg := validConfig()
+	cfg.MaxTurns = -5
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "max_turns")
+}
+
+func TestValidateInvalidTemplate(t *testing.T) {
+	cfg := validConfig()
+	cfg.Claude.Template = "{{.Broken"
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "claude.template")
+}
+
+func TestValidateTimeoutTooLow(t *testing.T) {
+	cfg := validConfig()
+	cfg.Timeout = "5s"
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "timeout must be at least")
+}
+
+func TestValidateMalformedRepo(t *testing.T) {
+	tests := []struct {
+		name string
+		repo string
+		want string
+	}{
+		{"no slash", "ownername", "owner/name format"},
+		{"trailing slash", "owner/", "owner/name format"},
+		{"leading slash", "/name", "owner/name format"},
+		{"multiple slashes", "owner/name/extra", "owner/name format"},
+		{"just slash", "/", "owner/name format"},
+		{"whitespace parts", " / ", "owner/name format"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cfg := validConfig()
+			cfg.Repo = tt.repo
+
+			err := cfg.Validate()
+			requireErrorContains(t, err, tt.want)
+		})
+	}
+}
+
+func TestLoadZeroMaxTurnsInYAML(t *testing.T) {
+	path := writeConfigFile(t, `repo: owner/name
+tasks:
+  fix-bugs:
+    labels: [bug]
+    skill: fix-bug
+max_turns: 0
+`)
+
+	_, err := Load(path)
+	requireErrorContains(t, err, "max_turns")
+}
+
+func TestLoadInvalidTemplateInYAML(t *testing.T) {
+	path := writeConfigFile(t, `repo: owner/name
+tasks:
+  fix-bugs:
+    labels: [bug]
+    skill: fix-bug
+claude:
+  template: "{{.Broken"
+`)
+
+	_, err := Load(path)
+	requireErrorContains(t, err, "claude.template")
+}
+
+func TestLoadLowTimeoutInYAML(t *testing.T) {
+	path := writeConfigFile(t, `repo: owner/name
+tasks:
+  fix-bugs:
+    labels: [bug]
+    skill: fix-bug
+timeout: "1s"
+`)
+
+	_, err := Load(path)
+	requireErrorContains(t, err, "timeout must be at least")
+}
+
+func TestValidateNegativeConcurrency(t *testing.T) {
+	cfg := validConfig()
+	cfg.Concurrency = -1
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "concurrency")
+}
+
+func TestValidateTaskSkillWhitespaceOnly(t *testing.T) {
+	cfg := validConfig()
+	cfg.Tasks = map[string]Task{
+		"fix-bugs": {Labels: []string{"bug"}, Skill: "  "},
+	}
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "skill")
+}
+
+func TestValidateTimeoutExactlyMinimum(t *testing.T) {
+	cfg := validConfig()
+	cfg.Timeout = "30s" // exactly the minimum
+
+	err := cfg.Validate()
+	if err != nil {
+		t.Fatalf("expected 30s timeout to be valid, got: %v", err)
+	}
+}
+
+func TestValidateTimeoutJustBelowMinimum(t *testing.T) {
+	cfg := validConfig()
+	cfg.Timeout = "29s"
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "timeout must be at least")
+}
+
+func TestLoadYAMLWithUnknownFields(t *testing.T) {
+	// Go's yaml.v3 ignores unknown fields by default.
+	// Verify this doesn't cause a failure.
+	path := writeConfigFile(t, `repo: owner/name
+tasks:
+  fix-bugs:
+    labels: [bug]
+    skill: fix-bug
+unknown_field: some_value
+nested_unknown:
+  key: value
+`)
+
+	cfg, err := Load(path)
+	if err != nil {
+		t.Fatalf("expected unknown fields to be ignored, got: %v", err)
+	}
+	if cfg.Repo != "owner/name" {
+		t.Fatalf("Repo = %q, want owner/name", cfg.Repo)
+	}
+}
+
+func TestValidateMultipleTasks(t *testing.T) {
+	cfg := validConfig()
+	cfg.Tasks = map[string]Task{
+		"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+		"features": {Labels: []string{"enhancement"}, Skill: "implement-feature"},
+	}
+
+	if err := cfg.Validate(); err != nil {
+		t.Fatalf("expected valid config with multiple tasks, got: %v", err)
+	}
+}
+
+func TestValidateMultipleTasksOneInvalid(t *testing.T) {
+	cfg := validConfig()
+	cfg.Tasks = map[string]Task{
+		"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+		"broken":   {Labels: []string{}, Skill: "fix-bug"}, // no labels
+	}
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "labels")
 }
