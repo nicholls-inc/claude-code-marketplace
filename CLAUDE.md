@@ -22,6 +22,12 @@ Meta prompts for discovering and installing curated GitHub Copilot customization
 - **Skills** (`awesome-copilot/skills/`): `/suggest-agents`, `/suggest-instructions`, `/suggest-prompts`, `/suggest-skills`
 - **Agent** (`awesome-copilot/agents/project-scaffold.md`): End-to-end project scaffolding
 
+### field-report (`field-report/`)
+
+Field report plugin. Generates structured performance reports on plugins, skills, and agents by analysing Claude Code session conversations.
+
+- **Skills** (`field-report/skills/`): `/field-report`
+
 ## Development — crosscheck
 
 ```bash

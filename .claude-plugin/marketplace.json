@@ -17,6 +17,11 @@
       "name": "awesome-copilot",
       "source": "./awesome-copilot",
       "description": "Meta prompts that help you discover and install curated GitHub Copilot agents, instructions, prompts, and skills from the awesome-copilot repository."
+    },
+    {
+      "name": "field-report",
+      "source": "./field-report",
+      "description": "Generate structured performance reports on plugins, skills, and agents by analysing Claude Code session conversations."
     }
   ]
 }

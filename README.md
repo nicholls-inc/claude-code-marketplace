@@ -12,6 +12,10 @@ Crosschecks Claude's code claims using [Dafny](https://dafny.org/) formal verifi
 
 Meta prompts that help you discover and install curated GitHub Copilot agents, instructions, prompts, and skills from the [awesome-copilot repository](https://github.com/github/awesome-copilot).
 
+### [field-report](./field-report/)
+
+Generate structured performance reports on plugins, skills, and agents by analysing Claude Code session conversations.
+
 ## Installation
 
 Add the marketplace, then install plugins:
