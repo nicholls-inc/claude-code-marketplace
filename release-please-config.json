@@ -4,7 +4,13 @@
       "release-type": "go",
       "package-name": "pit-crew",
       "component": "pit-crew",
-      "path": "pit-crew/cli"
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     },
     "crosscheck": {
       "release-type": "node",
