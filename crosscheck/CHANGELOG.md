@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.0.1...crosscheck-v2.1.0) (2026-03-13)
+
+
+### Features
+
+* **crosscheck:** add frontmatter to agent and skills ([#46](https://github.com/nicholls-inc/claude-code-marketplace/issues/46)) ([a143c14](https://github.com/nicholls-inc/claude-code-marketplace/commit/a143c1497a030cb7f7884b3d4bec200613d8b04b))
+
 ## [2.0.1](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.0.0...crosscheck-v2.0.1) (2026-03-12)
 
 
