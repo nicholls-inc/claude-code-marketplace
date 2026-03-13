@@ -1,3 +1,12 @@
+---
+name: trace-execution
+description: >-
+  Hypothesis-driven execution path tracing that builds complete call graphs from
+  entry point to leaf functions. Documents observations with line numbers and updates
+  hypotheses as evidence is gathered. Triggers: "trace execution", "what happens when",
+  "follow the code path", "call graph", "trace the flow".
+argument-hint: "[function name, file:line, or scenario to trace]"
+---
 # /trace-execution — Execution Path Tracing
 
 ## Description
