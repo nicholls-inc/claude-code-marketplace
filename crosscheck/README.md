@@ -63,6 +63,17 @@ claude --plugin-dir ./crosscheck
 
 ## Usage
 
+### Orchestrator Agent — Byfuglien (/ˈbʌflɪn/)
+
+The `byfuglien` (/ˈbʌflɪn/) agent is the unified orchestrator. It classifies tasks, routes to the appropriate skill, and validates output quality. Named after Dustin Byfuglien — the crosschecking enforcer.
+
+For formal verification tasks, it runs the full pipeline: spec refinement → verified implementation → code extraction. For reasoning tasks, it selects the right analysis skill and enforces evidence standards.
+
+Ask Claude to:
+```
+Use the byfuglien agent to verify your bug fix
+```
+
 ### Skills — Formal Verification
 
 Four skills for Dafny-backed formal verification:
@@ -177,12 +188,6 @@ Build a hierarchical claim tree arguing that code adequately satisfies requireme
 /rationale src/sort.py "must return a sorted permutation of the input"
 /rationale billing/calc.py:42 "energy conservation: period1 + period2 == total"
 ```
-
-### Orchestrator Agent — Byfuglien (/ˈbʌflɪn/)
-
-The `byfuglien` agent is the unified orchestrator. It classifies tasks, routes to the appropriate skill, and validates output quality. Named after Dustin Byfuglien — the crosschecking enforcer.
-
-For formal verification tasks, it runs the full pipeline: spec refinement → verified implementation → code extraction. For reasoning tasks, it selects the right analysis skill and enforces evidence standards.
 
 ## Core Principles — Semi-formal Reasoning
 
