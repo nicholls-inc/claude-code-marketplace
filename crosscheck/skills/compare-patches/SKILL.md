@@ -1,3 +1,12 @@
+---
+name: compare-patches
+description: >-
+  Determine whether two code patches are semantically equivalent by tracing
+  execution through the test suite using semi-formal reasoning. Produces a
+  structured proof of equivalence or a specific counterexample. Triggers:
+  "compare patches", "are these equivalent", "same behavior", "diff comparison".
+argument-hint: "[two patches as diffs or code blocks, optionally test file path]"
+---
 # /compare-patches — Patch Equivalence Verification
 
 ## Description
