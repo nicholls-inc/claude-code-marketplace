@@ -1,13 +1,3 @@
----
-name: locate-fault
-description: >-
-  Locate the root cause of a failing test using 4-phase semi-formal reasoning:
-  test semantics analysis, code path tracing, divergence analysis, and ranked
-  predictions. Traces from failure to root cause rather than fixating on crash
-  sites. Triggers: "locate fault", "find the bug", "why does this fail",
-  "root cause", stack traces, test failures.
-argument-hint: "[failing test name or error message] [optional: test file path]"
----
 # /locate-fault — Fault Localization via Semi-Formal Reasoning
 
 ## Description

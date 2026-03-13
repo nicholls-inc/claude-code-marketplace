@@ -1,13 +1,3 @@
----
-name: extract-code
-description: >-
-  Compile verified Dafny to Python or Go with Dafny runtime boilerplate stripped.
-  Presents clean output ready for project integration, with type mappings and
-  property-based test suggestions. Use after /generate-verified produces a verified
-  implementation. Triggers: "extract to python", "extract to go", "compile dafny".
-argument-hint: "to [python|go]"
----
-
 # /extract-code — Compile & Extract to Python/Go
 
 ## Description

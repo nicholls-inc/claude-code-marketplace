@@ -1,14 +1,3 @@
----
-name: lightweight-verify
-description: >-
-  Generate lightweight verification artifacts for functions where full formal
-  verification is overkill: design-by-contract assertions, property-based tests,
-  and documented runtime invariant checks. Use for simple transformations, CRUD,
-  concurrency, or floating-point code that Dafny cannot verify. Triggers:
-  "lightweight verify", "add contracts", "property-based tests", "assertions".
-argument-hint: "[function description or code] [python|go]"
----
-
 # /lightweight-verify — Lightweight Verification Alternatives
 
 ## Description
