@@ -1,5 +1,11 @@
 {
   "packages": {
+    "pit-crew": {
+      "release-type": "go",
+      "package-name": "pit-crew",
+      "component": "pit-crew",
+      "path": "pit-crew/cli"
+    },
     "crosscheck": {
       "release-type": "node",
       "package-name": "crosscheck",

@@ -1,0 +1,55 @@
+name: pit-crew CI
+
+on:
+  push:
+    branches: [main]
+    paths: ["pit-crew/cli/**"]
+  pull_request:
+    branches: [main]
+    paths: ["pit-crew/cli/**"]
+
+jobs:
+  go-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pit-crew/cli
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache-dependency-path: pit-crew/cli/go.sum
+
+      - run: go build ./cmd/pit-crew
+
+  go-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pit-crew/cli
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache-dependency-path: pit-crew/cli/go.sum
+
+      - run: go test ./...
+
+  go-vet:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pit-crew/cli
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache-dependency-path: pit-crew/cli/go.sum
+
+      - run: go vet ./...
