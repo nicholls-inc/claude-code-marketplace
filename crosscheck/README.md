@@ -63,7 +63,7 @@ claude --plugin-dir ./crosscheck
 
 ## Usage
 
-### Orchestrator Agent — Byfuglien (/ˈbʌflɪn/)
+### Orchestrator Agent — Byfuglien
 
 The `byfuglien` (/ˈbʌflɪn/) agent is the unified orchestrator. It classifies tasks, routes to the appropriate skill, and validates output quality. Named after Dustin Byfuglien — the crosschecking enforcer.
 
