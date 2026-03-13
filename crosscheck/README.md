@@ -20,7 +20,24 @@ Crosscheck was inspired by three research papers:
 
 ## Installation
 
-### 1. Build the Docker image
+### The Easy Way
+```
+# Add the marketplace
+claude plugin marketplace add nicholls-inc/claude-code-marketplace
+
+# Install plugins
+claude plugin install crosscheck@nicholls
+```
+
+### Local Install
+
+**1. Clone this repo**
+
+```bash
+git clone https://github.com/nicholls-inc/claude-code-marketplace.git
+```
+
+**2. Build the Docker image**
 
 ```bash
 ./scripts/build-docker.sh
@@ -28,7 +45,7 @@ Crosscheck was inspired by three research papers:
 
 This builds a multi-stage Docker image (~300-400MB) with Dafny 4.11.0 and Z3.
 
-### 2. Build the MCP server
+**2. Build the MCP server**
 
 ```bash
 cd mcp-server
@@ -36,7 +53,7 @@ npm install
 npm run build
 ```
 
-### 3. Install the plugin
+**4. Install the plugin**
 
 Point Claude Code at this plugin directory:
 
