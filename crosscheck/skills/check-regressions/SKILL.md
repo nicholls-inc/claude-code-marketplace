@@ -1,3 +1,14 @@
+---
+name: check-regressions
+description: >-
+  Scan the spec registry for verified Dafny specs whose associated source files have
+  changed. Re-verify affected specs and report which properties still hold. Use for
+  regression detection after code changes, pre-commit checks, or spec maintenance.
+  Triggers: "check regressions", "did my changes break specs", "re-verify",
+  "spec status", pre-commit review.
+argument-hint: "[optional: spec-id or --hard-only]"
+---
+
 # /check-regressions — Spec Registry Regression Detection
 
 ## Description

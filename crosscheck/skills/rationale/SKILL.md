@@ -1,3 +1,14 @@
+---
+name: rationale
+description: >-
+  Build a hierarchical claim tree arguing that code adequately satisfies its
+  requirements. Each leaf claim is classified by verification method (formal,
+  behavioral, static, semantic) and verified where possible. Bridges formal
+  verification and semi-formal reasoning. Triggers: "build rationale",
+  "is this code adequate", "adequacy argument", "verification coverage".
+argument-hint: "[code path] [optional: requirements description]"
+---
+
 # /rationale — Structured Adequacy Argument
 
 ## Description
