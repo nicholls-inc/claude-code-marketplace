@@ -43,7 +43,7 @@ func main() {
 
 	queueFile := filepath.Join(cfg.StateDir, "queue.jsonl")
 	q := queue.New(queueFile)
-	wt := worktree.New(".", nil)
+	wt := worktree.New(".", &realCmdRunner{})
 
 	switch subcommand {
 	case "scan":
