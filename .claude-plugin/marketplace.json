@@ -11,7 +11,7 @@
     {
       "name": "crosscheck",
       "source": "./crosscheck",
-      "description": "Crosscheck Claude's code with Dafny formal verification for Python/Go"
+      "description": "Crosschecks Claude's code claims using Dafny formal verification for provably correct Python/Go code, plus semi-formal reasoning for structured code analysis."
     },
     {
       "name": "awesome-copilot",
