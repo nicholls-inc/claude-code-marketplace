@@ -16,6 +16,18 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "field-report": {
+      "release-type": "simple",
+      "package-name": "field-report",
+      "component": "field-report",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }

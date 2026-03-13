@@ -1,0 +1,5 @@
+{
+  "name": "field-report",
+  "version": "1.0.0",
+  "description": "Generate structured performance reports on plugins, skills, and agents by analysing Claude Code session conversations."
+}
