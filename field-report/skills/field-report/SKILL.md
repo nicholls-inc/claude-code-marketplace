@@ -39,6 +39,7 @@ Rules:
 Abort conditions:
 
 - Abort if both session selector and subject are missing.
+- Abort if session selector is missing (subject alone is not sufficient to identify a session).
 - Abort if subject is missing.
 - Abort with usage examples:
   - `/field-report ses_abc123 reason`
@@ -213,13 +214,16 @@ Measure progress quality over the session.
 Method:
 
 - Classify messages as progress-advancing or correction/retry.
-- Compute efficiency ratio as:
-  - `advancing_messages / (advancing_messages + correction_messages)`
+- Describe the overall balance: whether the session was predominantly advancing or predominantly correcting.
 - Describe where momentum was high and where it stalled.
 
 Evidence criteria:
 
 - Cite at least two exchange sequences showing progress and at least one correction loop when present.
+
+Fallback statement:
+
+- If evidence is insufficient to classify messages, write: `Insufficient data — <reason>`.
 
 Interpretation guidance:
 
@@ -258,6 +262,10 @@ Checks:
 Evidence criteria:
 
 - Tie conclusions to opening exchanges and first execution segment.
+
+Fallback statement:
+
+- If opening exchanges are not identifiable, write: `Insufficient data — <reason>`.
 
 ### Step 12: Sanitise
 
@@ -388,7 +396,7 @@ Use this template structure exactly when building the report body.
 
 - Advancing messages: <count>
 - Correction/retry messages: <count>
-- Efficiency ratio: <value>
+- Overall balance: <predominantly advancing / predominantly correcting / mixed>
 - Momentum observations:
   - <exchange summary with evidence>
   - <exchange summary with evidence>
