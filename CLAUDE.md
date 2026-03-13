@@ -48,6 +48,15 @@ npm run test:e2e         # End-to-end tests (requires Docker)
 - Tests use vitest with fast-check for property-based testing
 - Docker image name configured via `DAFNY_DOCKER_IMAGE` env var (default: `crosscheck-dafny:latest`)
 
+## Commit conventions
+
+Conventional commits enforced via commitlint + husky. The `docs:` prefix is **blocked** for commits touching behavioral artifact files (`SKILL.md`, `agents/*.md`). These files define agent/skill behavior and are functional code — use `feat:`, `fix:`, or `refactor:` based on the nature of the change.
+
+- `feat(field-report): add new analysis dimension` — new skill behavior
+- `fix(crosscheck): correct abort threshold in /reason` — bug fix in skill logic
+- `refactor(crosscheck): simplify byfuglien routing` — structural change to agent
+- `docs(crosscheck): update README installation steps` — actual documentation (allowed)
+
 ## Dafny limitations to keep in mind
 
 - No IO/networking verification — requires `{:extern}` trust boundaries
