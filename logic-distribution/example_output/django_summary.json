@@ -1,0 +1,859 @@
+{
+  "project_root": "/tmp/django",
+  "total_functions": 29468,
+  "summary": {
+    "main_functions": 8224,
+    "main_lines": 106059,
+    "test_functions": 20733,
+    "config_functions": 511,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 571,
+        "lines": 17710,
+        "pct_functions": 6.9,
+        "pct_lines": 16.7
+      },
+      "MODEL_VALIDATION": {
+        "functions": 97,
+        "lines": 614,
+        "pct_functions": 1.2,
+        "pct_lines": 0.6
+      },
+      "VIEW_MIDDLEWARE": {
+        "functions": 3041,
+        "lines": 50971,
+        "pct_functions": 37.0,
+        "pct_lines": 48.1
+      },
+      "PURE_FUNCTION": {
+        "functions": 4408,
+        "lines": 33714,
+        "pct_functions": 53.6,
+        "pct_lines": 31.8
+      },
+      "EXTERNAL_IO": {
+        "functions": 107,
+        "lines": 3050,
+        "pct_functions": 1.3,
+        "pct_lines": 2.9
+      }
+    }
+  },
+  "sample_functions": [
+    {
+      "file_path": "django/__init__.py",
+      "function_name": "setup",
+      "line_number": 8,
+      "line_count": 17,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'apps', 'configure_logging', 'set_script_prefix', 'settings'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig.__init__",
+      "line_number": 16,
+      "line_count": 41,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'ImproperlyConfigured'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "AppConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig.__repr__",
+      "line_number": 58,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AppConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig.default_auto_field",
+      "line_number": 62,
+      "line_count": 4,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'cached_property', 'settings'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "AppConfig",
+      "decorators": [
+        "cached_property"
+      ]
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig._is_default_auto_field_overridden",
+      "line_number": 68,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AppConfig",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig._path_from_module",
+      "line_number": 71,
+      "line_count": 27,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'ImproperlyConfigured'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "AppConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig.create",
+      "line_number": 100,
+      "line_count": 123,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'import_string', 'ImproperlyConfigured', 'module_has_submodule'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "AppConfig",
+      "decorators": [
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig.get_model",
+      "line_number": 224,
+      "line_count": 16,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AppConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig.get_models",
+      "line_number": 241,
+      "line_count": 20,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self.models.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AppConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig.import_models",
+      "line_number": 262,
+      "line_count": 8,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'module_has_submodule'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "AppConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/config.py",
+      "function_name": "AppConfig.ready",
+      "line_number": 271,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AppConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.__init__",
+      "line_number": 20,
+      "line_count": 40,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.populate",
+      "line_number": 61,
+      "line_count": 67,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self.app_configs.values; ORM attribute: self.app_configs.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.check_apps_ready",
+      "line_number": 129,
+      "line_count": 10,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'settings', 'AppRegistryNotReady'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.check_models_ready",
+      "line_number": 140,
+      "line_count": 4,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'AppRegistryNotReady'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.get_app_configs",
+      "line_number": 145,
+      "line_count": 4,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self.app_configs.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.get_app_config",
+      "line_number": 150,
+      "line_count": 16,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.get_models",
+      "line_number": 169,
+      "line_count": 18,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self.app_configs.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": [
+        "functools.cache"
+      ]
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.get_model",
+      "line_number": 188,
+      "line_count": 26,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.register_model",
+      "line_number": 215,
+      "line_count": 26,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.is_installed",
+      "line_number": 242,
+      "line_count": 8,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self.app_configs.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.get_containing_app_config",
+      "line_number": 251,
+      "line_count": 18,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self.app_configs.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.get_registered_model",
+      "line_number": 270,
+      "line_count": 12,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.get_swappable_settings_name",
+      "line_number": 284,
+      "line_count": 21,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": [
+        "functools.cache"
+      ]
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.set_available_apps",
+      "line_number": 306,
+      "line_count": 27,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.unset_available_apps",
+      "line_number": 334,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.set_installed_apps",
+      "line_number": 339,
+      "line_count": 24,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'AppRegistryNotReady'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.unset_installed_apps",
+      "line_number": 364,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.clear_cache",
+      "line_number": 370,
+      "line_count": 17,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM attribute: self.app_configs.values",
+      "matched_categories": [
+        "DATABASE_ORM",
+        "EXTERNAL_IO"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Also matched: EXTERNAL_IO",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.lazy_model_operation",
+      "line_number": 388,
+      "line_count": 39,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/apps/registry.py",
+      "function_name": "Apps.do_pending_operations",
+      "line_number": 428,
+      "line_count": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Apps",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "SettingsReference.__new__",
+      "line_number": 32,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "SettingsReference",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "SettingsReference.__init__",
+      "line_number": 35,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "SettingsReference",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings._setup",
+      "line_number": 46,
+      "line_count": 17,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'ImproperlyConfigured'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "LazySettings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings.__repr__",
+      "line_number": 64,
+      "line_count": 7,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'empty'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "LazySettings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings.__getattr__",
+      "line_number": 72,
+      "line_count": 17,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'ImproperlyConfigured', 'empty'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "LazySettings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings.__setattr__",
+      "line_number": 90,
+      "line_count": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LazySettings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings.__delattr__",
+      "line_number": 101,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LazySettings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings.configure",
+      "line_number": 106,
+      "line_count": 14,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'global_settings', 'empty'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "LazySettings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings._add_script_prefix",
+      "line_number": 122,
+      "line_count": 13,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'get_script_prefix'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "LazySettings",
+      "decorators": [
+        "staticmethod"
+      ]
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings.configured",
+      "line_number": 137,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'empty'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "LazySettings",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "LazySettings._show_deprecation_warning",
+      "line_number": 141,
+      "line_count": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LazySettings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "Settings.__init__",
+      "line_number": 152,
+      "line_count": 44,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'ImproperlyConfigured', 'global_settings'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "Settings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "Settings.is_overridden",
+      "line_number": 197,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Settings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "Settings.__repr__",
+      "line_number": 200,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Settings",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "UserSettingsHolder.__init__",
+      "line_number": 214,
+      "line_count": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserSettingsHolder",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "UserSettingsHolder.__getattr__",
+      "line_number": 222,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserSettingsHolder",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "UserSettingsHolder.__setattr__",
+      "line_number": 227,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserSettingsHolder",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "UserSettingsHolder.__delattr__",
+      "line_number": 231,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserSettingsHolder",
+      "decorators": []
+    },
+    {
+      "file_path": "django/conf/__init__.py",
+      "function_name": "UserSettingsHolder.__dir__",
+      "line_number": 236,
+      "line_count": 6,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserSettingsHolder",
+      "decorators": []
+    }
+  ]
+}

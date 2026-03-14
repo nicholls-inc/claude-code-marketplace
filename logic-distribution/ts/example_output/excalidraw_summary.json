@@ -1,0 +1,845 @@
+{
+  "projectRoot": "/tmp/excalidraw",
+  "totalFunctions": 2389,
+  "summary": {
+    "mainFunctions": 2225,
+    "mainLines": 83551,
+    "testFunctions": 164,
+    "configFunctions": 0,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 42,
+        "lines": 4172,
+        "pctFunctions": 1.9,
+        "pctLines": 5
+      },
+      "SCHEMA_VALIDATION": {
+        "functions": 0,
+        "lines": 0,
+        "pctFunctions": 0,
+        "pctLines": 0
+      },
+      "VIEW_FRAMEWORK": {
+        "functions": 394,
+        "lines": 22640,
+        "pctFunctions": 17.7,
+        "pctLines": 27.1
+      },
+      "PURE_FUNCTION": {
+        "functions": 1766,
+        "lines": 54316,
+        "pctFunctions": 79.4,
+        "pctLines": 65
+      },
+      "EXTERNAL_IO": {
+        "functions": 23,
+        "lines": 2423,
+        "pctFunctions": 1,
+        "pctLines": 2.9
+      }
+    }
+  },
+  "sampleFunctions": [
+    {
+      "filePath": "dev-docs/src/components/Highlight.js",
+      "functionName": "Highlight",
+      "lineNumber": 2,
+      "lineCount": 14,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "dev-docs/src/components/Homepage/index.js",
+      "functionName": "Feature",
+      "lineNumber": 37,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "dev-docs/src/components/Homepage/index.js",
+      "functionName": "HomepageFeatures",
+      "lineNumber": 51,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "dev-docs/src/components/Homepage/index.tsx",
+      "functionName": "Feature",
+      "lineNumber": 45,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "dev-docs/src/components/Homepage/index.tsx",
+      "functionName": "HomepageFeatures",
+      "lineNumber": 59,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "dev-docs/src/pages/index.tsx",
+      "functionName": "HomepageHeader",
+      "lineNumber": 10,
+      "lineCount": 16,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); Custom hook: useDocusaurusContext",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "dev-docs/src/pages/index.tsx",
+      "functionName": "Home",
+      "lineNumber": 27,
+      "lineCount": 10,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "dev-docs/src/theme/ReactLiveScope/index.js",
+      "functionName": "Excalidraw",
+      "lineNumber": 12,
+      "lineCount": 9,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); Custom hook: useColorMode",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-nextjs/src/app/layout.tsx",
+      "functionName": "RootLayout",
+      "lineNumber": 1,
+      "lineCount": 11,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-nextjs/src/app/page.tsx",
+      "functionName": "ExcalidrawWithClientOnly",
+      "lineNumber": 8,
+      "lineCount": 6,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: page",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-nextjs/src/app/page.tsx",
+      "functionName": "Page",
+      "lineNumber": 15,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-nextjs/src/excalidrawWrapper.tsx",
+      "functionName": "ExcalidrawWrapper",
+      "lineNumber": 9,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-nextjs/src/pages/excalidraw-in-pages.tsx",
+      "functionName": "Excalidraw",
+      "lineNumber": 7,
+      "lineCount": 6,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: excalidraw-in-pages",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-nextjs/src/pages/excalidraw-in-pages.tsx",
+      "functionName": "Page",
+      "lineNumber": 14,
+      "lineCount": 10,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/components/CustomFooter.tsx",
+      "functionName": "CustomFooter",
+      "lineNumber": 23,
+      "lineCount": 50,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/components/ExampleApp.tsx",
+      "functionName": "ExampleApp",
+      "lineNumber": 75,
+      "lineCount": 896,
+      "category": "EXTERNAL_IO",
+      "confidence": "MEDIUM",
+      "rationale": "fetch() call",
+      "matchedCategories": [
+        "EXTERNAL_IO",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/components/MobileFooter.tsx",
+      "functionName": "MobileFooter",
+      "lineNumber": 8,
+      "lineCount": 22,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); Custom hook: useEditorInterface",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/components/sidebar/ExampleSidebar.tsx",
+      "functionName": "Sidebar",
+      "lineNumber": 5,
+      "lineCount": 28,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useState",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/utils.ts",
+      "functionName": "resolvablePromise",
+      "lineNumber": 11,
+      "lineCount": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/utils.ts",
+      "functionName": "distance2d",
+      "lineNumber": 23,
+      "lineCount": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/utils.ts",
+      "functionName": "fileOpen",
+      "lineNumber": 29,
+      "lineCount": 28,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/utils.ts",
+      "functionName": "debounce",
+      "lineNumber": 58,
+      "lineCount": 28,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/utils.ts",
+      "functionName": "withBatchedUpdates",
+      "lineNumber": 87,
+      "lineCount": 8,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "LOW",
+      "rationale": "Uses framework-imported names",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Classified as framework code due to imported name usage",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/with-script-in-browser/utils.ts",
+      "functionName": "withBatchedUpdatesThrottled",
+      "lineNumber": 100,
+      "lineCount": 10,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "LOW",
+      "rationale": "Uses framework-imported names",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Classified as framework code due to imported name usage",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/App.tsx",
+      "functionName": "initializeScene",
+      "lineNumber": 216,
+      "lineCount": 157,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "fetch() call",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/App.tsx",
+      "functionName": "ExcalidrawWrapper",
+      "lineNumber": 374,
+      "lineCount": 894,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); Custom hook: useExcalidrawAPI",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/App.tsx",
+      "functionName": "ExcalidrawApp",
+      "lineNumber": 1269,
+      "lineCount": 17,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/CustomStats.tsx",
+      "functionName": "getStorageSizes",
+      "lineNumber": 24,
+      "lineCount": 6,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/CustomStats.tsx",
+      "functionName": "CustomStats",
+      "lineNumber": 36,
+      "lineCount": 54,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useState",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/ExcalidrawPlusIframeExport.tsx",
+      "functionName": "parseSceneData",
+      "lineNumber": 42,
+      "lineCount": 46,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/ExcalidrawPlusIframeExport.tsx",
+      "functionName": "verifyJWT",
+      "lineNumber": 89,
+      "lineCount": 63,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/ExcalidrawPlusIframeExport.tsx",
+      "functionName": "ExcalidrawPlusIframeExport",
+      "lineNumber": 153,
+      "lineCount": 72,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "React hook: useRef",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/app-jotai.ts",
+      "functionName": "useAtomWithInitialValue",
+      "lineNumber": 17,
+      "lineCount": 21,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Custom hook: useAtom; Custom hook definition: useAtomWithInitialValue",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/app-language/LanguageList.tsx",
+      "functionName": "LanguageList",
+      "lineNumber": 8,
+      "lineCount": 20,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); Custom hook: useI18n",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/app-language/language-detector.ts",
+      "functionName": "getPreferredLanguage",
+      "lineNumber": 10,
+      "lineCount": 16,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/app-language/language-state.ts",
+      "functionName": "useAppLangCode",
+      "lineNumber": 9,
+      "lineCount": 9,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Custom hook: useAtom; Custom hook definition: useAppLangCode",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/bug-issue-template.js",
+      "functionName": "default export",
+      "lineNumber": 1,
+      "lineCount": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.componentDidMount",
+      "lineNumber": 208,
+      "lineCount": 47,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.onOfflineStatusToggle",
+      "lineNumber": 256,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.componentWillUnmount",
+      "lineNumber": 260,
+      "lineCount": 20,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.isCollaborating",
+      "lineNumber": 281,
+      "lineCount": 1,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.setIsCollaborating",
+      "lineNumber": 283,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.onUnload",
+      "lineNumber": 287,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.saveCollabRoomToFirebase",
+      "lineNumber": 315,
+      "lineCount": 41,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.stopCollaboration",
+      "lineNumber": 357,
+      "lineCount": 47,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.destroySocketClient",
+      "lineNumber": 405,
+      "lineCount": 14,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.fetchImageFilesFromFirebase",
+      "lineNumber": 420,
+      "lineCount": 27,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.decryptPayload",
+      "lineNumber": 448,
+      "lineCount": 20,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.startCollaboration",
+      "lineNumber": 471,
+      "lineCount": 236,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "Collab",
+      "decorators": []
+    },
+    {
+      "filePath": "excalidraw-app/collab/Collab.tsx",
+      "functionName": "Collab.initializeRoom",
+      "lineNumber": 708,
+      "lineCount": 46,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "Collab",
+      "decorators": []
+    }
+  ]
+}

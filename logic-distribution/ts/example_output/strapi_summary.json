@@ -1,0 +1,845 @@
+{
+  "projectRoot": "/tmp/strapi",
+  "totalFunctions": 5450,
+  "summary": {
+    "mainFunctions": 4758,
+    "mainLines": 161620,
+    "testFunctions": 590,
+    "configFunctions": 102,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 326,
+        "lines": 24758,
+        "pctFunctions": 6.9,
+        "pctLines": 15.3
+      },
+      "SCHEMA_VALIDATION": {
+        "functions": 43,
+        "lines": 1719,
+        "pctFunctions": 0.9,
+        "pctLines": 1.1
+      },
+      "VIEW_FRAMEWORK": {
+        "functions": 1281,
+        "lines": 70807,
+        "pctFunctions": 26.9,
+        "pctLines": 43.8
+      },
+      "PURE_FUNCTION": {
+        "functions": 2993,
+        "lines": 58358,
+        "pctFunctions": 62.9,
+        "pctLines": 36.1
+      },
+      "EXTERNAL_IO": {
+        "functions": 115,
+        "lines": 5978,
+        "pctFunctions": 2.4,
+        "pctLines": 3.7
+      }
+    }
+  },
+  "sampleFunctions": [
+    {
+      "filePath": "docs/docs/api/components/type.jsx",
+      "functionName": "Type",
+      "lineNumber": 3,
+      "lineCount": 11,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/config/admin.ts",
+      "functionName": "adminConfig",
+      "lineNumber": 1,
+      "lineCount": 20,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/config/database.ts",
+      "functionName": "default export",
+      "lineNumber": 1,
+      "lineCount": 56,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/config/features.ts",
+      "functionName": "default export",
+      "lineNumber": 1,
+      "lineCount": 1,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/config/plugins.ts",
+      "functionName": "default export",
+      "lineNumber": 1,
+      "lineCount": 1,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/config/server.ts",
+      "functionName": "serverConfig",
+      "lineNumber": 1,
+      "lineCount": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-mysql.js",
+      "functionName": "getContainerName",
+      "lineNumber": 23,
+      "lineCount": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-mysql.js",
+      "functionName": "ensureSnapshotsDir",
+      "lineNumber": 36,
+      "lineCount": 5,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: fs.existsSync; IO call: fs.existsSync; File IO: fs.mkdirSync",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-mysql.js",
+      "functionName": "execDocker",
+      "lineNumber": 42,
+      "lineCount": 8,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: execSync; IO call: execSync; Process: process.exit",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-postgres.js",
+      "functionName": "resolveContainerName",
+      "lineNumber": 23,
+      "lineCount": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-postgres.js",
+      "functionName": "ensureSnapshotsDir",
+      "lineNumber": 36,
+      "lineCount": 5,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: fs.existsSync; IO call: fs.existsSync; File IO: fs.mkdirSync",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-postgres.js",
+      "functionName": "execDocker",
+      "lineNumber": 42,
+      "lineCount": 8,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: execSync; IO call: execSync; Process: process.exit",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "getComposeEnv",
+      "lineNumber": 7,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "getContainerId",
+      "lineNumber": 11,
+      "lineCount": 14,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "getContainerName",
+      "lineNumber": 26,
+      "lineCount": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "isContainerRunning",
+      "lineNumber": 40,
+      "lineCount": 12,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "startContainer",
+      "lineNumber": 53,
+      "lineCount": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "waitForPostgresReady",
+      "lineNumber": 61,
+      "lineCount": 14,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "waitForMysqlReady",
+      "lineNumber": 76,
+      "lineCount": 18,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "assertPostgresReady",
+      "lineNumber": 95,
+      "lineCount": 12,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "assertMysqlReady",
+      "lineNumber": 108,
+      "lineCount": 16,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/db-utils.js",
+      "functionName": "getDatabaseEnv",
+      "lineNumber": 125,
+      "lineCount": 21,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/develop-with-db.js",
+      "functionName": "ensureUploadsDir",
+      "lineNumber": 31,
+      "lineCount": 5,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: fs.existsSync; IO call: fs.existsSync; File IO: fs.mkdirSync",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/develop-with-db.js",
+      "functionName": "ensureContainerRunning",
+      "lineNumber": 38,
+      "lineCount": 34,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "Process: process.exit",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/develop-with-db.js",
+      "functionName": "startStrapi",
+      "lineNumber": 74,
+      "lineCount": 62,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: spawn; IO call: spawn; Process: process.exit",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "parseCliArgs",
+      "lineNumber": 22,
+      "lineCount": 32,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "applyMultiplierToCounts",
+      "lineNumber": 55,
+      "lineCount": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "createMediaFile",
+      "lineNumber": 202,
+      "lineCount": 41,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: path.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: EXTERNAL_IO",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "createMediaFiles",
+      "lineNumber": 244,
+      "lineCount": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.pick",
+      "lineNumber": 267,
+      "lineCount": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.logError",
+      "lineNumber": 273,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.seedBasic",
+      "lineNumber": 283,
+      "lineCount": 27,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.seedBasicDp",
+      "lineNumber": 312,
+      "lineCount": 63,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.updateComponentRelations",
+      "lineNumber": 377,
+      "lineCount": 53,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.seedBasicDpI18n",
+      "lineNumber": 432,
+      "lineCount": 55,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.seedRelation",
+      "lineNumber": 489,
+      "lineCount": 61,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.seedRelationDp",
+      "lineNumber": 552,
+      "lineCount": 167,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.seedRelationDpI18n",
+      "lineNumber": 721,
+      "lineCount": 101,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "ContentSeeder.seedAll",
+      "lineNumber": 824,
+      "lineCount": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "ContentSeeder",
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/seed-v4.js",
+      "functionName": "seed",
+      "lineNumber": 840,
+      "lineCount": 38,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/setup-v4-project.js",
+      "functionName": "findDockerComposeFile",
+      "lineNumber": 18,
+      "lineCount": 14,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: fs.existsSync",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/v4/develop-with-db.js",
+      "functionName": "ensureContainerRunning",
+      "lineNumber": 25,
+      "lineCount": 21,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "Process: process.exit",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/v4/develop-with-db.js",
+      "functionName": "startStrapi",
+      "lineNumber": 47,
+      "lineCount": 54,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: spawn; Process: process.exit; Process: process.exit",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/v4/seed-with-db.js",
+      "functionName": "ensureContainerRunning",
+      "lineNumber": 30,
+      "lineCount": 21,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "Process: process.exit",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/v4/seed-with-db.js",
+      "functionName": "runSeed",
+      "lineNumber": 52,
+      "lineCount": 28,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "IO call: spawn; Process: process.exit; Process: process.exit",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/validate-migration.js",
+      "functionName": "parseCliArgs",
+      "lineNumber": 18,
+      "lineCount": 29,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/validate-migration.js",
+      "functionName": "getExpectedCounts",
+      "lineNumber": 48,
+      "lineCount": 28,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/validate-migration.js",
+      "functionName": "parseCountResult",
+      "lineNumber": 77,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/validate-migration.js",
+      "functionName": "validateCounts",
+      "lineNumber": 86,
+      "lineCount": 157,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/complex/scripts/validate-migration.js",
+      "functionName": "getEntityIdentifier",
+      "lineNumber": 244,
+      "lineCount": 6,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    }
+  ]
+}

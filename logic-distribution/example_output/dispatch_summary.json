@@ -1,0 +1,889 @@
+{
+  "project_root": "/tmp/dispatch",
+  "total_functions": 3010,
+  "summary": {
+    "main_functions": 2448,
+    "main_lines": 47303,
+    "test_functions": 562,
+    "config_functions": 0,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 487,
+        "lines": 10149,
+        "pct_functions": 19.9,
+        "pct_lines": 21.5
+      },
+      "MODEL_VALIDATION": {
+        "functions": 0,
+        "lines": 0,
+        "pct_functions": 0.0,
+        "pct_lines": 0.0
+      },
+      "VIEW_MIDDLEWARE": {
+        "functions": 1020,
+        "lines": 23090,
+        "pct_functions": 41.7,
+        "pct_lines": 48.8
+      },
+      "PURE_FUNCTION": {
+        "functions": 869,
+        "lines": 11565,
+        "pct_functions": 35.5,
+        "pct_lines": 24.4
+      },
+      "EXTERNAL_IO": {
+        "functions": 72,
+        "lines": 2499,
+        "pct_functions": 2.9,
+        "pct_lines": 5.3
+      }
+    }
+  },
+  "sample_functions": [
+    {
+      "file_path": "src/dispatch/__init__.py",
+      "function_name": "_get_git_revision",
+      "line_number": 89,
+      "line_count": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/__init__.py",
+      "function_name": "get_revision",
+      "line_number": 100,
+      "line_count": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/__init__.py",
+      "function_name": "get_version",
+      "line_number": 115,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/__init__.py",
+      "function_name": "is_docker",
+      "line_number": 121,
+      "line_count": 6,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/enums.py",
+      "function_name": "GenAIType.display_name",
+      "line_number": 29,
+      "line_count": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "GenAIType",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/enums.py",
+      "function_name": "GenAIType.get_all_types",
+      "line_number": 41,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "GenAIType",
+      "decorators": [
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/service.py",
+      "function_name": "get",
+      "line_number": 11,
+      "line_count": 3,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/service.py",
+      "function_name": "get_by_type",
+      "line_number": 16,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: filter; ORM attribute: filter; ORM attribute: filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/service.py",
+      "function_name": "get_all",
+      "line_number": 27,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'Session'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/service.py",
+      "function_name": "create",
+      "line_number": 32,
+      "line_count": 27,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: filter; ORM attribute: filter; ORM attribute: filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/service.py",
+      "function_name": "update",
+      "line_number": 61,
+      "line_count": 32,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: filter; ORM attribute: filter; ORM attribute: filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/service.py",
+      "function_name": "delete",
+      "line_number": 95,
+      "line_count": 5,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/views.py",
+      "function_name": "get_prompts",
+      "line_number": 30,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Flask route: router.get; FastAPI route: router.get",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": [
+        "router.get"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/views.py",
+      "function_name": "get_genai_types",
+      "line_number": 36,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Flask route: router.get; FastAPI route: router.get",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": [
+        "router.get"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/views.py",
+      "function_name": "get_default_prompts",
+      "line_number": 42,
+      "line_count": 6,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Flask route: router.get; FastAPI route: router.get",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": [
+        "router.get"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/views.py",
+      "function_name": "get_prompt",
+      "line_number": 51,
+      "line_count": 9,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Flask route: router.get; FastAPI route: router.get",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": [
+        "router.get"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/views.py",
+      "function_name": "create_prompt",
+      "line_number": 67,
+      "line_count": 20,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Flask route: router.post; FastAPI route: router.post",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": [
+        "router.post"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/views.py",
+      "function_name": "update_prompt",
+      "line_number": 94,
+      "line_count": 31,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Flask route: router.put; FastAPI route: router.put",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": [
+        "router.put"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/prompt/views.py",
+      "function_name": "delete_prompt",
+      "line_number": 132,
+      "line_count": 9,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Flask route: router.delete; FastAPI route: router.delete",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": [
+        "router.delete"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "get_model_token_limit",
+      "line_number": 52,
+      "line_count": 29,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "num_tokens_from_string",
+      "line_number": 83,
+      "line_count": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses logging",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "truncate_prompt",
+      "line_number": 109,
+      "line_count": 22,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses logging",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "prepare_prompt_for_model",
+      "line_number": 133,
+      "line_count": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "generate_case_signal_historical_context",
+      "line_number": 145,
+      "line_count": 90,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: raw; ORM attribute: filter; ORM expression names: {'Case'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "generate_case_signal_summary",
+      "line_number": 237,
+      "line_count": 119,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: signal_instance.raw; ORM expression names: {'Case'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "generate_incident_summary",
+      "line_number": 358,
+      "line_count": 89,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'Session'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "get_tag_recommendations",
+      "line_number": 449,
+      "line_count": 132,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: filter; ORM attribute: filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "generate_read_in_summary",
+      "line_number": 583,
+      "line_count": 120,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses logging",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/ai/service.py",
+      "function_name": "generate_tactical_report",
+      "line_number": 705,
+      "line_count": 81,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses logging",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/api.py",
+      "function_name": "get_organization_path",
+      "line_number": 86,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/api.py",
+      "function_name": "healthcheck",
+      "line_number": 257,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Flask route: api_router.get; FastAPI route: api_router.get",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": [
+        "api_router.get"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "generate_password",
+      "line_number": 31,
+      "line_count": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "hash_password",
+      "line_number": 46,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "DispatchUser.verify_password",
+      "line_number": 71,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "DispatchUser",
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "DispatchUser.set_password",
+      "line_number": 77,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "DispatchUser",
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "DispatchUser.is_owner",
+      "line_number": 83,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "DispatchUser",
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "DispatchUser.token",
+      "line_number": 89,
+      "line_count": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "DispatchUser",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "DispatchUser.get_organization_role",
+      "line_number": 99,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "DispatchUser",
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "UserBase.email_required",
+      "line_number": 170,
+      "line_count": 5,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'field_validator'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "UserBase",
+      "decorators": [
+        "field_validator",
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "UserLogin.password_required",
+      "line_number": 184,
+      "line_count": 5,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'field_validator'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "UserLogin",
+      "decorators": [
+        "field_validator",
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "UserRegister.password_required",
+      "line_number": 198,
+      "line_count": 4,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'field_validator'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "UserRegister",
+      "decorators": [
+        "field_validator",
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "UserPasswordUpdate.validate_password",
+      "line_number": 238,
+      "line_count": 9,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'field_validator'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "UserPasswordUpdate",
+      "decorators": [
+        "field_validator",
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "UserPasswordUpdate.password_required",
+      "line_number": 250,
+      "line_count": 5,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'field_validator'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "UserPasswordUpdate",
+      "decorators": [
+        "field_validator",
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "AdminPasswordReset.validate_password",
+      "line_number": 264,
+      "line_count": 9,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'field_validator'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "AdminPasswordReset",
+      "decorators": [
+        "field_validator",
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/models.py",
+      "function_name": "UserCreate.hash",
+      "line_number": 286,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'field_validator'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "UserCreate",
+      "decorators": [
+        "field_validator",
+        "classmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/permissions.py",
+      "function_name": "any_permission",
+      "line_number": 25,
+      "line_count": 8,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: permissions.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/permissions.py",
+      "function_name": "BasePermission.has_required_permissions",
+      "line_number": 71,
+      "line_count": 1,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: permissions.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "BasePermission",
+      "decorators": [
+        "abstractmethod"
+      ]
+    },
+    {
+      "file_path": "src/dispatch/auth/permissions.py",
+      "function_name": "BasePermission.__init__",
+      "line_number": 73,
+      "line_count": 34,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: permissions.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "BasePermission",
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/permissions.py",
+      "function_name": "PermissionsDependency.__init__",
+      "line_number": 129,
+      "line_count": 2,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: permissions.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "PermissionsDependency",
+      "decorators": []
+    },
+    {
+      "file_path": "src/dispatch/auth/permissions.py",
+      "function_name": "PermissionsDependency.__call__",
+      "line_number": 132,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: permissions.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "PermissionsDependency",
+      "decorators": []
+    }
+  ]
+}

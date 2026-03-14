@@ -1,0 +1,853 @@
+{
+  "project_root": "/tmp/netbox",
+  "total_functions": 5539,
+  "summary": {
+    "main_functions": 2848,
+    "main_lines": 33265,
+    "test_functions": 2607,
+    "config_functions": 84,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 760,
+        "lines": 13567,
+        "pct_functions": 26.7,
+        "pct_lines": 40.8
+      },
+      "MODEL_VALIDATION": {
+        "functions": 140,
+        "lines": 1198,
+        "pct_functions": 4.9,
+        "pct_lines": 3.6
+      },
+      "VIEW_MIDDLEWARE": {
+        "functions": 841,
+        "lines": 10368,
+        "pct_functions": 29.5,
+        "pct_lines": 31.2
+      },
+      "PURE_FUNCTION": {
+        "functions": 1090,
+        "lines": 7517,
+        "pct_functions": 38.3,
+        "pct_lines": 22.6
+      },
+      "EXTERNAL_IO": {
+        "functions": 17,
+        "lines": 615,
+        "pct_functions": 0.6,
+        "pct_lines": 1.8
+      }
+    }
+  },
+  "sample_functions": [
+    {
+      "file_path": "netbox/account/models.py",
+      "function_name": "UserToken.get_absolute_url",
+      "line_number": 16,
+      "line_count": 2,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'reverse'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "UserToken",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "LoginView.dispatch",
+      "line_number": 51,
+      "line_count": 2,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: LoginView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LoginView",
+      "decorators": [
+        "method_decorator"
+      ]
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "LoginView.gen_auth_data",
+      "line_number": 54,
+      "line_count": 17,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: LoginView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LoginView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "LoginView.get_auth_backends",
+      "line_number": 72,
+      "line_count": 19,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: LoginView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LoginView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "LoginView.get",
+      "line_number": 92,
+      "line_count": 13,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: LoginView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LoginView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "LoginView.post",
+      "line_number": 106,
+      "line_count": 44,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: LoginView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LoginView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "LoginView.redirect_to_next",
+      "line_number": 151,
+      "line_count": 12,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: LoginView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LoginView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "LogoutView.get",
+      "line_number": 170,
+      "line_count": 15,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: LogoutView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LogoutView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "ProfileView.get",
+      "line_number": 194,
+      "line_count": 12,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM attribute: filter; ORM attribute: ObjectChange.objects.valid_models; ORM attribute: ObjectChange.objects",
+      "matched_categories": [
+        "DATABASE_ORM",
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Also matched: VIEW_MIDDLEWARE",
+      "class_name": "ProfileView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "UserConfigView.get",
+      "line_number": 211,
+      "line_count": 8,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: UserConfigView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserConfigView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "UserConfigView.post",
+      "line_number": 220,
+      "line_count": 27,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: UserConfigView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserConfigView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "ChangePasswordView.get",
+      "line_number": 252,
+      "line_count": 12,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: ChangePasswordView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ChangePasswordView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "ChangePasswordView.post",
+      "line_number": 265,
+      "line_count": 12,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: ChangePasswordView",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ChangePasswordView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "BookmarkListView.get_queryset",
+      "line_number": 287,
+      "line_count": 2,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: Bookmark.objects.filter; ORM attribute: Bookmark.objects; QuerySet via .objects: Bookmark.objects.filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "BookmarkListView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "BookmarkListView.get_extra_context",
+      "line_number": 290,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "BookmarkListView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "NotificationListView.get_queryset",
+      "line_number": 304,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "NotificationListView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "NotificationListView.get_extra_context",
+      "line_number": 307,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "NotificationListView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "SubscriptionListView.get_queryset",
+      "line_number": 317,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "SubscriptionListView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "SubscriptionListView.get_extra_context",
+      "line_number": 320,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "SubscriptionListView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "UserTokenListView.get",
+      "line_number": 332,
+      "line_count": 11,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM attribute: UserToken.objects.filter; ORM attribute: UserToken.objects; QuerySet via .objects: UserToken.objects.filter",
+      "matched_categories": [
+        "DATABASE_ORM",
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Also matched: VIEW_MIDDLEWARE",
+      "class_name": "UserTokenListView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "UserTokenView.get",
+      "line_number": 356,
+      "line_count": 7,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM attribute: UserToken.objects.filter; ORM attribute: UserToken.objects; QuerySet via .objects: UserToken.objects.filter",
+      "matched_categories": [
+        "DATABASE_ORM",
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Also matched: VIEW_MIDDLEWARE",
+      "class_name": "UserTokenView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/account/views.py",
+      "function_name": "UserTokenEditView.alter_object",
+      "line_number": 371,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserTokenEditView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/api/views.py",
+      "function_name": "CircuitsRootView.get_view_name",
+      "line_number": 15,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitsRootView",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/apps.py",
+      "function_name": "CircuitsConfig.ready",
+      "line_number": 10,
+      "line_count": 17,
+      "category": "CONFIGURATION",
+      "confidence": "MEDIUM",
+      "rationale": "Function in configuration file",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitsConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "ProviderFilterSet.search",
+      "line_number": 92,
+      "line_count": 8,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: queryset.filter; ORM expression names: {'Q'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ProviderFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "ProviderAccountFilterSet.search",
+      "line_number": 121,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: queryset.filter; ORM expression names: {'Q'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ProviderAccountFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "ProviderNetworkFilterSet.search",
+      "line_number": 151,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: queryset.filter; ORM expression names: {'Q'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ProviderNetworkFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "CircuitFilterSet.search",
+      "line_number": 278,
+      "line_count": 11,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: queryset.filter; ORM expression names: {'Q'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "CircuitTerminationFilterSet.search",
+      "line_number": 382,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: queryset.filter; ORM expression names: {'Q'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitTerminationFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "CircuitGroupAssignmentFilterSet.search",
+      "line_number": 455,
+      "line_count": 7,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: queryset.filter; ORM expression names: {'Q'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitGroupAssignmentFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "CircuitGroupAssignmentFilterSet.filter_circuit",
+      "line_number": 463,
+      "line_count": 10,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: Circuit.objects.filter; ORM attribute: queryset.filter; ORM attribute: Circuit.objects",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitGroupAssignmentFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "CircuitGroupAssignmentFilterSet.filter_virtual_circuit",
+      "line_number": 474,
+      "line_count": 10,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: VirtualCircuit.objects.filter; ORM attribute: queryset.filter; ORM attribute: VirtualCircuit.objects",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitGroupAssignmentFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "CircuitGroupAssignmentFilterSet.filter_provider",
+      "line_number": 485,
+      "line_count": 16,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: Provider.objects.filter; ORM attribute: Circuit.objects.filter; ORM attribute: VirtualCircuit.objects.filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitGroupAssignmentFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "VirtualCircuitFilterSet.search",
+      "line_number": 566,
+      "line_count": 8,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: queryset.filter; ORM expression names: {'Q'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "VirtualCircuitFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/filtersets.py",
+      "function_name": "VirtualCircuitTerminationFilterSet.search",
+      "line_number": 635,
+      "line_count": 7,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: queryset.filter; ORM expression names: {'Q'}",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "VirtualCircuitTerminationFilterSet",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/forms/bulk_edit.py",
+      "function_name": "CircuitTerminationBulkEditForm.__init__",
+      "line_number": 226,
+      "line_count": 13,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: ContentType.objects.get; ORM attribute: model.objects.all; ORM attribute: ContentType.objects",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitTerminationBulkEditForm",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/forms/model_forms.py",
+      "function_name": "CircuitTerminationForm.__init__",
+      "line_number": 204,
+      "line_count": 23,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: ContentType.objects.get; ORM attribute: model.objects.all; ORM attribute: ContentType.objects",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitTerminationForm",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/forms/model_forms.py",
+      "function_name": "CircuitTerminationForm.clean",
+      "line_number": 228,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitTerminationForm",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/forms/model_forms.py",
+      "function_name": "CircuitGroupAssignmentForm.__init__",
+      "line_number": 277,
+      "line_count": 22,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: model.objects.all; ORM attribute: model.objects; ORM attribute: ContentType.objects.get",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitGroupAssignmentForm",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/forms/model_forms.py",
+      "function_name": "CircuitGroupAssignmentForm.clean",
+      "line_number": 300,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitGroupAssignmentForm",
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/graphql/types.py",
+      "function_name": "CircuitTerminationType.termination",
+      "line_number": 78,
+      "line_count": 9,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on View subclass: CircuitTerminationType",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitTerminationType",
+      "decorators": [
+        "strawberry_django.field"
+      ]
+    },
+    {
+      "file_path": "netbox/circuits/graphql/types.py",
+      "function_name": "CircuitGroupAssignmentType.member",
+      "line_number": 137,
+      "line_count": 6,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: types.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CircuitGroupAssignmentType",
+      "decorators": [
+        "strawberry_django.field"
+      ]
+    },
+    {
+      "file_path": "netbox/circuits/migrations/0046_charfield_null_choices.py",
+      "function_name": "set_null_values",
+      "line_number": 4,
+      "line_count": 12,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/migrations/0047_circuittermination__termination.py",
+      "function_name": "copy_site_assignments",
+      "line_number": 6,
+      "line_count": 18,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/migrations/0047_circuittermination__termination.py",
+      "function_name": "oc_circuittermination_termination",
+      "line_number": 55,
+      "line_count": 16,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/migrations/0048_circuitterminations_cached_relations.py",
+      "function_name": "populate_denormalized_fields",
+      "line_number": 5,
+      "line_count": 19,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/migrations/0048_circuitterminations_cached_relations.py",
+      "function_name": "oc_circuittermination_remove_fields",
+      "line_number": 91,
+      "line_count": 5,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/migrations/0051_virtualcircuit_group_assignment.py",
+      "function_name": "set_member_type",
+      "line_number": 6,
+      "line_count": 12,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/migrations/0051_virtualcircuit_group_assignment.py",
+      "function_name": "oc_circuitgroupassignment_member",
+      "line_number": 88,
+      "line_count": 11,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "netbox/circuits/models/circuits.py",
+      "function_name": "Circuit.__str__",
+      "line_number": 150,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Circuit",
+      "decorators": []
+    }
+  ]
+}

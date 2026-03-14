@@ -1,0 +1,844 @@
+{
+  "projectRoot": "/tmp/vscode",
+  "totalFunctions": 59128,
+  "summary": {
+    "mainFunctions": 54962,
+    "mainLines": 816762,
+    "testFunctions": 4144,
+    "configFunctions": 22,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 1268,
+        "lines": 60428,
+        "pctFunctions": 2.3,
+        "pctLines": 7.4
+      },
+      "SCHEMA_VALIDATION": {
+        "functions": 0,
+        "lines": 0,
+        "pctFunctions": 0,
+        "pctLines": 0
+      },
+      "VIEW_FRAMEWORK": {
+        "functions": 405,
+        "lines": 10989,
+        "pctFunctions": 0.7,
+        "pctLines": 1.3
+      },
+      "PURE_FUNCTION": {
+        "functions": 52909,
+        "lines": 734225,
+        "pctFunctions": 96.3,
+        "pctLines": 89.9
+      },
+      "EXTERNAL_IO": {
+        "functions": 380,
+        "lines": 11120,
+        "pctFunctions": 0.7,
+        "pctLines": 1.4
+      }
+    }
+  },
+  "sampleFunctions": [
+    {
+      "filePath": "eslint.config.js",
+      "functionName": "ignores",
+      "lineNumber": 17,
+      "lineCount": 4,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is a configuration file",
+      "matchedCategories": [
+        "CONFIGURATION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "activate",
+      "lineNumber": 12,
+      "lineCount": 19,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "registerSettingsCompletions",
+      "lineNumber": 32,
+      "lineCount": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "registerVariableCompletions",
+      "lineNumber": 40,
+      "lineCount": 44,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "isCompletingInsidePropertyStringValue",
+      "lineNumber": 85,
+      "lineCount": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "isLocationInsideTopLevelProperty",
+      "lineNumber": 97,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "registerExtensionsCompletions",
+      "lineNumber": 105,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "registerExtensionsCompletionsInExtensionsDocument",
+      "lineNumber": 109,
+      "lineCount": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "registerExtensionsCompletionsInWorkspaceConfigurationDocument",
+      "lineNumber": 123,
+      "lineCount": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "getReplaceRange",
+      "lineNumber": 137,
+      "lineCount": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/configurationEditingMain.ts",
+      "functionName": "registerContextKeyCompletions",
+      "lineNumber": 183,
+      "lineCount": 62,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/extensionsProposals.ts",
+      "functionName": "provideInstalledExtensionProposals",
+      "lineNumber": 9,
+      "lineCount": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/importExportProfiles.ts",
+      "functionName": "GitHubGistProfileContentHandler.getOctokit",
+      "lineNumber": 17,
+      "lineCount": 17,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "GitHubGistProfileContentHandler",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/importExportProfiles.ts",
+      "functionName": "GitHubGistProfileContentHandler.saveProfile",
+      "lineNumber": 35,
+      "lineCount": 16,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "GitHubGistProfileContentHandler",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/importExportProfiles.ts",
+      "functionName": "GitHubGistProfileContentHandler.getPublicOctokit",
+      "lineNumber": 53,
+      "lineCount": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "GitHubGistProfileContentHandler",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/importExportProfiles.ts",
+      "functionName": "GitHubGistProfileContentHandler.readProfile",
+      "lineNumber": 63,
+      "lineCount": 1,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "GitHubGistProfileContentHandler",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/importExportProfiles.ts",
+      "functionName": "GitHubGistProfileContentHandler.readProfile",
+      "lineNumber": 64,
+      "lineCount": 1,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "GitHubGistProfileContentHandler",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/importExportProfiles.ts",
+      "functionName": "GitHubGistProfileContentHandler.readProfile",
+      "lineNumber": 65,
+      "lineCount": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "GitHubGistProfileContentHandler",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/node/net.ts",
+      "functionName": "getAgent",
+      "lineNumber": 17,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "LOW",
+      "rationale": "Uses framework-imported names",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Classified as framework code due to imported name usage",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.provideCompletionItems",
+      "lineNumber": 16,
+      "lineCount": 55,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.getReplaceRange",
+      "lineNumber": 72,
+      "lineCount": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.isCompletingPropertyValue",
+      "lineNumber": 83,
+      "lineCount": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.provideWindowTitleCompletionItems",
+      "lineNumber": 95,
+      "lineCount": 38,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.provideEditorLabelCompletionItems",
+      "lineNumber": 134,
+      "lineCount": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.provideFilesAssociationsCompletionItems",
+      "lineNumber": 159,
+      "lineCount": 29,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.provideExcludeCompletionItems",
+      "lineNumber": 189,
+      "lineCount": 63,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.provideLanguageCompletionItems",
+      "lineNumber": 253,
+      "lineCount": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.provideLanguageCompletionItemsForLanguageOverrides",
+      "lineNumber": 265,
+      "lineCount": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.provideLanguageOverridesCompletionItems",
+      "lineNumber": 277,
+      "lineCount": 43,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.providePortsAttributesCompletionItem",
+      "lineNumber": 321,
+      "lineCount": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.newSimpleCompletionItem",
+      "lineNumber": 346,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/settingsDocumentHelper.ts",
+      "functionName": "SettingsDocument.newSnippetCompletionItem",
+      "lineNumber": 355,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "SettingsDocument",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/test/completion.test.ts",
+      "functionName": "testCompletion",
+      "lineNumber": 545,
+      "lineCount": 36,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matchedCategories": [
+        "TEST_CODE"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/configuration-editing/src/test/completion.test.ts",
+      "functionName": "setTestContent",
+      "lineNumber": 582,
+      "lineCount": 13,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matchedCategories": [
+        "TEST_CODE"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/browser/cssClientMain.ts",
+      "functionName": "activate",
+      "lineNumber": 15,
+      "lineCount": 17,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/browser/cssClientMain.ts",
+      "functionName": "deactivate",
+      "lineNumber": 33,
+      "lineCount": 6,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/cssClient.ts",
+      "functionName": "startClient",
+      "lineNumber": 39,
+      "lineCount": 175,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/customData.ts",
+      "functionName": "getCustomDataSource",
+      "lineNumber": 9,
+      "lineCount": 29,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/customData.ts",
+      "functionName": "getCustomDataPathsInAllWorkspaces",
+      "lineNumber": 40,
+      "lineCount": 36,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/customData.ts",
+      "functionName": "getCustomDataPathsFromAllExtensions",
+      "lineNumber": 77,
+      "lineCount": 12,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/dropOrPasteResource.ts",
+      "functionName": "DropOrPasteResourceProvider.provideDocumentDropEdits",
+      "lineNumber": 15,
+      "lineCount": 23,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "DropOrPasteResourceProvider",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/dropOrPasteResource.ts",
+      "functionName": "DropOrPasteResourceProvider.provideDocumentPasteEdits",
+      "lineNumber": 39,
+      "lineCount": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "DropOrPasteResourceProvider",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/dropOrPasteResource.ts",
+      "functionName": "DropOrPasteResourceProvider.getUriList",
+      "lineNumber": 64,
+      "lineCount": 17,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "DropOrPasteResourceProvider",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/dropOrPasteResource.ts",
+      "functionName": "DropOrPasteResourceProvider.createUriListSnippet",
+      "lineNumber": 82,
+      "lineCount": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "DropOrPasteResourceProvider",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/dropOrPasteResource.ts",
+      "functionName": "DropOrPasteResourceProvider.pasteAsCssUrlByDefault",
+      "lineNumber": 107,
+      "lineCount": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": "DropOrPasteResourceProvider",
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/dropOrPasteResource.ts",
+      "functionName": "getRelativePath",
+      "lineNumber": 118,
+      "lineCount": 15,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: relativePath.split.join",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/dropOrPasteResource.ts",
+      "functionName": "registerDropOrPasteResourceSupport",
+      "lineNumber": 134,
+      "lineCount": 20,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/shared.ts",
+      "functionName": "getDocumentDir",
+      "lineNumber": 21,
+      "lineCount": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/shared.ts",
+      "functionName": "getParentDocumentUri",
+      "lineNumber": 29,
+      "lineCount": 14,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "extensions/css-language-features/client/src/dropOrPaste/uriList.ts",
+      "functionName": "splitUriList",
+      "lineNumber": 8,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    }
+  ]
+}

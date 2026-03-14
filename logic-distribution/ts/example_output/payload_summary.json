@@ -1,0 +1,854 @@
+{
+  "projectRoot": "/tmp/payload",
+  "totalFunctions": 5611,
+  "summary": {
+    "mainFunctions": 4630,
+    "mainLines": 222031,
+    "testFunctions": 903,
+    "configFunctions": 78,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 511,
+        "lines": 52288,
+        "pctFunctions": 11,
+        "pctLines": 23.5
+      },
+      "SCHEMA_VALIDATION": {
+        "functions": 7,
+        "lines": 959,
+        "pctFunctions": 0.2,
+        "pctLines": 0.4
+      },
+      "VIEW_FRAMEWORK": {
+        "functions": 1783,
+        "lines": 66905,
+        "pctFunctions": 38.5,
+        "pctLines": 30.1
+      },
+      "PURE_FUNCTION": {
+        "functions": 2172,
+        "lines": 88809,
+        "pctFunctions": 46.9,
+        "pctLines": 40
+      },
+      "EXTERNAL_IO": {
+        "functions": 157,
+        "lines": 13070,
+        "pctFunctions": 3.4,
+        "pctLines": 5.9
+      }
+    }
+  },
+  "sampleFunctions": [
+    {
+      "filePath": "app/(app)/layout.tsx",
+      "functionName": "RootLayout",
+      "lineNumber": 8,
+      "lineCount": 7,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/(app)/test/page.tsx",
+      "functionName": "Page",
+      "lineNumber": 4,
+      "lineCount": 6,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matchedCategories": [
+        "TEST_CODE"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/(payload)/admin/[[...segments]]/not-found.tsx",
+      "functionName": "generateMetadata",
+      "lineNumber": 19,
+      "lineCount": 2,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Next.js data function: generateMetadata",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/(payload)/admin/[[...segments]]/not-found.tsx",
+      "functionName": "NotFound",
+      "lineNumber": 22,
+      "lineCount": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/(payload)/admin/[[...segments]]/page.tsx",
+      "functionName": "generateMetadata",
+      "lineNumber": 19,
+      "lineCount": 2,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Next.js data function: generateMetadata",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/(payload)/admin/[[...segments]]/page.tsx",
+      "functionName": "Page",
+      "lineNumber": 22,
+      "lineCount": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/(payload)/layout.tsx",
+      "functionName": "serverFunction",
+      "lineNumber": 17,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/(payload)/layout.tsx",
+      "functionName": "Layout",
+      "lineNumber": 26,
+      "lineCount": 5,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/global-error.tsx",
+      "functionName": "GlobalError",
+      "lineNumber": 8,
+      "lineCount": 20,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useEffect",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "app/my-route/route.ts",
+      "functionName": "GET",
+      "lineNumber": 1,
+      "lineCount": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/astro/payload/src/app/(payload)/admin/[[...segments]]/not-found.tsx",
+      "functionName": "generateMetadata",
+      "lineNumber": 18,
+      "lineCount": 2,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Next.js data function: generateMetadata",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/astro/payload/src/app/(payload)/admin/[[...segments]]/not-found.tsx",
+      "functionName": "NotFound",
+      "lineNumber": 21,
+      "lineCount": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/astro/payload/src/app/(payload)/admin/[[...segments]]/page.tsx",
+      "functionName": "generateMetadata",
+      "lineNumber": 18,
+      "lineCount": 2,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Next.js data function: generateMetadata",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/astro/payload/src/app/(payload)/admin/[[...segments]]/page.tsx",
+      "functionName": "Page",
+      "lineNumber": 21,
+      "lineCount": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/astro/payload/src/app/(payload)/layout.tsx",
+      "functionName": "serverFunction",
+      "lineNumber": 16,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/astro/payload/src/app/(payload)/layout.tsx",
+      "functionName": "Layout",
+      "lineNumber": 25,
+      "lineCount": 5,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/astro/payload/src/app/my-route/route.ts",
+      "functionName": "GET",
+      "lineNumber": 4,
+      "lineCount": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/Button/index.tsx",
+      "functionName": "Button",
+      "lineNumber": 23,
+      "lineCount": 55,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: filter.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/Gutter/index.tsx",
+      "functionName": "Gutter",
+      "lineNumber": 13,
+      "lineCount": 19,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: filter.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/Header/Nav/index.tsx",
+      "functionName": "HeaderNav",
+      "lineNumber": 9,
+      "lineCount": 29,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: filter.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/Header/index.tsx",
+      "functionName": "Header",
+      "lineNumber": 9,
+      "lineCount": 23,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/HydrateClientUser/index.tsx",
+      "functionName": "HydrateClientUser",
+      "lineNumber": 10,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Custom hook: useAuth",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/Input/index.tsx",
+      "functionName": "Input",
+      "lineNumber": 17,
+      "lineCount": 40,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: filter.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/Message/index.tsx",
+      "functionName": "Message",
+      "lineNumber": 5,
+      "lineCount": 29,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: filter.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/RenderParams/index.tsx",
+      "functionName": "RenderParams",
+      "lineNumber": 7,
+      "lineCount": 23,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useSearchParams",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/RichText/index.tsx",
+      "functionName": "RichText",
+      "lineNumber": 6,
+      "lineCount": 11,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: filter.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_components/RichText/serialize.tsx",
+      "functionName": "serialize",
+      "lineNumber": 19,
+      "lineCount": 72,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_providers/Auth/gql.ts",
+      "functionName": "gql",
+      "lineNumber": 9,
+      "lineCount": 26,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "fetch() call",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_providers/Auth/index.tsx",
+      "functionName": "AuthProvider",
+      "lineNumber": 15,
+      "lineCount": 168,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useState",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_providers/Auth/index.tsx",
+      "functionName": "useAuth",
+      "lineNumber": 186,
+      "lineCount": 1,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Custom hook definition: useAuth",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/_providers/Auth/rest.ts",
+      "functionName": "rest",
+      "lineNumber": 3,
+      "lineCount": 32,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "fetch() call",
+      "matchedCategories": [
+        "EXTERNAL_IO"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/account/AccountForm/index.tsx",
+      "functionName": "AccountForm",
+      "lineNumber": 20,
+      "lineCount": 132,
+      "category": "EXTERNAL_IO",
+      "confidence": "MEDIUM",
+      "rationale": "fetch() call",
+      "matchedCategories": [
+        "EXTERNAL_IO",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/account/page.tsx",
+      "functionName": "Account",
+      "lineNumber": 15,
+      "lineCount": 30,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/create-account/CreateAccountForm/index.tsx",
+      "functionName": "CreateAccountForm",
+      "lineNumber": 20,
+      "lineCount": 101,
+      "category": "EXTERNAL_IO",
+      "confidence": "MEDIUM",
+      "rationale": "fetch() call",
+      "matchedCategories": [
+        "EXTERNAL_IO",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/create-account/page.tsx",
+      "functionName": "CreateAccount",
+      "lineNumber": 12,
+      "lineCount": 21,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/layout.tsx",
+      "functionName": "RootLayout",
+      "lineNumber": 12,
+      "lineCount": 18,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/login/LoginForm/index.tsx",
+      "functionName": "LoginForm",
+      "lineNumber": 19,
+      "lineCount": 77,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useSearchParams",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/login/page.tsx",
+      "functionName": "Login",
+      "lineNumber": 12,
+      "lineCount": 17,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/logout/LogoutPage/index.tsx",
+      "functionName": "LogoutPage",
+      "lineNumber": 8,
+      "lineCount": 34,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); Custom hook: useAuth",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/logout/page.tsx",
+      "functionName": "Logout",
+      "lineNumber": 11,
+      "lineCount": 25,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/page.tsx",
+      "functionName": "HomePage",
+      "lineNumber": 10,
+      "lineCount": 48,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/recover-password/RecoverPasswordForm/index.tsx",
+      "functionName": "RecoverPasswordForm",
+      "lineNumber": 16,
+      "lineCount": 75,
+      "category": "EXTERNAL_IO",
+      "confidence": "MEDIUM",
+      "rationale": "fetch() call",
+      "matchedCategories": [
+        "EXTERNAL_IO",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/recover-password/page.tsx",
+      "functionName": "RecoverPassword",
+      "lineNumber": 11,
+      "lineCount": 15,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/reset-password/ResetPasswordForm/index.tsx",
+      "functionName": "ResetPasswordForm",
+      "lineNumber": 18,
+      "lineCount": 69,
+      "category": "EXTERNAL_IO",
+      "confidence": "MEDIUM",
+      "rationale": "fetch() call",
+      "matchedCategories": [
+        "EXTERNAL_IO",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(app)/reset-password/page.tsx",
+      "functionName": "ResetPassword",
+      "lineNumber": 11,
+      "lineCount": 17,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(payload)/admin/[[...segments]]/not-found.tsx",
+      "functionName": "generateMetadata",
+      "lineNumber": 19,
+      "lineCount": 2,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Next.js data function: generateMetadata",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(payload)/admin/[[...segments]]/not-found.tsx",
+      "functionName": "NotFound",
+      "lineNumber": 22,
+      "lineCount": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(payload)/admin/[[...segments]]/page.tsx",
+      "functionName": "generateMetadata",
+      "lineNumber": 19,
+      "lineCount": 2,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Next.js data function: generateMetadata",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(payload)/admin/[[...segments]]/page.tsx",
+      "functionName": "Page",
+      "lineNumber": 22,
+      "lineCount": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "examples/auth/src/app/(payload)/layout.tsx",
+      "functionName": "serverFunction",
+      "lineNumber": 17,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    }
+  ]
+}
