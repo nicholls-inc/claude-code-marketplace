@@ -1,0 +1,846 @@
+{
+  "project_root": "/tmp/saleor",
+  "total_functions": 20867,
+  "summary": {
+    "main_functions": 6573,
+    "main_lines": 113219,
+    "test_functions": 13800,
+    "config_functions": 494,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 1684,
+        "lines": 39911,
+        "pct_functions": 25.6,
+        "pct_lines": 35.3
+      },
+      "MODEL_VALIDATION": {
+        "functions": 71,
+        "lines": 364,
+        "pct_functions": 1.1,
+        "pct_lines": 0.3
+      },
+      "VIEW_MIDDLEWARE": {
+        "functions": 2629,
+        "lines": 41769,
+        "pct_functions": 40.0,
+        "pct_lines": 36.9
+      },
+      "PURE_FUNCTION": {
+        "functions": 2076,
+        "lines": 28976,
+        "pct_functions": 31.6,
+        "pct_lines": 25.6
+      },
+      "EXTERNAL_IO": {
+        "functions": 113,
+        "lines": 2199,
+        "pct_functions": 1.7,
+        "pct_lines": 1.9
+      }
+    }
+  },
+  "sample_functions": [
+    {
+      "file_path": "conftest.py",
+      "function_name": "pytest_addoption",
+      "line_number": 53,
+      "line_count": 7,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matched_categories": [
+        "TEST_CODE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "conftest.py",
+      "function_name": "pytest_configure",
+      "line_number": 62,
+      "line_count": 2,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matched_categories": [
+        "TEST_CODE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "conftest.py",
+      "function_name": "pytest_collection_modifyitems",
+      "line_number": 66,
+      "line_count": 11,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matched_categories": [
+        "TEST_CODE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/__init__.py",
+      "function_name": "PatchedSubscriberExecutionContext.__init__",
+      "line_number": 10,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "PatchedSubscriberExecutionContext",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/__init__.py",
+      "function_name": "PatchedSubscriberExecutionContext.reset",
+      "line_number": 14,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "PatchedSubscriberExecutionContext",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/__init__.py",
+      "function_name": "PatchedSubscriberExecutionContext.__getattr__",
+      "line_number": 17,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "PatchedSubscriberExecutionContext",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/apps.py",
+      "function_name": "AccountAppConfig.ready",
+      "line_number": 8,
+      "line_count": 9,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Signal connection: post_delete.connect",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AccountAppConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_account_created_event",
+      "line_number": 7,
+      "line_count": 2,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_account_activated_event",
+      "line_number": 11,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_account_deactivated_event",
+      "line_number": 22,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_password_reset_link_sent_event",
+      "line_number": 33,
+      "line_count": 4,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_password_reset_event",
+      "line_number": 39,
+      "line_count": 2,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_password_changed_event",
+      "line_number": 43,
+      "line_count": 2,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_email_change_request_event",
+      "line_number": 47,
+      "line_count": 6,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_email_changed_event",
+      "line_number": 55,
+      "line_count": 6,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_placed_order_event",
+      "line_number": 63,
+      "line_count": 4,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_added_to_note_order_event",
+      "line_number": 69,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_downloaded_a_digital_link_event",
+      "line_number": 80,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "customer_deleted_event",
+      "line_number": 91,
+      "line_count": 10,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "assigned_email_to_a_customer_event",
+      "line_number": 103,
+      "line_count": 10,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/events.py",
+      "function_name": "assigned_name_to_a_customer_event",
+      "line_number": 115,
+      "line_count": 10,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: CustomerEvent.objects.create; ORM attribute: CustomerEvent.objects; QuerySet via .objects: CustomerEvent.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/forms.py",
+      "function_name": "get_address_form",
+      "line_number": 6,
+      "line_count": 31,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "PossiblePhoneNumberFormField.__init__",
+      "line_number": 49,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "PossiblePhoneNumberFormField",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "CountryAreaChoiceField.valid_value",
+      "line_number": 57,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountryAreaChoiceField",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "AddressMetaForm.clean",
+      "line_number": 67,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on Form: AddressMetaForm",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AddressMetaForm",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "AddressForm.__init__",
+      "line_number": 111,
+      "line_count": 22,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on Form: AddressForm",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "AddressForm.clean",
+      "line_number": 134,
+      "line_count": 12,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on Form: AddressForm",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "CountryAwareAddressForm.add_field_errors",
+      "line_number": 167,
+      "line_count": 13,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'ValidationError'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "CountryAwareAddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "CountryAwareAddressForm._restore_non_allowed_fields",
+      "line_number": 181,
+      "line_count": 14,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountryAwareAddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "CountryAwareAddressForm.validate_address",
+      "line_number": 196,
+      "line_count": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountryAwareAddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "CountryAwareAddressForm.clean",
+      "line_number": 221,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountryAwareAddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "CountryAwareAddressForm.substitute_invalid_values",
+      "line_number": 226,
+      "line_count": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountryAwareAddressForm",
+      "decorators": [
+        "staticmethod"
+      ]
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "CountryAwareAddressForm.log_errors",
+      "line_number": 237,
+      "line_count": 12,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses logging",
+      "class_name": "CountryAwareAddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "get_address_form_class",
+      "line_number": 251,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "get_form_i18n_lines",
+      "line_number": 255,
+      "line_count": 21,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'BoundField'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "update_base_fields",
+      "line_number": 278,
+      "line_count": 32,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'forms'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n.py",
+      "function_name": "construct_address_form",
+      "line_number": 312,
+      "line_count": 12,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'ModelFormMetaclass'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n_rules_override.py",
+      "function_name": "patched_load_validation_data",
+      "line_number": 18,
+      "line_count": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/i18n_rules_override.py",
+      "function_name": "i18n_rules_override",
+      "line_number": 27,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/lock_objects.py",
+      "function_name": "user_qs_select_for_update",
+      "line_number": 4,
+      "line_count": 2,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: User.objects.order_by; ORM attribute: User.objects; QuerySet via .objects: User.objects.order_by",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/management/commands/createsuperuser.py",
+      "function_name": "Command.__init__",
+      "line_number": 33,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: createsuperuser.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/management/commands/createsuperuser.py",
+      "function_name": "Command.add_arguments",
+      "line_number": 37,
+      "line_count": 47,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: createsuperuser.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/management/commands/createsuperuser.py",
+      "function_name": "Command.execute",
+      "line_number": 85,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: createsuperuser.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/management/commands/createsuperuser.py",
+      "function_name": "Command.handle",
+      "line_number": 89,
+      "line_count": 154,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: createsuperuser.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/management/commands/createsuperuser.py",
+      "function_name": "Command.get_input_data",
+      "line_number": 244,
+      "line_count": 12,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: createsuperuser.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/management/commands/createsuperuser.py",
+      "function_name": "Command._get_input_message",
+      "line_number": 257,
+      "line_count": 12,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: createsuperuser.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/management/commands/createsuperuser.py",
+      "function_name": "Command._validate_username",
+      "line_number": 270,
+      "line_count": 15,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: createsuperuser.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/migrations/0013_auto_20171120_0521.py",
+      "function_name": "convert_phone_number_to_phonenumberfield",
+      "line_number": 9,
+      "line_count": 12,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/migrations/0020_user_token.py",
+      "function_name": "get_token",
+      "line_number": 7,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "saleor/account/migrations/0021_unique_token.py",
+      "function_name": "get_token",
+      "line_number": 6,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    }
+  ]
+}
