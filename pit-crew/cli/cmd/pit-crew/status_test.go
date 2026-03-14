@@ -29,7 +29,11 @@ func TestStatusEmpty(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 
-	out := captureStdout(func() { cmdStatus(q, nil) })
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	if !strings.Contains(out, "No jobs") {
 		t.Errorf("expected empty message, got: %s", out)
 	}
@@ -42,15 +46,45 @@ func TestStatusTable(t *testing.T) {
 	q.Enqueue(queue.Job{ID: "issue-42", IssueNum: 42, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now})   //nolint:errcheck
 	q.Enqueue(queue.Job{ID: "issue-55", IssueNum: 55, Skill: "fix-bug", State: queue.StateCompleted, CreatedAt: now}) //nolint:errcheck
 
-	out := captureStdout(func() { cmdStatus(q, nil) })
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	if !strings.Contains(out, "issue-42") {
 		t.Errorf("expected issue-42 in output, got: %s", out)
 	}
 	if !strings.Contains(out, "issue-55") {
 		t.Errorf("expected issue-55 in output, got: %s", out)
 	}
+	// Verify states appear
+	if !strings.Contains(out, "pending") {
+		t.Errorf("expected 'pending' state in output, got: %s", out)
+	}
+	if !strings.Contains(out, "completed") {
+		t.Errorf("expected 'completed' state in output, got: %s", out)
+	}
 	if !strings.Contains(out, "Summary:") {
 		t.Errorf("expected summary line, got: %s", out)
+	}
+}
+
+func TestStatusTableHeaders(t *testing.T) {
+	dir := t.TempDir()
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	now := time.Now().UTC()
+	q.Enqueue(queue.Job{ID: "issue-1", IssueNum: 1, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
+
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	for _, header := range []string{"ID", "Issue", "Skill", "State", "Started", "Duration"} {
+		if !strings.Contains(out, header) {
+			t.Errorf("expected header %q in table output, got: %s", header, out)
+		}
 	}
 }
 
@@ -60,7 +94,11 @@ func TestStatusJSON(t *testing.T) {
 	now := time.Now().UTC()
 	q.Enqueue(queue.Job{ID: "issue-1", IssueNum: 1, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
 
-	out := captureStdout(func() { cmdStatus(q, []string{"--json"}) })
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, true, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	var jobs []queue.Job
 	if err := json.Unmarshal([]byte(strings.TrimSpace(out)), &jobs); err != nil {
 		t.Fatalf("expected valid JSON, got: %s\nerr: %v", out, err)
@@ -77,7 +115,11 @@ func TestStatusStateFilter(t *testing.T) {
 	q.Enqueue(queue.Job{ID: "issue-1", IssueNum: 1, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now})   //nolint:errcheck
 	q.Enqueue(queue.Job{ID: "issue-2", IssueNum: 2, Skill: "fix-bug", State: queue.StateCompleted, CreatedAt: now}) //nolint:errcheck
 
-	out := captureStdout(func() { cmdStatus(q, []string{"--state", "pending"}) })
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "pending") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	if !strings.Contains(out, "issue-1") {
 		t.Errorf("expected issue-1 in filtered output, got: %s", out)
 	}
@@ -91,7 +133,11 @@ func TestStatusJSONEmpty(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 
-	out := captureStdout(func() { cmdStatus(q, []string{"--json"}) })
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, true, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	trimmed := strings.TrimSpace(out)
 	if trimmed != "[]" {
 		t.Errorf("expected '[]' for empty JSON output, got: %q", trimmed)
@@ -108,15 +154,18 @@ func TestStatusRunningJobShowsDuration(t *testing.T) {
 		State: queue.StateRunning, CreatedAt: now, StartedAt: &started,
 	})
 
-	out := captureStdout(func() { cmdStatus(q, nil) })
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	if !strings.Contains(out, "issue-10") {
 		t.Errorf("expected issue-10 in output, got: %s", out)
 	}
-	// Should show a duration (at least 2m)
 	if !strings.Contains(out, "running") {
 		t.Errorf("expected 'running' state in output, got: %s", out)
 	}
-	// The duration should contain "m" for minutes
+	// Duration should be approximately 2m — allow 2m0s through 2m5s
 	if !strings.Contains(out, "2m") {
 		t.Errorf("expected duration ~2m in output, got: %s", out)
 	}
@@ -134,10 +183,40 @@ func TestStatusCompletedJobShowsFixedDuration(t *testing.T) {
 		StartedAt: &started, EndedAt: &ended,
 	})
 
-	out := captureStdout(func() { cmdStatus(q, nil) })
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	// Duration should be 3m0s (fixed, not growing)
 	if !strings.Contains(out, "3m0s") {
 		t.Errorf("expected duration '3m0s' in output, got: %s", out)
+	}
+}
+
+func TestStatusFailedJob(t *testing.T) {
+	dir := t.TempDir()
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	now := time.Now().UTC()
+	started := now.Add(-1 * time.Minute)
+	ended := now.Add(-30 * time.Second)
+	q.Enqueue(queue.Job{ //nolint:errcheck
+		ID: "issue-99", IssueNum: 99, Skill: "fix-bug",
+		State: queue.StateFailed, CreatedAt: now,
+		StartedAt: &started, EndedAt: &ended,
+		Error: "compilation failed",
+	})
+
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !strings.Contains(out, "failed") {
+		t.Errorf("expected 'failed' state in output, got: %s", out)
+	}
+	if !strings.Contains(out, "issue-99") {
+		t.Errorf("expected issue-99 in output, got: %s", out)
 	}
 }
 
@@ -147,7 +226,11 @@ func TestStatusStateFilterNoMatches(t *testing.T) {
 	now := time.Now().UTC()
 	q.Enqueue(queue.Job{ID: "issue-1", IssueNum: 1, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
 
-	out := captureStdout(func() { cmdStatus(q, []string{"--state", "completed"}) })
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "completed") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	if !strings.Contains(out, "No jobs") {
 		t.Errorf("expected 'No jobs' for filtered empty result, got: %s", out)
 	}

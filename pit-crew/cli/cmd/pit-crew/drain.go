@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/spf13/cobra"
 
 	"github.com/nicholls-inc/claude-code-marketplace/pit-crew/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/pit-crew/cli/internal/queue"
@@ -13,17 +14,22 @@ import (
 	"github.com/nicholls-inc/claude-code-marketplace/pit-crew/cli/internal/worktree"
 )
 
-func cmdDrain(cfg *config.Config, q *queue.Queue, wt *worktree.Manager, args []string) {
-	dryRun := false
-	for _, a := range args {
-		if a == "--dry-run" {
-			dryRun = true
-		}
+func newDrainCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "drain",
+		Short: "Dequeue pending jobs and launch Claude sessions",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			dryRun, _ := cmd.Flags().GetBool("dry-run")
+			return cmdDrain(deps.cfg, deps.q, deps.wt, dryRun)
+		},
 	}
+	cmd.Flags().Bool("dry-run", false, "Preview what would be drained")
+	return cmd
+}
 
+func cmdDrain(cfg *config.Config, q *queue.Queue, wt *worktree.Manager, dryRun bool) error {
 	if dryRun {
-		dryRunDrain(cfg, q)
-		return
+		return dryRunDrain(cfg, q)
 	}
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
@@ -33,24 +39,23 @@ func cmdDrain(cfg *config.Config, q *queue.Queue, wt *worktree.Manager, args []s
 	r := runner.New(cfg, q, wt, cmdRunner)
 	result, err := r.Drain(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "drain error: %v\n", err)
-		os.Exit(2)
+		return &exitError{code: 2, err: fmt.Errorf("drain error: %w", err)}
 	}
 	fmt.Printf("Completed %d, failed %d, skipped %d\n", result.Completed, result.Failed, result.Skipped)
 	if result.Failed > 0 {
-		os.Exit(1)
+		return &exitError{code: 1}
 	}
+	return nil
 }
 
-func dryRunDrain(cfg *config.Config, q *queue.Queue) {
+func dryRunDrain(cfg *config.Config, q *queue.Queue) error {
 	jobs, err := q.ListByState(queue.StatePending)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error reading queue: %v\n", err)
-		os.Exit(2)
+		return &exitError{code: 2, err: fmt.Errorf("error reading queue: %w", err)}
 	}
 	if len(jobs) == 0 {
 		fmt.Println("No pending jobs.")
-		return
+		return nil
 	}
 	fmt.Printf("%-12s  %-6s  %-20s  %s\n", "ID", "Issue", "Skill", "Command")
 	fmt.Printf("%-12s  %-6s  %-20s  %s\n", "----", "-----", "-----", "-------")
@@ -59,4 +64,5 @@ func dryRunDrain(cfg *config.Config, q *queue.Queue) {
 		fmt.Printf("%-12s  #%-5d  %-20s  %s\n", j.ID, j.IssueNum, j.Skill, cmd)
 	}
 	fmt.Printf("\n%d job(s) would be drained (dry-run — no sessions launched)\n", len(jobs))
+	return nil
 }

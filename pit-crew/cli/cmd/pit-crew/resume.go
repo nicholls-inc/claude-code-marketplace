@@ -4,17 +4,29 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
+
 	"github.com/nicholls-inc/claude-code-marketplace/pit-crew/cli/internal/config"
 )
 
-func cmdResume(cfg *config.Config, args []string) {
+func newResumeCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "resume",
+		Short: "Resume paused operations",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return cmdResume(deps.cfg)
+		},
+	}
+}
+
+func cmdResume(cfg *config.Config) error {
 	if !isPaused(cfg) {
 		fmt.Println("Not paused.")
-		return
+		return nil
 	}
 	if err := os.Remove(pauseMarkerPath(cfg)); err != nil {
-		fmt.Fprintf(os.Stderr, "error removing pause marker: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("error removing pause marker: %w", err)
 	}
 	fmt.Println("Scanning resumed.")
+	return nil
 }

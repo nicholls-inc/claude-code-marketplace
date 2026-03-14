@@ -2,20 +2,27 @@ package main
 
 import (
 	"fmt"
-	"os"
+
+	"github.com/spf13/cobra"
 
 	"github.com/nicholls-inc/claude-code-marketplace/pit-crew/cli/internal/queue"
 )
 
-func cmdCancel(q *queue.Queue, args []string) {
-	if len(args) == 0 {
-		fmt.Fprintln(os.Stderr, "usage: pit-crew cancel <job-id>")
-		os.Exit(1)
+func newCancelCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "cancel <job-id>",
+		Short: "Cancel a queued or running job",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return cmdCancel(deps.q, args[0])
+		},
 	}
-	id := args[0]
+}
+
+func cmdCancel(q *queue.Queue, id string) error {
 	if err := q.Cancel(id); err != nil {
-		fmt.Fprintf(os.Stderr, "cancel error: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("cancel error: %w", err)
 	}
 	fmt.Printf("Cancelled job %s\n", id)
+	return nil
 }

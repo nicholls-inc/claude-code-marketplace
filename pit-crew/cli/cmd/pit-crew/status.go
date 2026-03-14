@@ -7,25 +7,28 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/spf13/cobra"
+
 	"github.com/nicholls-inc/claude-code-marketplace/pit-crew/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/pit-crew/cli/internal/queue"
 )
 
-func cmdStatus(q *queue.Queue, args []string) {
-	jsonMode := false
-	stateFilter := ""
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--json":
-			jsonMode = true
-		case "--state":
-			if i+1 < len(args) {
-				stateFilter = args[i+1]
-				i++
-			}
-		}
+func newStatusCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "status",
+		Short: "Show queue state and job summary",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			jsonMode, _ := cmd.Flags().GetBool("json")
+			stateFilter, _ := cmd.Flags().GetString("state")
+			return cmdStatus(deps.q, jsonMode, stateFilter)
+		},
 	}
+	cmd.Flags().Bool("json", false, "Output as JSON")
+	cmd.Flags().String("state", "", "Filter by job state")
+	return cmd
+}
 
+func cmdStatus(q *queue.Queue, jsonMode bool, stateFilter string) error {
 	var jobs []queue.Job
 	var err error
 	if stateFilter != "" {
@@ -34,8 +37,7 @@ func cmdStatus(q *queue.Queue, args []string) {
 		jobs, err = q.List()
 	}
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error reading queue: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("error reading queue: %w", err)
 	}
 
 	if jsonMode {
@@ -45,12 +47,12 @@ func cmdStatus(q *queue.Queue, args []string) {
 			jobs = []queue.Job{}
 		}
 		enc.Encode(jobs) //nolint:errcheck
-		return
+		return nil
 	}
 
 	if len(jobs) == 0 {
 		fmt.Println("No jobs in queue.")
-		return
+		return nil
 	}
 
 	fmt.Printf("%-14s  %-6s  %-20s  %-10s  %-12s  %s\n",
@@ -78,6 +80,7 @@ func cmdStatus(q *queue.Queue, args []string) {
 	fmt.Printf("\nSummary: %d pending, %d running, %d completed, %d failed\n",
 		counts[queue.StatePending], counts[queue.StateRunning],
 		counts[queue.StateCompleted], counts[queue.StateFailed])
+	return nil
 }
 
 func pauseMarkerPath(cfg *config.Config) string {

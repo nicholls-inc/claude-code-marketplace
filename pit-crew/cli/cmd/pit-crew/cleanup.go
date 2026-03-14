@@ -5,26 +5,33 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/spf13/cobra"
+
 	"github.com/nicholls-inc/claude-code-marketplace/pit-crew/cli/internal/worktree"
 )
 
-func cmdCleanup(wt *worktree.Manager, args []string) {
-	dryRun := false
-	for _, a := range args {
-		if a == "--dry-run" {
-			dryRun = true
-		}
+func newCleanupCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "cleanup",
+		Short: "Remove stale worktrees",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			dryRun, _ := cmd.Flags().GetBool("dry-run")
+			return cmdCleanup(deps.wt, dryRun)
+		},
 	}
+	cmd.Flags().Bool("dry-run", false, "Preview what would be removed")
+	return cmd
+}
 
+func cmdCleanup(wt *worktree.Manager, dryRun bool) error {
 	ctx := context.Background()
 	trees, err := wt.ListPitCrew(ctx)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "error listing worktrees: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("error listing worktrees: %w", err)
 	}
 	if len(trees) == 0 {
 		fmt.Println("No pit-crew worktrees found.")
-		return
+		return nil
 	}
 
 	removed := 0
@@ -47,4 +54,5 @@ func cmdCleanup(wt *worktree.Manager, args []string) {
 	} else {
 		fmt.Printf("\nRemoved %d worktree(s)\n", removed)
 	}
+	return nil
 }
