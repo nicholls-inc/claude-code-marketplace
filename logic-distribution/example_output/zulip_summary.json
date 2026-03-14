@@ -1,0 +1,875 @@
+{
+  "project_root": "/tmp/zulip",
+  "total_functions": 12124,
+  "summary": {
+    "main_functions": 5537,
+    "main_lines": 122473,
+    "test_functions": 6255,
+    "config_functions": 332,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 975,
+        "lines": 45720,
+        "pct_functions": 17.6,
+        "pct_lines": 37.3
+      },
+      "MODEL_VALIDATION": {
+        "functions": 126,
+        "lines": 814,
+        "pct_functions": 2.3,
+        "pct_lines": 0.7
+      },
+      "VIEW_MIDDLEWARE": {
+        "functions": 1880,
+        "lines": 37522,
+        "pct_functions": 34.0,
+        "pct_lines": 30.6
+      },
+      "PURE_FUNCTION": {
+        "functions": 2396,
+        "lines": 33495,
+        "pct_functions": 43.3,
+        "pct_lines": 27.3
+      },
+      "EXTERNAL_IO": {
+        "functions": 160,
+        "lines": 4922,
+        "pct_functions": 2.9,
+        "pct_lines": 4.0
+      }
+    }
+  },
+  "sample_functions": [
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "CountStat.time_increment",
+      "line_number": 52,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountStat",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "CountStat.__init__",
+      "line_number": 57,
+      "line_count": 17,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountStat",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "CountStat.__repr__",
+      "line_number": 76,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountStat",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "CountStat.last_successful_fill",
+      "line_number": 79,
+      "line_count": 7,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: FillState.objects.filter; ORM attribute: FillState.objects; QuerySet via .objects: FillState.objects.filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountStat",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "CountStat.current_month_accumulated_count_for_user",
+      "line_number": 87,
+      "line_count": 20,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: aggregate; ORM attribute: self.data_collector.output_table.objects.filter; ORM attribute: self.data_collector.output_table.objects",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CountStat",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "LoggingCountStat.__init__",
+      "line_number": 110,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "LoggingCountStat",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "DependentCountStat.__init__",
+      "line_number": 115,
+      "line_count": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "DependentCountStat",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "DataCollector.__init__",
+      "line_number": 128,
+      "line_count": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "DataCollector",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "DataCollector.depends_on_realm",
+      "line_number": 136,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "DataCollector",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "process_count_stat",
+      "line_number": 143,
+      "line_count": 52,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: FillState.objects.create; ORM attribute: FillState.objects.filter; ORM attribute: FillState.objects",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_update_fill_state",
+      "line_number": 197,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_fill_count_stat_at_hour",
+      "line_number": 205,
+      "line_count": 15,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses logging",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_delete_counts_at_hour",
+      "line_number": 222,
+      "line_count": 10,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: InstallationCount.objects.filter; ORM attribute: UserCount.objects.filter; ORM attribute: StreamCount.objects.filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_aggregate_to_summary_table",
+      "line_number": 234,
+      "line_count": 86,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "Raw SQL via cursor.execute; Raw SQL via cursor.execute; SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_increment_logging_stat",
+      "line_number": 326,
+      "line_count": 105,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: id_args.values; Raw SQL via cursor.execute; SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_drop_all_analytics_tables",
+      "line_number": 433,
+      "line_count": 6,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: UserCount.objects.all; ORM attribute: StreamCount.objects.all; ORM attribute: RealmCount.objects.all",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_drop_single_stat",
+      "line_number": 441,
+      "line_count": 6,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: UserCount.objects.filter; ORM attribute: StreamCount.objects.filter; ORM attribute: RealmCount.objects.filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_pull_by_sql_query",
+      "line_number": 454,
+      "line_count": 36,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "Raw SQL via cursor.execute",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "sql_data_collector",
+      "line_number": 492,
+      "line_count": 17,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'models'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "count_upload_space_used_by_realm_query",
+      "line_number": 511,
+      "line_count": 32,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "do_pull_minutes_active",
+      "line_number": 545,
+      "line_count": 34,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: values_list; ORM attribute: UserCount.objects.bulk_create; ORM attribute: UserCount.objects",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "count_message_by_user_query",
+      "line_number": 581,
+      "line_count": 30,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "count_message_type_by_user_query",
+      "line_number": 614,
+      "line_count": 52,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "count_message_by_stream_query",
+      "line_number": 672,
+      "line_count": 33,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "check_realmauditlog_by_user_query",
+      "line_number": 712,
+      "line_count": 37,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "check_useractivityinterval_by_user_query",
+      "line_number": 751,
+      "line_count": 22,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "count_realm_active_humans_query",
+      "line_number": 775,
+      "line_count": 50,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "SQL keyword in string literal",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/counts.py",
+      "function_name": "get_count_stats",
+      "line_number": 847,
+      "line_count": 122,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'settings'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/fixtures.py",
+      "function_name": "generate_time_series_data",
+      "line_number": 7,
+      "line_count": 71,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/lib/time_utils.py",
+      "function_name": "time_range",
+      "line_number": 11,
+      "line_count": 23,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/management/commands/check_analytics_state.py",
+      "function_name": "Command.handle",
+      "line_number": 35,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: check_analytics_state.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/management/commands/check_analytics_state.py",
+      "function_name": "Command.get_fill_state",
+      "line_number": 39,
+      "line_count": 54,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: Realm.objects.exists; ORM attribute: Realm.objects; QuerySet via .objects: Realm.objects.exists",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/management/commands/clear_analytics_tables.py",
+      "function_name": "Command.add_arguments",
+      "line_number": 15,
+      "line_count": 2,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: clear_analytics_tables.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/management/commands/clear_analytics_tables.py",
+      "function_name": "Command.handle",
+      "line_number": 19,
+      "line_count": 7,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: clear_analytics_tables.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/management/commands/clear_single_stat.py",
+      "function_name": "Command.add_arguments",
+      "line_number": 15,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: clear_single_stat.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/management/commands/clear_single_stat.py",
+      "function_name": "Command.handle",
+      "line_number": 20,
+      "line_count": 8,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: clear_single_stat.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/management/commands/populate_analytics_db.py",
+      "function_name": "Command.generate_fixture_data",
+      "line_number": 40,
+      "line_count": 24,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: populate_analytics_db.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/management/commands/populate_analytics_db.py",
+      "function_name": "Command.handle",
+      "line_number": 66,
+      "line_count": 288,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM attribute: NamedUserGroup.objects.get; ORM attribute: NamedUserGroup.objects.get; ORM attribute: UserGroupMembership.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM",
+        "EXTERNAL_IO"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Also matched: EXTERNAL_IO",
+      "class_name": "Command",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/management/commands/update_analytics_counts.py",
+      "function_name": "Command.add_arguments",
+      "line_number": 25,
+      "line_count": 14,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: update_analytics_counts.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/management/commands/update_analytics_counts.py",
+      "function_name": "Command.handle",
+      "line_number": 43,
+      "line_count": 2,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: update_analytics_counts.py",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": [
+        "override",
+        "abort_cron_during_deploy",
+        "abort_unless_locked"
+      ]
+    },
+    {
+      "file_path": "analytics/management/commands/update_analytics_counts.py",
+      "function_name": "Command.run_update_analytics_counts",
+      "line_number": 46,
+      "line_count": 54,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: Realm.objects.exists; ORM attribute: Realm.objects; ORM attribute: ALL_COUNT_STATS.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "Command",
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/migrations/0009_remove_messages_to_stream_stat.py",
+      "function_name": "delete_messages_sent_to_stream_stat",
+      "line_number": 6,
+      "line_count": 15,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/migrations/0010_clear_messages_sent_values.py",
+      "function_name": "clear_message_sent_by_message_type_values",
+      "line_number": 6,
+      "line_count": 15,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/migrations/0011_clear_analytics_tables.py",
+      "function_name": "clear_analytics_tables",
+      "line_number": 6,
+      "line_count": 12,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/migrations/0015_clear_duplicate_counts.py",
+      "function_name": "clear_duplicate_counts",
+      "line_number": 7,
+      "line_count": 48,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/models.py",
+      "function_name": "FillState.__str__",
+      "line_number": 21,
+      "line_count": 2,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: __str__",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "FillState",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/models.py",
+      "function_name": "installation_epoch",
+      "line_number": 27,
+      "line_count": 5,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: Realm.objects.aggregate; ORM attribute: Realm.objects; QuerySet via .objects: Realm.objects.aggregate",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "analytics/models.py",
+      "function_name": "InstallationCount.__str__",
+      "line_number": 64,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "InstallationCount",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/models.py",
+      "function_name": "RealmCount.__str__",
+      "line_number": 93,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "RealmCount",
+      "decorators": [
+        "override"
+      ]
+    },
+    {
+      "file_path": "analytics/models.py",
+      "function_name": "UserCount.__str__",
+      "line_number": 125,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserCount",
+      "decorators": [
+        "override"
+      ]
+    }
+  ]
+}

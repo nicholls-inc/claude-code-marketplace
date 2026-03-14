@@ -1,0 +1,862 @@
+{
+  "project_root": "/tmp/django-oscar",
+  "total_functions": 4148,
+  "summary": {
+    "main_functions": 2009,
+    "main_lines": 18819,
+    "test_functions": 2065,
+    "config_functions": 74,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 259,
+        "lines": 4298,
+        "pct_functions": 12.9,
+        "pct_lines": 22.8
+      },
+      "MODEL_VALIDATION": {
+        "functions": 430,
+        "lines": 2908,
+        "pct_functions": 21.4,
+        "pct_lines": 15.5
+      },
+      "VIEW_MIDDLEWARE": {
+        "functions": 750,
+        "lines": 7213,
+        "pct_functions": 37.3,
+        "pct_lines": 38.3
+      },
+      "PURE_FUNCTION": {
+        "functions": 557,
+        "lines": 4277,
+        "pct_functions": 27.7,
+        "pct_lines": 22.7
+      },
+      "EXTERNAL_IO": {
+        "functions": 13,
+        "lines": 123,
+        "pct_functions": 0.6,
+        "pct_lines": 0.7
+      }
+    }
+  },
+  "sample_functions": [
+    {
+      "file_path": "docs/source/conf.py",
+      "function_name": "process_docstring",
+      "line_number": 273,
+      "line_count": 36,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'models', 'strip_tags', 'force_str'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "docs/source/conf.py",
+      "function_name": "setup",
+      "line_number": 311,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/offers.py",
+      "function_name": "ChangesOwnerName.apply",
+      "line_number": 10,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ChangesOwnerName",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/offers.py",
+      "function_name": "ChangesOwnerName.apply_deferred",
+      "line_number": 15,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ChangesOwnerName",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/offers.py",
+      "function_name": "ChangesOwnerName.description",
+      "line_number": 22,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ChangesOwnerName",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "sandbox/apps/sitemaps.py",
+      "function_name": "I18nSitemap.__init__",
+      "line_number": 25,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'get_language'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "I18nSitemap",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/sitemaps.py",
+      "function_name": "I18nSitemap.get_obj_location",
+      "line_number": 29,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "I18nSitemap",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/sitemaps.py",
+      "function_name": "I18nSitemap.location",
+      "line_number": 32,
+      "line_count": 5,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'activate'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "I18nSitemap",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/sitemaps.py",
+      "function_name": "StaticSitemap.items",
+      "line_number": 41,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "StaticSitemap",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/sitemaps.py",
+      "function_name": "StaticSitemap.get_obj_location",
+      "line_number": 44,
+      "line_count": 2,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'reverse'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "StaticSitemap",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/sitemaps.py",
+      "function_name": "ProductSitemap.items",
+      "line_number": 50,
+      "line_count": 2,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: Product.objects.browsable; ORM attribute: Product.objects; QuerySet via .objects: Product.objects.browsable",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "ProductSitemap",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/sitemaps.py",
+      "function_name": "CategorySitemap.items",
+      "line_number": 56,
+      "line_count": 2,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: Category.objects.all; ORM attribute: Category.objects; QuerySet via .objects: Category.objects.all",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CategorySitemap",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/user/models.py",
+      "function_name": "CustomUserManager.create_user",
+      "line_number": 37,
+      "line_count": 7,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'BaseUserManager', 'timezone'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "CustomUserManager",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/user/models.py",
+      "function_name": "CustomUserManager.create_superuser",
+      "line_number": 45,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CustomUserManager",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/user/models.py",
+      "function_name": "CustomUserModel.__str__",
+      "line_number": 58,
+      "line_count": 2,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: __str__",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CustomUserModel",
+      "decorators": []
+    },
+    {
+      "file_path": "sandbox/apps/user/models.py",
+      "function_name": "CustomUserModel.get_full_name",
+      "line_number": 61,
+      "line_count": 2,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: get_full_name on CustomUserModel",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "CustomUserModel",
+      "decorators": []
+    },
+    {
+      "file_path": "setup.py",
+      "function_name": "BuildNPM.run",
+      "line_number": 16,
+      "line_count": 4,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "External call via subprocess: subprocess.check_call; External call via subprocess: subprocess.check_call; Subprocess: subprocess.check_call",
+      "matched_categories": [
+        "EXTERNAL_IO"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "BuildNPM",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/__init__.py",
+      "function_name": "get_short_version",
+      "line_number": 5,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/__init__.py",
+      "function_name": "get_version",
+      "line_number": 9,
+      "line_count": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.__str__",
+      "line_number": 274,
+      "line_count": 2,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: __str__",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.save",
+      "line_number": 284,
+      "line_count": 3,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: save",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.clean",
+      "line_number": 288,
+      "line_count": 17,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: clean",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.ensure_postcode_is_valid_for_country",
+      "line_number": 306,
+      "line_count": 26,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: ensure_postcode_is_valid_for_country on AbstractAddress",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress._update_search_text",
+      "line_number": 333,
+      "line_count": 2,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: _update_search_text on AbstractAddress",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.city",
+      "line_number": 339,
+      "line_count": 3,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model property: city",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.summary",
+      "line_number": 344,
+      "line_count": 6,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model property: summary",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.salutation",
+      "line_number": 352,
+      "line_count": 7,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model property: salutation",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.name",
+      "line_number": 361,
+      "line_count": 2,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model property: name",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.get_field_values",
+      "line_number": 366,
+      "line_count": 17,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: get_field_values on AbstractAddress",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.get_address_field_values",
+      "line_number": 384,
+      "line_count": 6,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: get_address_field_values on AbstractAddress",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.generate_hash",
+      "line_number": 391,
+      "line_count": 10,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: generate_hash on AbstractAddress",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.join_fields",
+      "line_number": 402,
+      "line_count": 6,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: join_fields on AbstractAddress",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.populate_alternative_model",
+      "line_number": 409,
+      "line_count": 12,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: populate_alternative_model on AbstractAddress",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractAddress.active_address_fields",
+      "line_number": 422,
+      "line_count": 7,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Custom model method: active_address_fields on AbstractAddress",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractCountry.__str__",
+      "line_number": 474,
+      "line_count": 2,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: __str__",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractCountry",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractCountry.code",
+      "line_number": 478,
+      "line_count": 5,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model property: code",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractCountry",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractCountry.numeric_code",
+      "line_number": 485,
+      "line_count": 10,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model property: numeric_code",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractCountry",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractShippingAddress.order",
+      "line_number": 532,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractShippingAddress",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractUserAddress.save",
+      "line_number": 587,
+      "line_count": 12,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractUserAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractUserAddress._ensure_defaults_integrity",
+      "line_number": 600,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self.__class__._default_manager.filter; ORM attribute: self.__class__._default_manager.filter",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractUserAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractUserAddress.validate_unique",
+      "line_number": 618,
+      "line_count": 9,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self.__class__.objects.filter; ORM attribute: qs.exists; ORM attribute: self.__class__.objects",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractUserAddress",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/abstract_models.py",
+      "function_name": "AbstractBillingAddress.order",
+      "line_number": 638,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractBillingAddress",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "src/oscar/apps/address/forms.py",
+      "function_name": "AbstractAddressForm.__init__",
+      "line_number": 11,
+      "line_count": 8,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "Method on Form: AbstractAddressForm",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractAddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/forms.py",
+      "function_name": "UserAddressForm.__init__",
+      "line_number": 38,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "UserAddressForm",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/address/migrations/0005_regenerate_user_address_hashes.py",
+      "function_name": "regenerate_user_address_hashes",
+      "line_number": 13,
+      "line_count": 6,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/analytics/abstract_models.py",
+      "function_name": "AbstractProductRecord.__str__",
+      "line_number": 41,
+      "line_count": 2,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: __str__",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractProductRecord",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/analytics/abstract_models.py",
+      "function_name": "AbstractUserProductView.__str__",
+      "line_number": 94,
+      "line_count": 5,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: __str__",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractUserProductView",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/analytics/abstract_models.py",
+      "function_name": "AbstractUserSearch.__str__",
+      "line_number": 115,
+      "line_count": 5,
+      "category": "MODEL_VALIDATION",
+      "confidence": "HIGH",
+      "rationale": "Model special method: __str__",
+      "matched_categories": [
+        "MODEL_VALIDATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AbstractUserSearch",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/analytics/apps.py",
+      "function_name": "AnalyticsConfig.ready",
+      "line_number": 12,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "MEDIUM",
+      "rationale": "Function in configuration file",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AnalyticsConfig",
+      "decorators": []
+    },
+    {
+      "file_path": "src/oscar/apps/analytics/receivers.py",
+      "function_name": "_update_counter",
+      "line_number": 23,
+      "line_count": 22,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: model.objects.filter; ORM attribute: model.objects; ORM attribute: model.objects.create",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    }
+  ]
+}

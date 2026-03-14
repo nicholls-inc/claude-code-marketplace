@@ -95,37 +95,58 @@ TOTAL                       6,573         113,219       100.0%     100.0%
 Excluded: 13800 test functions, 494 configuration functions
 ```
 
+### Comparative Results (4 codebases)
+
+#### By function count (%)
+
+| Category | Hypothesis | Saleor | Zulip | NetBox | Oscar |
+|---|---|---|---|---|---|
+| DATABASE_ORM | ~40% | 25.6% | 17.6% | 26.7% | 12.9% |
+| MODEL_VALIDATION | ~25% | 1.1% | 2.3% | 4.9% | **21.4%** |
+| VIEW_MIDDLEWARE | ~20% | 40.0% | 34.0% | 29.5% | 37.3% |
+| PURE_FUNCTION | ~10% | 31.6% | 43.3% | 38.3% | 27.7% |
+| EXTERNAL_IO | ~5% | 1.7% | 2.9% | 0.6% | 0.6% |
+
+#### By lines of code (%)
+
+| Category | Hypothesis | Saleor | Zulip | NetBox | Oscar |
+|---|---|---|---|---|---|
+| DATABASE_ORM | ~40% | 35.3% | **37.3%** | **40.8%** | 22.8% |
+| MODEL_VALIDATION | ~25% | 0.3% | 0.7% | 3.6% | **15.5%** |
+| VIEW_MIDDLEWARE | ~20% | 36.9% | 30.6% | 31.1% | **38.3%** |
+| PURE_FUNCTION | ~10% | 25.6% | 27.3% | 22.7% | 22.7% |
+| EXTERNAL_IO | ~5% | 1.9% | 4.0% | 1.8% | 0.7% |
+
+#### Raw numbers
+
+| Project | Architecture | Total funcs | Excl. tests | Excl. config |
+|---|---|---|---|---|
+| **Saleor** | GraphQL (Graphene) | 20,867 | 13,800 | 494 |
+| **Zulip** | Traditional Django + DRF | 12,124 | 6,255 | 332 |
+| **NetBox** | Django + DRF (REST) | 5,539 | 2,607 | 84 |
+| **django-oscar** | Traditional Django (e-commerce framework) | 4,148 | 2,065 | 74 |
+
 ### Key Findings
 
-The original hypothesis predicted ~10% pure functions. Saleor shows **31.6% by function count (25.6% by lines)** — significantly higher than expected. However, this deserves nuance:
+1. **DATABASE_ORM by lines is consistent at 35-41%** across Saleor, Zulip, and NetBox — confirming the hypothesis that ~40% of logic lives in the database. Oscar is lower (23%) because it's a framework (less app-specific queries, more generic patterns). By lines of code, the hypothesis holds well.
 
-1. **DATABASE_ORM at 25.6%/35.3%** — Close to the hypothesized 40%. The line-of-code percentage (35.3%) is closer to the prediction, suggesting ORM functions are larger than average.
+2. **PURE_FUNCTION is 3x higher than hypothesized** across all four codebases (23-27% by lines, 28-43% by function count). This is the biggest surprise — formal verification tools have a much larger attack surface than expected. Pure functions include data transformation helpers, business computation (tax, pricing, discounts), formatting, and validation utilities.
 
-2. **VIEW_MIDDLEWARE at 40.0%/36.9%** — Saleor uses GraphQL (Graphene) heavily rather than traditional Django views/DRF. This category absorbed what would be "framework model methods" in the hypothesis, since Graphene mutations handle validation and state transitions.
+3. **MODEL_VALIDATION only matches the hypothesis for django-oscar** (21.4%), which is the most traditional Django architecture. Modern projects (Saleor, Zulip, NetBox) put very little logic directly on model methods (1-5%), preferring service layers and GraphQL mutations.
 
-3. **MODEL_VALIDATION at 1.1%** — Much lower than the hypothesized 25%. In Saleor's architecture, business rules live in GraphQL mutations (VIEW_MIDDLEWARE) and service functions rather than on Django model methods.
+4. **VIEW_MIDDLEWARE absorbs what was hypothesized as MODEL_VALIDATION** — in practice, business rules live in views/mutations/serializers, not on models. Combined VIEW_MIDDLEWARE + MODEL_VALIDATION ranges from 34-58%, close to the hypothesized 45% combined.
 
-4. **PURE_FUNCTION at 31.6%/25.6%** — Significantly higher than hypothesized 10%. Many of these are:
-   - Data transformation helpers (preparing payloads, formatting)
-   - Business logic computation (tax calculations, pricing, discounts)
-   - Type conversion and validation utilities
-   - Many LOW-confidence classifications that may be framework-adjacent
+5. **EXTERNAL_IO is consistently low (0.6-4%)** — well-architected Django apps abstract IO behind clean interfaces. Zulip is highest at 4% due to email/webhook integrations.
 
-5. **EXTERNAL_IO at 1.7%** — Lower than hypothesized 5%. Saleor abstracts external integrations behind plugin interfaces, concentrating IO in fewer functions.
+6. **Architecture barely affects the formally-verifiable slice** — despite very different architectures (GraphQL vs REST vs traditional), the PURE_FUNCTION percentage by lines is remarkably stable at **22-27%** across all four projects. This suggests ~25% is a structural property of Django applications, not an accident of architecture.
 
-### Hypothesis vs Reality
+### Implications for Formal Verification
 
-| Category | Hypothesis | Saleor (functions) | Saleor (lines) |
-|---|---|---|---|
-| DATABASE_ORM | ~40% | 25.6% | 35.3% |
-| MODEL_VALIDATION | ~25% | 1.1% | 0.3% |
-| VIEW_MIDDLEWARE | ~20% | 40.0% | 36.9% |
-| PURE_FUNCTION | ~10% | 31.6% | 25.6% |
-| EXTERNAL_IO | ~5% | 1.7% | 1.9% |
+The data suggests that **~25% of a Django codebase by lines of code** is reachable by formal verification tools — 2.5x the hypothesized 10%. However:
 
-The hypothesis was partially supported for DATABASE_ORM (by lines) but significantly off for other categories. The key insight is that **architecture matters enormously** — Saleor's GraphQL-first design pushes logic into different categories than a traditional Django views+DRF app would.
-
-The formal verification opportunity (~25-31% pure functions) is much larger than hypothesized, though many of these functions are small helpers. The HIGH-confidence pure functions represent the most promising targets for formal verification.
+- Many pure functions are small helpers (median ~10 lines), so the *impact* of verifying them may be lower than the percentage suggests
+- The highest-value verification targets are in the remaining 75% — ORM query correctness, state machine transitions, and authorization logic — which current tools can't reach
+- The pure function set includes many LOW-confidence classifications that may be framework-adjacent on manual review
 
 ## Known Limitations
 
