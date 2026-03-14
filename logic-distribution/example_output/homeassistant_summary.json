@@ -1,0 +1,877 @@
+{
+  "project_root": "/tmp/ha-core",
+  "total_functions": 85942,
+  "summary": {
+    "main_functions": 41100,
+    "main_lines": 578214,
+    "test_functions": 44842,
+    "config_functions": 0,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 1062,
+        "lines": 32827,
+        "pct_functions": 2.6,
+        "pct_lines": 5.7
+      },
+      "MODEL_VALIDATION": {
+        "functions": 0,
+        "lines": 0,
+        "pct_functions": 0.0,
+        "pct_lines": 0.0
+      },
+      "VIEW_MIDDLEWARE": {
+        "functions": 32787,
+        "lines": 474218,
+        "pct_functions": 79.8,
+        "pct_lines": 82.0
+      },
+      "PURE_FUNCTION": {
+        "functions": 6988,
+        "lines": 62852,
+        "pct_functions": 17.0,
+        "pct_lines": 10.9
+      },
+      "EXTERNAL_IO": {
+        "functions": 263,
+        "lines": 8317,
+        "pct_functions": 0.6,
+        "pct_lines": 1.4
+      }
+    }
+  },
+  "sample_functions": [
+    {
+      "file_path": "homeassistant/__main__.py",
+      "function_name": "validate_os",
+      "line_number": 18,
+      "line_count": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses print()",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/__main__.py",
+      "function_name": "validate_python",
+      "line_number": 28,
+      "line_count": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses print()",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/__main__.py",
+      "function_name": "ensure_config_path",
+      "line_number": 39,
+      "line_count": 39,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses print()",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/__main__.py",
+      "function_name": "get_arguments",
+      "line_number": 80,
+      "line_count": 70,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/__main__.py",
+      "function_name": "check_threads",
+      "line_number": 152,
+      "line_count": 14,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/__main__.py",
+      "function_name": "main",
+      "line_number": 168,
+      "line_count": 58,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "File IO via open()",
+      "matched_categories": [
+        "EXTERNAL_IO"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.__init__",
+      "line_number": 55,
+      "line_count": 11,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'Store', 'HomeAssistant'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_get_groups",
+      "line_number": 67,
+      "line_count": 3,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self._groups.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_get_group",
+      "line_number": 71,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_get_users",
+      "line_number": 75,
+      "line_count": 3,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self._users.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_get_user",
+      "line_number": 79,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_create_user",
+      "line_number": 83,
+      "line_count": 52,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_link_user",
+      "line_number": 136,
+      "line_count": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_remove_user",
+      "line_number": 144,
+      "line_count": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_update_user",
+      "line_number": 152,
+      "line_count": 27,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_activate_user",
+      "line_number": 180,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_deactivate_user",
+      "line_number": 185,
+      "line_count": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_remove_credentials",
+      "line_number": 190,
+      "line_count": 15,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM attribute: self._users.values",
+      "matched_categories": [
+        "DATABASE_ORM"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_create_refresh_token",
+      "line_number": 206,
+      "line_count": 32,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_remove_refresh_token",
+      "line_number": 240,
+      "line_count": 7,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "HA callback: async_remove_refresh_token",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_get_refresh_token",
+      "line_number": 249,
+      "line_count": 5,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "HA callback: async_get_refresh_token",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_get_refresh_token_by_token",
+      "line_number": 256,
+      "line_count": 12,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM attribute: self._users.values; ORM attribute: user.refresh_tokens.values",
+      "matched_categories": [
+        "DATABASE_ORM",
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Also matched: VIEW_MIDDLEWARE",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_get_refresh_tokens",
+      "line_number": 270,
+      "line_count": 7,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM attribute: user.refresh_tokens.values; ORM attribute: self._users.values",
+      "matched_categories": [
+        "DATABASE_ORM",
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Also matched: VIEW_MIDDLEWARE",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_log_refresh_token_usage",
+      "line_number": 279,
+      "line_count": 11,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "HA callback: async_log_refresh_token_usage",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_set_expiry",
+      "line_number": 292,
+      "line_count": 13,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "HA callback: async_set_expiry",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_update_user_credentials_data",
+      "line_number": 307,
+      "line_count": 6,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "HA callback: async_update_user_credentials_data",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore.async_load",
+      "line_number": 314,
+      "line_count": 193,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'er', 'dr', 'dt_util'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore._build_token_id_to_user_id",
+      "line_number": 509,
+      "line_count": 7,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "HA callback: _build_token_id_to_user_id",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore._async_schedule_save",
+      "line_number": 518,
+      "line_count": 3,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "HIGH",
+      "rationale": "HA callback: _async_schedule_save",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore._data_to_save",
+      "line_number": 523,
+      "line_count": 74,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM attribute: self._groups.values; ORM attribute: self._users.values; ORM attribute: self._users.values",
+      "matched_categories": [
+        "DATABASE_ORM",
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Also matched: VIEW_MIDDLEWARE",
+      "class_name": "AuthStore",
+      "decorators": [
+        "callback"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "AuthStore._set_defaults",
+      "line_number": 598,
+      "line_count": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "AuthStore",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "_system_admin_group",
+      "line_number": 613,
+      "line_count": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "_system_user_group",
+      "line_number": 623,
+      "line_count": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/auth_store.py",
+      "function_name": "_system_read_only_group",
+      "line_number": 633,
+      "line_count": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/jwt_wrapper.py",
+      "function_name": "_PyJWSWithLoadCache._load",
+      "line_number": 36,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "_PyJWSWithLoadCache",
+      "decorators": [
+        "lru_cache"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/jwt_wrapper.py",
+      "function_name": "_decode_payload",
+      "line_number": 45,
+      "line_count": 9,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'json_loads'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": null,
+      "decorators": [
+        "lru_cache"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/jwt_wrapper.py",
+      "function_name": "_PyJWTWithVerify.decode_payload",
+      "line_number": 59,
+      "line_count": 15,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "_PyJWTWithVerify",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/jwt_wrapper.py",
+      "function_name": "_PyJWTWithVerify.verify_and_decode",
+      "line_number": 75,
+      "line_count": 29,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "_PyJWTWithVerify",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/insecure_example.py",
+      "function_name": "InsecureExampleModule.__init__",
+      "line_number": 34,
+      "line_count": 4,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'HomeAssistant'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "InsecureExampleModule",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/insecure_example.py",
+      "function_name": "InsecureExampleModule.input_schema",
+      "line_number": 40,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "InsecureExampleModule",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/insecure_example.py",
+      "function_name": "InsecureExampleModule.setup_schema",
+      "line_number": 45,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "InsecureExampleModule",
+      "decorators": [
+        "property"
+      ]
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/insecure_example.py",
+      "function_name": "InsecureExampleModule.async_setup_flow",
+      "line_number": 49,
+      "line_count": 6,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "InsecureExampleModule",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/insecure_example.py",
+      "function_name": "InsecureExampleModule.async_setup_user",
+      "line_number": 56,
+      "line_count": 12,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "InsecureExampleModule",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/insecure_example.py",
+      "function_name": "InsecureExampleModule.async_depose_user",
+      "line_number": 69,
+      "line_count": 9,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "InsecureExampleModule",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/insecure_example.py",
+      "function_name": "InsecureExampleModule.async_is_user_setup",
+      "line_number": 79,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "InsecureExampleModule",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/insecure_example.py",
+      "function_name": "InsecureExampleModule.async_validate",
+      "line_number": 83,
+      "line_count": 6,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "InsecureExampleModule",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/totp.py",
+      "function_name": "_generate_qr_code",
+      "line_number": 41,
+      "line_count": 20,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/totp.py",
+      "function_name": "_generate_secret_and_qr_code",
+      "line_number": 63,
+      "line_count": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/totp.py",
+      "function_name": "TotpAuthModule.__init__",
+      "line_number": 82,
+      "line_count": 8,
+      "category": "VIEW_MIDDLEWARE",
+      "confidence": "LOW",
+      "rationale": "Uses Django-imported names: {'Store', 'HomeAssistant'}",
+      "matched_categories": [
+        "VIEW_MIDDLEWARE"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Classified as framework code due to Django name usage",
+      "class_name": "TotpAuthModule",
+      "decorators": []
+    },
+    {
+      "file_path": "homeassistant/auth/mfa_modules/totp.py",
+      "function_name": "TotpAuthModule.input_schema",
+      "line_number": 92,
+      "line_count": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": "TotpAuthModule",
+      "decorators": [
+        "property"
+      ]
+    }
+  ]
+}

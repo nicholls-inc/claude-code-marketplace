@@ -80,6 +80,32 @@ ORM_NAMES = {
 
 ORM_TRANSACTION = {"atomic", "on_commit", "savepoint", "set_autocommit"}
 
+# SQLAlchemy ORM patterns (Flask, FastAPI, etc.)
+SQLA_SESSION_ATTRS = {
+    "query", "add", "add_all", "commit", "rollback", "flush", "refresh",
+    "expire", "expunge", "merge", "execute", "scalar", "scalars",
+    "begin", "begin_nested", "close",
+}
+
+SQLA_QUERY_ATTRS = {
+    "filter", "filter_by", "order_by", "group_by", "having",
+    "join", "outerjoin", "subquery", "limit", "offset", "distinct",
+    "union", "union_all", "intersect", "except_",
+    "with_entities", "options", "contains_eager", "joinedload",
+    "selectinload", "subqueryload", "lazyload",
+    "first", "one", "one_or_none", "all", "count", "exists",
+    "delete", "update",
+}
+
+SQLA_COLUMN_TYPES = {
+    "Column", "Integer", "String", "Text", "Boolean", "Float",
+    "DateTime", "Date", "Time", "Numeric", "BigInteger", "SmallInteger",
+    "ForeignKey", "Table", "MetaData", "Index", "UniqueConstraint",
+    "relationship", "backref", "hybrid_property", "declared_attr",
+}
+
+SQLA_SESSION_PATTERNS = {"db.session", "session.query", "session.execute"}
+
 SQL_KEYWORDS_PATTERN = re.compile(
     r"\b(SELECT\s+.+?\s+FROM|INSERT\s+INTO|UPDATE\s+.+?\s+SET|DELETE\s+FROM)\b",
     re.IGNORECASE,
@@ -151,6 +177,82 @@ TEMPLATE_TAG_DECORATORS = {
     "register.tag", "register.assignment_tag",
 }
 
+# Flask patterns
+FLASK_VIEW_BASE_CLASSES = {
+    "Resource", "MethodView", "BaseResource",
+    "FlaskView",
+}
+
+FLASK_ROUTE_DECORATORS = {
+    "route", "app.route", "blueprint.route", "bp.route",
+    "api.route", "routes.route",
+}
+
+FLASK_AUTH_DECORATORS = {
+    "login_required", "require_permission", "require_admin",
+    "require_admin_or_owner", "require_object_modify_permission",
+    "require_any_of_permission", "require_access",
+}
+
+# FastAPI patterns
+FASTAPI_ROUTER_DECORATORS = {
+    "router.get", "router.post", "router.put", "router.patch",
+    "router.delete", "router.head", "router.options",
+    "app.get", "app.post", "app.put", "app.patch", "app.delete",
+}
+
+PYDANTIC_BASE_CLASSES = {
+    "BaseModel", "BaseSchema",
+}
+
+FASTAPI_VIEW_BASE_CLASSES = {
+    "APIRouter",
+}
+
+# Home Assistant patterns
+HA_ENTITY_BASE_CLASSES = {
+    "Entity", "CoordinatorEntity", "RestoreEntity",
+    "SensorEntity", "BinarySensorEntity", "SwitchEntity",
+    "LightEntity", "ClimateEntity", "CoverEntity", "FanEntity",
+    "LockEntity", "MediaPlayerEntity", "CameraEntity", "AlarmControlPanelEntity",
+    "VacuumEntity", "WaterHeaterEntity", "HumidifierEntity",
+    "NumberEntity", "SelectEntity", "ButtonEntity", "TextEntity",
+    "DateEntity", "TimeEntity", "DateTimeEntity", "ImageEntity",
+    "EventEntity", "UpdateEntity", "TodoListEntity", "ValveEntity",
+    "LawnMowerEntity", "RemoteEntity", "SirenEntity", "CalendarEntity",
+    "WeatherEntity",
+}
+
+HA_CONFIG_FLOW_CLASSES = {
+    "ConfigFlow", "OptionsFlow", "OptionsFlowHandler",
+    "SchemaConfigFlowHandler", "SchemaOptionsFlowHandler",
+}
+
+HA_SETUP_FUNCTIONS = {
+    "async_setup", "async_setup_entry", "async_unload_entry",
+    "async_setup_platform", "setup_platform", "setup",
+    "async_remove_entry", "async_migrate_entry",
+}
+
+HA_FRAMEWORK_MODULES = {
+    "homeassistant", "hass",
+}
+
+HA_ENTITY_METHODS = {
+    "async_added_to_hass", "async_will_remove_from_hass",
+    "async_update", "update", "async_turn_on", "async_turn_off",
+    "async_toggle", "async_set_temperature", "async_set_hvac_mode",
+    "async_open_cover", "async_close_cover", "async_stop_cover",
+    "async_lock", "async_unlock", "async_press",
+    "async_set_native_value", "async_select_option",
+    "async_write_ha_state", "available",
+    "native_value", "native_unit_of_measurement",
+    "extra_state_attributes", "device_info", "unique_id",
+    "should_poll", "state", "is_on",
+}
+
+HA_DECORATORS = {"callback"}
+
 MODEL_BASE_CLASSES = {"Model", "AbstractUser", "AbstractBaseUser"}
 MANAGER_BASE_CLASSES = {"Manager", "BaseManager", "QuerySet"}
 
@@ -170,6 +272,17 @@ DJANGO_MODULES = {
     "graphene", "graphene_django", "strawberry", "ariadne",
 }
 
+# All framework modules (Django + Flask + FastAPI + HA + SQLAlchemy)
+ALL_FRAMEWORK_MODULES = DJANGO_MODULES | {
+    "flask", "flask_restful", "flask_login", "flask_sqlalchemy",
+    "flask_admin", "flask_cors", "flask_migrate", "flask_mail",
+    "werkzeug",
+    "fastapi", "pydantic", "starlette", "uvicorn",
+    "sqlalchemy", "sqlmodel", "alembic",
+    "homeassistant", "voluptuous",
+    "celery", "kombu",
+}
+
 # GraphQL resolver/mutation method names
 GRAPHQL_METHODS = {
     "resolve", "mutate", "perform_mutation", "get_queryset",
@@ -184,6 +297,12 @@ FRAMEWORK_FILE_PATTERNS = {
     "filters", "sorters", "dataloaders", "permissions",
     "serializers", "validators", "managers", "signals",
     "webhooks", "tasks", "commands",
+    # Flask
+    "handlers", "blueprints",
+    # FastAPI
+    "routers", "endpoints", "dependencies", "schemas",
+    # Home Assistant
+    "config_flow", "diagnostics", "coordinator",
 }
 
 SIDE_EFFECT_CALLS = {"print"}
@@ -364,9 +483,9 @@ def analyze_file_context(file_path: str, tree: ast.Module) -> FileContext:
             if node.module:
                 ctx.imports.add(node.module.split(".")[0])
                 ctx.imports.add(node.module)
-                # Track names imported from Django/framework modules
+                # Track names imported from any framework module
                 is_django_module = any(
-                    node.module.startswith(dm) for dm in DJANGO_MODULES
+                    node.module.startswith(dm) for dm in ALL_FRAMEWORK_MODULES
                 )
                 for alias in node.names:
                     name = alias.asname or alias.name
@@ -497,6 +616,26 @@ def classify_function(
             if txn_attr:
                 orm_reasons.append(f"Transaction usage: {txn_attr}")
 
+    # SQLAlchemy session operations (Flask, FastAPI, etc.)
+    has_sqla = "sqlalchemy" in ctx.imports or "sqlmodel" in ctx.imports or "flask_sqlalchemy" in ctx.imports
+    if has_sqla or "db" in names_used or "session" in names_used:
+        for chain in attr_accesses:
+            chain_str = ".".join(chain)
+            # db.session.X or session.X patterns
+            if any(s in chain for s in ("session", "db")) and (set(chain) & SQLA_SESSION_ATTRS):
+                orm_reasons.append(f"SQLAlchemy session: {chain_str}")
+                break
+        # .query() patterns
+        for chain in attr_accesses:
+            chain_str = ".".join(chain)
+            if "query" in chain and (set(chain) & SQLA_QUERY_ATTRS):
+                orm_reasons.append(f"SQLAlchemy query: {chain_str}")
+                break
+        # Direct session patterns
+        for pat in SQLA_SESSION_PATTERNS:
+            if pat in flat_attrs:
+                orm_reasons.append(f"SQLAlchemy: {pat}")
+
     if orm_reasons:
         matched.append((Category.DATABASE_ORM, "; ".join(orm_reasons[:3])))
 
@@ -610,6 +749,51 @@ def classify_function(
             if any(m.startswith(dm) for m in ctx.imports for dm in ("graphene", "strawberry", "ariadne")):
                 view_reasons.append(f"GraphQL method: {func_name} on {enclosing_class.name}")
 
+    # Flask patterns
+    if enclosing_class:
+        bases = set(ctx.class_bases.get(enclosing_class.name, []))
+        if bases & FLASK_VIEW_BASE_CLASSES:
+            view_reasons.append(f"Flask Resource/View: {enclosing_class.name}")
+
+    for dec in decorators:
+        if any(fr in dec for fr in FLASK_ROUTE_DECORATORS):
+            view_reasons.append(f"Flask route: {dec}")
+        if dec in FLASK_AUTH_DECORATORS:
+            view_reasons.append(f"Flask auth decorator: {dec}")
+
+    # FastAPI patterns
+    for dec in decorators:
+        if any(fr in dec for fr in FASTAPI_ROUTER_DECORATORS):
+            view_reasons.append(f"FastAPI route: {dec}")
+
+    if enclosing_class:
+        bases = set(ctx.class_bases.get(enclosing_class.name, []))
+        # Pydantic model methods (schema/validation layer)
+        if bases & PYDANTIC_BASE_CLASSES:
+            if func_name.startswith("validate_") or func_name.startswith("model_"):
+                view_reasons.append(f"Pydantic validator: {func_name} on {enclosing_class.name}")
+            elif "field_validator" in decorators or "model_validator" in decorators or "validator" in decorators:
+                view_reasons.append(f"Pydantic validator: {func_name} on {enclosing_class.name}")
+            else:
+                view_reasons.append(f"Pydantic model method: {func_name} on {enclosing_class.name}")
+
+    # Home Assistant patterns
+    if enclosing_class:
+        bases = set(ctx.class_bases.get(enclosing_class.name, []))
+        if bases & HA_ENTITY_BASE_CLASSES:
+            view_reasons.append(f"HA entity method: {func_name} on {enclosing_class.name}")
+        elif bases & HA_CONFIG_FLOW_CLASSES:
+            view_reasons.append(f"HA config flow: {func_name} on {enclosing_class.name}")
+
+    # HA setup/lifecycle functions (top-level)
+    if not enclosing_class and func_name in HA_SETUP_FUNCTIONS:
+        if any(m.startswith("homeassistant") for m in ctx.imports):
+            view_reasons.append(f"HA setup function: {func_name}")
+
+    # HA callback decorator
+    if "callback" in decorators and any(m.startswith("homeassistant") for m in ctx.imports):
+        view_reasons.append(f"HA callback: {func_name}")
+
     # Functions in framework-layer files (mutations/, resolvers/, etc.)
     file_basename = os.path.basename(ctx.file_path).replace(".py", "")
     file_parts = set(Path(ctx.file_path).parts)
@@ -619,8 +803,8 @@ def classify_function(
     )
 
     if is_framework_file and not view_reasons and not matched:
-        # Functions in framework-layer files that use Django imports
-        if any(m.startswith(dm) for m in ctx.imports for dm in DJANGO_MODULES):
+        # Functions in framework-layer files that use framework imports
+        if any(m.startswith(dm) for m in ctx.imports for dm in ALL_FRAMEWORK_MODULES):
             view_reasons.append(f"Function in framework file: {file_basename}.py")
 
     if view_reasons:
@@ -662,11 +846,11 @@ def classify_function(
     pure_disqualifiers = []
 
     # Django/framework imports at file level
-    django_imports = {m for m in ctx.imports if any(
-        m.startswith(dm) for dm in DJANGO_MODULES
+    framework_imports = {m for m in ctx.imports if any(
+        m.startswith(dm) for dm in ALL_FRAMEWORK_MODULES
     )}
 
-    # Check if function body references django-imported names
+    # Check if function body references framework-imported names
     uses_django_names = bool(ctx.django_imported_names & names_used)
 
     # Check for side effects
@@ -727,7 +911,7 @@ def classify_function(
             confidence = Confidence.MEDIUM
             rationale = "Pure function (has logging/print side effects)"
         else:
-            confidence = Confidence.LOW if django_imports else Confidence.HIGH
+            confidence = Confidence.LOW if framework_imports else Confidence.HIGH
             rationale = "No Django/IO/ORM indicators detected"
 
         borderline = bool(has_logging or has_print or pure_disqualifiers)

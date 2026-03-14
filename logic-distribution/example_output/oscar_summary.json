@@ -47,7 +47,7 @@
       "line_count": 36,
       "category": "VIEW_MIDDLEWARE",
       "confidence": "LOW",
-      "rationale": "Uses Django-imported names: {'models', 'strip_tags', 'force_str'}",
+      "rationale": "Uses Django-imported names: {'force_str', 'strip_tags', 'models'}",
       "matched_categories": [
         "VIEW_MIDDLEWARE"
       ],

@@ -20,16 +20,16 @@
         "pct_lines": 0.3
       },
       "VIEW_MIDDLEWARE": {
-        "functions": 2629,
-        "lines": 41769,
-        "pct_functions": 40.0,
-        "pct_lines": 36.9
+        "functions": 2665,
+        "lines": 42416,
+        "pct_functions": 40.5,
+        "pct_lines": 37.5
       },
       "PURE_FUNCTION": {
-        "functions": 2076,
-        "lines": 28976,
-        "pct_functions": 31.6,
-        "pct_lines": 25.6
+        "functions": 2040,
+        "lines": 28329,
+        "pct_functions": 31.0,
+        "pct_lines": 25.0
       },
       "EXTERNAL_IO": {
         "functions": 113,
@@ -94,7 +94,7 @@
       "line_number": 10,
       "line_count": 3,
       "category": "PURE_FUNCTION",
-      "confidence": "HIGH",
+      "confidence": "LOW",
       "rationale": "No Django/IO/ORM indicators detected",
       "matched_categories": [
         "PURE_FUNCTION"
@@ -110,7 +110,7 @@
       "line_number": 14,
       "line_count": 2,
       "category": "PURE_FUNCTION",
-      "confidence": "HIGH",
+      "confidence": "LOW",
       "rationale": "No Django/IO/ORM indicators detected",
       "matched_categories": [
         "PURE_FUNCTION"
@@ -126,7 +126,7 @@
       "line_number": 17,
       "line_count": 2,
       "category": "PURE_FUNCTION",
-      "confidence": "HIGH",
+      "confidence": "LOW",
       "rationale": "No Django/IO/ORM indicators detected",
       "matched_categories": [
         "PURE_FUNCTION"

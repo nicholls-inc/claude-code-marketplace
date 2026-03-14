@@ -20,16 +20,16 @@
         "pct_lines": 3.6
       },
       "VIEW_MIDDLEWARE": {
-        "functions": 839,
-        "lines": 10349,
+        "functions": 841,
+        "lines": 10368,
         "pct_functions": 29.5,
-        "pct_lines": 31.1
+        "pct_lines": 31.2
       },
       "PURE_FUNCTION": {
-        "functions": 1092,
-        "lines": 7536,
+        "functions": 1090,
+        "lines": 7517,
         "pct_functions": 38.3,
-        "pct_lines": 22.7
+        "pct_lines": 22.6
       },
       "EXTERNAL_IO": {
         "functions": 17,

@@ -1,0 +1,844 @@
+{
+  "project_root": "/tmp/redash",
+  "total_functions": 2516,
+  "summary": {
+    "main_functions": 1429,
+    "main_lines": 18547,
+    "test_functions": 1011,
+    "config_functions": 76,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 244,
+        "lines": 4937,
+        "pct_functions": 17.1,
+        "pct_lines": 26.6
+      },
+      "MODEL_VALIDATION": {
+        "functions": 85,
+        "lines": 462,
+        "pct_functions": 5.9,
+        "pct_lines": 2.5
+      },
+      "VIEW_MIDDLEWARE": {
+        "functions": 226,
+        "lines": 3024,
+        "pct_functions": 15.8,
+        "pct_lines": 16.3
+      },
+      "PURE_FUNCTION": {
+        "functions": 796,
+        "lines": 8457,
+        "pct_functions": 55.7,
+        "pct_lines": 45.6
+      },
+      "EXTERNAL_IO": {
+        "functions": 78,
+        "lines": 1667,
+        "pct_functions": 5.5,
+        "pct_lines": 9.0
+      }
+    }
+  },
+  "sample_functions": [
+    {
+      "file_path": "bin/get_changes.py",
+      "function_name": "get_change_log",
+      "line_number": 8,
+      "line_count": 31,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "External call via subprocess: subprocess.check_output; External call via subprocess: subprocess.check_output; Subprocess: subprocess.check_output",
+      "matched_categories": [
+        "EXTERNAL_IO"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "_github_request",
+      "line_number": 16,
+      "line_count": 11,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "External call via requests: requests.request",
+      "matched_categories": [
+        "EXTERNAL_IO"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "exception_from_error",
+      "line_number": 29,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "rc_tag_name",
+      "line_number": 33,
+      "line_count": 2,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "get_rc_release",
+      "line_number": 37,
+      "line_count": 10,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "create_release",
+      "line_number": 49,
+      "line_count": 16,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "upload_asset",
+      "line_number": 67,
+      "line_count": 14,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "External call via requests: requests.post; File IO via open()",
+      "matched_categories": [
+        "EXTERNAL_IO"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "remove_previous_builds",
+      "line_number": 83,
+      "line_count": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "get_changelog",
+      "line_number": 90,
+      "line_count": 38,
+      "category": "EXTERNAL_IO",
+      "confidence": "HIGH",
+      "rationale": "External call via subprocess: subprocess.check_output; External call via subprocess: subprocess.check_output; Subprocess: subprocess.check_output",
+      "matched_categories": [
+        "EXTERNAL_IO"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "update_release_commit_sha",
+      "line_number": 130,
+      "line_count": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No Django/IO/ORM indicators detected",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "bin/release_manager.py",
+      "function_name": "update_release",
+      "line_number": 143,
+      "line_count": 21,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has logging/print side effects)",
+      "matched_categories": [
+        "PURE_FUNCTION"
+      ],
+      "is_borderline": true,
+      "borderline_reason": "Uses print()",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/env.py",
+      "function_name": "run_migrations_offline",
+      "line_number": 32,
+      "line_count": 17,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/env.py",
+      "function_name": "run_migrations_online",
+      "line_number": 51,
+      "line_count": 37,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/0ec979123ba4_.py",
+      "function_name": "upgrade",
+      "line_number": 19,
+      "line_count": 3,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/0ec979123ba4_.py",
+      "function_name": "downgrade",
+      "line_number": 25,
+      "line_count": 3,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/0f740a081d20_inline_tags.py",
+      "function_name": "upgrade",
+      "line_number": 23,
+      "line_count": 12,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/0f740a081d20_inline_tags.py",
+      "function_name": "downgrade",
+      "line_number": 37,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/1038c2174f5d_make_case_insensitive_hash_of_query_text.py",
+      "function_name": "change_query_hash",
+      "line_number": 22,
+      "line_count": 8,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/1038c2174f5d_make_case_insensitive_hash_of_query_text.py",
+      "function_name": "upgrade",
+      "line_number": 32,
+      "line_count": 9,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/1038c2174f5d_make_case_insensitive_hash_of_query_text.py",
+      "function_name": "downgrade",
+      "line_number": 43,
+      "line_count": 9,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/1655999df5e3_default_alert_selector.py",
+      "function_name": "upgrade",
+      "line_number": 18,
+      "line_count": 6,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/1655999df5e3_default_alert_selector.py",
+      "function_name": "downgrade",
+      "line_number": 25,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/1daa601d3ae5_add_columns_for_disabled_users.py",
+      "function_name": "upgrade",
+      "line_number": 19,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/1daa601d3ae5_add_columns_for_disabled_users.py",
+      "function_name": "downgrade",
+      "line_number": 23,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/5ec5c84ba61e_.py",
+      "function_name": "upgrade",
+      "line_number": 21,
+      "line_count": 11,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/5ec5c84ba61e_.py",
+      "function_name": "downgrade",
+      "line_number": 34,
+      "line_count": 6,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/640888ce445d_.py",
+      "function_name": "upgrade",
+      "line_number": 23,
+      "line_count": 57,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/640888ce445d_.py",
+      "function_name": "downgrade",
+      "line_number": 82,
+      "line_count": 42,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/65fc9ede4746_add_is_draft_status_to_queries_and_.py",
+      "function_name": "upgrade",
+      "line_number": 21,
+      "line_count": 22,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/65fc9ede4746_add_is_draft_status_to_queries_and_.py",
+      "function_name": "downgrade",
+      "line_number": 45,
+      "line_count": 3,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/6b5be7e0a0ef_.py",
+      "function_name": "upgrade",
+      "line_number": 20,
+      "line_count": 19,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/6b5be7e0a0ef_.py",
+      "function_name": "downgrade",
+      "line_number": 41,
+      "line_count": 12,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/71477dadd6ef_favorites_unique_constraint.py",
+      "function_name": "upgrade",
+      "line_number": 19,
+      "line_count": 4,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/71477dadd6ef_favorites_unique_constraint.py",
+      "function_name": "downgrade",
+      "line_number": 25,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/7205816877ec_change_type_of_json_fields_from_varchar_.py",
+      "function_name": "upgrade",
+      "line_number": 20,
+      "line_count": 57,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/7205816877ec_change_type_of_json_fields_from_varchar_.py",
+      "function_name": "downgrade",
+      "line_number": 79,
+      "line_count": 57,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/73beceabb948_bring_back_null_schedule.py",
+      "function_name": "is_empty_schedule",
+      "line_number": 21,
+      "line_count": 16,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/73beceabb948_bring_back_null_schedule.py",
+      "function_name": "upgrade",
+      "line_number": 39,
+      "line_count": 15,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/73beceabb948_bring_back_null_schedule.py",
+      "function_name": "downgrade",
+      "line_number": 56,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/7671dca4e604_.py",
+      "function_name": "upgrade",
+      "line_number": 19,
+      "line_count": 5,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/7671dca4e604_.py",
+      "function_name": "downgrade",
+      "line_number": 26,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/7ce5925f832b_create_sqlalchemy_searchable_expressions.py",
+      "function_name": "upgrade",
+      "line_number": 20,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/7ce5925f832b_create_sqlalchemy_searchable_expressions.py",
+      "function_name": "downgrade",
+      "line_number": 24,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/89bc7873a3e0_fix_multiple_heads.py",
+      "function_name": "upgrade",
+      "line_number": 19,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/89bc7873a3e0_fix_multiple_heads.py",
+      "function_name": "downgrade",
+      "line_number": 23,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/969126bd800f_.py",
+      "function_name": "upgrade",
+      "line_number": 23,
+      "line_count": 51,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/969126bd800f_.py",
+      "function_name": "downgrade",
+      "line_number": 76,
+      "line_count": 9,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/98af61feea92_add_encrypted_options_to_data_sources.py",
+      "function_name": "upgrade",
+      "line_number": 30,
+      "line_count": 31,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/98af61feea92_add_encrypted_options_to_data_sources.py",
+      "function_name": "downgrade",
+      "line_number": 63,
+      "line_count": 2,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    },
+    {
+      "file_path": "migrations/versions/9e8c841d1a30_fix_hash.py",
+      "function_name": "update_query_hash",
+      "line_number": 24,
+      "line_count": 10,
+      "category": "CONFIGURATION",
+      "confidence": "HIGH",
+      "rationale": "File is migration or settings",
+      "matched_categories": [
+        "CONFIGURATION"
+      ],
+      "is_borderline": false,
+      "borderline_reason": "",
+      "class_name": null,
+      "decorators": []
+    }
+  ]
+}

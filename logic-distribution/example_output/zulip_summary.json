@@ -8,10 +8,10 @@
     "config_functions": 332,
     "categories": {
       "DATABASE_ORM": {
-        "functions": 975,
-        "lines": 45720,
+        "functions": 976,
+        "lines": 45745,
         "pct_functions": 17.6,
-        "pct_lines": 37.3
+        "pct_lines": 37.4
       },
       "MODEL_VALIDATION": {
         "functions": 126,
@@ -20,16 +20,16 @@
         "pct_lines": 0.7
       },
       "VIEW_MIDDLEWARE": {
-        "functions": 1880,
-        "lines": 37522,
-        "pct_functions": 34.0,
-        "pct_lines": 30.6
+        "functions": 1932,
+        "lines": 38431,
+        "pct_functions": 34.9,
+        "pct_lines": 31.4
       },
       "PURE_FUNCTION": {
-        "functions": 2396,
-        "lines": 33495,
-        "pct_functions": 43.3,
-        "pct_lines": 27.3
+        "functions": 2343,
+        "lines": 32561,
+        "pct_functions": 42.3,
+        "pct_lines": 26.6
       },
       "EXTERNAL_IO": {
         "functions": 160,
