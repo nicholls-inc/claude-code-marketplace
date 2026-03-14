@@ -3,3 +3,6 @@
 !.sisyphus/plans/**
 .claude/worktrees/
 node_modules/
+.xylem/
+xylem/cli/cmd/xylem/xylem
+xylem/cli/xylem

@@ -1,0 +1,5 @@
+{
+  "name": "xylem",
+  "version": "0.0.0",
+  "description": "Autonomous agent scheduling for GitHub issues — scans, queues, and launches Claude Code sessions to fix bugs, implement features, and refine issue descriptions."
+}

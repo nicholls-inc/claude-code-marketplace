@@ -16,6 +16,10 @@ Meta prompts that help you discover and install curated GitHub Copilot agents, i
 
 Generate structured performance reports on plugins, skills, and agents by analysing Claude Code session conversations.
 
+### [xylem](./xylem/README.md)
+
+Autonomous agent scheduling for GitHub issues — scans, queues, and launches Claude Code sessions to fix bugs, implement features, and refine issue descriptions.
+
 ## Installation
 
 Add the marketplace, then install plugins:
@@ -27,6 +31,7 @@ claude plugin marketplace add nicholls-inc/claude-code-marketplace
 # Install plugins
 claude plugin install crosscheck@nicholls
 claude plugin install awesome-copilot@nicholls
+claude plugin install xylem@nicholls
 ```
 
 See each plugin's README for prerequisites and setup details.

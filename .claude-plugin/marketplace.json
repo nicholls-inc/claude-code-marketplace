@@ -22,6 +22,11 @@
       "name": "field-report",
       "source": "./field-report",
       "description": "Generate structured performance reports on plugins, skills, and agents by analysing Claude Code session conversations."
+    },
+    {
+      "name": "xylem",
+      "source": "./xylem",
+      "description": "Autonomous agent scheduling for GitHub issues — scans, queues, and launches Claude Code sessions to fix bugs, implement features, and refine issue descriptions."
     }
   ]
 }
