@@ -3,6 +3,6 @@
 !.sisyphus/plans/**
 .claude/worktrees/
 node_modules/
-.pit-crew/
-pit-crew/cli/cmd/pit-crew/pit-crew
-pit-crew/cli/pit-crew
+.xylem/
+xylem/cli/cmd/xylem/xylem
+xylem/cli/xylem
