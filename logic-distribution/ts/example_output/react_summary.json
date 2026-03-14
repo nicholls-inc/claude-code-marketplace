@@ -1,0 +1,845 @@
+{
+  "projectRoot": "/tmp/react",
+  "totalFunctions": 11466,
+  "summary": {
+    "mainFunctions": 8223,
+    "mainLines": 216693,
+    "testFunctions": 2637,
+    "configFunctions": 606,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 130,
+        "lines": 10927,
+        "pctFunctions": 1.6,
+        "pctLines": 5
+      },
+      "SCHEMA_VALIDATION": {
+        "functions": 10,
+        "lines": 241,
+        "pctFunctions": 0.1,
+        "pctLines": 0.1
+      },
+      "VIEW_FRAMEWORK": {
+        "functions": 1357,
+        "lines": 57902,
+        "pctFunctions": 16.5,
+        "pctLines": 26.7
+      },
+      "PURE_FUNCTION": {
+        "functions": 6607,
+        "lines": 142147,
+        "pctFunctions": 80.3,
+        "pctLines": 65.6
+      },
+      "EXTERNAL_IO": {
+        "functions": 119,
+        "lines": 5476,
+        "pctFunctions": 1.4,
+        "pctLines": 2.5
+      }
+    }
+  },
+  "sampleFunctions": [
+    {
+      "filePath": "compiler/apps/playground/__tests__/e2e/page.spec.ts",
+      "functionName": "isMonacoLoaded",
+      "lineNumber": 13,
+      "lineCount": 6,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matchedCategories": [
+        "TEST_CODE"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/__tests__/e2e/page.spec.ts",
+      "functionName": "formatPrint",
+      "lineNumber": 20,
+      "lineCount": 3,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matchedCategories": [
+        "TEST_CODE"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/__tests__/e2e/page.spec.ts",
+      "functionName": "expandConfigs",
+      "lineNumber": 24,
+      "lineCount": 5,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matchedCategories": [
+        "TEST_CODE"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/app/layout.tsx",
+      "functionName": "RootLayout",
+      "lineNumber": 10,
+      "lineCount": 38,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/app/page.tsx",
+      "functionName": "Page",
+      "lineNumber": 14,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/AccordionWindow.tsx",
+      "functionName": "AccordionWindow",
+      "lineNumber": 19,
+      "lineCount": 26,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/AccordionWindow.tsx",
+      "functionName": "AccordionWindowItem",
+      "lineNumber": 46,
+      "lineCount": 81,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useId",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/ConfigEditor.tsx",
+      "functionName": "ConfigEditor",
+      "lineNumber": 29,
+      "lineCount": 44,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useState",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/ConfigEditor.tsx",
+      "functionName": "ExpandedEditor",
+      "lineNumber": 74,
+      "lineCount": 122,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useStore",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/ConfigEditor.tsx",
+      "functionName": "CollapsedEditor",
+      "lineNumber": 197,
+      "lineCount": 25,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/EditorImpl.tsx",
+      "functionName": "Editor",
+      "lineNumber": 20,
+      "lineCount": 50,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useStore",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Input.tsx",
+      "functionName": "Input",
+      "lineNumber": 37,
+      "lineCount": 144,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useState",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Output.tsx",
+      "functionName": "tabify",
+      "lineNumber": 87,
+      "lineCount": 134,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: compilerOutput.errors.map.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: VIEW_FRAMEWORK",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Output.tsx",
+      "functionName": "tabifyCached",
+      "lineNumber": 222,
+      "lineCount": 10,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: Output",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Output.tsx",
+      "functionName": "Fallback",
+      "lineNumber": 233,
+      "lineCount": 7,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Output.tsx",
+      "functionName": "utf16ToUTF8",
+      "lineNumber": 241,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Output.tsx",
+      "functionName": "getSourceMapUrl",
+      "lineNumber": 245,
+      "lineCount": 7,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Output.tsx",
+      "functionName": "Output",
+      "lineNumber": 253,
+      "lineCount": 7,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Output.tsx",
+      "functionName": "OutputContent",
+      "lineNumber": 261,
+      "lineCount": 76,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useState",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/Output.tsx",
+      "functionName": "TextTabContent",
+      "lineNumber": 338,
+      "lineCount": 85,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useState",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Editor/index.tsx",
+      "functionName": "Editor",
+      "lineNumber": 14,
+      "lineCount": 3,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: index",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Header.tsx",
+      "functionName": "Header",
+      "lineNumber": 24,
+      "lineCount": 100,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useState",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Icons/IconChevron.tsx",
+      "functionName": "IconChevron",
+      "lineNumber": 10,
+      "lineCount": 32,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Icons/IconGitHub.tsx",
+      "functionName": "IconGitHub",
+      "lineNumber": 10,
+      "lineCount": 15,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Logo.tsx",
+      "functionName": "Logo",
+      "lineNumber": 10,
+      "lineCount": 18,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component)",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/Message.tsx",
+      "functionName": "Message",
+      "lineNumber": 36,
+      "lineCount": 43,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); Custom hook: useSnackbar",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/StoreContext.tsx",
+      "functionName": "StoreProvider",
+      "lineNumber": 35,
+      "lineCount": 30,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useReducer",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/StoreContext.tsx",
+      "functionName": "storeReducer",
+      "lineNumber": 89,
+      "lineCount": 31,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/components/TabbedWindow.tsx",
+      "functionName": "TabbedWindow",
+      "lineNumber": 16,
+      "lineCount": 66,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Returns JSX (React/UI component); React hook: useId",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/hooks/useMountEffect.ts",
+      "functionName": "useMountEffect",
+      "lineNumber": 11,
+      "lineCount": 3,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "React hook: useEffect; Custom hook definition: useMountEffect",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/compilation.ts",
+      "functionName": "parseInput",
+      "lineNumber": 34,
+      "lineCount": 19,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/compilation.ts",
+      "functionName": "invokeCompiler",
+      "lineNumber": 54,
+      "lineCount": 26,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/compilation.ts",
+      "functionName": "parseOptions",
+      "lineNumber": 129,
+      "lineCount": 53,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/compilation.ts",
+      "functionName": "compile",
+      "lineNumber": 183,
+      "lineCount": 126,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/createContext.ts",
+      "functionName": "createContext",
+      "lineNumber": 26,
+      "lineCount": 15,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "React hook: useContext",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/reactCompilerMonacoDiagnostics.ts",
+      "functionName": "mapReactCompilerSeverityToMonaco",
+      "lineNumber": 16,
+      "lineCount": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/reactCompilerMonacoDiagnostics.ts",
+      "functionName": "mapReactCompilerDiagnosticToMonacoMarker",
+      "lineNumber": 28,
+      "lineCount": 20,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/reactCompilerMonacoDiagnostics.ts",
+      "functionName": "renderReactCompilerMarkers",
+      "lineNumber": 56,
+      "lineCount": 43,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/stores/messages.ts",
+      "functionName": "createMessage",
+      "lineNumber": 27,
+      "lineCount": 15,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: body.join",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/stores/store.ts",
+      "functionName": "encodeStore",
+      "lineNumber": 23,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/stores/store.ts",
+      "functionName": "decodeStore",
+      "lineNumber": 26,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/stores/store.ts",
+      "functionName": "saveStore",
+      "lineNumber": 33,
+      "lineCount": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/stores/store.ts",
+      "functionName": "isValidStore",
+      "lineNumber": 43,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/apps/playground/lib/stores/store.ts",
+      "functionName": "initStoreFromUrlOrLocalStorage",
+      "lineNumber": 56,
+      "lineCount": 22,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/packages/babel-plugin-react-compiler/scripts/babel-plugin-annotate-react-code.ts",
+      "functionName": "AnnotateReactCodeBabelPlugin",
+      "lineNumber": 12,
+      "lineCount": 12,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/packages/babel-plugin-react-compiler/scripts/babel-plugin-annotate-react-code.ts",
+      "functionName": "annotate",
+      "lineNumber": 25,
+      "lineCount": 20,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/packages/babel-plugin-react-compiler/scripts/babel-plugin-annotate-react-code.ts",
+      "functionName": "shouldVisit",
+      "lineNumber": 46,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/packages/babel-plugin-react-compiler/scripts/babel-plugin-annotate-react-code.ts",
+      "functionName": "buildTypeOfReactForget",
+      "lineNumber": 55,
+      "lineCount": 23,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/packages/babel-plugin-react-compiler/scripts/babel-plugin-annotate-react-code.ts",
+      "functionName": "isComponentDeclaration",
+      "lineNumber": 91,
+      "lineCount": 5,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "compiler/packages/babel-plugin-react-compiler/scripts/babel-plugin-annotate-react-code.ts",
+      "functionName": "isComponentOrHookLike",
+      "lineNumber": 101,
+      "lineCount": 37,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    }
+  ]
+}

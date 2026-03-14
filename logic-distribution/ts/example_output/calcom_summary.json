@@ -1,0 +1,854 @@
+{
+  "projectRoot": "/tmp/cal.com",
+  "totalFunctions": 12699,
+  "summary": {
+    "mainFunctions": 11881,
+    "mainLines": 391276,
+    "testFunctions": 767,
+    "configFunctions": 51,
+    "categories": {
+      "DATABASE_ORM": {
+        "functions": 1835,
+        "lines": 91210,
+        "pctFunctions": 15.4,
+        "pctLines": 23.3
+      },
+      "SCHEMA_VALIDATION": {
+        "functions": 194,
+        "lines": 5856,
+        "pctFunctions": 1.6,
+        "pctLines": 1.5
+      },
+      "VIEW_FRAMEWORK": {
+        "functions": 4075,
+        "lines": 176392,
+        "pctFunctions": 34.3,
+        "pctLines": 45.1
+      },
+      "PURE_FUNCTION": {
+        "functions": 5568,
+        "lines": 106115,
+        "pctFunctions": 46.9,
+        "pctLines": 27.1
+      },
+      "EXTERNAL_IO": {
+        "functions": 209,
+        "lines": 11703,
+        "pctFunctions": 1.8,
+        "pctLines": 3
+      }
+    }
+  },
+  "sampleFunctions": [
+    {
+      "filePath": "__checks__/calcom-dashboard.check.js",
+      "functionName": "run",
+      "lineNumber": 10,
+      "lineCount": 23,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "__checks__/location-link.check.js",
+      "functionName": "run",
+      "lineNumber": 10,
+      "lineCount": 24,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "__checks__/organization.spec.ts",
+      "functionName": "expectPageToBeRenderedWithEmbedSsr",
+      "lineNumber": 103,
+      "lineCount": 3,
+      "category": "TEST_CODE",
+      "confidence": "HIGH",
+      "rationale": "File is a test file",
+      "matchedCategories": [
+        "TEST_CODE"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/instrumentation.ts",
+      "functionName": "register",
+      "lineNumber": 3,
+      "lineCount": 13,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/addRequestid.ts",
+      "functionName": "addRequestId",
+      "lineNumber": 4,
+      "lineCount": 21,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: addRequestid",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/captureErrors.ts",
+      "functionName": "captureErrors",
+      "lineNumber": 4,
+      "lineCount": 11,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: captureErrors",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/captureUserId.ts",
+      "functionName": "captureUserId",
+      "lineNumber": 4,
+      "lineCount": 5,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: captureUserId",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/extendRequest.ts",
+      "functionName": "extendRequest",
+      "lineNumber": 3,
+      "lineCount": 7,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: extendRequest",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/httpMethods.ts",
+      "functionName": "httpMethod",
+      "lineNumber": 3,
+      "lineCount": 10,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: httpMethods",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/httpMethods.ts",
+      "functionName": "httpMethods",
+      "lineNumber": 16,
+      "lineCount": 10,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: httpMethods",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/rateLimitApiKey.ts",
+      "functionName": "rateLimitApiKey",
+      "lineNumber": 7,
+      "lineCount": 42,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: rateLimitApiKey",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/safeParseJSON.ts",
+      "functionName": "parseJSONSafely",
+      "lineNumber": 1,
+      "lineCount": 14,
+      "category": "PURE_FUNCTION",
+      "confidence": "MEDIUM",
+      "rationale": "Pure function (has console.log side effects)",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Uses console.log",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/verifyApiKey.ts",
+      "functionName": "verifyApiKey",
+      "lineNumber": 16,
+      "lineCount": 39,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: verifyApiKey",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/verifyCredentialSyncEnabled.ts",
+      "functionName": "verifyCredentialSyncEnabled",
+      "lineNumber": 5,
+      "lineCount": 20,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: verifyCredentialSyncEnabled",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/helpers/withPagination.ts",
+      "functionName": "withPagination",
+      "lineNumber": 9,
+      "lineCount": 9,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "MEDIUM",
+      "rationale": "Function in framework file: withPagination",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/bookings/get/buildWhereClause.ts",
+      "functionName": "buildWhereClause",
+      "lineNumber": 11,
+      "lineCount": 27,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/extractUserIdsFromQuery.ts",
+      "functionName": "extractUserIdsFromQuery",
+      "lineNumber": 7,
+      "lineCount": 8,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: extractUserIdsFromQuery",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/isAdmin.ts",
+      "functionName": "isAdminGuard",
+      "lineNumber": 8,
+      "lineCount": 34,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.membership.findMany",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/isLockedOrBlocked.ts",
+      "functionName": "isLockedOrBlocked",
+      "lineNumber": 6,
+      "lineCount": 12,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: isLockedOrBlocked",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/isValidBase64Image.ts",
+      "functionName": "isValidBase64Image",
+      "lineNumber": 1,
+      "lineCount": 4,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/retrieveScopedAccessibleUsers.ts",
+      "functionName": "getAllOrganizationMemberships",
+      "lineNumber": 9,
+      "lineCount": 15,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/retrieveScopedAccessibleUsers.ts",
+      "functionName": "getAllAdminMemberships",
+      "lineNumber": 25,
+      "lineCount": 17,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.membership.findMany",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/retrieveScopedAccessibleUsers.ts",
+      "functionName": "getAllOrganizationMembers",
+      "lineNumber": 43,
+      "lineCount": 11,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.membership.findMany",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/retrieveScopedAccessibleUsers.ts",
+      "functionName": "getAccessibleUsers",
+      "lineNumber": 55,
+      "lineCount": 32,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.membership.findMany",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/retrieveScopedAccessibleUsers.ts",
+      "functionName": "retrieveOrgScopedAccessibleUsers",
+      "lineNumber": 88,
+      "lineCount": 8,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/utils/stringifyISODate.ts",
+      "functionName": "stringifyISODate",
+      "lineNumber": 1,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "HIGH",
+      "rationale": "No framework/IO/ORM indicators detected",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/validations/credential-sync.ts",
+      "functionName": "userId",
+      "lineNumber": 5,
+      "lineCount": 9,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "MEDIUM",
+      "rationale": "Function in framework file: credential-sync",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/validations/credential-sync.ts",
+      "functionName": "credentialId",
+      "lineNumber": 15,
+      "lineCount": 9,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "MEDIUM",
+      "rationale": "Function in framework file: credential-sync",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/validations/membership.ts",
+      "functionName": "membershipCreateBodySchema",
+      "lineNumber": 17,
+      "lineCount": 16,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/validations/membership.ts",
+      "functionName": "membershipIdSchema",
+      "lineNumber": 56,
+      "lineCount": 20,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "MEDIUM",
+      "rationale": "Function in framework file: membership",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/validations/selected-calendar.ts",
+      "functionName": "selectedCalendarIdSchema",
+      "lineNumber": 31,
+      "lineCount": 31,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: rest.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/validations/shared/jsonSchema.ts",
+      "functionName": "jsonSchema",
+      "lineNumber": 9,
+      "lineCount": 3,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "MEDIUM",
+      "rationale": "Function in framework file: jsonSchema",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/validations/shared/timeZone.ts",
+      "functionName": "timeZone",
+      "lineNumber": 5,
+      "lineCount": 3,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: Object.keys.join",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/lib/validations/user.ts",
+      "functionName": "usernameSchema",
+      "lineNumber": 56,
+      "lineCount": 11,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "MEDIUM",
+      "rationale": "Function in framework file: user",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/api-keys/[id]/_auth-middleware.ts",
+      "functionName": "authMiddleware",
+      "lineNumber": 8,
+      "lineCount": 11,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.apiKey.findFirst",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/api-keys/[id]/_delete.ts",
+      "functionName": "deleteHandler",
+      "lineNumber": 8,
+      "lineCount": 6,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: _delete",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/api-keys/[id]/_get.ts",
+      "functionName": "getHandler",
+      "lineNumber": 9,
+      "lineCount": 6,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: _get",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/api-keys/[id]/_patch.ts",
+      "functionName": "patchHandler",
+      "lineNumber": 9,
+      "lineCount": 7,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: _patch",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/api-keys/_get.ts",
+      "functionName": "handleAdminRequests",
+      "lineNumber": 16,
+      "lineCount": 11,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/api-keys/_get.ts",
+      "functionName": "hasReqArgs",
+      "lineNumber": 28,
+      "lineCount": 3,
+      "category": "PURE_FUNCTION",
+      "confidence": "LOW",
+      "rationale": "No framework/IO indicators detected in function body",
+      "matchedCategories": [
+        "PURE_FUNCTION"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/api-keys/_get.ts",
+      "functionName": "getHandler",
+      "lineNumber": 32,
+      "lineCount": 8,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.apiKey.findMany",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/api-keys/_post.ts",
+      "functionName": "postHandler",
+      "lineNumber": 12,
+      "lineCount": 33,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: _post",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/attendees/[id]/_auth-middleware.ts",
+      "functionName": "authMiddleware",
+      "lineNumber": 8,
+      "lineCount": 12,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.attendee.findFirst",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/attendees/[id]/_delete.ts",
+      "functionName": "deleteHandler",
+      "lineNumber": 37,
+      "lineCount": 6,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: _delete",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/attendees/[id]/_get.ts",
+      "functionName": "getHandler",
+      "lineNumber": 38,
+      "lineCount": 6,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.attendee.findUnique",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/attendees/[id]/_patch.ts",
+      "functionName": "patchHandler",
+      "lineNumber": 56,
+      "lineCount": 8,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "MEDIUM",
+      "rationale": "Function in framework file: _patch",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/attendees/[id]/_patch.ts",
+      "functionName": "checkPermissions",
+      "lineNumber": 65,
+      "lineCount": 11,
+      "category": "DATABASE_ORM",
+      "confidence": "MEDIUM",
+      "rationale": "ORM method: prisma.booking.findFirst",
+      "matchedCategories": [
+        "DATABASE_ORM",
+        "SCHEMA_VALIDATION"
+      ],
+      "isBorderline": true,
+      "borderlineReason": "Also matched: SCHEMA_VALIDATION",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/attendees/_get.ts",
+      "functionName": "handler",
+      "lineNumber": 33,
+      "lineCount": 8,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.attendee.findMany",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/attendees/_post.ts",
+      "functionName": "postHandler",
+      "lineNumber": 54,
+      "lineCount": 27,
+      "category": "DATABASE_ORM",
+      "confidence": "HIGH",
+      "rationale": "ORM method: prisma.booking.findFirst",
+      "matchedCategories": [
+        "DATABASE_ORM"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    },
+    {
+      "filePath": "apps/api/v1/pages/api/availabilities/[id]/_auth-middleware.ts",
+      "functionName": "authMiddleware",
+      "lineNumber": 7,
+      "lineCount": 13,
+      "category": "VIEW_FRAMEWORK",
+      "confidence": "HIGH",
+      "rationale": "Function in framework file: _auth-middleware",
+      "matchedCategories": [
+        "VIEW_FRAMEWORK"
+      ],
+      "isBorderline": false,
+      "borderlineReason": "",
+      "className": null,
+      "decorators": []
+    }
+  ]
+}
