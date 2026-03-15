@@ -7,7 +7,7 @@ npx --no -- commitlint --edit "$1"
 # These files define agent/skill behavior and must use feat:/fix:/refactor: etc.
 MSG=$(head -1 "$1")
 if echo "$MSG" | grep -qE '^docs(\(.*\))?(!)?:'; then
-  BEHAVIORAL_FILES=$(git diff --cached --name-only | grep -E '(SKILL\.md|agents/.*\.md)$')
+  BEHAVIORAL_FILES=$(git diff --cached --name-only | grep -E '(SKILL\.md|agents/.*\.md)$' || true)
   if [ -n "$BEHAVIORAL_FILES" ]; then
     echo ""
     echo "ERROR: commits touching behavioral artifacts must not use the 'docs:' prefix."

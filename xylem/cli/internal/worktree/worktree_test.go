@@ -63,7 +63,7 @@ func TestDefaultBranchFromGH(t *testing.T) {
 	r := newMock()
 	r.setOutput("gh repo view --json defaultBranchRef", []byte(`{"defaultBranchRef":{"name":"main"}}`))
 	m := New("/repo", r)
-	branch, err := m.DefaultBranch(context.Background())
+	branch, err := m.DetectDefaultBranch(context.Background())
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -75,9 +75,10 @@ func TestDefaultBranchFromGH(t *testing.T) {
 func TestDefaultBranchFallback(t *testing.T) {
 	r := newMock()
 	r.setErr("gh repo view --json defaultBranchRef", errors.New("gh not available"))
+	r.setErr("git symbolic-ref refs/remotes/origin/HEAD", errors.New("not set"))
 	r.setOutput("git remote show origin", []byte(`  HEAD branch: develop`))
 	m := New("/repo", r)
-	branch, err := m.DefaultBranch(context.Background())
+	branch, err := m.DetectDefaultBranch(context.Background())
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -349,10 +350,11 @@ func TestCopyClaudeConfig(t *testing.T) {
 func TestDefaultBranchBothFail(t *testing.T) {
 	r := newMock()
 	r.setErr("gh repo view --json defaultBranchRef", errors.New("gh not available"))
+	r.setErr("git symbolic-ref refs/remotes/origin/HEAD", errors.New("not set"))
 	r.setErr("git remote show origin", errors.New("network error"))
 
 	m := New("/repo", r)
-	_, err := m.DefaultBranch(context.Background())
+	_, err := m.DetectDefaultBranch(context.Background())
 	if err == nil {
 		t.Fatal("expected error when both gh and git fail")
 	}
@@ -365,10 +367,11 @@ func TestDefaultBranchGitOutputNoHeadLine(t *testing.T) {
 	// git remote show origin returns output but no "HEAD branch:" line
 	r := newMock()
 	r.setErr("gh repo view --json defaultBranchRef", errors.New("no gh"))
+	r.setErr("git symbolic-ref refs/remotes/origin/HEAD", errors.New("not set"))
 	r.setOutput("git remote show origin", []byte("  Remote branch:\n    main tracked\n"))
 
 	m := New("/repo", r)
-	_, err := m.DefaultBranch(context.Background())
+	_, err := m.DetectDefaultBranch(context.Background())
 	if err == nil {
 		t.Fatal("expected error when HEAD branch not found in output")
 	}
@@ -378,13 +381,14 @@ func TestDefaultBranchGitOutputNoHeadLine(t *testing.T) {
 }
 
 func TestDefaultBranchGHReturnsMalformedJSON(t *testing.T) {
-	// gh succeeds but returns garbage; should fall back to git
+	// gh succeeds but returns garbage; should fall back to symbolic-ref then git
 	r := newMock()
 	r.setOutput("gh repo view --json defaultBranchRef", []byte(`not json`))
+	r.setErr("git symbolic-ref refs/remotes/origin/HEAD", errors.New("not set"))
 	r.setOutput("git remote show origin", []byte("  HEAD branch: develop\n"))
 
 	m := New("/repo", r)
-	branch, err := m.DefaultBranch(context.Background())
+	branch, err := m.DetectDefaultBranch(context.Background())
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -394,13 +398,14 @@ func TestDefaultBranchGHReturnsMalformedJSON(t *testing.T) {
 }
 
 func TestDefaultBranchGHReturnsEmptyName(t *testing.T) {
-	// gh returns valid JSON but with empty name; should fall back to git
+	// gh returns valid JSON but with empty name; should fall back to symbolic-ref then git
 	r := newMock()
 	r.setOutput("gh repo view --json defaultBranchRef", []byte(`{"defaultBranchRef":{"name":""}}`))
+	r.setErr("git symbolic-ref refs/remotes/origin/HEAD", errors.New("not set"))
 	r.setOutput("git remote show origin", []byte("  HEAD branch: master\n"))
 
 	m := New("/repo", r)
-	branch, err := m.DefaultBranch(context.Background())
+	branch, err := m.DetectDefaultBranch(context.Background())
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
@@ -428,6 +433,7 @@ func TestCreateWorktreeAddFails(t *testing.T) {
 func TestCreateDefaultBranchFails(t *testing.T) {
 	r := newMock()
 	r.setErr("gh repo view --json defaultBranchRef", errors.New("no gh"))
+	r.setErr("git symbolic-ref refs/remotes/origin/HEAD", errors.New("not set"))
 	r.setErr("git remote show origin", errors.New("no remote"))
 
 	m := New("/repo", r)
@@ -554,5 +560,87 @@ func TestRemoveWorktreeRemoveFails(t *testing.T) {
 	// Should NOT attempt branch delete if remove failed
 	if r.called("git", "branch", "-d", "fix/issue-1") {
 		t.Error("should not delete branch when worktree remove fails")
+	}
+}
+
+// --- No-remote and override tests ---
+
+func TestDetectDefaultBranchOverride(t *testing.T) {
+	r := newMock()
+	m := New("/repo", r)
+	m.DefaultBranch = "custom-main"
+
+	branch, err := m.DetectDefaultBranch(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if branch != "custom-main" {
+		t.Errorf("expected 'custom-main', got %q", branch)
+	}
+	// No commands should have been run
+	if len(r.calls) != 0 {
+		t.Errorf("expected no commands when override is set, got: %v", r.calls)
+	}
+}
+
+func TestDetectDefaultBranchSymbolicRef(t *testing.T) {
+	r := newMock()
+	r.setErr("gh repo view --json defaultBranchRef", errors.New("no gh"))
+	r.setOutput("git symbolic-ref refs/remotes/origin/HEAD", []byte("refs/remotes/origin/main\n"))
+
+	m := New("/repo", r)
+	branch, err := m.DetectDefaultBranch(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if branch != "main" {
+		t.Errorf("expected 'main', got %q", branch)
+	}
+	// Should NOT call git remote show origin
+	if r.called("git", "remote", "show", "origin") {
+		t.Error("should not call git remote show origin when symbolic-ref succeeds")
+	}
+}
+
+func TestCreateNoOriginRemote(t *testing.T) {
+	r := newMock()
+	r.setOutput("gh repo view --json defaultBranchRef", []byte(`{"defaultBranchRef":{"name":"main"}}`))
+	// No origin remote
+	r.setErr("git remote get-url origin", errors.New("fatal: No such remote 'origin'"))
+
+	m := New("/repo", r)
+	_, err := m.Create(context.Background(), "fix/local-only")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Should NOT fetch
+	if r.called("git", "fetch", "origin", "main") {
+		t.Error("should not call git fetch when no origin remote")
+	}
+	// Should use local branch as start point (not origin/main)
+	if !r.called("git", "worktree", "add", ".claude/worktrees/fix/local-only", "-b", "fix/local-only", "main") {
+		t.Errorf("expected worktree add with local start point 'main', got calls: %v", r.calls)
+	}
+}
+
+func TestCreateWithOriginRemote(t *testing.T) {
+	r := newMock()
+	r.setOutput("gh repo view --json defaultBranchRef", []byte(`{"defaultBranchRef":{"name":"main"}}`))
+	// Origin remote exists (default mock returns empty bytes, nil error)
+
+	m := New("/repo", r)
+	_, err := m.Create(context.Background(), "fix/has-origin")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Should fetch
+	if !r.called("git", "fetch", "origin", "main") {
+		t.Error("expected git fetch origin main when origin exists")
+	}
+	// Should use origin/main as start point
+	if !r.called("git", "worktree", "add", ".claude/worktrees/fix/has-origin", "-b", "fix/has-origin", "origin/main") {
+		t.Errorf("expected worktree add with 'origin/main' start point, got calls: %v", r.calls)
 	}
 }

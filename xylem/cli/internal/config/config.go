@@ -18,15 +18,16 @@ const defaultClaudeTemplate = "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-tu
 const legacyClaudeTemplate = "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"
 
 type Config struct {
-	Repo        string                  `yaml:"repo,omitempty"`
-	Sources     map[string]SourceConfig `yaml:"sources,omitempty"`
-	Tasks       map[string]Task         `yaml:"tasks,omitempty"`
-	Concurrency int                     `yaml:"concurrency"`
-	MaxTurns    int                     `yaml:"max_turns"`
-	Timeout     string                  `yaml:"timeout"`
-	StateDir    string                  `yaml:"state_dir"`
-	Exclude     []string                `yaml:"exclude,omitempty"`
-	Claude      ClaudeConfig            `yaml:"claude"`
+	Repo          string                  `yaml:"repo,omitempty"`
+	Sources       map[string]SourceConfig `yaml:"sources,omitempty"`
+	Tasks         map[string]Task         `yaml:"tasks,omitempty"`
+	Concurrency   int                     `yaml:"concurrency"`
+	MaxTurns      int                     `yaml:"max_turns"`
+	Timeout       string                  `yaml:"timeout"`
+	StateDir      string                  `yaml:"state_dir"`
+	Exclude       []string                `yaml:"exclude,omitempty"`
+	DefaultBranch string                  `yaml:"default_branch,omitempty"`
+	Claude        ClaudeConfig            `yaml:"claude"`
 }
 
 type SourceConfig struct {
