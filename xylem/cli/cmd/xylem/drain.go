@@ -11,6 +11,7 @@ import (
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/queue"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/runner"
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/source"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/worktree"
 )
 
@@ -37,6 +38,7 @@ func cmdDrain(cfg *config.Config, q *queue.Queue, wt *worktree.Manager, dryRun b
 
 	cmdRunner := &realCmdRunner{}
 	r := runner.New(cfg, q, wt, cmdRunner)
+	r.Sources = buildSourceMap(cfg, q, cmdRunner)
 	result, err := r.Drain(ctx)
 	if err != nil {
 		return &exitError{code: 2, err: fmt.Errorf("drain error: %w", err)}
@@ -46,6 +48,30 @@ func cmdDrain(cfg *config.Config, q *queue.Queue, wt *worktree.Manager, dryRun b
 		return &exitError{code: 1}
 	}
 	return nil
+}
+
+func buildSourceMap(cfg *config.Config, q *queue.Queue, cmdRunner source.CommandRunner) map[string]source.Source {
+	sources := make(map[string]source.Source)
+	for _, srcCfg := range cfg.Sources {
+		if srcCfg.Type == "github" {
+			tasks := make(map[string]source.GitHubTask, len(srcCfg.Tasks))
+			for name, t := range srcCfg.Tasks {
+				tasks[name] = source.GitHubTask{
+					Labels: t.Labels,
+					Skill:  t.Skill,
+				}
+			}
+			gh := &source.GitHub{
+				Repo:      srcCfg.Repo,
+				Tasks:     tasks,
+				Exclude:   srcCfg.Exclude,
+				Queue:     q,
+				CmdRunner: cmdRunner,
+			}
+			sources[gh.Name()] = gh
+		}
+	}
+	return sources
 }
 
 func dryRunDrain(cfg *config.Config, q *queue.Queue) error {
