@@ -28,6 +28,10 @@ func newRootCmd() *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			if cmd.Name() == "init" {
+				return nil
+			}
+
 			if _, err := exec.LookPath("git"); err != nil {
 				return fmt.Errorf("error: git not found on PATH")
 			}
@@ -61,6 +65,7 @@ func newRootCmd() *cobra.Command {
 	viper.AutomaticEnv()
 
 	cmd.AddCommand(
+		newInitCmd(),
 		newScanCmd(),
 		newDrainCmd(),
 		newEnqueueCmd(),
