@@ -94,9 +94,22 @@ claude:
 		t.Fatalf("Claude.Command = %q, want claude", cfg.Claude.Command)
 	}
 
-	wantTemplate := "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"
+	// Legacy default template gets upgraded to use {{.Ref}} during normalization
+	wantTemplate := defaultClaudeTemplate
 	if cfg.Claude.Template != wantTemplate {
 		t.Fatalf("Claude.Template = %q, want %q", cfg.Claude.Template, wantTemplate)
+	}
+
+	// Legacy config should be normalized into Sources
+	if len(cfg.Sources) != 1 {
+		t.Fatalf("expected 1 source after normalization, got %d", len(cfg.Sources))
+	}
+	ghSrc, ok := cfg.Sources["github"]
+	if !ok {
+		t.Fatal("expected github source after normalization")
+	}
+	if ghSrc.Repo != "owner/name" {
+		t.Fatalf("source repo = %q, want owner/name", ghSrc.Repo)
 	}
 }
 
@@ -144,9 +157,15 @@ tasks:
 		t.Fatalf("Claude.Command = %q, want claude", cfg.Claude.Command)
 	}
 
-	wantTemplate := "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"
+	// Legacy default template gets upgraded to use {{.Ref}}
+	wantTemplate := defaultClaudeTemplate
 	if cfg.Claude.Template != wantTemplate {
 		t.Fatalf("Claude.Template = %q, want %q", cfg.Claude.Template, wantTemplate)
+	}
+
+	// Legacy config should be normalized into Sources
+	if len(cfg.Sources) != 1 {
+		t.Fatalf("expected 1 source after normalization, got %d", len(cfg.Sources))
 	}
 }
 
@@ -155,6 +174,15 @@ func validConfig() *Config {
 		Repo: "owner/name",
 		Tasks: map[string]Task{
 			"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+		},
+		Sources: map[string]SourceConfig{
+			"github": {
+				Type: "github",
+				Repo: "owner/name",
+				Tasks: map[string]Task{
+					"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+				},
+			},
 		},
 		Concurrency: 2,
 		MaxTurns:    50,
@@ -166,20 +194,47 @@ func validConfig() *Config {
 	}
 }
 
-func TestValidateMissingRepo(t *testing.T) {
-	cfg := validConfig()
-	cfg.Repo = ""
-
+func TestValidateMissingRepoInGitHubSource(t *testing.T) {
+	cfg := &Config{
+		Concurrency: 2,
+		MaxTurns:    50,
+		Timeout:     "30m",
+		Claude:      ClaudeConfig{Command: "claude", Template: defaultClaudeTemplate},
+		Sources: map[string]SourceConfig{
+			"github": {Type: "github", Repo: "", Tasks: map[string]Task{
+				"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+			}},
+		},
+	}
 	err := cfg.Validate()
 	requireErrorContains(t, err, "repo")
 }
 
-func TestValidateEmptyTasks(t *testing.T) {
-	cfg := validConfig()
-	cfg.Tasks = nil
-
+func TestValidateNoSourcesNoRepoIsValid(t *testing.T) {
+	cfg := &Config{
+		Concurrency: 2,
+		MaxTurns:    50,
+		Timeout:     "30m",
+		Claude:      ClaudeConfig{Command: "claude", Template: defaultClaudeTemplate},
+	}
 	err := cfg.Validate()
-	requireErrorContains(t, err, "tasks")
+	if err != nil {
+		t.Fatalf("expected valid config with no sources (enqueue-only), got: %v", err)
+	}
+}
+
+func TestValidateEmptyTasksInGitHubSource(t *testing.T) {
+	cfg := &Config{
+		Concurrency: 2,
+		MaxTurns:    50,
+		Timeout:     "30m",
+		Claude:      ClaudeConfig{Command: "claude", Template: defaultClaudeTemplate},
+		Sources: map[string]SourceConfig{
+			"github": {Type: "github", Repo: "owner/name", Tasks: nil},
+		},
+	}
+	err := cfg.Validate()
+	requireErrorContains(t, err, "task")
 }
 
 func TestValidateZeroConcurrency(t *testing.T) {
@@ -200,8 +255,9 @@ func TestValidateInvalidTimeout(t *testing.T) {
 
 func TestValidateTaskMissingLabels(t *testing.T) {
 	cfg := validConfig()
-	cfg.Tasks = map[string]Task{
-		"fix-bugs": {Skill: "fix-bug"},
+	cfg.Sources["github"] = SourceConfig{
+		Type: "github", Repo: "owner/name",
+		Tasks: map[string]Task{"fix-bugs": {Skill: "fix-bug"}},
 	}
 
 	err := cfg.Validate()
@@ -210,8 +266,9 @@ func TestValidateTaskMissingLabels(t *testing.T) {
 
 func TestValidateTaskMissingSkill(t *testing.T) {
 	cfg := validConfig()
-	cfg.Tasks = map[string]Task{
-		"fix-bugs": {Labels: []string{"bug"}},
+	cfg.Sources["github"] = SourceConfig{
+		Type: "github", Repo: "owner/name",
+		Tasks: map[string]Task{"fix-bugs": {Labels: []string{"bug"}}},
 	}
 
 	err := cfg.Validate()
@@ -282,9 +339,18 @@ func TestValidateMalformedRepo(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cfg := validConfig()
-			cfg.Repo = tt.repo
-
+			cfg := &Config{
+				Concurrency: 2,
+				MaxTurns:    50,
+				Timeout:     "30m",
+				Claude:      ClaudeConfig{Command: "claude", Template: defaultClaudeTemplate},
+				Sources: map[string]SourceConfig{
+					"github": {
+						Type: "github", Repo: tt.repo,
+						Tasks: map[string]Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+					},
+				},
+			}
 			err := cfg.Validate()
 			requireErrorContains(t, err, tt.want)
 		})
@@ -341,8 +407,9 @@ func TestValidateNegativeConcurrency(t *testing.T) {
 
 func TestValidateTaskSkillWhitespaceOnly(t *testing.T) {
 	cfg := validConfig()
-	cfg.Tasks = map[string]Task{
-		"fix-bugs": {Labels: []string{"bug"}, Skill: "  "},
+	cfg.Sources["github"] = SourceConfig{
+		Type: "github", Repo: "owner/name",
+		Tasks: map[string]Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "  "}},
 	}
 
 	err := cfg.Validate()
@@ -391,10 +458,11 @@ nested_unknown:
 
 func TestValidateMultipleTasks(t *testing.T) {
 	cfg := validConfig()
-	cfg.Tasks = map[string]Task{
+	tasks := map[string]Task{
 		"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
 		"features": {Labels: []string{"enhancement"}, Skill: "implement-feature"},
 	}
+	cfg.Sources["github"] = SourceConfig{Type: "github", Repo: "owner/name", Tasks: tasks}
 
 	if err := cfg.Validate(); err != nil {
 		t.Fatalf("expected valid config with multiple tasks, got: %v", err)
@@ -403,10 +471,11 @@ func TestValidateMultipleTasks(t *testing.T) {
 
 func TestValidateMultipleTasksOneInvalid(t *testing.T) {
 	cfg := validConfig()
-	cfg.Tasks = map[string]Task{
+	tasks := map[string]Task{
 		"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
 		"broken":   {Labels: []string{}, Skill: "fix-bug"}, // no labels
 	}
+	cfg.Sources["github"] = SourceConfig{Type: "github", Repo: "owner/name", Tasks: tasks}
 
 	err := cfg.Validate()
 	requireErrorContains(t, err, "labels")

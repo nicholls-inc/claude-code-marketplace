@@ -24,20 +24,25 @@ var deps *appDeps
 func newRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:           "xylem",
-		Short:         "Autonomous issue agent scheduler",
+		Short:         "Autonomous Claude Code session scheduler",
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			for _, tool := range []string{"gh", "git"} {
-				if _, err := exec.LookPath(tool); err != nil {
-					return fmt.Errorf("error: %s not found on PATH", tool)
-				}
+			if _, err := exec.LookPath("git"); err != nil {
+				return fmt.Errorf("error: git not found on PATH")
 			}
 
 			configPath := viper.GetString("config")
 			cfg, err := config.Load(configPath)
 			if err != nil {
 				return fmt.Errorf("error loading config %s: %w", configPath, err)
+			}
+
+			// Only require gh if a GitHub source is configured
+			if hasGitHubSource(cfg) {
+				if _, err := exec.LookPath("gh"); err != nil {
+					return fmt.Errorf("error: gh not found on PATH (required for github source)")
+				}
 			}
 
 			queueFile := filepath.Join(cfg.StateDir, "queue.jsonl")
@@ -58,6 +63,7 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(
 		newScanCmd(),
 		newDrainCmd(),
+		newEnqueueCmd(),
 		newStatusCmd(),
 		newPauseCmd(),
 		newResumeCmd(),
@@ -66,4 +72,13 @@ func newRootCmd() *cobra.Command {
 	)
 
 	return cmd
+}
+
+func hasGitHubSource(cfg *config.Config) bool {
+	for _, src := range cfg.Sources {
+		if src.Type == "github" {
+			return true
+		}
+	}
+	return false
 }

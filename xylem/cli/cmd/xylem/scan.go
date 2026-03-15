@@ -67,10 +67,10 @@ func dryRunScan(cfg *config.Config, q *queue.Queue, runner scanner.CommandRunner
 		fmt.Println("No new issues found.")
 		return nil
 	}
-	fmt.Printf("%-12s  %-6s  %-20s  %s\n", "ID", "Issue", "Skill", "URL")
-	fmt.Printf("%-12s  %-6s  %-20s  %s\n", "----", "-----", "-----", "---")
+	fmt.Printf("%-14s  %-14s  %-20s  %s\n", "ID", "Source", "Skill", "Ref")
+	fmt.Printf("%-14s  %-14s  %-20s  %s\n", "----", "------", "-----", "---")
 	for _, j := range vessels {
-		fmt.Printf("%-12s  #%-5d  %-20s  %s\n", j.ID, j.IssueNum, j.Skill, j.IssueURL)
+		fmt.Printf("%-14s  %-14s  %-20s  %s\n", j.ID, j.Source, j.Skill, j.Ref)
 	}
 	fmt.Printf("\n%d candidate(s) would be queued (dry-run — no changes made)\n", len(vessels))
 	return nil

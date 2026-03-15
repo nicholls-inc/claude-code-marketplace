@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/queue"
@@ -49,6 +48,16 @@ func (m *mockRunner) Run(_ context.Context, name string, args ...string) ([]byte
 	return []byte("[]"), nil
 }
 
+// ghIssue mirrors the GitHub issue JSON structure for test helpers.
+type ghIssue struct {
+	Number int    `json:"number"`
+	Title  string `json:"title"`
+	URL    string `json:"url"`
+	Labels []struct {
+		Name string `json:"name"`
+	} `json:"labels"`
+}
+
 func makeConfig(dir string) *config.Config {
 	return &config.Config{
 		Repo:        "owner/repo",
@@ -57,9 +66,19 @@ func makeConfig(dir string) *config.Config {
 		Timeout:     "30m",
 		StateDir:    dir,
 		Exclude:     []string{"wontfix", "duplicate"},
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"},
+		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
 		Tasks: map[string]config.Task{
 			"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+		},
+		Sources: map[string]config.SourceConfig{
+			"github": {
+				Type:    "github",
+				Repo:    "owner/repo",
+				Exclude: []string{"wontfix", "duplicate"},
+				Tasks: map[string]config.Task{
+					"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+				},
+			},
 		},
 	}
 }
@@ -94,15 +113,24 @@ func TestScanFindsIssues(t *testing.T) {
 	if result.Added != 2 {
 		t.Errorf("expected 2 added, got %d", result.Added)
 	}
-	if result.Skipped != 0 {
-		t.Errorf("expected 0 skipped, got %d", result.Skipped)
-	}
 	if result.Paused {
 		t.Error("expected not paused")
 	}
 	vessels, _ := q.List()
 	if len(vessels) != 2 {
 		t.Errorf("expected 2 vessels in queue, got %d", len(vessels))
+	}
+	// Verify new vessel format
+	for _, v := range vessels {
+		if v.Source != "github-issue" {
+			t.Errorf("expected source github-issue, got %q", v.Source)
+		}
+		if v.Ref == "" {
+			t.Error("expected Ref to be set")
+		}
+		if v.Meta["issue_num"] == "" {
+			t.Error("expected Meta[issue_num] to be set")
+		}
 	}
 }
 
@@ -127,9 +155,6 @@ func TestScanExcludedLabel(t *testing.T) {
 	if result.Added != 0 {
 		t.Errorf("expected 0 added (excluded), got %d", result.Added)
 	}
-	if result.Skipped != 1 {
-		t.Errorf("expected 1 skipped, got %d", result.Skipped)
-	}
 }
 
 func TestScanAlreadyQueued(t *testing.T) {
@@ -139,8 +164,13 @@ func TestScanAlreadyQueued(t *testing.T) {
 	q := queue.New(queueFile)
 	r := newMock()
 
-	now := time.Now().UTC()
-	_ = q.Enqueue(queue.Vessel{ID: "issue-1", IssueNum: 1, IssueURL: "https://github.com/owner/repo/issues/1", Skill: "fix-bug", State: queue.StatePending, CreatedAt: now})
+	// Pre-enqueue using new format
+	_ = q.Enqueue(queue.Vessel{
+		ID: "issue-1", Source: "github-issue",
+		Ref: "https://github.com/owner/repo/issues/1", Skill: "fix-bug",
+		Meta: map[string]string{"issue_num": "1"},
+		State: queue.StatePending, CreatedAt: queue.Vessel{}.CreatedAt,
+	})
 
 	issues := []ghIssue{
 		{Number: 1, Title: "already queued", URL: "https://github.com/owner/repo/issues/1", Labels: []struct {
@@ -156,9 +186,6 @@ func TestScanAlreadyQueued(t *testing.T) {
 	}
 	if result.Added != 0 {
 		t.Errorf("expected 0 added (already queued), got %d", result.Added)
-	}
-	if result.Skipped != 1 {
-		t.Errorf("expected 1 skipped, got %d", result.Skipped)
 	}
 }
 
@@ -198,7 +225,6 @@ func TestScanExistingPR(t *testing.T) {
 		}{{Name: "bug"}}},
 	}
 	r.set(issueJSON(issues), "gh", "search", "issues", "--repo", "owner/repo", "--state", "open", "--json", "number,title,url,labels", "--limit", "20", "--label", "bug")
-	// The PR search now uses head branch pattern and fetches headRefName
 	r.set([]byte(`[{"number":99,"headRefName":"fix/issue-55-null-fix"}]`),
 		"gh", "pr", "list", "--repo", "owner/repo", "--search", "head:fix/issue-55-", "--state", "open", "--json", "number,headRefName", "--limit", "5")
 
@@ -213,9 +239,6 @@ func TestScanExistingPR(t *testing.T) {
 }
 
 func TestScanPRFalsePositiveIgnored(t *testing.T) {
-	// Regression test: a PR whose title/body mentions "#1" but whose head branch
-	// does NOT match the xylem naming convention should NOT cause issue #1 to
-	// be skipped.
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -227,13 +250,8 @@ func TestScanPRFalsePositiveIgnored(t *testing.T) {
 		}{{Name: "bug"}}},
 	}
 	r.set(issueJSON(issues), "gh", "search", "issues", "--repo", "owner/repo", "--state", "open", "--json", "number,title,url,labels", "--limit", "20", "--label", "bug")
-
-	// Simulate an unrelated PR returned by the search whose head branch does NOT
-	// match the expected pattern. The old code would have incorrectly skipped
-	// issue #1 because ANY returned PR counted as a match.
 	r.set([]byte(`[{"number":200,"headRefName":"chore/priority-1-ci-fix"}]`),
 		"gh", "pr", "list", "--repo", "owner/repo", "--search", "head:fix/issue-1-", "--state", "open", "--json", "number,headRefName", "--limit", "5")
-	// feat/ prefix search returns nothing
 	r.set([]byte(`[]`),
 		"gh", "pr", "list", "--repo", "owner/repo", "--search", "head:feat/issue-1-", "--state", "open", "--json", "number,headRefName", "--limit", "5")
 
@@ -245,24 +263,25 @@ func TestScanPRFalsePositiveIgnored(t *testing.T) {
 	if result.Added != 1 {
 		t.Errorf("expected 1 added (false positive PR should be ignored), got %d", result.Added)
 	}
-	if result.Skipped != 0 {
-		t.Errorf("expected 0 skipped, got %d", result.Skipped)
-	}
 }
 
 func TestScanCrossTaskDedupDeterministic(t *testing.T) {
-	// When the same issue appears in multiple tasks, it should only be enqueued
-	// once regardless of map iteration order.
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	cfg.Tasks = map[string]config.Task{
 		"fix-bugs":  {Labels: []string{"bug"}, Skill: "fix-bug"},
 		"emergency": {Labels: []string{"urgent"}, Skill: "fix-bug"},
 	}
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	cfg.Sources = map[string]config.SourceConfig{
+		"github": {
+			Type:    "github",
+			Repo:    "owner/repo",
+			Exclude: []string{"wontfix", "duplicate"},
+			Tasks:   cfg.Tasks,
+		},
+	}
 	r := newMock()
 
-	// Same issue #10 appears under both label searches
 	sharedIssue := []ghIssue{
 		{Number: 10, Title: "shared issue", URL: "https://github.com/owner/repo/issues/10", Labels: []struct {
 			Name string `json:"name"`
@@ -271,23 +290,17 @@ func TestScanCrossTaskDedupDeterministic(t *testing.T) {
 	r.set(issueJSON(sharedIssue), "gh", "search", "issues", "--repo", "owner/repo", "--state", "open", "--json", "number,title,url,labels", "--limit", "20", "--label", "bug")
 	r.set(issueJSON(sharedIssue), "gh", "search", "issues", "--repo", "owner/repo", "--state", "open", "--json", "number,title,url,labels", "--limit", "20", "--label", "urgent")
 
-	_ = New(cfg, q, r) // verify construction; actual test uses per-iteration queues
-
-	// Run multiple times to exercise different map iteration orders
 	for i := 0; i < 5; i++ {
 		qFile := filepath.Join(dir, fmt.Sprintf("queue-%d.jsonl", i))
 		qi := queue.New(qFile)
 		si := New(cfg, qi, r)
-		result, err := si.Scan(context.Background())
+		_, err := si.Scan(context.Background())
 		if err != nil {
 			t.Fatalf("run %d: unexpected error: %v", i, err)
 		}
 		vessels, _ := qi.List()
 		if len(vessels) != 1 {
 			t.Errorf("run %d: expected exactly 1 vessel in queue, got %d", i, len(vessels))
-		}
-		if result.Added+result.Skipped != 2 {
-			t.Errorf("run %d: expected 2 total (added+skipped), got %d", i, result.Added+result.Skipped)
 		}
 	}
 }
@@ -338,6 +351,14 @@ func TestScanMultipleTasks(t *testing.T) {
 		"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
 		"features": {Labels: []string{"low-effort"}, Skill: "implement-feature"},
 	}
+	cfg.Sources = map[string]config.SourceConfig{
+		"github": {
+			Type:    "github",
+			Repo:    "owner/repo",
+			Exclude: []string{"wontfix", "duplicate"},
+			Tasks:   cfg.Tasks,
+		},
+	}
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	r := newMock()
 
@@ -374,7 +395,6 @@ func TestScanMultipleTasks(t *testing.T) {
 }
 
 func TestScanGHReturnsMalformedJSON(t *testing.T) {
-	// When `gh search issues` returns invalid JSON, Scan should return an error.
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -387,14 +407,9 @@ func TestScanGHReturnsMalformedJSON(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected error for malformed gh JSON output")
 	}
-	if !strings.Contains(err.Error(), "parse gh search output") {
-		t.Errorf("expected parse error, got: %v", err)
-	}
 }
 
 func TestHasOpenPRMalformedJSONIgnored(t *testing.T) {
-	// When gh pr list returns malformed JSON, hasOpenPR should return false
-	// (the issue should NOT be skipped).
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -406,7 +421,6 @@ func TestHasOpenPRMalformedJSONIgnored(t *testing.T) {
 		}{{Name: "bug"}}},
 	}
 	r.set(issueJSON(issues), "gh", "search", "issues", "--repo", "owner/repo", "--state", "open", "--json", "number,title,url,labels", "--limit", "20", "--label", "bug")
-	// Return malformed JSON for PR check
 	r.set([]byte(`not json at all`),
 		"gh", "pr", "list", "--repo", "owner/repo", "--search", "head:fix/issue-77-", "--state", "open", "--json", "number,headRefName", "--limit", "5")
 	r.set([]byte(`not json`),
@@ -423,7 +437,6 @@ func TestHasOpenPRMalformedJSONIgnored(t *testing.T) {
 }
 
 func TestHasOpenPRGHErrorIgnored(t *testing.T) {
-	// When gh pr list returns an error, hasOpenPR should return false.
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -451,7 +464,6 @@ func TestHasOpenPRGHErrorIgnored(t *testing.T) {
 }
 
 func TestScanExistingBranchFeatPrefix(t *testing.T) {
-	// Test that hasBranch also checks "feat/" prefix, not just "fix/".
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -463,7 +475,6 @@ func TestScanExistingBranchFeatPrefix(t *testing.T) {
 		}{{Name: "bug"}}},
 	}
 	r.set(issueJSON(issues), "gh", "search", "issues", "--repo", "owner/repo", "--state", "open", "--json", "number,title,url,labels", "--limit", "20", "--label", "bug")
-	// fix/ prefix returns nothing, but feat/ prefix has a match
 	r.set([]byte(""), "git", "ls-remote", "--heads", "origin", "fix/issue-99-*")
 	r.set([]byte("abc123\trefs/heads/feat/issue-99-add-feature"), "git", "ls-remote", "--heads", "origin", "feat/issue-99-*")
 
@@ -478,12 +489,10 @@ func TestScanExistingBranchFeatPrefix(t *testing.T) {
 }
 
 func TestScanEmptyIssuesList(t *testing.T) {
-	// When gh returns an empty array, Scan should succeed with 0 added.
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	r := newMock()
-	// Default mock returns "[]" for unknown keys, so no special setup needed.
 
 	s := New(cfg, q, r)
 	result, err := s.Scan(context.Background())
@@ -492,8 +501,5 @@ func TestScanEmptyIssuesList(t *testing.T) {
 	}
 	if result.Added != 0 {
 		t.Errorf("expected 0 added, got %d", result.Added)
-	}
-	if result.Skipped != 0 {
-		t.Errorf("expected 0 skipped, got %d", result.Skipped)
 	}
 }

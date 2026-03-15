@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync/atomic"
 	"testing"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/queue"
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/source"
 )
 
 type mockCmdRunner struct {
@@ -74,43 +76,37 @@ func (m *mockWorktree) Create(_ context.Context, branchName string) (string, err
 
 func makeTestConfig(dir string, concurrency int) *config.Config {
 	return &config.Config{
-		Repo:        "owner/repo",
 		Concurrency: concurrency,
 		MaxTurns:    50,
 		Timeout:     "30s",
 		StateDir:    dir,
-		Exclude:     []string{"wontfix"},
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"},
-		Tasks:       map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
+		Sources: map[string]config.SourceConfig{
+			"github": {
+				Type:    "github",
+				Repo:    "owner/repo",
+				Exclude: []string{"wontfix"},
+				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+			},
+		},
 	}
 }
 
 func makeVessel(num int, skill string) queue.Vessel {
 	return queue.Vessel{
-		ID:        fmt.Sprintf("issue-%d", num),
-		IssueURL:  fmt.Sprintf("https://github.com/owner/repo/issues/%d", num),
-		IssueNum:  num,
-		Skill:     skill,
-		State:     queue.StatePending,
+		ID:     fmt.Sprintf("issue-%d", num),
+		Source: "github-issue",
+		Ref:    fmt.Sprintf("https://github.com/owner/repo/issues/%d", num),
+		Skill:  skill,
+		Meta:   map[string]string{"issue_num": strconv.Itoa(num)},
+		State:  queue.StatePending,
 		CreatedAt: time.Now().UTC(),
 	}
 }
 
-func TestSlugify(t *testing.T) {
-	cases := []struct {
-		input string
-		want  string
-	}{
-		{"https://github.com/owner/repo/issues/42", "42"},
-		{"simple text", "simple-text"},
-		{"ALL CAPS", "all-caps"},
-		{"special!@#chars", "special-chars"},
-	}
-	for _, tc := range cases {
-		got := slugify(tc.input)
-		if got != tc.want {
-			t.Errorf("slugify(%q) = %q, want %q", tc.input, got, tc.want)
-		}
+func makeGitHubSource() *source.GitHub {
+	return &source.GitHub{
+		Repo: "owner/repo",
 	}
 }
 
@@ -119,12 +115,13 @@ func TestBuildCommand(t *testing.T) {
 		MaxTurns: 50,
 		Claude: config.ClaudeConfig{
 			Command:  "claude",
-			Template: "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}",
+			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
 		},
 	}
 	vessel := &queue.Vessel{
-		Skill:    "fix-bug",
-		IssueURL: "https://github.com/owner/repo/issues/42",
+		Source: "github-issue",
+		Skill:  "fix-bug",
+		Ref:    "https://github.com/owner/repo/issues/42",
 	}
 	cmd, args, err := buildCommand(cfg, vessel)
 	if err != nil {
@@ -145,6 +142,59 @@ func TestBuildCommand(t *testing.T) {
 	}
 }
 
+func TestBuildCommandDirectPrompt(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command:  "claude",
+			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+		},
+	}
+	vessel := &queue.Vessel{
+		Source: "manual",
+		Prompt: "Fix the null pointer in handler.go",
+	}
+	cmd, args, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if cmd != "claude" {
+		t.Errorf("expected cmd 'claude', got %q", cmd)
+	}
+	if len(args) != 4 {
+		t.Fatalf("expected 4 args, got %d: %v", len(args), args)
+	}
+	if args[0] != "-p" {
+		t.Errorf("expected -p flag, got %q", args[0])
+	}
+	if args[1] != "Fix the null pointer in handler.go" {
+		t.Errorf("expected prompt text, got %q", args[1])
+	}
+}
+
+func TestBuildCommandBackwardCompatIssueURL(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command:  "claude",
+			Template: "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}",
+		},
+	}
+	vessel := &queue.Vessel{
+		Source: "github-issue",
+		Skill:  "fix-bug",
+		Ref:    "https://github.com/owner/repo/issues/42",
+	}
+	cmd, args, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	full := cmd + " " + strings.Join(args, " ")
+	if !strings.Contains(full, "issues/42") {
+		t.Errorf("expected IssueURL backward compat to work, got: %s", full)
+	}
+}
+
 func TestDrainSingleVessel(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 2)
@@ -154,6 +204,9 @@ func TestDrainSingleVessel(t *testing.T) {
 	cmdRunner := &mockCmdRunner{}
 	wt := &mockWorktree{}
 	r := New(cfg, q, wt, cmdRunner)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
 
 	result, err := r.Drain(context.Background())
 	if err != nil {
@@ -277,19 +330,9 @@ func TestDrainTimeout(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	slow := &struct {
-		mockCmdRunner
-		delay time.Duration
-	}{
-		delay: 200 * time.Millisecond,
-	}
-	slow.delay = 200 * time.Millisecond
-
-	called := false
 	cmdRunner := &mockCmdRunner{
 		processErr: context.DeadlineExceeded,
 	}
-	_ = called
 
 	wt := &mockWorktree{}
 	r := New(cfg, q, wt, cmdRunner)
@@ -304,49 +347,19 @@ func TestDrainTimeout(t *testing.T) {
 }
 
 func TestMakeVesselHighNumbers(t *testing.T) {
-	// Verify makeVessel works correctly for num >= 10 (was previously broken)
 	for _, num := range []int{0, 1, 9, 10, 42, 100, 999} {
 		vessel := makeVessel(num, "fix-bug")
 		wantID := fmt.Sprintf("issue-%d", num)
-		wantURL := fmt.Sprintf("https://github.com/owner/repo/issues/%d", num)
+		wantRef := fmt.Sprintf("https://github.com/owner/repo/issues/%d", num)
 		if vessel.ID != wantID {
 			t.Errorf("makeVessel(%d).ID = %q, want %q", num, vessel.ID, wantID)
 		}
-		if vessel.IssueURL != wantURL {
-			t.Errorf("makeVessel(%d).IssueURL = %q, want %q", num, vessel.IssueURL, wantURL)
+		if vessel.Ref != wantRef {
+			t.Errorf("makeVessel(%d).Ref = %q, want %q", num, vessel.Ref, wantRef)
 		}
-		if vessel.IssueNum != num {
-			t.Errorf("makeVessel(%d).IssueNum = %d, want %d", num, vessel.IssueNum, num)
+		if vessel.Meta["issue_num"] != strconv.Itoa(num) {
+			t.Errorf("makeVessel(%d).Meta[issue_num] = %q, want %q", num, vessel.Meta["issue_num"], strconv.Itoa(num))
 		}
-	}
-}
-
-func TestSlugifyEdgeCases(t *testing.T) {
-	cases := []struct {
-		name  string
-		input string
-		want  string
-	}{
-		{"empty string", "", "task"},
-		{"all special chars", "!@#$%^&*()", "task"},
-		{"consecutive hyphens", "a---b---c", "a-b-c"},
-		{"leading trailing special", "---hello---", "hello"},
-		{"very long input", "abcdefghijklmnopqrstuvwxyz0123456789", "abcdefghijklmnopqrst"},
-		{"truncation trims trailing hyphen at 21 chars", "abcdefghijklmnopqrs-x", "abcdefghijklmnopqrs"},
-		{"truncation trims trailing hyphen", "abcdefghijklmnopqrs-xyz", "abcdefghijklmnopqrs"},
-		{"no truncation at exactly 20 chars", "abcdefghijklmnopqrst", "abcdefghijklmnopqrst"},
-		{"url with trailing slash", "https://example.com/path/", "path"},
-		{"single char", "x", "x"},
-		{"only hyphens after clean", "---", "task"},
-		{"mixed case", "Hello-World", "hello-world"},
-	}
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			got := slugify(tc.input)
-			if got != tc.want {
-				t.Errorf("slugify(%q) = %q, want %q", tc.input, got, tc.want)
-			}
-		})
 	}
 }
 
@@ -358,7 +371,7 @@ func TestBuildCommandEdgeCases(t *testing.T) {
 				Template: "{{.Command}}",
 			},
 		}
-		vessel := &queue.Vessel{Skill: "fix-bug", IssueURL: "https://example.com"}
+		vessel := &queue.Vessel{Skill: "fix-bug", Ref: "https://example.com"}
 		_, _, err := buildCommand(cfg, vessel)
 		if err == nil {
 			t.Error("expected error for empty command, got nil")
@@ -415,7 +428,6 @@ func TestBuildCommandEdgeCases(t *testing.T) {
 }
 
 func TestDrainConcurrencyLimitEnforced(t *testing.T) {
-	// Test with more vessels and higher concurrency limit to verify the semaphore
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 3)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -447,7 +459,6 @@ func TestDrainEmptyQueue(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 2)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	// No vessels enqueued
 
 	cmdRunner := &mockCmdRunner{}
 	wt := &mockWorktree{}
@@ -469,8 +480,6 @@ func TestDrainEmptyQueue(t *testing.T) {
 }
 
 func TestBranchPrefixSelection(t *testing.T) {
-	// Verify that the branch prefix is "fix" for fix-related skills
-	// and "feat" for non-fix skills.
 	tests := []struct {
 		skill      string
 		wantPrefix string
@@ -490,22 +499,19 @@ func TestBranchPrefixSelection(t *testing.T) {
 			q := queue.New(filepath.Join(dir, "queue.jsonl"))
 			_ = q.Enqueue(makeVessel(1, tc.skill))
 
-			var createdBranch string
-			wt := &mockWorktree{}
-			origCreate := wt.Create
-			_ = origCreate // not a func field, use a tracking worktree instead
-
-			// Use a tracking worktree to capture branch name
 			tracker := &trackingWorktree{}
 			cmdRunner := &mockCmdRunner{}
 			r := New(cfg, q, tracker, cmdRunner)
+			r.Sources = map[string]source.Source{
+				"github-issue": makeGitHubSource(),
+			}
 
 			_, err := r.Drain(context.Background())
 			if err != nil {
 				t.Fatalf("drain: %v", err)
 			}
 
-			createdBranch = tracker.lastBranch
+			createdBranch := tracker.lastBranch
 			wantPrefix := tc.wantPrefix + "/issue-1-"
 			if !strings.HasPrefix(createdBranch, wantPrefix) {
 				t.Errorf("for skill %q, expected branch prefix %q, got %q", tc.skill, wantPrefix, createdBranch)
@@ -524,13 +530,12 @@ func (tw *trackingWorktree) Create(_ context.Context, branchName string) (string
 }
 
 func TestBuildCommandTemplateExecutionError(t *testing.T) {
-	// Template that references a non-existent field
 	cfg := &config.Config{
 		Claude: config.ClaudeConfig{
 			Template: "{{.NonExistentField}}",
 		},
 	}
-	vessel := &queue.Vessel{Skill: "fix-bug", IssueURL: "https://example.com"}
+	vessel := &queue.Vessel{Skill: "fix-bug", Ref: "https://example.com"}
 	_, _, err := buildCommand(cfg, vessel)
 	if err == nil {
 		t.Error("expected error for template referencing non-existent field")
@@ -541,7 +546,6 @@ func TestBuildCommandTemplateExecutionError(t *testing.T) {
 }
 
 func TestDrainMultipleFailures(t *testing.T) {
-	// All vessels fail — verify all are counted.
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 2)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -564,31 +568,10 @@ func TestDrainMultipleFailures(t *testing.T) {
 		t.Errorf("expected 0 completed, got %d", result.Completed)
 	}
 
-	// All vessels should be in failed state
 	vessels, _ := q.List()
 	for _, j := range vessels {
 		if j.State != queue.StateFailed {
 			t.Errorf("vessel %s: expected failed, got %s", j.ID, j.State)
 		}
-	}
-}
-
-func TestSlugifyUnicodeAndSpecialChars(t *testing.T) {
-	cases := []struct {
-		name  string
-		input string
-		want  string
-	}{
-		{"unicode chars", "héllo-wörld", "h-llo-w-rld"},
-		{"numbers only", "12345", "12345"},
-		{"path with query", "https://example.com/issues/42?ref=main", "42-ref-main"},
-	}
-	for _, tc := range cases {
-		t.Run(tc.name, func(t *testing.T) {
-			got := slugify(tc.input)
-			if got != tc.want {
-				t.Errorf("slugify(%q) = %q, want %q", tc.input, got, tc.want)
-			}
-		})
 	}
 }

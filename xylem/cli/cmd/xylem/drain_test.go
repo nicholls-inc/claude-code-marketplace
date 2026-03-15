@@ -13,14 +13,19 @@ import (
 
 func makeDrainConfig(dir string) *config.Config {
 	return &config.Config{
-		Repo:        "owner/repo",
 		Concurrency: 2,
 		MaxTurns:    50,
 		Timeout:     "30m",
 		StateDir:    dir,
-		Exclude:     []string{"wontfix"},
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"},
-		Tasks:       map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
+		Sources: map[string]config.SourceConfig{
+			"github": {
+				Type:    "github",
+				Repo:    "owner/repo",
+				Exclude: []string{"wontfix"},
+				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+			},
+		},
 	}
 }
 
@@ -31,18 +36,14 @@ func TestDrainDryRun(t *testing.T) {
 
 	now := time.Now().UTC()
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-1", IssueNum: 1,
-		IssueURL:  "https://github.com/owner/repo/issues/1",
-		Skill:     "fix-bug",
-		State:     queue.StatePending,
-		CreatedAt: now,
+		ID: "issue-1", Source: "github-issue",
+		Ref:   "https://github.com/owner/repo/issues/1",
+		Skill: "fix-bug", State: queue.StatePending, CreatedAt: now,
 	})
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-2", IssueNum: 2,
-		IssueURL:  "https://github.com/owner/repo/issues/2",
-		Skill:     "fix-bug",
-		State:     queue.StatePending,
-		CreatedAt: now,
+		ID: "issue-2", Source: "github-issue",
+		Ref:   "https://github.com/owner/repo/issues/2",
+		Skill: "fix-bug", State: queue.StatePending, CreatedAt: now,
 	})
 
 	out := captureStdout(func() {
@@ -71,11 +72,9 @@ func TestDrainDryRunCommandFormat(t *testing.T) {
 
 	now := time.Now().UTC()
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-1", IssueNum: 1,
-		IssueURL:  "https://github.com/owner/repo/issues/1",
-		Skill:     "fix-bug",
-		State:     queue.StatePending,
-		CreatedAt: now,
+		ID: "issue-1", Source: "github-issue",
+		Ref:   "https://github.com/owner/repo/issues/1",
+		Skill: "fix-bug", State: queue.StatePending, CreatedAt: now,
 	})
 
 	out := captureStdout(func() {
@@ -85,17 +84,14 @@ func TestDrainDryRunCommandFormat(t *testing.T) {
 		}
 	})
 
-	// Verify the exact command template rendering
 	expectedCmd := `claude -p "/fix-bug https://github.com/owner/repo/issues/1" --max-turns 50`
 	if !strings.Contains(out, expectedCmd) {
 		t.Errorf("expected command %q in output, got: %s", expectedCmd, out)
 	}
-	// Verify table headers
-	if !strings.Contains(out, "ID") || !strings.Contains(out, "Issue") ||
+	if !strings.Contains(out, "ID") || !strings.Contains(out, "Source") ||
 		!strings.Contains(out, "Skill") || !strings.Contains(out, "Command") {
-		t.Errorf("expected table headers (ID, Issue, Skill, Command), got: %s", out)
+		t.Errorf("expected table headers (ID, Source, Skill, Command), got: %s", out)
 	}
-	// Verify count message
 	if !strings.Contains(out, "1 vessel(s) would be drained") {
 		t.Errorf("expected count message, got: %s", out)
 	}
@@ -121,7 +117,6 @@ func TestDrainDryRunEmpty(t *testing.T) {
 func TestDrainDryRunQueueReadError(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeDrainConfig(dir)
-	// Point to a directory instead of a file to force a read error
 	q := queue.New(dir)
 
 	err := dryRunDrain(cfg, q)
@@ -138,7 +133,6 @@ func TestDrainDryRunQueueReadError(t *testing.T) {
 }
 
 func TestExitErrorCodes(t *testing.T) {
-	// Test exitError type directly to verify code semantics
 	t.Run("code2_with_wrapped_error", func(t *testing.T) {
 		inner := errors.New("drain error: something went wrong")
 		ee := &exitError{code: 2, err: inner}

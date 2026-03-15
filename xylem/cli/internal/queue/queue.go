@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -47,15 +48,17 @@ var validTransitions = map[VesselState]map[VesselState]bool{
 var ErrInvalidTransition = errors.New("invalid state transition")
 
 type Vessel struct {
-	ID        string     `json:"id"`
-	IssueURL  string     `json:"issue_url"`
-	IssueNum  int        `json:"issue_num"`
-	Skill     string     `json:"skill"`
-	State     VesselState   `json:"state"`
-	CreatedAt time.Time  `json:"created_at"`
-	StartedAt *time.Time `json:"started_at,omitempty"`
-	EndedAt   *time.Time `json:"ended_at,omitempty"`
-	Error     string     `json:"error,omitempty"`
+	ID        string            `json:"id"`
+	Source    string            `json:"source"`
+	Ref       string            `json:"ref,omitempty"`
+	Skill     string            `json:"skill,omitempty"`
+	Prompt    string            `json:"prompt,omitempty"`
+	Meta      map[string]string `json:"meta,omitempty"`
+	State     VesselState       `json:"state"`
+	CreatedAt time.Time         `json:"created_at"`
+	StartedAt *time.Time        `json:"started_at,omitempty"`
+	EndedAt   *time.Time        `json:"ended_at,omitempty"`
+	Error     string            `json:"error,omitempty"`
 }
 
 type Queue struct {
@@ -203,14 +206,14 @@ func (q *Queue) Cancel(id string) error {
 	})
 }
 
-func (q *Queue) HasIssue(issueNum int) bool {
+func (q *Queue) HasRef(ref string) bool {
 	vessels, err := q.List()
 	if err != nil {
 		return false
 	}
 
 	for _, vessel := range vessels {
-		if vessel.IssueNum == issueNum && vessel.State != StateCancelled {
+		if vessel.Ref == ref && vessel.State != StateCancelled {
 			return true
 		}
 	}
@@ -272,6 +275,7 @@ func (q *Queue) readAllVessels() ([]Vessel, error) {
 			log.Printf("warn: skipping malformed queue entry at line %d: %v (content: %s)", lineNum, err, line)
 			continue
 		}
+		migrateLegacyVessel(&vessel, []byte(line))
 		vessels = append(vessels, vessel)
 	}
 
@@ -284,6 +288,31 @@ func (q *Queue) readAllVessels() ([]Vessel, error) {
 	}
 
 	return vessels, nil
+}
+
+// migrateLegacyVessel populates the new generic fields from legacy
+// issue_url/issue_num JSON fields when reading old queue entries.
+func migrateLegacyVessel(v *Vessel, raw []byte) {
+	if v.Source != "" {
+		return // already migrated
+	}
+	var legacy struct {
+		IssueURL string `json:"issue_url"`
+		IssueNum int    `json:"issue_num"`
+	}
+	if err := json.Unmarshal(raw, &legacy); err != nil {
+		return
+	}
+	if legacy.IssueURL != "" {
+		v.Source = "github-issue"
+		v.Ref = legacy.IssueURL
+		if v.Meta == nil {
+			v.Meta = make(map[string]string)
+		}
+		if legacy.IssueNum != 0 {
+			v.Meta["issue_num"] = strconv.Itoa(legacy.IssueNum)
+		}
+	}
 }
 
 func (q *Queue) writeAllVessels(vessels []Vessel) error {

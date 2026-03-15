@@ -21,11 +21,12 @@ func newTestQueue(t *testing.T) (*Queue, string) {
 
 func testVessel(issue int) Vessel {
 	return Vessel{
-		ID:        fmt.Sprintf("issue-%d", issue),
-		IssueURL:  fmt.Sprintf("https://github.com/example/repo/issues/%d", issue),
-		IssueNum:  issue,
-		Skill:     "fix-bug",
-		State:     StatePending,
+		ID:     fmt.Sprintf("issue-%d", issue),
+		Source: "github-issue",
+		Ref:    fmt.Sprintf("https://github.com/example/repo/issues/%d", issue),
+		Skill:  "fix-bug",
+		Meta:   map[string]string{"issue_num": fmt.Sprintf("%d", issue)},
+		State:  StatePending,
 		CreatedAt: time.Now().UTC(),
 	}
 }
@@ -71,8 +72,11 @@ func TestEnqueue(t *testing.T) {
 	if got.ID != "issue-42" {
 		t.Fatalf("expected id issue-42, got %q", got.ID)
 	}
-	if got.IssueNum != 42 {
-		t.Fatalf("expected issue num 42, got %d", got.IssueNum)
+	if got.Source != "github-issue" {
+		t.Fatalf("expected source github-issue, got %q", got.Source)
+	}
+	if got.Ref != "https://github.com/example/repo/issues/42" {
+		t.Fatalf("expected ref issue URL, got %q", got.Ref)
 	}
 	if got.State != StatePending {
 		t.Fatalf("expected state pending, got %q", got.State)
@@ -248,21 +252,21 @@ func TestCancelNotFound(t *testing.T) {
 	}
 }
 
-func TestHasIssue(t *testing.T) {
+func TestHasRef(t *testing.T) {
 	q, _ := newTestQueue(t)
 	if err := q.Enqueue(testVessel(42)); err != nil {
 		t.Fatalf("enqueue: %v", err)
 	}
 
-	if !q.HasIssue(42) {
-		t.Fatal("expected HasIssue(42) to be true")
+	if !q.HasRef("https://github.com/example/repo/issues/42") {
+		t.Fatal("expected HasRef to be true for enqueued ref")
 	}
-	if q.HasIssue(99) {
-		t.Fatal("expected HasIssue(99) to be false")
+	if q.HasRef("https://github.com/example/repo/issues/99") {
+		t.Fatal("expected HasRef to be false for unknown ref")
 	}
 }
 
-func TestHasIssueCancelled(t *testing.T) {
+func TestHasRefCancelled(t *testing.T) {
 	q, _ := newTestQueue(t)
 	vessel := testVessel(42)
 	if err := q.Enqueue(vessel); err != nil {
@@ -272,8 +276,8 @@ func TestHasIssueCancelled(t *testing.T) {
 		t.Fatalf("cancel: %v", err)
 	}
 
-	if q.HasIssue(42) {
-		t.Fatal("expected cancelled vessel to not count in HasIssue")
+	if q.HasRef("https://github.com/example/repo/issues/42") {
+		t.Fatal("expected cancelled vessel to not count in HasRef")
 	}
 }
 
@@ -600,13 +604,13 @@ func TestConcurrentListDuringDequeue(t *testing.T) {
 		}()
 	}
 
-	// Simultaneously read via HasIssue and ListByState.
+	// Simultaneously read via HasRef and ListByState.
 	wg.Add(numVessels)
 	for i := 0; i < numVessels; i++ {
 		i := i
 		go func() {
 			defer wg.Done()
-			_ = q.HasIssue(700 + i)
+			_ = q.HasRef(fmt.Sprintf("https://github.com/example/repo/issues/%d", 700+i))
 			_, _ = q.ListByState(StateRunning)
 		}()
 	}
@@ -801,8 +805,8 @@ func TestDequeueSkipsNonPending(t *testing.T) {
 	if got == nil {
 		t.Fatal("expected a vessel, got nil")
 	}
-	if got.IssueNum != 32 {
-		t.Fatalf("expected issue 32 (first pending), got %d", got.IssueNum)
+	if got.ID != "issue-32" {
+		t.Fatalf("expected issue-32 (first pending), got %s", got.ID)
 	}
 }
 
@@ -945,6 +949,35 @@ func TestBlankLinesIgnored(t *testing.T) {
 		t.Fatalf("expected 1 vessel (blank lines ignored), got %d", len(vessels))
 	}
 	_ = q // satisfy vet
+}
+
+func TestLegacyJSONLMigration(t *testing.T) {
+	_, path := newTestQueue(t)
+	q := New(path)
+
+	// Write a legacy-format entry with issue_url and issue_num
+	legacy := `{"id":"issue-42","issue_url":"https://github.com/example/repo/issues/42","issue_num":42,"skill":"fix-bug","state":"pending","created_at":"2026-01-01T00:00:00Z"}`
+	if err := os.WriteFile(path, []byte(legacy+"\n"), 0o644); err != nil {
+		t.Fatalf("write legacy: %v", err)
+	}
+
+	vessels, err := q.List()
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	if len(vessels) != 1 {
+		t.Fatalf("expected 1 vessel, got %d", len(vessels))
+	}
+	v := vessels[0]
+	if v.Source != "github-issue" {
+		t.Fatalf("expected source github-issue, got %q", v.Source)
+	}
+	if v.Ref != "https://github.com/example/repo/issues/42" {
+		t.Fatalf("expected ref from issue_url, got %q", v.Ref)
+	}
+	if v.Meta["issue_num"] != "42" {
+		t.Fatalf("expected meta issue_num=42, got %q", v.Meta["issue_num"])
+	}
 }
 
 func TestWriteEmptyVessels(t *testing.T) {

@@ -25,6 +25,13 @@ func captureStdout(fn func()) string {
 	return buf.String()
 }
 
+func testStatusVessel(id string, state queue.VesselState) queue.Vessel {
+	return queue.Vessel{
+		ID: id, Source: "github-issue", Skill: "fix-bug",
+		State: state, CreatedAt: time.Now().UTC(),
+	}
+}
+
 func TestStatusEmpty(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -42,9 +49,8 @@ func TestStatusEmpty(t *testing.T) {
 func TestStatusTable(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	now := time.Now().UTC()
-	q.Enqueue(queue.Vessel{ID: "issue-42", IssueNum: 42, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now})   //nolint:errcheck
-	q.Enqueue(queue.Vessel{ID: "issue-55", IssueNum: 55, Skill: "fix-bug", State: queue.StateCompleted, CreatedAt: now}) //nolint:errcheck
+	q.Enqueue(testStatusVessel("issue-42", queue.StatePending))   //nolint:errcheck
+	q.Enqueue(testStatusVessel("issue-55", queue.StateCompleted)) //nolint:errcheck
 
 	var err error
 	out := captureStdout(func() { err = cmdStatus(q, false, "") })
@@ -57,7 +63,6 @@ func TestStatusTable(t *testing.T) {
 	if !strings.Contains(out, "issue-55") {
 		t.Errorf("expected issue-55 in output, got: %s", out)
 	}
-	// Verify states appear
 	if !strings.Contains(out, "pending") {
 		t.Errorf("expected 'pending' state in output, got: %s", out)
 	}
@@ -72,8 +77,7 @@ func TestStatusTable(t *testing.T) {
 func TestStatusTableHeaders(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	now := time.Now().UTC()
-	q.Enqueue(queue.Vessel{ID: "issue-1", IssueNum: 1, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
+	q.Enqueue(testStatusVessel("issue-1", queue.StatePending)) //nolint:errcheck
 
 	var err error
 	out := captureStdout(func() { err = cmdStatus(q, false, "") })
@@ -81,7 +85,7 @@ func TestStatusTableHeaders(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	for _, header := range []string{"ID", "Issue", "Skill", "State", "Started", "Duration"} {
+	for _, header := range []string{"ID", "Source", "Skill", "State", "Started", "Duration"} {
 		if !strings.Contains(out, header) {
 			t.Errorf("expected header %q in table output, got: %s", header, out)
 		}
@@ -91,8 +95,7 @@ func TestStatusTableHeaders(t *testing.T) {
 func TestStatusJSON(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	now := time.Now().UTC()
-	q.Enqueue(queue.Vessel{ID: "issue-1", IssueNum: 1, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
+	q.Enqueue(testStatusVessel("issue-1", queue.StatePending)) //nolint:errcheck
 
 	var err error
 	out := captureStdout(func() { err = cmdStatus(q, true, "") })
@@ -111,9 +114,8 @@ func TestStatusJSON(t *testing.T) {
 func TestStatusStateFilter(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	now := time.Now().UTC()
-	q.Enqueue(queue.Vessel{ID: "issue-1", IssueNum: 1, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now})   //nolint:errcheck
-	q.Enqueue(queue.Vessel{ID: "issue-2", IssueNum: 2, Skill: "fix-bug", State: queue.StateCompleted, CreatedAt: now}) //nolint:errcheck
+	q.Enqueue(testStatusVessel("issue-1", queue.StatePending))   //nolint:errcheck
+	q.Enqueue(testStatusVessel("issue-2", queue.StateCompleted)) //nolint:errcheck
 
 	var err error
 	out := captureStdout(func() { err = cmdStatus(q, false, "pending") })
@@ -129,7 +131,6 @@ func TestStatusStateFilter(t *testing.T) {
 }
 
 func TestStatusJSONEmpty(t *testing.T) {
-	// Verify --json with empty queue returns [] not null
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 
@@ -150,7 +151,7 @@ func TestStatusRunningVesselShowsDuration(t *testing.T) {
 	now := time.Now().UTC()
 	started := now.Add(-2 * time.Minute)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-10", IssueNum: 10, Skill: "fix-bug",
+		ID: "issue-10", Source: "github-issue", Skill: "fix-bug",
 		State: queue.StateRunning, CreatedAt: now, StartedAt: &started,
 	})
 
@@ -165,7 +166,6 @@ func TestStatusRunningVesselShowsDuration(t *testing.T) {
 	if !strings.Contains(out, "running") {
 		t.Errorf("expected 'running' state in output, got: %s", out)
 	}
-	// Duration should be approximately 2m — allow 2m0s through 2m5s
 	if !strings.Contains(out, "2m") {
 		t.Errorf("expected duration ~2m in output, got: %s", out)
 	}
@@ -176,9 +176,9 @@ func TestStatusCompletedVesselShowsFixedDuration(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	now := time.Now().UTC()
 	started := now.Add(-5 * time.Minute)
-	ended := now.Add(-2 * time.Minute) // 3 minute duration
+	ended := now.Add(-2 * time.Minute)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-20", IssueNum: 20, Skill: "fix-bug",
+		ID: "issue-20", Source: "github-issue", Skill: "fix-bug",
 		State: queue.StateCompleted, CreatedAt: now,
 		StartedAt: &started, EndedAt: &ended,
 	})
@@ -188,7 +188,6 @@ func TestStatusCompletedVesselShowsFixedDuration(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	// Duration should be 3m0s (fixed, not growing)
 	if !strings.Contains(out, "3m0s") {
 		t.Errorf("expected duration '3m0s' in output, got: %s", out)
 	}
@@ -201,7 +200,7 @@ func TestStatusFailedVessel(t *testing.T) {
 	started := now.Add(-1 * time.Minute)
 	ended := now.Add(-30 * time.Second)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-99", IssueNum: 99, Skill: "fix-bug",
+		ID: "issue-99", Source: "github-issue", Skill: "fix-bug",
 		State: queue.StateFailed, CreatedAt: now,
 		StartedAt: &started, EndedAt: &ended,
 		Error: "compilation failed",
@@ -223,8 +222,7 @@ func TestStatusFailedVessel(t *testing.T) {
 func TestStatusStateFilterNoMatches(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	now := time.Now().UTC()
-	q.Enqueue(queue.Vessel{ID: "issue-1", IssueNum: 1, Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
+	q.Enqueue(testStatusVessel("issue-1", queue.StatePending)) //nolint:errcheck
 
 	var err error
 	out := captureStdout(func() { err = cmdStatus(q, false, "completed") })

@@ -57,11 +57,20 @@ func dryRunDrain(cfg *config.Config, q *queue.Queue) error {
 		fmt.Println("No pending vessels.")
 		return nil
 	}
-	fmt.Printf("%-12s  %-6s  %-20s  %s\n", "ID", "Issue", "Skill", "Command")
-	fmt.Printf("%-12s  %-6s  %-20s  %s\n", "----", "-----", "-----", "-------")
+	fmt.Printf("%-14s  %-14s  %-20s  %s\n", "ID", "Source", "Skill", "Command")
+	fmt.Printf("%-14s  %-14s  %-20s  %s\n", "----", "------", "-----", "-------")
 	for _, j := range vessels {
-		cmd := fmt.Sprintf("%s -p \"/%s %s\" --max-turns %d", cfg.Claude.Command, j.Skill, j.IssueURL, cfg.MaxTurns)
-		fmt.Printf("%-12s  #%-5d  %-20s  %s\n", j.ID, j.IssueNum, j.Skill, cmd)
+		skill := j.Skill
+		if skill == "" {
+			skill = "(prompt)"
+		}
+		var cmd string
+		if j.Prompt != "" {
+			cmd = fmt.Sprintf("%s -p %q --max-turns %d", cfg.Claude.Command, truncate(j.Prompt, 40), cfg.MaxTurns)
+		} else {
+			cmd = fmt.Sprintf("%s -p \"/%s %s\" --max-turns %d", cfg.Claude.Command, j.Skill, j.Ref, cfg.MaxTurns)
+		}
+		fmt.Printf("%-14s  %-14s  %-20s  %s\n", j.ID, j.Source, skill, cmd)
 	}
 	fmt.Printf("\n%d vessel(s) would be drained (dry-run — no sessions launched)\n", len(vessels))
 	return nil
