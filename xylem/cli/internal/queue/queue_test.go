@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
-	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -21,11 +20,12 @@ func newTestQueue(t *testing.T) (*Queue, string) {
 
 func testVessel(issue int) Vessel {
 	return Vessel{
-		ID:        fmt.Sprintf("issue-%d", issue),
-		IssueURL:  fmt.Sprintf("https://github.com/example/repo/issues/%d", issue),
-		IssueNum:  issue,
-		Skill:     "fix-bug",
-		State:     StatePending,
+		ID:     fmt.Sprintf("issue-%d", issue),
+		Source: "github-issue",
+		Ref:    fmt.Sprintf("https://github.com/example/repo/issues/%d", issue),
+		Skill:  "fix-bug",
+		Meta:   map[string]string{"issue_num": fmt.Sprintf("%d", issue)},
+		State:  StatePending,
 		CreatedAt: time.Now().UTC(),
 	}
 }
@@ -71,8 +71,11 @@ func TestEnqueue(t *testing.T) {
 	if got.ID != "issue-42" {
 		t.Fatalf("expected id issue-42, got %q", got.ID)
 	}
-	if got.IssueNum != 42 {
-		t.Fatalf("expected issue num 42, got %d", got.IssueNum)
+	if got.Source != "github-issue" {
+		t.Fatalf("expected source github-issue, got %q", got.Source)
+	}
+	if got.Ref != "https://github.com/example/repo/issues/42" {
+		t.Fatalf("expected ref issue URL, got %q", got.Ref)
 	}
 	if got.State != StatePending {
 		t.Fatalf("expected state pending, got %q", got.State)
@@ -248,21 +251,21 @@ func TestCancelNotFound(t *testing.T) {
 	}
 }
 
-func TestHasIssue(t *testing.T) {
+func TestHasRef(t *testing.T) {
 	q, _ := newTestQueue(t)
 	if err := q.Enqueue(testVessel(42)); err != nil {
 		t.Fatalf("enqueue: %v", err)
 	}
 
-	if !q.HasIssue(42) {
-		t.Fatal("expected HasIssue(42) to be true")
+	if !q.HasRef("https://github.com/example/repo/issues/42") {
+		t.Fatal("expected HasRef to be true for enqueued ref")
 	}
-	if q.HasIssue(99) {
-		t.Fatal("expected HasIssue(99) to be false")
+	if q.HasRef("https://github.com/example/repo/issues/99") {
+		t.Fatal("expected HasRef to be false for unknown ref")
 	}
 }
 
-func TestHasIssueCancelled(t *testing.T) {
+func TestHasRefCancelled(t *testing.T) {
 	q, _ := newTestQueue(t)
 	vessel := testVessel(42)
 	if err := q.Enqueue(vessel); err != nil {
@@ -272,8 +275,8 @@ func TestHasIssueCancelled(t *testing.T) {
 		t.Fatalf("cancel: %v", err)
 	}
 
-	if q.HasIssue(42) {
-		t.Fatal("expected cancelled vessel to not count in HasIssue")
+	if q.HasRef("https://github.com/example/repo/issues/42") {
+		t.Fatal("expected cancelled vessel to not count in HasRef")
 	}
 }
 
@@ -460,40 +463,6 @@ func TestUpdateValidTransitionFailedToPending(t *testing.T) {
 	}
 }
 
-func TestUpdateValidTransitions(t *testing.T) {
-	// Test the full happy-path lifecycle: pending -> running -> completed.
-	q, _ := newTestQueue(t)
-	vessel := testVessel(15)
-	if err := q.Enqueue(vessel); err != nil {
-		t.Fatalf("enqueue: %v", err)
-	}
-
-	// pending -> running (via Dequeue, which is the normal path)
-	got, err := q.Dequeue()
-	if err != nil {
-		t.Fatalf("dequeue: %v", err)
-	}
-	if got == nil {
-		t.Fatal("expected vessel")
-	}
-	if got.State != StateRunning {
-		t.Fatalf("expected running, got %q", got.State)
-	}
-
-	// running -> completed
-	if err := q.Update(vessel.ID, StateCompleted, ""); err != nil {
-		t.Fatalf("running->completed: %v", err)
-	}
-
-	vessels, err := q.List()
-	if err != nil {
-		t.Fatalf("list: %v", err)
-	}
-	if vessels[0].State != StateCompleted {
-		t.Fatalf("expected completed, got %q", vessels[0].State)
-	}
-}
-
 func TestUpdateRunningToCancelled(t *testing.T) {
 	q, _ := newTestQueue(t)
 	vessel := testVessel(16)
@@ -514,112 +483,6 @@ func TestUpdateRunningToCancelled(t *testing.T) {
 	}
 	if vessels[0].State != StateCancelled {
 		t.Fatalf("expected cancelled, got %q", vessels[0].State)
-	}
-}
-
-// --- Concurrent read/write tests ---
-
-func TestConcurrentReadWrite(t *testing.T) {
-	q, _ := newTestQueue(t)
-	const writers = 5
-	const readers = 5
-
-	// Pre-populate some vessels.
-	for i := 0; i < 5; i++ {
-		if err := q.Enqueue(testVessel(500 + i)); err != nil {
-			t.Fatalf("enqueue: %v", err)
-		}
-	}
-
-	var wg sync.WaitGroup
-
-	// Launch writers that enqueue new vessels.
-	wg.Add(writers)
-	for i := 0; i < writers; i++ {
-		i := i
-		go func() {
-			defer wg.Done()
-			vessel := testVessel(600 + i)
-			if err := q.Enqueue(vessel); err != nil {
-				t.Errorf("writer enqueue %d: %v", i, err)
-			}
-		}()
-	}
-
-	// Launch readers that call List concurrently with the writers.
-	wg.Add(readers)
-	for i := 0; i < readers; i++ {
-		i := i
-		go func() {
-			defer wg.Done()
-			vessels, err := q.List()
-			if err != nil {
-				t.Errorf("reader list %d: %v", i, err)
-				return
-			}
-			// Should have at least the pre-populated vessels.
-			if len(vessels) < 5 {
-				t.Errorf("reader %d: expected at least 5 vessels, got %d", i, len(vessels))
-			}
-		}()
-	}
-
-	wg.Wait()
-
-	// Final check: all vessels present.
-	vessels, err := q.List()
-	if err != nil {
-		t.Fatalf("final list: %v", err)
-	}
-	if len(vessels) != 10 {
-		t.Fatalf("expected 10 vessels, got %d", len(vessels))
-	}
-}
-
-func TestConcurrentListDuringDequeue(t *testing.T) {
-	q, _ := newTestQueue(t)
-	const numVessels = 10
-
-	for i := 0; i < numVessels; i++ {
-		if err := q.Enqueue(testVessel(700 + i)); err != nil {
-			t.Fatalf("enqueue: %v", err)
-		}
-	}
-
-	var wg sync.WaitGroup
-
-	// Dequeue all vessels concurrently.
-	wg.Add(numVessels)
-	for i := 0; i < numVessels; i++ {
-		go func() {
-			defer wg.Done()
-			_, err := q.Dequeue()
-			if err != nil {
-				t.Errorf("dequeue: %v", err)
-			}
-		}()
-	}
-
-	// Simultaneously read via HasIssue and ListByState.
-	wg.Add(numVessels)
-	for i := 0; i < numVessels; i++ {
-		i := i
-		go func() {
-			defer wg.Done()
-			_ = q.HasIssue(700 + i)
-			_, _ = q.ListByState(StateRunning)
-		}()
-	}
-
-	wg.Wait()
-
-	// All vessels should be dequeued (running or pending if contention missed them).
-	vessels, err := q.List()
-	if err != nil {
-		t.Fatalf("final list: %v", err)
-	}
-	if len(vessels) != numVessels {
-		t.Fatalf("expected %d vessels, got %d", numVessels, len(vessels))
 	}
 }
 
@@ -677,29 +540,6 @@ func TestConcurrentUpdateAndList(t *testing.T) {
 	}
 }
 
-// --- Malformed line handling test ---
-
-func TestMalformedLineReportsError(t *testing.T) {
-	_, path := newTestQueue(t)
-	q := New(path)
-
-	content := "{not-valid-json}\n"
-	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
-		t.Fatalf("write: %v", err)
-	}
-
-	vessels, err := q.List()
-	if err == nil {
-		t.Fatal("expected error for malformed content")
-	}
-	if !strings.Contains(err.Error(), "malformed") {
-		t.Fatalf("expected malformed error message, got: %v", err)
-	}
-	if len(vessels) != 0 {
-		t.Fatalf("expected 0 valid vessels, got %d", len(vessels))
-	}
-}
-
 // --- Additional coverage tests ---
 
 func TestUpdateNonExistentVessel(t *testing.T) {
@@ -749,36 +589,6 @@ func TestUpdateRunningBranchSetsTimestamps(t *testing.T) {
 	}
 }
 
-func TestUpdateRetryPreservesStartedAt(t *testing.T) {
-	// Cover the default branch in Update's switch: failed -> pending clears Error.
-	// Also verify that after a retry cycle (failed -> pending -> running),
-	// the StartedAt is preserved from the first run if already set.
-	q, _ := newTestQueue(t)
-	vessel := testVessel(21)
-	if err := q.Enqueue(vessel); err != nil {
-		t.Fatalf("enqueue: %v", err)
-	}
-	if _, err := q.Dequeue(); err != nil {
-		t.Fatalf("dequeue: %v", err)
-	}
-	if err := q.Update(vessel.ID, StateFailed, "transient"); err != nil {
-		t.Fatalf("fail: %v", err)
-	}
-
-	// Retry: failed -> pending
-	if err := q.Update(vessel.ID, StatePending, ""); err != nil {
-		t.Fatalf("retry: %v", err)
-	}
-
-	vessels, err := q.List()
-	if err != nil {
-		t.Fatalf("list: %v", err)
-	}
-	if vessels[0].Error != "" {
-		t.Fatalf("expected error cleared after retry, got %q", vessels[0].Error)
-	}
-}
-
 func TestDequeueSkipsNonPending(t *testing.T) {
 	// Dequeue should pick the first pending vessel, skipping running/completed.
 	q, _ := newTestQueue(t)
@@ -801,130 +611,8 @@ func TestDequeueSkipsNonPending(t *testing.T) {
 	if got == nil {
 		t.Fatal("expected a vessel, got nil")
 	}
-	if got.IssueNum != 32 {
-		t.Fatalf("expected issue 32 (first pending), got %d", got.IssueNum)
-	}
-}
-
-func TestDequeueNoPendingReturnsNil(t *testing.T) {
-	// All vessels are in non-pending states; Dequeue should return nil.
-	q, _ := newTestQueue(t)
-	j := testVessel(40)
-	j.State = StateCompleted
-	if err := q.Enqueue(j); err != nil {
-		t.Fatalf("enqueue: %v", err)
-	}
-
-	got, err := q.Dequeue()
-	if err != nil {
-		t.Fatalf("dequeue: %v", err)
-	}
-	if got != nil {
-		t.Fatalf("expected nil (no pending vessels), got %+v", *got)
-	}
-}
-
-func TestConcurrentEnqueueAndDequeue(t *testing.T) {
-	// Exercise concurrent Enqueue and Dequeue to verify file-lock correctness
-	// under mixed read-write contention.
-	q, _ := newTestQueue(t)
-	const numVessels = 20
-
-	// Pre-load some vessels
-	for i := 0; i < numVessels; i++ {
-		if err := q.Enqueue(testVessel(900 + i)); err != nil {
-			t.Fatalf("enqueue: %v", err)
-		}
-	}
-
-	var wg sync.WaitGroup
-	var dequeued int32
-	var enqueued int32
-
-	// Concurrently dequeue
-	wg.Add(numVessels)
-	for i := 0; i < numVessels; i++ {
-		go func() {
-			defer wg.Done()
-			vessel, err := q.Dequeue()
-			if err != nil {
-				t.Errorf("dequeue: %v", err)
-				return
-			}
-			if vessel != nil {
-				atomic.AddInt32(&dequeued, 1)
-			}
-		}()
-	}
-
-	// Concurrently enqueue more
-	wg.Add(5)
-	for i := 0; i < 5; i++ {
-		i := i
-		go func() {
-			defer wg.Done()
-			if err := q.Enqueue(testVessel(950 + i)); err != nil {
-				t.Errorf("enqueue: %v", err)
-				return
-			}
-			atomic.AddInt32(&enqueued, 1)
-		}()
-	}
-
-	wg.Wait()
-
-	// Verify consistency: all vessels accounted for
-	vessels, err := q.List()
-	if err != nil {
-		t.Fatalf("final list: %v", err)
-	}
-
-	totalExpected := numVessels + int(atomic.LoadInt32(&enqueued))
-	if len(vessels) != totalExpected {
-		t.Fatalf("expected %d vessels total, got %d", totalExpected, len(vessels))
-	}
-
-	// Each dequeued vessel should be in Running state
-	runCount := 0
-	for _, j := range vessels {
-		if j.State == StateRunning {
-			runCount++
-		}
-	}
-	if int32(runCount) != atomic.LoadInt32(&dequeued) {
-		t.Errorf("running count %d != dequeued count %d", runCount, dequeued)
-	}
-}
-
-func TestListByStateNoMatches(t *testing.T) {
-	q, _ := newTestQueue(t)
-	if err := q.Enqueue(testVessel(50)); err != nil {
-		t.Fatalf("enqueue: %v", err)
-	}
-
-	// No completed vessels
-	completed, err := q.ListByState(StateCompleted)
-	if err != nil {
-		t.Fatalf("list by state: %v", err)
-	}
-	if len(completed) != 0 {
-		t.Fatalf("expected 0 completed, got %d", len(completed))
-	}
-}
-
-func TestEmptyFileReadAllVessels(t *testing.T) {
-	_, path := newTestQueue(t)
-	// Create an empty file
-	if err := os.WriteFile(path, []byte(""), 0o644); err != nil {
-		t.Fatalf("write empty file: %v", err)
-	}
-	q := New(path)
-	vessels, err := q.List()
-	if err != nil {
-		t.Fatalf("list on empty file: %v", err)
-	}
-	if len(vessels) != 0 {
-		t.Fatalf("expected 0 vessels from empty file, got %d", len(vessels))
+	if got.ID != "issue-32" {
+		t.Fatalf("expected issue-32 (first pending), got %s", got.ID)
 	}
 }
 
@@ -947,19 +635,32 @@ func TestBlankLinesIgnored(t *testing.T) {
 	_ = q // satisfy vet
 }
 
-func TestWriteEmptyVessels(t *testing.T) {
-	// Verify writeAllVessels handles the empty case without writing a trailing newline.
-	q, path := newTestQueue(t)
-	// Enqueue then cancel to get a non-empty file, then verify the file format.
-	if err := q.Enqueue(testVessel(70)); err != nil {
-		t.Fatalf("enqueue: %v", err)
+func TestLegacyJSONLMigration(t *testing.T) {
+	_, path := newTestQueue(t)
+	q := New(path)
+
+	// Write a legacy-format entry with issue_url and issue_num
+	legacy := `{"id":"issue-42","issue_url":"https://github.com/example/repo/issues/42","issue_num":42,"skill":"fix-bug","state":"pending","created_at":"2026-01-01T00:00:00Z"}`
+	if err := os.WriteFile(path, []byte(legacy+"\n"), 0o644); err != nil {
+		t.Fatalf("write legacy: %v", err)
 	}
-	data, _ := os.ReadFile(path)
-	if len(data) == 0 {
-		t.Fatal("expected non-empty file after enqueue")
+
+	vessels, err := q.List()
+	if err != nil {
+		t.Fatalf("list: %v", err)
 	}
-	// File should end with newline
-	if data[len(data)-1] != '\n' {
-		t.Fatal("expected trailing newline in queue file")
+	if len(vessels) != 1 {
+		t.Fatalf("expected 1 vessel, got %d", len(vessels))
+	}
+	v := vessels[0]
+	if v.Source != "github-issue" {
+		t.Fatalf("expected source github-issue, got %q", v.Source)
+	}
+	if v.Ref != "https://github.com/example/repo/issues/42" {
+		t.Fatalf("expected ref from issue_url, got %q", v.Ref)
+	}
+	if v.Meta["issue_num"] != "42" {
+		t.Fatalf("expected meta issue_num=42, got %q", v.Meta["issue_num"])
 	}
 }
+

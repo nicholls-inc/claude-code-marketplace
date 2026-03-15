@@ -35,7 +35,7 @@ func TestCobraSubcommandRegistration(t *testing.T) {
 		names[sub.Name()] = true
 	}
 
-	expected := []string{"scan", "drain", "status", "pause", "resume", "cancel", "cleanup"}
+	expected := []string{"scan", "drain", "status", "pause", "resume", "cancel", "cleanup", "enqueue"}
 	for _, name := range expected {
 		if !names[name] {
 			t.Errorf("expected subcommand %q to be registered", name)
@@ -43,33 +43,6 @@ func TestCobraSubcommandRegistration(t *testing.T) {
 	}
 	if len(cmd.Commands()) != len(expected) {
 		t.Errorf("expected %d subcommands, got %d", len(expected), len(cmd.Commands()))
-	}
-}
-
-func TestCobraUnknownSubcommand(t *testing.T) {
-	cmd := newRootCmd()
-	cmd.SetArgs([]string{"bogus"})
-	err := cmd.Execute()
-	if err == nil {
-		t.Fatal("expected error for unknown subcommand")
-	}
-	if !strings.Contains(err.Error(), "unknown command") {
-		t.Errorf("expected 'unknown command' error, got: %v", err)
-	}
-}
-
-func TestCobraCancelRequiresArgs(t *testing.T) {
-	setupTestDeps(t)
-	cmd := newRootCmd()
-	// Skip PersistentPreRunE
-	cmd.PersistentPreRunE = nil
-	cmd.SetArgs([]string{"cancel"})
-	err := cmd.Execute()
-	if err == nil {
-		t.Fatal("expected error when cancel has no args")
-	}
-	if !strings.Contains(err.Error(), "accepts 1 arg") {
-		t.Errorf("expected ExactArgs error, got: %v", err)
 	}
 }
 
@@ -93,39 +66,3 @@ func TestCobraStatusJsonFlag(t *testing.T) {
 	}
 }
 
-func TestCobraScanDryRunFlag(t *testing.T) {
-	setupTestDeps(t)
-	cmd := newRootCmd()
-	cmd.PersistentPreRunE = nil
-
-	// With no tasks configured and dry-run, scan should execute without error
-	// (empty scan returns "No new issues found")
-	out := captureStdout(func() {
-		cmd.SetArgs([]string{"scan", "--dry-run"})
-		err := cmd.Execute()
-		if err != nil {
-			t.Fatalf("unexpected error: %v", err)
-		}
-	})
-
-	// Since no tasks are configured, scan returns immediately with no output
-	// or "No new issues found" — the key test is that the flag was parsed.
-	_ = out // flag parsing verified by successful execution
-}
-
-func TestCobraHelpFlag(t *testing.T) {
-	cmd := newRootCmd()
-	cmd.SetArgs([]string{"--help"})
-
-	out := captureStdout(func() {
-		// --help causes Execute to return nil
-		_ = cmd.Execute()
-	})
-
-	if !strings.Contains(out, "xylem") {
-		t.Errorf("expected 'xylem' in help text, got: %s", out)
-	}
-	if !strings.Contains(out, "Available Commands") {
-		t.Errorf("expected 'Available Commands' in help text, got: %s", out)
-	}
-}

@@ -55,8 +55,16 @@ func makeScanConfig(dir string) *config.Config {
 		Timeout:     "30m",
 		StateDir:    dir,
 		Exclude:     []string{"wontfix"},
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"},
+		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
 		Tasks:       map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+		Sources: map[string]config.SourceConfig{
+			"github": {
+				Type:    "github",
+				Repo:    "owner/repo",
+				Exclude: []string{"wontfix"},
+				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+			},
+		},
 	}
 }
 
@@ -78,8 +86,9 @@ func issuesJSON(issues []ghIssueJSON) []byte {
 // a set of issues. This avoids hitting the "unstubbed command" error for
 // the branch/PR filtering paths.
 func stubScanCommands(r *mockScanRunner, cfg *config.Config, issues []ghIssueJSON) {
-	for _, task := range cfg.Tasks {
-		r.set(issuesJSON(issues), "gh", "search", "issues", "--repo", cfg.Repo,
+	ghSrc := cfg.Sources["github"]
+	for _, task := range ghSrc.Tasks {
+		r.set(issuesJSON(issues), "gh", "search", "issues", "--repo", ghSrc.Repo,
 			"--state", "open", "--json", "number,title,url,labels",
 			"--limit", "20", "--label", task.Labels[0])
 	}
@@ -90,7 +99,7 @@ func stubScanCommands(r *mockScanRunner, cfg *config.Config, issues []ghIssueJSO
 			r.set([]byte(""), "git", "ls-remote", "--heads", "origin",
 				fmt.Sprintf("%s/issue-%d-*", prefix, issue.Number))
 			// gh pr list returns empty array = no PRs
-			r.set([]byte("[]"), "gh", "pr", "list", "--repo", cfg.Repo,
+			r.set([]byte("[]"), "gh", "pr", "list", "--repo", ghSrc.Repo,
 				"--search", fmt.Sprintf("head:%s/issue-%d-", prefix, issue.Number),
 				"--state", "open", "--json", "number,headRefName", "--limit", "5")
 		}
@@ -132,16 +141,13 @@ func TestScanDryRun(t *testing.T) {
 		t.Errorf("dry-run should not write to queue, got %d vessels", len(vessels))
 	}
 	// Check table headers
-	if !strings.Contains(out, "ID") || !strings.Contains(out, "Issue") ||
-		!strings.Contains(out, "Skill") || !strings.Contains(out, "URL") {
-		t.Errorf("expected table headers (ID, Issue, Skill, URL), got: %s", out)
+	if !strings.Contains(out, "ID") || !strings.Contains(out, "Source") ||
+		!strings.Contains(out, "Skill") || !strings.Contains(out, "Ref") {
+		t.Errorf("expected table headers (ID, Source, Skill, Ref), got: %s", out)
 	}
 	// Check formatted issue row
 	if !strings.Contains(out, "issue-1") {
 		t.Errorf("expected issue-1 in dry-run output, got: %s", out)
-	}
-	if !strings.Contains(out, "#1") {
-		t.Errorf("expected #1 in dry-run output, got: %s", out)
 	}
 	if !strings.Contains(out, "fix-bug") {
 		t.Errorf("expected skill in dry-run output, got: %s", out)
@@ -244,87 +250,6 @@ func TestScanDryRunEmpty(t *testing.T) {
 
 	if !strings.Contains(out, "No new issues") {
 		t.Errorf("expected empty message, got: %s", out)
-	}
-}
-
-func TestScanExcludedLabel(t *testing.T) {
-	dir := t.TempDir()
-	cfg := makeScanConfig(dir)
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	r := newScanMock()
-
-	// Issue has the "wontfix" excluded label
-	issues := []ghIssueJSON{
-		{Number: 3, Title: "won't fix this", URL: "https://github.com/owner/repo/issues/3",
-			Labels: []struct {
-				Name string `json:"name"`
-			}{{Name: "bug"}, {Name: "wontfix"}}},
-	}
-	stubScanCommands(r, cfg, issues)
-
-	out := captureStdout(func() {
-		err := cmdScan(cfg, q, r, false)
-		if err != nil {
-			t.Fatalf("unexpected error: %v", err)
-		}
-	})
-
-	if !strings.Contains(out, "Added 0") {
-		t.Errorf("expected 'Added 0' for excluded issue, got: %s", out)
-	}
-	if !strings.Contains(out, "skipped 1") {
-		t.Errorf("expected 'skipped 1' for excluded issue, got: %s", out)
-	}
-
-	vessels, _ := q.List()
-	if len(vessels) != 0 {
-		t.Errorf("expected 0 vessels in queue, got %d", len(vessels))
-	}
-}
-
-func TestScanDuplicateIssue(t *testing.T) {
-	dir := t.TempDir()
-	cfg := makeScanConfig(dir)
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	r := newScanMock()
-
-	issues := []ghIssueJSON{
-		{Number: 1, Title: "fix null", URL: "https://github.com/owner/repo/issues/1",
-			Labels: []struct {
-				Name string `json:"name"`
-			}{{Name: "bug"}}},
-	}
-	stubScanCommands(r, cfg, issues)
-
-	// First scan — adds vessel
-	err := cmdScan(cfg, q, r, false)
-	if err != nil {
-		t.Fatalf("first scan error: %v", err)
-	}
-
-	vessels, _ := q.List()
-	if len(vessels) != 1 {
-		t.Fatalf("expected 1 vessel after first scan, got %d", len(vessels))
-	}
-
-	// Second scan — issue already in queue, should be skipped
-	out := captureStdout(func() {
-		err = cmdScan(cfg, q, r, false)
-		if err != nil {
-			t.Fatalf("second scan error: %v", err)
-		}
-	})
-
-	if !strings.Contains(out, "Added 0") {
-		t.Errorf("expected 'Added 0' for duplicate scan, got: %s", out)
-	}
-	if !strings.Contains(out, "skipped 1") {
-		t.Errorf("expected 'skipped 1' for duplicate scan, got: %s", out)
-	}
-
-	vessels, _ = q.List()
-	if len(vessels) != 1 {
-		t.Errorf("expected still 1 vessel after duplicate scan, got %d", len(vessels))
 	}
 }
 

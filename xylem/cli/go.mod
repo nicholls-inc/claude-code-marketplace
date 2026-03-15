@@ -1,6 +1,6 @@
 module github.com/nicholls-inc/claude-code-marketplace/xylem/cli
 
-go 1.25.1
+go 1.24.7
 
 require (
 	github.com/gofrs/flock v0.13.0

@@ -11,6 +11,7 @@ import (
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/queue"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/runner"
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/source"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/worktree"
 )
 
@@ -37,6 +38,7 @@ func cmdDrain(cfg *config.Config, q *queue.Queue, wt *worktree.Manager, dryRun b
 
 	cmdRunner := &realCmdRunner{}
 	r := runner.New(cfg, q, wt, cmdRunner)
+	r.Sources = buildSourceMap(cfg, q, cmdRunner)
 	result, err := r.Drain(ctx)
 	if err != nil {
 		return &exitError{code: 2, err: fmt.Errorf("drain error: %w", err)}
@@ -48,6 +50,30 @@ func cmdDrain(cfg *config.Config, q *queue.Queue, wt *worktree.Manager, dryRun b
 	return nil
 }
 
+func buildSourceMap(cfg *config.Config, q *queue.Queue, cmdRunner source.CommandRunner) map[string]source.Source {
+	sources := make(map[string]source.Source)
+	for _, srcCfg := range cfg.Sources {
+		if srcCfg.Type == "github" {
+			tasks := make(map[string]source.GitHubTask, len(srcCfg.Tasks))
+			for name, t := range srcCfg.Tasks {
+				tasks[name] = source.GitHubTask{
+					Labels: t.Labels,
+					Skill:  t.Skill,
+				}
+			}
+			gh := &source.GitHub{
+				Repo:      srcCfg.Repo,
+				Tasks:     tasks,
+				Exclude:   srcCfg.Exclude,
+				Queue:     q,
+				CmdRunner: cmdRunner,
+			}
+			sources[gh.Name()] = gh
+		}
+	}
+	return sources
+}
+
 func dryRunDrain(cfg *config.Config, q *queue.Queue) error {
 	vessels, err := q.ListByState(queue.StatePending)
 	if err != nil {
@@ -57,11 +83,20 @@ func dryRunDrain(cfg *config.Config, q *queue.Queue) error {
 		fmt.Println("No pending vessels.")
 		return nil
 	}
-	fmt.Printf("%-12s  %-6s  %-20s  %s\n", "ID", "Issue", "Skill", "Command")
-	fmt.Printf("%-12s  %-6s  %-20s  %s\n", "----", "-----", "-----", "-------")
+	fmt.Printf("%-14s  %-14s  %-20s  %s\n", "ID", "Source", "Skill", "Command")
+	fmt.Printf("%-14s  %-14s  %-20s  %s\n", "----", "------", "-----", "-------")
 	for _, j := range vessels {
-		cmd := fmt.Sprintf("%s -p \"/%s %s\" --max-turns %d", cfg.Claude.Command, j.Skill, j.IssueURL, cfg.MaxTurns)
-		fmt.Printf("%-12s  #%-5d  %-20s  %s\n", j.ID, j.IssueNum, j.Skill, cmd)
+		skill := j.Skill
+		if skill == "" {
+			skill = "(prompt)"
+		}
+		var cmd string
+		if j.Prompt != "" {
+			cmd = fmt.Sprintf("%s -p %q --max-turns %d", cfg.Claude.Command, truncate(j.Prompt, 40), cfg.MaxTurns)
+		} else {
+			cmd = fmt.Sprintf("%s -p \"/%s %s\" --max-turns %d", cfg.Claude.Command, j.Skill, j.Ref, cfg.MaxTurns)
+		}
+		fmt.Printf("%-14s  %-14s  %-20s  %s\n", j.ID, j.Source, skill, cmd)
 	}
 	fmt.Printf("\n%d vessel(s) would be drained (dry-run — no sessions launched)\n", len(vessels))
 	return nil

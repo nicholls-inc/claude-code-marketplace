@@ -55,10 +55,10 @@ func cmdStatus(q *queue.Queue, jsonMode bool, stateFilter string) error {
 		return nil
 	}
 
-	fmt.Printf("%-14s  %-6s  %-20s  %-10s  %-12s  %s\n",
-		"ID", "Issue", "Skill", "State", "Started", "Duration")
-	fmt.Printf("%-14s  %-6s  %-20s  %-10s  %-12s  %s\n",
-		"----", "-----", "-----", "-----", "-------", "--------")
+	fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-12s  %s\n",
+		"ID", "Source", "Skill", "State", "Started", "Duration")
+	fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-12s  %s\n",
+		"----", "------", "-----", "-----", "-------", "--------")
 
 	counts := map[queue.VesselState]int{}
 	for _, j := range vessels {
@@ -73,8 +73,12 @@ func cmdStatus(q *queue.Queue, jsonMode bool, stateFilter string) error {
 			}
 			duration = end.Sub(*j.StartedAt).Round(time.Second).String()
 		}
-		fmt.Printf("%-14s  #%-5d  %-20s  %-10s  %-12s  %s\n",
-			j.ID, j.IssueNum, j.Skill, string(j.State), started, duration)
+		skill := j.Skill
+		if skill == "" {
+			skill = "(prompt)"
+		}
+		fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-12s  %s\n",
+			j.ID, j.Source, skill, string(j.State), started, duration)
 	}
 
 	fmt.Printf("\nSummary: %d pending, %d running, %d completed, %d failed\n",

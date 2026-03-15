@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"regexp"
 	"strings"
 	"sync"
 	"text/template"
@@ -13,6 +12,7 @@ import (
 
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/queue"
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/source"
 )
 
 // CommandRunner abstracts subprocess execution for testing.
@@ -39,6 +39,7 @@ type Runner struct {
 	Queue    *queue.Queue
 	Worktree WorktreeManager
 	Runner   CommandRunner
+	Sources  map[string]source.Source
 }
 
 // New creates a Runner.
@@ -101,19 +102,16 @@ wait:
 }
 
 func (r *Runner) runVessel(ctx context.Context, vessel queue.Vessel) string {
-	// Add in-progress label (best-effort)
-	r.Runner.RunOutput(ctx, "gh", "issue", "edit", //nolint:errcheck
-		fmt.Sprintf("%d", vessel.IssueNum),
-		"--repo", r.Config.Repo,
-		"--add-label", "in-progress")
+	// Look up source for this vessel
+	src := r.resolveSource(vessel.Source)
 
-	// Determine branch name
-	prefix := "feat"
-	if strings.Contains(strings.ToLower(vessel.Skill), "fix") {
-		prefix = "fix"
+	// Source-specific start hook (e.g., add in-progress label)
+	if err := src.OnStart(ctx, vessel); err != nil {
+		log.Printf("warn: source OnStart for %s: %v", vessel.ID, err)
 	}
-	slug := slugify(vessel.IssueURL)
-	branchName := fmt.Sprintf("%s/issue-%d-%s", prefix, vessel.IssueNum, slug)
+
+	// Source-specific branch naming
+	branchName := src.BranchName(vessel)
 
 	// Create worktree
 	worktreePath, err := r.Worktree.Create(ctx, branchName)
@@ -148,27 +146,53 @@ func (r *Runner) runVessel(ctx context.Context, vessel queue.Vessel) string {
 	return "completed"
 }
 
+func (r *Runner) resolveSource(name string) source.Source {
+	if r.Sources != nil {
+		if src, ok := r.Sources[name]; ok {
+			return src
+		}
+	}
+	return &source.Manual{}
+}
+
 // cmdVars holds template substitution values.
 type cmdVars struct {
 	Command  string
 	Skill    string
-	IssueURL string
+	Ref      string
+	Prompt   string
 	MaxTurns int
+	Meta     map[string]string
+	IssueURL string // backward-compat alias
 }
 
 // buildCommand renders the config template and returns (cmd, args).
 func buildCommand(cfg *config.Config, vessel *queue.Vessel) (string, []string, error) {
+	// Direct prompt mode: bypass template
+	if vessel.Prompt != "" {
+		args := []string{"-p", vessel.Prompt, "--max-turns", fmt.Sprintf("%d", cfg.MaxTurns)}
+		return cfg.Claude.Command, args, nil
+	}
+
 	tmpl, err := template.New("cmd").Parse(cfg.Claude.Template)
 	if err != nil {
 		return "", nil, fmt.Errorf("parse template: %w", err)
 	}
-	var buf bytes.Buffer
-	if err := tmpl.Execute(&buf, cmdVars{
+
+	vars := cmdVars{
 		Command:  cfg.Claude.Command,
 		Skill:    vessel.Skill,
-		IssueURL: vessel.IssueURL,
+		Ref:      vessel.Ref,
 		MaxTurns: cfg.MaxTurns,
-	}); err != nil {
+		Meta:     vessel.Meta,
+	}
+	// Backward compat: populate IssueURL for legacy templates
+	if vessel.Source == "github-issue" {
+		vars.IssueURL = vessel.Ref
+	}
+
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, vars); err != nil {
 		return "", nil, fmt.Errorf("execute template: %w", err)
 	}
 	parts := strings.Fields(buf.String())
@@ -176,27 +200,4 @@ func buildCommand(cfg *config.Config, vessel *queue.Vessel) (string, []string, e
 		return "", nil, fmt.Errorf("empty command from template")
 	}
 	return parts[0], parts[1:], nil
-}
-
-var nonAlphaNum = regexp.MustCompile(`[^a-z0-9]+`)
-
-// slugify produces a short kebab-case slug from a string (uses last path segment for URLs).
-func slugify(s string) string {
-	// For URLs, use the last segment (issue number already in branch name)
-	// Just return a short fixed slug so branch names stay clean
-	parts := strings.Split(strings.ToLower(s), "/")
-	src := parts[len(parts)-1]
-	if src == "" && len(parts) > 1 {
-		src = parts[len(parts)-2]
-	}
-	clean := nonAlphaNum.ReplaceAllString(src, "-")
-	clean = strings.Trim(clean, "-")
-	if len(clean) > 20 {
-		clean = clean[:20]
-		clean = strings.TrimRight(clean, "-")
-	}
-	if clean == "" {
-		clean = "task"
-	}
-	return clean
 }
