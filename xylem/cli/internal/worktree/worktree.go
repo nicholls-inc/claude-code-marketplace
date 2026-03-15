@@ -24,8 +24,9 @@ type WorktreeInfo struct {
 
 // Manager manages xylem git worktrees.
 type Manager struct {
-	RepoRoot string
-	Runner   CommandRunner
+	RepoRoot      string
+	Runner        CommandRunner
+	DefaultBranch string // if set, skip auto-detection
 }
 
 // New creates a Manager for the given repository root.
@@ -33,9 +34,14 @@ func New(repoRoot string, runner CommandRunner) *Manager {
 	return &Manager{RepoRoot: repoRoot, Runner: runner}
 }
 
-// DefaultBranch detects the repository's default branch dynamically.
-// It first tries `gh repo view`, then falls back to `git remote show origin`.
-func (m *Manager) DefaultBranch(ctx context.Context) (string, error) {
+// DetectDefaultBranch detects the repository's default branch.
+// If Manager.DefaultBranch is set, it returns that immediately (no network calls).
+// Otherwise it tries: gh repo view → git symbolic-ref → git remote show origin.
+func (m *Manager) DetectDefaultBranch(ctx context.Context) (string, error) {
+	if m.DefaultBranch != "" {
+		return m.DefaultBranch, nil
+	}
+
 	type ghResp struct {
 		DefaultBranchRef struct {
 			Name string `json:"name"`
@@ -49,7 +55,17 @@ func (m *Manager) DefaultBranch(ctx context.Context) (string, error) {
 		}
 	}
 
-	// Fallback: git remote show origin
+	// Fallback: local symbolic-ref (works offline when origin exists)
+	out, err = m.Runner.Run(ctx, "git", "symbolic-ref", "refs/remotes/origin/HEAD")
+	if err == nil {
+		ref := strings.TrimSpace(string(out))
+		// ref looks like "refs/remotes/origin/main"
+		if branch := strings.TrimPrefix(ref, "refs/remotes/origin/"); branch != ref && branch != "" {
+			return branch, nil
+		}
+	}
+
+	// Fallback: git remote show origin (requires network)
 	out, err = m.Runner.Run(ctx, "git", "remote", "show", "origin")
 	if err != nil {
 		return "", fmt.Errorf("detect default branch: %w", err)
@@ -69,19 +85,27 @@ func (m *Manager) DefaultBranch(ctx context.Context) (string, error) {
 // Create creates a git worktree at .claude/worktrees/<branchName> branched from origin/<defaultBranch>.
 // It also copies .claude/ config files (settings.json, settings.local.json, rules/) into the worktree.
 func (m *Manager) Create(ctx context.Context, branchName string) (string, error) {
-	defaultBranch, err := m.DefaultBranch(ctx)
+	defaultBranch, err := m.DetectDefaultBranch(ctx)
 	if err != nil {
 		return "", fmt.Errorf("create worktree: %w", err)
 	}
 
-	// Fetch the default branch
-	if _, err := m.Runner.Run(ctx, "git", "fetch", "origin", defaultBranch); err != nil {
-		return "", fmt.Errorf("git fetch origin %s: %w", defaultBranch, err)
+	// Check if origin remote exists
+	hasOrigin := m.hasRemote(ctx, "origin")
+
+	// Fetch the default branch (only if origin exists)
+	if hasOrigin {
+		if _, err := m.Runner.Run(ctx, "git", "fetch", "origin", defaultBranch); err != nil {
+			return "", fmt.Errorf("git fetch origin %s: %w", defaultBranch, err)
+		}
 	}
 
 	// Create the worktree
 	worktreePath := filepath.Join(".claude", "worktrees", branchName)
-	startPoint := "origin/" + defaultBranch
+	startPoint := defaultBranch
+	if hasOrigin {
+		startPoint = "origin/" + defaultBranch
+	}
 	if _, err := m.Runner.Run(ctx, "git", "worktree", "add", worktreePath, "-b", branchName, startPoint); err != nil {
 		return "", fmt.Errorf("git worktree add: %w", err)
 	}
@@ -92,6 +116,12 @@ func (m *Manager) Create(ctx context.Context, branchName string) (string, error)
 	}
 
 	return worktreePath, nil
+}
+
+// hasRemote checks whether a named remote exists (local-only, no network).
+func (m *Manager) hasRemote(ctx context.Context, name string) bool {
+	_, err := m.Runner.Run(ctx, "git", "remote", "get-url", name)
+	return err == nil
 }
 
 // copyClaudeConfig copies selected .claude/ files from the repo root into the worktree.

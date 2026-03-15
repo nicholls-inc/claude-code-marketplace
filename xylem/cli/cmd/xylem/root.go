@@ -50,10 +50,12 @@ func newRootCmd() *cobra.Command {
 			}
 
 			queueFile := filepath.Join(cfg.StateDir, "queue.jsonl")
+			wt := worktree.New(".", &realCmdRunner{})
+			wt.DefaultBranch = cfg.DefaultBranch
 			deps = &appDeps{
 				cfg: cfg,
 				q:   queue.New(queueFile),
-				wt:  worktree.New(".", &realCmdRunner{}),
+				wt:  wt,
 			}
 			return nil
 		},
