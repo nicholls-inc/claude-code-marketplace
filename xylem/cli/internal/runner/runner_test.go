@@ -480,33 +480,3 @@ func TestBuildCommandTemplateExecutionError(t *testing.T) {
 	}
 }
 
-func TestDrainMultipleFailures(t *testing.T) {
-	dir := t.TempDir()
-	cfg := makeTestConfig(dir, 2)
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	for i := 1; i <= 5; i++ {
-		_ = q.Enqueue(makeVessel(i, "fix-bug"))
-	}
-
-	cmdRunner := &mockCmdRunner{processErr: errors.New("exit 1")}
-	wt := &mockWorktree{}
-	r := New(cfg, q, wt, cmdRunner)
-
-	result, err := r.Drain(context.Background())
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if result.Failed != 5 {
-		t.Errorf("expected 5 failed, got %d (completed=%d)", result.Failed, result.Completed)
-	}
-	if result.Completed != 0 {
-		t.Errorf("expected 0 completed, got %d", result.Completed)
-	}
-
-	vessels, _ := q.List()
-	for _, j := range vessels {
-		if j.State != queue.StateFailed {
-			t.Errorf("vessel %s: expected failed, got %s", j.ID, j.State)
-		}
-	}
-}

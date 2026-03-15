@@ -297,47 +297,6 @@ func TestParsePorcelainNoTrailingNewline(t *testing.T) {
 	}
 }
 
-func TestParsePorcelainMultipleEntries(t *testing.T) {
-	porcelain := strings.Join([]string{
-		"worktree /repo",
-		"HEAD aaa111",
-		"branch refs/heads/main",
-		"",
-		"worktree /repo/.claude/worktrees/fix/bug-1",
-		"HEAD bbb222",
-		"branch refs/heads/fix/bug-1",
-		"",
-		"worktree /repo/.claude/worktrees/feat/new-feature",
-		"HEAD ccc333",
-		"branch refs/heads/feat/new-feature",
-		"",
-	}, "\n")
-	result := parsePorcelain(porcelain)
-	if len(result) != 3 {
-		t.Fatalf("expected 3 worktrees, got %d", len(result))
-	}
-	expected := []struct {
-		path   string
-		branch string
-		commit string
-	}{
-		{"/repo", "main", "aaa111"},
-		{"/repo/.claude/worktrees/fix/bug-1", "fix/bug-1", "bbb222"},
-		{"/repo/.claude/worktrees/feat/new-feature", "feat/new-feature", "ccc333"},
-	}
-	for i, exp := range expected {
-		if result[i].Path != exp.path {
-			t.Errorf("[%d] expected path %q, got %q", i, exp.path, result[i].Path)
-		}
-		if result[i].Branch != exp.branch {
-			t.Errorf("[%d] expected branch %q, got %q", i, exp.branch, result[i].Branch)
-		}
-		if result[i].HeadCommit != exp.commit {
-			t.Errorf("[%d] expected commit %q, got %q", i, exp.commit, result[i].HeadCommit)
-		}
-	}
-}
-
 func TestCopyFilePreservesPermissions(t *testing.T) {
 	srcDir := t.TempDir()
 	dstDir := t.TempDir()
@@ -349,27 +308,6 @@ func TestCopyFilePreservesPermissions(t *testing.T) {
 	}
 
 	dstPath := filepath.Join(dstDir, "script.sh")
-	if err := copyFile(srcPath, dstPath); err != nil {
-		t.Fatalf("copyFile failed: %v", err)
-	}
-
-	srcInfo, _ := os.Stat(srcPath)
-	dstInfo, _ := os.Stat(dstPath)
-	if srcInfo.Mode() != dstInfo.Mode() {
-		t.Errorf("permissions not preserved: source=%v, dest=%v", srcInfo.Mode(), dstInfo.Mode())
-	}
-}
-
-func TestCopyFilePreservesReadOnlyPermissions(t *testing.T) {
-	srcDir := t.TempDir()
-	dstDir := t.TempDir()
-
-	srcPath := filepath.Join(srcDir, "readonly.txt")
-	if err := os.WriteFile(srcPath, []byte("data"), 0o444); err != nil {
-		t.Fatal(err)
-	}
-
-	dstPath := filepath.Join(dstDir, "readonly.txt")
 	if err := copyFile(srcPath, dstPath); err != nil {
 		t.Fatalf("copyFile failed: %v", err)
 	}

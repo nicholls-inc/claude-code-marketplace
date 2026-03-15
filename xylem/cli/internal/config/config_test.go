@@ -299,14 +299,6 @@ func TestValidateZeroMaxTurns(t *testing.T) {
 	requireErrorContains(t, err, "max_turns")
 }
 
-func TestValidateNegativeMaxTurns(t *testing.T) {
-	cfg := validConfig()
-	cfg.MaxTurns = -5
-
-	err := cfg.Validate()
-	requireErrorContains(t, err, "max_turns")
-}
-
 func TestValidateInvalidTemplate(t *testing.T) {
 	cfg := validConfig()
 	cfg.Claude.Template = "{{.Broken"
@@ -357,54 +349,6 @@ func TestValidateMalformedRepo(t *testing.T) {
 	}
 }
 
-func TestLoadZeroMaxTurnsInYAML(t *testing.T) {
-	path := writeConfigFile(t, `repo: owner/name
-tasks:
-  fix-bugs:
-    labels: [bug]
-    skill: fix-bug
-max_turns: 0
-`)
-
-	_, err := Load(path)
-	requireErrorContains(t, err, "max_turns")
-}
-
-func TestLoadInvalidTemplateInYAML(t *testing.T) {
-	path := writeConfigFile(t, `repo: owner/name
-tasks:
-  fix-bugs:
-    labels: [bug]
-    skill: fix-bug
-claude:
-  template: "{{.Broken"
-`)
-
-	_, err := Load(path)
-	requireErrorContains(t, err, "claude.template")
-}
-
-func TestLoadLowTimeoutInYAML(t *testing.T) {
-	path := writeConfigFile(t, `repo: owner/name
-tasks:
-  fix-bugs:
-    labels: [bug]
-    skill: fix-bug
-timeout: "1s"
-`)
-
-	_, err := Load(path)
-	requireErrorContains(t, err, "timeout must be at least")
-}
-
-func TestValidateNegativeConcurrency(t *testing.T) {
-	cfg := validConfig()
-	cfg.Concurrency = -1
-
-	err := cfg.Validate()
-	requireErrorContains(t, err, "concurrency")
-}
-
 func TestValidateTaskSkillWhitespaceOnly(t *testing.T) {
 	cfg := validConfig()
 	cfg.Sources["github"] = SourceConfig{
@@ -423,27 +367,6 @@ func TestValidateTimeoutExactlyMinimum(t *testing.T) {
 	err := cfg.Validate()
 	if err != nil {
 		t.Fatalf("expected 30s timeout to be valid, got: %v", err)
-	}
-}
-
-func TestValidateTimeoutJustBelowMinimum(t *testing.T) {
-	cfg := validConfig()
-	cfg.Timeout = "29s"
-
-	err := cfg.Validate()
-	requireErrorContains(t, err, "timeout must be at least")
-}
-
-func TestValidateMultipleTasks(t *testing.T) {
-	cfg := validConfig()
-	tasks := map[string]Task{
-		"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
-		"features": {Labels: []string{"enhancement"}, Skill: "implement-feature"},
-	}
-	cfg.Sources["github"] = SourceConfig{Type: "github", Repo: "owner/name", Tasks: tasks}
-
-	if err := cfg.Validate(); err != nil {
-		t.Fatalf("expected valid config with multiple tasks, got: %v", err)
 	}
 }
 

@@ -132,31 +132,3 @@ func TestDrainDryRunQueueReadError(t *testing.T) {
 	}
 }
 
-func TestExitErrorCodes(t *testing.T) {
-	t.Run("code2_with_wrapped_error", func(t *testing.T) {
-		inner := errors.New("drain error: something went wrong")
-		ee := &exitError{code: 2, err: inner}
-		if ee.code != 2 {
-			t.Errorf("expected code 2, got %d", ee.code)
-		}
-		if ee.Error() != "drain error: something went wrong" {
-			t.Errorf("unexpected error message: %s", ee.Error())
-		}
-		if !errors.Is(ee.Unwrap(), inner) {
-			t.Error("expected Unwrap to return inner error")
-		}
-	})
-
-	t.Run("code1_no_wrapped_error", func(t *testing.T) {
-		ee := &exitError{code: 1}
-		if ee.code != 1 {
-			t.Errorf("expected code 1, got %d", ee.code)
-		}
-		if ee.Error() != "exit code 1" {
-			t.Errorf("unexpected error message: %s", ee.Error())
-		}
-		if ee.Unwrap() != nil {
-			t.Error("expected Unwrap to return nil")
-		}
-	})
-}

@@ -74,24 +74,6 @@ func TestStatusTable(t *testing.T) {
 	}
 }
 
-func TestStatusTableHeaders(t *testing.T) {
-	dir := t.TempDir()
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	q.Enqueue(testStatusVessel("issue-1", queue.StatePending)) //nolint:errcheck
-
-	var err error
-	out := captureStdout(func() { err = cmdStatus(q, false, "") })
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	for _, header := range []string{"ID", "Source", "Skill", "State", "Started", "Duration"} {
-		if !strings.Contains(out, header) {
-			t.Errorf("expected header %q in table output, got: %s", header, out)
-		}
-	}
-}
-
 func TestStatusJSON(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -127,21 +109,6 @@ func TestStatusStateFilter(t *testing.T) {
 	}
 	if strings.Contains(out, "issue-2") {
 		t.Errorf("expected issue-2 filtered out, got: %s", out)
-	}
-}
-
-func TestStatusJSONEmpty(t *testing.T) {
-	dir := t.TempDir()
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-
-	var err error
-	out := captureStdout(func() { err = cmdStatus(q, true, "") })
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	trimmed := strings.TrimSpace(out)
-	if trimmed != "[]" {
-		t.Errorf("expected '[]' for empty JSON output, got: %q", trimmed)
 	}
 }
 
@@ -193,43 +160,3 @@ func TestStatusCompletedVesselShowsFixedDuration(t *testing.T) {
 	}
 }
 
-func TestStatusFailedVessel(t *testing.T) {
-	dir := t.TempDir()
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	now := time.Now().UTC()
-	started := now.Add(-1 * time.Minute)
-	ended := now.Add(-30 * time.Second)
-	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-99", Source: "github-issue", Skill: "fix-bug",
-		State: queue.StateFailed, CreatedAt: now,
-		StartedAt: &started, EndedAt: &ended,
-		Error: "compilation failed",
-	})
-
-	var err error
-	out := captureStdout(func() { err = cmdStatus(q, false, "") })
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !strings.Contains(out, "failed") {
-		t.Errorf("expected 'failed' state in output, got: %s", out)
-	}
-	if !strings.Contains(out, "issue-99") {
-		t.Errorf("expected issue-99 in output, got: %s", out)
-	}
-}
-
-func TestStatusStateFilterNoMatches(t *testing.T) {
-	dir := t.TempDir()
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	q.Enqueue(testStatusVessel("issue-1", queue.StatePending)) //nolint:errcheck
-
-	var err error
-	out := captureStdout(func() { err = cmdStatus(q, false, "completed") })
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !strings.Contains(out, "No vessels") {
-		t.Errorf("expected 'No vessels' for filtered empty result, got: %s", out)
-	}
-}

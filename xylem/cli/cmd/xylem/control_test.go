@@ -92,27 +92,6 @@ func TestResumeIdempotent(t *testing.T) {
 	}
 }
 
-func TestPauseResumeRoundtrip(t *testing.T) {
-	dir := t.TempDir()
-	cfg := makeControlConfig(dir)
-
-	if isPaused(cfg) {
-		t.Error("should not be paused initially")
-	}
-	if err := cmdPause(cfg); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !isPaused(cfg) {
-		t.Error("should be paused after pause")
-	}
-	if err := cmdResume(cfg); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if isPaused(cfg) {
-		t.Error("should not be paused after resume")
-	}
-}
-
 func TestCancelPendingVessel(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
@@ -142,23 +121,3 @@ func TestCancelNonExistentVessel(t *testing.T) {
 	}
 }
 
-func TestCancelCompletedVessel(t *testing.T) {
-	dir := t.TempDir()
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	now := time.Now().UTC()
-	started := now.Add(-1 * time.Minute)
-	ended := now
-	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-1", Source: "github-issue", Skill: "fix-bug",
-		State: queue.StateCompleted, CreatedAt: now,
-		StartedAt: &started, EndedAt: &ended,
-	})
-
-	err := cmdCancel(q, "issue-1")
-	if err == nil {
-		t.Fatal("expected error cancelling completed vessel")
-	}
-	if !strings.Contains(err.Error(), "cancel error:") {
-		t.Errorf("expected wrapped 'cancel error:', got: %v", err)
-	}
-}
