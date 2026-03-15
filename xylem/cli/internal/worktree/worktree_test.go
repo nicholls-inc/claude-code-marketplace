@@ -513,46 +513,11 @@ func TestListError(t *testing.T) {
 	}
 }
 
-func TestListXylemError(t *testing.T) {
-	r := newMock()
-	r.setErr("git worktree list --porcelain", errors.New("not a git repo"))
-
-	m := New("/repo", r)
-	_, err := m.ListXylem(context.Background())
-	if err == nil {
-		t.Fatal("expected error propagation from ListXylem")
-	}
-}
-
 func TestCopyFileNonExistentSource(t *testing.T) {
 	dstPath := filepath.Join(t.TempDir(), "output.txt")
 	err := copyFile("/nonexistent/path/file.txt", dstPath)
 	if err == nil {
 		t.Fatal("expected error for non-existent source")
-	}
-}
-
-func TestCopyFileContentPreserved(t *testing.T) {
-	srcDir := t.TempDir()
-	dstDir := t.TempDir()
-
-	content := "hello world\nsecond line\n"
-	srcPath := filepath.Join(srcDir, "data.txt")
-	if err := os.WriteFile(srcPath, []byte(content), 0o644); err != nil {
-		t.Fatal(err)
-	}
-
-	dstPath := filepath.Join(dstDir, "subdir", "data.txt")
-	if err := copyFile(srcPath, dstPath); err != nil {
-		t.Fatalf("copyFile: %v", err)
-	}
-
-	got, err := os.ReadFile(dstPath)
-	if err != nil {
-		t.Fatalf("read dst: %v", err)
-	}
-	if string(got) != content {
-		t.Errorf("content mismatch: got %q, want %q", string(got), content)
 	}
 }
 

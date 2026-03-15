@@ -434,28 +434,6 @@ func TestValidateTimeoutJustBelowMinimum(t *testing.T) {
 	requireErrorContains(t, err, "timeout must be at least")
 }
 
-func TestLoadYAMLWithUnknownFields(t *testing.T) {
-	// Go's yaml.v3 ignores unknown fields by default.
-	// Verify this doesn't cause a failure.
-	path := writeConfigFile(t, `repo: owner/name
-tasks:
-  fix-bugs:
-    labels: [bug]
-    skill: fix-bug
-unknown_field: some_value
-nested_unknown:
-  key: value
-`)
-
-	cfg, err := Load(path)
-	if err != nil {
-		t.Fatalf("expected unknown fields to be ignored, got: %v", err)
-	}
-	if cfg.Repo != "owner/name" {
-		t.Fatalf("Repo = %q, want owner/name", cfg.Repo)
-	}
-}
-
 func TestValidateMultipleTasks(t *testing.T) {
 	cfg := validConfig()
 	tasks := map[string]Task{

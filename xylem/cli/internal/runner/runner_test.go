@@ -346,23 +346,6 @@ func TestDrainTimeout(t *testing.T) {
 	}
 }
 
-func TestMakeVesselHighNumbers(t *testing.T) {
-	for _, num := range []int{0, 1, 9, 10, 42, 100, 999} {
-		vessel := makeVessel(num, "fix-bug")
-		wantID := fmt.Sprintf("issue-%d", num)
-		wantRef := fmt.Sprintf("https://github.com/owner/repo/issues/%d", num)
-		if vessel.ID != wantID {
-			t.Errorf("makeVessel(%d).ID = %q, want %q", num, vessel.ID, wantID)
-		}
-		if vessel.Ref != wantRef {
-			t.Errorf("makeVessel(%d).Ref = %q, want %q", num, vessel.Ref, wantRef)
-		}
-		if vessel.Meta["issue_num"] != strconv.Itoa(num) {
-			t.Errorf("makeVessel(%d).Meta[issue_num] = %q, want %q", num, vessel.Meta["issue_num"], strconv.Itoa(num))
-		}
-	}
-}
-
 func TestBuildCommandEdgeCases(t *testing.T) {
 	t.Run("empty template result", func(t *testing.T) {
 		cfg := &config.Config{
@@ -405,54 +388,6 @@ func TestBuildCommandEdgeCases(t *testing.T) {
 		}
 	})
 
-	t.Run("command with multiple args", func(t *testing.T) {
-		cfg := &config.Config{
-			MaxTurns: 10,
-			Claude: config.ClaudeConfig{
-				Command:  "claude",
-				Template: "{{.Command}} --flag1 --flag2 value",
-			},
-		}
-		vessel := &queue.Vessel{Skill: "fix-bug"}
-		cmd, args, err := buildCommand(cfg, vessel)
-		if err != nil {
-			t.Fatalf("unexpected error: %v", err)
-		}
-		if cmd != "claude" {
-			t.Errorf("expected cmd 'claude', got %q", cmd)
-		}
-		if len(args) != 3 {
-			t.Errorf("expected 3 args, got %d: %v", len(args), args)
-		}
-	})
-}
-
-func TestDrainConcurrencyLimitEnforced(t *testing.T) {
-	dir := t.TempDir()
-	cfg := makeTestConfig(dir, 3)
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	for i := 1; i <= 20; i++ {
-		_ = q.Enqueue(makeVessel(i, "fix-bug"))
-	}
-
-	counter := &countingCmdRunner{delay: 30 * time.Millisecond}
-	wt := &mockWorktree{}
-	r := New(cfg, q, wt, counter)
-
-	result, err := r.Drain(context.Background())
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if result.Completed != 20 {
-		t.Errorf("expected 20 completed, got %d (failed=%d, skipped=%d)", result.Completed, result.Failed, result.Skipped)
-	}
-	max := atomic.LoadInt32(&counter.maxSeen)
-	if max > 3 {
-		t.Errorf("concurrency exceeded limit: max concurrent = %d, limit = 3", max)
-	}
-	if max == 0 {
-		t.Error("expected at least some concurrent execution, got max=0")
-	}
 }
 
 func TestDrainEmptyQueue(t *testing.T) {

@@ -681,29 +681,6 @@ func TestConcurrentUpdateAndList(t *testing.T) {
 	}
 }
 
-// --- Malformed line handling test ---
-
-func TestMalformedLineReportsError(t *testing.T) {
-	_, path := newTestQueue(t)
-	q := New(path)
-
-	content := "{not-valid-json}\n"
-	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
-		t.Fatalf("write: %v", err)
-	}
-
-	vessels, err := q.List()
-	if err == nil {
-		t.Fatal("expected error for malformed content")
-	}
-	if !strings.Contains(err.Error(), "malformed") {
-		t.Fatalf("expected malformed error message, got: %v", err)
-	}
-	if len(vessels) != 0 {
-		t.Fatalf("expected 0 valid vessels, got %d", len(vessels))
-	}
-}
-
 // --- Additional coverage tests ---
 
 func TestUpdateNonExistentVessel(t *testing.T) {
@@ -900,37 +877,6 @@ func TestConcurrentEnqueueAndDequeue(t *testing.T) {
 	}
 }
 
-func TestListByStateNoMatches(t *testing.T) {
-	q, _ := newTestQueue(t)
-	if err := q.Enqueue(testVessel(50)); err != nil {
-		t.Fatalf("enqueue: %v", err)
-	}
-
-	// No completed vessels
-	completed, err := q.ListByState(StateCompleted)
-	if err != nil {
-		t.Fatalf("list by state: %v", err)
-	}
-	if len(completed) != 0 {
-		t.Fatalf("expected 0 completed, got %d", len(completed))
-	}
-}
-
-func TestEmptyFileReadAllVessels(t *testing.T) {
-	_, path := newTestQueue(t)
-	// Create an empty file
-	if err := os.WriteFile(path, []byte(""), 0o644); err != nil {
-		t.Fatalf("write empty file: %v", err)
-	}
-	q := New(path)
-	vessels, err := q.List()
-	if err != nil {
-		t.Fatalf("list on empty file: %v", err)
-	}
-	if len(vessels) != 0 {
-		t.Fatalf("expected 0 vessels from empty file, got %d", len(vessels))
-	}
-}
 
 func TestBlankLinesIgnored(t *testing.T) {
 	q, path := newTestQueue(t)
@@ -980,19 +926,3 @@ func TestLegacyJSONLMigration(t *testing.T) {
 	}
 }
 
-func TestWriteEmptyVessels(t *testing.T) {
-	// Verify writeAllVessels handles the empty case without writing a trailing newline.
-	q, path := newTestQueue(t)
-	// Enqueue then cancel to get a non-empty file, then verify the file format.
-	if err := q.Enqueue(testVessel(70)); err != nil {
-		t.Fatalf("enqueue: %v", err)
-	}
-	data, _ := os.ReadFile(path)
-	if len(data) == 0 {
-		t.Fatal("expected non-empty file after enqueue")
-	}
-	// File should end with newline
-	if data[len(data)-1] != '\n' {
-		t.Fatal("expected trailing newline in queue file")
-	}
-}

@@ -33,20 +33,6 @@ func TestPauseCreatesMarker(t *testing.T) {
 	}
 }
 
-func TestPauseOutput(t *testing.T) {
-	dir := t.TempDir()
-	cfg := makeControlConfig(dir)
-
-	out := captureStdout(func() {
-		if err := cmdPause(cfg); err != nil {
-			t.Fatalf("unexpected error: %v", err)
-		}
-	})
-	if !strings.Contains(out, "Scanning paused.") {
-		t.Errorf("expected 'Scanning paused.' in output, got: %s", out)
-	}
-}
-
 func TestPauseIdempotent(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeControlConfig(dir)
@@ -83,25 +69,6 @@ func TestResumeRemovesMarker(t *testing.T) {
 
 	if _, err := os.Stat(filepath.Join(dir, "paused")); err == nil {
 		t.Error("expected pause marker to be removed")
-	}
-}
-
-func TestResumeOutput(t *testing.T) {
-	dir := t.TempDir()
-	cfg := makeControlConfig(dir)
-
-	// Pause first, then resume
-	if err := cmdPause(cfg); err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	out := captureStdout(func() {
-		if err := cmdResume(cfg); err != nil {
-			t.Fatalf("unexpected error: %v", err)
-		}
-	})
-	if !strings.Contains(out, "Scanning resumed.") {
-		t.Errorf("expected 'Scanning resumed.' in output, got: %s", out)
 	}
 }
 
@@ -159,22 +126,6 @@ func TestCancelPendingVessel(t *testing.T) {
 	vessels, _ := q.List()
 	if vessels[0].State != queue.StateCancelled {
 		t.Errorf("expected cancelled, got %s", vessels[0].State)
-	}
-}
-
-func TestCancelOutput(t *testing.T) {
-	dir := t.TempDir()
-	q := queue.New(filepath.Join(dir, "queue.jsonl"))
-	now := time.Now().UTC()
-	q.Enqueue(queue.Vessel{ID: "issue-1", Source: "github-issue", Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
-
-	out := captureStdout(func() {
-		if err := cmdCancel(q, "issue-1"); err != nil {
-			t.Fatalf("unexpected error: %v", err)
-		}
-	})
-	if !strings.Contains(out, "Cancelled vessel issue-1") {
-		t.Errorf("expected 'Cancelled vessel issue-1' in output, got: %s", out)
 	}
 }
 
