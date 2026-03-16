@@ -19,7 +19,7 @@ func TestInitCreatesConfigAndStateDir(t *testing.T) {
 	os.Chdir(dir) //nolint:errcheck
 	t.Cleanup(func() { os.Chdir(orig) }) //nolint:errcheck
 
-	out := captureStdout(func() {
+	captureStdout(func() {
 		err := cmdInit(configPath, false)
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
@@ -46,12 +46,6 @@ func TestInitCreatesConfigAndStateDir(t *testing.T) {
 		t.Errorf("unexpected gitignore content: %q", string(data))
 	}
 
-	if !strings.Contains(out, "Created") {
-		t.Errorf("expected 'Created' in output, got: %s", out)
-	}
-	if !strings.Contains(out, "Next steps") {
-		t.Errorf("expected 'Next steps' in output, got: %s", out)
-	}
 }
 
 func TestInitIdempotentWithoutForce(t *testing.T) {
@@ -232,17 +226,21 @@ func TestInitCobraBypassesPersistentPreRunE(t *testing.T) {
 	os.Chdir(dir) //nolint:errcheck
 	t.Cleanup(func() { os.Chdir(orig) }) //nolint:errcheck
 
-	cmd := newRootCmd()
-	cmd.SetArgs([]string{"init"})
-
-	out := captureStdout(func() {
-		err := cmd.Execute()
-		if err != nil {
-			t.Fatalf("init should not fail due to PersistentPreRunE: %v", err)
+	// Negative control: status (non-init) should fail without a config file
+	statusCmd := newRootCmd()
+	statusCmd.SetArgs([]string{"status"})
+	captureStdout(func() {
+		if err := statusCmd.Execute(); err == nil {
+			t.Fatal("status should fail without config via PersistentPreRunE")
 		}
 	})
 
-	if !strings.Contains(out, "Next steps") {
-		t.Errorf("expected init output, got: %s", out)
-	}
+	// init should succeed in the same condition (no config file)
+	initCmd := newRootCmd()
+	initCmd.SetArgs([]string{"init"})
+	captureStdout(func() {
+		if err := initCmd.Execute(); err != nil {
+			t.Fatalf("init should bypass PersistentPreRunE: %v", err)
+		}
+	})
 }

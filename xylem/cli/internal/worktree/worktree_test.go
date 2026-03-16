@@ -352,6 +352,7 @@ func TestDefaultBranchBothFail(t *testing.T) {
 	r.setErr("gh repo view --json defaultBranchRef", errors.New("gh not available"))
 	r.setErr("git symbolic-ref refs/remotes/origin/HEAD", errors.New("not set"))
 	r.setErr("git remote show origin", errors.New("network error"))
+	r.setErr("git symbolic-ref HEAD", errors.New("not a git repo"))
 
 	m := New("/repo", r)
 	_, err := m.DetectDefaultBranch(context.Background())
