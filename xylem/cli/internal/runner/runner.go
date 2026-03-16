@@ -116,7 +116,7 @@ func (r *Runner) runVessel(ctx context.Context, vessel queue.Vessel) string {
 	// Create worktree
 	worktreePath, err := r.Worktree.Create(ctx, branchName)
 	if err != nil {
-		if updateErr := r.Queue.Update(vessel.ID, queue.StateFailed, fmt.Sprintf("create worktree: %v", err)); updateErr != nil {
+		if updateErr := r.Queue.Update(vessel.ID, queue.StateFailed, err.Error()); updateErr != nil {
 			log.Printf("warn: failed to update vessel %s state: %v", vessel.ID, updateErr)
 		}
 		return "failed"

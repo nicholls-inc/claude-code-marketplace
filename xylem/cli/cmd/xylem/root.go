@@ -28,6 +28,10 @@ func newRootCmd() *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			if cmd.Name() == "init" {
+				return nil
+			}
+
 			if _, err := exec.LookPath("git"); err != nil {
 				return fmt.Errorf("error: git not found on PATH")
 			}
@@ -46,10 +50,12 @@ func newRootCmd() *cobra.Command {
 			}
 
 			queueFile := filepath.Join(cfg.StateDir, "queue.jsonl")
+			wt := worktree.New(".", &realCmdRunner{})
+			wt.DefaultBranch = cfg.DefaultBranch
 			deps = &appDeps{
 				cfg: cfg,
 				q:   queue.New(queueFile),
-				wt:  worktree.New(".", &realCmdRunner{}),
+				wt:  wt,
 			}
 			return nil
 		},
@@ -61,6 +67,7 @@ func newRootCmd() *cobra.Command {
 	viper.AutomaticEnv()
 
 	cmd.AddCommand(
+		newInitCmd(),
 		newScanCmd(),
 		newDrainCmd(),
 		newEnqueueCmd(),
