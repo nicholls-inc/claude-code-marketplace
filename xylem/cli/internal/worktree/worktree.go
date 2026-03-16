@@ -65,6 +65,15 @@ func (m *Manager) DetectDefaultBranch(ctx context.Context) (string, error) {
 		}
 	}
 
+	// Fallback: local HEAD (works without any remote)
+	out, err = m.Runner.Run(ctx, "git", "symbolic-ref", "HEAD")
+	if err == nil {
+		ref := strings.TrimSpace(string(out))
+		if branch := strings.TrimPrefix(ref, "refs/heads/"); branch != ref && branch != "" {
+			return branch, nil
+		}
+	}
+
 	// Fallback: git remote show origin (requires network)
 	out, err = m.Runner.Run(ctx, "git", "remote", "show", "origin")
 	if err != nil {

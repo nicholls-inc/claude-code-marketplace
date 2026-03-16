@@ -602,9 +602,30 @@ func TestDetectDefaultBranchSymbolicRef(t *testing.T) {
 	}
 }
 
+func TestDetectDefaultBranchLocalHEAD(t *testing.T) {
+	r := newMock()
+	r.setErr("gh repo view --json defaultBranchRef", errors.New("no gh"))
+	r.setErr("git symbolic-ref refs/remotes/origin/HEAD", errors.New("not set"))
+	r.setOutput("git symbolic-ref HEAD", []byte("refs/heads/main\n"))
+
+	m := New("/repo", r)
+	branch, err := m.DetectDefaultBranch(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if branch != "main" {
+		t.Errorf("expected 'main', got %q", branch)
+	}
+	// Should NOT call git remote show origin
+	if r.called("git", "remote", "show", "origin") {
+		t.Error("should not call git remote show origin when local HEAD succeeds")
+	}
+}
+
 func TestCreateNoOriginRemote(t *testing.T) {
 	r := newMock()
-	r.setOutput("gh repo view --json defaultBranchRef", []byte(`{"defaultBranchRef":{"name":"main"}}`))
+	r.setErr("gh repo view --json defaultBranchRef", errors.New("no gh"))
+	r.setOutput("git symbolic-ref HEAD", []byte("refs/heads/main\n"))
 	// No origin remote
 	r.setErr("git remote get-url origin", errors.New("fatal: No such remote 'origin'"))
 
