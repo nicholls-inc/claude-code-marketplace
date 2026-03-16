@@ -172,6 +172,47 @@ func TestBuildCommandDirectPrompt(t *testing.T) {
 	}
 }
 
+func TestBuildCommandDirectPromptWithRef(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command:  "claude",
+			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+		},
+	}
+	vessel := &queue.Vessel{
+		Source: "manual",
+		Prompt: "Fix the null pointer in handler.go",
+		Ref:    "https://github.com/owner/repo/issues/99",
+	}
+	cmd, args, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if cmd != "claude" {
+		t.Errorf("expected cmd 'claude', got %q", cmd)
+	}
+	if len(args) != 4 {
+		t.Fatalf("expected 4 args, got %d: %v", len(args), args)
+	}
+	if args[0] != "-p" {
+		t.Errorf("expected -p flag, got %q", args[0])
+	}
+	// The prompt should contain the ref prepended
+	if !strings.Contains(args[1], "Ref: https://github.com/owner/repo/issues/99") {
+		t.Errorf("expected ref URL in prompt, got %q", args[1])
+	}
+	if !strings.Contains(args[1], "Fix the null pointer in handler.go") {
+		t.Errorf("expected original prompt text in prompt, got %q", args[1])
+	}
+	// Ref should come before the prompt text
+	refIdx := strings.Index(args[1], "Ref:")
+	promptIdx := strings.Index(args[1], "Fix the null pointer")
+	if refIdx >= promptIdx {
+		t.Errorf("expected ref to come before prompt, ref at %d, prompt at %d", refIdx, promptIdx)
+	}
+}
+
 func TestBuildCommandBackwardCompatIssueURL(t *testing.T) {
 	cfg := &config.Config{
 		MaxTurns: 50,
