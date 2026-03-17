@@ -170,7 +170,11 @@ type cmdVars struct {
 func buildCommand(cfg *config.Config, vessel *queue.Vessel) (string, []string, error) {
 	// Direct prompt mode: bypass template
 	if vessel.Prompt != "" {
-		args := []string{"-p", vessel.Prompt, "--max-turns", fmt.Sprintf("%d", cfg.MaxTurns)}
+		prompt := vessel.Prompt
+		if vessel.Ref != "" {
+			prompt = fmt.Sprintf("Ref: %s\n\n%s", vessel.Ref, vessel.Prompt)
+		}
+		args := []string{"-p", prompt, "--max-turns", fmt.Sprintf("%d", cfg.MaxTurns)}
 		return cfg.Claude.Command, args, nil
 	}
 
