@@ -100,6 +100,10 @@ state_dir: ".xylem"
 claude:
   command: "claude"
   template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
+  # allowed_tools:
+  #   - "Bash(gh issue view *)"
+  #   - "Bash(gh pr create *)"
+  #   - "WebFetch"
 `, repo, repo)
 
 	if err := os.WriteFile(configPath, []byte(content), 0o644); err != nil {

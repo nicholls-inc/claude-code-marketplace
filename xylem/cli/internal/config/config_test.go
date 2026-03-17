@@ -381,3 +381,103 @@ func TestValidateMultipleTasksOneInvalid(t *testing.T) {
 	err := cfg.Validate()
 	requireErrorContains(t, err, "labels")
 }
+
+func TestValidateAllowedToolsEmpty(t *testing.T) {
+	cfg := validConfig()
+	cfg.Claude.AllowedTools = []string{}
+
+	err := cfg.Validate()
+	if err != nil {
+		t.Fatalf("expected empty allowed_tools to be valid, got: %v", err)
+	}
+}
+
+func TestValidateAllowedToolsValid(t *testing.T) {
+	cfg := validConfig()
+	cfg.Claude.AllowedTools = []string{"Bash(gh issue view *)", "WebFetch"}
+
+	err := cfg.Validate()
+	if err != nil {
+		t.Fatalf("expected valid allowed_tools, got: %v", err)
+	}
+}
+
+func TestValidateAllowedToolsEmptyString(t *testing.T) {
+	cfg := validConfig()
+	cfg.Claude.AllowedTools = []string{"WebFetch", ""}
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "allowed_tools[1] must not be empty")
+}
+
+func TestValidateAllowedToolsWhitespaceOnly(t *testing.T) {
+	cfg := validConfig()
+	cfg.Claude.AllowedTools = []string{"  "}
+
+	err := cfg.Validate()
+	requireErrorContains(t, err, "allowed_tools[0] must not be empty")
+}
+
+func TestLoadAllowedToolsFromYAML(t *testing.T) {
+	path := writeConfigFile(t, `sources:
+  github:
+    type: github
+    repo: owner/name
+    tasks:
+      fix-bugs:
+        labels: [bug]
+        skill: fix-bug
+concurrency: 2
+max_turns: 50
+timeout: "30m"
+claude:
+  command: "claude"
+  template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
+  allowed_tools:
+    - "Bash(gh issue view *)"
+    - "Bash(gh pr create *)"
+    - "WebFetch"
+`)
+
+	cfg, err := Load(path)
+	if err != nil {
+		t.Fatalf("Load returned error: %v", err)
+	}
+
+	if len(cfg.Claude.AllowedTools) != 3 {
+		t.Fatalf("expected 3 allowed tools, got %d: %v", len(cfg.Claude.AllowedTools), cfg.Claude.AllowedTools)
+	}
+	want := []string{"Bash(gh issue view *)", "Bash(gh pr create *)", "WebFetch"}
+	for i, tool := range cfg.Claude.AllowedTools {
+		if tool != want[i] {
+			t.Errorf("AllowedTools[%d] = %q, want %q", i, tool, want[i])
+		}
+	}
+}
+
+func TestLoadAllowedToolsAbsent(t *testing.T) {
+	path := writeConfigFile(t, `sources:
+  github:
+    type: github
+    repo: owner/name
+    tasks:
+      fix-bugs:
+        labels: [bug]
+        skill: fix-bug
+concurrency: 2
+max_turns: 50
+timeout: "30m"
+claude:
+  command: "claude"
+  template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
+`)
+
+	cfg, err := Load(path)
+	if err != nil {
+		t.Fatalf("Load returned error: %v", err)
+	}
+
+	if len(cfg.Claude.AllowedTools) != 0 {
+		t.Fatalf("expected no allowed tools when absent, got %d: %v", len(cfg.Claude.AllowedTools), cfg.Claude.AllowedTools)
+	}
+}
