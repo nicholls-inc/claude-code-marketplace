@@ -175,6 +175,9 @@ func buildCommand(cfg *config.Config, vessel *queue.Vessel) (string, []string, e
 			prompt = fmt.Sprintf("Ref: %s\n\n%s", vessel.Ref, vessel.Prompt)
 		}
 		args := []string{"-p", prompt, "--max-turns", fmt.Sprintf("%d", cfg.MaxTurns)}
+		for _, tool := range cfg.Claude.AllowedTools {
+			args = append(args, "--allowedTools", tool)
+		}
 		return cfg.Claude.Command, args, nil
 	}
 
@@ -203,5 +206,9 @@ func buildCommand(cfg *config.Config, vessel *queue.Vessel) (string, []string, e
 	if len(parts) == 0 {
 		return "", nil, fmt.Errorf("empty command from template")
 	}
-	return parts[0], parts[1:], nil
+	args := parts[1:]
+	for _, tool := range cfg.Claude.AllowedTools {
+		args = append(args, "--allowedTools", tool)
+	}
+	return parts[0], args, nil
 }

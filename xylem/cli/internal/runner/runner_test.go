@@ -505,6 +505,171 @@ func (tw *trackingWorktree) Create(_ context.Context, branchName string) (string
 	return ".claude/worktrees/" + branchName, nil
 }
 
+func TestBuildCommandAllowedToolsNone(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command:  "claude",
+			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+		},
+	}
+	vessel := &queue.Vessel{
+		Source: "github-issue",
+		Skill:  "fix-bug",
+		Ref:    "https://github.com/owner/repo/issues/42",
+	}
+	_, args, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	for _, arg := range args {
+		if arg == "--allowedTools" {
+			t.Error("expected no --allowedTools flag when AllowedTools is empty")
+		}
+	}
+}
+
+func TestBuildCommandAllowedToolsOne(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command:      "claude",
+			Template:     "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+			AllowedTools: []string{"WebFetch"},
+		},
+	}
+	vessel := &queue.Vessel{
+		Source: "github-issue",
+		Skill:  "fix-bug",
+		Ref:    "https://github.com/owner/repo/issues/42",
+	}
+	_, args, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	// Count --allowedTools flags
+	count := 0
+	for i, arg := range args {
+		if arg == "--allowedTools" {
+			count++
+			if i+1 >= len(args) {
+				t.Fatal("--allowedTools at end of args with no value")
+			}
+			if args[i+1] != "WebFetch" {
+				t.Errorf("expected value %q after --allowedTools, got %q", "WebFetch", args[i+1])
+			}
+		}
+	}
+	if count != 1 {
+		t.Errorf("expected 1 --allowedTools flag, got %d in args: %v", count, args)
+	}
+}
+
+func TestBuildCommandAllowedToolsMultiple(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command:      "claude",
+			Template:     "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+			AllowedTools: []string{"Bash(gh issue view *)", "Bash(gh pr create *)", "WebFetch"},
+		},
+	}
+	vessel := &queue.Vessel{
+		Source: "github-issue",
+		Skill:  "fix-bug",
+		Ref:    "https://github.com/owner/repo/issues/42",
+	}
+	_, args, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Count --allowedTools flags
+	count := 0
+	for i, arg := range args {
+		if arg == "--allowedTools" {
+			count++
+			if i+1 >= len(args) {
+				t.Fatal("--allowedTools at end of args with no value")
+			}
+		}
+	}
+	if count != 3 {
+		t.Errorf("expected 3 --allowedTools flags, got %d in args: %v", count, args)
+	}
+
+	// Verify each tool appears as a value after --allowedTools
+	wantTools := []string{"Bash(gh issue view *)", "Bash(gh pr create *)", "WebFetch"}
+	toolIdx := 0
+	for i, arg := range args {
+		if arg == "--allowedTools" && i+1 < len(args) {
+			if args[i+1] != wantTools[toolIdx] {
+				t.Errorf("expected tool %q at position %d, got %q", wantTools[toolIdx], toolIdx, args[i+1])
+			}
+			toolIdx++
+		}
+	}
+}
+
+func TestBuildCommandAllowedToolsDirectPrompt(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command:      "claude",
+			Template:     "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+			AllowedTools: []string{"Bash(gh issue view *)", "WebFetch"},
+		},
+	}
+	vessel := &queue.Vessel{
+		Source: "manual",
+		Prompt: "Fix the null pointer in handler.go",
+	}
+	cmd, args, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if cmd != "claude" {
+		t.Errorf("expected cmd 'claude', got %q", cmd)
+	}
+
+	// Should have: -p, prompt, --max-turns, 50, --allowedTools, tool1, --allowedTools, tool2
+	expectedLen := 8
+	if len(args) != expectedLen {
+		t.Fatalf("expected %d args, got %d: %v", expectedLen, len(args), args)
+	}
+
+	// Verify the --allowedTools flags come after --max-turns
+	if args[4] != "--allowedTools" || args[5] != "Bash(gh issue view *)" {
+		t.Errorf("expected first allowed tool, got args[4:6]=%v", args[4:6])
+	}
+	if args[6] != "--allowedTools" || args[7] != "WebFetch" {
+		t.Errorf("expected second allowed tool, got args[6:8]=%v", args[6:8])
+	}
+}
+
+func TestBuildCommandAllowedToolsDirectPromptNone(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command:  "claude",
+			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+			// No AllowedTools
+		},
+	}
+	vessel := &queue.Vessel{
+		Source: "manual",
+		Prompt: "Fix the null pointer in handler.go",
+	}
+	_, args, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	// Should have exactly: -p, prompt, --max-turns, 50
+	if len(args) != 4 {
+		t.Fatalf("expected 4 args (no --allowedTools), got %d: %v", len(args), args)
+	}
+}
+
 func TestBuildCommandTemplateExecutionError(t *testing.T) {
 	cfg := &config.Config{
 		Claude: config.ClaudeConfig{

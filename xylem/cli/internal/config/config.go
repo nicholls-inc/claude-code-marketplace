@@ -43,8 +43,9 @@ type Task struct {
 }
 
 type ClaudeConfig struct {
-	Command  string `yaml:"command"`
-	Template string `yaml:"template"`
+	Command      string   `yaml:"command"`
+	Template     string   `yaml:"template"`
+	AllowedTools []string `yaml:"allowed_tools,omitempty"`
 }
 
 func Load(path string) (*Config, error) {
@@ -116,6 +117,12 @@ func (c *Config) Validate() error {
 
 	if _, err := template.New("cfg").Parse(c.Claude.Template); err != nil {
 		return fmt.Errorf("claude.template is not a valid Go template: %w", err)
+	}
+
+	for i, tool := range c.Claude.AllowedTools {
+		if strings.TrimSpace(tool) == "" {
+			return fmt.Errorf("claude.allowed_tools[%d] must not be empty", i)
+		}
 	}
 
 	// Validate sources
