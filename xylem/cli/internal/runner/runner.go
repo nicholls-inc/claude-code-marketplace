@@ -1,13 +1,11 @@
 package runner
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"log"
 	"strings"
 	"sync"
-	"text/template"
 	"time"
 
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
@@ -155,60 +153,26 @@ func (r *Runner) resolveSource(name string) source.Source {
 	return &source.Manual{}
 }
 
-// cmdVars holds template substitution values.
-type cmdVars struct {
-	Command  string
-	Skill    string
-	Ref      string
-	Prompt   string
-	MaxTurns int
-	Meta     map[string]string
-	IssueURL string // backward-compat alias
-}
-
-// buildCommand renders the config template and returns (cmd, args).
+// buildCommand constructs the claude command and args from config and vessel.
 func buildCommand(cfg *config.Config, vessel *queue.Vessel) (string, []string, error) {
-	// Direct prompt mode: bypass template
+	// Direct prompt mode
 	if vessel.Prompt != "" {
 		prompt := vessel.Prompt
 		if vessel.Ref != "" {
 			prompt = fmt.Sprintf("Ref: %s\n\n%s", vessel.Ref, vessel.Prompt)
 		}
 		args := []string{"-p", prompt, "--max-turns", fmt.Sprintf("%d", cfg.MaxTurns)}
-		for _, tool := range cfg.Claude.AllowedTools {
-			args = append(args, "--allowedTools", tool)
+		if cfg.Claude.Flags != "" {
+			args = append(args, strings.Fields(cfg.Claude.Flags)...)
 		}
 		return cfg.Claude.Command, args, nil
 	}
 
-	tmpl, err := template.New("cmd").Parse(cfg.Claude.Template)
-	if err != nil {
-		return "", nil, fmt.Errorf("parse template: %w", err)
+	// Skill-based mode: build command from flags (v2 phase-based execution will replace this)
+	prompt := fmt.Sprintf("/%s %s", vessel.Skill, vessel.Ref)
+	args := []string{"-p", prompt, "--max-turns", fmt.Sprintf("%d", cfg.MaxTurns)}
+	if cfg.Claude.Flags != "" {
+		args = append(args, strings.Fields(cfg.Claude.Flags)...)
 	}
-
-	vars := cmdVars{
-		Command:  cfg.Claude.Command,
-		Skill:    vessel.Skill,
-		Ref:      vessel.Ref,
-		MaxTurns: cfg.MaxTurns,
-		Meta:     vessel.Meta,
-	}
-	// Backward compat: populate IssueURL for legacy templates
-	if vessel.Source == "github-issue" {
-		vars.IssueURL = vessel.Ref
-	}
-
-	var buf bytes.Buffer
-	if err := tmpl.Execute(&buf, vars); err != nil {
-		return "", nil, fmt.Errorf("execute template: %w", err)
-	}
-	parts := strings.Fields(buf.String())
-	if len(parts) == 0 {
-		return "", nil, fmt.Errorf("empty command from template")
-	}
-	args := parts[1:]
-	for _, tool := range cfg.Claude.AllowedTools {
-		args = append(args, "--allowedTools", tool)
-	}
-	return parts[0], args, nil
+	return cfg.Claude.Command, args, nil
 }
