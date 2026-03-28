@@ -72,6 +72,9 @@ func TestStatusTable(t *testing.T) {
 	if !strings.Contains(out, "Summary:") {
 		t.Errorf("expected summary line, got: %s", out)
 	}
+	if !strings.Contains(out, "Info") {
+		t.Errorf("expected Info column header, got: %s", out)
+	}
 }
 
 func TestStatusJSON(t *testing.T) {
@@ -160,3 +163,192 @@ func TestStatusCompletedVesselShowsFixedDuration(t *testing.T) {
 	}
 }
 
+func TestStatusShowsWaitingVessels(t *testing.T) {
+	dir := t.TempDir()
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	now := time.Now().UTC()
+	started := now.Add(-30 * time.Minute)
+	waitingSince := now.Add(-10 * time.Minute)
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "issue-99", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateWaiting, CreatedAt: now,
+		StartedAt: &started, WaitingFor: "plan-approved",
+		WaitingSince: &waitingSince,
+	})
+
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !strings.Contains(out, "issue-99") {
+		t.Errorf("expected issue-99 in output, got: %s", out)
+	}
+	if !strings.Contains(out, "waiting") {
+		t.Errorf("expected 'waiting' state in output, got: %s", out)
+	}
+	if !strings.Contains(out, "plan-approved") {
+		t.Errorf("expected 'plan-approved' label in info column, got: %s", out)
+	}
+	if !strings.Contains(out, "waiting for") {
+		t.Errorf("expected 'waiting for' info text, got: %s", out)
+	}
+}
+
+func TestStatusShowsTimedOutVessels(t *testing.T) {
+	dir := t.TempDir()
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	now := time.Now().UTC()
+	started := now.Add(-1 * time.Hour)
+	ended := now.Add(-30 * time.Minute)
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "issue-77", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateTimedOut, CreatedAt: now,
+		StartedAt: &started, EndedAt: &ended,
+	})
+
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !strings.Contains(out, "issue-77") {
+		t.Errorf("expected issue-77 in output, got: %s", out)
+	}
+	if !strings.Contains(out, "timed_out") {
+		t.Errorf("expected 'timed_out' state in output, got: %s", out)
+	}
+}
+
+func TestStatusFilterByWaiting(t *testing.T) {
+	dir := t.TempDir()
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	now := time.Now().UTC()
+	waitingSince := now.Add(-5 * time.Minute)
+	started := now.Add(-10 * time.Minute)
+
+	q.Enqueue(testStatusVessel("issue-1", queue.StatePending)) //nolint:errcheck
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "issue-2", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateWaiting, CreatedAt: now,
+		StartedAt: &started, WaitingFor: "review",
+		WaitingSince: &waitingSince,
+	})
+
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "waiting") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !strings.Contains(out, "issue-2") {
+		t.Errorf("expected issue-2 in filtered output, got: %s", out)
+	}
+	if strings.Contains(out, "issue-1") {
+		t.Errorf("expected issue-1 filtered out, got: %s", out)
+	}
+}
+
+func TestStatusSummaryCounts(t *testing.T) {
+	dir := t.TempDir()
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	now := time.Now().UTC()
+	started := now.Add(-10 * time.Minute)
+	ended := now.Add(-5 * time.Minute)
+	waitingSince := now.Add(-3 * time.Minute)
+
+	q.Enqueue(testStatusVessel("v-1", queue.StatePending)) //nolint:errcheck
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "v-2", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateRunning, CreatedAt: now, StartedAt: &started,
+	})
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "v-3", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateCompleted, CreatedAt: now,
+		StartedAt: &started, EndedAt: &ended,
+	})
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "v-4", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateFailed, CreatedAt: now,
+		StartedAt: &started, EndedAt: &ended,
+	})
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "v-5", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateCancelled, CreatedAt: now, EndedAt: &ended,
+	})
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "v-6", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateWaiting, CreatedAt: now,
+		StartedAt: &started, WaitingFor: "approval",
+		WaitingSince: &waitingSince,
+	})
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "v-7", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateTimedOut, CreatedAt: now,
+		StartedAt: &started, EndedAt: &ended,
+	})
+
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, false, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Verify all counts appear in summary
+	if !strings.Contains(out, "1 pending") {
+		t.Errorf("expected '1 pending' in summary, got: %s", out)
+	}
+	if !strings.Contains(out, "1 running") {
+		t.Errorf("expected '1 running' in summary, got: %s", out)
+	}
+	if !strings.Contains(out, "1 completed") {
+		t.Errorf("expected '1 completed' in summary, got: %s", out)
+	}
+	if !strings.Contains(out, "1 failed") {
+		t.Errorf("expected '1 failed' in summary, got: %s", out)
+	}
+	if !strings.Contains(out, "1 cancelled") {
+		t.Errorf("expected '1 cancelled' in summary, got: %s", out)
+	}
+	if !strings.Contains(out, "1 waiting") {
+		t.Errorf("expected '1 waiting' in summary, got: %s", out)
+	}
+	if !strings.Contains(out, "1 timed_out") {
+		t.Errorf("expected '1 timed_out' in summary, got: %s", out)
+	}
+}
+
+func TestStatusJSONIncludesWaitingFields(t *testing.T) {
+	dir := t.TempDir()
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	now := time.Now().UTC()
+	started := now.Add(-10 * time.Minute)
+	waitingSince := now.Add(-5 * time.Minute)
+
+	q.Enqueue(queue.Vessel{ //nolint:errcheck
+		ID: "issue-50", Source: "github-issue", Skill: "fix-bug",
+		State: queue.StateWaiting, CreatedAt: now,
+		StartedAt: &started, WaitingFor: "plan-approved",
+		WaitingSince: &waitingSince,
+	})
+
+	var err error
+	out := captureStdout(func() { err = cmdStatus(q, true, "") })
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var vessels []queue.Vessel
+	if err := json.Unmarshal([]byte(strings.TrimSpace(out)), &vessels); err != nil {
+		t.Fatalf("expected valid JSON, got: %s\nerr: %v", out, err)
+	}
+	if len(vessels) != 1 {
+		t.Fatalf("expected 1 vessel, got %d", len(vessels))
+	}
+	v := vessels[0]
+	if v.WaitingFor != "plan-approved" {
+		t.Errorf("expected waiting_for='plan-approved', got %q", v.WaitingFor)
+	}
+	if v.WaitingSince == nil {
+		t.Error("expected waiting_since to be set")
+	}
+}

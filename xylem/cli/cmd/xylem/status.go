@@ -55,10 +55,10 @@ func cmdStatus(q *queue.Queue, jsonMode bool, stateFilter string) error {
 		return nil
 	}
 
-	fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-12s  %s\n",
-		"ID", "Source", "Skill", "State", "Started", "Duration")
-	fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-12s  %s\n",
-		"----", "------", "-----", "-----", "-------", "--------")
+	fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-30s  %-12s  %s\n",
+		"ID", "Source", "Skill", "State", "Info", "Started", "Duration")
+	fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-30s  %-12s  %s\n",
+		"----", "------", "-----", "-----", "----", "-------", "--------")
 
 	counts := map[queue.VesselState]int{}
 	for _, j := range vessels {
@@ -77,14 +77,29 @@ func cmdStatus(q *queue.Queue, jsonMode bool, stateFilter string) error {
 		if skill == "" {
 			skill = "(prompt)"
 		}
-		fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-12s  %s\n",
-			j.ID, j.Source, skill, string(j.State), started, duration)
+		info := vesselInfo(j)
+		fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-30s  %-12s  %s\n",
+			j.ID, j.Source, skill, string(j.State), info, started, duration)
 	}
 
-	fmt.Printf("\nSummary: %d pending, %d running, %d completed, %d failed\n",
+	fmt.Printf("\nSummary: %d pending, %d running, %d completed, %d failed, %d cancelled, %d waiting, %d timed_out\n",
 		counts[queue.StatePending], counts[queue.StateRunning],
-		counts[queue.StateCompleted], counts[queue.StateFailed])
+		counts[queue.StateCompleted], counts[queue.StateFailed],
+		counts[queue.StateCancelled], counts[queue.StateWaiting],
+		counts[queue.StateTimedOut])
 	return nil
+}
+
+// vesselInfo returns additional context for the Info column based on vessel state.
+func vesselInfo(v queue.Vessel) string {
+	if v.State == queue.StateWaiting && v.WaitingFor != "" {
+		elapsed := "unknown"
+		if v.WaitingSince != nil {
+			elapsed = time.Since(*v.WaitingSince).Round(time.Second).String()
+		}
+		return fmt.Sprintf("waiting for %q (%s)", v.WaitingFor, elapsed)
+	}
+	return ""
 }
 
 func pauseMarkerPath(cfg *config.Config) string {
