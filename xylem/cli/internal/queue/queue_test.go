@@ -12,6 +12,17 @@ import (
 	"time"
 )
 
+// helperTransitionToWaiting transitions a vessel from pending -> running -> waiting via the queue.
+func helperTransitionToWaiting(t *testing.T, q *Queue, id string) {
+	t.Helper()
+	if _, err := q.Dequeue(); err != nil {
+		t.Fatalf("dequeue: %v", err)
+	}
+	if err := q.Update(id, StateWaiting, ""); err != nil {
+		t.Fatalf("update to waiting: %v", err)
+	}
+}
+
 func newTestQueue(t *testing.T) (*Queue, string) {
 	t.Helper()
 	path := filepath.Join(t.TempDir(), "queue.jsonl")
@@ -661,6 +672,397 @@ func TestLegacyJSONLMigration(t *testing.T) {
 	}
 	if v.Meta["issue_num"] != "42" {
 		t.Fatalf("expected meta issue_num=42, got %q", v.Meta["issue_num"])
+	}
+}
+
+// --- v2 state and field tests ---
+
+func TestWaitingState(t *testing.T) {
+	tests := []struct {
+		name      string
+		toState   VesselState
+		errMsg    string
+		wantErr   bool
+		wantState VesselState
+	}{
+		{
+			name:      "running to waiting",
+			toState:   StateWaiting,
+			wantState: StateWaiting,
+		},
+		{
+			name:      "waiting to running (resume)",
+			toState:   StateRunning,
+			wantState: StateRunning,
+		},
+		{
+			name:      "waiting to timed_out",
+			toState:   StateTimedOut,
+			errMsg:    "gate timeout",
+			wantState: StateTimedOut,
+		},
+		{
+			name:      "waiting to cancelled",
+			toState:   StateCancelled,
+			wantState: StateCancelled,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			q, _ := newTestQueue(t)
+			vessel := testVessel(500)
+			if err := q.Enqueue(vessel); err != nil {
+				t.Fatalf("enqueue: %v", err)
+			}
+
+			// Get to running state.
+			if _, err := q.Dequeue(); err != nil {
+				t.Fatalf("dequeue: %v", err)
+			}
+
+			// For tests starting from waiting, transition to waiting first.
+			if tc.toState != StateWaiting {
+				if err := q.Update(vessel.ID, StateWaiting, ""); err != nil {
+					t.Fatalf("transition to waiting: %v", err)
+				}
+			}
+
+			err := q.Update(vessel.ID, tc.toState, tc.errMsg)
+			if (err != nil) != tc.wantErr {
+				t.Fatalf("Update() error = %v, wantErr %v", err, tc.wantErr)
+			}
+			if tc.wantErr {
+				return
+			}
+
+			vessels, err := q.List()
+			if err != nil {
+				t.Fatalf("list: %v", err)
+			}
+			if vessels[0].State != tc.wantState {
+				t.Fatalf("expected state %s, got %s", tc.wantState, vessels[0].State)
+			}
+		})
+	}
+
+	// Verify waiting does NOT allow -> completed or -> failed.
+	t.Run("waiting to completed is invalid", func(t *testing.T) {
+		q, _ := newTestQueue(t)
+		vessel := testVessel(501)
+		if err := q.Enqueue(vessel); err != nil {
+			t.Fatalf("enqueue: %v", err)
+		}
+		helperTransitionToWaiting(t, q, vessel.ID)
+
+		err := q.Update(vessel.ID, StateCompleted, "")
+		if err == nil {
+			t.Fatal("expected error for waiting->completed transition")
+		}
+		if !errors.Is(err, ErrInvalidTransition) {
+			t.Fatalf("expected ErrInvalidTransition, got: %v", err)
+		}
+	})
+
+	t.Run("waiting to failed is invalid", func(t *testing.T) {
+		q, _ := newTestQueue(t)
+		vessel := testVessel(502)
+		if err := q.Enqueue(vessel); err != nil {
+			t.Fatalf("enqueue: %v", err)
+		}
+		helperTransitionToWaiting(t, q, vessel.ID)
+
+		err := q.Update(vessel.ID, StateFailed, "boom")
+		if err == nil {
+			t.Fatal("expected error for waiting->failed transition")
+		}
+		if !errors.Is(err, ErrInvalidTransition) {
+			t.Fatalf("expected ErrInvalidTransition, got: %v", err)
+		}
+	})
+}
+
+func TestWaitingStateDoesNotSetEndedAt(t *testing.T) {
+	q, _ := newTestQueue(t)
+	vessel := testVessel(503)
+	if err := q.Enqueue(vessel); err != nil {
+		t.Fatalf("enqueue: %v", err)
+	}
+	helperTransitionToWaiting(t, q, vessel.ID)
+
+	vessels, err := q.List()
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	if vessels[0].EndedAt != nil {
+		t.Fatal("expected EndedAt to be nil for waiting state")
+	}
+}
+
+func TestTimedOutState(t *testing.T) {
+	q, _ := newTestQueue(t)
+	vessel := testVessel(510)
+	if err := q.Enqueue(vessel); err != nil {
+		t.Fatalf("enqueue: %v", err)
+	}
+	helperTransitionToWaiting(t, q, vessel.ID)
+
+	if err := q.Update(vessel.ID, StateTimedOut, "gate timeout"); err != nil {
+		t.Fatalf("update to timed_out: %v", err)
+	}
+
+	vessels, err := q.List()
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	if vessels[0].State != StateTimedOut {
+		t.Fatalf("expected timed_out, got %s", vessels[0].State)
+	}
+	if vessels[0].EndedAt == nil {
+		t.Fatal("expected EndedAt to be set for timed_out")
+	}
+	if vessels[0].Error != "gate timeout" {
+		t.Fatalf("expected error 'gate timeout', got %q", vessels[0].Error)
+	}
+
+	// timed_out is terminal — no transitions out.
+	for _, target := range []VesselState{StatePending, StateRunning, StateWaiting, StateCompleted, StateFailed, StateCancelled} {
+		err := q.Update(vessel.ID, target, "")
+		if err == nil {
+			t.Fatalf("expected error for timed_out->%s transition", target)
+		}
+		if !errors.Is(err, ErrInvalidTransition) {
+			t.Fatalf("expected ErrInvalidTransition for timed_out->%s, got: %v", target, err)
+		}
+	}
+}
+
+func TestV2VesselFields(t *testing.T) {
+	q, _ := newTestQueue(t)
+	now := time.Now().UTC()
+	vessel := Vessel{
+		ID:           "v2-test-1",
+		Source:       "github-issue",
+		Ref:          "https://github.com/example/repo/issues/99",
+		Skill:        "fix-bug",
+		State:        StatePending,
+		CreatedAt:    now,
+		CurrentPhase: 2,
+		PhaseOutputs: map[string]string{"plan": "done", "implement": "in-progress"},
+		GateRetries:  3,
+		WaitingSince: &now,
+		WaitingFor:   "review-label",
+		WorktreePath: "/tmp/worktree-abc",
+		FailedPhase:  "implement",
+		GateOutput:   "label not found",
+		RetryOf:      "v2-test-0",
+	}
+
+	if err := q.Enqueue(vessel); err != nil {
+		t.Fatalf("enqueue: %v", err)
+	}
+
+	vessels, err := q.List()
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	if len(vessels) != 1 {
+		t.Fatalf("expected 1 vessel, got %d", len(vessels))
+	}
+
+	got := vessels[0]
+	if got.CurrentPhase != 2 {
+		t.Fatalf("expected CurrentPhase 2, got %d", got.CurrentPhase)
+	}
+	if got.PhaseOutputs["plan"] != "done" {
+		t.Fatalf("expected PhaseOutputs[plan]=done, got %q", got.PhaseOutputs["plan"])
+	}
+	if got.PhaseOutputs["implement"] != "in-progress" {
+		t.Fatalf("expected PhaseOutputs[implement]=in-progress, got %q", got.PhaseOutputs["implement"])
+	}
+	if got.GateRetries != 3 {
+		t.Fatalf("expected GateRetries 3, got %d", got.GateRetries)
+	}
+	if got.WaitingSince == nil {
+		t.Fatal("expected WaitingSince to be set")
+	}
+	if got.WaitingFor != "review-label" {
+		t.Fatalf("expected WaitingFor 'review-label', got %q", got.WaitingFor)
+	}
+	if got.WorktreePath != "/tmp/worktree-abc" {
+		t.Fatalf("expected WorktreePath '/tmp/worktree-abc', got %q", got.WorktreePath)
+	}
+	if got.FailedPhase != "implement" {
+		t.Fatalf("expected FailedPhase 'implement', got %q", got.FailedPhase)
+	}
+	if got.GateOutput != "label not found" {
+		t.Fatalf("expected GateOutput 'label not found', got %q", got.GateOutput)
+	}
+	if got.RetryOf != "v2-test-0" {
+		t.Fatalf("expected RetryOf 'v2-test-0', got %q", got.RetryOf)
+	}
+}
+
+func TestBackwardCompat(t *testing.T) {
+	_, path := newTestQueue(t)
+	q := New(path)
+
+	// Write a JSONL line with only v1 fields (no v2 fields in JSON).
+	v1JSON := `{"id":"compat-1","source":"github-issue","ref":"https://github.com/example/repo/issues/1","skill":"fix-bug","state":"pending","created_at":"2026-01-01T00:00:00Z"}`
+	if err := os.WriteFile(path, []byte(v1JSON+"\n"), 0o644); err != nil {
+		t.Fatalf("write v1 json: %v", err)
+	}
+
+	vessels, err := q.List()
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	if len(vessels) != 1 {
+		t.Fatalf("expected 1 vessel, got %d", len(vessels))
+	}
+
+	got := vessels[0]
+	// v1 fields present.
+	if got.ID != "compat-1" {
+		t.Fatalf("expected id compat-1, got %q", got.ID)
+	}
+	if got.State != StatePending {
+		t.Fatalf("expected pending, got %q", got.State)
+	}
+	// v2 fields should be zero values.
+	if got.CurrentPhase != 0 {
+		t.Fatalf("expected CurrentPhase 0, got %d", got.CurrentPhase)
+	}
+	if got.PhaseOutputs != nil {
+		t.Fatalf("expected nil PhaseOutputs, got %v", got.PhaseOutputs)
+	}
+	if got.GateRetries != 0 {
+		t.Fatalf("expected GateRetries 0, got %d", got.GateRetries)
+	}
+	if got.WaitingSince != nil {
+		t.Fatal("expected nil WaitingSince")
+	}
+	if got.WaitingFor != "" {
+		t.Fatalf("expected empty WaitingFor, got %q", got.WaitingFor)
+	}
+	if got.WorktreePath != "" {
+		t.Fatalf("expected empty WorktreePath, got %q", got.WorktreePath)
+	}
+	if got.FailedPhase != "" {
+		t.Fatalf("expected empty FailedPhase, got %q", got.FailedPhase)
+	}
+	if got.GateOutput != "" {
+		t.Fatalf("expected empty GateOutput, got %q", got.GateOutput)
+	}
+	if got.RetryOf != "" {
+		t.Fatalf("expected empty RetryOf, got %q", got.RetryOf)
+	}
+}
+
+func TestUpdateVessel(t *testing.T) {
+	t.Run("update phase tracking fields", func(t *testing.T) {
+		q, _ := newTestQueue(t)
+		vessel := testVessel(600)
+		if err := q.Enqueue(vessel); err != nil {
+			t.Fatalf("enqueue: %v", err)
+		}
+
+		// Read it back, modify v2 fields, and persist.
+		vessels, err := q.List()
+		if err != nil {
+			t.Fatalf("list: %v", err)
+		}
+		updated := vessels[0]
+		updated.CurrentPhase = 3
+		updated.PhaseOutputs = map[string]string{"plan": "ok", "implement": "ok", "test": "running"}
+		updated.WorktreePath = "/tmp/wt-600"
+
+		if err := q.UpdateVessel(updated); err != nil {
+			t.Fatalf("UpdateVessel: %v", err)
+		}
+
+		got, err := q.FindByID(vessel.ID)
+		if err != nil {
+			t.Fatalf("FindByID: %v", err)
+		}
+		if got.CurrentPhase != 3 {
+			t.Fatalf("expected CurrentPhase 3, got %d", got.CurrentPhase)
+		}
+		if got.PhaseOutputs["test"] != "running" {
+			t.Fatalf("expected PhaseOutputs[test]=running, got %q", got.PhaseOutputs["test"])
+		}
+		if got.WorktreePath != "/tmp/wt-600" {
+			t.Fatalf("expected WorktreePath '/tmp/wt-600', got %q", got.WorktreePath)
+		}
+	})
+
+	t.Run("update non-existent vessel returns error", func(t *testing.T) {
+		q, _ := newTestQueue(t)
+		ghost := Vessel{ID: "ghost-999"}
+		err := q.UpdateVessel(ghost)
+		if err == nil {
+			t.Fatal("expected error for non-existent vessel")
+		}
+		if !strings.Contains(err.Error(), "not found") {
+			t.Fatalf("expected not-found error, got: %v", err)
+		}
+	})
+}
+
+func TestFindByID(t *testing.T) {
+	t.Run("find existing vessel", func(t *testing.T) {
+		q, _ := newTestQueue(t)
+		vessel := testVessel(700)
+		if err := q.Enqueue(vessel); err != nil {
+			t.Fatalf("enqueue: %v", err)
+		}
+
+		got, err := q.FindByID(vessel.ID)
+		if err != nil {
+			t.Fatalf("FindByID: %v", err)
+		}
+		if got.ID != vessel.ID {
+			t.Fatalf("expected id %s, got %s", vessel.ID, got.ID)
+		}
+		if got.Source != vessel.Source {
+			t.Fatalf("expected source %s, got %s", vessel.Source, got.Source)
+		}
+	})
+
+	t.Run("find non-existent vessel returns error", func(t *testing.T) {
+		q, _ := newTestQueue(t)
+		_, err := q.FindByID("does-not-exist")
+		if err == nil {
+			t.Fatal("expected error for non-existent vessel")
+		}
+		if !strings.Contains(err.Error(), "not found") {
+			t.Fatalf("expected not-found error, got: %v", err)
+		}
+	})
+}
+
+func TestCancelWaitingVessel(t *testing.T) {
+	q, _ := newTestQueue(t)
+	vessel := testVessel(900)
+	if err := q.Enqueue(vessel); err != nil {
+		t.Fatalf("enqueue: %v", err)
+	}
+	helperTransitionToWaiting(t, q, vessel.ID)
+
+	// Cancel the waiting vessel.
+	if err := q.Cancel(vessel.ID); err != nil {
+		t.Fatalf("cancel waiting vessel: %v", err)
+	}
+
+	vessels, err := q.List()
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	if vessels[0].State != StateCancelled {
+		t.Fatalf("expected cancelled, got %s", vessels[0].State)
+	}
+	if vessels[0].EndedAt == nil {
+		t.Fatal("expected EndedAt to be set after cancel")
 	}
 }
 

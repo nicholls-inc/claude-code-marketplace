@@ -22,6 +22,8 @@ const (
 	StateCompleted VesselState = "completed"
 	StateFailed    VesselState = "failed"
 	StateCancelled VesselState = "cancelled"
+	StateWaiting   VesselState = "waiting"
+	StateTimedOut  VesselState = "timed_out"
 )
 
 // validTransitions defines the allowed state transitions. Each key is a current
@@ -35,13 +37,20 @@ var validTransitions = map[VesselState]map[VesselState]bool{
 		StateCompleted: true,
 		StateFailed:    true,
 		StateCancelled: true,
+		StateWaiting:   true, // label gate pauses vessel
+	},
+	StateWaiting: {            // label gate pause state
+		StateRunning:   true,  // label gate passed, resume
+		StateTimedOut:  true,  // label gate timed out
+		StateCancelled: true,  // manually cancelled while waiting
 	},
 	StateFailed: {
 		StatePending: true, // allow retry
 	},
-	// Terminal states: no transitions out of completed or cancelled.
+	// Terminal states: no transitions out of completed, cancelled, or timed_out.
 	StateCompleted: {},
 	StateCancelled: {},
+	StateTimedOut:  {},
 }
 
 // ErrInvalidTransition is returned when a state transition is not allowed.
@@ -59,6 +68,17 @@ type Vessel struct {
 	StartedAt *time.Time        `json:"started_at,omitempty"`
 	EndedAt   *time.Time        `json:"ended_at,omitempty"`
 	Error     string            `json:"error,omitempty"`
+
+	// v2 phase-based execution fields
+	CurrentPhase int               `json:"current_phase,omitempty"`
+	PhaseOutputs map[string]string `json:"phase_outputs,omitempty"`
+	GateRetries  int               `json:"gate_retries,omitempty"`
+	WaitingSince *time.Time        `json:"waiting_since,omitempty"`
+	WaitingFor   string            `json:"waiting_for,omitempty"`
+	WorktreePath string            `json:"worktree_path,omitempty"`
+	FailedPhase  string            `json:"failed_phase,omitempty"`
+	GateOutput   string            `json:"gate_output,omitempty"`
+	RetryOf      string            `json:"retry_of,omitempty"`
 }
 
 type Queue struct {
@@ -146,6 +166,12 @@ func (q *Queue) Update(id string, state VesselState, errMsg string) error {
 			case StateCompleted, StateCancelled:
 				vessels[i].EndedAt = &now
 				vessels[i].Error = ""
+			case StateWaiting:
+				// Don't set EndedAt — vessel is still in progress
+				vessels[i].Error = ""
+			case StateTimedOut:
+				vessels[i].EndedAt = &now
+				vessels[i].Error = errMsg
 			default:
 				vessels[i].Error = ""
 			}
@@ -192,7 +218,7 @@ func (q *Queue) Cancel(id string) error {
 			if vessels[i].ID != id {
 				continue
 			}
-			if vessels[i].State != StatePending {
+			if vessels[i].State != StatePending && vessels[i].State != StateWaiting {
 				return fmt.Errorf("cannot cancel vessel %s in state %s", id, vessels[i].State)
 			}
 			now := time.Now().UTC()
@@ -204,6 +230,41 @@ func (q *Queue) Cancel(id string) error {
 
 		return fmt.Errorf("vessel %s not found", id)
 	})
+}
+
+func (q *Queue) UpdateVessel(vessel Vessel) error {
+	return q.withLock(func() error {
+		vessels, err := q.readAllVessels()
+		if err != nil {
+			return err
+		}
+		for i := range vessels {
+			if vessels[i].ID == vessel.ID {
+				vessels[i] = vessel
+				return q.writeAllVessels(vessels)
+			}
+		}
+		return fmt.Errorf("vessel %s not found", vessel.ID)
+	})
+}
+
+func (q *Queue) FindByID(id string) (*Vessel, error) {
+	var found *Vessel
+	err := q.withRLock(func() error {
+		vessels, readErr := q.readAllVessels()
+		if readErr != nil {
+			return readErr
+		}
+		for i := range vessels {
+			if vessels[i].ID == id {
+				v := vessels[i]
+				found = &v
+				return nil
+			}
+		}
+		return fmt.Errorf("vessel %s not found", id)
+	})
+	return found, err
 }
 
 func (q *Queue) HasRef(ref string) bool {
