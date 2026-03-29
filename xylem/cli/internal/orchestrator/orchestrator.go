@@ -108,13 +108,13 @@ type MissionAttributes struct {
 // OrchestratorConfig controls orchestrator behaviour.
 type OrchestratorConfig struct {
 	MaxSubAgents    int
-	SummaryMaxTokens int
+	SummaryMaxChars int
 	SubAgentTimeout time.Duration
 	FailurePolicy   string // "fail-fast", "continue", "retry"
 }
 
-// DefaultSummaryMaxTokens is used when SummaryMaxTokens is zero.
-const DefaultSummaryMaxTokens = 2000
+// DefaultSummaryMaxChars is used when SummaryMaxChars is zero.
+const DefaultSummaryMaxChars = 2000
 
 // CommunicationFile represents a file-based message between agents.
 type CommunicationFile struct {
@@ -153,10 +153,10 @@ func SelectPattern(attrs MissionAttributes) Pattern {
 }
 
 // NewOrchestrator creates a new Orchestrator with the given configuration.
-// If SummaryMaxTokens is zero the default (2000) is used.
+// If SummaryMaxChars is zero the default (2000) is used.
 func NewOrchestrator(config OrchestratorConfig) *Orchestrator {
-	if config.SummaryMaxTokens <= 0 {
-		config.SummaryMaxTokens = DefaultSummaryMaxTokens
+	if config.SummaryMaxChars <= 0 {
+		config.SummaryMaxChars = DefaultSummaryMaxChars
 	}
 	return &Orchestrator{
 		config: config,
@@ -241,12 +241,12 @@ func (o *Orchestrator) UpdateAgent(id string, status AgentStatus, tokensUsed int
 }
 
 // SetResult stores a condensed result for a sub-agent. The summary is
-// truncated to SummaryMaxTokens.
+// truncated to SummaryMaxChars.
 func (o *Orchestrator) SetResult(result SubAgentResult) error {
 	if _, ok := o.agentIDs[result.AgentID]; !ok {
 		return fmt.Errorf("set result: unknown agent %q", result.AgentID)
 	}
-	result.Summary = TruncateSummary(result.Summary, o.config.SummaryMaxTokens)
+	result.Summary = TruncateSummary(result.Summary, o.config.SummaryMaxChars)
 	o.results[result.AgentID] = &result
 	return nil
 }
@@ -313,14 +313,15 @@ func (o *Orchestrator) agentsByStatus(status AgentStatus) []AgentSlot {
 }
 
 // TruncateSummary truncates a summary string so its byte length does not
-// exceed maxTokens. The truncation is rune-aware: it never splits a
-// multi-byte UTF-8 character. A simple character-based approximation is used
-// (one token ~= one character for this context-firewall budget).
-func TruncateSummary(summary string, maxTokens int) string {
-	if maxTokens <= 0 {
-		maxTokens = DefaultSummaryMaxTokens
+// exceed maxChars. The truncation is rune-aware: it never splits a
+// multi-byte UTF-8 character. This is a character-based truncation, not a
+// token-based one; callers should size maxChars accordingly (a typical LLM
+// token is approximately 4 characters).
+func TruncateSummary(summary string, maxChars int) string {
+	if maxChars <= 0 {
+		maxChars = DefaultSummaryMaxChars
 	}
-	if len(summary) <= maxTokens {
+	if len(summary) <= maxChars {
 		return summary
 	}
 	// Walk runes forward, accumulating byte length, and stop before
@@ -329,7 +330,7 @@ func TruncateSummary(summary string, maxTokens int) string {
 	end := 0
 	for i, r := range summary {
 		n := utf8.RuneLen(r)
-		if i+n > maxTokens {
+		if i+n > maxChars {
 			break
 		}
 		end = i + n

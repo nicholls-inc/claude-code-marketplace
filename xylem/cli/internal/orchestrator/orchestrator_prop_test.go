@@ -61,15 +61,15 @@ func TestPropPatternAlwaysValid(t *testing.T) {
 	})
 }
 
-// --- Property: TruncateSummary never exceeds maxTokens ---
+// --- Property: TruncateSummary never exceeds maxChars ---
 
 func TestPropTruncateSummaryBound(t *testing.T) {
 	rapid.Check(t, func(t *rapid.T) {
 		summary := rapid.String().Draw(t, "summary")
-		maxTokens := rapid.IntRange(1, 10000).Draw(t, "maxTokens")
-		result := TruncateSummary(summary, maxTokens)
-		if len(result) > maxTokens {
-			t.Fatalf("TruncateSummary produced %d chars, max was %d", len(result), maxTokens)
+		maxChars := rapid.IntRange(1, 10000).Draw(t, "maxChars")
+		result := TruncateSummary(summary, maxChars)
+		if len(result) > maxChars {
+			t.Fatalf("TruncateSummary produced %d chars, max was %d", len(result), maxChars)
 		}
 	})
 }
@@ -79,8 +79,8 @@ func TestPropTruncateSummaryBound(t *testing.T) {
 func TestPropTruncatePreservesShort(t *testing.T) {
 	rapid.Check(t, func(t *rapid.T) {
 		summary := rapid.StringN(0, 50, 50).Draw(t, "summary")
-		maxTokens := rapid.IntRange(50, 10000).Draw(t, "maxTokens")
-		result := TruncateSummary(summary, maxTokens)
+		maxChars := rapid.IntRange(50, 10000).Draw(t, "maxChars")
+		result := TruncateSummary(summary, maxChars)
 		if result != summary {
 			t.Fatalf("short summary was modified: got %q, want %q", result, summary)
 		}
