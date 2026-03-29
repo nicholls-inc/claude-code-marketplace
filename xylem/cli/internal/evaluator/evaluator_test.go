@@ -52,6 +52,14 @@ func (e *errGenerator) Generate(_ context.Context, _ string, _ []Issue) (string,
 
 func (e *errGenerator) ID() string { return e.id }
 
+type nilEvaluator struct{ id string }
+
+func (n *nilEvaluator) Evaluate(_ context.Context, _ string, _ []Criterion) (*EvalResult, error) {
+	return nil, nil
+}
+
+func (n *nilEvaluator) ID() string { return n.id }
+
 type errEvaluator struct{ id string }
 
 func (e *errEvaluator) Evaluate(_ context.Context, _ string, _ []Criterion) (*EvalResult, error) {
@@ -223,6 +231,19 @@ func TestRunGenerateError(t *testing.T) {
 	}
 }
 
+func TestRunEvaluateNilResult(t *testing.T) {
+	gen := &stubGenerator{id: "gen-1", outputs: []string{"output"}}
+	eval := &nilEvaluator{id: "eval-1"}
+	loop, err := NewLoop(gen, eval, testConfig())
+	if err != nil {
+		t.Fatalf("setup: %v", err)
+	}
+	_, err = loop.Run(context.Background(), "task")
+	if err == nil {
+		t.Fatal("expected error when evaluator returns nil result")
+	}
+}
+
 func TestRunEvaluateError(t *testing.T) {
 	gen := &stubGenerator{id: "gen-1", outputs: []string{"output"}}
 	eval := &errEvaluator{id: "eval-1"}
@@ -350,6 +371,19 @@ func TestValidateConfigBadCriterionThreshold(t *testing.T) {
 	}
 }
 
+func TestValidateConfigDuplicateCriterionName(t *testing.T) {
+	cfg := EvalConfig{
+		Criteria: []Criterion{
+			{Name: "correctness", Weight: 0.5, Threshold: 0.5},
+			{Name: "correctness", Weight: 0.5, Threshold: 0.5},
+		},
+		PassThreshold: 0.7,
+	}
+	if err := ValidateConfig(cfg); err == nil {
+		t.Fatal("expected error for duplicate criterion name")
+	}
+}
+
 func TestValidateConfigEmptyCriteria(t *testing.T) {
 	cfg := EvalConfig{
 		Criteria:      nil,
@@ -400,8 +434,8 @@ func TestWeightedScoreClampedHigh(t *testing.T) {
 	q := QualityScore{Criteria: map[string]float64{"a": 1.5}}
 	criteria := []Criterion{{Name: "a", Weight: 1.0}}
 	got := q.WeightedScore(criteria)
-	if got > 1.0 {
-		t.Errorf("expected clamped to 1.0, got %f", got)
+	if got != 1.0 {
+		t.Errorf("expected exactly 1.0 after clamping, got %f", got)
 	}
 }
 
@@ -521,8 +555,19 @@ func TestSaveLoadReportRoundTrip(t *testing.T) {
 	if loaded.FinalResult.Score.Overall != original.FinalResult.Score.Overall {
 		t.Errorf("overall score: got %f, want %f", loaded.FinalResult.Score.Overall, original.FinalResult.Score.Overall)
 	}
+	if loaded.FinalResult.Pass != original.FinalResult.Pass {
+		t.Errorf("final pass: got %v, want %v", loaded.FinalResult.Pass, original.FinalResult.Pass)
+	}
+	if loaded.FinalResult.EvaluatorID != original.FinalResult.EvaluatorID {
+		t.Errorf("final evaluator ID: got %q, want %q", loaded.FinalResult.EvaluatorID, original.FinalResult.EvaluatorID)
+	}
 	if len(loaded.History) != len(original.History) {
 		t.Errorf("history length: got %d, want %d", len(loaded.History), len(original.History))
+	}
+	if len(loaded.History) > 0 {
+		if loaded.History[0].Score.Overall != original.History[0].Score.Overall {
+			t.Errorf("history[0] overall score: got %f, want %f", loaded.History[0].Score.Overall, original.History[0].Score.Overall)
+		}
 	}
 }
 
@@ -564,5 +609,39 @@ func TestRunUsesDefaultMaxIterations(t *testing.T) {
 	}
 	if lr.Iterations != DefaultMaxIterations {
 		t.Errorf("expected %d iterations (default), got %d", DefaultMaxIterations, lr.Iterations)
+	}
+}
+
+func TestRunUsesDefaultPassThreshold(t *testing.T) {
+	tests := []struct {
+		name     string
+		score    float64
+		wantPass bool
+	}{
+		{"below default threshold", 0.5, false},
+		{"above default threshold", 0.8, true},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			gen := &stubGenerator{id: "gen-1", outputs: []string{"out"}}
+			eval := &stubEvaluator{id: "eval-1", results: []*EvalResult{
+				{Score: QualityScore{Overall: tc.score}},
+			}}
+			cfg := EvalConfig{
+				MaxIterations: 1,
+				// PassThreshold 0 -> defaults to 0.7
+			}
+			loop, err := NewLoop(gen, eval, cfg)
+			if err != nil {
+				t.Fatalf("setup: %v", err)
+			}
+			lr, err := loop.Run(context.Background(), "task")
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if lr.FinalResult.Pass != tc.wantPass {
+				t.Errorf("score %.1f: got pass=%v, want pass=%v (default threshold 0.7)", tc.score, lr.FinalResult.Pass, tc.wantPass)
+			}
+		})
 	}
 }

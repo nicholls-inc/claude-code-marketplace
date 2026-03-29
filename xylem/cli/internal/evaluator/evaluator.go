@@ -175,8 +175,13 @@ func ValidateConfig(config EvalConfig) error {
 	}
 
 	if len(config.Criteria) > 0 {
+		seen := make(map[string]bool, len(config.Criteria))
 		var weightSum float64
 		for _, c := range config.Criteria {
+			if seen[c.Name] {
+				return fmt.Errorf("validate config: duplicate criterion name: %q", c.Name)
+			}
+			seen[c.Name] = true
 			if c.Weight < 0 {
 				return fmt.Errorf("validate config: criterion %q weight must be non-negative, got %f", c.Name, c.Weight)
 			}
@@ -247,6 +252,9 @@ func (l *Loop) Run(ctx context.Context, task string) (*LoopResult, error) {
 		evalResult, err := l.evaluator.Evaluate(ctx, output, l.config.Criteria)
 		if err != nil {
 			return nil, fmt.Errorf("loop run: evaluate iteration %d: %w", i, err)
+		}
+		if evalResult == nil {
+			return nil, fmt.Errorf("loop run: evaluate iteration %d: evaluator returned nil result", i)
 		}
 
 		evalResult.Iteration = i
