@@ -56,7 +56,7 @@ func genTool(t *rapid.T) Tool {
 	}
 	return Tool{
 		Name:        genToolName(t),
-		Description: rapid.StringMatching(`[a-z]{1,5}[a-z ]{4,25}`).Draw(t, "desc"),
+		Description: rapid.StringMatching(`[a-z]{1,5}[a-z]{4,25}`).Draw(t, "desc"),
 		Parameters:  params,
 		Scope:       genScope(t),
 		Tags:        tags,
