@@ -2,6 +2,8 @@ package observability
 
 import (
 	"testing"
+
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/signal"
 )
 
 func TestSignalSpanAttributesBasic(t *testing.T) {
@@ -101,5 +103,92 @@ func TestFormatAttributeKeyLowercase(t *testing.T) {
 	got := FormatAttributeKey("AGENT", "STATUS")
 	if got != "agent.status" {
 		t.Errorf("expected agent.status, got %s", got)
+	}
+}
+
+func TestSignalToSignalData(t *testing.T) {
+	sig := signal.Signal{Type: signal.Repetition, Value: 0.5, Level: signal.Warning}
+	data := SignalToSignalData(sig)
+	if data.Type != "Repetition" {
+		t.Errorf("expected Type Repetition, got %s", data.Type)
+	}
+	if data.Value != 0.5 {
+		t.Errorf("expected Value 0.5, got %f", data.Value)
+	}
+	if data.Level != "Warning" {
+		t.Errorf("expected Level Warning, got %s", data.Level)
+	}
+}
+
+func TestSignalSetToSignalData(t *testing.T) {
+	set := signal.SignalSet{
+		Signals: []signal.Signal{
+			{Type: signal.Repetition, Value: 0.1, Level: signal.Normal},
+			{Type: signal.ToolFailureRate, Value: 0.4, Level: signal.Warning},
+			{Type: signal.EfficiencyScore, Value: 1.5, Level: signal.Normal},
+			{Type: signal.ContextThrash, Value: 0.8, Level: signal.Critical},
+			{Type: signal.TaskStall, Value: 0.0, Level: signal.Normal},
+		},
+	}
+	data := SignalSetToSignalData(set)
+	if len(data) != 5 {
+		t.Fatalf("expected 5 SignalData, got %d", len(data))
+	}
+	// Verify order and types are preserved.
+	expectedTypes := []string{"Repetition", "ToolFailureRate", "EfficiencyScore", "ContextThrash", "TaskStall"}
+	for i, d := range data {
+		if d.Type != expectedTypes[i] {
+			t.Errorf("data[%d].Type = %s, want %s", i, d.Type, expectedTypes[i])
+		}
+	}
+}
+
+func TestSignalSetSpanAttributesCount(t *testing.T) {
+	set := signal.SignalSet{
+		Signals: []signal.Signal{
+			{Type: signal.Repetition, Value: 0.1, Level: signal.Normal},
+			{Type: signal.ToolFailureRate, Value: 0.4, Level: signal.Warning},
+			{Type: signal.EfficiencyScore, Value: 1.5, Level: signal.Normal},
+			{Type: signal.ContextThrash, Value: 0.8, Level: signal.Critical},
+			{Type: signal.TaskStall, Value: 0.0, Level: signal.Normal},
+		},
+	}
+	attrs := SignalSetSpanAttributes(set)
+	// 5 signals * 2 attrs each + 4 aggregate = 14
+	if len(attrs) != 14 {
+		t.Errorf("expected 14 attributes, got %d", len(attrs))
+	}
+}
+
+func TestSignalSetSpanAttributesHealth(t *testing.T) {
+	set := signal.SignalSet{
+		Signals: []signal.Signal{
+			{Type: signal.Repetition, Value: 0.1, Level: signal.Normal},
+			{Type: signal.ToolFailureRate, Value: 0.1, Level: signal.Normal},
+		},
+	}
+	attrs := SignalSetSpanAttributes(set)
+	expectedHealth := set.HealthString()
+	found := false
+	for _, a := range attrs {
+		if a.Key == "signals.health" {
+			found = true
+			if a.Value != expectedHealth {
+				t.Errorf("signals.health = %s, want %s", a.Value, expectedHealth)
+			}
+			break
+		}
+	}
+	if !found {
+		t.Error("signals.health attribute not found")
+	}
+}
+
+func TestSignalSetSpanAttributesEmpty(t *testing.T) {
+	set := signal.SignalSet{}
+	attrs := SignalSetSpanAttributes(set)
+	// Empty set: 0 per-signal attrs + 4 aggregate = 4
+	if len(attrs) != 4 {
+		t.Errorf("expected 4 attributes for empty set, got %d", len(attrs))
 	}
 }
