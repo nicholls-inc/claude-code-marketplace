@@ -72,12 +72,15 @@ func (w *Window) DurableTokens() int {
 }
 
 // Utilization returns the fraction of the token budget currently used.
-// INV: Utilization is always in [0.0, 1.0] (clamped).
+// INV: Utilization is always in [0.0, 1.0] (clamped at both bounds).
 func (w *Window) Utilization() float64 {
 	if w.MaxTokens <= 0 {
 		return 0.0
 	}
 	u := float64(w.UsedTokens()) / float64(w.MaxTokens)
+	if u < 0.0 {
+		return 0.0
+	}
 	if u > 1.0 {
 		return 1.0
 	}
@@ -113,7 +116,6 @@ type Pipeline struct {
 // Metrics tracks utilization statistics for a pipeline.
 type Metrics struct {
 	WindowFillRate       float64 `json:"window_fill_rate"`
-	CompactionCount      int     `json:"compaction_count"`
 	TotalTokensAssembled int     `json:"total_tokens_assembled"`
 	DurableTokens        int     `json:"durable_tokens"`
 	WorkingTokens        int     `json:"working_tokens"`
@@ -172,12 +174,17 @@ func (p *Pipeline) Metrics() Metrics {
 // Compact removes non-durable segments from a window when utilization exceeds
 // the configured threshold.
 //
-// INV: Compaction NEVER removes segments where Durable == true.
-// INV: UsedTokens() <= MaxTokens after Compact().
-// INV: DurableTokens() is unchanged by Compact().
+// INV: Compaction preserves durable segments when PreserveDurable is true.
+// INV: UsedTokens() <= MaxTokens after Compact(), unless durable segments alone exceed the budget.
+// INV: DurableTokens() is unchanged by Compact() when PreserveDurable is true.
 func Compact(window *Window, config CompactionConfig) *Window {
 	if window.Utilization() <= config.Threshold {
-		return window
+		// Return a shallow copy to avoid aliasing: mutations to the returned
+		// window must not affect the input.
+		copied := *window
+		copied.Segments = make([]Segment, len(window.Segments))
+		copy(copied.Segments, window.Segments)
+		return &copied
 	}
 
 	kept := make([]Segment, 0, len(window.Segments))
