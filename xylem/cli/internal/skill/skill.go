@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"gopkg.in/yaml.v3"
@@ -48,19 +49,25 @@ func Load(path string) (*Skill, error) {
 		return nil, fmt.Errorf("parse skill yaml %q: %w", path, err)
 	}
 
-	basePath := filepath.Dir(path)
-	if err := s.Validate(basePath); err != nil {
+	if err := s.Validate(path); err != nil {
 		return nil, fmt.Errorf("validate skill %q: %w", path, err)
 	}
 
 	return &s, nil
 }
 
-// Validate checks that the skill definition is well-formed. basePath is the
-// directory from which prompt_file paths are resolved.
-func (s *Skill) Validate(basePath string) error {
+// Validate checks that the skill definition is well-formed. skillFilePath is
+// the path to the skill YAML file, used to verify the skill name matches the
+// filename. Prompt file paths are resolved relative to the current working
+// directory (repo root).
+func (s *Skill) Validate(skillFilePath string) error {
 	if s.Name == "" {
 		return fmt.Errorf(`"name" is required`)
+	}
+
+	expectedName := strings.TrimSuffix(filepath.Base(skillFilePath), filepath.Ext(skillFilePath))
+	if s.Name != expectedName {
+		return fmt.Errorf("skill name %q does not match filename %q", s.Name, filepath.Base(skillFilePath))
 	}
 
 	if len(s.Phases) == 0 {
@@ -82,8 +89,7 @@ func (s *Skill) Validate(basePath string) error {
 			return fmt.Errorf("phase %q: prompt_file is required", p.Name)
 		}
 
-		resolved := filepath.Join(basePath, p.PromptFile)
-		if _, err := os.Stat(resolved); err != nil {
+		if _, err := os.Stat(p.PromptFile); err != nil {
 			return fmt.Errorf("phase %q: prompt_file not found: %s", p.Name, p.PromptFile)
 		}
 

@@ -7,10 +7,10 @@ import (
 	"testing"
 )
 
-func writeSkillFile(t *testing.T, dir, content string) string {
+func writeSkillFile(t *testing.T, dir, name, content string) string {
 	t.Helper()
 
-	path := filepath.Join(dir, "skill.yaml")
+	path := filepath.Join(dir, name+".yaml")
 	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
 		t.Fatalf("write skill file: %v", err)
 	}
@@ -42,16 +42,32 @@ func requireErrorContains(t *testing.T, err error, want string) {
 	}
 }
 
+// chdirTemp changes the working directory to dir for the duration of the test.
+func chdirTemp(t *testing.T, dir string) {
+	t.Helper()
+
+	orig, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("getwd: %v", err)
+	}
+	if err := os.Chdir(dir); err != nil {
+		t.Fatalf("chdir %q: %v", dir, err)
+	}
+	t.Cleanup(func() { os.Chdir(orig) })
+}
+
 func TestLoad(t *testing.T) {
 	tests := []struct {
 		name      string
+		skillName string // filename stem; defaults to "fix-bug"
 		yaml      string
-		prompts   []string // prompt files to create relative to basePath
+		prompts   []string // prompt files to create relative to repo root (cwd)
 		wantErr   string   // empty means no error expected
 		checkFunc func(t *testing.T, s *Skill)
 	}{
 		{
-			name: "valid skill file",
+			name:      "valid skill file",
+			skillName: "fix-bug",
 			yaml: `name: fix-bug
 description: Fix a bug
 phases:
@@ -83,7 +99,8 @@ phases:
 			},
 		},
 		{
-			name: "valid skill with all features",
+			name:      "valid skill with all features",
+			skillName: "deploy",
 			yaml: `name: deploy
 description: Deploy with gates
 phases:
@@ -126,12 +143,14 @@ phases:
 			},
 		},
 		{
-			name:    "missing phases key",
-			yaml:    "name: test-skill\n",
-			wantErr: `"phases" is required`,
+			name:      "missing phases key",
+			skillName: "test-skill",
+			yaml:      "name: test-skill\n",
+			wantErr:   `"phases" is required`,
 		},
 		{
-			name: "empty name",
+			name:      "empty name",
+			skillName: "test-skill",
 			yaml: `phases:
   - name: analyze
     prompt_file: prompts/analyze.md
@@ -141,7 +160,8 @@ phases:
 			wantErr: `"name" is required`,
 		},
 		{
-			name: "duplicate phase names",
+			name:      "duplicate phase names",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: implement
@@ -155,7 +175,8 @@ phases:
 			wantErr: `duplicate phase name "implement"`,
 		},
 		{
-			name: "missing prompt_file",
+			name:      "missing prompt_file",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: analyze
@@ -164,7 +185,8 @@ phases:
 			wantErr: "prompt_file is required",
 		},
 		{
-			name: "non-existent prompt_file",
+			name:      "non-existent prompt_file",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: analyze
@@ -174,7 +196,8 @@ phases:
 			wantErr: "prompt_file not found: prompts/missing.md",
 		},
 		{
-			name: "invalid gate type",
+			name:      "invalid gate type",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: analyze
@@ -187,7 +210,8 @@ phases:
 			wantErr: `type must be "command" or "label"`,
 		},
 		{
-			name: "command gate missing run",
+			name:      "command gate missing run",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: analyze
@@ -200,7 +224,8 @@ phases:
 			wantErr: "run is required for command gate",
 		},
 		{
-			name: "label gate missing wait_for",
+			name:      "label gate missing wait_for",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: analyze
@@ -213,7 +238,8 @@ phases:
 			wantErr: "wait_for is required for label gate",
 		},
 		{
-			name: "invalid duration string",
+			name:      "invalid duration string",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: analyze
@@ -228,7 +254,8 @@ phases:
 			wantErr: `invalid retry_delay "not-a-duration"`,
 		},
 		{
-			name: "max_turns zero",
+			name:      "max_turns zero",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: analyze
@@ -239,7 +266,8 @@ phases:
 			wantErr: "max_turns must be greater than 0",
 		},
 		{
-			name: "allowed_tools empty string",
+			name:      "allowed_tools empty string",
+			skillName: "test-skill",
 			yaml: `name: test-skill
 phases:
   - name: analyze
@@ -250,16 +278,34 @@ phases:
 			prompts: []string{"prompts/analyze.md"},
 			wantErr: "allowed_tools must not be empty when specified",
 		},
+		{
+			name:      "name does not match filename",
+			skillName: "fix-bug",
+			yaml: `name: wrong-name
+phases:
+  - name: analyze
+    prompt_file: prompts/analyze.md
+    max_turns: 10
+`,
+			prompts: []string{"prompts/analyze.md"},
+			wantErr: `skill name "wrong-name" does not match filename "fix-bug.yaml"`,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			dir := t.TempDir()
+			chdirTemp(t, dir)
+
 			for _, p := range tt.prompts {
 				createPromptFile(t, dir, p)
 			}
 
-			path := writeSkillFile(t, dir, tt.yaml)
+			skillName := tt.skillName
+			if skillName == "" {
+				skillName = "fix-bug"
+			}
+			path := writeSkillFile(t, dir, skillName, tt.yaml)
 			s, err := Load(path)
 
 			if tt.wantErr != "" {
@@ -287,7 +333,7 @@ func TestLoadFileNotFound(t *testing.T) {
 
 func TestLoadMalformedYAML(t *testing.T) {
 	dir := t.TempDir()
-	path := writeSkillFile(t, dir, "name: [broken\n")
+	path := writeSkillFile(t, dir, "skill", "name: [broken\n")
 
 	_, err := Load(path)
 	if err == nil {
@@ -297,13 +343,15 @@ func TestLoadMalformedYAML(t *testing.T) {
 
 func TestValidate(t *testing.T) {
 	tests := []struct {
-		name    string
-		skill   Skill
-		prompts []string // prompt files to create relative to basePath
-		wantErr string
+		name          string
+		skillFileName string // filename stem for the skill file (used for name validation)
+		skill         Skill
+		prompts       []string // prompt files to create relative to cwd
+		wantErr       string
 	}{
 		{
-			name: "valid minimal skill",
+			name:          "valid minimal skill",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -313,7 +361,8 @@ func TestValidate(t *testing.T) {
 			prompts: []string{"prompt.md"},
 		},
 		{
-			name: "empty name",
+			name:          "empty name",
+			skillFileName: "test",
 			skill: Skill{
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 5},
@@ -323,14 +372,16 @@ func TestValidate(t *testing.T) {
 			wantErr: `"name" is required`,
 		},
 		{
-			name: "no phases",
+			name:          "no phases",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 			},
 			wantErr: `"phases" is required`,
 		},
 		{
-			name: "phase with empty name",
+			name:          "phase with empty name",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -341,7 +392,8 @@ func TestValidate(t *testing.T) {
 			wantErr: "each phase must have a non-empty name",
 		},
 		{
-			name: "duplicate phase names",
+			name:          "duplicate phase names",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -353,7 +405,8 @@ func TestValidate(t *testing.T) {
 			wantErr: `duplicate phase name "build"`,
 		},
 		{
-			name: "missing prompt_file value",
+			name:          "missing prompt_file value",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -363,7 +416,8 @@ func TestValidate(t *testing.T) {
 			wantErr: "prompt_file is required",
 		},
 		{
-			name: "non-existent prompt_file",
+			name:          "non-existent prompt_file",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -373,7 +427,8 @@ func TestValidate(t *testing.T) {
 			wantErr: "prompt_file not found: does-not-exist.md",
 		},
 		{
-			name: "max_turns zero",
+			name:          "max_turns zero",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -384,7 +439,8 @@ func TestValidate(t *testing.T) {
 			wantErr: "max_turns must be greater than 0",
 		},
 		{
-			name: "max_turns negative",
+			name:          "max_turns negative",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -395,7 +451,8 @@ func TestValidate(t *testing.T) {
 			wantErr: "max_turns must be greater than 0",
 		},
 		{
-			name: "invalid gate type",
+			name:          "invalid gate type",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -409,7 +466,8 @@ func TestValidate(t *testing.T) {
 			wantErr: `type must be "command" or "label"`,
 		},
 		{
-			name: "command gate missing run",
+			name:          "command gate missing run",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -423,7 +481,8 @@ func TestValidate(t *testing.T) {
 			wantErr: "run is required for command gate",
 		},
 		{
-			name: "label gate missing wait_for",
+			name:          "label gate missing wait_for",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -437,7 +496,8 @@ func TestValidate(t *testing.T) {
 			wantErr: "wait_for is required for label gate",
 		},
 		{
-			name: "invalid retry_delay duration",
+			name:          "invalid retry_delay duration",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -451,7 +511,8 @@ func TestValidate(t *testing.T) {
 			wantErr: `invalid retry_delay "bad"`,
 		},
 		{
-			name: "invalid timeout duration",
+			name:          "invalid timeout duration",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -465,7 +526,8 @@ func TestValidate(t *testing.T) {
 			wantErr: `invalid timeout "forever"`,
 		},
 		{
-			name: "invalid poll_interval duration",
+			name:          "invalid poll_interval duration",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -479,7 +541,8 @@ func TestValidate(t *testing.T) {
 			wantErr: `invalid poll_interval "nope"`,
 		},
 		{
-			name: "allowed_tools empty string",
+			name:          "allowed_tools empty string",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -490,7 +553,8 @@ func TestValidate(t *testing.T) {
 			wantErr: "allowed_tools must not be empty when specified",
 		},
 		{
-			name: "allowed_tools nil is valid",
+			name:          "allowed_tools nil is valid",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -500,7 +564,8 @@ func TestValidate(t *testing.T) {
 			prompts: []string{"prompt.md"},
 		},
 		{
-			name: "allowed_tools with value is valid",
+			name:          "allowed_tools with value is valid",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -510,7 +575,8 @@ func TestValidate(t *testing.T) {
 			prompts: []string{"prompt.md"},
 		},
 		{
-			name: "valid command gate with all fields",
+			name:          "valid command gate with all fields",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -528,7 +594,8 @@ func TestValidate(t *testing.T) {
 			prompts: []string{"prompt.md"},
 		},
 		{
-			name: "valid label gate with all fields",
+			name:          "valid label gate with all fields",
+			skillFileName: "test",
 			skill: Skill{
 				Name: "test",
 				Phases: []Phase{
@@ -545,16 +612,36 @@ func TestValidate(t *testing.T) {
 			},
 			prompts: []string{"prompt.md"},
 		},
+		{
+			name:          "name does not match filename",
+			skillFileName: "test",
+			skill: Skill{
+				Name: "wrong-name",
+				Phases: []Phase{
+					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 5},
+				},
+			},
+			prompts: []string{"prompt.md"},
+			wantErr: `skill name "wrong-name" does not match filename "test.yaml"`,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			dir := t.TempDir()
+			chdirTemp(t, dir)
+
 			for _, p := range tt.prompts {
 				createPromptFile(t, dir, p)
 			}
 
-			err := tt.skill.Validate(dir)
+			skillFileName := tt.skillFileName
+			if skillFileName == "" {
+				skillFileName = "test"
+			}
+			skillFilePath := filepath.Join(dir, skillFileName+".yaml")
+
+			err := tt.skill.Validate(skillFilePath)
 
 			if tt.wantErr != "" {
 				requireErrorContains(t, err, tt.wantErr)
