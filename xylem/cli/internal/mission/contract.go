@@ -1,6 +1,7 @@
 package mission
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -22,6 +23,13 @@ type VerificationStep struct {
 	Type        string `json:"type"` // test, lint, formal, manual
 	Command     string `json:"command"`
 	Description string `json:"description"`
+}
+
+// ContractPoster posts a sprint contract to an external platform (e.g.,
+// GitHub issue comment, Linear comment, CLI output). Implementations handle
+// platform-specific formatting and API calls.
+type ContractPoster interface {
+	PostContract(ctx context.Context, contract SprintContract) error
 }
 
 // SprintContract is the agreement that defines "done" before work begins.
@@ -155,4 +163,58 @@ func LoadContract(missionID string, dir string) (*SprintContract, error) {
 		return nil, fmt.Errorf("load contract: unmarshal: %w", err)
 	}
 	return &c, nil
+}
+
+// FormatContractMarkdown renders a SprintContract as a human-readable
+// Markdown string suitable for posting as a comment or message.
+// INV: Output is never empty for a valid contract.
+func FormatContractMarkdown(c SprintContract) string {
+	var b strings.Builder
+
+	fmt.Fprintf(&b, "## Sprint Contract: %s\n\n", c.MissionID)
+
+	b.WriteString("### Tasks\n\n")
+	for i, task := range c.Tasks {
+		desc := task.Description
+		if desc == "" {
+			desc = task.ID
+		}
+		fmt.Fprintf(&b, "%d. %s\n", i+1, desc)
+	}
+
+	b.WriteString("\n### Acceptance Criteria\n\n")
+	for _, cr := range c.Criteria {
+		fmt.Fprintf(&b, "- **%s**: %s (threshold: %.2f)\n", cr.Name, cr.Description, cr.Threshold)
+	}
+
+	b.WriteString("\n### Verification Steps\n\n")
+	for _, vs := range c.VerificationSteps {
+		if vs.Command != "" {
+			fmt.Fprintf(&b, "- [%s] %s: `%s`\n", vs.Type, vs.Description, vs.Command)
+		} else {
+			fmt.Fprintf(&b, "- [%s] %s\n", vs.Type, vs.Description)
+		}
+	}
+
+	fmt.Fprintf(&b, "\n---\n*Created: %s*\n", c.CreatedAt.Format(time.RFC3339))
+
+	return b.String()
+}
+
+// SaveAndPost saves the contract locally and posts it via the provided poster.
+// If poster is nil, only the local save is performed. If saving fails, posting
+// is skipped. If posting fails, the contract is still saved locally and the
+// post error is returned.
+// INV: Local file is always written if SaveContract succeeds, regardless of poster result.
+func SaveAndPost(ctx context.Context, c SprintContract, dir string, poster ContractPoster) error {
+	if err := SaveContract(c, dir); err != nil {
+		return fmt.Errorf("save and post: %w", err)
+	}
+	if poster == nil {
+		return nil
+	}
+	if err := poster.PostContract(ctx, c); err != nil {
+		return fmt.Errorf("save and post: post: %w", err)
+	}
+	return nil
 }

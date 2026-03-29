@@ -1,6 +1,10 @@
 package mission
 
 import (
+	"context"
+	"errors"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 	"time"
@@ -646,5 +650,185 @@ func TestLoadContractRejectsPathTraversal(t *testing.T) {
 				t.Errorf("expected error containing %q, got %q", tc.wantErr, err.Error())
 			}
 		})
+	}
+}
+
+// --- mockPoster for ContractPoster tests ---
+
+type mockPoster struct {
+	called   bool
+	contract SprintContract
+	err      error
+}
+
+func (m *mockPoster) PostContract(_ context.Context, c SprintContract) error {
+	m.called = true
+	m.contract = c
+	return m.err
+}
+
+// --- FormatContractMarkdown tests ---
+
+func sampleContract() SprintContract {
+	return SprintContract{
+		MissionID: "m-fmt-001",
+		Tasks: []Task{
+			{ID: "t-1", MissionID: "m-fmt-001", Description: "implement login", Status: Pending},
+			{ID: "t-2", MissionID: "m-fmt-001", Description: "add tests", Status: Pending},
+		},
+		Criteria: []Criterion{
+			{Name: "coverage", Description: "code coverage above threshold", Threshold: 0.8, Required: true},
+		},
+		VerificationSteps: []VerificationStep{
+			{Type: "test", Command: "go test ./...", Description: "run unit tests"},
+			{Type: "manual", Description: "review code"},
+		},
+		CreatedAt: time.Date(2025, 6, 15, 12, 0, 0, 0, time.UTC),
+	}
+}
+
+func TestFormatContractMarkdownContainsMissionID(t *testing.T) {
+	c := sampleContract()
+	md := FormatContractMarkdown(c)
+	if !strings.Contains(md, c.MissionID) {
+		t.Errorf("markdown should contain mission ID %q, got:\n%s", c.MissionID, md)
+	}
+}
+
+func TestFormatContractMarkdownContainsTasks(t *testing.T) {
+	c := sampleContract()
+	md := FormatContractMarkdown(c)
+	for _, task := range c.Tasks {
+		if !strings.Contains(md, task.Description) {
+			t.Errorf("markdown should contain task description %q, got:\n%s", task.Description, md)
+		}
+	}
+}
+
+func TestFormatContractMarkdownContainsCriteria(t *testing.T) {
+	c := sampleContract()
+	md := FormatContractMarkdown(c)
+	for _, cr := range c.Criteria {
+		if !strings.Contains(md, cr.Name) {
+			t.Errorf("markdown should contain criterion name %q, got:\n%s", cr.Name, md)
+		}
+		if !strings.Contains(md, cr.Description) {
+			t.Errorf("markdown should contain criterion description %q, got:\n%s", cr.Description, md)
+		}
+	}
+}
+
+func TestFormatContractMarkdownContainsVerificationSteps(t *testing.T) {
+	c := sampleContract()
+	md := FormatContractMarkdown(c)
+	for _, vs := range c.VerificationSteps {
+		if !strings.Contains(md, vs.Description) {
+			t.Errorf("markdown should contain step description %q, got:\n%s", vs.Description, md)
+		}
+		if !strings.Contains(md, vs.Type) {
+			t.Errorf("markdown should contain step type %q, got:\n%s", vs.Type, md)
+		}
+		if vs.Command != "" && !strings.Contains(md, vs.Command) {
+			t.Errorf("markdown should contain step command %q, got:\n%s", vs.Command, md)
+		}
+	}
+}
+
+// --- SaveAndPost tests ---
+
+func TestSaveAndPostNilPoster(t *testing.T) {
+	dir := t.TempDir()
+	c := SprintContract{
+		MissionID: "m-nilpost",
+		Tasks:     []Task{{ID: "t-1", MissionID: "m-nilpost", Description: "do thing", Status: Pending}},
+		Criteria:  []Criterion{{Name: "pass", Threshold: 1.0, Required: true}},
+		CreatedAt: time.Now(),
+	}
+
+	err := SaveAndPost(context.Background(), c, dir, nil)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	// Verify file was saved.
+	path := filepath.Join(dir, "contracts", "m-nilpost.json")
+	if _, err := os.Stat(path); err != nil {
+		t.Fatalf("expected contract file to exist at %s: %v", path, err)
+	}
+}
+
+func TestSaveAndPostSuccess(t *testing.T) {
+	dir := t.TempDir()
+	c := SprintContract{
+		MissionID: "m-post-ok",
+		Tasks:     []Task{{ID: "t-1", MissionID: "m-post-ok", Description: "do thing", Status: Pending}},
+		Criteria:  []Criterion{{Name: "pass", Threshold: 1.0, Required: true}},
+		CreatedAt: time.Now(),
+	}
+	poster := &mockPoster{}
+
+	err := SaveAndPost(context.Background(), c, dir, poster)
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+	if !poster.called {
+		t.Fatal("expected poster to be called")
+	}
+	if poster.contract.MissionID != c.MissionID {
+		t.Errorf("poster received MissionID %q, want %q", poster.contract.MissionID, c.MissionID)
+	}
+
+	// Verify file was saved.
+	path := filepath.Join(dir, "contracts", "m-post-ok.json")
+	if _, err := os.Stat(path); err != nil {
+		t.Fatalf("expected contract file to exist: %v", err)
+	}
+}
+
+func TestSaveAndPostSaveError(t *testing.T) {
+	// Use a non-writable directory to force save failure.
+	dir := "/nonexistent/path/that/does/not/exist"
+	c := SprintContract{
+		MissionID: "m-save-err",
+		Tasks:     []Task{{ID: "t-1", MissionID: "m-save-err", Description: "do thing", Status: Pending}},
+		Criteria:  []Criterion{{Name: "pass", Threshold: 1.0, Required: true}},
+		CreatedAt: time.Now(),
+	}
+	poster := &mockPoster{}
+
+	err := SaveAndPost(context.Background(), c, dir, poster)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.Contains(err.Error(), "save and post") {
+		t.Errorf("expected error containing 'save and post', got %q", err.Error())
+	}
+	if poster.called {
+		t.Fatal("poster should NOT be called when save fails")
+	}
+}
+
+func TestSaveAndPostPostError(t *testing.T) {
+	dir := t.TempDir()
+	c := SprintContract{
+		MissionID: "m-post-err",
+		Tasks:     []Task{{ID: "t-1", MissionID: "m-post-err", Description: "do thing", Status: Pending}},
+		Criteria:  []Criterion{{Name: "pass", Threshold: 1.0, Required: true}},
+		CreatedAt: time.Now(),
+	}
+	poster := &mockPoster{err: errors.New("API unavailable")}
+
+	err := SaveAndPost(context.Background(), c, dir, poster)
+	if err == nil {
+		t.Fatal("expected error, got nil")
+	}
+	if !strings.Contains(err.Error(), "post") {
+		t.Errorf("expected error containing 'post', got %q", err.Error())
+	}
+
+	// INV: Local file is always written if SaveContract succeeds.
+	path := filepath.Join(dir, "contracts", "m-post-err.json")
+	if _, err := os.Stat(path); err != nil {
+		t.Fatalf("contract file should exist even when post fails: %v", err)
 	}
 }

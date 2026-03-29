@@ -2,6 +2,7 @@ package mission
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
@@ -230,6 +231,61 @@ func TestPropBlastRadiusEmptyDenies(t *testing.T) {
 		err := CheckBlastRadius([]string{path}, []string{})
 		if err == nil {
 			t.Fatalf("empty allowed should deny %q", path)
+		}
+	})
+}
+
+// --- Property: FormatContractMarkdown contains all task descriptions ---
+
+func TestPropFormatContractMarkdownContainsAllTasks(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		taskCount := rapid.IntRange(1, 10).Draw(t, "task_count")
+		tasks := make([]Task, taskCount)
+		for i := range tasks {
+			tasks[i] = Task{
+				ID:          rapid.StringMatching(`t-[a-z0-9]{3,8}`).Draw(t, "task_id"),
+				MissionID:   "m-prop",
+				Description: rapid.StringMatching(`[a-z ]{5,30}`).Draw(t, "desc"),
+				Status:      Pending,
+			}
+		}
+
+		c := SprintContract{
+			MissionID: "m-prop",
+			Tasks:     tasks,
+			Criteria:  []Criterion{{Name: "c", Threshold: 1.0}},
+			CreatedAt: time.Date(2025, 6, 15, 12, 0, 0, 0, time.UTC),
+		}
+
+		md := FormatContractMarkdown(c)
+		for _, task := range tasks {
+			if !strings.Contains(md, task.Description) {
+				t.Fatalf("markdown missing task description %q", task.Description)
+			}
+		}
+	})
+}
+
+// --- Property: FormatContractMarkdown is never empty for valid contracts ---
+
+func TestPropFormatContractMarkdownNonEmpty(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		missionID := rapid.StringMatching(`m-[a-z0-9]{3,8}`).Draw(t, "mission_id")
+		c := SprintContract{
+			MissionID: missionID,
+			Tasks: []Task{{
+				ID:          rapid.StringMatching(`t-[a-z0-9]{3,8}`).Draw(t, "task_id"),
+				MissionID:   missionID,
+				Description: rapid.StringMatching(`[a-z ]{5,30}`).Draw(t, "desc"),
+				Status:      Pending,
+			}},
+			Criteria:  []Criterion{{Name: rapid.StringMatching(`[a-z]{3,10}`).Draw(t, "crit"), Threshold: 1.0}},
+			CreatedAt: time.Date(2025, 6, 15, 12, 0, 0, 0, time.UTC),
+		}
+
+		md := FormatContractMarkdown(c)
+		if md == "" {
+			t.Fatal("FormatContractMarkdown returned empty string for valid contract")
 		}
 	})
 }
