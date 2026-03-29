@@ -604,3 +604,178 @@ func TestGetTopologyReturnsCopy(t *testing.T) {
 		t.Fatalf("expected default pattern (sequential), got %s", internal.Pattern)
 	}
 }
+
+// --- HandleFailure tests ---
+
+func TestHandleFailureRetryPolicy(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{FailurePolicy: "retry"})
+	_ = o.AddAgent("a1", "task-1")
+	_ = o.UpdateAgent("a1", StatusFailed, 100, time.Second, "boom")
+
+	action, err := o.HandleFailure("a1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if action != ActionRetry {
+		t.Fatalf("expected ActionRetry, got %s", action)
+	}
+}
+
+func TestHandleFailureContinuePolicy(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{FailurePolicy: "continue"})
+	_ = o.AddAgent("a1", "task-1")
+	_ = o.UpdateAgent("a1", StatusFailed, 50, time.Second, "error")
+
+	action, err := o.HandleFailure("a1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if action != ActionSkip {
+		t.Fatalf("expected ActionSkip, got %s", action)
+	}
+}
+
+func TestHandleFailureFailFastPolicy(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{FailurePolicy: "fail-fast"})
+	_ = o.AddAgent("a1", "task-1")
+	_ = o.UpdateAgent("a1", StatusTimedOut, 0, 30*time.Second, "deadline exceeded")
+
+	action, err := o.HandleFailure("a1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if action != ActionEscalate {
+		t.Fatalf("expected ActionEscalate, got %s", action)
+	}
+}
+
+func TestHandleFailureDefaultPolicy(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{FailurePolicy: "unknown-policy"})
+	_ = o.AddAgent("a1", "task-1")
+	_ = o.UpdateAgent("a1", StatusFailed, 0, 0, "err")
+
+	action, err := o.HandleFailure("a1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if action != ActionEscalate {
+		t.Fatalf("expected ActionEscalate for unknown policy, got %s", action)
+	}
+}
+
+func TestHandleFailureUnknownAgent(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{FailurePolicy: "retry"})
+	_, err := o.HandleFailure("nonexistent")
+	if err == nil {
+		t.Fatal("expected error for unknown agent")
+	}
+	if !strings.Contains(err.Error(), "unknown agent") {
+		t.Errorf("error should mention unknown agent, got: %v", err)
+	}
+}
+
+func TestHandleFailureNotFailed(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{FailurePolicy: "retry"})
+	_ = o.AddAgent("a1", "task-1")
+	_ = o.UpdateAgent("a1", StatusRunning, 0, 0, "")
+
+	_, err := o.HandleFailure("a1")
+	if err == nil {
+		t.Fatal("expected error for non-failed agent")
+	}
+	if !strings.Contains(err.Error(), "not in a failed state") {
+		t.Errorf("error should mention not in a failed state, got: %v", err)
+	}
+
+	// Also test with completed status.
+	_ = o.UpdateAgent("a1", StatusCompleted, 100, time.Second, "")
+	_, err = o.HandleFailure("a1")
+	if err == nil {
+		t.Fatal("expected error for completed agent")
+	}
+}
+
+// --- BuildFailureReport tests ---
+
+func TestBuildFailureReportBasic(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{FailurePolicy: "retry"})
+	_ = o.AddAgent("a1", "task-1")
+	_ = o.UpdateAgent("a1", StatusFailed, 150, 5*time.Second, "out of memory")
+
+	report, err := o.BuildFailureReport("a1")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if report.AgentID != "a1" {
+		t.Errorf("AgentID = %q, want %q", report.AgentID, "a1")
+	}
+	if report.Task != "task-1" {
+		t.Errorf("Task = %q, want %q", report.Task, "task-1")
+	}
+	if report.Error != "out of memory" {
+		t.Errorf("Error = %q, want %q", report.Error, "out of memory")
+	}
+	if report.Status != StatusFailed {
+		t.Errorf("Status = %s, want %s", report.Status, StatusFailed)
+	}
+	if report.TokensUsed != 150 {
+		t.Errorf("TokensUsed = %d, want 150", report.TokensUsed)
+	}
+	if report.WallClock != 5*time.Second {
+		t.Errorf("WallClock = %v, want %v", report.WallClock, 5*time.Second)
+	}
+	if report.Action != ActionRetry {
+		t.Errorf("Action = %s, want %s", report.Action, ActionRetry)
+	}
+	if len(report.CompletedDeps) != 0 {
+		t.Errorf("CompletedDeps should be empty, got %v", report.CompletedDeps)
+	}
+	if len(report.FailedDeps) != 0 {
+		t.Errorf("FailedDeps should be empty, got %v", report.FailedDeps)
+	}
+}
+
+func TestBuildFailureReportWithDeps(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{FailurePolicy: "continue"})
+	_ = o.AddAgent("dep-ok", "upstream-ok")
+	_ = o.AddAgent("dep-fail", "upstream-fail")
+	_ = o.AddAgent("target", "main-task")
+	_ = o.AddEdge("dep-ok", "target", "depends")
+	_ = o.AddEdge("dep-fail", "target", "depends")
+	_ = o.UpdateAgent("dep-ok", StatusCompleted, 100, time.Second, "")
+	_ = o.UpdateAgent("dep-fail", StatusFailed, 50, time.Second, "upstream error")
+	_ = o.UpdateAgent("target", StatusFailed, 0, 2*time.Second, "dependency failure")
+
+	report, err := o.BuildFailureReport("target")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if report.Action != ActionSkip {
+		t.Errorf("Action = %s, want %s", report.Action, ActionSkip)
+	}
+	if len(report.CompletedDeps) != 1 || report.CompletedDeps[0] != "dep-ok" {
+		t.Errorf("CompletedDeps = %v, want [dep-ok]", report.CompletedDeps)
+	}
+	if len(report.FailedDeps) != 1 || report.FailedDeps[0] != "dep-fail" {
+		t.Errorf("FailedDeps = %v, want [dep-fail]", report.FailedDeps)
+	}
+}
+
+// --- FailureAction String tests ---
+
+func TestFailureActionString(t *testing.T) {
+	tests := []struct {
+		a    FailureAction
+		want string
+	}{
+		{ActionRetry, "retry"},
+		{ActionSkip, "skip"},
+		{ActionEscalate, "escalate"},
+		{FailureAction(99), "unknown(99)"},
+	}
+	for _, tt := range tests {
+		if got := tt.a.String(); got != tt.want {
+			t.Errorf("FailureAction(%d).String() = %q, want %q", int(tt.a), got, tt.want)
+		}
+	}
+}
