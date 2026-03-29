@@ -245,6 +245,17 @@ func TestSubmit_DeniedIntentDoesNotExecute(t *testing.T) {
 	if exec.calls() != 0 {
 		t.Fatalf("executor calls: got %d, want 0 (denied intent must not execute)", exec.calls())
 	}
+
+	entries, err := al.Entries()
+	if err != nil {
+		t.Fatalf("read audit: %v", err)
+	}
+	if len(entries) != 1 {
+		t.Fatalf("audit entries: got %d, want 1", len(entries))
+	}
+	if entries[0].Decision != Deny {
+		t.Fatalf("audit decision: got %q, want %q", entries[0].Decision, Deny)
+	}
 }
 
 func TestSubmit_ExecutorErrorCaptured(t *testing.T) {
@@ -456,6 +467,14 @@ func TestMatchGlob(t *testing.T) {
 		{"?ile.read", "file.read", true},
 		{"?ile.read", "xile.read", true},
 		{"?ile.read", "xxile.read", false},
+		// Edge case: empty pattern
+		{"", "", true},
+		{"", "x", false},
+		// Path separator: * does not cross /
+		{"/tmp/*", "/tmp/foo", true},
+		{"/tmp/*", "/tmp/foo/bar", false},
+		// Malformed pattern: fail-closed
+		{"[", "x", false},
 	}
 
 	for _, tt := range tests {
