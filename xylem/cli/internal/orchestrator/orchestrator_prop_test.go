@@ -226,3 +226,71 @@ func TestPropBackEdgeCreatesCycle(t *testing.T) {
 		}
 	})
 }
+
+// --- Property: HandleFailure always returns a valid FailureAction ---
+
+func TestPropHandleFailureAlwaysValidAction(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		policy := rapid.SampledFrom([]string{"retry", "continue", "fail-fast", "unknown", ""}).Draw(t, "policy")
+		status := rapid.SampledFrom([]AgentStatus{StatusFailed, StatusTimedOut}).Draw(t, "status")
+		o := NewOrchestrator(OrchestratorConfig{FailurePolicy: policy})
+		_ = o.AddAgent("a1", "task")
+		_ = o.UpdateAgent("a1", status, 0, time.Second, "error")
+
+		action, err := o.HandleFailure("a1")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		valid := action == ActionRetry || action == ActionSkip || action == ActionEscalate
+		if !valid {
+			t.Fatalf("HandleFailure returned invalid action: %d", int(action))
+		}
+	})
+}
+
+// --- Property: BuildFailureReport fields match the agent slot ---
+
+func TestPropBuildFailureReportAgentFieldsMatch(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		policy := rapid.SampledFrom([]string{"retry", "continue", "fail-fast"}).Draw(t, "policy")
+		tokens := rapid.IntRange(0, 10000).Draw(t, "tokens")
+		wallSec := rapid.IntRange(0, 300).Draw(t, "wallSec")
+		wallClock := time.Duration(wallSec) * time.Second
+		errMsg := rapid.StringMatching(`[a-z ]{0,30}`).Draw(t, "errMsg")
+		task := rapid.StringMatching(`[a-z-]{1,20}`).Draw(t, "task")
+		status := rapid.SampledFrom([]AgentStatus{StatusFailed, StatusTimedOut}).Draw(t, "status")
+
+		o := NewOrchestrator(OrchestratorConfig{FailurePolicy: policy})
+		_ = o.AddAgent("target", task)
+		_ = o.UpdateAgent("target", status, tokens, wallClock, errMsg)
+
+		report, err := o.BuildFailureReport("target")
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if report.AgentID != "target" {
+			t.Fatalf("AgentID = %q, want %q", report.AgentID, "target")
+		}
+		if report.Task != task {
+			t.Fatalf("Task = %q, want %q", report.Task, task)
+		}
+		if report.Error != errMsg {
+			t.Fatalf("Error = %q, want %q", report.Error, errMsg)
+		}
+		if report.Status != status {
+			t.Fatalf("Status = %s, want %s", report.Status, status)
+		}
+		if report.TokensUsed != tokens {
+			t.Fatalf("TokensUsed = %d, want %d", report.TokensUsed, tokens)
+		}
+		if report.WallClock != wallClock {
+			t.Fatalf("WallClock = %v, want %v", report.WallClock, wallClock)
+		}
+		if report.CompletedDeps == nil {
+			t.Fatal("CompletedDeps should not be nil")
+		}
+		if report.FailedDeps == nil {
+			t.Fatal("FailedDeps should not be nil")
+		}
+	})
+}

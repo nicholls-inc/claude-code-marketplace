@@ -441,3 +441,130 @@ func NewCommunicationFile(from, to, fileType, filePath string) CommunicationFile
 		CreatedAt: time.Now(),
 	}
 }
+
+// FailureAction specifies the recommended response to an agent failure.
+type FailureAction int
+
+const (
+	// ActionRetry indicates the same task should be retried with fresh context.
+	ActionRetry FailureAction = iota
+	// ActionSkip indicates the failed task should be skipped.
+	ActionSkip
+	// ActionEscalate indicates the failure should be escalated to the operator.
+	ActionEscalate
+)
+
+// String returns the human-readable name for a FailureAction.
+func (a FailureAction) String() string {
+	switch a {
+	case ActionRetry:
+		return "retry"
+	case ActionSkip:
+		return "skip"
+	case ActionEscalate:
+		return "escalate"
+	default:
+		return fmt.Sprintf("unknown(%d)", int(a))
+	}
+}
+
+// FailureReport captures context about a failed agent for debugging and
+// escalation purposes.
+type FailureReport struct {
+	AgentID       string        `json:"agent_id"`
+	Task          string        `json:"task"`
+	Error         string        `json:"error"`
+	Status        AgentStatus   `json:"status"`
+	TokensUsed    int           `json:"tokens_used"`
+	WallClock     time.Duration `json:"wall_clock"`
+	Action        FailureAction `json:"action"`
+	CompletedDeps []string      `json:"completed_deps"`
+	FailedDeps    []string      `json:"failed_deps"`
+}
+
+// failedAgent looks up an agent by ID and verifies it is in a terminal
+// failure state. Returns the slot pointer or an error with the given context
+// prefix.
+func (o *Orchestrator) failedAgent(agentID, context string) (*AgentSlot, error) {
+	// INV: agentID must reference a known agent in a terminal failure state.
+	for i := range o.topology.Nodes {
+		if o.topology.Nodes[i].ID == agentID {
+			s := &o.topology.Nodes[i]
+			if s.Status != StatusFailed && s.Status != StatusTimedOut {
+				return nil, fmt.Errorf("%s: agent %q is not in a failed state (status: %s)", context, agentID, s.Status)
+			}
+			return s, nil
+		}
+	}
+	return nil, fmt.Errorf("%s: unknown agent %q", context, agentID)
+}
+
+// HandleFailure determines the recommended action for a failed agent based
+// on the orchestrator's FailurePolicy. Returns an error if the agent is not
+// found or is not in a failed/timed-out state.
+//
+// Policy mapping:
+//
+//	"retry"     -> ActionRetry
+//	"continue"  -> ActionSkip
+//	"fail-fast" -> ActionEscalate
+//	default     -> ActionEscalate
+func (o *Orchestrator) HandleFailure(agentID string) (FailureAction, error) {
+	if _, err := o.failedAgent(agentID, "handle failure"); err != nil {
+		return ActionEscalate, err
+	}
+
+	switch o.config.FailurePolicy {
+	case "retry":
+		return ActionRetry, nil
+	case "continue":
+		return ActionSkip, nil
+	case "fail-fast":
+		return ActionEscalate, nil
+	default:
+		return ActionEscalate, nil
+	}
+}
+
+// BuildFailureReport constructs a FailureReport for the given agent,
+// including upstream dependency status.
+func (o *Orchestrator) BuildFailureReport(agentID string) (*FailureReport, error) {
+	found, err := o.failedAgent(agentID, "build failure report")
+	if err != nil {
+		return nil, err
+	}
+
+	action, _ := o.HandleFailure(agentID)
+
+	// Collect upstream dependencies: edges where To == agentID.
+	completedDeps := []string{}
+	failedDeps := []string{}
+	for _, e := range o.topology.Edges {
+		if e.To != agentID {
+			continue
+		}
+		for i := range o.topology.Nodes {
+			if o.topology.Nodes[i].ID == e.From {
+				switch o.topology.Nodes[i].Status {
+				case StatusCompleted:
+					completedDeps = append(completedDeps, e.From)
+				case StatusFailed, StatusTimedOut:
+					failedDeps = append(failedDeps, e.From)
+				}
+				break
+			}
+		}
+	}
+
+	return &FailureReport{
+		AgentID:       found.ID,
+		Task:          found.Task,
+		Error:         found.Error,
+		Status:        found.Status,
+		TokensUsed:    found.TokensUsed,
+		WallClock:     found.WallClock,
+		Action:        action,
+		CompletedDeps: completedDeps,
+		FailedDeps:    failedDeps,
+	}, nil
+}
