@@ -353,6 +353,17 @@ func TestNewContract(t *testing.T) {
 			steps:    steps,
 			wantErr:  "at least one criterion is required",
 		},
+		{
+			name:    "duplicate task IDs",
+			mission: m,
+			tasks: []Task{
+				{ID: "t-1", MissionID: m.ID, Description: "first", Status: Pending},
+				{ID: "t-1", MissionID: m.ID, Description: "second", Status: Pending},
+			},
+			criteria: criteria,
+			steps:    steps,
+			wantErr:  "duplicate task ID",
+		},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -513,10 +524,39 @@ func TestContractSaveLoadRoundTrip(t *testing.T) {
 		t.Errorf("MissionID: got %q, want %q", loaded.MissionID, original.MissionID)
 	}
 	if len(loaded.Tasks) != len(original.Tasks) {
-		t.Errorf("Tasks len: got %d, want %d", len(loaded.Tasks), len(original.Tasks))
+		t.Fatalf("Tasks len: got %d, want %d", len(loaded.Tasks), len(original.Tasks))
+	}
+	// Verify task fields including Dependencies.
+	for i, want := range original.Tasks {
+		got := loaded.Tasks[i]
+		if got.ID != want.ID {
+			t.Errorf("Tasks[%d].ID: got %q, want %q", i, got.ID, want.ID)
+		}
+		if got.Description != want.Description {
+			t.Errorf("Tasks[%d].Description: got %q, want %q", i, got.Description, want.Description)
+		}
+		if got.Status != want.Status {
+			t.Errorf("Tasks[%d].Status: got %q, want %q", i, got.Status, want.Status)
+		}
+		if len(got.Dependencies) != len(want.Dependencies) {
+			t.Errorf("Tasks[%d].Dependencies len: got %d, want %d", i, len(got.Dependencies), len(want.Dependencies))
+		} else {
+			for j, dep := range want.Dependencies {
+				if got.Dependencies[j] != dep {
+					t.Errorf("Tasks[%d].Dependencies[%d]: got %q, want %q", i, j, got.Dependencies[j], dep)
+				}
+			}
+		}
 	}
 	if len(loaded.Criteria) != len(original.Criteria) {
 		t.Errorf("Criteria len: got %d, want %d", len(loaded.Criteria), len(original.Criteria))
+	}
+	// Verify CreatedAt round-trips.
+	if loaded.CreatedAt.IsZero() {
+		t.Error("CreatedAt should not be zero after round-trip")
+	}
+	if !loaded.CreatedAt.Equal(original.CreatedAt) {
+		t.Errorf("CreatedAt: got %v, want %v", loaded.CreatedAt, original.CreatedAt)
 	}
 	if loaded.AcceptedAt == nil {
 		t.Fatal("AcceptedAt should not be nil after round-trip")
@@ -531,5 +571,80 @@ func TestLoadContractNotFound(t *testing.T) {
 	_, err := LoadContract("nonexistent", dir)
 	if err == nil {
 		t.Fatal("expected error loading nonexistent contract")
+	}
+}
+
+// --- Path sanitization tests ---
+
+func TestSaveContractRejectsPathTraversal(t *testing.T) {
+	tests := []struct {
+		name      string
+		missionID string
+		wantErr   string
+	}{
+		{
+			name:      "forward slash",
+			missionID: "../etc/passwd",
+			wantErr:   "path separator",
+		},
+		{
+			name:      "backslash",
+			missionID: `..\..\secret`,
+			wantErr:   "path separator",
+		},
+		{
+			name:      "dotdot only",
+			missionID: "..",
+			wantErr:   "path traversal",
+		},
+		{
+			name:      "embedded slash",
+			missionID: "foo/bar",
+			wantErr:   "path separator",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			dir := t.TempDir()
+			c := SprintContract{MissionID: tc.missionID}
+			err := SaveContract(c, dir)
+			if err == nil {
+				t.Fatal("expected error, got nil")
+			}
+			if !strings.Contains(err.Error(), tc.wantErr) {
+				t.Errorf("expected error containing %q, got %q", tc.wantErr, err.Error())
+			}
+		})
+	}
+}
+
+func TestLoadContractRejectsPathTraversal(t *testing.T) {
+	tests := []struct {
+		name      string
+		missionID string
+		wantErr   string
+	}{
+		{
+			name:      "forward slash",
+			missionID: "../etc/passwd",
+			wantErr:   "path separator",
+		},
+		{
+			name:      "dotdot only",
+			missionID: "..",
+			wantErr:   "path traversal",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			dir := t.TempDir()
+			_, err := LoadContract(tc.missionID, dir)
+			if err == nil {
+				t.Fatal("expected error, got nil")
+			}
+			if !strings.Contains(err.Error(), tc.wantErr) {
+				t.Errorf("expected error containing %q, got %q", tc.wantErr, err.Error())
+			}
+		})
 	}
 }

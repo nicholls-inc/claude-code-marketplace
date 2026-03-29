@@ -44,15 +44,43 @@ func TestPropValidMissionPassesValidation(t *testing.T) {
 // --- Property: negative constraint values are rejected ---
 
 func TestPropNegativeConstraintRejected(t *testing.T) {
-	rapid.Check(t, func(t *rapid.T) {
-		c := Constraint{
-			MaxRetries:  rapid.IntRange(-1000, -1).Draw(t, "max_retries"),
-			TokenBudget: rapid.IntRange(0, 100).Draw(t, "token_budget"),
-			TimeBudget:  time.Duration(rapid.IntRange(0, 100).Draw(t, "time_budget")) * time.Second,
-		}
-		if err := ValidateConstraint(c); err == nil {
-			t.Fatal("expected error for negative max_retries")
-		}
+	t.Run("negative MaxRetries", func(t *testing.T) {
+		rapid.Check(t, func(t *rapid.T) {
+			c := Constraint{
+				MaxRetries:  rapid.IntRange(-1000, -1).Draw(t, "max_retries"),
+				TokenBudget: rapid.IntRange(0, 100).Draw(t, "token_budget"),
+				TimeBudget:  time.Duration(rapid.IntRange(0, 100).Draw(t, "time_budget")) * time.Second,
+			}
+			if err := ValidateConstraint(c); err == nil {
+				t.Fatal("expected error for negative max_retries")
+			}
+		})
+	})
+
+	t.Run("negative TokenBudget", func(t *testing.T) {
+		rapid.Check(t, func(t *rapid.T) {
+			c := Constraint{
+				MaxRetries:  rapid.IntRange(0, 100).Draw(t, "max_retries"),
+				TokenBudget: rapid.IntRange(-1000, -1).Draw(t, "token_budget"),
+				TimeBudget:  time.Duration(rapid.IntRange(0, 100).Draw(t, "time_budget")) * time.Second,
+			}
+			if err := ValidateConstraint(c); err == nil {
+				t.Fatal("expected error for negative token_budget")
+			}
+		})
+	})
+
+	t.Run("negative TimeBudget", func(t *testing.T) {
+		rapid.Check(t, func(t *rapid.T) {
+			c := Constraint{
+				MaxRetries:  rapid.IntRange(0, 100).Draw(t, "max_retries"),
+				TokenBudget: rapid.IntRange(0, 100).Draw(t, "token_budget"),
+				TimeBudget:  time.Duration(rapid.IntRange(-1000, -1).Draw(t, "time_budget")) * time.Second,
+			}
+			if err := ValidateConstraint(c); err == nil {
+				t.Fatal("expected error for negative time_budget")
+			}
+		})
 	})
 }
 
@@ -102,10 +130,40 @@ func TestPropContractJSONRoundTrip(t *testing.T) {
 			t.Errorf("MissionID mismatch: %q != %q", decoded.MissionID, original.MissionID)
 		}
 		if len(decoded.Tasks) != len(original.Tasks) {
-			t.Errorf("Tasks len mismatch: %d != %d", len(decoded.Tasks), len(original.Tasks))
+			t.Fatalf("Tasks len mismatch: %d != %d", len(decoded.Tasks), len(original.Tasks))
+		}
+		for i, want := range original.Tasks {
+			got := decoded.Tasks[i]
+			if got.ID != want.ID {
+				t.Errorf("Tasks[%d].ID: got %q, want %q", i, got.ID, want.ID)
+			}
+			if got.MissionID != want.MissionID {
+				t.Errorf("Tasks[%d].MissionID: got %q, want %q", i, got.MissionID, want.MissionID)
+			}
+			if got.Description != want.Description {
+				t.Errorf("Tasks[%d].Description: got %q, want %q", i, got.Description, want.Description)
+			}
+			if got.Status != want.Status {
+				t.Errorf("Tasks[%d].Status: got %q, want %q", i, got.Status, want.Status)
+			}
 		}
 		if len(decoded.Criteria) != len(original.Criteria) {
-			t.Errorf("Criteria len mismatch: %d != %d", len(decoded.Criteria), len(original.Criteria))
+			t.Fatalf("Criteria len mismatch: %d != %d", len(decoded.Criteria), len(original.Criteria))
+		}
+		for i, want := range original.Criteria {
+			got := decoded.Criteria[i]
+			if got.Name != want.Name {
+				t.Errorf("Criteria[%d].Name: got %q, want %q", i, got.Name, want.Name)
+			}
+			if got.Description != want.Description {
+				t.Errorf("Criteria[%d].Description: got %q, want %q", i, got.Description, want.Description)
+			}
+			if got.Threshold != want.Threshold {
+				t.Errorf("Criteria[%d].Threshold: got %v, want %v", i, got.Threshold, want.Threshold)
+			}
+			if got.Required != want.Required {
+				t.Errorf("Criteria[%d].Required: got %v, want %v", i, got.Required, want.Required)
+			}
 		}
 		if !decoded.CreatedAt.Equal(original.CreatedAt) {
 			t.Errorf("CreatedAt mismatch: %v != %v", decoded.CreatedAt, original.CreatedAt)
@@ -113,18 +171,40 @@ func TestPropContractJSONRoundTrip(t *testing.T) {
 	})
 }
 
-// --- Property: AnalyzeComplexity is deterministic ---
+// --- Property: fileCount >= 10 always yields Complex ---
 
-func TestPropComplexityDeterministic(t *testing.T) {
+func TestPropHighFileCountIsComplex(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		desc := rapid.StringMatching(`[a-z ]{0,600}`).Draw(t, "desc")
+		files := rapid.IntRange(10, 100).Draw(t, "files")
+		domains := rapid.IntRange(0, 10).Draw(t, "domains")
+
+		result := AnalyzeComplexity(desc, files, domains)
+		if result != Complex {
+			t.Errorf("fileCount=%d should be Complex, got %q", files, result)
+		}
+	})
+}
+
+// --- Property: Simple implies fileCount < 3 AND domainCount < 1 ---
+
+func TestPropSimpleImpliesLowCounts(t *testing.T) {
 	rapid.Check(t, func(t *rapid.T) {
 		desc := rapid.StringMatching(`[a-z ]{0,600}`).Draw(t, "desc")
 		files := rapid.IntRange(0, 20).Draw(t, "files")
 		domains := rapid.IntRange(0, 5).Draw(t, "domains")
 
-		a := AnalyzeComplexity(desc, files, domains)
-		b := AnalyzeComplexity(desc, files, domains)
-		if a != b {
-			t.Errorf("non-deterministic: %q != %q for (%q, %d, %d)", a, b, desc, files, domains)
+		result := AnalyzeComplexity(desc, files, domains)
+		if result == Simple {
+			if files >= moderateFileThreshold {
+				t.Errorf("Simple but fileCount=%d >= %d", files, moderateFileThreshold)
+			}
+			if domains >= moderateDomainThreshold {
+				t.Errorf("Simple but domainCount=%d >= %d", domains, moderateDomainThreshold)
+			}
+			if len(desc) >= moderateDescLen {
+				t.Errorf("Simple but len(desc)=%d >= %d", len(desc), moderateDescLen)
+			}
 		}
 	})
 }
