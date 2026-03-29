@@ -55,8 +55,10 @@ func makeScanConfig(dir string) *config.Config {
 		Timeout:     "30m",
 		StateDir:    dir,
 		Exclude:     []string{"wontfix"},
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
-		Tasks:       map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+		Claude: config.ClaudeConfig{
+			Command: "claude",
+		},
+		Tasks: map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
 		Sources: map[string]config.SourceConfig{
 			"github": {
 				Type:    "github",

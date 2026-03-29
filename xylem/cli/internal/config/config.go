@@ -4,18 +4,12 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"text/template"
 	"time"
 
 	"gopkg.in/yaml.v3"
 )
 
 const minTimeout = 30 * time.Second
-
-const defaultClaudeTemplate = "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
-
-// legacyClaudeTemplate is the old default using {{.IssueURL}} for backward compat.
-const legacyClaudeTemplate = "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}"
 
 type Config struct {
 	Repo          string                  `yaml:"repo,omitempty"`
@@ -28,6 +22,7 @@ type Config struct {
 	Exclude       []string                `yaml:"exclude,omitempty"`
 	DefaultBranch string                  `yaml:"default_branch,omitempty"`
 	Claude        ClaudeConfig            `yaml:"claude"`
+	Daemon        DaemonConfig            `yaml:"daemon,omitempty"`
 }
 
 type SourceConfig struct {
@@ -43,9 +38,17 @@ type Task struct {
 }
 
 type ClaudeConfig struct {
-	Command      string   `yaml:"command"`
-	Template     string   `yaml:"template"`
+	Command  string            `yaml:"command"`
+	Flags    string            `yaml:"flags,omitempty"`
+	Env      map[string]string `yaml:"env,omitempty"`
+	// Template is kept for deserialization so we can detect and reject it.
+	Template     string   `yaml:"template,omitempty"`
 	AllowedTools []string `yaml:"allowed_tools,omitempty"`
+}
+
+type DaemonConfig struct {
+	ScanInterval  string `yaml:"scan_interval,omitempty"`
+	DrainInterval string `yaml:"drain_interval,omitempty"`
 }
 
 func Load(path string) (*Config, error) {
@@ -61,8 +64,11 @@ func Load(path string) (*Config, error) {
 		StateDir:    ".xylem",
 		Exclude:     []string{"wontfix", "duplicate", "in-progress", "no-bot"},
 		Claude: ClaudeConfig{
-			Command:  "claude",
-			Template: defaultClaudeTemplate,
+			Command: "claude",
+		},
+		Daemon: DaemonConfig{
+			ScanInterval:  "60s",
+			DrainInterval: "30s",
 		},
 	}
 
@@ -91,10 +97,6 @@ func (c *Config) normalize() {
 				Tasks:   c.Tasks,
 			},
 		}
-		// Upgrade legacy template to use {{.Ref}} if it was the old default
-		if c.Claude.Template == legacyClaudeTemplate {
-			c.Claude.Template = defaultClaudeTemplate
-		}
 	}
 }
 
@@ -115,13 +117,28 @@ func (c *Config) Validate() error {
 		return fmt.Errorf("timeout must be at least %s", minTimeout)
 	}
 
-	if _, err := template.New("cfg").Parse(c.Claude.Template); err != nil {
-		return fmt.Errorf("claude.template is not a valid Go template: %w", err)
+	if c.Claude.Template != "" {
+		return fmt.Errorf("claude.template is no longer supported; migrate to phase-based skills in .xylem/skills/")
 	}
 
-	for i, tool := range c.Claude.AllowedTools {
-		if strings.TrimSpace(tool) == "" {
-			return fmt.Errorf("claude.allowed_tools[%d] must not be empty", i)
+	if len(c.Claude.AllowedTools) > 0 {
+		return fmt.Errorf("claude.allowed_tools is no longer supported; use allowed_tools in skill phase definitions")
+	}
+
+	if strings.Contains(c.Claude.Flags, "--bare") {
+		if c.Claude.Env == nil || c.Claude.Env["ANTHROPIC_API_KEY"] == "" {
+			return fmt.Errorf("--bare requires ANTHROPIC_API_KEY in claude.env")
+		}
+	}
+
+	if c.Daemon.ScanInterval != "" {
+		if _, err := time.ParseDuration(c.Daemon.ScanInterval); err != nil {
+			return fmt.Errorf("daemon.scan_interval must be a valid duration: %w", err)
+		}
+	}
+	if c.Daemon.DrainInterval != "" {
+		if _, err := time.ParseDuration(c.Daemon.DrainInterval); err != nil {
+			return fmt.Errorf("daemon.drain_interval must be a valid duration: %w", err)
 		}
 	}
 

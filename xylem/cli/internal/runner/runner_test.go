@@ -80,7 +80,9 @@ func makeTestConfig(dir string, concurrency int) *config.Config {
 		MaxTurns:    50,
 		Timeout:     "30s",
 		StateDir:    dir,
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
+		Claude: config.ClaudeConfig{
+			Command: "claude",
+		},
 		Sources: map[string]config.SourceConfig{
 			"github": {
 				Type:    "github",
@@ -114,8 +116,7 @@ func TestBuildCommand(t *testing.T) {
 	cfg := &config.Config{
 		MaxTurns: 50,
 		Claude: config.ClaudeConfig{
-			Command:  "claude",
-			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+			Command: "claude",
 		},
 	}
 	vessel := &queue.Vessel{
@@ -146,8 +147,7 @@ func TestBuildCommandDirectPrompt(t *testing.T) {
 	cfg := &config.Config{
 		MaxTurns: 50,
 		Claude: config.ClaudeConfig{
-			Command:  "claude",
-			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+			Command: "claude",
 		},
 	}
 	vessel := &queue.Vessel{
@@ -176,8 +176,7 @@ func TestBuildCommandDirectPromptWithRef(t *testing.T) {
 	cfg := &config.Config{
 		MaxTurns: 50,
 		Claude: config.ClaudeConfig{
-			Command:  "claude",
-			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+			Command: "claude",
 		},
 	}
 	vessel := &queue.Vessel{
@@ -213,12 +212,11 @@ func TestBuildCommandDirectPromptWithRef(t *testing.T) {
 	}
 }
 
-func TestBuildCommandBackwardCompatIssueURL(t *testing.T) {
+func TestBuildCommandSkillBased(t *testing.T) {
 	cfg := &config.Config{
 		MaxTurns: 50,
 		Claude: config.ClaudeConfig{
-			Command:  "claude",
-			Template: "{{.Command}} -p \"/{{.Skill}} {{.IssueURL}}\" --max-turns {{.MaxTurns}}",
+			Command: "claude",
 		},
 	}
 	vessel := &queue.Vessel{
@@ -230,9 +228,18 @@ func TestBuildCommandBackwardCompatIssueURL(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	full := cmd + " " + strings.Join(args, " ")
-	if !strings.Contains(full, "issues/42") {
-		t.Errorf("expected IssueURL backward compat to work, got: %s", full)
+	if cmd != "claude" {
+		t.Errorf("expected cmd 'claude', got %q", cmd)
+	}
+	// Should produce: -p "/fix-bug https://..." --max-turns 50
+	if args[0] != "-p" {
+		t.Errorf("expected -p flag, got %q", args[0])
+	}
+	if !strings.Contains(args[1], "/fix-bug") {
+		t.Errorf("expected skill in prompt, got %q", args[1])
+	}
+	if !strings.Contains(args[1], "issues/42") {
+		t.Errorf("expected ref in prompt, got %q", args[1])
 	}
 }
 
@@ -387,48 +394,22 @@ func TestDrainTimeout(t *testing.T) {
 	}
 }
 
-func TestBuildCommandEdgeCases(t *testing.T) {
-	t.Run("empty template result", func(t *testing.T) {
-		cfg := &config.Config{
-			Claude: config.ClaudeConfig{
-				Command:  "",
-				Template: "{{.Command}}",
-			},
-		}
-		vessel := &queue.Vessel{Skill: "fix-bug", Ref: "https://example.com"}
-		_, _, err := buildCommand(cfg, vessel)
-		if err == nil {
-			t.Error("expected error for empty command, got nil")
-		}
-	})
-
-	t.Run("invalid template syntax", func(t *testing.T) {
-		cfg := &config.Config{
-			Claude: config.ClaudeConfig{
-				Template: "{{.Invalid",
-			},
-		}
-		vessel := &queue.Vessel{}
-		_, _, err := buildCommand(cfg, vessel)
-		if err == nil {
-			t.Error("expected error for invalid template, got nil")
-		}
-	})
-
-	t.Run("template with only whitespace", func(t *testing.T) {
-		cfg := &config.Config{
-			Claude: config.ClaudeConfig{
-				Command:  "   ",
-				Template: "{{.Command}}",
-			},
-		}
-		vessel := &queue.Vessel{}
-		_, _, err := buildCommand(cfg, vessel)
-		if err == nil {
-			t.Error("expected error for whitespace-only command, got nil")
-		}
-	})
-
+func TestBuildCommandEmptyCommand(t *testing.T) {
+	cfg := &config.Config{
+		MaxTurns: 50,
+		Claude: config.ClaudeConfig{
+			Command: "",
+		},
+	}
+	vessel := &queue.Vessel{Skill: "fix-bug", Ref: "https://example.com"}
+	cmd, _, err := buildCommand(cfg, vessel)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	// Empty command is returned as-is; the OS will fail to exec it
+	if cmd != "" {
+		t.Errorf("expected empty command, got %q", cmd)
+	}
 }
 
 func TestDrainEmptyQueue(t *testing.T) {
@@ -505,12 +486,12 @@ func (tw *trackingWorktree) Create(_ context.Context, branchName string) (string
 	return ".claude/worktrees/" + branchName, nil
 }
 
-func TestBuildCommandAllowedToolsNone(t *testing.T) {
+func TestBuildCommandWithFlags(t *testing.T) {
 	cfg := &config.Config{
 		MaxTurns: 50,
 		Claude: config.ClaudeConfig{
-			Command:  "claude",
-			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
+			Command: "claude",
+			Flags:   "--bare --dangerously-skip-permissions",
 		},
 	}
 	vessel := &queue.Vessel{
@@ -522,102 +503,45 @@ func TestBuildCommandAllowedToolsNone(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	for _, arg := range args {
-		if arg == "--allowedTools" {
-			t.Error("expected no --allowedTools flag when AllowedTools is empty")
-		}
+	// Should have: -p, prompt, --max-turns, 50, --bare, --dangerously-skip-permissions
+	if len(args) != 6 {
+		t.Fatalf("expected 6 args, got %d: %v", len(args), args)
+	}
+	if args[4] != "--bare" {
+		t.Errorf("expected --bare flag, got %q", args[4])
+	}
+	if args[5] != "--dangerously-skip-permissions" {
+		t.Errorf("expected --dangerously-skip-permissions flag, got %q", args[5])
 	}
 }
 
-func TestBuildCommandAllowedToolsOne(t *testing.T) {
+func TestBuildCommandNoFlags(t *testing.T) {
 	cfg := &config.Config{
 		MaxTurns: 50,
 		Claude: config.ClaudeConfig{
-			Command:      "claude",
-			Template:     "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
-			AllowedTools: []string{"WebFetch"},
+			Command: "claude",
 		},
 	}
 	vessel := &queue.Vessel{
-		Source: "github-issue",
-		Skill:  "fix-bug",
-		Ref:    "https://github.com/owner/repo/issues/42",
+		Source: "manual",
+		Prompt: "Fix the null pointer in handler.go",
 	}
 	_, args, err := buildCommand(cfg, vessel)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	// Count --allowedTools flags
-	count := 0
-	for i, arg := range args {
-		if arg == "--allowedTools" {
-			count++
-			if i+1 >= len(args) {
-				t.Fatal("--allowedTools at end of args with no value")
-			}
-			if args[i+1] != "WebFetch" {
-				t.Errorf("expected value %q after --allowedTools, got %q", "WebFetch", args[i+1])
-			}
-		}
-	}
-	if count != 1 {
-		t.Errorf("expected 1 --allowedTools flag, got %d in args: %v", count, args)
+	// Should have exactly: -p, prompt, --max-turns, 50
+	if len(args) != 4 {
+		t.Fatalf("expected 4 args (no extra flags), got %d: %v", len(args), args)
 	}
 }
 
-func TestBuildCommandAllowedToolsMultiple(t *testing.T) {
+func TestBuildCommandDirectPromptWithFlags(t *testing.T) {
 	cfg := &config.Config{
 		MaxTurns: 50,
 		Claude: config.ClaudeConfig{
-			Command:      "claude",
-			Template:     "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
-			AllowedTools: []string{"Bash(gh issue view *)", "Bash(gh pr create *)", "WebFetch"},
-		},
-	}
-	vessel := &queue.Vessel{
-		Source: "github-issue",
-		Skill:  "fix-bug",
-		Ref:    "https://github.com/owner/repo/issues/42",
-	}
-	_, args, err := buildCommand(cfg, vessel)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-
-	// Count --allowedTools flags
-	count := 0
-	for i, arg := range args {
-		if arg == "--allowedTools" {
-			count++
-			if i+1 >= len(args) {
-				t.Fatal("--allowedTools at end of args with no value")
-			}
-		}
-	}
-	if count != 3 {
-		t.Errorf("expected 3 --allowedTools flags, got %d in args: %v", count, args)
-	}
-
-	// Verify each tool appears as a value after --allowedTools
-	wantTools := []string{"Bash(gh issue view *)", "Bash(gh pr create *)", "WebFetch"}
-	toolIdx := 0
-	for i, arg := range args {
-		if arg == "--allowedTools" && i+1 < len(args) {
-			if args[i+1] != wantTools[toolIdx] {
-				t.Errorf("expected tool %q at position %d, got %q", wantTools[toolIdx], toolIdx, args[i+1])
-			}
-			toolIdx++
-		}
-	}
-}
-
-func TestBuildCommandAllowedToolsDirectPrompt(t *testing.T) {
-	cfg := &config.Config{
-		MaxTurns: 50,
-		Claude: config.ClaudeConfig{
-			Command:      "claude",
-			Template:     "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
-			AllowedTools: []string{"Bash(gh issue view *)", "WebFetch"},
+			Command: "claude",
+			Flags:   "--bare",
 		},
 	}
 	vessel := &queue.Vessel{
@@ -631,58 +555,12 @@ func TestBuildCommandAllowedToolsDirectPrompt(t *testing.T) {
 	if cmd != "claude" {
 		t.Errorf("expected cmd 'claude', got %q", cmd)
 	}
-
-	// Should have: -p, prompt, --max-turns, 50, --allowedTools, tool1, --allowedTools, tool2
-	expectedLen := 8
-	if len(args) != expectedLen {
-		t.Fatalf("expected %d args, got %d: %v", expectedLen, len(args), args)
+	// Should have: -p, prompt, --max-turns, 50, --bare
+	if len(args) != 5 {
+		t.Fatalf("expected 5 args, got %d: %v", len(args), args)
 	}
-
-	// Verify the --allowedTools flags come after --max-turns
-	if args[4] != "--allowedTools" || args[5] != "Bash(gh issue view *)" {
-		t.Errorf("expected first allowed tool, got args[4:6]=%v", args[4:6])
-	}
-	if args[6] != "--allowedTools" || args[7] != "WebFetch" {
-		t.Errorf("expected second allowed tool, got args[6:8]=%v", args[6:8])
-	}
-}
-
-func TestBuildCommandAllowedToolsDirectPromptNone(t *testing.T) {
-	cfg := &config.Config{
-		MaxTurns: 50,
-		Claude: config.ClaudeConfig{
-			Command:  "claude",
-			Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}",
-			// No AllowedTools
-		},
-	}
-	vessel := &queue.Vessel{
-		Source: "manual",
-		Prompt: "Fix the null pointer in handler.go",
-	}
-	_, args, err := buildCommand(cfg, vessel)
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	// Should have exactly: -p, prompt, --max-turns, 50
-	if len(args) != 4 {
-		t.Fatalf("expected 4 args (no --allowedTools), got %d: %v", len(args), args)
-	}
-}
-
-func TestBuildCommandTemplateExecutionError(t *testing.T) {
-	cfg := &config.Config{
-		Claude: config.ClaudeConfig{
-			Template: "{{.NonExistentField}}",
-		},
-	}
-	vessel := &queue.Vessel{Skill: "fix-bug", Ref: "https://example.com"}
-	_, _, err := buildCommand(cfg, vessel)
-	if err == nil {
-		t.Error("expected error for template referencing non-existent field")
-	}
-	if !strings.Contains(err.Error(), "execute template") {
-		t.Errorf("expected execute template error, got: %v", err)
+	if args[4] != "--bare" {
+		t.Errorf("expected --bare flag, got %q", args[4])
 	}
 }
 

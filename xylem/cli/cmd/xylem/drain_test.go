@@ -17,7 +17,9 @@ func makeDrainConfig(dir string) *config.Config {
 		MaxTurns:    50,
 		Timeout:     "30m",
 		StateDir:    dir,
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
+		Claude: config.ClaudeConfig{
+			Command: "claude",
+		},
 		Sources: map[string]config.SourceConfig{
 			"github": {
 				Type:    "github",
