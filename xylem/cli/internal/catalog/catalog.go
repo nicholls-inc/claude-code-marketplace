@@ -101,6 +101,7 @@ func ValidateTool(tool Tool) error {
 	if tool.Scope < ScopeReadOnly || tool.Scope > ScopeFullAutonomy {
 		return fmt.Errorf("validate tool: invalid scope %d", tool.Scope)
 	}
+	seen := make(map[string]struct{}, len(tool.Parameters))
 	for _, p := range tool.Parameters {
 		if strings.TrimSpace(p.Name) == "" {
 			return fmt.Errorf("validate tool: parameter name is required")
@@ -110,6 +111,10 @@ func ValidateTool(tool Tool) error {
 		default:
 			return fmt.Errorf("validate tool: invalid parameter type %q", p.Type)
 		}
+		if _, dup := seen[p.Name]; dup {
+			return fmt.Errorf("validate tool: duplicate parameter name: %q", p.Name)
+		}
+		seen[p.Name] = struct{}{}
 	}
 	return nil
 }
@@ -125,7 +130,7 @@ func (c *Catalog) Register(tool Tool) error {
 	if _, exists := c.tools[tool.Name]; exists {
 		return fmt.Errorf("register: tool %q already exists", tool.Name)
 	}
-	t := tool
+	t := copyTool(tool)
 	c.tools[tool.Name] = &t
 	c.metrics[tool.Name] = &ToolMetrics{}
 	return nil
@@ -140,7 +145,7 @@ func (c *Catalog) Get(name string) (*Tool, error) {
 	if !ok {
 		return nil, fmt.Errorf("get: tool %q not found", name)
 	}
-	cpy := *t
+	cpy := copyTool(*t)
 	return &cpy, nil
 }
 
@@ -150,7 +155,7 @@ func (c *Catalog) List() []Tool {
 	defer c.mu.RUnlock()
 	out := make([]Tool, 0, len(c.tools))
 	for _, t := range c.tools {
-		out = append(out, *t)
+		out = append(out, copyTool(*t))
 	}
 	return out
 }
@@ -163,7 +168,7 @@ func (c *Catalog) ListByTag(tag string) []Tool {
 	for _, t := range c.tools {
 		for _, tg := range t.Tags {
 			if tg == tag {
-				out = append(out, *t)
+				out = append(out, copyTool(*t))
 				break
 			}
 		}
@@ -344,6 +349,13 @@ func (c *Catalog) AvgTokenCost(toolName string) (float64, error) {
 		return 0, nil
 	}
 	return m.TotalTokenCost / float64(m.Calls), nil
+}
+
+// copyTool returns a deep copy of t, including its Parameters and Tags slices.
+func copyTool(t Tool) Tool {
+	t.Parameters = append([]Param(nil), t.Parameters...)
+	t.Tags = append([]string(nil), t.Tags...)
+	return t
 }
 
 // tokenize splits a string into lower-case words.

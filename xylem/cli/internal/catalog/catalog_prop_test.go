@@ -32,9 +32,19 @@ func genToolName(t *rapid.T) string {
 func genTool(t *rapid.T) Tool {
 	nParams := rapid.IntRange(0, 3).Draw(t, "nParams")
 	params := make([]Param, nParams)
+	usedNames := make(map[string]struct{}, nParams)
 	for i := range params {
+		// Generate unique parameter names to satisfy validation.
+		var name string
+		for {
+			name = rapid.StringMatching(`[a-z]{2,8}`).Draw(t, "paramName")
+			if _, exists := usedNames[name]; !exists {
+				break
+			}
+		}
+		usedNames[name] = struct{}{}
 		params[i] = Param{
-			Name:     rapid.StringMatching(`[a-z]{2,8}`).Draw(t, "paramName"),
+			Name:     name,
 			Type:     genParamType(t),
 			Required: rapid.Bool().Draw(t, "required"),
 		}
@@ -46,7 +56,7 @@ func genTool(t *rapid.T) Tool {
 	}
 	return Tool{
 		Name:        genToolName(t),
-		Description: rapid.StringMatching(`[a-z ]{5,30}`).Draw(t, "desc"),
+		Description: rapid.StringMatching(`[a-z]{1,5}[a-z ]{4,25}`).Draw(t, "desc"),
 		Parameters:  params,
 		Scope:       genScope(t),
 		Tags:        tags,
