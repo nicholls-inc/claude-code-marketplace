@@ -45,7 +45,8 @@ type UsageRecord struct {
 type Budget struct {
 	TokenLimit   int           `json:"token_limit"`
 	CostLimitUSD float64      `json:"cost_limit_usd"`
-	Window       time.Duration `json:"window"`
+	// TODO: Window is reserved for future time-windowed budget support.
+	Window time.Duration `json:"window"`
 }
 
 // BudgetAlert records a budget threshold event.
