@@ -60,7 +60,7 @@ type Vessel struct {
 	ID        string            `json:"id"`
 	Source    string            `json:"source"`
 	Ref       string            `json:"ref,omitempty"`
-	Skill     string            `json:"skill,omitempty"`
+	Workflow  string            `json:"workflow,omitempty"`
 	Prompt    string            `json:"prompt,omitempty"`
 	Meta      map[string]string `json:"meta,omitempty"`
 	State     VesselState       `json:"state"`

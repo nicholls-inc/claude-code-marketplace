@@ -56,9 +56,9 @@ func cmdStatus(q *queue.Queue, jsonMode bool, stateFilter string) error {
 	}
 
 	fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-30s  %-12s  %s\n",
-		"ID", "Source", "Skill", "State", "Info", "Started", "Duration")
+		"ID", "Source", "Workflow", "State", "Info", "Started", "Duration")
 	fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-30s  %-12s  %s\n",
-		"----", "------", "-----", "-----", "----", "-------", "--------")
+		"----", "------", "--------", "-----", "----", "-------", "--------")
 
 	counts := map[queue.VesselState]int{}
 	for _, j := range vessels {
@@ -73,13 +73,13 @@ func cmdStatus(q *queue.Queue, jsonMode bool, stateFilter string) error {
 			}
 			duration = end.Sub(*j.StartedAt).Round(time.Second).String()
 		}
-		skill := j.Skill
-		if skill == "" {
-			skill = "(prompt)"
+		wf := j.Workflow
+		if wf == "" {
+			wf = "(prompt)"
 		}
 		info := vesselInfo(j)
 		fmt.Printf("%-14s  %-14s  %-20s  %-10s  %-30s  %-12s  %s\n",
-			j.ID, j.Source, skill, string(j.State), info, started, duration)
+			j.ID, j.Source, wf, string(j.State), info, started, duration)
 	}
 
 	fmt.Printf("\nSummary: %d pending, %d running, %d completed, %d failed, %d cancelled, %d waiting, %d timed_out\n",

@@ -1,4 +1,4 @@
-package skill
+package workflow
 
 import (
 	"fmt"
@@ -10,14 +10,14 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Skill defines a multi-phase execution plan loaded from a YAML file.
-type Skill struct {
+// Workflow defines a multi-phase execution plan loaded from a YAML file.
+type Workflow struct {
 	Name        string  `yaml:"name"`
 	Description string  `yaml:"description,omitempty"`
 	Phases      []Phase `yaml:"phases"`
 }
 
-// Phase represents a single step in a skill's execution pipeline.
+// Phase represents a single step in a workflow's execution pipeline.
 type Phase struct {
 	Name         string  `yaml:"name"`
 	PromptFile   string  `yaml:"prompt_file"`
@@ -37,45 +37,45 @@ type Gate struct {
 	PollInterval string `yaml:"poll_interval,omitempty"` // default "60s" (type=label)
 }
 
-// Load reads and validates a skill definition YAML file at path.
-func Load(path string) (*Skill, error) {
+// Load reads and validates a workflow definition YAML file at path.
+func Load(path string) (*Workflow, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("read skill file %q: %w", path, err)
+		return nil, fmt.Errorf("read workflow file %q: %w", path, err)
 	}
 
-	var s Skill
-	if err := yaml.Unmarshal(data, &s); err != nil {
-		return nil, fmt.Errorf("parse skill yaml %q: %w", path, err)
+	var w Workflow
+	if err := yaml.Unmarshal(data, &w); err != nil {
+		return nil, fmt.Errorf("parse workflow yaml %q: %w", path, err)
 	}
 
-	if err := s.Validate(path); err != nil {
-		return nil, fmt.Errorf("validate skill %q: %w", path, err)
+	if err := w.Validate(path); err != nil {
+		return nil, fmt.Errorf("validate workflow %q: %w", path, err)
 	}
 
-	return &s, nil
+	return &w, nil
 }
 
-// Validate checks that the skill definition is well-formed. skillFilePath is
-// the path to the skill YAML file, used to verify the skill name matches the
-// filename. Prompt file paths are resolved relative to the current working
-// directory (repo root).
-func (s *Skill) Validate(skillFilePath string) error {
-	if s.Name == "" {
+// Validate checks that the workflow definition is well-formed. workflowFilePath
+// is the path to the workflow YAML file, used to verify the workflow name
+// matches the filename. Prompt file paths are resolved relative to the current
+// working directory (repo root).
+func (w *Workflow) Validate(workflowFilePath string) error {
+	if w.Name == "" {
 		return fmt.Errorf(`"name" is required`)
 	}
 
-	expectedName := strings.TrimSuffix(filepath.Base(skillFilePath), filepath.Ext(skillFilePath))
-	if s.Name != expectedName {
-		return fmt.Errorf("skill name %q does not match filename %q", s.Name, filepath.Base(skillFilePath))
+	expectedName := strings.TrimSuffix(filepath.Base(workflowFilePath), filepath.Ext(workflowFilePath))
+	if w.Name != expectedName {
+		return fmt.Errorf("workflow name %q does not match filename %q", w.Name, filepath.Base(workflowFilePath))
 	}
 
-	if len(s.Phases) == 0 {
+	if len(w.Phases) == 0 {
 		return fmt.Errorf(`"phases" is required`)
 	}
 
-	seen := make(map[string]bool, len(s.Phases))
-	for _, p := range s.Phases {
+	seen := make(map[string]bool, len(w.Phases))
+	for _, p := range w.Phases {
 		if p.Name == "" {
 			return fmt.Errorf("each phase must have a non-empty name")
 		}

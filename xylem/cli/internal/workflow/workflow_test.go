@@ -1,4 +1,4 @@
-package skill
+package workflow
 
 import (
 	"os"
@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func writeSkillFile(t *testing.T, dir, name, content string) string {
+func writeWorkflowFile(t *testing.T, dir, name, content string) string {
 	t.Helper()
 
 	path := filepath.Join(dir, name+".yaml")
 	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
-		t.Fatalf("write skill file: %v", err)
+		t.Fatalf("write workflow file: %v", err)
 	}
 
 	return path
@@ -59,15 +59,15 @@ func chdirTemp(t *testing.T, dir string) {
 func TestLoad(t *testing.T) {
 	tests := []struct {
 		name      string
-		skillName string // filename stem; defaults to "fix-bug"
+		workflowName string // filename stem; defaults to "fix-bug"
 		yaml      string
 		prompts   []string // prompt files to create relative to repo root (cwd)
 		wantErr   string   // empty means no error expected
-		checkFunc func(t *testing.T, s *Skill)
+		checkFunc func(t *testing.T, w *Workflow)
 	}{
 		{
-			name:      "valid skill file",
-			skillName: "fix-bug",
+			name:      "valid workflow file",
+			workflowName: "fix-bug",
 			yaml: `name: fix-bug
 description: Fix a bug
 phases:
@@ -79,28 +79,28 @@ phases:
     max_turns: 20
 `,
 			prompts: []string{"prompts/analyze.md", "prompts/implement.md"},
-			checkFunc: func(t *testing.T, s *Skill) {
+			checkFunc: func(t *testing.T, w *Workflow) {
 				t.Helper()
-				if s.Name != "fix-bug" {
-					t.Fatalf("Name = %q, want fix-bug", s.Name)
+				if w.Name != "fix-bug" {
+					t.Fatalf("Name = %q, want fix-bug", w.Name)
 				}
-				if s.Description != "Fix a bug" {
-					t.Fatalf("Description = %q, want 'Fix a bug'", s.Description)
+				if w.Description != "Fix a bug" {
+					t.Fatalf("Description = %q, want 'Fix a bug'", w.Description)
 				}
-				if len(s.Phases) != 2 {
-					t.Fatalf("len(Phases) = %d, want 2", len(s.Phases))
+				if len(w.Phases) != 2 {
+					t.Fatalf("len(Phases) = %d, want 2", len(w.Phases))
 				}
-				if s.Phases[0].Name != "analyze" {
-					t.Fatalf("Phases[0].Name = %q, want analyze", s.Phases[0].Name)
+				if w.Phases[0].Name != "analyze" {
+					t.Fatalf("Phases[0].Name = %q, want analyze", w.Phases[0].Name)
 				}
-				if s.Phases[1].MaxTurns != 20 {
-					t.Fatalf("Phases[1].MaxTurns = %d, want 20", s.Phases[1].MaxTurns)
+				if w.Phases[1].MaxTurns != 20 {
+					t.Fatalf("Phases[1].MaxTurns = %d, want 20", w.Phases[1].MaxTurns)
 				}
 			},
 		},
 		{
-			name:      "valid skill with all features",
-			skillName: "deploy",
+			name:      "valid workflow with all features",
+			workflowName: "deploy",
 			yaml: `name: deploy
 description: Deploy with gates
 phases:
@@ -123,34 +123,34 @@ phases:
       poll_interval: "30s"
 `,
 			prompts: []string{"prompts/build.md", "prompts/review.md"},
-			checkFunc: func(t *testing.T, s *Skill) {
+			checkFunc: func(t *testing.T, w *Workflow) {
 				t.Helper()
-				if s.Phases[0].Gate.Type != "command" {
-					t.Fatalf("gate type = %q, want command", s.Phases[0].Gate.Type)
+				if w.Phases[0].Gate.Type != "command" {
+					t.Fatalf("gate type = %q, want command", w.Phases[0].Gate.Type)
 				}
-				if s.Phases[0].Gate.Retries != 2 {
-					t.Fatalf("gate retries = %d, want 2", s.Phases[0].Gate.Retries)
+				if w.Phases[0].Gate.Retries != 2 {
+					t.Fatalf("gate retries = %d, want 2", w.Phases[0].Gate.Retries)
 				}
-				if *s.Phases[0].AllowedTools != "Bash,Read" {
-					t.Fatalf("AllowedTools = %q, want Bash,Read", *s.Phases[0].AllowedTools)
+				if *w.Phases[0].AllowedTools != "Bash,Read" {
+					t.Fatalf("AllowedTools = %q, want Bash,Read", *w.Phases[0].AllowedTools)
 				}
-				if s.Phases[1].Gate.Type != "label" {
-					t.Fatalf("gate type = %q, want label", s.Phases[1].Gate.Type)
+				if w.Phases[1].Gate.Type != "label" {
+					t.Fatalf("gate type = %q, want label", w.Phases[1].Gate.Type)
 				}
-				if s.Phases[1].Gate.WaitFor != "approved" {
-					t.Fatalf("gate wait_for = %q, want approved", s.Phases[1].Gate.WaitFor)
+				if w.Phases[1].Gate.WaitFor != "approved" {
+					t.Fatalf("gate wait_for = %q, want approved", w.Phases[1].Gate.WaitFor)
 				}
 			},
 		},
 		{
 			name:      "missing phases key",
-			skillName: "test-skill",
-			yaml:      "name: test-skill\n",
+			workflowName: "test-workflow",
+			yaml:      "name: test-workflow\n",
 			wantErr:   `"phases" is required`,
 		},
 		{
 			name:      "empty name",
-			skillName: "test-skill",
+			workflowName: "test-workflow",
 			yaml: `phases:
   - name: analyze
     prompt_file: prompts/analyze.md
@@ -161,8 +161,8 @@ phases:
 		},
 		{
 			name:      "duplicate phase names",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: implement
     prompt_file: prompts/a.md
@@ -176,8 +176,8 @@ phases:
 		},
 		{
 			name:      "missing prompt_file",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: analyze
     max_turns: 10
@@ -186,8 +186,8 @@ phases:
 		},
 		{
 			name:      "non-existent prompt_file",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: analyze
     prompt_file: prompts/missing.md
@@ -197,8 +197,8 @@ phases:
 		},
 		{
 			name:      "invalid gate type",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: analyze
     prompt_file: prompts/analyze.md
@@ -211,8 +211,8 @@ phases:
 		},
 		{
 			name:      "command gate missing run",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: analyze
     prompt_file: prompts/analyze.md
@@ -225,8 +225,8 @@ phases:
 		},
 		{
 			name:      "label gate missing wait_for",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: analyze
     prompt_file: prompts/analyze.md
@@ -239,8 +239,8 @@ phases:
 		},
 		{
 			name:      "invalid duration string",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: analyze
     prompt_file: prompts/analyze.md
@@ -255,8 +255,8 @@ phases:
 		},
 		{
 			name:      "max_turns zero",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: analyze
     prompt_file: prompts/analyze.md
@@ -267,8 +267,8 @@ phases:
 		},
 		{
 			name:      "allowed_tools empty string",
-			skillName: "test-skill",
-			yaml: `name: test-skill
+			workflowName: "test-workflow",
+			yaml: `name: test-workflow
 phases:
   - name: analyze
     prompt_file: prompts/analyze.md
@@ -280,7 +280,7 @@ phases:
 		},
 		{
 			name:      "name does not match filename",
-			skillName: "fix-bug",
+			workflowName: "fix-bug",
 			yaml: `name: wrong-name
 phases:
   - name: analyze
@@ -288,7 +288,7 @@ phases:
     max_turns: 10
 `,
 			prompts: []string{"prompts/analyze.md"},
-			wantErr: `skill name "wrong-name" does not match filename "fix-bug.yaml"`,
+			wantErr: `workflow name "wrong-name" does not match filename "fix-bug.yaml"`,
 		},
 	}
 
@@ -301,12 +301,12 @@ phases:
 				createPromptFile(t, dir, p)
 			}
 
-			skillName := tt.skillName
-			if skillName == "" {
-				skillName = "fix-bug"
+			workflowName := tt.workflowName
+			if workflowName == "" {
+				workflowName = "fix-bug"
 			}
-			path := writeSkillFile(t, dir, skillName, tt.yaml)
-			s, err := Load(path)
+			path := writeWorkflowFile(t, dir, workflowName, tt.yaml)
+			w, err := Load(path)
 
 			if tt.wantErr != "" {
 				requireErrorContains(t, err, tt.wantErr)
@@ -318,7 +318,7 @@ phases:
 			}
 
 			if tt.checkFunc != nil {
-				tt.checkFunc(t, s)
+				tt.checkFunc(t, w)
 			}
 		})
 	}
@@ -333,7 +333,7 @@ func TestLoadFileNotFound(t *testing.T) {
 
 func TestLoadMalformedYAML(t *testing.T) {
 	dir := t.TempDir()
-	path := writeSkillFile(t, dir, "skill", "name: [broken\n")
+	path := writeWorkflowFile(t, dir, "workflow", "name: [broken\n")
 
 	_, err := Load(path)
 	if err == nil {
@@ -344,15 +344,15 @@ func TestLoadMalformedYAML(t *testing.T) {
 func TestValidate(t *testing.T) {
 	tests := []struct {
 		name          string
-		skillFileName string // filename stem for the skill file (used for name validation)
-		skill         Skill
+		workflowFileName string // filename stem for the workflow file (used for name validation)
+		workflow      Workflow
 		prompts       []string // prompt files to create relative to cwd
 		wantErr       string
 	}{
 		{
-			name:          "valid minimal skill",
-			skillFileName: "test",
-			skill: Skill{
+			name:          "valid minimal workflow",
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 5},
@@ -362,8 +362,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "empty name",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 5},
 				},
@@ -373,16 +373,16 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "no phases",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 			},
 			wantErr: `"phases" is required`,
 		},
 		{
 			name:          "phase with empty name",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "", PromptFile: "prompt.md", MaxTurns: 5},
@@ -393,8 +393,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "duplicate phase names",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "build", PromptFile: "a.md", MaxTurns: 5},
@@ -406,8 +406,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "missing prompt_file value",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "", MaxTurns: 5},
@@ -417,8 +417,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "non-existent prompt_file",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "does-not-exist.md", MaxTurns: 5},
@@ -428,8 +428,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "max_turns zero",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 0},
@@ -440,8 +440,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "max_turns negative",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: -1},
@@ -452,8 +452,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "invalid gate type",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{
@@ -467,8 +467,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "command gate missing run",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{
@@ -482,8 +482,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "label gate missing wait_for",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{
@@ -497,8 +497,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "invalid retry_delay duration",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{
@@ -512,8 +512,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "invalid timeout duration",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{
@@ -527,8 +527,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "invalid poll_interval duration",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{
@@ -542,8 +542,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "allowed_tools empty string",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 5, AllowedTools: strPtr("")},
@@ -554,8 +554,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "allowed_tools nil is valid",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 5, AllowedTools: nil},
@@ -565,8 +565,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "allowed_tools with value is valid",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 5, AllowedTools: strPtr("Bash,Read")},
@@ -576,8 +576,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "valid command gate with all fields",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{
@@ -595,8 +595,8 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "valid label gate with all fields",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "test",
 				Phases: []Phase{
 					{
@@ -614,15 +614,15 @@ func TestValidate(t *testing.T) {
 		},
 		{
 			name:          "name does not match filename",
-			skillFileName: "test",
-			skill: Skill{
+			workflowFileName: "test",
+			workflow: Workflow{
 				Name: "wrong-name",
 				Phases: []Phase{
 					{Name: "step1", PromptFile: "prompt.md", MaxTurns: 5},
 				},
 			},
 			prompts: []string{"prompt.md"},
-			wantErr: `skill name "wrong-name" does not match filename "test.yaml"`,
+			wantErr: `workflow name "wrong-name" does not match filename "test.yaml"`,
 		},
 	}
 
@@ -635,13 +635,13 @@ func TestValidate(t *testing.T) {
 				createPromptFile(t, dir, p)
 			}
 
-			skillFileName := tt.skillFileName
-			if skillFileName == "" {
-				skillFileName = "test"
+			workflowFileName := tt.workflowFileName
+			if workflowFileName == "" {
+				workflowFileName = "test"
 			}
-			skillFilePath := filepath.Join(dir, skillFileName+".yaml")
+			workflowFilePath := filepath.Join(dir, workflowFileName+".yaml")
 
-			err := tt.skill.Validate(skillFilePath)
+			err := tt.workflow.Validate(workflowFilePath)
 
 			if tt.wantErr != "" {
 				requireErrorContains(t, err, tt.wantErr)

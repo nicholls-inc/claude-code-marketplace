@@ -37,7 +37,7 @@ func TestLoadValid(t *testing.T) {
 tasks:
   fix-bugs:
     labels: [bug, ready-for-work]
-    skill: fix-bug
+    workflow: fix-bug
 concurrency: 3
 max_turns: 30
 timeout: "15m"
@@ -68,8 +68,8 @@ claude:
 		t.Fatalf("task labels = %#v, want [bug ready-for-work]", task.Labels)
 	}
 
-	if task.Skill != "fix-bug" {
-		t.Fatalf("task skill = %q, want fix-bug", task.Skill)
+	if task.Workflow != "fix-bug" {
+		t.Fatalf("task workflow = %q, want fix-bug", task.Workflow)
 	}
 
 	if cfg.Concurrency != 3 {
@@ -122,7 +122,7 @@ func TestLoadDefaults(t *testing.T) {
 tasks:
   fix-bugs:
     labels: [bug]
-    skill: fix-bug
+    workflow: fix-bug
 `)
 
 	cfg, err := Load(path)
@@ -183,14 +183,14 @@ func validConfig() *Config {
 	return &Config{
 		Repo: "owner/name",
 		Tasks: map[string]Task{
-			"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+			"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"},
 		},
 		Sources: map[string]SourceConfig{
 			"github": {
 				Type: "github",
 				Repo: "owner/name",
 				Tasks: map[string]Task{
-					"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+					"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"},
 				},
 			},
 		},
@@ -211,7 +211,7 @@ func TestValidateMissingRepoInGitHubSource(t *testing.T) {
 		Claude:      ClaudeConfig{Command: "claude"},
 		Sources: map[string]SourceConfig{
 			"github": {Type: "github", Repo: "", Tasks: map[string]Task{
-				"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+				"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"},
 			}},
 		},
 	}
@@ -266,14 +266,14 @@ func TestValidateTaskMissingLabels(t *testing.T) {
 	cfg := validConfig()
 	cfg.Sources["github"] = SourceConfig{
 		Type: "github", Repo: "owner/name",
-		Tasks: map[string]Task{"fix-bugs": {Skill: "fix-bug"}},
+		Tasks: map[string]Task{"fix-bugs": {Workflow: "fix-bug"}},
 	}
 
 	err := cfg.Validate()
 	requireErrorContains(t, err, "labels")
 }
 
-func TestValidateTaskMissingSkill(t *testing.T) {
+func TestValidateTaskMissingWorkflow(t *testing.T) {
 	cfg := validConfig()
 	cfg.Sources["github"] = SourceConfig{
 		Type: "github", Repo: "owner/name",
@@ -281,7 +281,7 @@ func TestValidateTaskMissingSkill(t *testing.T) {
 	}
 
 	err := cfg.Validate()
-	requireErrorContains(t, err, "skill")
+	requireErrorContains(t, err, "workflow")
 }
 
 func TestMalformedYAML(t *testing.T) {
@@ -310,7 +310,7 @@ func TestValidateZeroMaxTurns(t *testing.T) {
 
 func TestValidateTemplateRejected(t *testing.T) {
 	cfg := validConfig()
-	cfg.Claude.Template = "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
+	cfg.Claude.Template = "{{.Command}} -p \"/{{.Workflow}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
 
 	err := cfg.Validate()
 	requireErrorContains(t, err, "claude.template is no longer supported")
@@ -348,7 +348,7 @@ func TestValidateMalformedRepo(t *testing.T) {
 				Sources: map[string]SourceConfig{
 					"github": {
 						Type: "github", Repo: tt.repo,
-						Tasks: map[string]Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+						Tasks: map[string]Task{"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"}},
 					},
 				},
 			}
@@ -358,15 +358,15 @@ func TestValidateMalformedRepo(t *testing.T) {
 	}
 }
 
-func TestValidateTaskSkillWhitespaceOnly(t *testing.T) {
+func TestValidateTaskWorkflowWhitespaceOnly(t *testing.T) {
 	cfg := validConfig()
 	cfg.Sources["github"] = SourceConfig{
 		Type: "github", Repo: "owner/name",
-		Tasks: map[string]Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "  "}},
+		Tasks: map[string]Task{"fix-bugs": {Labels: []string{"bug"}, Workflow: "  "}},
 	}
 
 	err := cfg.Validate()
-	requireErrorContains(t, err, "skill")
+	requireErrorContains(t, err, "workflow")
 }
 
 func TestValidateTimeoutExactlyMinimum(t *testing.T) {
@@ -382,8 +382,8 @@ func TestValidateTimeoutExactlyMinimum(t *testing.T) {
 func TestValidateMultipleTasksOneInvalid(t *testing.T) {
 	cfg := validConfig()
 	tasks := map[string]Task{
-		"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
-		"broken":   {Labels: []string{}, Skill: "fix-bug"}, // no labels
+		"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"},
+		"broken":   {Labels: []string{}, Workflow: "fix-bug"}, // no labels
 	}
 	cfg.Sources["github"] = SourceConfig{Type: "github", Repo: "owner/name", Tasks: tasks}
 
@@ -469,7 +469,7 @@ func TestLoadWithFlagsAndEnv(t *testing.T) {
     tasks:
       fix-bugs:
         labels: [bug]
-        skill: fix-bug
+        workflow: fix-bug
 concurrency: 2
 max_turns: 50
 timeout: "30m"
@@ -501,13 +501,13 @@ func TestLoadRejectsOldTemplate(t *testing.T) {
     tasks:
       fix-bugs:
         labels: [bug]
-        skill: fix-bug
+        workflow: fix-bug
 concurrency: 2
 max_turns: 50
 timeout: "30m"
 claude:
   command: "claude"
-  template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
+  template: "{{.Command}} -p \"/{{.Workflow}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
 `)
 
 	_, err := Load(path)
@@ -522,7 +522,7 @@ func TestLoadRejectsOldAllowedTools(t *testing.T) {
     tasks:
       fix-bugs:
         labels: [bug]
-        skill: fix-bug
+        workflow: fix-bug
 concurrency: 2
 max_turns: 50
 timeout: "30m"
@@ -544,7 +544,7 @@ func TestLoadDaemonConfig(t *testing.T) {
     tasks:
       fix-bugs:
         labels: [bug]
-        skill: fix-bug
+        workflow: fix-bug
 concurrency: 2
 max_turns: 50
 timeout: "30m"

@@ -293,7 +293,7 @@ func TestCleanupPhaseDirs(t *testing.T) {
 	started := now.Add(-9 * 24 * time.Hour)
 	ended := now.Add(-8 * 24 * time.Hour)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-1", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-1", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateCompleted, CreatedAt: started,
 		StartedAt: &started, EndedAt: &ended,
 	})
@@ -331,7 +331,7 @@ func TestCleanupSkipsRecentPhaseDirs(t *testing.T) {
 	started := now.Add(-2 * 24 * time.Hour)
 	ended := now.Add(-1 * 24 * time.Hour)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-2", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-2", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateCompleted, CreatedAt: started,
 		StartedAt: &started, EndedAt: &ended,
 	})
@@ -366,7 +366,7 @@ func TestCleanupDryRunPhaseDirs(t *testing.T) {
 	started := now.Add(-11 * 24 * time.Hour)
 	ended := now.Add(-10 * 24 * time.Hour)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-3", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-3", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateFailed, CreatedAt: started,
 		StartedAt: &started, EndedAt: &ended,
 	})
@@ -418,7 +418,7 @@ func TestCleanupTimedOutPhaseDirs(t *testing.T) {
 	started := now.Add(-9 * 24 * time.Hour)
 	ended := now.Add(-8 * 24 * time.Hour)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-4", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-4", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateTimedOut, CreatedAt: started,
 		StartedAt: &started, EndedAt: &ended,
 	})

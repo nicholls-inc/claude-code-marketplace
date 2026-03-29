@@ -15,16 +15,16 @@ func newEnqueueCmd() *cobra.Command {
 		Use:   "enqueue",
 		Short: "Manually enqueue a task for Claude to work on",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			skill, _ := cmd.Flags().GetString("skill")
+			wf, _ := cmd.Flags().GetString("workflow")
 			ref, _ := cmd.Flags().GetString("ref")
 			prompt, _ := cmd.Flags().GetString("prompt")
 			promptFile, _ := cmd.Flags().GetString("prompt-file")
 			srcName, _ := cmd.Flags().GetString("source")
 			id, _ := cmd.Flags().GetString("id")
-			return cmdEnqueue(deps.q, skill, ref, prompt, promptFile, srcName, id)
+			return cmdEnqueue(deps.q, wf, ref, prompt, promptFile, srcName, id)
 		},
 	}
-	cmd.Flags().String("skill", "", "Skill to invoke (e.g., fix-bug, implement-feature)")
+	cmd.Flags().String("workflow", "", "Workflow to invoke (e.g., fix-bug, implement-feature)")
 	cmd.Flags().String("ref", "", "Task reference (URL, ticket ID, description)")
 	cmd.Flags().String("prompt", "", "Direct prompt to pass to Claude")
 	cmd.Flags().String("prompt-file", "", "Read prompt from file (mutually exclusive with --prompt)")
@@ -33,7 +33,7 @@ func newEnqueueCmd() *cobra.Command {
 	return cmd
 }
 
-func cmdEnqueue(q *queue.Queue, skill, ref, prompt, promptFile, srcName, id string) error {
+func cmdEnqueue(q *queue.Queue, wf, ref, prompt, promptFile, srcName, id string) error {
 	if prompt != "" && promptFile != "" {
 		return fmt.Errorf("--prompt and --prompt-file are mutually exclusive")
 	}
@@ -46,8 +46,8 @@ func cmdEnqueue(q *queue.Queue, skill, ref, prompt, promptFile, srcName, id stri
 		prompt = string(data)
 	}
 
-	if skill == "" && prompt == "" {
-		return fmt.Errorf("at least one of --skill or --prompt/--prompt-file is required")
+	if wf == "" && prompt == "" {
+		return fmt.Errorf("at least one of --workflow or --prompt/--prompt-file is required")
 	}
 
 	if id == "" {
@@ -58,7 +58,7 @@ func cmdEnqueue(q *queue.Queue, skill, ref, prompt, promptFile, srcName, id stri
 		ID:        id,
 		Source:    srcName,
 		Ref:       ref,
-		Skill:     skill,
+		Workflow:  wf,
 		Prompt:    prompt,
 		State:     queue.StatePending,
 		CreatedAt: time.Now().UTC(),
@@ -66,6 +66,6 @@ func cmdEnqueue(q *queue.Queue, skill, ref, prompt, promptFile, srcName, id stri
 	if err := q.Enqueue(vessel); err != nil {
 		return fmt.Errorf("enqueue error: %w", err)
 	}
-	fmt.Printf("Enqueued vessel %s (skill=%s, source=%s)\n", vessel.ID, vessel.Skill, vessel.Source)
+	fmt.Printf("Enqueued vessel %s (workflow=%s, source=%s)\n", vessel.ID, vessel.Workflow, vessel.Source)
 	return nil
 }

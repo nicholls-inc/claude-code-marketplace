@@ -16,7 +16,7 @@ import (
 
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/queue"
-	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/skill"
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/workflow"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/source"
 )
 
@@ -178,18 +178,18 @@ func makeTestConfig(dir string, concurrency int) *config.Config {
 				Type:    "github",
 				Repo:    "owner/repo",
 				Exclude: []string{"wontfix"},
-				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"}},
 			},
 		},
 	}
 }
 
-func makeVessel(num int, skill string) queue.Vessel {
+func makeVessel(num int, wf string) queue.Vessel {
 	return queue.Vessel{
 		ID:     fmt.Sprintf("issue-%d", num),
 		Source: "github-issue",
 		Ref:    fmt.Sprintf("https://github.com/owner/repo/issues/%d", num),
-		Skill:  skill,
+		Workflow: wf,
 		Meta:   map[string]string{"issue_num": strconv.Itoa(num)},
 		State:  queue.StatePending,
 		CreatedAt: time.Now().UTC(),
@@ -221,7 +221,7 @@ func TestBuildCommand(t *testing.T) {
 	}
 	vessel := &queue.Vessel{
 		Source: "github-issue",
-		Skill:  "fix-bug",
+		Workflow:  "fix-bug",
 		Ref:    "https://github.com/owner/repo/issues/42",
 	}
 	cmd, args, err := buildCommand(cfg, vessel)
@@ -233,7 +233,7 @@ func TestBuildCommand(t *testing.T) {
 	}
 	full := cmd + " " + strings.Join(args, " ")
 	if !strings.Contains(full, "fix-bug") {
-		t.Errorf("expected skill in command, got: %s", full)
+		t.Errorf("expected workflow in command, got: %s", full)
 	}
 	if !strings.Contains(full, "42") {
 		t.Errorf("expected issue URL in command, got: %s", full)
@@ -243,11 +243,11 @@ func TestBuildCommand(t *testing.T) {
 	}
 }
 
-// writeSkillFile creates a skill YAML and its prompt files in the given dir.
-func writeSkillFile(t *testing.T, dir, name string, phases []testPhase) {
+// writeWorkflowFile creates a workflow YAML and its prompt files in the given dir.
+func writeWorkflowFile(t *testing.T, dir, name string, phases []testPhase) {
 	t.Helper()
-	skillDir := filepath.Join(dir, ".xylem", "skills")
-	os.MkdirAll(skillDir, 0o755)
+	workflowDir := filepath.Join(dir, ".xylem", "workflows")
+	os.MkdirAll(workflowDir, 0o755)
 
 	var phaseYAML strings.Builder
 	for _, p := range phases {
@@ -266,8 +266,8 @@ func writeSkillFile(t *testing.T, dir, name string, phases []testPhase) {
 		}
 	}
 
-	skillContent := fmt.Sprintf("name: %s\nphases:\n%s", name, phaseYAML.String())
-	os.WriteFile(filepath.Join(skillDir, name+".yaml"), []byte(skillContent), 0o644)
+	workflowContent := fmt.Sprintf("name: %s\nphases:\n%s", name, phaseYAML.String())
+	os.WriteFile(filepath.Join(workflowDir, name+".yaml"), []byte(workflowContent), 0o644)
 }
 
 func TestBuildCommandDirectPrompt(t *testing.T) {
@@ -348,7 +348,7 @@ func TestBuildCommandSkillBased(t *testing.T) {
 	}
 	vessel := &queue.Vessel{
 		Source: "github-issue",
-		Skill:  "fix-bug",
+		Workflow:  "fix-bug",
 		Ref:    "https://github.com/owner/repo/issues/42",
 	}
 	cmd, args, err := buildCommand(cfg, vessel)
@@ -363,7 +363,7 @@ func TestBuildCommandSkillBased(t *testing.T) {
 		t.Errorf("expected -p flag, got %q", args[0])
 	}
 	if !strings.Contains(args[1], "/fix-bug") {
-		t.Errorf("expected skill in prompt, got %q", args[1])
+		t.Errorf("expected workflow in prompt, got %q", args[1])
 	}
 	if !strings.Contains(args[1], "issues/42") {
 		t.Errorf("expected ref in prompt, got %q", args[1])
@@ -386,13 +386,13 @@ func TestDrainSingleVessel(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze the issue", maxTurns: 5},
 	})
 	cfg.StateDir = filepath.Join(dir, ".xylem")
 
-	// Override skill path: change working directory context
-	// We need the skill to be loadable from .xylem/skills/fix-bug.yaml
+	// Override workflow path: change working directory context
+	// We need the workflow to be loadable from .xylem/workflows/fix-bug.yaml
 	oldWd, _ := os.Getwd()
 	os.Chdir(dir)
 	defer os.Chdir(oldWd)
@@ -430,7 +430,7 @@ func TestDrainMultiPhaseSkill(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze: {{.Issue.Title}}", maxTurns: 5},
 		{name: "implement", promptContent: "Implement based on: {{.PreviousOutputs.analyze}}", maxTurns: 10},
 		{name: "pr", promptContent: "Create PR", maxTurns: 3},
@@ -482,7 +482,7 @@ func TestDrainPhaseFailsStopsSubsequent(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
 		{name: "implement", promptContent: "Implement", maxTurns: 10},
 		{name: "pr", promptContent: "PR", maxTurns: 3},
@@ -606,7 +606,7 @@ func TestDrainCommandGatePasses(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{
 			name: "implement", promptContent: "Implement fix", maxTurns: 10,
 			gate: "      type: command\n      run: \"make test\"",
@@ -649,7 +649,7 @@ func TestDrainCommandGateFailsNoRetries(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{
 			name: "implement", promptContent: "Implement fix", maxTurns: 10,
 			gate: "      type: command\n      run: \"make test\"\n      retries: 0",
@@ -692,7 +692,7 @@ func TestDrainCommandGateFailsWithRetries(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{
 			name: "implement", promptContent: "Implement fix\n{{.GateResult}}", maxTurns: 10,
 			gate: "      type: command\n      run: \"make test\"\n      retries: 2\n      retry_delay: \"1ms\"",
@@ -742,7 +742,7 @@ func TestDrainLabelGateTransitionsToWaiting(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{
 			name: "plan", promptContent: "Create plan", maxTurns: 5,
 			gate: "      type: label\n      wait_for: \"plan-approved\"\n      timeout: \"24h\"",
@@ -793,7 +793,7 @@ func TestDrainVesselFails(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
 	})
 
@@ -847,8 +847,8 @@ func TestDrainConcurrencyLimit(t *testing.T) {
 	cfg.StateDir = filepath.Join(dir, ".xylem")
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 
-	// Create skill and enqueue vessels
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	// Create workflow and enqueue vessels
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
 	})
 
@@ -883,7 +883,7 @@ func TestDrainContextCancel(t *testing.T) {
 	cfg.StateDir = filepath.Join(dir, ".xylem")
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
 	})
 
@@ -949,7 +949,7 @@ func TestBuildCommandEmptyCommand(t *testing.T) {
 			Command: "",
 		},
 	}
-	vessel := &queue.Vessel{Skill: "fix-bug", Ref: "https://example.com"}
+	vessel := &queue.Vessel{Workflow: "fix-bug", Ref: "https://example.com"}
 	cmd, _, err := buildCommand(cfg, vessel)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -991,7 +991,7 @@ func TestDrainHarnessAppended(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
 	})
 
@@ -1042,7 +1042,7 @@ func TestDrainPreviousOutputsAvailable(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze the issue", maxTurns: 5},
 		{name: "implement", promptContent: "Previous analysis: {{.PreviousOutputs.analyze}}", maxTurns: 10},
 	})
@@ -1080,7 +1080,7 @@ func TestDrainPreviousOutputsAvailable(t *testing.T) {
 
 func TestBranchPrefixSelection(t *testing.T) {
 	tests := []struct {
-		skill      string
+		workflow   string
 		wantPrefix string
 	}{
 		{"fix-bug", "fix"},
@@ -1092,14 +1092,14 @@ func TestBranchPrefixSelection(t *testing.T) {
 	}
 
 	for _, tc := range tests {
-		t.Run(tc.skill, func(t *testing.T) {
+		t.Run(tc.workflow, func(t *testing.T) {
 			dir := t.TempDir()
 			cfg := makeTestConfig(dir, 1)
 			cfg.StateDir = filepath.Join(dir, ".xylem")
 			q := queue.New(filepath.Join(dir, "queue.jsonl"))
-			_ = q.Enqueue(makeVessel(1, tc.skill))
+			_ = q.Enqueue(makeVessel(1, tc.workflow))
 
-			writeSkillFile(t, dir, tc.skill, []testPhase{
+			writeWorkflowFile(t, dir, tc.workflow, []testPhase{
 				{name: "work", promptContent: "Do work", maxTurns: 5},
 			})
 
@@ -1122,7 +1122,7 @@ func TestBranchPrefixSelection(t *testing.T) {
 			createdBranch := tracker.lastBranch
 			wantPrefix := tc.wantPrefix + "/issue-1-"
 			if !strings.HasPrefix(createdBranch, wantPrefix) {
-				t.Errorf("for skill %q, expected branch prefix %q, got %q", tc.skill, wantPrefix, createdBranch)
+				t.Errorf("for workflow %q, expected branch prefix %q, got %q", tc.workflow, wantPrefix, createdBranch)
 			}
 		})
 	}
@@ -1138,7 +1138,7 @@ func TestBuildCommandWithFlags(t *testing.T) {
 	}
 	vessel := &queue.Vessel{
 		Source: "github-issue",
-		Skill:  "fix-bug",
+		Workflow:  "fix-bug",
 		Ref:    "https://github.com/owner/repo/issues/42",
 	}
 	_, args, err := buildCommand(cfg, vessel)
@@ -1211,7 +1211,7 @@ func TestBuildPhaseArgs(t *testing.T) {
 		cfg := &config.Config{
 			Claude: config.ClaudeConfig{Command: "claude"},
 		}
-		p := &skill.Phase{Name: "analyze", MaxTurns: 5}
+		p := &workflow.Phase{Name: "analyze", MaxTurns: 5}
 		args := buildPhaseArgs(cfg, p, "")
 
 		if args[0] != "-p" {
@@ -1226,7 +1226,7 @@ func TestBuildPhaseArgs(t *testing.T) {
 		cfg := &config.Config{
 			Claude: config.ClaudeConfig{Command: "claude", Flags: "--bare --dangerously-skip-permissions"},
 		}
-		p := &skill.Phase{Name: "analyze", MaxTurns: 5}
+		p := &workflow.Phase{Name: "analyze", MaxTurns: 5}
 		args := buildPhaseArgs(cfg, p, "")
 
 		joined := strings.Join(args, " ")
@@ -1243,7 +1243,7 @@ func TestBuildPhaseArgs(t *testing.T) {
 			Claude: config.ClaudeConfig{Command: "claude", AllowedTools: []string{"WebFetch"}},
 		}
 		allowedTools := "Read,Edit"
-		p := &skill.Phase{Name: "analyze", MaxTurns: 5, AllowedTools: &allowedTools}
+		p := &workflow.Phase{Name: "analyze", MaxTurns: 5, AllowedTools: &allowedTools}
 		args := buildPhaseArgs(cfg, p, "")
 
 		// Should have both phase-level and config-level tools
@@ -1262,7 +1262,7 @@ func TestBuildPhaseArgs(t *testing.T) {
 		cfg := &config.Config{
 			Claude: config.ClaudeConfig{Command: "claude"},
 		}
-		p := &skill.Phase{Name: "analyze", MaxTurns: 5}
+		p := &workflow.Phase{Name: "analyze", MaxTurns: 5}
 		args := buildPhaseArgs(cfg, p, "harness content")
 
 		found := false
@@ -1285,7 +1285,7 @@ func TestDrainTimeoutV2Phase(t *testing.T) {
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	writeSkillFile(t, dir, "fix-bug", []testPhase{
+	writeWorkflowFile(t, dir, "fix-bug", []testPhase{
 		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
 	})
 

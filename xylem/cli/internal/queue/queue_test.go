@@ -34,7 +34,7 @@ func testVessel(issue int) Vessel {
 		ID:     fmt.Sprintf("issue-%d", issue),
 		Source: "github-issue",
 		Ref:    fmt.Sprintf("https://github.com/example/repo/issues/%d", issue),
-		Skill:  "fix-bug",
+		Workflow:  "fix-bug",
 		Meta:   map[string]string{"issue_num": fmt.Sprintf("%d", issue)},
 		State:  StatePending,
 		CreatedAt: time.Now().UTC(),
@@ -651,7 +651,7 @@ func TestLegacyJSONLMigration(t *testing.T) {
 	q := New(path)
 
 	// Write a legacy-format entry with issue_url and issue_num
-	legacy := `{"id":"issue-42","issue_url":"https://github.com/example/repo/issues/42","issue_num":42,"skill":"fix-bug","state":"pending","created_at":"2026-01-01T00:00:00Z"}`
+	legacy := `{"id":"issue-42","issue_url":"https://github.com/example/repo/issues/42","issue_num":42,"workflow":"fix-bug","state":"pending","created_at":"2026-01-01T00:00:00Z"}`
 	if err := os.WriteFile(path, []byte(legacy+"\n"), 0o644); err != nil {
 		t.Fatalf("write legacy: %v", err)
 	}
@@ -844,7 +844,7 @@ func TestV2VesselFields(t *testing.T) {
 		ID:           "v2-test-1",
 		Source:       "github-issue",
 		Ref:          "https://github.com/example/repo/issues/99",
-		Skill:        "fix-bug",
+		Workflow:        "fix-bug",
 		State:        StatePending,
 		CreatedAt:    now,
 		CurrentPhase: 2,
@@ -908,7 +908,7 @@ func TestBackwardCompat(t *testing.T) {
 	q := New(path)
 
 	// Write a JSONL line with only v1 fields (no v2 fields in JSON).
-	v1JSON := `{"id":"compat-1","source":"github-issue","ref":"https://github.com/example/repo/issues/1","skill":"fix-bug","state":"pending","created_at":"2026-01-01T00:00:00Z"}`
+	v1JSON := `{"id":"compat-1","source":"github-issue","ref":"https://github.com/example/repo/issues/1","workflow":"fix-bug","state":"pending","created_at":"2026-01-01T00:00:00Z"}`
 	if err := os.WriteFile(path, []byte(v1JSON+"\n"), 0o644); err != nil {
 		t.Fatalf("write v1 json: %v", err)
 	}

@@ -14,7 +14,7 @@ import (
 // GitHubTask defines a label-based task for the GitHub source.
 type GitHubTask struct {
 	Labels []string
-	Skill  string
+	Workflow string
 }
 
 // GitHub scans GitHub issues and produces vessels.
@@ -78,7 +78,7 @@ func (g *GitHub) Scan(ctx context.Context) ([]queue.Vessel, error) {
 				ID:     fmt.Sprintf("issue-%d", issue.Number),
 				Source: "github-issue",
 				Ref:    issue.URL,
-				Skill:  task.Skill,
+				Workflow: task.Workflow,
 				Meta: map[string]string{
 					"issue_num": strconv.Itoa(issue.Number),
 				},
@@ -108,7 +108,7 @@ func (g *GitHub) OnStart(ctx context.Context, vessel queue.Vessel) error {
 
 func (g *GitHub) BranchName(vessel queue.Vessel) string {
 	prefix := "feat"
-	if strings.Contains(strings.ToLower(vessel.Skill), "fix") {
+	if strings.Contains(strings.ToLower(vessel.Workflow), "fix") {
 		prefix = "fix"
 	}
 	issueNum := vessel.Meta["issue_num"]

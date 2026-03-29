@@ -55,14 +55,14 @@ func cmdInit(configPath string, force bool) error {
 	// Create HARNESS.md
 	writeFileIfNeeded(filepath.Join(defaultStateDir, "HARNESS.md"), harnessContent, force)
 
-	// Create skill definitions
-	writeFileIfNeeded(filepath.Join(defaultStateDir, "skills", "fix-bug.yaml"), fixBugSkillContent, force)
-	writeFileIfNeeded(filepath.Join(defaultStateDir, "skills", "implement-feature.yaml"), implementFeatureSkillContent, force)
+	// Create workflow definitions
+	writeFileIfNeeded(filepath.Join(defaultStateDir, "workflows", "fix-bug.yaml"), fixBugWorkflowContent, force)
+	writeFileIfNeeded(filepath.Join(defaultStateDir, "workflows", "implement-feature.yaml"), implementFeatureWorkflowContent, force)
 
 	// Create prompt templates
-	for _, skill := range []string{"fix-bug", "implement-feature"} {
+	for _, wf := range []string{"fix-bug", "implement-feature"} {
 		for _, phase := range []string{"analyze", "plan", "implement", "pr"} {
-			writeFileIfNeeded(filepath.Join(defaultStateDir, "prompts", skill, phase+".md"), promptContent(skill, phase), force)
+			writeFileIfNeeded(filepath.Join(defaultStateDir, "prompts", wf, phase+".md"), promptContent(wf, phase), force)
 		}
 	}
 
@@ -116,7 +116,7 @@ sources:
     tasks:
       fix-bugs:
         labels: [bug, ready-for-work]
-        skill: fix-bug
+        workflow: fix-bug
   # features:
   #   type: github
   #   repo: %s
@@ -124,7 +124,7 @@ sources:
   #   tasks:
   #     implement-features:
   #       labels: [enhancement, low-effort, ready-for-work]
-  #       skill: implement-feature
+  #       workflow: implement-feature
 
 concurrency: 2
 max_turns: 50
@@ -201,7 +201,7 @@ const harnessContent = `# Project Overview
 <!-- Note any external services or tools the agent needs -->
 `
 
-const fixBugSkillContent = `name: fix-bug
+const fixBugWorkflowContent = `name: fix-bug
 description: "Diagnose and fix a bug from a GitHub issue"
 phases:
   - name: analyze
@@ -222,7 +222,7 @@ phases:
     max_turns: 3
 `
 
-const implementFeatureSkillContent = `name: implement-feature
+const implementFeatureWorkflowContent = `name: implement-feature
 description: "Implement a feature from a GitHub issue"
 phases:
   - name: analyze
@@ -313,8 +313,8 @@ Commit all changes with a clear commit message, push the branch, and create a PR
 gh pr create --title "<descriptive title>" --body "<summary of changes, linking to {{.Issue.URL}}>"
 `
 
-func promptContent(skill, phase string) string {
-	_ = skill // All skills share the same prompt templates per phase.
+func promptContent(wf, phase string) string {
+	_ = wf // All workflows share the same prompt templates per phase.
 	switch phase {
 	case "analyze":
 		return analyzePrompt

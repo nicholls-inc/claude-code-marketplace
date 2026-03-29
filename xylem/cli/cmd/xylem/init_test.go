@@ -236,8 +236,8 @@ func TestInitCreatesV2Files(t *testing.T) {
 
 	expectedFiles := []string{
 		".xylem/HARNESS.md",
-		".xylem/skills/fix-bug.yaml",
-		".xylem/skills/implement-feature.yaml",
+		".xylem/workflows/fix-bug.yaml",
+		".xylem/workflows/implement-feature.yaml",
 		".xylem/prompts/fix-bug/analyze.md",
 		".xylem/prompts/fix-bug/plan.md",
 		".xylem/prompts/fix-bug/implement.md",
@@ -291,7 +291,7 @@ func TestInitSkipsExistingV2Files(t *testing.T) {
 	}
 
 	// But other files should still be created
-	if _, err := os.Stat(filepath.Join(dir, ".xylem", "skills", "fix-bug.yaml")); os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(dir, ".xylem", "workflows", "fix-bug.yaml")); os.IsNotExist(err) {
 		t.Error("expected fix-bug.yaml to be created")
 	}
 }

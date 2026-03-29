@@ -54,7 +54,7 @@ func cmdRetry(q *queue.Queue, id string) error {
 		ID:          newID,
 		Source:      vessel.Source,
 		Ref:         vessel.Ref,
-		Skill:       vessel.Skill,
+		Workflow:    vessel.Workflow,
 		Prompt:      vessel.Prompt,
 		Meta:        meta,
 		State:       queue.StatePending,

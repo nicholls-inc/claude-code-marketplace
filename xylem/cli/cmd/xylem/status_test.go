@@ -27,7 +27,7 @@ func captureStdout(fn func()) string {
 
 func testStatusVessel(id string, state queue.VesselState) queue.Vessel {
 	return queue.Vessel{
-		ID: id, Source: "github-issue", Skill: "fix-bug",
+		ID: id, Source: "github-issue", Workflow: "fix-bug",
 		State: state, CreatedAt: time.Now().UTC(),
 	}
 }
@@ -121,7 +121,7 @@ func TestStatusRunningVesselShowsDuration(t *testing.T) {
 	now := time.Now().UTC()
 	started := now.Add(-2 * time.Minute)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-10", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-10", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateRunning, CreatedAt: now, StartedAt: &started,
 	})
 
@@ -148,7 +148,7 @@ func TestStatusCompletedVesselShowsFixedDuration(t *testing.T) {
 	started := now.Add(-5 * time.Minute)
 	ended := now.Add(-2 * time.Minute)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-20", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-20", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateCompleted, CreatedAt: now,
 		StartedAt: &started, EndedAt: &ended,
 	})
@@ -170,7 +170,7 @@ func TestStatusShowsWaitingVessels(t *testing.T) {
 	started := now.Add(-30 * time.Minute)
 	waitingSince := now.Add(-10 * time.Minute)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-99", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-99", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateWaiting, CreatedAt: now,
 		StartedAt: &started, WaitingFor: "plan-approved",
 		WaitingSince: &waitingSince,
@@ -202,7 +202,7 @@ func TestStatusShowsTimedOutVessels(t *testing.T) {
 	started := now.Add(-1 * time.Hour)
 	ended := now.Add(-30 * time.Minute)
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-77", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-77", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateTimedOut, CreatedAt: now,
 		StartedAt: &started, EndedAt: &ended,
 	})
@@ -229,7 +229,7 @@ func TestStatusFilterByWaiting(t *testing.T) {
 
 	q.Enqueue(testStatusVessel("issue-1", queue.StatePending)) //nolint:errcheck
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-2", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-2", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateWaiting, CreatedAt: now,
 		StartedAt: &started, WaitingFor: "review",
 		WaitingSince: &waitingSince,
@@ -258,31 +258,31 @@ func TestStatusSummaryCounts(t *testing.T) {
 
 	q.Enqueue(testStatusVessel("v-1", queue.StatePending)) //nolint:errcheck
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "v-2", Source: "github-issue", Skill: "fix-bug",
+		ID: "v-2", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateRunning, CreatedAt: now, StartedAt: &started,
 	})
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "v-3", Source: "github-issue", Skill: "fix-bug",
+		ID: "v-3", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateCompleted, CreatedAt: now,
 		StartedAt: &started, EndedAt: &ended,
 	})
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "v-4", Source: "github-issue", Skill: "fix-bug",
+		ID: "v-4", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateFailed, CreatedAt: now,
 		StartedAt: &started, EndedAt: &ended,
 	})
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "v-5", Source: "github-issue", Skill: "fix-bug",
+		ID: "v-5", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateCancelled, CreatedAt: now, EndedAt: &ended,
 	})
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "v-6", Source: "github-issue", Skill: "fix-bug",
+		ID: "v-6", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateWaiting, CreatedAt: now,
 		StartedAt: &started, WaitingFor: "approval",
 		WaitingSince: &waitingSince,
 	})
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "v-7", Source: "github-issue", Skill: "fix-bug",
+		ID: "v-7", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateTimedOut, CreatedAt: now,
 		StartedAt: &started, EndedAt: &ended,
 	})
@@ -325,7 +325,7 @@ func TestStatusJSONIncludesWaitingFields(t *testing.T) {
 	waitingSince := now.Add(-5 * time.Minute)
 
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
-		ID: "issue-50", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-50", Source: "github-issue", Workflow: "fix-bug",
 		State: queue.StateWaiting, CreatedAt: now,
 		StartedAt: &started, WaitingFor: "plan-approved",
 		WaitingSince: &waitingSince,

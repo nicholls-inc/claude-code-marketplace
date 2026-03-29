@@ -66,9 +66,9 @@ func makeConfig(dir string) *config.Config {
 		Timeout:     "30m",
 		StateDir:    dir,
 		Exclude:     []string{"wontfix", "duplicate"},
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
+		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Workflow}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
 		Tasks: map[string]config.Task{
-			"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+			"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"},
 		},
 		Sources: map[string]config.SourceConfig{
 			"github": {
@@ -76,7 +76,7 @@ func makeConfig(dir string) *config.Config {
 				Repo:    "owner/repo",
 				Exclude: []string{"wontfix", "duplicate"},
 				Tasks: map[string]config.Task{
-					"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
+					"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"},
 				},
 			},
 		},
@@ -167,7 +167,7 @@ func TestScanAlreadyQueued(t *testing.T) {
 	// Pre-enqueue using new format
 	_ = q.Enqueue(queue.Vessel{
 		ID: "issue-1", Source: "github-issue",
-		Ref: "https://github.com/owner/repo/issues/1", Skill: "fix-bug",
+		Ref: "https://github.com/owner/repo/issues/1", Workflow: "fix-bug",
 		Meta: map[string]string{"issue_num": "1"},
 		State: queue.StatePending, CreatedAt: queue.Vessel{}.CreatedAt,
 	})
@@ -269,8 +269,8 @@ func TestScanCrossTaskDedupDeterministic(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	cfg.Tasks = map[string]config.Task{
-		"fix-bugs":  {Labels: []string{"bug"}, Skill: "fix-bug"},
-		"emergency": {Labels: []string{"urgent"}, Skill: "fix-bug"},
+		"fix-bugs":  {Labels: []string{"bug"}, Workflow: "fix-bug"},
+		"emergency": {Labels: []string{"urgent"}, Workflow: "fix-bug"},
 	}
 	cfg.Sources = map[string]config.SourceConfig{
 		"github": {
@@ -348,8 +348,8 @@ func TestScanMultipleTasks(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeConfig(dir)
 	cfg.Tasks = map[string]config.Task{
-		"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"},
-		"features": {Labels: []string{"low-effort"}, Skill: "implement-feature"},
+		"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"},
+		"features": {Labels: []string{"low-effort"}, Workflow: "implement-feature"},
 	}
 	cfg.Sources = map[string]config.SourceConfig{
 		"github": {
@@ -385,12 +385,12 @@ func TestScanMultipleTasks(t *testing.T) {
 		t.Errorf("expected 2 total added, got %d", result.Added)
 	}
 	vessels, _ := q.List()
-	skills := make(map[string]bool)
+	workflows := make(map[string]bool)
 	for _, j := range vessels {
-		skills[j.Skill] = true
+		workflows[j.Workflow] = true
 	}
-	if !skills["fix-bug"] || !skills["implement-feature"] {
-		t.Errorf("expected both skills queued, got: %v", skills)
+	if !workflows["fix-bug"] || !workflows["implement-feature"] {
+		t.Errorf("expected both workflows queued, got: %v", workflows)
 	}
 }
 

@@ -18,7 +18,7 @@ func TestRetryCreatesNewVessel(t *testing.T) {
 	q := newRetryTestQueue(t)
 	now := time.Now().UTC()
 	v := queue.Vessel{
-		ID: "issue-42", Source: "github-issue", Skill: "fix-bug",
+		ID: "issue-42", Source: "github-issue", Workflow: "fix-bug",
 		Ref: "https://github.com/owner/repo/issues/42",
 		Meta:        map[string]string{"issue_num": "42"},
 		State:       queue.StatePending, CreatedAt: now,
@@ -42,8 +42,8 @@ func TestRetryCreatesNewVessel(t *testing.T) {
 			if v.State != queue.StatePending {
 				t.Errorf("retry should be pending, got %s", v.State)
 			}
-			if v.Skill != "fix-bug" {
-				t.Errorf("retry should have same skill, got %s", v.Skill)
+			if v.Workflow != "fix-bug" {
+				t.Errorf("retry should have same workflow, got %s", v.Workflow)
 			}
 			if v.Source != "github-issue" {
 				t.Errorf("retry should have same source, got %s", v.Source)
@@ -136,7 +136,7 @@ func TestRetryMultipleRetries(t *testing.T) {
 	q := newRetryTestQueue(t)
 	now := time.Now().UTC()
 
-	q.Enqueue(queue.Vessel{ID: "issue-42", Source: "manual", Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
+	q.Enqueue(queue.Vessel{ID: "issue-42", Source: "manual", Workflow: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
 	q.Update("issue-42", queue.StateRunning, "")                                                                           //nolint:errcheck
 	q.Update("issue-42", queue.StateFailed, "first error")                                                                 //nolint:errcheck
 

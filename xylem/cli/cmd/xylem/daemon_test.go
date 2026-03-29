@@ -17,13 +17,13 @@ func makeDaemonConfig(dir string) *config.Config {
 		MaxTurns:    50,
 		Timeout:     "30m",
 		StateDir:    dir,
-		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
+		Claude:      config.ClaudeConfig{Command: "claude", Template: "{{.Command}} -p \"/{{.Workflow}} {{.Ref}}\" --max-turns {{.MaxTurns}}"},
 		Sources: map[string]config.SourceConfig{
 			"github": {
 				Type:    "github",
 				Repo:    "owner/repo",
 				Exclude: []string{"wontfix"},
-				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"}},
 			},
 		},
 	}

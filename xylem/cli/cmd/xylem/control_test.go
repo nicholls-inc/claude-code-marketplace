@@ -96,7 +96,7 @@ func TestCancelPendingVessel(t *testing.T) {
 	dir := t.TempDir()
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	now := time.Now().UTC()
-	q.Enqueue(queue.Vessel{ID: "issue-1", Source: "github-issue", Skill: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
+	q.Enqueue(queue.Vessel{ID: "issue-1", Source: "github-issue", Workflow: "fix-bug", State: queue.StatePending, CreatedAt: now}) //nolint:errcheck
 
 	if err := cmdCancel(q, "issue-1"); err != nil {
 		t.Fatalf("unexpected error: %v", err)

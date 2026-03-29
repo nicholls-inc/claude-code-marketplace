@@ -35,7 +35,7 @@ type SourceConfig struct {
 
 type Task struct {
 	Labels []string `yaml:"labels,omitempty"`
-	Skill  string   `yaml:"skill"`
+	Workflow string `yaml:"workflow"`
 }
 
 type ClaudeConfig struct {
@@ -126,11 +126,11 @@ func (c *Config) Validate() error {
 	}
 
 	if c.Claude.Template != "" {
-		return fmt.Errorf("claude.template is no longer supported; migrate to phase-based skills in .xylem/skills/")
+		return fmt.Errorf("claude.template is no longer supported; migrate to phase-based workflows in .xylem/workflows/")
 	}
 
 	if len(c.Claude.AllowedTools) > 0 {
-		return fmt.Errorf("claude.allowed_tools is no longer supported; use allowed_tools in skill phase definitions")
+		return fmt.Errorf("claude.allowed_tools is no longer supported; use allowed_tools in workflow phase definitions")
 	}
 
 	if strings.Contains(c.Claude.Flags, "--bare") {
@@ -175,8 +175,8 @@ func (c *Config) Validate() error {
 			if len(task.Labels) == 0 {
 				return fmt.Errorf("task %q must include at least one labels entry", tname)
 			}
-			if strings.TrimSpace(task.Skill) == "" {
-				return fmt.Errorf("task %q must include a skill", tname)
+			if strings.TrimSpace(task.Workflow) == "" {
+				return fmt.Errorf("task %q must include a workflow", tname)
 			}
 		}
 	}
@@ -213,8 +213,8 @@ func validateGitHubSource(name string, src SourceConfig) error {
 		if len(task.Labels) == 0 {
 			return fmt.Errorf("source %q task %q: must include at least one labels entry", name, tname)
 		}
-		if strings.TrimSpace(task.Skill) == "" {
-			return fmt.Errorf("source %q task %q: must include a skill", name, tname)
+		if strings.TrimSpace(task.Workflow) == "" {
+			return fmt.Errorf("source %q task %q: must include a workflow", name, tname)
 		}
 	}
 	return nil

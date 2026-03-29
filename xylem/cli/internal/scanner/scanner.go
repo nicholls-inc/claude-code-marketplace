@@ -73,7 +73,7 @@ func (s *Scanner) buildSources() []source.Source {
 			for name, t := range srcCfg.Tasks {
 				tasks[name] = source.GitHubTask{
 					Labels: t.Labels,
-					Skill:  t.Skill,
+					Workflow: t.Workflow,
 				}
 			}
 			sources = append(sources, &source.GitHub{

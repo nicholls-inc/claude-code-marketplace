@@ -58,13 +58,13 @@ func makeScanConfig(dir string) *config.Config {
 		Claude: config.ClaudeConfig{
 			Command: "claude",
 		},
-		Tasks: map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+		Tasks: map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"}},
 		Sources: map[string]config.SourceConfig{
 			"github": {
 				Type:    "github",
 				Repo:    "owner/repo",
 				Exclude: []string{"wontfix"},
-				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"}},
 			},
 		},
 	}
@@ -144,15 +144,15 @@ func TestScanDryRun(t *testing.T) {
 	}
 	// Check table headers
 	if !strings.Contains(out, "ID") || !strings.Contains(out, "Source") ||
-		!strings.Contains(out, "Skill") || !strings.Contains(out, "Ref") {
-		t.Errorf("expected table headers (ID, Source, Skill, Ref), got: %s", out)
+		!strings.Contains(out, "Workflow") || !strings.Contains(out, "Ref") {
+		t.Errorf("expected table headers (ID, Source, Workflow, Ref), got: %s", out)
 	}
 	// Check formatted issue row
 	if !strings.Contains(out, "issue-1") {
 		t.Errorf("expected issue-1 in dry-run output, got: %s", out)
 	}
 	if !strings.Contains(out, "fix-bug") {
-		t.Errorf("expected skill in dry-run output, got: %s", out)
+		t.Errorf("expected workflow in dry-run output, got: %s", out)
 	}
 	// Check count message
 	if !strings.Contains(out, "1 candidate(s) would be queued") {

@@ -25,7 +25,7 @@ func makeDrainConfig(dir string) *config.Config {
 				Type:    "github",
 				Repo:    "owner/repo",
 				Exclude: []string{"wontfix"},
-				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Skill: "fix-bug"}},
+				Tasks:   map[string]config.Task{"fix-bugs": {Labels: []string{"bug"}, Workflow: "fix-bug"}},
 			},
 		},
 	}
@@ -40,12 +40,12 @@ func TestDrainDryRun(t *testing.T) {
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
 		ID: "issue-1", Source: "github-issue",
 		Ref:   "https://github.com/owner/repo/issues/1",
-		Skill: "fix-bug", State: queue.StatePending, CreatedAt: now,
+		Workflow: "fix-bug", State: queue.StatePending, CreatedAt: now,
 	})
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
 		ID: "issue-2", Source: "github-issue",
 		Ref:   "https://github.com/owner/repo/issues/2",
-		Skill: "fix-bug", State: queue.StatePending, CreatedAt: now,
+		Workflow: "fix-bug", State: queue.StatePending, CreatedAt: now,
 	})
 
 	out := captureStdout(func() {
@@ -76,7 +76,7 @@ func TestDrainDryRunCommandFormat(t *testing.T) {
 	q.Enqueue(queue.Vessel{ //nolint:errcheck
 		ID: "issue-1", Source: "github-issue",
 		Ref:   "https://github.com/owner/repo/issues/1",
-		Skill: "fix-bug", State: queue.StatePending, CreatedAt: now,
+		Workflow: "fix-bug", State: queue.StatePending, CreatedAt: now,
 	})
 
 	out := captureStdout(func() {
@@ -91,8 +91,8 @@ func TestDrainDryRunCommandFormat(t *testing.T) {
 		t.Errorf("expected command %q in output, got: %s", expectedCmd, out)
 	}
 	if !strings.Contains(out, "ID") || !strings.Contains(out, "Source") ||
-		!strings.Contains(out, "Skill") || !strings.Contains(out, "Command") {
-		t.Errorf("expected table headers (ID, Source, Skill, Command), got: %s", out)
+		!strings.Contains(out, "Workflow") || !strings.Contains(out, "Command") {
+		t.Errorf("expected table headers (ID, Source, Workflow, Command), got: %s", out)
 	}
 	if !strings.Contains(out, "1 vessel(s) would be drained") {
 		t.Errorf("expected count message, got: %s", out)
