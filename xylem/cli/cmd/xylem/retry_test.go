@@ -20,8 +20,10 @@ func TestRetryCreatesNewVessel(t *testing.T) {
 	v := queue.Vessel{
 		ID: "issue-42", Source: "github-issue", Skill: "fix-bug",
 		Ref: "https://github.com/owner/repo/issues/42",
-		Meta:  map[string]string{"issue_num": "42"},
-		State: queue.StatePending, CreatedAt: now,
+		Meta:        map[string]string{"issue_num": "42"},
+		State:       queue.StatePending, CreatedAt: now,
+		FailedPhase: "gate",
+		GateOutput:  "exit code 1: tests failed",
 	}
 	q.Enqueue(v) //nolint:errcheck
 	q.Update("issue-42", queue.StateRunning, "")            //nolint:errcheck
@@ -60,6 +62,18 @@ func TestRetryCreatesNewVessel(t *testing.T) {
 			}
 			if v.Meta["issue_num"] != "42" {
 				t.Errorf("meta issue_num should be preserved, got %s", v.Meta["issue_num"])
+			}
+			if v.Meta["failed_phase"] != "gate" {
+				t.Errorf("meta failed_phase should be 'gate', got %s", v.Meta["failed_phase"])
+			}
+			if v.Meta["gate_output"] != "exit code 1: tests failed" {
+				t.Errorf("meta gate_output should be 'exit code 1: tests failed', got %s", v.Meta["gate_output"])
+			}
+			if v.FailedPhase != "gate" {
+				t.Errorf("FailedPhase should be 'gate', got %s", v.FailedPhase)
+			}
+			if v.GateOutput != "exit code 1: tests failed" {
+				t.Errorf("GateOutput should be 'exit code 1: tests failed', got %s", v.GateOutput)
 			}
 		}
 	}

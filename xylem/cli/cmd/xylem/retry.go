@@ -43,17 +43,25 @@ func cmdRetry(q *queue.Queue, id string) error {
 	if vessel.Error != "" {
 		meta["retry_error"] = vessel.Error
 	}
+	if vessel.FailedPhase != "" {
+		meta["failed_phase"] = vessel.FailedPhase
+	}
+	if vessel.GateOutput != "" {
+		meta["gate_output"] = vessel.GateOutput
+	}
 
 	newVessel := queue.Vessel{
-		ID:        newID,
-		Source:    vessel.Source,
-		Ref:       vessel.Ref,
-		Skill:     vessel.Skill,
-		Prompt:    vessel.Prompt,
-		Meta:      meta,
-		State:     queue.StatePending,
-		CreatedAt: time.Now().UTC(),
-		RetryOf:   vessel.ID,
+		ID:          newID,
+		Source:      vessel.Source,
+		Ref:         vessel.Ref,
+		Skill:       vessel.Skill,
+		Prompt:      vessel.Prompt,
+		Meta:        meta,
+		State:       queue.StatePending,
+		CreatedAt:   time.Now().UTC(),
+		RetryOf:     vessel.ID,
+		FailedPhase: vessel.FailedPhase,
+		GateOutput:  vessel.GateOutput,
 	}
 
 	if err := q.Enqueue(newVessel); err != nil {
