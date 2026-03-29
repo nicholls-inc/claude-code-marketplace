@@ -112,9 +112,12 @@ func TestProp_AuditLogLengthEqualsSubmitCount(t *testing.T) {
 		al := NewAuditLog(filepath.Join(dir, "audit.jsonl"))
 		inter := NewIntermediary(policies, al, exec)
 
-		for range n {
+		for i := range n {
 			intent := intentGen().Draw(t, "intent")
-			_, _ = inter.Submit(context.Background(), intent)
+			_, err := inter.Submit(context.Background(), intent)
+			if err != nil {
+				t.Fatalf("submit %d: %v", i, err)
+			}
 		}
 
 		entries, err := al.Entries()
@@ -123,6 +126,12 @@ func TestProp_AuditLogLengthEqualsSubmitCount(t *testing.T) {
 		}
 		if len(entries) != n {
 			t.Fatalf("audit entries: got %d, want %d", len(entries), n)
+		}
+		// Spot-check: all entries should have Allow decision (allow-all policy).
+		for i, e := range entries {
+			if e.Decision != Allow {
+				t.Fatalf("entry[%d] decision: got %q, want %q", i, e.Decision, Allow)
+			}
 		}
 	})
 }
