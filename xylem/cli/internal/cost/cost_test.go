@@ -775,6 +775,189 @@ func TestEmptyTrackerReport(t *testing.T) {
 	}
 }
 
+func TestNewWindowedTracker(t *testing.T) {
+	t.Run("valid creation", func(t *testing.T) {
+		b := Budget{CostLimitUSD: 5.0, Window: time.Hour}
+		wt, err := NewWindowedTracker(b)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if wt == nil {
+			t.Fatal("expected non-nil tracker")
+		}
+		if wt.WindowExceeded() {
+			t.Fatal("new windowed tracker should not have exceeded budget")
+		}
+		if wt.TotalCost() != 0 {
+			t.Fatal("new windowed tracker should have zero cost")
+		}
+		if wt.WindowCost() != 0 {
+			t.Fatal("new windowed tracker should have zero window cost")
+		}
+	})
+
+	t.Run("rejects zero window", func(t *testing.T) {
+		b := Budget{CostLimitUSD: 5.0, Window: 0}
+		_, err := NewWindowedTracker(b)
+		if err == nil {
+			t.Fatal("expected error for zero window")
+		}
+	})
+
+	t.Run("rejects negative window", func(t *testing.T) {
+		b := Budget{CostLimitUSD: 5.0, Window: -time.Minute}
+		_, err := NewWindowedTracker(b)
+		if err == nil {
+			t.Fatal("expected error for negative window")
+		}
+	})
+}
+
+func TestWindowedTrackerRecordAndRotate(t *testing.T) {
+	b := Budget{CostLimitUSD: 10.0, Window: time.Hour}
+	wt, err := NewWindowedTracker(b)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	// Record in window 1.
+	if err := wt.Record(UsageRecord{CostUSD: 1.0, InputTokens: 100, OutputTokens: 50, Timestamp: base}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if err := wt.Record(UsageRecord{CostUSD: 2.0, InputTokens: 200, OutputTokens: 100, Timestamp: base.Add(30 * time.Minute)}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if got := wt.WindowCost(); !floatEqual(got, 3.0) {
+		t.Fatalf("WindowCost() = %f, want 3.0", got)
+	}
+	if got := wt.WindowTokens(); got != 450 {
+		t.Fatalf("WindowTokens() = %d, want 450", got)
+	}
+
+	// Record in window 2 (past the 1-hour boundary).
+	if err := wt.Record(UsageRecord{CostUSD: 0.5, InputTokens: 50, OutputTokens: 25, Timestamp: base.Add(61 * time.Minute)}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	// Window cost should only reflect the new window.
+	if got := wt.WindowCost(); !floatEqual(got, 0.5) {
+		t.Fatalf("after rotation WindowCost() = %f, want 0.5", got)
+	}
+	if got := wt.WindowTokens(); got != 75 {
+		t.Fatalf("after rotation WindowTokens() = %d, want 75", got)
+	}
+
+	// Total should still include everything.
+	if got := wt.TotalCost(); !floatEqual(got, 3.5) {
+		t.Fatalf("TotalCost() = %f, want 3.5", got)
+	}
+	if got := wt.TotalTokens(); got != 525 {
+		t.Fatalf("TotalTokens() = %d, want 525", got)
+	}
+}
+
+func TestWindowedTrackerPerWindowBudget(t *testing.T) {
+	b := Budget{CostLimitUSD: 1.0, Window: time.Hour}
+	wt, err := NewWindowedTracker(b)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	// Exceed in window 1.
+	if err := wt.Record(UsageRecord{CostUSD: 1.5, Timestamp: base}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if !wt.WindowExceeded() {
+		t.Fatal("expected WindowExceeded to be true")
+	}
+
+	// Move to window 2 — exceeded should reset.
+	if err := wt.Record(UsageRecord{CostUSD: 0.1, Timestamp: base.Add(61 * time.Minute)}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if wt.WindowExceeded() {
+		t.Fatal("WindowExceeded should reset after window rotation")
+	}
+}
+
+func TestWindowedTrackerAlerts(t *testing.T) {
+	b := Budget{CostLimitUSD: 1.0, Window: time.Hour}
+	wt, err := NewWindowedTracker(b)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	// 85% — triggers warning.
+	if err := wt.Record(UsageRecord{CostUSD: 0.85, Timestamp: base}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	alerts := wt.Alerts()
+	if len(alerts) != 1 {
+		t.Fatalf("expected 1 alert, got %d", len(alerts))
+	}
+	if alerts[0].Type != "warning" {
+		t.Fatalf("expected warning, got %s", alerts[0].Type)
+	}
+
+	// Push over 100% — triggers exceeded.
+	if err := wt.Record(UsageRecord{CostUSD: 0.20, Timestamp: base.Add(10 * time.Minute)}); err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	alerts = wt.Alerts()
+	if len(alerts) != 2 {
+		t.Fatalf("expected 2 alerts, got %d", len(alerts))
+	}
+	if alerts[1].Type != "exceeded" {
+		t.Fatalf("expected exceeded, got %s", alerts[1].Type)
+	}
+}
+
+func TestWindowedTrackerTotalCost(t *testing.T) {
+	b := Budget{CostLimitUSD: 10.0, Window: time.Hour}
+	wt, err := NewWindowedTracker(b)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	// Spread records across multiple windows.
+	records := []UsageRecord{
+		{CostUSD: 1.0, InputTokens: 100, OutputTokens: 50, Timestamp: base},
+		{CostUSD: 2.0, InputTokens: 200, OutputTokens: 100, Timestamp: base.Add(30 * time.Minute)},
+		{CostUSD: 3.0, InputTokens: 300, OutputTokens: 150, Timestamp: base.Add(90 * time.Minute)},
+		{CostUSD: 4.0, InputTokens: 400, OutputTokens: 200, Timestamp: base.Add(150 * time.Minute)},
+	}
+
+	for _, r := range records {
+		if err := wt.Record(r); err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+	}
+
+	// Total must always accumulate across all windows.
+	if got := wt.TotalCost(); !floatEqual(got, 10.0) {
+		t.Fatalf("TotalCost() = %f, want 10.0", got)
+	}
+	if got := wt.TotalTokens(); got != 1500 {
+		t.Fatalf("TotalTokens() = %d, want 1500", got)
+	}
+
+	// Window cost should only be the last window.
+	if got := wt.WindowCost(); !floatEqual(got, 4.0) {
+		t.Fatalf("WindowCost() = %f, want 4.0 (last window only)", got)
+	}
+}
+
 func floatEqual(a, b float64) bool {
 	return math.Abs(a-b) < 1e-9
 }
