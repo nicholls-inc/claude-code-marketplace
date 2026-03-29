@@ -208,6 +208,66 @@ func TestPropertyScratchpadPromotion(t *testing.T) {
 	})
 }
 
+// ---------- Progress round-trip property ----------
+
+func TestPropProgressRoundTrip(t *testing.T) {
+	dir := tempDirForRapid(t)
+	rapid.Check(t, func(rt *rapid.T) {
+		subDir := filepath.Join(dir, rapid.StringMatching(`[a-z]{10}`).Draw(rt, "subdir"))
+		missionID := rapid.StringMatching(`[a-z][a-z0-9]{0,9}`).Draw(rt, "missionID")
+		nTasks := rapid.IntRange(0, 10).Draw(rt, "nTasks")
+		tasks := make([]string, nTasks)
+		for i := 0; i < nTasks; i++ {
+			tasks[i] = rapid.StringMatching(`[a-z]{1,12}`).Draw(rt, "task")
+		}
+
+		created, err := CreateProgress(missionID, tasks, subDir)
+		if err != nil {
+			rt.Fatalf("create progress: %v", err)
+		}
+
+		loaded, err := LoadProgress(missionID, subDir)
+		if err != nil {
+			rt.Fatalf("load progress: %v", err)
+		}
+
+		if loaded.MissionID != created.MissionID {
+			rt.Fatalf("mission ID mismatch: got %q, want %q", loaded.MissionID, created.MissionID)
+		}
+		if len(loaded.Items) != len(created.Items) {
+			rt.Fatalf("items count mismatch: got %d, want %d", len(loaded.Items), len(created.Items))
+		}
+		for i := range loaded.Items {
+			if loaded.Items[i].Task != created.Items[i].Task {
+				rt.Fatalf("item %d task mismatch: got %q, want %q", i, loaded.Items[i].Task, created.Items[i].Task)
+			}
+			if loaded.Items[i].Status != "pending" {
+				rt.Fatalf("item %d status = %q, want %q", i, loaded.Items[i].Status, "pending")
+			}
+		}
+	})
+}
+
+// ---------- StartSession never panics property ----------
+
+func TestPropStartSessionNeverPanics(t *testing.T) {
+	dir := tempDirForRapid(t)
+	rapid.Check(t, func(rt *rapid.T) {
+		subDir := filepath.Join(dir, rapid.StringMatching(`[a-z]{10}`).Draw(rt, "subdir"))
+		missionID := rapid.StringMatching(`[a-z][a-z0-9]{0,9}`).Draw(rt, "missionID")
+		sessionID := rapid.StringMatching(`[a-z][a-z0-9]{0,9}`).Draw(rt, "sessionID")
+
+		// Must not panic regardless of whether files exist.
+		ctx, err := StartSession(missionID, sessionID, subDir)
+		if err != nil {
+			rt.Fatalf("start session returned error for missing files: %v", err)
+		}
+		if ctx == nil {
+			rt.Fatal("start session returned nil context")
+		}
+	})
+}
+
 // ---------- Validate rejects empty key or value ----------
 
 func TestPropertyValidateRejectsEmptyKeyOrValue(t *testing.T) {

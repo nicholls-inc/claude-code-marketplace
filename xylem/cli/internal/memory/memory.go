@@ -6,6 +6,7 @@ package memory
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -348,6 +349,185 @@ func LoadHandoff(missionID, sessionID, dir string) (*HandoffArtifact, error) {
 		return nil, fmt.Errorf("load handoff: unmarshal: %w", err)
 	}
 	return &h, nil
+}
+
+// ProgressItem tracks the status of a single task within a mission.
+type ProgressItem struct {
+	Task        string     `json:"task"`
+	Status      string     `json:"status"` // "pending", "in_progress", "completed", "failed"
+	StartedAt   *time.Time `json:"started_at,omitempty"`
+	CompletedAt *time.Time `json:"completed_at,omitempty"`
+}
+
+// ProgressFile tracks task-level progress for a mission across sessions.
+// INV: MissionID is always non-empty.
+// INV: UpdatedAt is always set on save.
+type ProgressFile struct {
+	MissionID string         `json:"mission_id"`
+	Items     []ProgressItem `json:"items"`
+	UpdatedAt time.Time      `json:"updated_at"`
+}
+
+// progressFileName returns the deterministic filename for a progress file.
+// It validates that missionID contains only safe path characters.
+func progressFileName(missionID string) (string, error) {
+	if err := sanitizePathComponent(missionID); err != nil {
+		return "", fmt.Errorf("progress filename: invalid mission ID: %w", err)
+	}
+	return fmt.Sprintf("progress_%s.json", missionID), nil
+}
+
+// validProgressStatuses enumerates the accepted status values for ProgressItem.
+var validProgressStatuses = map[string]bool{
+	"pending":     true,
+	"in_progress": true,
+	"completed":   true,
+	"failed":      true,
+}
+
+// saveProgress marshals a ProgressFile to JSON and writes it to dir.
+func saveProgress(pf *ProgressFile, dir string) error {
+	fname, err := progressFileName(pf.MissionID)
+	if err != nil {
+		return err
+	}
+
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return fmt.Errorf("create dir: %w", err)
+	}
+
+	data, err := json.MarshalIndent(pf, "", "  ")
+	if err != nil {
+		return fmt.Errorf("marshal: %w", err)
+	}
+
+	path := filepath.Join(dir, fname)
+	if err := os.WriteFile(path, data, 0o644); err != nil {
+		return fmt.Errorf("write: %w", err)
+	}
+	return nil
+}
+
+// CreateProgress creates a new ProgressFile for the given mission with all
+// tasks set to "pending" and writes it to dir.
+// INV: Created file always contains valid JSON.
+func CreateProgress(missionID string, tasks []string, dir string) (*ProgressFile, error) {
+	if err := sanitizePathComponent(missionID); err != nil {
+		return nil, fmt.Errorf("create progress: invalid mission ID: %w", err)
+	}
+
+	items := make([]ProgressItem, len(tasks))
+	for i, task := range tasks {
+		items[i] = ProgressItem{
+			Task:   task,
+			Status: "pending",
+		}
+	}
+
+	pf := &ProgressFile{
+		MissionID: missionID,
+		Items:     items,
+		UpdatedAt: time.Now(),
+	}
+
+	if err := saveProgress(pf, dir); err != nil {
+		return nil, fmt.Errorf("create progress: %w", err)
+	}
+	return pf, nil
+}
+
+// LoadProgress reads a ProgressFile from dir.
+func LoadProgress(missionID string, dir string) (*ProgressFile, error) {
+	fname, err := progressFileName(missionID)
+	if err != nil {
+		return nil, fmt.Errorf("load progress: %w", err)
+	}
+
+	path := filepath.Join(dir, fname)
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("load progress: %w", err)
+	}
+
+	var pf ProgressFile
+	if err := json.Unmarshal(data, &pf); err != nil {
+		return nil, fmt.Errorf("load progress: unmarshal: %w", err)
+	}
+	return &pf, nil
+}
+
+// UpdateProgress modifies the status of a task in an existing progress file.
+// It sets StartedAt when transitioning to "in_progress" and CompletedAt when
+// transitioning to "completed" or "failed".
+func UpdateProgress(missionID, task, status string, dir string) error {
+	if !validProgressStatuses[status] {
+		return fmt.Errorf("update progress: invalid status %q", status)
+	}
+
+	pf, err := LoadProgress(missionID, dir)
+	if err != nil {
+		return fmt.Errorf("update progress: %w", err)
+	}
+
+	found := false
+	now := time.Now()
+	for i := range pf.Items {
+		if pf.Items[i].Task == task {
+			found = true
+			pf.Items[i].Status = status
+			if status == "in_progress" && pf.Items[i].StartedAt == nil {
+				pf.Items[i].StartedAt = &now
+			}
+			if status == "completed" || status == "failed" {
+				pf.Items[i].CompletedAt = &now
+			}
+			break
+		}
+	}
+	if !found {
+		return fmt.Errorf("update progress: task %q not found", task)
+	}
+
+	pf.UpdatedAt = now
+
+	if err := saveProgress(pf, dir); err != nil {
+		return fmt.Errorf("update progress: %w", err)
+	}
+	return nil
+}
+
+// SessionContext combines prior session artifacts for a resuming agent.
+type SessionContext struct {
+	Handoff  *HandoffArtifact `json:"handoff,omitempty"`
+	Progress *ProgressFile    `json:"progress,omitempty"`
+}
+
+// StartSession loads the most recent handoff artifact and progress file for
+// the given mission, returning a combined SessionContext. Missing artifacts
+// are not treated as errors; their fields will be nil.
+// INV: Never returns an error for missing files — only for I/O or parse failures.
+func StartSession(missionID, prevSessionID, dir string) (*SessionContext, error) {
+	ctx := &SessionContext{}
+
+	handoff, err := LoadHandoff(missionID, prevSessionID, dir)
+	if err != nil {
+		if !errors.Is(err, os.ErrNotExist) {
+			return nil, fmt.Errorf("start session: load handoff: %w", err)
+		}
+	} else {
+		ctx.Handoff = handoff
+	}
+
+	progress, err := LoadProgress(missionID, dir)
+	if err != nil {
+		if !errors.Is(err, os.ErrNotExist) {
+			return nil, fmt.Errorf("start session: load progress: %w", err)
+		}
+	} else {
+		ctx.Progress = progress
+	}
+
+	return ctx, nil
 }
 
 // Scratchpad provides ephemeral key-value notes with promotion support.
