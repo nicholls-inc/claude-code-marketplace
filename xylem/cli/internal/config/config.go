@@ -21,6 +21,7 @@ type Config struct {
 	StateDir      string                  `yaml:"state_dir"`
 	Exclude       []string                `yaml:"exclude,omitempty"`
 	DefaultBranch string                  `yaml:"default_branch,omitempty"`
+	CleanupAfter  string                  `yaml:"cleanup_after,omitempty"`
 	Claude        ClaudeConfig            `yaml:"claude"`
 	Daemon        DaemonConfig            `yaml:"daemon,omitempty"`
 }
@@ -58,11 +59,12 @@ func Load(path string) (*Config, error) {
 	}
 
 	cfg := &Config{
-		Concurrency: 2,
-		MaxTurns:    50,
-		Timeout:     "30m",
-		StateDir:    ".xylem",
-		Exclude:     []string{"wontfix", "duplicate", "in-progress", "no-bot"},
+		Concurrency:  2,
+		MaxTurns:     50,
+		Timeout:      "30m",
+		StateDir:     ".xylem",
+		CleanupAfter: "168h",
+		Exclude:      []string{"wontfix", "duplicate", "in-progress", "no-bot"},
 		Claude: ClaudeConfig{
 			Command: "claude",
 		},
@@ -115,6 +117,12 @@ func (c *Config) Validate() error {
 	}
 	if dur < minTimeout {
 		return fmt.Errorf("timeout must be at least %s", minTimeout)
+	}
+
+	if c.CleanupAfter != "" {
+		if _, err := time.ParseDuration(c.CleanupAfter); err != nil {
+			return fmt.Errorf("cleanup_after must be a valid duration: %w", err)
+		}
 	}
 
 	if c.Claude.Template != "" {
@@ -174,6 +182,19 @@ func (c *Config) Validate() error {
 	}
 
 	return nil
+}
+
+// CleanupAfterDuration returns the parsed cleanup_after duration, defaulting to
+// 168h (7 days) if the field is empty or unparseable.
+func (c *Config) CleanupAfterDuration() time.Duration {
+	if c.CleanupAfter == "" {
+		return 168 * time.Hour
+	}
+	d, err := time.ParseDuration(c.CleanupAfter)
+	if err != nil {
+		return 168 * time.Hour
+	}
+	return d
 }
 
 func validateGitHubSource(name string, src SourceConfig) error {
