@@ -371,6 +371,45 @@ func (s SignalSet) Assess() HealthLevel {
 	}
 }
 
+// ShouldEvaluate returns true if any signal in the set has a Warning or
+// Critical level, indicating that an LLM-based evaluation should be triggered.
+// INV: Returns false for empty signal sets.
+// INV: Returns true if and only if at least one signal has level != Normal.
+func (s SignalSet) ShouldEvaluate() bool {
+	for _, sig := range s.Signals {
+		if sig.Level == Warning || sig.Level == Critical {
+			return true
+		}
+	}
+	return false
+}
+
+// HealthString returns a string representation of the aggregate health
+// suitable for passing to evaluator.SelectIntensity's signalHealth parameter.
+// The mapping is:
+//
+//	Excellent, Good  -> "healthy"
+//	Neutral          -> "good"
+//	Poor             -> "degraded"
+//	Severe           -> "unhealthy"
+//
+// INV: Output is always one of "healthy", "good", "degraded", "unhealthy".
+func (s SignalSet) HealthString() string {
+	level := s.Assess()
+	switch level {
+	case Excellent, Good:
+		return "healthy"
+	case Neutral:
+		return "good"
+	case Poor:
+		return "degraded"
+	case Severe:
+		return "unhealthy"
+	default:
+		return "healthy"
+	}
+}
+
 // levelRank returns a numeric rank for a ThresholdLevel for comparison.
 func levelRank(l ThresholdLevel) int {
 	switch l {
