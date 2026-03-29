@@ -55,10 +55,11 @@ type TechStack struct {
 
 // EntryPoint describes a runnable entry point discovered in the repo.
 type EntryPoint struct {
-	Name     string
-	Command  string
-	Verified bool
-	Error    string
+	Name    string
+	Command string
+	// Exists indicates the entry point file was found on disk.
+	Exists bool   `json:"exists"`
+	Error  string
 }
 
 // RepoProfile aggregates analysis results for a repository.
@@ -222,8 +223,7 @@ func DetectLanguages(path string) []Language {
 			return nil
 		}
 		if info.IsDir() {
-			base := filepath.Base(p)
-			if strings.HasPrefix(base, ".") || base == "node_modules" || base == "vendor" || base == "__pycache__" {
+			if isSkippableDir(filepath.Base(p)) {
 				return filepath.SkipDir
 			}
 			return nil
@@ -317,9 +317,9 @@ func DiscoverEntryPoints(path string) []EntryPoint {
 		target := filepath.Join(path, ep.File)
 		if _, err := os.Stat(target); err == nil {
 			eps = append(eps, EntryPoint{
-				Name:     ep.Name,
-				Command:  ep.Command,
-				Verified: true,
+				Name:    ep.Name,
+				Command: ep.Command,
+				Exists:  true,
 			})
 		}
 	}
@@ -547,7 +547,13 @@ func scoreValidationHarness(path string) (float64, []string, bool) {
 
 	hasTests := false
 	_ = filepath.Walk(path, func(p string, info os.FileInfo, err error) error {
-		if err != nil || info.IsDir() {
+		if err != nil {
+			return nil
+		}
+		if info.IsDir() {
+			if isSkippableDir(filepath.Base(p)) {
+				return filepath.SkipDir
+			}
 			return nil
 		}
 		base := filepath.Base(p)
@@ -790,4 +796,10 @@ func anyExists(base string, paths []string) bool {
 		}
 	}
 	return false
+}
+
+// isSkippableDir reports whether a directory should be skipped during tree walks
+// (hidden dirs, vendored dependencies, caches).
+func isSkippableDir(name string) bool {
+	return strings.HasPrefix(name, ".") || name == "node_modules" || name == "vendor" || name == "__pycache__"
 }

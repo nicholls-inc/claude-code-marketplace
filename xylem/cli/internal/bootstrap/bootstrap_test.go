@@ -348,13 +348,13 @@ func TestDiscoverEntryPoints(t *testing.T) {
 	}
 }
 
-func TestDiscoverEntryPointsVerified(t *testing.T) {
+func TestDiscoverEntryPointsExists(t *testing.T) {
 	root := setupRepo(t, []string{"Makefile"}, nil)
 	eps := DiscoverEntryPoints(root)
 
 	for _, ep := range eps {
-		if !ep.Verified {
-			t.Fatalf("expected entry point %q to be verified", ep.Name)
+		if !ep.Exists {
+			t.Fatalf("expected entry point %q to have Exists=true", ep.Name)
 		}
 		if ep.Error != "" {
 			t.Fatalf("expected no error for entry point %q, got %q", ep.Name, ep.Error)
@@ -474,17 +474,44 @@ func TestAnalyzeRepo(t *testing.T) {
 	if len(profile.Languages) == 0 {
 		t.Fatal("expected at least one language")
 	}
+	if profile.Languages[0].Name != "Go" {
+		t.Fatalf("expected first language to be Go, got %q", profile.Languages[0].Name)
+	}
 
 	if len(profile.Frameworks) == 0 {
 		t.Fatal("expected at least one framework")
+	}
+	fwNames := make(map[string]bool)
+	for _, fw := range profile.Frameworks {
+		fwNames[fw.Name] = true
+	}
+	if !fwNames["Go Modules"] {
+		t.Fatalf("expected Go Modules framework, got %v", profile.Frameworks)
 	}
 
 	if len(profile.BuildTools) == 0 {
 		t.Fatal("expected at least one build tool")
 	}
+	btNames := make(map[string]bool)
+	for _, bt := range profile.BuildTools {
+		btNames[bt.Name] = true
+	}
+	if !btNames["Make"] {
+		t.Fatalf("expected Make build tool, got %v", profile.BuildTools)
+	}
 
 	if len(profile.EntryPoints) == 0 {
 		t.Fatal("expected at least one entry point")
+	}
+	epNames := make(map[string]bool)
+	for _, ep := range profile.EntryPoints {
+		epNames[ep.Name] = true
+	}
+	if !epNames["make"] {
+		t.Fatalf("expected 'make' entry point, got %v", profile.EntryPoints)
+	}
+	if !epNames["go run"] {
+		t.Fatalf("expected 'go run' entry point, got %v", profile.EntryPoints)
 	}
 }
 
@@ -547,15 +574,15 @@ func TestAuditLegibility(t *testing.T) {
 			name:      "well-structured repo",
 			files:     []string{"README.md", "go.mod", "Makefile", "AGENTS.md", "main.go", "main_test.go", ".golangci.yml", ".editorconfig", "ARCHITECTURE.md", "CONTRIBUTING.md", "CHANGELOG.md"},
 			dirs:      []string{"scripts", "internal", "docs", "docs/adr", ".github/workflows"},
-			wantAbove: 0.7,
-			wantBelow: 1.01,
+			wantAbove: 0.93,
+			wantBelow: 0.95,
 		},
 		{
 			name:      "minimal repo",
 			files:     []string{"README.md", "main.go"},
 			dirs:      []string{"src"},
-			wantAbove: 0.1,
-			wantBelow: 0.6,
+			wantAbove: 0.24,
+			wantBelow: 0.26,
 		},
 	}
 
@@ -915,8 +942,42 @@ func TestLegibilityDimensionGaps(t *testing.T) {
 	}
 }
 
-func TestLegibilityAutoFixable(t *testing.T) {
+func TestScoreValidationHarnessSkipsVendor(t *testing.T) {
 	root := t.TempDir()
+
+	// Create a test file inside node_modules/ only — no test files at root.
+	nmDir := filepath.Join(root, "node_modules", "some-pkg")
+	if err := os.MkdirAll(nmDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(nmDir, "index.test.js"), []byte("test"), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	score, gaps, _ := scoreValidationHarness(root)
+
+	if score != 0 {
+		t.Fatalf("expected score 0 (vendored tests should be skipped), got %f", score)
+	}
+	foundTestGap := false
+	for _, g := range gaps {
+		if g == "no test files found" {
+			foundTestGap = true
+			break
+		}
+	}
+	if !foundTestGap {
+		t.Fatalf("expected 'no test files found' gap, got %v", gaps)
+	}
+}
+
+func TestLegibilityAutoFixable(t *testing.T) {
+	// Set up a repo where "Linting/Formatting" has a perfect score (no gaps,
+	// not auto-fixable) and "Decision Records" has gaps (auto-fixable).
+	root := setupRepo(t,
+		[]string{".golangci.yml", ".editorconfig"},
+		nil,
+	)
 	profile, err := AnalyzeRepo(root)
 	if err != nil {
 		t.Fatalf("AnalyzeRepo: %v", err)
@@ -927,10 +988,24 @@ func TestLegibilityAutoFixable(t *testing.T) {
 		t.Fatalf("AuditLegibility: %v", err)
 	}
 
-	// On empty repo, all dimensions with gaps should be auto-fixable.
 	for _, ds := range report.Dimensions {
-		if len(ds.Gaps) > 0 && !ds.AutoFixable {
-			t.Fatalf("dimension %q has gaps but AutoFixable is false", ds.Dimension.Name)
+		switch ds.Dimension.Name {
+		case "Linting/Formatting":
+			// Full score — no gaps, not auto-fixable.
+			if ds.AutoFixable {
+				t.Fatalf("Linting/Formatting has no gaps but AutoFixable is true")
+			}
+			if len(ds.Gaps) != 0 {
+				t.Fatalf("Linting/Formatting should have no gaps, got %v", ds.Gaps)
+			}
+		case "Decision Records":
+			// Missing ADR dir and CHANGELOG — has gaps, auto-fixable.
+			if !ds.AutoFixable {
+				t.Fatalf("Decision Records has gaps but AutoFixable is false")
+			}
+			if len(ds.Gaps) == 0 {
+				t.Fatal("Decision Records should have gaps on this repo")
+			}
 		}
 	}
 }
