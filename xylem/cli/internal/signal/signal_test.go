@@ -299,6 +299,17 @@ func TestComputeTaskStall(t *testing.T) {
 			window: window,
 			want:   0.0,
 		},
+		{
+			name: "unsorted events produce same result as sorted",
+			events: []TraceEvent{
+				{Timestamp: now.Add(11 * time.Minute), Content: "more thinking"},
+				{Timestamp: now, ToolName: "bash", Success: true},
+				{Timestamp: now.Add(7 * time.Minute), Content: "still thinking"},
+				{Timestamp: now.Add(6 * time.Minute), Content: "thinking..."},
+			},
+			window: window,
+			want:   1.0,
+		},
 	}
 
 	for _, tc := range tests {
@@ -531,5 +542,43 @@ func TestComputeIntegration(t *testing.T) {
 		if sig.Value < 0 {
 			t.Errorf("signal %v has negative value: %v", sig.Type, sig.Value)
 		}
+	}
+
+	// ToolFailureRate: 1 failed out of 3 tool events = ~0.333
+	tfr, ok := ss.Get(ToolFailureRate)
+	if !ok {
+		t.Fatal("expected ToolFailureRate signal to be present")
+	}
+	wantTFR := 1.0 / 3.0
+	if diff := tfr.Value - wantTFR; diff < -0.001 || diff > 0.001 {
+		t.Errorf("ToolFailureRate = %v, want ~%v", tfr.Value, wantTFR)
+	}
+	// With default thresholds (warning=0.3, critical=0.6), ~0.333 is Warning.
+	if tfr.Level != Warning {
+		t.Errorf("ToolFailureRate level = %v, want Warning", tfr.Level)
+	}
+
+	// EfficiencyScore: 3 events / 10 baseline = 0.3 (Normal).
+	eff, ok := ss.Get(EfficiencyScore)
+	if !ok {
+		t.Fatal("expected EfficiencyScore signal to be present")
+	}
+	if eff.Value != 0.3 {
+		t.Errorf("EfficiencyScore = %v, want 0.3", eff.Value)
+	}
+	if eff.Level != Normal {
+		t.Errorf("EfficiencyScore level = %v, want Normal", eff.Level)
+	}
+
+	// TaskStall: span is 2 minutes < 5 minute window, so 0.0 (Normal).
+	ts, ok := ss.Get(TaskStall)
+	if !ok {
+		t.Fatal("expected TaskStall signal to be present")
+	}
+	if ts.Value != 0.0 {
+		t.Errorf("TaskStall = %v, want 0.0", ts.Value)
+	}
+	if ts.Level != Normal {
+		t.Errorf("TaskStall level = %v, want Normal", ts.Level)
 	}
 }

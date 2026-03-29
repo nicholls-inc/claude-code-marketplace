@@ -4,6 +4,7 @@
 package signal
 
 import (
+	"sort"
 	"time"
 )
 
@@ -266,6 +267,15 @@ func ComputeTaskStall(events []TraceEvent, window time.Duration) float64 {
 	if len(events) < 2 {
 		return 0.0
 	}
+
+	// Sort a copy by timestamp ascending so the function is robust against
+	// unsorted input without mutating the caller's slice.
+	sorted := make([]TraceEvent, len(events))
+	copy(sorted, events)
+	sort.Slice(sorted, func(i, j int) bool {
+		return sorted[i].Timestamp.Before(sorted[j].Timestamp)
+	})
+	events = sorted
 
 	// Find the time span of events.
 	first := events[0].Timestamp
