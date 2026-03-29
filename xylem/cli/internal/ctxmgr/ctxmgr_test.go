@@ -104,6 +104,7 @@ func TestAssemble(t *testing.T) {
 		maxTokens      int
 		wantSegments   int
 		wantUsedTokens int
+		wantOrder      []string // expected segment names in priority order
 	}{
 		{
 			name:           "empty pipeline produces empty window",
@@ -111,6 +112,7 @@ func TestAssemble(t *testing.T) {
 			maxTokens:      1000,
 			wantSegments:   0,
 			wantUsedTokens: 0,
+			wantOrder:      nil,
 		},
 		{
 			name: "single processor contributes segments",
@@ -120,9 +122,10 @@ func TestAssemble(t *testing.T) {
 			maxTokens:      1000,
 			wantSegments:   1,
 			wantUsedTokens: 100,
+			wantOrder:      []string{"s1"},
 		},
 		{
-			name: "multiple processors combine segments",
+			name: "multiple processors combine segments in priority order",
 			processors: []Processor{
 				staticProcessor(t, "p1", 1, seg(t, "s1", 100, false)),
 				staticProcessor(t, "p2", 2, seg(t, "s2", 200, true)),
@@ -130,6 +133,19 @@ func TestAssemble(t *testing.T) {
 			maxTokens:      1000,
 			wantSegments:   2,
 			wantUsedTokens: 300,
+			wantOrder:      []string{"s1", "s2"},
+		},
+		{
+			name: "out-of-order priorities are assembled in priority order",
+			processors: []Processor{
+				staticProcessor(t, "low-priority", 3, seg(t, "last", 50, false)),
+				staticProcessor(t, "high-priority", 1, seg(t, "first", 150, false)),
+				staticProcessor(t, "mid-priority", 2, seg(t, "middle", 100, true)),
+			},
+			maxTokens:      1000,
+			wantSegments:   3,
+			wantUsedTokens: 300,
+			wantOrder:      []string{"first", "middle", "last"},
 		},
 	}
 
@@ -147,6 +163,15 @@ func TestAssemble(t *testing.T) {
 			}
 			if w.MaxTokens != tt.maxTokens {
 				t.Errorf("MaxTokens = %d, want %d", w.MaxTokens, tt.maxTokens)
+			}
+			// Verify segments appear in the expected priority order.
+			for i, wantName := range tt.wantOrder {
+				if i >= len(w.Segments) {
+					break
+				}
+				if w.Segments[i].Name != wantName {
+					t.Errorf("Segments[%d].Name = %q, want %q (priority ordering)", i, w.Segments[i].Name, wantName)
+				}
 			}
 		})
 	}
@@ -316,6 +341,20 @@ func TestCompact(t *testing.T) {
 			wantDurTokens:  0,
 			wantUsedTokens: 950,
 		},
+		{
+			name: "PreserveDurable false removes durable segments too",
+			window: Window{
+				Segments: []Segment{
+					{Name: "durable", Tokens: 100, Durable: true},
+					{Name: "working", Tokens: 900, Durable: false},
+				},
+				MaxTokens: 1000,
+			},
+			config:         CompactionConfig{Threshold: 0.5, PreserveDurable: false},
+			wantSegments:   0,
+			wantDurTokens:  0,
+			wantUsedTokens: 0,
+		},
 	}
 
 	for _, tt := range tests {
@@ -383,6 +422,35 @@ func TestSelectStrategy(t *testing.T) {
 			hasDurable:     true,
 			taskComplexity: "high",
 			want:           StrategyIsolate,
+		},
+		// Boundary value tests: exact thresholds where > vs >= matters.
+		{
+			name:           "exactly 0.8 utilization is not Compress (> not >=)",
+			utilization:    0.8,
+			hasDurable:     false,
+			taskComplexity: "low",
+			want:           StrategyWrite,
+		},
+		{
+			name:           "just above 0.8 returns Compress",
+			utilization:    0.80001,
+			hasDurable:     false,
+			taskComplexity: "low",
+			want:           StrategyCompress,
+		},
+		{
+			name:           "exactly 0.5 with durable is not Select (> not >=)",
+			utilization:    0.5,
+			hasDurable:     true,
+			taskComplexity: "low",
+			want:           StrategyWrite,
+		},
+		{
+			name:           "just above 0.5 with durable returns Select",
+			utilization:    0.50001,
+			hasDurable:     true,
+			taskComplexity: "low",
+			want:           StrategySelect,
 		},
 	}
 

@@ -6,13 +6,14 @@ import (
 	"pgregory.net/rapid"
 )
 
-// genSegment generates an arbitrary Segment with non-negative tokens.
+// genSegment generates an arbitrary Segment, including negative token values
+// to exercise clamping in Utilization().
 func genSegment() *rapid.Generator[Segment] {
 	return rapid.Custom(func(t *rapid.T) Segment {
 		return Segment{
 			Name:     rapid.StringN(1, 20, 20).Draw(t, "name"),
 			Content:  rapid.String().Draw(t, "content"),
-			Tokens:   rapid.IntRange(0, 10000).Draw(t, "tokens"),
+			Tokens:   rapid.IntRange(-100, 10000).Draw(t, "tokens"),
 			Durable:  rapid.Bool().Draw(t, "durable"),
 			Source:   rapid.StringN(0, 10, 10).Draw(t, "source"),
 			Priority: rapid.IntRange(0, 100).Draw(t, "priority"),
@@ -143,6 +144,16 @@ func TestProp_CompactReducesUtilization(t *testing.T) {
 		}
 
 		result := Compact(w, CompactionConfig{Threshold: threshold, PreserveDurable: true})
+
+		// The documented invariant: UsedTokens() <= MaxTokens after Compact(),
+		// unless durable segments alone exceed the budget.
+		durableTokens := result.DurableTokens()
+		if result.UsedTokens() > result.MaxTokens && durableTokens <= result.MaxTokens {
+			t.Fatalf("Compact() violated UsedTokens <= MaxTokens: used=%d, max=%d (durable=%d)",
+				result.UsedTokens(), result.MaxTokens, durableTokens)
+		}
+
+		// Also verify compaction never increases tokens.
 		if result.UsedTokens() > w.UsedTokens() {
 			t.Fatalf("Compact increased tokens: %d > %d", result.UsedTokens(), w.UsedTokens())
 		}
