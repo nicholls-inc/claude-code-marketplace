@@ -233,6 +233,7 @@ func (o *Orchestrator) UpdateAgent(id string, status AgentStatus, tokensUsed int
 	for i := range o.topology.Nodes {
 		if o.topology.Nodes[i].ID == id {
 			o.topology.Nodes[i].Status = status
+			prevTokens := o.topology.Nodes[i].TokensUsed
 			o.topology.Nodes[i].TokensUsed = tokensUsed
 			o.topology.Nodes[i].WallClock = wallClock
 			o.topology.Nodes[i].Error = errMsg
@@ -246,7 +247,7 @@ func (o *Orchestrator) UpdateAgent(id string, status AgentStatus, tokensUsed int
 				o.topology.Nodes[i].EndedAt = &now
 			}
 
-			o.recordTokens(tokensUsed)
+			o.recordTokens(tokensUsed - prevTokens)
 			return nil
 		}
 	}
