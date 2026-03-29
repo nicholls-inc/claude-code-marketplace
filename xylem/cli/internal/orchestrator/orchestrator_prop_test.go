@@ -8,21 +8,36 @@ import (
 	"pgregory.net/rapid"
 )
 
-// --- Property: pattern selection is deterministic ---
+// --- Property: simple missions always get sequential ---
 
-func TestPropPatternDeterministic(t *testing.T) {
+func TestPropSimpleMissionSequential(t *testing.T) {
 	rapid.Check(t, func(t *rapid.T) {
 		attrs := MissionAttributes{
-			Description:         rapid.String().Draw(t, "desc"),
-			FileCount:           rapid.IntRange(0, 100).Draw(t, "files"),
-			DomainCount:         rapid.IntRange(0, 20).Draw(t, "domains"),
+			FileCount:           rapid.IntRange(0, 1).Draw(t, "files"),
+			DomainCount:         rapid.IntRange(0, 1).Draw(t, "domains"),
 			ToolCount:           rapid.IntRange(0, 20).Draw(t, "tools"),
 			EstimatedComplexity: rapid.SampledFrom([]string{"low", "medium", "high"}).Draw(t, "complexity"),
 		}
-		p1 := SelectPattern(attrs)
-		p2 := SelectPattern(attrs)
-		if p1 != p2 {
-			t.Fatalf("SelectPattern not deterministic: %s != %s for %+v", p1, p2, attrs)
+		p := SelectPattern(attrs)
+		if p != PatternSequential {
+			t.Fatalf("FileCount<=1 && DomainCount<=1 should yield Sequential, got %s for %+v", p, attrs)
+		}
+	})
+}
+
+// --- Property: high-complexity many-tools missions get orchestrator-workers ---
+
+func TestPropHighComplexityManyToolsOrchestratorWorkers(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		attrs := MissionAttributes{
+			FileCount:           rapid.IntRange(2, 100).Draw(t, "files"),
+			DomainCount:         rapid.IntRange(2, 20).Draw(t, "domains"),
+			ToolCount:           rapid.IntRange(4, 20).Draw(t, "tools"),
+			EstimatedComplexity: "high",
+		}
+		p := SelectPattern(attrs)
+		if p != PatternOrchestratorWorkers {
+			t.Fatalf("high complexity + ToolCount>3 should yield OrchestratorWorkers, got %s for %+v", p, attrs)
 		}
 	})
 }
@@ -98,17 +113,24 @@ func TestPropAgentTracking(t *testing.T) {
 	})
 }
 
-// --- Property: agent IDs are unique ---
+// --- Property: agent IDs are unique (random IDs, some may collide) ---
 
 func TestPropAgentIDsUnique(t *testing.T) {
 	rapid.Check(t, func(t *rapid.T) {
 		n := rapid.IntRange(1, 20).Draw(t, "numAgents")
 		o := NewOrchestrator(OrchestratorConfig{})
+		attempted := make(map[string]struct{})
 		for i := 0; i < n; i++ {
-			_ = o.AddAgent(fmt.Sprintf("agent-%d", i), "task")
+			id := rapid.StringMatching(`[a-z]{1,5}`).Draw(t, fmt.Sprintf("id-%d", i))
+			_ = o.AddAgent(id, "task")
+			attempted[id] = struct{}{}
+		}
+		topo := o.GetTopology()
+		if len(topo.Nodes) != len(attempted) {
+			t.Fatalf("topology has %d nodes, expected %d unique IDs attempted", len(topo.Nodes), len(attempted))
 		}
 		seen := make(map[string]struct{})
-		for _, node := range o.GetTopology().Nodes {
+		for _, node := range topo.Nodes {
 			if _, dup := seen[node.ID]; dup {
 				t.Fatalf("duplicate agent ID %q in topology", node.ID)
 			}
