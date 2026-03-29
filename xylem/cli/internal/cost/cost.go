@@ -45,7 +45,8 @@ type UsageRecord struct {
 type Budget struct {
 	TokenLimit   int           `json:"token_limit"`
 	CostLimitUSD float64      `json:"cost_limit_usd"`
-	// TODO: Window is reserved for future time-windowed budget support.
+	// Window is the duration of the rolling time window. When non-zero,
+	// WindowedTracker enforces per-window limits instead of cumulative limits.
 	Window time.Duration `json:"window"`
 }
 
@@ -109,14 +110,33 @@ func NewTracker(budget *Budget) *Tracker {
 	}
 }
 
-// Record adds a usage record and checks budget constraints. It returns an error
-// only for invalid input, not for exceeding the budget.
-func (t *Tracker) Record(record UsageRecord) error {
+// validateRecord checks that a UsageRecord has non-negative values.
+func validateRecord(record UsageRecord) error {
 	if record.CostUSD < 0 {
 		return fmt.Errorf("record usage: cost must be non-negative, got %f", record.CostUSD)
 	}
 	if record.InputTokens < 0 || record.OutputTokens < 0 {
 		return fmt.Errorf("record usage: token counts must be non-negative")
+	}
+	return nil
+}
+
+// alertsHaveWarningForLimit returns true if a warning alert with the given
+// limit has already been issued.
+func alertsHaveWarningForLimit(alerts []BudgetAlert, limit float64) bool {
+	for _, a := range alerts {
+		if a.Type == "warning" && a.Limit == limit {
+			return true
+		}
+	}
+	return false
+}
+
+// Record adds a usage record and checks budget constraints. It returns an error
+// only for invalid input, not for exceeding the budget.
+func (t *Tracker) Record(record UsageRecord) error {
+	if err := validateRecord(record); err != nil {
+		return err
 	}
 
 	t.mu.Lock()
@@ -144,7 +164,7 @@ func (t *Tracker) Record(record UsageRecord) error {
 				Limit:     t.budget.CostLimitUSD,
 				Timestamp: record.Timestamp,
 			})
-		} else if utilization >= warningThreshold && !t.exceeded && !t.hasWarningForLimitLocked(t.budget.CostLimitUSD) {
+		} else if utilization >= warningThreshold && !t.exceeded && !alertsHaveWarningForLimit(t.alerts, t.budget.CostLimitUSD) {
 			t.alerts = append(t.alerts, BudgetAlert{
 				Type:      "warning",
 				Current:   totalCost,
@@ -165,7 +185,7 @@ func (t *Tracker) Record(record UsageRecord) error {
 				Limit:     float64(t.budget.TokenLimit),
 				Timestamp: record.Timestamp,
 			})
-		} else if utilization >= warningThreshold && !t.exceeded && !t.hasWarningForLimitLocked(float64(t.budget.TokenLimit)) {
+		} else if utilization >= warningThreshold && !t.exceeded && !alertsHaveWarningForLimit(t.alerts, float64(t.budget.TokenLimit)) {
 			t.alerts = append(t.alerts, BudgetAlert{
 				Type:      "warning",
 				Current:   float64(totalTokens),
@@ -176,17 +196,6 @@ func (t *Tracker) Record(record UsageRecord) error {
 	}
 
 	return nil
-}
-
-// hasWarningForLimitLocked returns true if a warning alert with the given limit
-// has already been issued. Must be called with t.mu held.
-func (t *Tracker) hasWarningForLimitLocked(limit float64) bool {
-	for _, a := range t.alerts {
-		if a.Type == "warning" && a.Limit == limit {
-			return true
-		}
-	}
-	return false
 }
 
 // TotalCost returns the sum of CostUSD across all records.
@@ -405,4 +414,159 @@ func LoadReport(path string) (*CostReport, error) {
 		return nil, fmt.Errorf("unmarshal report: %w", err)
 	}
 	return &report, nil
+}
+
+// WindowedTracker enforces budget constraints within rolling time windows.
+// It tracks consumption in discrete windows of Budget.Window duration and
+// resets counters at window boundaries.
+//
+// WindowedTracker is safe for concurrent use.
+type WindowedTracker struct {
+	mu           sync.Mutex
+	budget       Budget
+	windowStart  time.Time
+	windowCost   float64
+	windowTokens int
+	totalCost    float64
+	totalTokens  int
+	allRecords   []UsageRecord
+	alerts       []BudgetAlert
+	exceeded     bool
+}
+
+// NewWindowedTracker creates a WindowedTracker with the given budget. The budget
+// must have a positive Window duration.
+func NewWindowedTracker(budget Budget) (*WindowedTracker, error) {
+	if budget.Window <= 0 {
+		return nil, fmt.Errorf("new windowed tracker: window must be positive, got %v", budget.Window)
+	}
+	return &WindowedTracker{
+		budget:     budget,
+		allRecords: make([]UsageRecord, 0),
+		alerts:     make([]BudgetAlert, 0),
+	}, nil
+}
+
+// Record adds a usage record, rotates the window if needed, and checks
+// per-window budget constraints. It returns an error only for invalid input.
+func (wt *WindowedTracker) Record(record UsageRecord) error {
+	if err := validateRecord(record); err != nil {
+		return err
+	}
+
+	wt.mu.Lock()
+	defer wt.mu.Unlock()
+
+	// Initialize windowStart from the first record.
+	if wt.windowStart.IsZero() {
+		wt.windowStart = record.Timestamp
+	}
+
+	// INV: WindowExceeded resets to false when window rotates
+	if !record.Timestamp.Before(wt.windowStart.Add(wt.budget.Window)) {
+		wt.windowCost = 0
+		wt.windowTokens = 0
+		wt.windowStart = record.Timestamp
+		wt.exceeded = false
+	}
+
+	// INV: TotalCost equals the sum of all records ever (regardless of window)
+	wt.allRecords = append(wt.allRecords, record)
+	wt.totalCost += record.CostUSD
+	wt.totalTokens += record.InputTokens + record.OutputTokens
+	wt.windowCost += record.CostUSD
+	wt.windowTokens += record.InputTokens + record.OutputTokens
+
+	// Check per-window cost budget.
+	if wt.budget.CostLimitUSD > 0 {
+		utilization := wt.windowCost / wt.budget.CostLimitUSD
+		if utilization >= exceededThreshold && !wt.exceeded {
+			wt.exceeded = true
+			wt.alerts = append(wt.alerts, BudgetAlert{
+				Type:      "exceeded",
+				Current:   wt.windowCost,
+				Limit:     wt.budget.CostLimitUSD,
+				Timestamp: record.Timestamp,
+			})
+		} else if utilization >= warningThreshold && !wt.exceeded && !alertsHaveWarningForLimit(wt.alerts, wt.budget.CostLimitUSD) {
+			wt.alerts = append(wt.alerts, BudgetAlert{
+				Type:      "warning",
+				Current:   wt.windowCost,
+				Limit:     wt.budget.CostLimitUSD,
+				Timestamp: record.Timestamp,
+			})
+		}
+	}
+
+	// Check per-window token budget.
+	if wt.budget.TokenLimit > 0 {
+		utilization := float64(wt.windowTokens) / float64(wt.budget.TokenLimit)
+		if utilization >= exceededThreshold && !wt.exceeded {
+			wt.exceeded = true
+			wt.alerts = append(wt.alerts, BudgetAlert{
+				Type:      "exceeded",
+				Current:   float64(wt.windowTokens),
+				Limit:     float64(wt.budget.TokenLimit),
+				Timestamp: record.Timestamp,
+			})
+		} else if utilization >= warningThreshold && !wt.exceeded && !alertsHaveWarningForLimit(wt.alerts, float64(wt.budget.TokenLimit)) {
+			wt.alerts = append(wt.alerts, BudgetAlert{
+				Type:      "warning",
+				Current:   float64(wt.windowTokens),
+				Limit:     float64(wt.budget.TokenLimit),
+				Timestamp: record.Timestamp,
+			})
+		}
+	}
+
+	return nil
+}
+
+// WindowCost returns the sum of CostUSD in the current window records.
+// INV: WindowCost() <= TotalCost() always
+func (wt *WindowedTracker) WindowCost() float64 {
+	wt.mu.Lock()
+	defer wt.mu.Unlock()
+	return wt.windowCost
+}
+
+// WindowTokens returns the sum of InputTokens+OutputTokens in the current
+// window records.
+func (wt *WindowedTracker) WindowTokens() int {
+	wt.mu.Lock()
+	defer wt.mu.Unlock()
+	return wt.windowTokens
+}
+
+// TotalCost returns the sum of CostUSD across ALL records ever recorded,
+// regardless of window boundaries.
+func (wt *WindowedTracker) TotalCost() float64 {
+	wt.mu.Lock()
+	defer wt.mu.Unlock()
+	return wt.totalCost
+}
+
+// TotalTokens returns the sum of all InputTokens+OutputTokens across ALL
+// records ever recorded, regardless of window boundaries.
+func (wt *WindowedTracker) TotalTokens() int {
+	wt.mu.Lock()
+	defer wt.mu.Unlock()
+	return wt.totalTokens
+}
+
+// Alerts returns a copy of all budget alerts in chronological order.
+func (wt *WindowedTracker) Alerts() []BudgetAlert {
+	wt.mu.Lock()
+	defer wt.mu.Unlock()
+	out := make([]BudgetAlert, len(wt.alerts))
+	copy(out, wt.alerts)
+	return out
+}
+
+// WindowExceeded returns whether the current window has exceeded the budget.
+// INV: WindowExceeded resets to false when window rotates
+func (wt *WindowedTracker) WindowExceeded() bool {
+	wt.mu.Lock()
+	defer wt.mu.Unlock()
+	return wt.exceeded
 }

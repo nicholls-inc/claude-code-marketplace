@@ -315,6 +315,103 @@ func TestProp_ZeroCostRecordPreservesTotalCost(t *testing.T) {
 	})
 }
 
+// TestPropWindowedTotalCostEqualsSumOfRecords verifies that TotalCost always
+// equals the sum of all CostUSD values regardless of window rotation.
+func TestPropWindowedTotalCostEqualsSumOfRecords(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		window := time.Duration(rapid.IntRange(1, 60).Draw(t, "window_minutes")) * time.Minute
+		budget := Budget{CostLimitUSD: 1000.0, Window: window}
+		wt, err := NewWindowedTracker(budget)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+		records := rapid.SliceOfN(genUsageRecord(), 1, 50).Draw(t, "records")
+
+		var expectedCost float64
+		for i, r := range records {
+			// Space records out so some cross window boundaries.
+			r.Timestamp = base.Add(time.Duration(i) * time.Duration(rapid.IntRange(1, 120).Draw(t, "offset_minutes")) * time.Minute)
+			if err := wt.Record(r); err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			expectedCost += r.CostUSD
+		}
+
+		if math.Abs(wt.TotalCost()-expectedCost) > 1e-6 {
+			t.Fatalf("TotalCost() = %f, expected %f", wt.TotalCost(), expectedCost)
+		}
+	})
+}
+
+// TestPropWindowedCostNeverNegative verifies that both window cost and total
+// cost are never negative.
+func TestPropWindowedCostNeverNegative(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		window := time.Duration(rapid.IntRange(1, 60).Draw(t, "window_minutes")) * time.Minute
+		budget := Budget{CostLimitUSD: 1000.0, Window: window}
+		wt, err := NewWindowedTracker(budget)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+		records := rapid.SliceOfN(genUsageRecord(), 1, 50).Draw(t, "records")
+
+		for i, r := range records {
+			r.Timestamp = base.Add(time.Duration(i) * time.Duration(rapid.IntRange(1, 120).Draw(t, "offset_minutes")) * time.Minute)
+			if err := wt.Record(r); err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+
+			if wt.WindowCost() < 0 {
+				t.Fatalf("WindowCost() = %f, must be non-negative", wt.WindowCost())
+			}
+			if wt.TotalCost() < 0 {
+				t.Fatalf("TotalCost() = %f, must be non-negative", wt.TotalCost())
+			}
+		}
+	})
+}
+
+// TestPropWindowedExceededResetsOnRotation verifies that the exceeded flag
+// resets to false when the window rotates.
+func TestPropWindowedExceededResetsOnRotation(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		window := time.Duration(rapid.IntRange(1, 10).Draw(t, "window_minutes")) * time.Minute
+		// Use a small limit so we exceed easily.
+		limit := float64(rapid.IntRange(1, 10).Draw(t, "limit_cents")) / 100.0
+		budget := Budget{CostLimitUSD: limit, Window: window}
+		wt, err := NewWindowedTracker(budget)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		base := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
+
+		// Exceed in window 1.
+		bigCost := limit + 1.0
+		if err := wt.Record(UsageRecord{CostUSD: bigCost, Timestamp: base}); err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if !wt.WindowExceeded() {
+			t.Fatal("expected WindowExceeded after exceeding budget")
+		}
+
+		// Record a small amount in a new window — exceeded must reset.
+		newWindowTime := base.Add(window + time.Second)
+		smallCost := float64(rapid.IntRange(0, 1).Draw(t, "small_cost_cents")) / 100.0
+		if err := wt.Record(UsageRecord{CostUSD: smallCost, Timestamp: newWindowTime}); err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+
+		if smallCost < limit && wt.WindowExceeded() {
+			t.Fatal("WindowExceeded should reset to false after window rotation with sub-limit cost")
+		}
+	})
+}
+
 // TestProp_BudgetUtilizationMatchesCost verifies utilization = totalCost / limit.
 func TestProp_BudgetUtilizationMatchesCost(t *testing.T) {
 	rapid.Check(t, func(t *rapid.T) {
