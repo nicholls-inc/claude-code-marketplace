@@ -194,3 +194,65 @@ func TestPropertyToolFailureRateNoTools(t *testing.T) {
 		}
 	})
 }
+
+// genSignalSet generates a random SignalSet with 1-10 signals.
+func genSignalSet() *rapid.Generator[SignalSet] {
+	return rapid.Custom(func(t *rapid.T) SignalSet {
+		n := rapid.IntRange(1, 10).Draw(t, "count")
+		signals := make([]Signal, n)
+		for i := range n {
+			signals[i] = Signal{
+				Type:  SignalType(rapid.StringMatching(`[A-Za-z]+`).Draw(t, "type")),
+				Value: rapid.Float64Range(0.0, 1.0).Draw(t, "value"),
+				Level: ThresholdLevel(rapid.SampledFrom([]ThresholdLevel{Normal, Warning, Critical}).Draw(t, "level")),
+			}
+		}
+		return SignalSet{Signals: signals}
+	})
+}
+
+// Property 7: ShouldEvaluate() is false if and only if Assess() returns Excellent.
+func TestPropShouldEvaluateConsistentWithAssess(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		ss := genSignalSet().Draw(t, "signal_set")
+		shouldEval := ss.ShouldEvaluate()
+		health := ss.Assess()
+
+		if !shouldEval && health != Excellent {
+			t.Fatalf("ShouldEvaluate()=false but Assess()=%v, expected Excellent", health)
+		}
+		if shouldEval && health == Excellent {
+			t.Fatalf("ShouldEvaluate()=true but Assess()=Excellent, expected non-Excellent")
+		}
+	})
+}
+
+// Property 8: HealthString() always returns one of the four valid strings.
+func TestPropHealthStringAlwaysValid(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		ss := genSignalSet().Draw(t, "signal_set")
+		h := ss.HealthString()
+
+		valid := map[string]bool{
+			"healthy":   true,
+			"good":      true,
+			"degraded":  true,
+			"unhealthy": true,
+		}
+		if !valid[h] {
+			t.Fatalf("HealthString() = %q, not one of the valid values", h)
+		}
+	})
+}
+
+// Property 9: If ShouldEvaluate() returns false, Assess() must return Excellent.
+func TestPropShouldEvaluateFalseImpliesExcellent(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		ss := genSignalSet().Draw(t, "signal_set")
+		if !ss.ShouldEvaluate() {
+			if h := ss.Assess(); h != Excellent {
+				t.Fatalf("ShouldEvaluate()=false but Assess()=%v, expected Excellent", h)
+			}
+		}
+	})
+}

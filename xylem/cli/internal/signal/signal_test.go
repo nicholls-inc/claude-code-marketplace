@@ -521,6 +521,105 @@ func TestDefaultConfig(t *testing.T) {
 	}
 }
 
+// --- ShouldEvaluate tests ---
+
+func TestShouldEvaluateAllNormal(t *testing.T) {
+	ss := SignalSet{Signals: []Signal{
+		{Type: Repetition, Level: Normal},
+		{Type: ToolFailureRate, Level: Normal},
+		{Type: EfficiencyScore, Level: Normal},
+	}}
+	if ss.ShouldEvaluate() {
+		t.Error("ShouldEvaluate() = true, want false for all Normal signals")
+	}
+}
+
+func TestShouldEvaluateWithWarning(t *testing.T) {
+	ss := SignalSet{Signals: []Signal{
+		{Type: Repetition, Level: Normal},
+		{Type: ToolFailureRate, Level: Warning},
+		{Type: EfficiencyScore, Level: Normal},
+	}}
+	if !ss.ShouldEvaluate() {
+		t.Error("ShouldEvaluate() = false, want true when a Warning signal is present")
+	}
+}
+
+func TestShouldEvaluateWithCritical(t *testing.T) {
+	ss := SignalSet{Signals: []Signal{
+		{Type: Repetition, Level: Normal},
+		{Type: ToolFailureRate, Level: Critical},
+		{Type: EfficiencyScore, Level: Normal},
+	}}
+	if !ss.ShouldEvaluate() {
+		t.Error("ShouldEvaluate() = false, want true when a Critical signal is present")
+	}
+}
+
+func TestShouldEvaluateEmpty(t *testing.T) {
+	ss := SignalSet{Signals: nil}
+	if ss.ShouldEvaluate() {
+		t.Error("ShouldEvaluate() = true, want false for empty signal set")
+	}
+}
+
+// --- HealthString tests ---
+
+func TestHealthStringExcellent(t *testing.T) {
+	ss := SignalSet{Signals: []Signal{
+		{Type: Repetition, Level: Normal},
+		{Type: ToolFailureRate, Level: Normal},
+		{Type: EfficiencyScore, Level: Normal},
+	}}
+	if got := ss.HealthString(); got != "healthy" {
+		t.Errorf("HealthString() = %q, want %q (Excellent maps to healthy)", got, "healthy")
+	}
+}
+
+func TestHealthStringGood(t *testing.T) {
+	ss := SignalSet{Signals: []Signal{
+		{Type: Repetition, Level: Warning},
+		{Type: ToolFailureRate, Level: Normal},
+		{Type: EfficiencyScore, Level: Normal},
+	}}
+	if got := ss.HealthString(); got != "healthy" {
+		t.Errorf("HealthString() = %q, want %q (Good maps to healthy)", got, "healthy")
+	}
+}
+
+func TestHealthStringNeutral(t *testing.T) {
+	ss := SignalSet{Signals: []Signal{
+		{Type: Repetition, Level: Warning},
+		{Type: ToolFailureRate, Level: Warning},
+		{Type: EfficiencyScore, Level: Normal},
+	}}
+	if got := ss.HealthString(); got != "good" {
+		t.Errorf("HealthString() = %q, want %q (Neutral maps to good)", got, "good")
+	}
+}
+
+func TestHealthStringPoor(t *testing.T) {
+	ss := SignalSet{Signals: []Signal{
+		{Type: Repetition, Level: Critical},
+		{Type: ToolFailureRate, Level: Normal},
+		{Type: EfficiencyScore, Level: Normal},
+	}}
+	if got := ss.HealthString(); got != "degraded" {
+		t.Errorf("HealthString() = %q, want %q (Poor maps to degraded)", got, "degraded")
+	}
+}
+
+func TestHealthStringSevere(t *testing.T) {
+	ss := SignalSet{Signals: []Signal{
+		{Type: Repetition, Level: Critical},
+		{Type: ToolFailureRate, Level: Critical},
+		{Type: EfficiencyScore, Level: Normal},
+	}}
+	if got := ss.HealthString(); got != "unhealthy" {
+		t.Errorf("HealthString() = %q, want %q (Severe maps to unhealthy)", got, "unhealthy")
+	}
+}
+
 // --- Compute integration test ---
 
 func TestComputeIntegration(t *testing.T) {
