@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"context"
+	"io"
 	"os"
 	"os/exec"
 )
@@ -29,4 +31,17 @@ func (r *realCmdRunner) RunProcess(ctx context.Context, dir string, name string,
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+func (r *realCmdRunner) RunPhase(ctx context.Context, dir string, stdin io.Reader, name string, args ...string) ([]byte, error) {
+	cmd := exec.CommandContext(ctx, name, args...)
+	cmd.Dir = dir
+	cmd.Stdin = stdin
+	cmd.Stderr = os.Stderr
+
+	var stdout bytes.Buffer
+	cmd.Stdout = io.MultiWriter(os.Stdout, &stdout)
+
+	err := cmd.Run()
+	return stdout.Bytes(), err
 }

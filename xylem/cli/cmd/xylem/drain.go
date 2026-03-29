@@ -10,6 +10,7 @@ import (
 
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/queue"
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/reporter"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/runner"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/source"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/worktree"
@@ -39,11 +40,16 @@ func cmdDrain(cfg *config.Config, q *queue.Queue, wt *worktree.Manager, dryRun b
 	cmdRunner := &realCmdRunner{}
 	r := runner.New(cfg, q, wt, cmdRunner)
 	r.Sources = buildSourceMap(cfg, q, cmdRunner)
+	r.Reporter = buildReporter(cfg, cmdRunner)
+
+	// Check waiting vessels before draining pending ones
+	r.CheckWaitingVessels(ctx)
+
 	result, err := r.Drain(ctx)
 	if err != nil {
 		return &exitError{code: 2, err: fmt.Errorf("drain error: %w", err)}
 	}
-	fmt.Printf("Completed %d, failed %d, skipped %d\n", result.Completed, result.Failed, result.Skipped)
+	fmt.Printf("Completed %d, failed %d, skipped %d, waiting %d\n", result.Completed, result.Failed, result.Skipped, result.Waiting)
 	if result.Failed > 0 {
 		return &exitError{code: 1}
 	}
@@ -72,6 +78,16 @@ func buildSourceMap(cfg *config.Config, q *queue.Queue, cmdRunner source.Command
 		}
 	}
 	return sources
+}
+
+func buildReporter(cfg *config.Config, cmdRunner reporter.Runner) *reporter.Reporter {
+	// Find the first GitHub source repo for reporting
+	for _, srcCfg := range cfg.Sources {
+		if srcCfg.Type == "github" && srcCfg.Repo != "" {
+			return &reporter.Reporter{Runner: cmdRunner, Repo: srcCfg.Repo}
+		}
+	}
+	return nil
 }
 
 func dryRunDrain(cfg *config.Config, q *queue.Queue) error {

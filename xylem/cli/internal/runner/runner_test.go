@@ -1,9 +1,12 @@
 package runner
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -13,16 +16,46 @@ import (
 
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/queue"
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/skill"
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/source"
 )
 
+// --- Mock types ---
+
 type mockCmdRunner struct {
-	processErr error
-	outputErr  error
-	started    int32
+	processErr   error
+	outputErr    error
+	outputData   []byte
+	phaseOutputs map[string][]byte // keyed by substring in prompt
+	phaseErr     error
+	started      int32
+	gateOutput   []byte
+	gateErr      error
+	// Track calls for assertion
+	phaseCalls []phaseCall
+	outputArgs [][]string
 }
 
-func (m *mockCmdRunner) RunOutput(_ context.Context, _ string, _ ...string) ([]byte, error) {
+type phaseCall struct {
+	dir    string
+	prompt string
+	name   string
+	args   []string
+}
+
+func (m *mockCmdRunner) RunOutput(_ context.Context, name string, args ...string) ([]byte, error) {
+	m.outputArgs = append(m.outputArgs, append([]string{name}, args...))
+	if m.gateOutput != nil {
+		// If the command looks like a gate command (sh -c), return gate output
+		for _, a := range args {
+			if strings.Contains(a, "cd ") {
+				return m.gateOutput, m.gateErr
+			}
+		}
+	}
+	if m.outputData != nil {
+		return m.outputData, m.outputErr
+	}
 	return []byte{}, m.outputErr
 }
 
@@ -30,6 +63,33 @@ func (m *mockCmdRunner) RunProcess(_ context.Context, _ string, _ string, _ ...s
 	atomic.AddInt32(&m.started, 1)
 	return m.processErr
 }
+
+func (m *mockCmdRunner) RunPhase(_ context.Context, dir string, stdin io.Reader, name string, args ...string) ([]byte, error) {
+	prompt, _ := io.ReadAll(stdin)
+	m.phaseCalls = append(m.phaseCalls, phaseCall{
+		dir:    dir,
+		prompt: string(prompt),
+		name:   name,
+		args:   args,
+	})
+	atomic.AddInt32(&m.started, 1)
+
+	// Return canned output based on prompt content
+	for key, output := range m.phaseOutputs {
+		if bytes.Contains(prompt, []byte(key)) {
+			return output, m.phaseErr
+		}
+	}
+	return []byte("mock output"), m.phaseErr
+}
+
+// mockExitError implements the exitCoder interface that gate.RunCommandGate checks.
+type mockExitError struct {
+	code int
+}
+
+func (e *mockExitError) Error() string    { return fmt.Sprintf("exit status %d", e.code) }
+func (e *mockExitError) ExitCode() int    { return e.code }
 
 type countingCmdRunner struct {
 	concurrent int32
@@ -59,6 +119,25 @@ func (c *countingCmdRunner) RunProcess(_ context.Context, _ string, _ string, _ 
 	return nil
 }
 
+func (c *countingCmdRunner) RunPhase(_ context.Context, _ string, stdin io.Reader, _ string, _ ...string) ([]byte, error) {
+	io.ReadAll(stdin)
+	cur := atomic.AddInt32(&c.concurrent, 1)
+	for {
+		old := atomic.LoadInt32(&c.maxSeen)
+		if cur <= old {
+			break
+		}
+		if atomic.CompareAndSwapInt32(&c.maxSeen, old, cur) {
+			break
+		}
+	}
+	if c.delay > 0 {
+		time.Sleep(c.delay)
+	}
+	atomic.AddInt32(&c.concurrent, -1)
+	return []byte("mock output"), nil
+}
+
 type mockWorktree struct {
 	createErr error
 	path      string
@@ -73,6 +152,17 @@ func (m *mockWorktree) Create(_ context.Context, branchName string) (string, err
 	}
 	return ".claude/worktrees/" + branchName, nil
 }
+
+type trackingWorktree struct {
+	lastBranch string
+}
+
+func (tw *trackingWorktree) Create(_ context.Context, branchName string) (string, error) {
+	tw.lastBranch = branchName
+	return ".claude/worktrees/" + branchName, nil
+}
+
+// --- Helpers ---
 
 func makeTestConfig(dir string, concurrency int) *config.Config {
 	return &config.Config{
@@ -101,6 +191,16 @@ func makeVessel(num int, skill string) queue.Vessel {
 		Ref:    fmt.Sprintf("https://github.com/owner/repo/issues/%d", num),
 		Skill:  skill,
 		Meta:   map[string]string{"issue_num": strconv.Itoa(num)},
+		State:  queue.StatePending,
+		CreatedAt: time.Now().UTC(),
+	}
+}
+
+func makePromptVessel(num int, prompt string) queue.Vessel {
+	return queue.Vessel{
+		ID:     fmt.Sprintf("prompt-%d", num),
+		Source: "manual",
+		Prompt: prompt,
 		State:  queue.StatePending,
 		CreatedAt: time.Now().UTC(),
 	}
@@ -141,6 +241,33 @@ func TestBuildCommand(t *testing.T) {
 	if !strings.Contains(full, "--max-turns") {
 		t.Errorf("expected --max-turns in command, got: %s", full)
 	}
+}
+
+// writeSkillFile creates a skill YAML and its prompt files in the given dir.
+func writeSkillFile(t *testing.T, dir, name string, phases []testPhase) {
+	t.Helper()
+	skillDir := filepath.Join(dir, ".xylem", "skills")
+	os.MkdirAll(skillDir, 0o755)
+
+	var phaseYAML strings.Builder
+	for _, p := range phases {
+		promptPath := filepath.Join(dir, ".xylem", "prompts", name, p.name+".md")
+		os.MkdirAll(filepath.Dir(promptPath), 0o755)
+		os.WriteFile(promptPath, []byte(p.promptContent), 0o644)
+
+		phaseYAML.WriteString(fmt.Sprintf("  - name: %s\n", p.name))
+		phaseYAML.WriteString(fmt.Sprintf("    prompt_file: %s\n", promptPath))
+		phaseYAML.WriteString(fmt.Sprintf("    max_turns: %d\n", p.maxTurns))
+		if p.gate != "" {
+			phaseYAML.WriteString(fmt.Sprintf("    gate:\n%s\n", p.gate))
+		}
+		if p.allowedTools != "" {
+			phaseYAML.WriteString(fmt.Sprintf("    allowed_tools: %q\n", p.allowedTools))
+		}
+	}
+
+	skillContent := fmt.Sprintf("name: %s\nphases:\n%s", name, phaseYAML.String())
+	os.WriteFile(filepath.Join(skillDir, name+".yaml"), []byte(skillContent), 0o644)
 }
 
 func TestBuildCommandDirectPrompt(t *testing.T) {
@@ -243,11 +370,32 @@ func TestBuildCommandSkillBased(t *testing.T) {
 	}
 }
 
+type testPhase struct {
+	name          string
+	promptContent string
+	maxTurns      int
+	gate          string
+	allowedTools  string
+}
+
+// --- Tests ---
+
 func TestDrainSingleVessel(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 2)
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze the issue", maxTurns: 5},
+	})
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+
+	// Override skill path: change working directory context
+	// We need the skill to be loadable from .xylem/skills/fix-bug.yaml
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
 
 	cmdRunner := &mockCmdRunner{}
 	wt := &mockWorktree{}
@@ -275,13 +423,385 @@ func TestDrainSingleVessel(t *testing.T) {
 	}
 }
 
-func TestDrainVesselFails(t *testing.T) {
+func TestDrainMultiPhaseSkill(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
-	cmdRunner := &mockCmdRunner{processErr: errors.New("exit status 1")}
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze: {{.Issue.Title}}", maxTurns: 5},
+		{name: "implement", promptContent: "Implement based on: {{.PreviousOutputs.analyze}}", maxTurns: 10},
+		{name: "pr", promptContent: "Create PR", maxTurns: 3},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{
+		phaseOutputs: map[string][]byte{
+			"Analyze":   []byte("analysis result"),
+			"Implement": []byte("implementation done"),
+			"Create PR": []byte("PR created"),
+		},
+	}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Completed != 1 {
+		t.Errorf("expected 1 completed, got %d", result.Completed)
+	}
+
+	// All 3 phases should have been invoked
+	if len(cmdRunner.phaseCalls) != 3 {
+		t.Fatalf("expected 3 phase calls, got %d", len(cmdRunner.phaseCalls))
+	}
+
+	// Verify output files exist
+	for _, pName := range []string{"analyze", "implement", "pr"} {
+		outputPath := filepath.Join(dir, ".xylem", "phases", "issue-1", pName+".output")
+		if _, err := os.Stat(outputPath); os.IsNotExist(err) {
+			t.Errorf("expected output file %s to exist", outputPath)
+		}
+	}
+}
+
+func TestDrainPhaseFailsStopsSubsequent(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
+		{name: "implement", promptContent: "Implement", maxTurns: 10},
+		{name: "pr", promptContent: "PR", maxTurns: 3},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{
+		phaseOutputs: map[string][]byte{
+			"Analyze": []byte("analysis done"),
+		},
+		phaseErr: errors.New("exit status 1"),
+	}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Failed != 1 {
+		t.Errorf("expected 1 failed, got %d", result.Failed)
+	}
+
+	// Only 1 phase should have been called (first one fails)
+	if len(cmdRunner.phaseCalls) != 1 {
+		t.Errorf("expected 1 phase call (stopped at failure), got %d", len(cmdRunner.phaseCalls))
+	}
+
+	vessels, _ := q.List()
+	if vessels[0].State != queue.StateFailed {
+		t.Errorf("expected vessel failed, got %s", vessels[0].State)
+	}
+}
+
+func TestDrainPromptOnlyVessel(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makePromptVessel(1, "Fix the null pointer in handler.go"))
+
+	cmdRunner := &mockCmdRunner{}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Completed != 1 {
+		t.Errorf("expected 1 completed, got %d", result.Completed)
+	}
+
+	// Should be exactly 1 RunPhase call
+	if len(cmdRunner.phaseCalls) != 1 {
+		t.Fatalf("expected 1 phase call for prompt-only, got %d", len(cmdRunner.phaseCalls))
+	}
+
+	// Verify the prompt was passed via stdin
+	call := cmdRunner.phaseCalls[0]
+	if !strings.Contains(call.prompt, "Fix the null pointer in handler.go") {
+		t.Errorf("expected prompt in stdin, got: %s", call.prompt)
+	}
+
+	// Verify -p flag is present
+	hasP := false
+	for _, a := range call.args {
+		if a == "-p" {
+			hasP = true
+			break
+		}
+	}
+	if !hasP {
+		t.Errorf("expected -p flag in args, got: %v", call.args)
+	}
+
+	vessels, _ := q.List()
+	if vessels[0].State != queue.StateCompleted {
+		t.Errorf("expected vessel completed, got %s", vessels[0].State)
+	}
+}
+
+func TestDrainPromptOnlyWithRef(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+
+	v := makePromptVessel(1, "Fix the null pointer")
+	v.Ref = "https://github.com/owner/repo/issues/99"
+	_ = q.Enqueue(v)
+
+	cmdRunner := &mockCmdRunner{}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Completed != 1 {
+		t.Errorf("expected 1 completed, got %d", result.Completed)
+	}
+
+	call := cmdRunner.phaseCalls[0]
+	if !strings.Contains(call.prompt, "Ref: https://github.com/owner/repo/issues/99") {
+		t.Errorf("expected ref in prompt, got: %s", call.prompt)
+	}
+	if !strings.Contains(call.prompt, "Fix the null pointer") {
+		t.Errorf("expected original prompt in stdin, got: %s", call.prompt)
+	}
+}
+
+func TestDrainCommandGatePasses(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{
+			name: "implement", promptContent: "Implement fix", maxTurns: 10,
+			gate: "      type: command\n      run: \"make test\"",
+		},
+		{name: "pr", promptContent: "Create PR", maxTurns: 3},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{
+		gateOutput: []byte("all tests passed"),
+		gateErr:    nil, // gate passes
+	}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Completed != 1 {
+		t.Errorf("expected 1 completed, got %d", result.Completed)
+	}
+
+	// Both phases should have run
+	if len(cmdRunner.phaseCalls) != 2 {
+		t.Errorf("expected 2 phase calls (gate passed), got %d", len(cmdRunner.phaseCalls))
+	}
+}
+
+func TestDrainCommandGateFailsNoRetries(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{
+			name: "implement", promptContent: "Implement fix", maxTurns: 10,
+			gate: "      type: command\n      run: \"make test\"\n      retries: 0",
+		},
+		{name: "pr", promptContent: "Create PR", maxTurns: 3},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{
+		gateOutput: []byte("FAIL: TestFoo"),
+		gateErr:    errors.New("exit status 1"), // gate fails
+	}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Failed != 1 {
+		t.Errorf("expected 1 failed, got %d", result.Failed)
+	}
+
+	// Only 1 phase call (gate failed, no retry, phase 2 not invoked)
+	if len(cmdRunner.phaseCalls) != 1 {
+		t.Errorf("expected 1 phase call, got %d", len(cmdRunner.phaseCalls))
+	}
+}
+
+func TestDrainCommandGateFailsWithRetries(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{
+			name: "implement", promptContent: "Implement fix\n{{.GateResult}}", maxTurns: 10,
+			gate: "      type: command\n      run: \"make test\"\n      retries: 2\n      retry_delay: \"1ms\"",
+		},
+		{name: "pr", promptContent: "Create PR", maxTurns: 3},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{
+		gateOutput: []byte("FAIL: TestFoo"),
+		gateErr:    &mockExitError{code: 1}, // gate always fails (non-zero exit)
+	}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Failed != 1 {
+		t.Errorf("expected 1 failed, got %d", result.Failed)
+	}
+
+	// Phase should be invoked 3 times total: initial + 2 retries
+	if len(cmdRunner.phaseCalls) != 3 {
+		t.Errorf("expected 3 phase calls (1 + 2 retries), got %d", len(cmdRunner.phaseCalls))
+	}
+
+	// The 2nd and 3rd calls should include gate result context in rendered prompt
+	for i := 1; i < len(cmdRunner.phaseCalls); i++ {
+		if !strings.Contains(cmdRunner.phaseCalls[i].prompt, "gate check failed") {
+			t.Errorf("retry %d prompt should contain gate failure context, got: %s", i, cmdRunner.phaseCalls[i].prompt)
+		}
+	}
+}
+
+func TestDrainLabelGateTransitionsToWaiting(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{
+			name: "plan", promptContent: "Create plan", maxTurns: 5,
+			gate: "      type: label\n      wait_for: \"plan-approved\"\n      timeout: \"24h\"",
+		},
+		{name: "implement", promptContent: "Implement", maxTurns: 10},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Waiting != 1 {
+		t.Errorf("expected 1 waiting, got %d", result.Waiting)
+	}
+
+	// Only 1 phase should have been invoked (plan)
+	if len(cmdRunner.phaseCalls) != 1 {
+		t.Errorf("expected 1 phase call, got %d", len(cmdRunner.phaseCalls))
+	}
+
+	vessels, _ := q.List()
+	if vessels[0].State != queue.StateWaiting {
+		t.Errorf("expected vessel waiting, got %s", vessels[0].State)
+	}
+	if vessels[0].WaitingFor != "plan-approved" {
+		t.Errorf("expected WaitingFor=plan-approved, got %s", vessels[0].WaitingFor)
+	}
+	if vessels[0].WaitingSince == nil {
+		t.Error("expected WaitingSince to be set")
+	}
+}
+
+func TestDrainVesselFails(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{phaseErr: errors.New("exit status 1")}
 	wt := &mockWorktree{}
 	r := New(cfg, q, wt, cmdRunner)
 
@@ -301,6 +821,7 @@ func TestDrainVesselFails(t *testing.T) {
 func TestDrainWorktreeCreateFails(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
 	_ = q.Enqueue(makeVessel(1, "fix-bug"))
 
@@ -323,7 +844,18 @@ func TestDrainWorktreeCreateFails(t *testing.T) {
 func TestDrainConcurrencyLimit(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+
+	// Create skill and enqueue vessels
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
 	for i := 1; i <= 4; i++ {
 		_ = q.Enqueue(makeVessel(i, "fix-bug"))
 	}
@@ -331,6 +863,9 @@ func TestDrainConcurrencyLimit(t *testing.T) {
 	counter := &countingCmdRunner{delay: 50 * time.Millisecond}
 	wt := &mockWorktree{}
 	r := New(cfg, q, wt, counter)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
 
 	_, err := r.Drain(context.Background())
 	if err != nil {
@@ -345,7 +880,17 @@ func TestDrainConcurrencyLimit(t *testing.T) {
 func TestDrainContextCancel(t *testing.T) {
 	dir := t.TempDir()
 	cfg := makeTestConfig(dir, 1)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
 	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
 	for i := 1; i <= 5; i++ {
 		_ = q.Enqueue(makeVessel(i, "fix-bug"))
 	}
@@ -355,6 +900,9 @@ func TestDrainContextCancel(t *testing.T) {
 	counter := &countingCmdRunner{delay: 20 * time.Millisecond}
 	wt := &mockWorktree{}
 	r := New(cfg, q, wt, counter)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
 
 	go func() {
 		time.Sleep(30 * time.Millisecond)
@@ -436,6 +984,100 @@ func TestDrainEmptyQueue(t *testing.T) {
 	}
 }
 
+func TestDrainHarnessAppended(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
+	})
+
+	// Write harness file
+	harnessDir := filepath.Join(dir, ".xylem")
+	os.MkdirAll(harnessDir, 0o755)
+	os.WriteFile(filepath.Join(harnessDir, "HARNESS.md"), []byte("Golden rules for this repo"), 0o644)
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
+
+	_, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if len(cmdRunner.phaseCalls) != 1 {
+		t.Fatalf("expected 1 phase call, got %d", len(cmdRunner.phaseCalls))
+	}
+
+	// Check that --append-system-prompt is in the args
+	call := cmdRunner.phaseCalls[0]
+	found := false
+	for i, a := range call.args {
+		if a == "--append-system-prompt" && i+1 < len(call.args) {
+			if strings.Contains(call.args[i+1], "Golden rules") {
+				found = true
+			}
+		}
+	}
+	if !found {
+		t.Errorf("expected --append-system-prompt with harness content, got args: %v", call.args)
+	}
+}
+
+func TestDrainPreviousOutputsAvailable(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 2)
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze the issue", maxTurns: 5},
+		{name: "implement", promptContent: "Previous analysis: {{.PreviousOutputs.analyze}}", maxTurns: 10},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{
+		phaseOutputs: map[string][]byte{
+			"Analyze": []byte("found root cause in auth.go"),
+		},
+	}
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+	r.Sources = map[string]source.Source{
+		"github-issue": makeGitHubSource(),
+	}
+
+	_, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if len(cmdRunner.phaseCalls) != 2 {
+		t.Fatalf("expected 2 phase calls, got %d", len(cmdRunner.phaseCalls))
+	}
+
+	// Second phase prompt should contain the first phase's output
+	secondPrompt := cmdRunner.phaseCalls[1].prompt
+	if !strings.Contains(secondPrompt, "found root cause in auth.go") {
+		t.Errorf("expected previous output in second phase prompt, got: %s", secondPrompt)
+	}
+}
+
 func TestBranchPrefixSelection(t *testing.T) {
 	tests := []struct {
 		skill      string
@@ -453,8 +1095,17 @@ func TestBranchPrefixSelection(t *testing.T) {
 		t.Run(tc.skill, func(t *testing.T) {
 			dir := t.TempDir()
 			cfg := makeTestConfig(dir, 1)
+			cfg.StateDir = filepath.Join(dir, ".xylem")
 			q := queue.New(filepath.Join(dir, "queue.jsonl"))
 			_ = q.Enqueue(makeVessel(1, tc.skill))
+
+			writeSkillFile(t, dir, tc.skill, []testPhase{
+				{name: "work", promptContent: "Do work", maxTurns: 5},
+			})
+
+			oldWd, _ := os.Getwd()
+			os.Chdir(dir)
+			defer os.Chdir(oldWd)
 
 			tracker := &trackingWorktree{}
 			cmdRunner := &mockCmdRunner{}
@@ -475,15 +1126,6 @@ func TestBranchPrefixSelection(t *testing.T) {
 			}
 		})
 	}
-}
-
-type trackingWorktree struct {
-	lastBranch string
-}
-
-func (tw *trackingWorktree) Create(_ context.Context, branchName string) (string, error) {
-	tw.lastBranch = branchName
-	return ".claude/worktrees/" + branchName, nil
 }
 
 func TestBuildCommandWithFlags(t *testing.T) {
@@ -564,3 +1206,105 @@ func TestBuildCommandDirectPromptWithFlags(t *testing.T) {
 	}
 }
 
+func TestBuildPhaseArgs(t *testing.T) {
+	t.Run("basic", func(t *testing.T) {
+		cfg := &config.Config{
+			Claude: config.ClaudeConfig{Command: "claude"},
+		}
+		p := &skill.Phase{Name: "analyze", MaxTurns: 5}
+		args := buildPhaseArgs(cfg, p, "")
+
+		if args[0] != "-p" {
+			t.Errorf("expected -p, got %s", args[0])
+		}
+		if args[1] != "--max-turns" || args[2] != "5" {
+			t.Errorf("expected --max-turns 5, got %v", args[1:3])
+		}
+	})
+
+	t.Run("with flags", func(t *testing.T) {
+		cfg := &config.Config{
+			Claude: config.ClaudeConfig{Command: "claude", Flags: "--bare --dangerously-skip-permissions"},
+		}
+		p := &skill.Phase{Name: "analyze", MaxTurns: 5}
+		args := buildPhaseArgs(cfg, p, "")
+
+		joined := strings.Join(args, " ")
+		if !strings.Contains(joined, "--bare") {
+			t.Errorf("expected --bare in args, got: %v", args)
+		}
+		if !strings.Contains(joined, "--dangerously-skip-permissions") {
+			t.Errorf("expected --dangerously-skip-permissions in args, got: %v", args)
+		}
+	})
+
+	t.Run("with allowed tools", func(t *testing.T) {
+		cfg := &config.Config{
+			Claude: config.ClaudeConfig{Command: "claude", AllowedTools: []string{"WebFetch"}},
+		}
+		allowedTools := "Read,Edit"
+		p := &skill.Phase{Name: "analyze", MaxTurns: 5, AllowedTools: &allowedTools}
+		args := buildPhaseArgs(cfg, p, "")
+
+		// Should have both phase-level and config-level tools
+		toolCount := 0
+		for _, a := range args {
+			if a == "--allowedTools" {
+				toolCount++
+			}
+		}
+		if toolCount != 2 {
+			t.Errorf("expected 2 --allowedTools flags, got %d in %v", toolCount, args)
+		}
+	})
+
+	t.Run("with harness", func(t *testing.T) {
+		cfg := &config.Config{
+			Claude: config.ClaudeConfig{Command: "claude"},
+		}
+		p := &skill.Phase{Name: "analyze", MaxTurns: 5}
+		args := buildPhaseArgs(cfg, p, "harness content")
+
+		found := false
+		for i, a := range args {
+			if a == "--append-system-prompt" && i+1 < len(args) && args[i+1] == "harness content" {
+				found = true
+			}
+		}
+		if !found {
+			t.Errorf("expected --append-system-prompt with harness, got: %v", args)
+		}
+	})
+}
+
+func TestDrainTimeoutV2Phase(t *testing.T) {
+	dir := t.TempDir()
+	cfg := makeTestConfig(dir, 1)
+	cfg.Timeout = "50ms"
+	cfg.StateDir = filepath.Join(dir, ".xylem")
+	q := queue.New(filepath.Join(dir, "queue.jsonl"))
+	_ = q.Enqueue(makeVessel(1, "fix-bug"))
+
+	writeSkillFile(t, dir, "fix-bug", []testPhase{
+		{name: "analyze", promptContent: "Analyze", maxTurns: 5},
+	})
+
+	oldWd, _ := os.Getwd()
+	os.Chdir(dir)
+	defer os.Chdir(oldWd)
+
+	cmdRunner := &mockCmdRunner{
+		phaseErr: context.DeadlineExceeded,
+	}
+
+	wt := &mockWorktree{}
+	r := New(cfg, q, wt, cmdRunner)
+
+	result, err := r.Drain(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if result.Failed != 1 {
+		t.Errorf("expected timed-out vessel to be marked failed, got completed=%d failed=%d", result.Completed, result.Failed)
+	}
+}
