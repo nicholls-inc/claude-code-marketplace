@@ -268,6 +268,89 @@ func TestPropStartSessionNeverPanics(t *testing.T) {
 	})
 }
 
+// ---------- Semantic validation properties ----------
+
+func TestPropSemanticValidationNeverPanics(t *testing.T) {
+	rapid.Check(t, func(rt *rapid.T) {
+		v := DefaultSemanticValidator()
+
+		entry := Entry{
+			Type:      rapid.SampledFrom([]MemoryType{Procedural, Semantic, Episodic}).Draw(rt, "type"),
+			Key:       rapid.String().Draw(rt, "key"),
+			Value:     rapid.String().Draw(rt, "value"),
+			MissionID: rapid.StringMatching(`[a-z]{1,10}`).Draw(rt, "missionID"),
+		}
+
+		nExisting := rapid.IntRange(0, 10).Draw(rt, "nExisting")
+		existing := make([]Entry, nExisting)
+		for i := 0; i < nExisting; i++ {
+			existing[i] = Entry{
+				Type:      rapid.SampledFrom([]MemoryType{Procedural, Semantic, Episodic}).Draw(rt, "existType"),
+				Key:       rapid.String().Draw(rt, "existKey"),
+				Value:     rapid.String().Draw(rt, "existValue"),
+				MissionID: rapid.StringMatching(`[a-z]{1,10}`).Draw(rt, "existMission"),
+			}
+		}
+
+		// Must not panic.
+		result := v.Validate(entry, existing)
+		// Valid must be consistent with checks.
+		for _, c := range result.Checks {
+			if c.Severity == "error" && result.Valid {
+				rt.Fatal("Valid is true but an error-severity check exists")
+			}
+		}
+	})
+}
+
+func TestPropNonContradictoryWriteAlwaysSucceeds(t *testing.T) {
+	rapid.Check(t, func(rt *rapid.T) {
+		v := DefaultSemanticValidator()
+		value := rapid.StringMatching(`[a-z]{5,20}`).Draw(rt, "value")
+		key := rapid.StringMatching(`[a-z]{1,10}`).Draw(rt, "key")
+		memType := rapid.SampledFrom([]MemoryType{Procedural, Semantic}).Draw(rt, "type")
+
+		entry := Entry{Type: memType, Key: key, Value: value, MissionID: "m1"}
+		existing := []Entry{
+			{Type: memType, Key: key, Value: value, MissionID: "m1"},
+		}
+
+		result := v.Validate(entry, existing)
+		for _, c := range result.Checks {
+			if c.Check == "contradiction" {
+				rt.Fatal("contradiction found when value matches existing entry")
+			}
+		}
+	})
+}
+
+func TestPropHallucinationCheckDeterministic(t *testing.T) {
+	rapid.Check(t, func(rt *rapid.T) {
+		v := DefaultSemanticValidator()
+		entry := Entry{
+			Type:      Semantic,
+			Key:       rapid.StringMatching(`[a-z]{1,10}`).Draw(rt, "key"),
+			Value:     rapid.String().Draw(rt, "value"),
+			MissionID: "m1",
+		}
+
+		r1 := v.Validate(entry, nil)
+		r2 := v.Validate(entry, nil)
+
+		if r1.Valid != r2.Valid {
+			rt.Fatal("hallucination check is non-deterministic: Valid differs")
+		}
+		if len(r1.Checks) != len(r2.Checks) {
+			rt.Fatal("hallucination check is non-deterministic: Checks count differs")
+		}
+		for i := range r1.Checks {
+			if r1.Checks[i].Check != r2.Checks[i].Check || r1.Checks[i].Severity != r2.Checks[i].Severity {
+				rt.Fatalf("hallucination check is non-deterministic at index %d", i)
+			}
+		}
+	})
+}
+
 // ---------- Validate rejects empty key or value ----------
 
 func TestPropertyValidateRejectsEmptyKeyOrValue(t *testing.T) {
