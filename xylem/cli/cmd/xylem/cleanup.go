@@ -84,7 +84,7 @@ func cleanupPhaseOutputs(cfg *config.Config, q *queue.Queue, dryRun bool) {
 		return
 	}
 
-	cutoff := time.Now().Add(-168 * time.Hour) // 7 days
+	cutoff := time.Now().Add(-cfg.CleanupAfterDuration())
 
 	// Build set of terminal vessel IDs older than cutoff
 	terminalIDs := make(map[string]bool)
