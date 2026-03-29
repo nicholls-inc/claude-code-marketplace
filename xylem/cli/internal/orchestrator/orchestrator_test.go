@@ -103,17 +103,17 @@ func TestAgentStatusString(t *testing.T) {
 
 // --- NewOrchestrator tests ---
 
-func TestNewOrchestratorDefaultSummaryTokens(t *testing.T) {
+func TestNewOrchestratorDefaultSummaryChars(t *testing.T) {
 	o := NewOrchestrator(OrchestratorConfig{})
-	if o.config.SummaryMaxTokens != DefaultSummaryMaxTokens {
-		t.Fatalf("expected default SummaryMaxTokens %d, got %d", DefaultSummaryMaxTokens, o.config.SummaryMaxTokens)
+	if o.config.SummaryMaxChars != DefaultSummaryMaxChars {
+		t.Fatalf("expected default SummaryMaxChars %d, got %d", DefaultSummaryMaxChars, o.config.SummaryMaxChars)
 	}
 }
 
-func TestNewOrchestratorCustomSummaryTokens(t *testing.T) {
-	o := NewOrchestrator(OrchestratorConfig{SummaryMaxTokens: 500})
-	if o.config.SummaryMaxTokens != 500 {
-		t.Fatalf("expected SummaryMaxTokens 500, got %d", o.config.SummaryMaxTokens)
+func TestNewOrchestratorCustomSummaryChars(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{SummaryMaxChars: 500})
+	if o.config.SummaryMaxChars != 500 {
+		t.Fatalf("expected SummaryMaxChars 500, got %d", o.config.SummaryMaxChars)
 	}
 }
 
@@ -321,7 +321,7 @@ func TestUpdateAgentUnknown(t *testing.T) {
 // --- SetResult / GetResult tests ---
 
 func TestSetResultTruncatesSummary(t *testing.T) {
-	o := NewOrchestrator(OrchestratorConfig{SummaryMaxTokens: 10})
+	o := NewOrchestrator(OrchestratorConfig{SummaryMaxChars: 10})
 	_ = o.AddAgent("a1", "t1")
 	err := o.SetResult(SubAgentResult{
 		AgentID: "a1",
@@ -387,51 +387,51 @@ func TestTruncateSummary(t *testing.T) {
 	tests := []struct {
 		name      string
 		summary   string
-		maxTokens int
+		maxChars int
 		wantLen   int
 	}{
 		{
 			name:      "short summary unchanged",
 			summary:   "hello",
-			maxTokens: 100,
+			maxChars: 100,
 			wantLen:   5,
 		},
 		{
 			name:      "exact length unchanged",
 			summary:   "abcde",
-			maxTokens: 5,
+			maxChars: 5,
 			wantLen:   5,
 		},
 		{
 			name:      "long summary truncated",
 			summary:   strings.Repeat("x", 3000),
-			maxTokens: 2000,
+			maxChars: 2000,
 			wantLen:   2000,
 		},
 		{
-			name:      "zero maxTokens uses default",
+			name:      "zero maxChars uses default",
 			summary:   strings.Repeat("x", 3000),
-			maxTokens: 0,
-			wantLen:   DefaultSummaryMaxTokens,
+			maxChars: 0,
+			wantLen:   DefaultSummaryMaxChars,
 		},
 		{
-			name:      "negative maxTokens uses default",
+			name:      "negative maxChars uses default",
 			summary:   strings.Repeat("x", 3000),
-			maxTokens: -1,
-			wantLen:   DefaultSummaryMaxTokens,
+			maxChars: -1,
+			wantLen:   DefaultSummaryMaxChars,
 		},
 		{
 			name:      "empty summary",
 			summary:   "",
-			maxTokens: 100,
+			maxChars: 100,
 			wantLen:   0,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := TruncateSummary(tt.summary, tt.maxTokens)
+			got := TruncateSummary(tt.summary, tt.maxChars)
 			if len(got) != tt.wantLen {
-				t.Fatalf("TruncateSummary(len=%d, %d) length = %d, want %d", len(tt.summary), tt.maxTokens, len(got), tt.wantLen)
+				t.Fatalf("TruncateSummary(len=%d, %d) length = %d, want %d", len(tt.summary), tt.maxChars, len(got), tt.wantLen)
 			}
 		})
 	}
