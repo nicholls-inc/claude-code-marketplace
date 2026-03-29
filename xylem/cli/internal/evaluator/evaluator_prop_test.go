@@ -2,7 +2,7 @@ package evaluator
 
 import (
 	"context"
-	"encoding/json"
+	"os"
 	"testing"
 
 	"pgregory.net/rapid"
@@ -197,14 +197,18 @@ func TestPropReportRoundTrip(t *testing.T) {
 			Converged:  converged,
 		}
 
-		// Round-trip through JSON (same serialisation used by Save/LoadReport).
-		data, err := json.Marshal(original)
-		if err != nil {
-			t.Fatalf("marshal: %v", err)
+		// Round-trip through the real SaveReport/LoadReport functions.
+		dir, dirErr := os.MkdirTemp("", "eval-prop-*")
+		if dirErr != nil {
+			t.Fatalf("mkdirtemp: %v", dirErr)
 		}
-		var loaded LoopResult
-		if err := json.Unmarshal(data, &loaded); err != nil {
-			t.Fatalf("unmarshal: %v", err)
+		defer os.RemoveAll(dir)
+		if err := SaveReport(dir, original); err != nil {
+			t.Fatalf("save: %v", err)
+		}
+		loaded, err := LoadReport(dir)
+		if err != nil {
+			t.Fatalf("load: %v", err)
 		}
 
 		if loaded.Converged != original.Converged {
