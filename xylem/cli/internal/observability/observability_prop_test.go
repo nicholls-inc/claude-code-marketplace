@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/signal"
 	"pgregory.net/rapid"
 )
 
@@ -120,6 +121,80 @@ func TestPropMissionAttributesAlwaysContainID(t *testing.T) {
 		}
 		if !found {
 			t.Fatal("mission.id attribute not found")
+		}
+	})
+}
+
+// genSignal generates a random signal.Signal.
+func genSignal() *rapid.Generator[signal.Signal] {
+	return rapid.Custom(func(t *rapid.T) signal.Signal {
+		return signal.Signal{
+			Type: signal.SignalType(rapid.SampledFrom([]string{
+				"Repetition", "ToolFailureRate", "EfficiencyScore", "ContextThrash", "TaskStall",
+			}).Draw(t, "type")),
+			Value: rapid.Float64Range(0.0, 10.0).Draw(t, "value"),
+			Level: signal.ThresholdLevel(rapid.SampledFrom([]string{
+				"Normal", "Warning", "Critical",
+			}).Draw(t, "level")),
+		}
+	})
+}
+
+// genSignalSet generates a random signal.SignalSet.
+func genSignalSet() *rapid.Generator[signal.SignalSet] {
+	return rapid.Custom(func(t *rapid.T) signal.SignalSet {
+		n := rapid.IntRange(0, 10).Draw(t, "count")
+		signals := make([]signal.Signal, n)
+		for i := range n {
+			signals[i] = genSignal().Draw(t, "signal")
+		}
+		return signal.SignalSet{Signals: signals}
+	})
+}
+
+func TestPropSignalBridgePreservesType(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		sig := genSignal().Draw(t, "signal")
+		data := SignalToSignalData(sig)
+		if data.Type != string(sig.Type) {
+			t.Fatalf("Type mismatch: got %s, want %s", data.Type, string(sig.Type))
+		}
+	})
+}
+
+func TestPropSignalBridgePreservesValue(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		sig := genSignal().Draw(t, "signal")
+		data := SignalToSignalData(sig)
+		if data.Value != sig.Value {
+			t.Fatalf("Value mismatch: got %f, want %f", data.Value, sig.Value)
+		}
+	})
+}
+
+func TestPropSignalSetBridgeLength(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		set := genSignalSet().Draw(t, "set")
+		data := SignalSetToSignalData(set)
+		if len(data) != len(set.Signals) {
+			t.Fatalf("length mismatch: got %d, want %d", len(data), len(set.Signals))
+		}
+	})
+}
+
+func TestPropSignalSetAttributesDeterministic(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		set := genSignalSet().Draw(t, "set")
+		a := SignalSetSpanAttributes(set)
+		b := SignalSetSpanAttributes(set)
+		if len(a) != len(b) {
+			t.Fatalf("non-deterministic length: %d vs %d", len(a), len(b))
+		}
+		for i := range a {
+			if a[i].Key != b[i].Key || a[i].Value != b[i].Value {
+				t.Fatalf("non-deterministic at index %d: (%s=%s) vs (%s=%s)",
+					i, a[i].Key, a[i].Value, b[i].Key, b[i].Value)
+			}
 		}
 	})
 }
