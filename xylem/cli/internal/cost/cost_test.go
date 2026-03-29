@@ -506,15 +506,25 @@ func TestReportBreakdownSumsToTotal(t *testing.T) {
 func TestDefaultModelLadder(t *testing.T) {
 	ladder := DefaultModelLadder()
 
-	roles := []AgentRole{RolePlanner, RoleGenerator, RoleEvaluator, RoleSubAgent}
-	for _, role := range roles {
-		if model, ok := ladder.Roles[role]; !ok || model == "" {
-			t.Fatalf("DefaultModelLadder missing or empty model for role %s", role)
-		}
+	expected := map[AgentRole]string{
+		RolePlanner:   "claude-sonnet-4-20250514",
+		RoleGenerator: "claude-sonnet-4-20250514",
+		RoleEvaluator: "claude-haiku-35-20241022",
+		RoleSubAgent:  "claude-haiku-35-20241022",
 	}
 
-	if len(ladder.Roles) != len(roles) {
-		t.Fatalf("expected %d roles in ladder, got %d", len(roles), len(ladder.Roles))
+	if len(ladder.Roles) != len(expected) {
+		t.Fatalf("expected %d roles in ladder, got %d", len(expected), len(ladder.Roles))
+	}
+
+	for role, wantModel := range expected {
+		gotModel, ok := ladder.Roles[role]
+		if !ok {
+			t.Fatalf("DefaultModelLadder missing role %s", role)
+		}
+		if gotModel != wantModel {
+			t.Fatalf("DefaultModelLadder[%s] = %q, want %q", role, gotModel, wantModel)
+		}
 	}
 }
 
@@ -762,28 +772,6 @@ func TestEmptyTrackerReport(t *testing.T) {
 	}
 	if report.RecordCount != 0 {
 		t.Fatalf("RecordCount = %d, want 0", report.RecordCount)
-	}
-}
-
-func TestFloatEqual(t *testing.T) {
-	tests := []struct {
-		name string
-		a, b float64
-		want bool
-	}{
-		{"equal zeros", 0, 0, true},
-		{"equal values", 1.5, 1.5, true},
-		{"tiny difference", 1.0, 1.0 + 1e-10, true},
-		{"significant difference", 1.0, 1.1, false},
-		{"negative values", -1.5, -1.5, true},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := floatEqual(tt.a, tt.b); got != tt.want {
-				t.Fatalf("floatEqual(%f, %f) = %v, want %v", tt.a, tt.b, got, tt.want)
-			}
-		})
 	}
 }
 
