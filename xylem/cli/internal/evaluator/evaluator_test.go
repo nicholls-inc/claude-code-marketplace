@@ -645,3 +645,128 @@ func TestRunUsesDefaultPassThreshold(t *testing.T) {
 		})
 	}
 }
+
+// --- AdjustForIntensity tests ---
+
+func TestAdjustForIntensityLightweight(t *testing.T) {
+	cfg := testConfig()
+	adjusted := AdjustForIntensity(cfg, Lightweight)
+	if adjusted.MaxIterations != 1 {
+		t.Errorf("expected MaxIterations=1 for Lightweight, got %d", adjusted.MaxIterations)
+	}
+}
+
+func TestAdjustForIntensityStandard(t *testing.T) {
+	cfg := EvalConfig{
+		Criteria:      testCriteria(),
+		MaxIterations: 0, // zero triggers default
+		PassThreshold: 0.7,
+	}
+	adjusted := AdjustForIntensity(cfg, Standard)
+	if adjusted.MaxIterations != DefaultMaxIterations {
+		t.Errorf("expected MaxIterations=%d for Standard, got %d", DefaultMaxIterations, adjusted.MaxIterations)
+	}
+}
+
+func TestAdjustForIntensityThorough(t *testing.T) {
+	cfg := testConfig()
+	adjusted := AdjustForIntensity(cfg, Thorough)
+	if adjusted.MaxIterations != 5 {
+		t.Errorf("expected MaxIterations=5 for Thorough, got %d", adjusted.MaxIterations)
+	}
+}
+
+func TestAdjustForIntensityPreservesOtherFields(t *testing.T) {
+	cfg := testConfig()
+	adjusted := AdjustForIntensity(cfg, Thorough)
+	if adjusted.PassThreshold != cfg.PassThreshold {
+		t.Errorf("PassThreshold changed: got %f, want %f", adjusted.PassThreshold, cfg.PassThreshold)
+	}
+	if len(adjusted.Criteria) != len(cfg.Criteria) {
+		t.Errorf("Criteria length changed: got %d, want %d", len(adjusted.Criteria), len(cfg.Criteria))
+	}
+	for i, c := range adjusted.Criteria {
+		if c.Name != cfg.Criteria[i].Name {
+			t.Errorf("Criteria[%d].Name changed: got %q, want %q", i, c.Name, cfg.Criteria[i].Name)
+		}
+		if c.Weight != cfg.Criteria[i].Weight {
+			t.Errorf("Criteria[%d].Weight changed: got %f, want %f", i, c.Weight, cfg.Criteria[i].Weight)
+		}
+	}
+}
+
+func TestAdjustForIntensityCopiesCriteria(t *testing.T) {
+	cfg := testConfig()
+	adjusted := AdjustForIntensity(cfg, Standard)
+	// Mutate the returned criteria and verify the original is untouched.
+	adjusted.Criteria[0].Name = "mutated"
+	if cfg.Criteria[0].Name == "mutated" {
+		t.Error("modifying returned criteria affected the original — deep copy missing")
+	}
+}
+
+// --- RunWithIntensity tests ---
+
+func TestRunWithIntensityLightweight(t *testing.T) {
+	// Stub always fails so the loop exhausts its iterations.
+	gen := &stubGenerator{id: "gen-1", outputs: []string{"a"}}
+	eval := &stubEvaluator{id: "eval-1", results: []*EvalResult{
+		{Score: QualityScore{Overall: 0.1}, Feedback: []Issue{{Severity: SeverityLow, Description: "bad"}}},
+	}}
+	loop, err := NewLoop(gen, eval, testConfig())
+	if err != nil {
+		t.Fatalf("setup: %v", err)
+	}
+	lr, err := loop.RunWithIntensity(context.Background(), "task", Lightweight)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if lr.Iterations != 1 {
+		t.Errorf("expected 1 iteration for Lightweight, got %d", lr.Iterations)
+	}
+}
+
+func TestRunWithIntensityThorough(t *testing.T) {
+	// Stub always fails so the loop runs all 5 iterations.
+	outputs := make([]string, 5)
+	results := make([]*EvalResult, 5)
+	for i := 0; i < 5; i++ {
+		outputs[i] = "output"
+		results[i] = &EvalResult{
+			Score:    QualityScore{Overall: 0.1},
+			Feedback: []Issue{{Severity: SeverityLow, Description: "bad"}},
+		}
+	}
+	gen := &stubGenerator{id: "gen-1", outputs: outputs}
+	eval := &stubEvaluator{id: "eval-1", results: results}
+	loop, err := NewLoop(gen, eval, testConfig())
+	if err != nil {
+		t.Fatalf("setup: %v", err)
+	}
+	lr, err := loop.RunWithIntensity(context.Background(), "task", Thorough)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if lr.Iterations != 5 {
+		t.Errorf("expected 5 iterations for Thorough, got %d", lr.Iterations)
+	}
+}
+
+func TestRunWithIntensityRestoresConfig(t *testing.T) {
+	gen := &stubGenerator{id: "gen-1", outputs: []string{"a"}}
+	eval := &stubEvaluator{id: "eval-1", results: []*EvalResult{
+		{Score: QualityScore{Overall: 0.9}},
+	}}
+	loop, err := NewLoop(gen, eval, testConfig())
+	if err != nil {
+		t.Fatalf("setup: %v", err)
+	}
+	originalMax := loop.config.MaxIterations
+	_, err = loop.RunWithIntensity(context.Background(), "task", Lightweight)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if loop.config.MaxIterations != originalMax {
+		t.Errorf("config not restored: MaxIterations is %d, want %d", loop.config.MaxIterations, originalMax)
+	}
+}

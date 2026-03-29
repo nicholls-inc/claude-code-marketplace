@@ -248,6 +248,44 @@ func TestPropValidateConfigRejectsBadWeights(t *testing.T) {
 	})
 }
 
+// --- Property: AdjustForIntensity always produces positive MaxIterations ---
+
+func TestPropAdjustForIntensityAlwaysPositive(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		intensity := EvalIntensity(rapid.IntRange(0, 2).Draw(t, "intensity"))
+		maxIter := rapid.IntRange(0, 100).Draw(t, "maxIter")
+		threshold := rapid.Float64Range(0, 1).Draw(t, "threshold")
+
+		cfg := EvalConfig{
+			MaxIterations: maxIter,
+			PassThreshold: threshold,
+		}
+		adjusted := AdjustForIntensity(cfg, intensity)
+		if adjusted.MaxIterations <= 0 {
+			t.Errorf("MaxIterations must be > 0, got %d (intensity=%v, input=%d)",
+				adjusted.MaxIterations, intensity, maxIter)
+		}
+	})
+}
+
+// --- Property: AdjustForIntensity preserves PassThreshold ---
+
+func TestPropAdjustForIntensityPreservesThreshold(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		intensity := EvalIntensity(rapid.IntRange(0, 2).Draw(t, "intensity"))
+		threshold := rapid.Float64Range(0, 1).Draw(t, "threshold")
+
+		cfg := EvalConfig{
+			MaxIterations: rapid.IntRange(0, 100).Draw(t, "maxIter"),
+			PassThreshold: threshold,
+		}
+		adjusted := AdjustForIntensity(cfg, intensity)
+		if adjusted.PassThreshold != threshold {
+			t.Errorf("PassThreshold changed: got %f, want %f", adjusted.PassThreshold, threshold)
+		}
+	})
+}
+
 // --- Property: deterministic evaluation produces same result ---
 
 func TestPropDeterministicEvaluation(t *testing.T) {

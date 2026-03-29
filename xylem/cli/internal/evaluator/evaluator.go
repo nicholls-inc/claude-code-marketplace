@@ -301,6 +301,45 @@ func SelectIntensity(complexity, signalHealth string) EvalIntensity {
 	}
 }
 
+// AdjustForIntensity returns a copy of config with MaxIterations adjusted
+// based on the evaluation intensity:
+//
+//	Lightweight -> 1 iteration
+//	Standard    -> DefaultMaxIterations (3)
+//	Thorough    -> 5 iterations
+//
+// Other config fields are preserved unchanged.
+// INV: Returned config always has MaxIterations > 0.
+func AdjustForIntensity(config EvalConfig, intensity EvalIntensity) EvalConfig {
+	adjusted := config
+	// Deep-copy Criteria to avoid aliasing.
+	adjusted.Criteria = make([]Criterion, len(config.Criteria))
+	copy(adjusted.Criteria, config.Criteria)
+	switch intensity {
+	case Lightweight:
+		adjusted.MaxIterations = 1
+	case Thorough:
+		adjusted.MaxIterations = 5
+	default:
+		if adjusted.MaxIterations == 0 {
+			adjusted.MaxIterations = DefaultMaxIterations
+		}
+	}
+	return adjusted
+}
+
+// RunWithIntensity executes the gen-eval loop with the config adjusted for
+// the given intensity level. This is the entry point that wires signal-based
+// intensity selection into the evaluation loop.
+//
+// The original config is restored after the call completes.
+func (l *Loop) RunWithIntensity(ctx context.Context, task string, intensity EvalIntensity) (*LoopResult, error) {
+	original := l.config
+	l.config = AdjustForIntensity(l.config, intensity)
+	defer func() { l.config = original }()
+	return l.Run(ctx, task)
+}
+
 // SaveReport writes a LoopResult as JSON to the given directory under the
 // filename "quality-report.json".
 func SaveReport(dir string, lr *LoopResult) error {
