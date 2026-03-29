@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/cost"
 	"pgregory.net/rapid"
 )
 
@@ -291,6 +292,83 @@ func TestPropBuildFailureReportAgentFieldsMatch(t *testing.T) {
 		}
 		if report.FailedDeps == nil {
 			t.Fatal("FailedDeps should not be nil")
+		}
+	})
+}
+
+// --- Property: once BudgetExceeded() is true it stays true ---
+
+func TestPropBudgetExceededMonotonic(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		limit := rapid.IntRange(1, 10000).Draw(t, "limit")
+		budget := &cost.Budget{TokenLimit: limit}
+		o := NewOrchestrator(OrchestratorConfig{
+			CostBudget:   budget,
+			DefaultModel: "test-model",
+			MissionID:    "prop-monotonic",
+		})
+
+		n := rapid.IntRange(1, 20).Draw(t, "numUpdates")
+		exceeded := false
+		for i := 0; i < n; i++ {
+			id := fmt.Sprintf("agent-%d", i)
+			_ = o.AddAgent(id, "task")
+			tokens := rapid.IntRange(0, 5000).Draw(t, fmt.Sprintf("tokens-%d", i))
+			_ = o.UpdateAgent(id, StatusRunning, tokens, time.Second, "")
+
+			if exceeded && !o.BudgetExceeded() {
+				t.Fatalf("BudgetExceeded went from true to false after update %d", i)
+			}
+			if o.BudgetExceeded() {
+				exceeded = true
+			}
+		}
+	})
+}
+
+// --- Property: sum of all tokensUsed equals TotalTokenCost ---
+
+func TestPropTotalTokensEqualsSum(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		budget := &cost.Budget{TokenLimit: 1000000}
+		o := NewOrchestrator(OrchestratorConfig{
+			CostBudget:   budget,
+			DefaultModel: "test-model",
+			MissionID:    "prop-sum",
+		})
+
+		n := rapid.IntRange(1, 20).Draw(t, "numAgents")
+		var totalExpected int
+		for i := 0; i < n; i++ {
+			id := fmt.Sprintf("agent-%d", i)
+			_ = o.AddAgent(id, "task")
+			tokens := rapid.IntRange(0, 10000).Draw(t, fmt.Sprintf("tokens-%d", i))
+			_ = o.UpdateAgent(id, StatusRunning, tokens, time.Second, "")
+			totalExpected += tokens
+		}
+
+		if got := o.TotalTokenCost(); got != totalExpected {
+			t.Fatalf("TotalTokenCost = %d, want %d", got, totalExpected)
+		}
+	})
+}
+
+// --- Property: nil budget never exceeds ---
+
+func TestPropNilBudgetNeverExceeds(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		o := NewOrchestrator(OrchestratorConfig{})
+
+		n := rapid.IntRange(1, 20).Draw(t, "numUpdates")
+		for i := 0; i < n; i++ {
+			id := fmt.Sprintf("agent-%d", i)
+			_ = o.AddAgent(id, "task")
+			tokens := rapid.IntRange(0, 100000).Draw(t, fmt.Sprintf("tokens-%d", i))
+			_ = o.UpdateAgent(id, StatusRunning, tokens, time.Second, "")
+
+			if o.BudgetExceeded() {
+				t.Fatalf("BudgetExceeded should always be false with nil budget, true after update %d", i)
+			}
 		}
 	})
 }

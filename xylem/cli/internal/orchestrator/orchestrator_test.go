@@ -5,6 +5,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/cost"
 )
 
 // --- SelectPattern tests ---
@@ -777,5 +779,187 @@ func TestFailureActionString(t *testing.T) {
 		if got := tt.a.String(); got != tt.want {
 			t.Errorf("FailureAction(%d).String() = %q, want %q", int(tt.a), got, tt.want)
 		}
+	}
+}
+
+// --- Cost bridge tests ---
+
+func TestOrchestratorNoBudget(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{})
+	_ = o.AddAgent("a1", "task-1")
+	_ = o.UpdateAgent("a1", StatusRunning, 500, time.Second, "")
+
+	if o.BudgetExceeded() {
+		t.Fatal("BudgetExceeded should be false with nil budget")
+	}
+	if o.CostReport() != nil {
+		t.Fatal("CostReport should be nil with nil budget")
+	}
+	if o.TotalTokenCost() != 0 {
+		t.Fatalf("TotalTokenCost should be 0 with nil budget, got %d", o.TotalTokenCost())
+	}
+	if alerts := o.CostAlerts(); len(alerts) != 0 {
+		t.Fatalf("CostAlerts should be empty with nil budget, got %d", len(alerts))
+	}
+}
+
+func TestOrchestratorWithBudget(t *testing.T) {
+	budget := &cost.Budget{TokenLimit: 1000}
+	o := NewOrchestrator(OrchestratorConfig{
+		CostBudget:   budget,
+		DefaultModel: "test-model",
+		MissionID:    "mission-1",
+	})
+	_ = o.AddAgent("a1", "task-1")
+
+	// Record 500 tokens — should not exceed.
+	_ = o.UpdateAgent("a1", StatusRunning, 500, time.Second, "")
+	if o.BudgetExceeded() {
+		t.Fatal("BudgetExceeded should be false at 500/1000 tokens")
+	}
+
+	// Add another agent and push past the limit.
+	_ = o.AddAgent("a2", "task-2")
+	_ = o.UpdateAgent("a2", StatusRunning, 600, time.Second, "")
+	if !o.BudgetExceeded() {
+		t.Fatal("BudgetExceeded should be true at 1100/1000 tokens")
+	}
+}
+
+func TestOrchestratorCostReport(t *testing.T) {
+	budget := &cost.Budget{TokenLimit: 10000}
+	o := NewOrchestrator(OrchestratorConfig{
+		CostBudget:   budget,
+		DefaultModel: "test-model",
+		MissionID:    "mission-report",
+	})
+	_ = o.AddAgent("a1", "task-1")
+	_ = o.AddAgent("a2", "task-2")
+	_ = o.UpdateAgent("a1", StatusRunning, 300, time.Second, "")
+	_ = o.UpdateAgent("a2", StatusRunning, 200, time.Second, "")
+
+	report := o.CostReport()
+	if report == nil {
+		t.Fatal("CostReport should not be nil with budget configured")
+	}
+	if report.MissionID != "mission-report" {
+		t.Errorf("MissionID = %q, want %q", report.MissionID, "mission-report")
+	}
+	if report.TotalTokens != 500 {
+		t.Errorf("TotalTokens = %d, want 500", report.TotalTokens)
+	}
+	if o.TotalTokenCost() != 500 {
+		t.Errorf("TotalTokenCost = %d, want 500", o.TotalTokenCost())
+	}
+}
+
+func TestOrchestratorCostAlerts(t *testing.T) {
+	budget := &cost.Budget{TokenLimit: 1000}
+	o := NewOrchestrator(OrchestratorConfig{
+		CostBudget:   budget,
+		DefaultModel: "test-model",
+		MissionID:    "mission-alerts",
+	})
+	_ = o.AddAgent("a1", "task-1")
+
+	// Push past 80% — should trigger a warning.
+	_ = o.UpdateAgent("a1", StatusRunning, 850, time.Second, "")
+	alerts := o.CostAlerts()
+	hasWarning := false
+	for _, a := range alerts {
+		if a.Type == "warning" {
+			hasWarning = true
+		}
+	}
+	if !hasWarning {
+		t.Fatal("expected a warning alert at 85% utilization")
+	}
+
+	// Push past 100% — should trigger exceeded.
+	_ = o.AddAgent("a2", "task-2")
+	_ = o.UpdateAgent("a2", StatusRunning, 200, time.Second, "")
+	alerts = o.CostAlerts()
+	hasExceeded := false
+	for _, a := range alerts {
+		if a.Type == "exceeded" {
+			hasExceeded = true
+		}
+	}
+	if !hasExceeded {
+		t.Fatal("expected an exceeded alert at 105% utilization")
+	}
+}
+
+func TestOrchestratorSetResultRecordsTokens(t *testing.T) {
+	budget := &cost.Budget{TokenLimit: 10000}
+	o := NewOrchestrator(OrchestratorConfig{
+		CostBudget:   budget,
+		DefaultModel: "test-model",
+		MissionID:    "mission-result",
+	})
+	_ = o.AddAgent("a1", "task-1")
+
+	// SetResult with tokens but no prior UpdateAgent — full amount recorded.
+	_ = o.SetResult(SubAgentResult{
+		AgentID:    "a1",
+		Summary:    "done",
+		Success:    true,
+		TokensUsed: 400,
+	})
+	if o.TotalTokenCost() != 400 {
+		t.Fatalf("TotalTokenCost = %d, want 400", o.TotalTokenCost())
+	}
+}
+
+func TestOrchestratorSetResultDeltaOnly(t *testing.T) {
+	budget := &cost.Budget{TokenLimit: 10000}
+	o := NewOrchestrator(OrchestratorConfig{
+		CostBudget:   budget,
+		DefaultModel: "test-model",
+		MissionID:    "mission-delta",
+	})
+	_ = o.AddAgent("a1", "task-1")
+
+	// UpdateAgent records 300 tokens.
+	_ = o.UpdateAgent("a1", StatusRunning, 300, time.Second, "")
+	if o.TotalTokenCost() != 300 {
+		t.Fatalf("TotalTokenCost after UpdateAgent = %d, want 300", o.TotalTokenCost())
+	}
+
+	// SetResult with 500 tokens total — only the delta (200) should be recorded.
+	_ = o.SetResult(SubAgentResult{
+		AgentID:    "a1",
+		Summary:    "done",
+		Success:    true,
+		TokensUsed: 500,
+	})
+	if o.TotalTokenCost() != 500 {
+		t.Fatalf("TotalTokenCost after SetResult = %d, want 500", o.TotalTokenCost())
+	}
+}
+
+func TestOrchestratorBackwardCompat(t *testing.T) {
+	// All existing patterns (no CostBudget) continue to work unchanged.
+	o := NewOrchestrator(OrchestratorConfig{MaxSubAgents: 5, SummaryMaxChars: 100})
+	if err := o.AddAgent("a1", "task-1"); err != nil {
+		t.Fatalf("AddAgent failed: %v", err)
+	}
+	if err := o.UpdateAgent("a1", StatusRunning, 100, time.Second, ""); err != nil {
+		t.Fatalf("UpdateAgent failed: %v", err)
+	}
+	if err := o.SetResult(SubAgentResult{AgentID: "a1", Summary: "ok", Success: true, TokensUsed: 100}); err != nil {
+		t.Fatalf("SetResult failed: %v", err)
+	}
+	if o.BudgetExceeded() {
+		t.Fatal("BudgetExceeded should be false without a budget")
+	}
+	if o.CostReport() != nil {
+		t.Fatal("CostReport should be nil without a budget")
+	}
+	if o.TotalTokenCost() != 0 {
+		t.Fatal("TotalTokenCost should be 0 without a budget")
+	}
+	if len(o.CostAlerts()) != 0 {
+		t.Fatal("CostAlerts should be empty without a budget")
 	}
 }

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"time"
 	"unicode/utf8"
+
+	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/cost"
 )
 
 // Pattern describes the orchestration strategy for a multi-agent mission.
@@ -111,6 +113,9 @@ type OrchestratorConfig struct {
 	SummaryMaxChars int
 	SubAgentTimeout time.Duration
 	FailurePolicy   string // "fail-fast", "continue", "retry"
+	CostBudget      *cost.Budget // nil = no budget enforcement
+	DefaultModel    string       // model name for cost records
+	MissionID       string       // for cost report generation
 }
 
 // DefaultSummaryMaxChars is used when SummaryMaxChars is zero.
@@ -133,6 +138,7 @@ type Orchestrator struct {
 	topology *AgentTopology
 	results  map[string]*SubAgentResult
 	agentIDs map[string]struct{} // fast uniqueness check
+	tracker  *cost.Tracker       // nil = no cost tracking
 }
 
 // SelectPattern chooses an orchestration pattern based on mission attributes.
@@ -158,6 +164,10 @@ func NewOrchestrator(config OrchestratorConfig) *Orchestrator {
 	if config.SummaryMaxChars <= 0 {
 		config.SummaryMaxChars = DefaultSummaryMaxChars
 	}
+	var tracker *cost.Tracker
+	if config.CostBudget != nil {
+		tracker = cost.NewTracker(config.CostBudget)
+	}
 	return &Orchestrator{
 		config: config,
 		topology: &AgentTopology{
@@ -166,6 +176,7 @@ func NewOrchestrator(config OrchestratorConfig) *Orchestrator {
 		},
 		results:  make(map[string]*SubAgentResult),
 		agentIDs: make(map[string]struct{}),
+		tracker:  tracker,
 	}
 }
 
@@ -234,6 +245,8 @@ func (o *Orchestrator) UpdateAgent(id string, status AgentStatus, tokensUsed int
 				now := time.Now()
 				o.topology.Nodes[i].EndedAt = &now
 			}
+
+			o.recordTokens(tokensUsed)
 			return nil
 		}
 	}
@@ -241,12 +254,27 @@ func (o *Orchestrator) UpdateAgent(id string, status AgentStatus, tokensUsed int
 }
 
 // SetResult stores a condensed result for a sub-agent. The summary is
-// truncated to SummaryMaxChars.
+// truncated to SummaryMaxChars. If the result carries TokensUsed that differ
+// from the agent slot's current value, the delta is recorded to the cost
+// tracker to avoid double-counting with UpdateAgent.
 func (o *Orchestrator) SetResult(result SubAgentResult) error {
 	if _, ok := o.agentIDs[result.AgentID]; !ok {
 		return fmt.Errorf("set result: unknown agent %q", result.AgentID)
 	}
 	result.Summary = TruncateSummary(result.Summary, o.config.SummaryMaxChars)
+
+	if result.TokensUsed > 0 {
+		// Only record the delta to avoid double-counting with UpdateAgent.
+		var slotTokens int
+		for _, n := range o.topology.Nodes {
+			if n.ID == result.AgentID {
+				slotTokens = n.TokensUsed
+				break
+			}
+		}
+		o.recordTokens(result.TokensUsed - slotTokens)
+	}
+
 	o.results[result.AgentID] = &result
 	return nil
 }
