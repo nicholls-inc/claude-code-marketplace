@@ -215,6 +215,25 @@ func TestAddEdgeSelfLoop(t *testing.T) {
 	}
 }
 
+func TestAddEdgeDuplicate(t *testing.T) {
+	o := NewOrchestrator(OrchestratorConfig{})
+	_ = o.AddAgent("a1", "t1")
+	_ = o.AddAgent("a2", "t2")
+	if err := o.AddEdge("a1", "a2", "depends"); err != nil {
+		t.Fatalf("first AddEdge failed: %v", err)
+	}
+	// Adding the exact same edge again is silently accepted (no dedup).
+	// The current implementation does not reject duplicate edges; this test
+	// documents that behavior. Both copies appear in the topology.
+	if err := o.AddEdge("a1", "a2", "depends"); err != nil {
+		t.Fatalf("duplicate AddEdge unexpectedly failed: %v", err)
+	}
+	topo := o.GetTopology()
+	if len(topo.Edges) != 2 {
+		t.Fatalf("expected 2 edges (duplicate accepted), got %d", len(topo.Edges))
+	}
+}
+
 func TestAddEdgeCycleDetected(t *testing.T) {
 	o := NewOrchestrator(OrchestratorConfig{})
 	_ = o.AddAgent("a1", "t1")
@@ -560,11 +579,28 @@ func TestMetricsReturnsAllAgents(t *testing.T) {
 
 // --- GetTopology tests ---
 
-func TestGetTopologyReturnsCorrectPattern(t *testing.T) {
+func TestGetTopologyReturnsCopy(t *testing.T) {
 	o := NewOrchestrator(OrchestratorConfig{})
-	o.topology.Pattern = PatternParallel
+	_ = o.AddAgent("a1", "t1")
+	_ = o.AddAgent("a2", "t2")
+	_ = o.AddEdge("a1", "a2", "dep")
+
 	topo := o.GetTopology()
-	if topo.Pattern != PatternParallel {
-		t.Errorf("expected Parallel pattern, got %s", topo.Pattern)
+
+	// Mutate the returned topology.
+	topo.Nodes = append(topo.Nodes, AgentSlot{ID: "injected"})
+	topo.Edges = append(topo.Edges, Edge{From: "a2", To: "a1", Type: "bad"})
+	topo.Pattern = PatternHandoff
+
+	// Verify the orchestrator's internal state is unchanged.
+	internal := o.GetTopology()
+	if len(internal.Nodes) != 2 {
+		t.Fatalf("expected 2 internal nodes, got %d", len(internal.Nodes))
+	}
+	if len(internal.Edges) != 1 {
+		t.Fatalf("expected 1 internal edge, got %d", len(internal.Edges))
+	}
+	if internal.Pattern != PatternSequential {
+		t.Fatalf("expected default pattern (sequential), got %s", internal.Pattern)
 	}
 }

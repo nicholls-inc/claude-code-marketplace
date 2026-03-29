@@ -3,6 +3,7 @@ package orchestrator
 import (
 	"fmt"
 	"time"
+	"unicode/utf8"
 )
 
 // Pattern describes the orchestration strategy for a multi-agent mission.
@@ -125,6 +126,8 @@ type CommunicationFile struct {
 }
 
 // Orchestrator manages sub-agents, tracks topology, and collects results.
+// Orchestrator is not safe for concurrent use. Callers must synchronize
+// access externally.
 type Orchestrator struct {
 	config   OrchestratorConfig
 	topology *AgentTopology
@@ -248,9 +251,19 @@ func (o *Orchestrator) SetResult(result SubAgentResult) error {
 	return nil
 }
 
-// GetTopology returns the current agent topology.
+// GetTopology returns a deep copy of the current agent topology. Callers may
+// freely mutate the returned value without affecting the orchestrator's
+// internal state.
 func (o *Orchestrator) GetTopology() *AgentTopology {
-	return o.topology
+	nodes := make([]AgentSlot, len(o.topology.Nodes))
+	copy(nodes, o.topology.Nodes)
+	edges := make([]Edge, len(o.topology.Edges))
+	copy(edges, o.topology.Edges)
+	return &AgentTopology{
+		Nodes:   nodes,
+		Edges:   edges,
+		Pattern: o.topology.Pattern,
+	}
 }
 
 // GetResult returns the result for a sub-agent, or nil if not yet available.
@@ -299,9 +312,10 @@ func (o *Orchestrator) agentsByStatus(status AgentStatus) []AgentSlot {
 	return out
 }
 
-// TruncateSummary truncates a summary string so its length does not exceed
-// maxTokens characters. A simple character-based approximation is used (one
-// token ~= one character for this context-firewall budget).
+// TruncateSummary truncates a summary string so its byte length does not
+// exceed maxTokens. The truncation is rune-aware: it never splits a
+// multi-byte UTF-8 character. A simple character-based approximation is used
+// (one token ~= one character for this context-firewall budget).
 func TruncateSummary(summary string, maxTokens int) string {
 	if maxTokens <= 0 {
 		maxTokens = DefaultSummaryMaxTokens
@@ -309,7 +323,18 @@ func TruncateSummary(summary string, maxTokens int) string {
 	if len(summary) <= maxTokens {
 		return summary
 	}
-	return summary[:maxTokens]
+	// Walk runes forward, accumulating byte length, and stop before
+	// exceeding the budget. Ranging over a string yields rune boundaries,
+	// so we can slice by byte offset without splitting a character.
+	end := 0
+	for i, r := range summary {
+		n := utf8.RuneLen(r)
+		if i+n > maxTokens {
+			break
+		}
+		end = i + n
+	}
+	return summary[:end]
 }
 
 // ValidateTopology checks an AgentTopology for structural problems:
