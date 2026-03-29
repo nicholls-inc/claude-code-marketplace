@@ -1,15 +1,37 @@
 # xylem
 
-Generic multi-source session scheduler — scans pluggable sources, queues tasks, and launches Claude Code sessions in isolated git worktrees.
+Generic multi-source session scheduler — scans pluggable sources, queues tasks, and launches Claude Code sessions in isolated git worktrees with phase-based execution and quality gates.
 
 ## Overview
 
 xylem is a two-layer system:
 
 - **Go CLI** (`xylem`) — control plane: scans configured sources for actionable tasks, manages a persistent work queue, and launches Claude Code sessions in isolated git worktrees
-- **Skills** — execution plane: `fix-bug` and `implement-feature` skills run inside each Claude session to do the actual work
+- **Skills** — execution plane: multi-phase skill definitions (e.g. `fix-bug`, `implement-feature`) run inside each Claude session with quality gates between phases
 
 Sources are pluggable. The built-in `github` source scans GitHub issues by label. The `manual` source backs the `enqueue` command for ad-hoc tasks. You can configure multiple sources in a single config — xylem handles scheduling, deduplication, concurrency, and worktree isolation across all of them.
+
+### Agent harness library
+
+The CLI includes an internal library implementing foundational agent harness components. These are building blocks for mission-scoped agent orchestration:
+
+| Package | Purpose |
+|---------|---------|
+| `bootstrap` | Repo analysis, AGENTS.md generation, docs scaffolding, convention detection |
+| `catalog` | Tool catalog with descriptions, parameter types, overlap detection, permission scopes |
+| `cost` | Token tracking by agent role and purpose, budget enforcement, model ladders, anomaly detection |
+| `ctxmgr` | Named, ordered context processors with compaction, strategy selection, durable/working segment separation |
+| `evaluator` | Generator-evaluator loops with signal-gated intensity, configurable iterations, structured reports |
+| `gate` | Inter-phase quality gates (command execution, label polling) |
+| `intermediary` | Deterministic intent validation with policy rules, audit logging, glob-based permissions |
+| `memory` | Mission-scoped typed memory (procedural/semantic/episodic), progress files, handoff artifacts, KV store, scratchpads |
+| `mission` | Complexity analysis, task decomposition, sprint contracts, persona/scope constraints, blast radius checks |
+| `observability` | OpenTelemetry span attributes for missions, agents, and signals with OTLP gRPC export |
+| `orchestrator` | Multi-agent topology (sequential/parallel/orchestrator-workers/handoff), sub-agent context firewalls, failure handling |
+| `phase` | Prompt template rendering with issue data, previous outputs, and gate results |
+| `reporter` | Phase result collection and output management |
+| `signal` | Behavioral heuristics (repetition, tool failure rate, context thrash, efficiency, task stall) with health levels |
+| `skill` | Skill definition loading and validation from YAML |
 
 ## Prerequisites
 
@@ -17,7 +39,6 @@ Sources are pluggable. The built-in `github` source scans GitHub issues by label
 - **git** — must be on PATH
 - **[claude](https://docs.anthropic.com/en/docs/claude-code)** — Claude Code CLI
 - **[gh](https://cli.github.com/)** — GitHub CLI, authenticated (`gh auth login`). Only required when a `github` source is configured.
-- **[refine-issue](https://github.com/nicholls-inc/claude-code-marketplace)** skill — external dependency for the `refine-issue` task type; install separately via `claude skill install`
 
 ## Installation
 
@@ -32,9 +53,25 @@ claude plugin install xylem@nicholls
 go install github.com/nicholls-inc/claude-code-marketplace/xylem/cli/cmd/xylem@latest
 ```
 
+## Quick start
+
+```bash
+# Bootstrap config and state directory
+xylem init
+
+# Edit .xylem.yml with your repo and task config
+# Edit .xylem/HARNESS.md with your project details
+
+# Preview what would be queued
+xylem scan --dry-run
+
+# Scan and process
+xylem scan && xylem drain
+```
+
 ## Configuration
 
-Create `.xylem.yml` in your target repository:
+Create `.xylem.yml` in your target repository, or run `xylem init` to generate one:
 
 ```yaml
 sources:
@@ -62,8 +99,37 @@ state_dir: ".xylem"
 
 claude:
   command: "claude"
-  template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
+  flags: "--bare --dangerously-skip-permissions"
+  env:
+    ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}"
+
+daemon:
+  scan_interval: "60s"
+  drain_interval: "30s"
 ```
+
+### Configuration reference
+
+| Field | Default | Description |
+|-------|---------|-------------|
+| `sources` | required | Map of source names to source configs |
+| `sources.<name>.type` | required | Source type (`github`) |
+| `sources.<name>.repo` | required (github) | GitHub repo in `owner/name` format |
+| `sources.<name>.exclude` | `[]` | Labels that prevent an issue from being queued |
+| `sources.<name>.tasks` | required | Map of task names to label+skill configs |
+| `sources.<name>.tasks.<t>.labels` | required | Labels that trigger this task |
+| `sources.<name>.tasks.<t>.skill` | required | Skill name to invoke (e.g. `fix-bug`) |
+| `concurrency` | `2` | Max simultaneous Claude sessions |
+| `max_turns` | `50` | Max turns per Claude session |
+| `timeout` | `"30m"` | Per-session timeout (Go duration string) |
+| `state_dir` | `".xylem"` | Directory for queue, state files, skills, and prompts |
+| `default_branch` | auto-detected | Branch to create worktrees from |
+| `cleanup_after` | `"168h"` | Age threshold for worktree cleanup (7 days) |
+| `claude.command` | `"claude"` | Claude CLI binary name |
+| `claude.flags` | `""` | Additional CLI flags passed to every session |
+| `claude.env` | `{}` | Environment variables for Claude sessions |
+| `daemon.scan_interval` | `"60s"` | How often the daemon scans for new work |
+| `daemon.drain_interval` | `"30s"` | How often the daemon drains pending vessels |
 
 ### Legacy config format
 
@@ -83,45 +149,88 @@ max_turns: 50
 timeout: "30m"
 state_dir: ".xylem"
 exclude: [wontfix, duplicate, in-progress, no-bot]
-
-claude:
-  command: "claude"
-  template: "{{.Command}} -p \"/{{.Skill}} {{.Ref}}\" --max-turns {{.MaxTurns}}"
 ```
 
-### Configuration reference
+Note: `claude.template` is no longer supported. Migrate to phase-based skills in `.xylem/skills/`.
 
-| Field | Default | Description |
-|-------|---------|-------------|
-| `sources` | required | Map of source names to source configs |
-| `sources.<name>.type` | required | Source type (`github`) |
-| `sources.<name>.repo` | required (github) | GitHub repo in `owner/name` format |
-| `sources.<name>.exclude` | `[]` | Labels that prevent an issue from being queued |
-| `sources.<name>.tasks` | required | Map of task names to label+skill configs |
-| `sources.<name>.tasks.<t>.labels` | required | Labels that trigger this task |
-| `sources.<name>.tasks.<t>.skill` | required | Skill name to invoke (e.g. `fix-bug`) |
-| `concurrency` | `2` | Max simultaneous Claude sessions |
-| `max_turns` | `50` | Max turns per Claude session |
-| `timeout` | `"30m"` | Per-session timeout (Go duration string) |
-| `state_dir` | `".xylem"` | Directory for queue and state files |
-| `claude.command` | `"claude"` | Claude CLI binary name |
-| `claude.template` | see above | Go template for the claude invocation |
+## Skills
 
-### Template variables
+Skills are multi-phase execution plans defined in YAML. Each phase runs a prompt template against Claude with a configurable turn limit, and phases can have quality gates that must pass before the next phase begins.
 
-The `claude.template` Go template has access to:
+### Skill definition format
+
+```yaml
+# .xylem/skills/fix-bug.yaml
+name: fix-bug
+description: "Diagnose and fix a bug from a GitHub issue"
+phases:
+  - name: analyze
+    prompt_file: .xylem/prompts/fix-bug/analyze.md
+    max_turns: 5
+  - name: plan
+    prompt_file: .xylem/prompts/fix-bug/plan.md
+    max_turns: 3
+  - name: implement
+    prompt_file: .xylem/prompts/fix-bug/implement.md
+    max_turns: 15
+    gate:
+      type: command
+      run: "make test"
+      retries: 2
+  - name: pr
+    prompt_file: .xylem/prompts/fix-bug/pr.md
+    max_turns: 3
+```
+
+### Gate types
+
+| Type | Description | Key fields |
+|------|-------------|------------|
+| `command` | Runs a shell command; phase retries if it fails | `run`, `retries`, `retry_delay` |
+| `label` | Polls a GitHub issue for a label; blocks until found or timeout | `wait_for`, `timeout`, `poll_interval` |
+
+### Prompt templates
+
+Prompt files are Go templates with access to:
 
 | Variable | Description |
 |----------|-------------|
-| `{{.Command}}` | Claude CLI binary |
-| `{{.Skill}}` | Skill name from the matched task |
-| `{{.Ref}}` | Task reference (URL, ticket ID, etc.) |
-| `{{.Prompt}}` | Direct prompt (for `enqueue --prompt`) |
-| `{{.MaxTurns}}` | Max turns from config |
-| `{{.Meta}}` | Source-specific metadata map |
-| `{{.IssueURL}}` | Backward-compat alias for `{{.Ref}}` (GitHub source only) |
+| `{{.Issue.Title}}` | Issue title |
+| `{{.Issue.URL}}` | Issue URL |
+| `{{.Issue.Body}}` | Issue body |
+| `{{.PreviousOutputs.<phase>}}` | Output from a previous phase |
+| `{{.GateResult}}` | Output from the last gate failure (for retries) |
+| `{{.Vessel.ID}}` | Vessel identifier |
+| `{{.Vessel.Ref}}` | Task reference |
+
+### Built-in skills
+
+**fix-bug** — Diagnoses and fixes a GitHub issue in 4 phases: Analyze → Plan → Implement → PR. The implement phase gates on `make test`.
+
+**implement-feature** — Implements a feature request in 4 phases: Analyze → Plan → Implement → PR. The plan phase gates on a `plan-approved` label (human-in-the-loop approval).
+
+`xylem init` scaffolds both skills with prompt templates you can customize.
 
 ## Usage
+
+### init
+
+Bootstrap the config file, state directory, skill definitions, and prompt templates:
+
+```bash
+xylem init
+# Created .xylem.yml
+# Ensured .xylem/ directory exists
+# Created .xylem/HARNESS.md
+# Created .xylem/skills/fix-bug.yaml
+# Created .xylem/skills/implement-feature.yaml
+# Created .xylem/prompts/fix-bug/analyze.md
+# ...
+
+xylem init --force   # Overwrite existing files
+```
+
+The init command auto-detects your GitHub remote and pre-fills the config.
 
 ### scan
 
@@ -148,6 +257,26 @@ xylem drain --dry-run
 ```
 
 Drain handles SIGINT/SIGTERM gracefully: running sessions finish, pending vessels are not started.
+
+### daemon
+
+Run a continuous scan-drain loop instead of using cron:
+
+```bash
+xylem daemon
+# daemon started: scan_interval=60s drain_interval=30s
+# daemon: scan complete — added=1 skipped=0
+# daemon: drain complete — completed=1 failed=0 skipped=0
+# daemon: tick summary — pending=0 running=0 completed=1 failed=0
+```
+
+Handles SIGINT/SIGTERM for graceful shutdown. Configure intervals in `.xylem.yml`:
+
+```yaml
+daemon:
+  scan_interval: "2m"
+  drain_interval: "30s"
+```
 
 ### enqueue
 
@@ -177,6 +306,17 @@ xylem enqueue --skill fix-bug --ref "#42" --id "hotfix-42" --source "jira"
 | `--id` | auto-generated | Custom vessel ID |
 
 At least one of `--skill` or `--prompt`/`--prompt-file` is required. When `--prompt` is used, the template is bypassed and the prompt is passed directly to Claude.
+
+### retry
+
+Retry a failed vessel with failure context carried forward:
+
+```bash
+xylem retry issue-42
+# Created retry vessel issue-42-retry-1 (retrying issue-42)
+```
+
+The retry vessel inherits the original's config and includes metadata about the failure (error message, failed phase, gate output) so the next session can learn from it.
 
 ### status
 
@@ -232,9 +372,20 @@ xylem cleanup --dry-run
 # Shows what would be removed without removing
 ```
 
-## Cron setup
+Worktrees older than `cleanup_after` (default: 7 days) are removed.
 
-Run scan and drain on a schedule:
+## Automation
+
+### Daemon mode (recommended)
+
+```bash
+# Run as a background service
+xylem daemon &
+
+# Or with systemd, launchd, etc.
+```
+
+### Cron
 
 ```cron
 0 * * * * cd /path/to/repo && xylem scan && xylem drain >> /tmp/xylem.log 2>&1
@@ -246,20 +397,6 @@ Or use separate schedules:
 */15 * * * * cd /path/to/repo && xylem scan >> /tmp/xylem-scan.log 2>&1
 0,30 * * * * cd /path/to/repo && xylem drain >> /tmp/xylem-drain.log 2>&1
 ```
-
-## Skills
-
-### fix-bug
-
-Diagnoses and fixes a GitHub issue in 5 phases: Parse → Diagnose → Implement → Validate → PR. Language-agnostic — works with any codebase.
-
-### implement-feature
-
-Implements a low-effort GitHub feature request in 5 phases: Parse → Plan → Implement → Validate → PR. Language-agnostic.
-
-### refine-issue (external dependency)
-
-Refines issue descriptions to make them agent-ready. Install separately — this is not bundled with xylem.
 
 ## Architecture
 
@@ -276,21 +413,28 @@ Sources                     xylem scan            Queue
                                  │
                  ┌───────────────┼───────────────┐
                  ▼               ▼               ▼
-          source.OnStart   worktree.Create   claude session
-          (side effects)   (git worktree)    (in worktree)
+          source.OnStart   worktree.Create   Phase execution
+          (side effects)   (git worktree)    (skill phases in worktree)
+                                                  │
+                                          ┌───────┼───────┐
+                                          ▼       ▼       ▼
+                                       analyze → plan → implement → pr
+                                                  │              │
+                                              label gate    command gate
+                                             (wait for      (run tests,
+                                              approval)      retry on fail)
 ```
 
-The Go CLI is the **control plane** — it handles scheduling, deduplication, concurrency limits, and worktree lifecycle. The Claude skills are the **execution plane** — they run inside each isolated worktree session and do the actual implementation work.
+The Go CLI is the **control plane** — it handles scheduling, deduplication, concurrency limits, worktree lifecycle, and phase-based execution. The Claude sessions are the **execution plane** — they run inside each isolated worktree and do the actual implementation work, one phase at a time.
 
 Each source implements the `Source` interface: `Scan()`, `OnStart()`, and `BranchName()`. The GitHub source scans issues by label and names branches `fix/issue-<N>-<slug>` or `feat/issue-<N>-<slug>`. The manual source names branches `task/<id>-<slug>`.
 
-Vessels enqueued via `xylem enqueue --prompt` bypass the template entirely — the prompt is passed directly to Claude.
+Vessels enqueued via `xylem enqueue --prompt` bypass skill phases entirely — the prompt is passed directly to Claude.
 
 ## Known limitations
 
-- **No auto-retry** — failed vessels stay in the queue as `failed`; re-queue manually
-- **No webhooks** — polling only (cron-based)
-- **No priority queues** — FIFO order only
-- **Cancel does not kill sessions** — only removes pending vessels; running sessions run to completion
 - **Sequential correctness only** — no concurrency modeling in the skills themselves
 - **GitHub only** — `github` is the only built-in scanning source; other integrations require manual enqueue
+- **Cancel does not kill sessions** — only removes pending vessels; running sessions run to completion
+- **No priority queues** — FIFO order only
+- **No webhooks** — polling only (cron or daemon mode)
