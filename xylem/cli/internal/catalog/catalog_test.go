@@ -81,7 +81,7 @@ func TestRegisterDuplicate(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	c := NewCatalog()
-	tool := makeTool("my-tool", ScopeReadOnly, nil)
+	tool := makeTool("my-tool", ScopeReadOnly, []string{"io", "file"})
 	if err := c.Register(tool); err != nil {
 		t.Fatalf("register: %v", err)
 	}
@@ -91,6 +91,47 @@ func TestGet(t *testing.T) {
 	}
 	if got.Name != "my-tool" {
 		t.Errorf("got name %q, want %q", got.Name, "my-tool")
+	}
+	if got.Description != tool.Description {
+		t.Errorf("got description %q, want %q", got.Description, tool.Description)
+	}
+	if got.Scope != tool.Scope {
+		t.Errorf("got scope %d, want %d", got.Scope, tool.Scope)
+	}
+	if len(got.Tags) != len(tool.Tags) {
+		t.Fatalf("got %d tags, want %d", len(got.Tags), len(tool.Tags))
+	}
+	for i, tag := range tool.Tags {
+		if got.Tags[i] != tag {
+			t.Errorf("tag[%d] = %q, want %q", i, got.Tags[i], tag)
+		}
+	}
+}
+
+func TestGetReturnsCopyIsolatedFromCatalog(t *testing.T) {
+	c := NewCatalog()
+	if err := c.Register(makeTool("iso", ScopeReadOnly, []string{"original"})); err != nil {
+		t.Fatalf("register: %v", err)
+	}
+
+	got, err := c.Get("iso")
+	if err != nil {
+		t.Fatalf("get: %v", err)
+	}
+	// Mutate the returned copy's Tags slice.
+	got.Tags[0] = "mutated"
+	got.Tags = append(got.Tags, "extra")
+
+	// Fetch again and verify the catalog's copy is unchanged.
+	again, err := c.Get("iso")
+	if err != nil {
+		t.Fatalf("get after mutation: %v", err)
+	}
+	if len(again.Tags) != 1 {
+		t.Fatalf("catalog tags length = %d, want 1", len(again.Tags))
+	}
+	if again.Tags[0] != "original" {
+		t.Errorf("catalog tag = %q, want %q", again.Tags[0], "original")
 	}
 }
 
@@ -113,13 +154,24 @@ func TestListEmpty(t *testing.T) {
 
 func TestListReturnsAll(t *testing.T) {
 	c := NewCatalog()
-	for _, name := range []string{"a", "b", "c"} {
+	want := map[string]struct{}{"a": {}, "b": {}, "c": {}}
+	for name := range want {
 		if err := c.Register(makeTool(name, ScopeReadOnly, nil)); err != nil {
 			t.Fatalf("register %s: %v", name, err)
 		}
 	}
-	if got := c.List(); len(got) != 3 {
-		t.Errorf("expected 3 tools, got %d", len(got))
+	got := c.List()
+	if len(got) != len(want) {
+		t.Fatalf("expected %d tools, got %d", len(want), len(got))
+	}
+	gotNames := make(map[string]struct{}, len(got))
+	for _, tool := range got {
+		gotNames[tool.Name] = struct{}{}
+	}
+	for name := range want {
+		if _, ok := gotNames[name]; !ok {
+			t.Errorf("missing tool %q in List() result", name)
+		}
 	}
 }
 
@@ -325,6 +377,12 @@ func TestRecordUsageAndGetMetrics(t *testing.T) {
 	if m.TotalTokenCost != 1.5 {
 		t.Errorf("total token cost = %f, want 1.5", m.TotalTokenCost)
 	}
+	if m.LastUsed.IsZero() {
+		t.Error("LastUsed should be non-zero after recording usage")
+	}
+	if elapsed := time.Since(m.LastUsed); elapsed >= time.Second {
+		t.Errorf("LastUsed is %v ago, want < 1s", elapsed)
+	}
 }
 
 func TestRecordUsageUnknownTool(t *testing.T) {
@@ -482,6 +540,13 @@ func TestValidateTool(t *testing.T) {
 		{"param bad type", Tool{
 			Name: "t", Description: "d", Scope: ScopeReadOnly,
 			Parameters: []Param{{Name: "p", Type: "float"}},
+		}, true},
+		{"duplicate param names", Tool{
+			Name: "t", Description: "d", Scope: ScopeReadOnly,
+			Parameters: []Param{
+				{Name: "dup", Type: ParamString},
+				{Name: "dup", Type: ParamInt},
+			},
 		}, true},
 	}
 	for _, tc := range tests {
