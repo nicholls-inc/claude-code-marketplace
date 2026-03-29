@@ -470,6 +470,229 @@ func TestHandoffLoadMissing(t *testing.T) {
 	}
 }
 
+// ---------- Progress ----------
+
+func TestCreateProgressValid(t *testing.T) {
+	dir := t.TempDir()
+	tasks := []string{"build", "test", "deploy"}
+	pf, err := CreateProgress("m1", tasks, dir)
+	if err != nil {
+		t.Fatalf("create progress: %v", err)
+	}
+	if pf.MissionID != "m1" {
+		t.Fatalf("mission ID = %q, want %q", pf.MissionID, "m1")
+	}
+	if len(pf.Items) != 3 {
+		t.Fatalf("got %d items, want 3", len(pf.Items))
+	}
+	for i, item := range pf.Items {
+		if item.Task != tasks[i] {
+			t.Fatalf("item %d task = %q, want %q", i, item.Task, tasks[i])
+		}
+		if item.Status != "pending" {
+			t.Fatalf("item %d status = %q, want %q", i, item.Status, "pending")
+		}
+		if item.StartedAt != nil {
+			t.Fatalf("item %d StartedAt should be nil", i)
+		}
+		if item.CompletedAt != nil {
+			t.Fatalf("item %d CompletedAt should be nil", i)
+		}
+	}
+	if pf.UpdatedAt.IsZero() {
+		t.Fatal("expected non-zero UpdatedAt")
+	}
+
+	// Verify file exists and contains valid JSON.
+	path := filepath.Join(dir, "progress_m1.json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read file: %v", err)
+	}
+	if len(data) == 0 {
+		t.Fatal("progress file is empty")
+	}
+}
+
+func TestCreateProgressInvalidMissionID(t *testing.T) {
+	dir := t.TempDir()
+	tests := []struct {
+		name      string
+		missionID string
+	}{
+		{"path traversal", "../escape"},
+		{"empty", ""},
+		{"slash", "a/b"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := CreateProgress(tt.missionID, []string{"task"}, dir)
+			if err == nil {
+				t.Fatalf("expected error for mission ID %q", tt.missionID)
+			}
+		})
+	}
+}
+
+func TestLoadProgressRoundTrip(t *testing.T) {
+	dir := t.TempDir()
+	tasks := []string{"alpha", "beta"}
+	created, err := CreateProgress("m1", tasks, dir)
+	if err != nil {
+		t.Fatalf("create: %v", err)
+	}
+
+	loaded, err := LoadProgress("m1", dir)
+	if err != nil {
+		t.Fatalf("load: %v", err)
+	}
+
+	if loaded.MissionID != created.MissionID {
+		t.Fatalf("mission ID mismatch: got %q, want %q", loaded.MissionID, created.MissionID)
+	}
+	if len(loaded.Items) != len(created.Items) {
+		t.Fatalf("items count mismatch: got %d, want %d", len(loaded.Items), len(created.Items))
+	}
+	for i := range loaded.Items {
+		if loaded.Items[i].Task != created.Items[i].Task {
+			t.Fatalf("item %d task mismatch: got %q, want %q", i, loaded.Items[i].Task, created.Items[i].Task)
+		}
+		if loaded.Items[i].Status != created.Items[i].Status {
+			t.Fatalf("item %d status mismatch: got %q, want %q", i, loaded.Items[i].Status, created.Items[i].Status)
+		}
+	}
+}
+
+func TestUpdateProgressStatus(t *testing.T) {
+	dir := t.TempDir()
+	_, err := CreateProgress("m1", []string{"build", "test"}, dir)
+	if err != nil {
+		t.Fatalf("create: %v", err)
+	}
+
+	if err := UpdateProgress("m1", "build", "in_progress", dir); err != nil {
+		t.Fatalf("update: %v", err)
+	}
+
+	loaded, err := LoadProgress("m1", dir)
+	if err != nil {
+		t.Fatalf("load: %v", err)
+	}
+
+	if loaded.Items[0].Status != "in_progress" {
+		t.Fatalf("status = %q, want %q", loaded.Items[0].Status, "in_progress")
+	}
+	if loaded.Items[0].StartedAt == nil {
+		t.Fatal("expected StartedAt to be set")
+	}
+	if loaded.Items[0].CompletedAt != nil {
+		t.Fatal("expected CompletedAt to be nil")
+	}
+	// Second task should be unchanged.
+	if loaded.Items[1].Status != "pending" {
+		t.Fatalf("second task status = %q, want %q", loaded.Items[1].Status, "pending")
+	}
+}
+
+func TestUpdateProgressCompletion(t *testing.T) {
+	dir := t.TempDir()
+	_, err := CreateProgress("m1", []string{"build"}, dir)
+	if err != nil {
+		t.Fatalf("create: %v", err)
+	}
+
+	if err := UpdateProgress("m1", "build", "in_progress", dir); err != nil {
+		t.Fatalf("update to in_progress: %v", err)
+	}
+	if err := UpdateProgress("m1", "build", "completed", dir); err != nil {
+		t.Fatalf("update to completed: %v", err)
+	}
+
+	loaded, err := LoadProgress("m1", dir)
+	if err != nil {
+		t.Fatalf("load: %v", err)
+	}
+
+	if loaded.Items[0].Status != "completed" {
+		t.Fatalf("status = %q, want %q", loaded.Items[0].Status, "completed")
+	}
+	if loaded.Items[0].StartedAt == nil {
+		t.Fatal("expected StartedAt to be set")
+	}
+	if loaded.Items[0].CompletedAt == nil {
+		t.Fatal("expected CompletedAt to be set")
+	}
+}
+
+func TestUpdateProgressUnknownTask(t *testing.T) {
+	dir := t.TempDir()
+	_, err := CreateProgress("m1", []string{"build"}, dir)
+	if err != nil {
+		t.Fatalf("create: %v", err)
+	}
+
+	err = UpdateProgress("m1", "nonexistent", "in_progress", dir)
+	if err == nil {
+		t.Fatal("expected error for unknown task")
+	}
+	if !strings.Contains(err.Error(), "not found") {
+		t.Fatalf("expected 'not found' in error, got: %v", err)
+	}
+}
+
+func TestStartSessionBothExist(t *testing.T) {
+	dir := t.TempDir()
+
+	// Create handoff.
+	h := NewHandoff("m1", "s1")
+	h.Completed = []string{"task-a"}
+	if err := h.Save(dir); err != nil {
+		t.Fatalf("save handoff: %v", err)
+	}
+
+	// Create progress.
+	_, err := CreateProgress("m1", []string{"build", "test"}, dir)
+	if err != nil {
+		t.Fatalf("create progress: %v", err)
+	}
+
+	ctx, err := StartSession("m1", "s1", dir)
+	if err != nil {
+		t.Fatalf("start session: %v", err)
+	}
+
+	if ctx.Handoff == nil {
+		t.Fatal("expected Handoff to be non-nil")
+	}
+	if ctx.Handoff.MissionID != "m1" {
+		t.Fatalf("handoff mission = %q, want %q", ctx.Handoff.MissionID, "m1")
+	}
+	if ctx.Progress == nil {
+		t.Fatal("expected Progress to be non-nil")
+	}
+	if ctx.Progress.MissionID != "m1" {
+		t.Fatalf("progress mission = %q, want %q", ctx.Progress.MissionID, "m1")
+	}
+	if len(ctx.Progress.Items) != 2 {
+		t.Fatalf("progress items = %d, want 2", len(ctx.Progress.Items))
+	}
+}
+
+func TestStartSessionMissingFiles(t *testing.T) {
+	dir := t.TempDir()
+
+	ctx, err := StartSession("m1", "s1", dir)
+	if err != nil {
+		t.Fatalf("expected no error for missing files, got: %v", err)
+	}
+	if ctx.Handoff != nil {
+		t.Fatal("expected Handoff to be nil")
+	}
+	if ctx.Progress != nil {
+		t.Fatal("expected Progress to be nil")
+	}
+}
+
 // ---------- Scratchpad ----------
 
 func TestScratchpadSetGet(t *testing.T) {
