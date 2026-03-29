@@ -219,6 +219,144 @@ func TestInitRespectsConfigFlag(t *testing.T) {
 	}
 }
 
+func TestInitCreatesV2Files(t *testing.T) {
+	dir := t.TempDir()
+	configPath := filepath.Join(dir, ".xylem.yml")
+
+	orig, _ := os.Getwd()
+	os.Chdir(dir) //nolint:errcheck
+	t.Cleanup(func() { os.Chdir(orig) }) //nolint:errcheck
+
+	captureStdout(func() {
+		err := cmdInit(configPath, false)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+	})
+
+	expectedFiles := []string{
+		".xylem/HARNESS.md",
+		".xylem/skills/fix-bug.yaml",
+		".xylem/skills/implement-feature.yaml",
+		".xylem/prompts/fix-bug/analyze.md",
+		".xylem/prompts/fix-bug/plan.md",
+		".xylem/prompts/fix-bug/implement.md",
+		".xylem/prompts/fix-bug/pr.md",
+		".xylem/prompts/implement-feature/analyze.md",
+		".xylem/prompts/implement-feature/plan.md",
+		".xylem/prompts/implement-feature/implement.md",
+		".xylem/prompts/implement-feature/pr.md",
+	}
+	for _, f := range expectedFiles {
+		path := filepath.Join(dir, f)
+		info, err := os.Stat(path)
+		if os.IsNotExist(err) {
+			t.Errorf("expected file %s to exist", f)
+			continue
+		}
+		if info.Size() == 0 {
+			t.Errorf("expected file %s to be non-empty", f)
+		}
+	}
+}
+
+func TestInitSkipsExistingV2Files(t *testing.T) {
+	dir := t.TempDir()
+	configPath := filepath.Join(dir, ".xylem.yml")
+
+	orig, _ := os.Getwd()
+	os.Chdir(dir) //nolint:errcheck
+	t.Cleanup(func() { os.Chdir(orig) }) //nolint:errcheck
+
+	// Pre-create HARNESS.md with custom content
+	os.MkdirAll(filepath.Join(dir, ".xylem"), 0o755) //nolint:errcheck
+	custom := "# My custom harness\n"
+	os.WriteFile(filepath.Join(dir, ".xylem", "HARNESS.md"), []byte(custom), 0o644) //nolint:errcheck
+
+	out := captureStdout(func() {
+		err := cmdInit(configPath, false)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+	})
+
+	// HARNESS.md should be preserved
+	data, _ := os.ReadFile(filepath.Join(dir, ".xylem", "HARNESS.md"))
+	if string(data) != custom {
+		t.Errorf("HARNESS.md was overwritten, got: %s", string(data))
+	}
+
+	if !strings.Contains(out, "skipped") {
+		t.Errorf("expected 'skipped' message for existing file, got: %s", out)
+	}
+
+	// But other files should still be created
+	if _, err := os.Stat(filepath.Join(dir, ".xylem", "skills", "fix-bug.yaml")); os.IsNotExist(err) {
+		t.Error("expected fix-bug.yaml to be created")
+	}
+}
+
+func TestInitForceOverwritesV2Files(t *testing.T) {
+	dir := t.TempDir()
+	configPath := filepath.Join(dir, ".xylem.yml")
+
+	orig, _ := os.Getwd()
+	os.Chdir(dir) //nolint:errcheck
+	t.Cleanup(func() { os.Chdir(orig) }) //nolint:errcheck
+
+	// Pre-create HARNESS.md with custom content
+	os.MkdirAll(filepath.Join(dir, ".xylem"), 0o755) //nolint:errcheck
+	os.WriteFile(filepath.Join(dir, ".xylem", "HARNESS.md"), []byte("custom"), 0o644) //nolint:errcheck
+
+	captureStdout(func() {
+		err := cmdInit(configPath, true)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+	})
+
+	// HARNESS.md should now have the default content
+	data, _ := os.ReadFile(filepath.Join(dir, ".xylem", "HARNESS.md"))
+	if string(data) == "custom" {
+		t.Error("HARNESS.md was not overwritten with force=true")
+	}
+	if !strings.Contains(string(data), "Project Overview") {
+		t.Error("expected default HARNESS.md content after force overwrite")
+	}
+}
+
+func TestInitScaffoldConfigV2Format(t *testing.T) {
+	dir := t.TempDir()
+	configPath := filepath.Join(dir, ".xylem.yml")
+
+	orig, _ := os.Getwd()
+	os.Chdir(dir) //nolint:errcheck
+	t.Cleanup(func() { os.Chdir(orig) }) //nolint:errcheck
+
+	captureStdout(func() {
+		err := cmdInit(configPath, false)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+	})
+
+	data, err := os.ReadFile(configPath)
+	if err != nil {
+		t.Fatalf("failed to read config: %v", err)
+	}
+	content := string(data)
+
+	if !strings.Contains(content, "flags:") {
+		t.Error("expected v2 config to contain 'flags:' field")
+	}
+	if !strings.Contains(content, "env:") {
+		t.Error("expected v2 config to contain 'env:' section")
+	}
+	if strings.Contains(content, "template:") {
+		t.Error("expected v2 config to NOT contain 'template:' field")
+	}
+}
+
 func TestInitCobraBypassesPersistentPreRunE(t *testing.T) {
 	dir := t.TempDir()
 
