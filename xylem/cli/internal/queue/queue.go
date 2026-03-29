@@ -168,6 +168,7 @@ func (q *Queue) Update(id string, state VesselState, errMsg string) error {
 				vessels[i].Error = ""
 			case StateWaiting:
 				// Don't set EndedAt — vessel is still in progress
+				vessels[i].WaitingSince = &now
 				vessels[i].Error = ""
 			case StateTimedOut:
 				vessels[i].EndedAt = &now
@@ -226,6 +227,27 @@ func (q *Queue) ListByState(state VesselState) ([]Vessel, error) {
 	return filtered, nil
 }
 
+// UpdateVessel replaces a vessel in the queue with the given vessel (matched by ID).
+// This persists all v2 fields (CurrentPhase, WorktreePath, etc.).
+func (q *Queue) UpdateVessel(vessel Vessel) error {
+	return q.withLock(func() error {
+		vessels, err := q.readAllVessels()
+		if err != nil {
+			return err
+		}
+
+		for i := range vessels {
+			if vessels[i].ID != vessel.ID {
+				continue
+			}
+			vessels[i] = vessel
+			return q.writeAllVessels(vessels)
+		}
+
+		return fmt.Errorf("vessel %s not found", vessel.ID)
+	})
+}
+
 func (q *Queue) Cancel(id string) error {
 	return q.withLock(func() error {
 		vessels, err := q.readAllVessels()
@@ -248,22 +270,6 @@ func (q *Queue) Cancel(id string) error {
 		}
 
 		return fmt.Errorf("vessel %s not found", id)
-	})
-}
-
-func (q *Queue) UpdateVessel(vessel Vessel) error {
-	return q.withLock(func() error {
-		vessels, err := q.readAllVessels()
-		if err != nil {
-			return err
-		}
-		for i := range vessels {
-			if vessels[i].ID == vessel.ID {
-				vessels[i] = vessel
-				return q.writeAllVessels(vessels)
-			}
-		}
-		return fmt.Errorf("vessel %s not found", vessel.ID)
 	})
 }
 
