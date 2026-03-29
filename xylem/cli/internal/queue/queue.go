@@ -192,6 +192,25 @@ func (q *Queue) List() ([]Vessel, error) {
 	return vessels, err
 }
 
+func (q *Queue) FindByID(id string) (*Vessel, error) {
+	var found *Vessel
+	err := q.withRLock(func() error {
+		vessels, readErr := q.readAllVessels()
+		if readErr != nil {
+			return readErr
+		}
+		for i := range vessels {
+			if vessels[i].ID == id {
+				v := vessels[i]
+				found = &v
+				return nil
+			}
+		}
+		return fmt.Errorf("vessel %s not found", id)
+	})
+	return found, err
+}
+
 func (q *Queue) ListByState(state VesselState) ([]Vessel, error) {
 	vessels, err := q.List()
 	if err != nil {
@@ -246,25 +265,6 @@ func (q *Queue) UpdateVessel(vessel Vessel) error {
 		}
 		return fmt.Errorf("vessel %s not found", vessel.ID)
 	})
-}
-
-func (q *Queue) FindByID(id string) (*Vessel, error) {
-	var found *Vessel
-	err := q.withRLock(func() error {
-		vessels, readErr := q.readAllVessels()
-		if readErr != nil {
-			return readErr
-		}
-		for i := range vessels {
-			if vessels[i].ID == id {
-				v := vessels[i]
-				found = &v
-				return nil
-			}
-		}
-		return fmt.Errorf("vessel %s not found", id)
-	})
-	return found, err
 }
 
 func (q *Queue) HasRef(ref string) bool {

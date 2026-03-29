@@ -35,7 +35,7 @@ func TestCobraSubcommandRegistration(t *testing.T) {
 		names[sub.Name()] = true
 	}
 
-	expected := []string{"init", "scan", "drain", "status", "pause", "resume", "cancel", "cleanup", "enqueue"}
+	expected := []string{"init", "scan", "drain", "status", "pause", "resume", "cancel", "cleanup", "enqueue", "daemon", "retry"}
 	for _, name := range expected {
 		if !names[name] {
 			t.Errorf("expected subcommand %q to be registered", name)
