@@ -938,6 +938,64 @@ func TestOrchestratorSetResultDeltaOnly(t *testing.T) {
 	}
 }
 
+func TestOrchestratorUpdateAgentDelta(t *testing.T) {
+	budget := &cost.Budget{TokenLimit: 10000}
+	o := NewOrchestrator(OrchestratorConfig{
+		CostBudget:   budget,
+		DefaultModel: "test-model",
+		MissionID:    "mission-delta-update",
+	})
+	_ = o.AddAgent("a1", "task-1")
+
+	// First UpdateAgent: 500 tokens (delta from 0 = 500).
+	_ = o.UpdateAgent("a1", StatusRunning, 500, time.Second, "")
+	if got := o.TotalTokenCost(); got != 500 {
+		t.Fatalf("TotalTokenCost after first UpdateAgent = %d, want 500", got)
+	}
+
+	// Second UpdateAgent: 800 tokens total (delta = 300).
+	_ = o.UpdateAgent("a1", StatusCompleted, 800, 2*time.Second, "")
+	if got := o.TotalTokenCost(); got != 800 {
+		t.Fatalf("TotalTokenCost after second UpdateAgent = %d, want 800 (not 1300)", got)
+	}
+}
+
+func TestOrchestratorUpdateAgentDeltaSameValue(t *testing.T) {
+	budget := &cost.Budget{TokenLimit: 10000}
+	o := NewOrchestrator(OrchestratorConfig{
+		CostBudget:   budget,
+		DefaultModel: "test-model",
+		MissionID:    "mission-delta-same",
+	})
+	_ = o.AddAgent("a1", "task-1")
+
+	// First UpdateAgent: 500 tokens.
+	_ = o.UpdateAgent("a1", StatusRunning, 500, time.Second, "")
+	// Second UpdateAgent: same 500 tokens (delta = 0, nothing recorded).
+	_ = o.UpdateAgent("a1", StatusCompleted, 500, 2*time.Second, "")
+	if got := o.TotalTokenCost(); got != 500 {
+		t.Fatalf("TotalTokenCost = %d, want 500 (delta 0 should record nothing)", got)
+	}
+}
+
+func TestOrchestratorUpdateAgentDeltaDecrease(t *testing.T) {
+	budget := &cost.Budget{TokenLimit: 10000}
+	o := NewOrchestrator(OrchestratorConfig{
+		CostBudget:   budget,
+		DefaultModel: "test-model",
+		MissionID:    "mission-delta-decrease",
+	})
+	_ = o.AddAgent("a1", "task-1")
+
+	// First UpdateAgent: 500 tokens.
+	_ = o.UpdateAgent("a1", StatusRunning, 500, time.Second, "")
+	// Second UpdateAgent: 300 tokens (delta = -200, negative guard prevents recording).
+	_ = o.UpdateAgent("a1", StatusCompleted, 300, 2*time.Second, "")
+	if got := o.TotalTokenCost(); got != 500 {
+		t.Fatalf("TotalTokenCost = %d, want 500 (negative delta should not be recorded)", got)
+	}
+}
+
 func TestOrchestratorBackwardCompat(t *testing.T) {
 	// All existing patterns (no CostBudget) continue to work unchanged.
 	o := NewOrchestrator(OrchestratorConfig{MaxSubAgents: 5, SummaryMaxChars: 100})
