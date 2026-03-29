@@ -5,6 +5,7 @@ import (
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/trace"
@@ -18,9 +19,14 @@ type TracerConfig struct {
 	// ServiceVersion is the SemVer string of the service.
 	ServiceVersion string
 
-	// Endpoint is the OTLP collector address. When empty the tracer
-	// falls back to a stdout exporter suitable for local development.
+	// Endpoint is the OTLP collector address (e.g. "localhost:4317").
+	// When empty the tracer falls back to a stdout exporter suitable
+	// for local development.
 	Endpoint string
+
+	// Insecure disables TLS for the OTLP gRPC connection. Only used
+	// when Endpoint is set.
+	Insecure bool
 
 	// SampleRate controls the fraction of traces that are recorded.
 	// Must be in the range [0.0, 1.0].
@@ -49,11 +55,25 @@ func DefaultTracerConfig() TracerConfig {
 }
 
 // NewTracer creates and registers a global TracerProvider. When
-// config.Endpoint is empty a stdout exporter is used; otherwise a future
-// OTLP exporter path can be added here.
+// config.Endpoint is set an OTLP gRPC exporter sends traces to that
+// collector address; otherwise a stdout exporter is used for local
+// development.
 // INV: Returned Tracer is non-nil when err is nil.
 func NewTracer(config TracerConfig) (*Tracer, error) {
-	exporter, err := stdouttrace.New(stdouttrace.WithPrettyPrint())
+	var exporter sdktrace.SpanExporter
+	var err error
+
+	if config.Endpoint != "" {
+		opts := []otlptracegrpc.Option{
+			otlptracegrpc.WithEndpoint(config.Endpoint),
+		}
+		if config.Insecure {
+			opts = append(opts, otlptracegrpc.WithInsecure())
+		}
+		exporter, err = otlptracegrpc.New(context.Background(), opts...)
+	} else {
+		exporter, err = stdouttrace.New(stdouttrace.WithPrettyPrint())
+	}
 	if err != nil {
 		return nil, err
 	}
