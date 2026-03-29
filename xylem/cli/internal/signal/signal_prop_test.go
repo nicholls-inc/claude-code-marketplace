@@ -108,17 +108,46 @@ func TestPropertyComputeNeverPanics(t *testing.T) {
 	})
 }
 
-// Property 4: For any signal set, Assess() is deterministic.
-func TestPropertyAssessDeterministic(t *testing.T) {
+// Property 4a: If all signals have level Normal, Assess returns Excellent.
+func TestPropertyAssessAllNormalIsExcellent(t *testing.T) {
 	rapid.Check(t, func(t *rapid.T) {
-		events := genTraceEvents().Draw(t, "events")
-		cfg := DefaultConfig()
-		ss := Compute(events, cfg)
+		n := rapid.IntRange(1, 10).Draw(t, "count")
+		signals := make([]Signal, n)
+		for i := range n {
+			signals[i] = Signal{
+				Type:  SignalType(rapid.StringMatching(`[A-Za-z]+`).Draw(t, "type")),
+				Value: rapid.Float64Range(0.0, 1.0).Draw(t, "value"),
+				Level: Normal,
+			}
+		}
+		ss := SignalSet{Signals: signals}
+		if h := ss.Assess(); h != Excellent {
+			t.Fatalf("Assess() with all Normal signals = %v, want Excellent", h)
+		}
+	})
+}
 
-		h1 := ss.Assess()
-		h2 := ss.Assess()
-		if h1 != h2 {
-			t.Fatalf("Assess() not deterministic: %v != %v", h1, h2)
+// Property 4b: If any signal has level Critical, Assess returns at most Poor.
+func TestPropertyAssessCriticalAtMostPoor(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		n := rapid.IntRange(1, 10).Draw(t, "count")
+		signals := make([]Signal, n)
+		for i := range n {
+			signals[i] = Signal{
+				Type:  SignalType(rapid.StringMatching(`[A-Za-z]+`).Draw(t, "type")),
+				Value: rapid.Float64Range(0.0, 1.0).Draw(t, "value"),
+				Level: ThresholdLevel(rapid.SampledFrom([]ThresholdLevel{Normal, Warning, Critical}).Draw(t, "level")),
+			}
+		}
+		// Force at least one Critical signal.
+		idx := rapid.IntRange(0, n-1).Draw(t, "critical_idx")
+		signals[idx].Level = Critical
+
+		ss := SignalSet{Signals: signals}
+		h := ss.Assess()
+		// With at least one Critical, health must be Poor or Severe.
+		if h != Poor && h != Severe {
+			t.Fatalf("Assess() with a Critical signal = %v, want Poor or Severe", h)
 		}
 	})
 }
