@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -1007,5 +1008,246 @@ func TestLegibilityAutoFixable(t *testing.T) {
 				t.Fatal("Decision Records should have gaps on this repo")
 			}
 		}
+	}
+}
+
+func TestWriteAgentsMD(t *testing.T) {
+	dir := t.TempDir()
+	profile := &RepoProfile{
+		Languages: []Language{{Name: "Go", FileCount: 3, Confidence: 0.9}},
+	}
+
+	if err := WriteAgentsMD(profile, dir); err != nil {
+		t.Fatalf("WriteAgentsMD: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(dir, "AGENTS.md"))
+	if err != nil {
+		t.Fatalf("read AGENTS.md: %v", err)
+	}
+
+	if !strings.HasPrefix(string(data), "# AGENTS.md") {
+		t.Fatalf("AGENTS.md missing heading, got: %s", string(data[:min(50, len(data))]))
+	}
+}
+
+func TestWriteAgentsMDSkipsExisting(t *testing.T) {
+	dir := t.TempDir()
+	target := filepath.Join(dir, "AGENTS.md")
+	original := "# existing content\n"
+	if err := os.WriteFile(target, []byte(original), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	profile := &RepoProfile{
+		Languages: []Language{{Name: "Go", FileCount: 5, Confidence: 1.0}},
+	}
+
+	if err := WriteAgentsMD(profile, dir); err != nil {
+		t.Fatalf("WriteAgentsMD: %v", err)
+	}
+
+	data, err := os.ReadFile(target)
+	if err != nil {
+		t.Fatalf("read: %v", err)
+	}
+	if string(data) != original {
+		t.Fatalf("existing AGENTS.md was overwritten: got %q, want %q", string(data), original)
+	}
+}
+
+func TestGenerateDocsStructure(t *testing.T) {
+	dir := t.TempDir()
+	profile := &RepoProfile{
+		Languages:  []Language{{Name: "Go", FileCount: 2, Confidence: 0.8}},
+		Frameworks: []Framework{{Name: "Go Modules", Language: "Go"}},
+		EntryPoints: []EntryPoint{
+			{Name: "make", Command: "make"},
+		},
+	}
+
+	if err := GenerateDocsStructure(profile, dir); err != nil {
+		t.Fatalf("GenerateDocsStructure: %v", err)
+	}
+
+	// Check architecture.md exists and has expected content.
+	archData, err := os.ReadFile(filepath.Join(dir, "docs", "architecture.md"))
+	if err != nil {
+		t.Fatalf("read architecture.md: %v", err)
+	}
+	if !strings.Contains(string(archData), "# Architecture") {
+		t.Fatal("architecture.md missing heading")
+	}
+	if !strings.Contains(string(archData), "Go") {
+		t.Fatal("architecture.md missing language info")
+	}
+
+	// Check getting-started.md exists.
+	gsData, err := os.ReadFile(filepath.Join(dir, "docs", "getting-started.md"))
+	if err != nil {
+		t.Fatalf("read getting-started.md: %v", err)
+	}
+	if !strings.Contains(string(gsData), "# Getting Started") {
+		t.Fatal("getting-started.md missing heading")
+	}
+
+	// Check ADR directory and template.
+	adrData, err := os.ReadFile(filepath.Join(dir, "docs", "adr", "0001-initial-setup.md"))
+	if err != nil {
+		t.Fatalf("read ADR template: %v", err)
+	}
+	if !strings.Contains(string(adrData), "ADR 0001") {
+		t.Fatal("ADR template missing title")
+	}
+}
+
+func TestGenerateDocsStructureSkipsExisting(t *testing.T) {
+	dir := t.TempDir()
+	docsDir := filepath.Join(dir, "docs")
+	if err := os.MkdirAll(docsDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+
+	original := "# My custom architecture\n"
+	archPath := filepath.Join(docsDir, "architecture.md")
+	if err := os.WriteFile(archPath, []byte(original), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	profile := &RepoProfile{
+		Languages: []Language{{Name: "Go", FileCount: 1, Confidence: 1.0}},
+	}
+
+	if err := GenerateDocsStructure(profile, dir); err != nil {
+		t.Fatalf("GenerateDocsStructure: %v", err)
+	}
+
+	data, err := os.ReadFile(archPath)
+	if err != nil {
+		t.Fatalf("read: %v", err)
+	}
+	if string(data) != original {
+		t.Fatalf("architecture.md was overwritten: got %q, want %q", string(data), original)
+	}
+}
+
+func TestGenerateProgressFile(t *testing.T) {
+	dir := t.TempDir()
+
+	if err := GenerateProgressFile("mission-42", dir); err != nil {
+		t.Fatalf("GenerateProgressFile: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(dir, "progress.json"))
+	if err != nil {
+		t.Fatalf("read progress.json: %v", err)
+	}
+
+	var result progressData
+	if err := json.Unmarshal(data, &result); err != nil {
+		t.Fatalf("unmarshal progress.json: %v", err)
+	}
+
+	if result.MissionID != "mission-42" {
+		t.Fatalf("mission_id = %q, want %q", result.MissionID, "mission-42")
+	}
+	if result.Items == nil || len(result.Items) != 0 {
+		t.Fatalf("items should be empty array, got %v", result.Items)
+	}
+	if result.UpdatedAt == "" {
+		t.Fatal("updated_at should not be empty")
+	}
+}
+
+func TestGenerateFeatureList(t *testing.T) {
+	dir := t.TempDir()
+	profile := &RepoProfile{
+		EntryPoints: []EntryPoint{
+			{Name: "make", Command: "make"},
+			{Name: "go run", Command: "go run ."},
+		},
+		Frameworks: []Framework{
+			{Name: "Go Modules", Language: "Go"},
+		},
+	}
+
+	if err := GenerateFeatureList(profile, dir); err != nil {
+		t.Fatalf("GenerateFeatureList: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(dir, "feature-list.json"))
+	if err != nil {
+		t.Fatalf("read feature-list.json: %v", err)
+	}
+
+	var features []feature
+	if err := json.Unmarshal(data, &features); err != nil {
+		t.Fatalf("unmarshal feature-list.json: %v", err)
+	}
+
+	if len(features) != 3 {
+		t.Fatalf("expected 3 features (2 entry points + 1 framework), got %d", len(features))
+	}
+
+	// Check that entry points are present.
+	foundMake := false
+	for _, f := range features {
+		if f.Name == "make" && f.Source == "entry-point" && f.Status == "pending" {
+			foundMake = true
+		}
+	}
+	if !foundMake {
+		t.Fatal("missing 'make' entry-point feature")
+	}
+
+	// Check that framework is present.
+	foundFramework := false
+	for _, f := range features {
+		if f.Name == "Go Modules" && f.Source == "framework" && f.Status == "pending" {
+			foundFramework = true
+		}
+	}
+	if !foundFramework {
+		t.Fatal("missing 'Go Modules' framework feature")
+	}
+}
+
+func TestBootstrapIntegration(t *testing.T) {
+	dir := t.TempDir()
+	// Create a minimal repo structure.
+	for _, f := range []string{"main.go", "go.mod", "Makefile"} {
+		if err := os.WriteFile(filepath.Join(dir, f), []byte("// placeholder"), 0o644); err != nil {
+			t.Fatalf("write %q: %v", f, err)
+		}
+	}
+
+	profile, err := Bootstrap(dir)
+	if err != nil {
+		t.Fatalf("Bootstrap: %v", err)
+	}
+
+	if profile == nil {
+		t.Fatal("expected non-nil profile")
+	}
+
+	// AGENTS.md should exist.
+	if _, err := os.Stat(filepath.Join(dir, "AGENTS.md")); err != nil {
+		t.Fatalf("AGENTS.md not created: %v", err)
+	}
+
+	// docs/ structure should exist.
+	if _, err := os.Stat(filepath.Join(dir, "docs", "architecture.md")); err != nil {
+		t.Fatalf("docs/architecture.md not created: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "docs", "getting-started.md")); err != nil {
+		t.Fatalf("docs/getting-started.md not created: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(dir, "docs", "adr", "0001-initial-setup.md")); err != nil {
+		t.Fatalf("docs/adr/0001-initial-setup.md not created: %v", err)
+	}
+
+	// feature-list.json should exist.
+	if _, err := os.Stat(filepath.Join(dir, "feature-list.json")); err != nil {
+		t.Fatalf("feature-list.json not created: %v", err)
 	}
 }

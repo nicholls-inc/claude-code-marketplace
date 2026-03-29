@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -743,6 +744,193 @@ func GenerateAgentsMD(profile *RepoProfile) string {
 	}
 
 	return sb.String()
+}
+
+// WriteAgentsMD generates AGENTS.md from the given profile and writes it
+// to the specified directory. It does not overwrite an existing AGENTS.md.
+// INV: Never modifies an existing file.
+func WriteAgentsMD(profile *RepoProfile, dir string) error {
+	target := filepath.Join(dir, "AGENTS.md")
+	if _, err := os.Stat(target); err == nil {
+		return nil
+	}
+	content := GenerateAgentsMD(profile)
+	if err := os.WriteFile(target, []byte(content), 0o644); err != nil {
+		return fmt.Errorf("bootstrap: write AGENTS.md: %w", err)
+	}
+	return nil
+}
+
+// GenerateDocsStructure creates a docs/ directory skeleton with placeholder
+// files inferred from the repository profile. Existing files are not overwritten.
+// INV: Never modifies existing files.
+func GenerateDocsStructure(profile *RepoProfile, dir string) error {
+	docsDir := filepath.Join(dir, "docs")
+	if err := os.MkdirAll(docsDir, 0o755); err != nil {
+		return fmt.Errorf("bootstrap: create docs dir: %w", err)
+	}
+
+	adrDir := filepath.Join(docsDir, "adr")
+	if err := os.MkdirAll(adrDir, 0o755); err != nil {
+		return fmt.Errorf("bootstrap: create docs/adr dir: %w", err)
+	}
+
+	// architecture.md
+	archPath := filepath.Join(docsDir, "architecture.md")
+	if _, err := os.Stat(archPath); err != nil {
+		var sb strings.Builder
+		sb.WriteString("# Architecture\n\n## Overview\n\n")
+		if len(profile.Languages) > 0 {
+			sb.WriteString("Languages: ")
+			names := make([]string, 0, len(profile.Languages))
+			for _, l := range profile.Languages {
+				names = append(names, l.Name)
+			}
+			sb.WriteString(strings.Join(names, ", "))
+			sb.WriteString("\n\n")
+		}
+		if len(profile.Frameworks) > 0 {
+			sb.WriteString("Frameworks: ")
+			names := make([]string, 0, len(profile.Frameworks))
+			for _, f := range profile.Frameworks {
+				names = append(names, f.Name)
+			}
+			sb.WriteString(strings.Join(names, ", "))
+			sb.WriteString("\n")
+		}
+		if err := os.WriteFile(archPath, []byte(sb.String()), 0o644); err != nil {
+			return fmt.Errorf("bootstrap: write architecture.md: %w", err)
+		}
+	}
+
+	// getting-started.md
+	gsPath := filepath.Join(docsDir, "getting-started.md")
+	if _, err := os.Stat(gsPath); err != nil {
+		var sb strings.Builder
+		sb.WriteString("# Getting Started\n\n## Prerequisites\n\n")
+		if len(profile.EntryPoints) > 0 {
+			sb.WriteString("## Entry Points\n\n")
+			for _, ep := range profile.EntryPoints {
+				sb.WriteString(fmt.Sprintf("- **%s**: `%s`\n", ep.Name, ep.Command))
+			}
+		}
+		if err := os.WriteFile(gsPath, []byte(sb.String()), 0o644); err != nil {
+			return fmt.Errorf("bootstrap: write getting-started.md: %w", err)
+		}
+	}
+
+	// adr/0001-initial-setup.md
+	adrPath := filepath.Join(adrDir, "0001-initial-setup.md")
+	if _, err := os.Stat(adrPath); err != nil {
+		content := fmt.Sprintf("# ADR 0001: Initial project setup\n\nDate: %s\n\n## Status\n\nAccepted\n\n## Context\n\nInitial project setup.\n\n## Decision\n\nTBD\n\n## Consequences\n\nTBD\n",
+			time.Now().Format("2006-01-02"))
+		if err := os.WriteFile(adrPath, []byte(content), 0o644); err != nil {
+			return fmt.Errorf("bootstrap: write ADR template: %w", err)
+		}
+	}
+
+	return nil
+}
+
+// progressData is the JSON structure for progress tracking files.
+type progressData struct {
+	MissionID string        `json:"mission_id"`
+	Items     []interface{} `json:"items"`
+	UpdatedAt string        `json:"updated_at"`
+}
+
+// GenerateProgressFile creates an initial JSON progress tracking file for
+// a mission. Does not overwrite an existing file.
+// INV: Never modifies an existing file.
+func GenerateProgressFile(missionID string, dir string) error {
+	target := filepath.Join(dir, "progress.json")
+	if _, err := os.Stat(target); err == nil {
+		return nil
+	}
+	data := progressData{
+		MissionID: missionID,
+		Items:     []interface{}{},
+		UpdatedAt: time.Now().UTC().Format(time.RFC3339),
+	}
+	b, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return fmt.Errorf("bootstrap: marshal progress: %w", err)
+	}
+	if err := os.WriteFile(target, b, 0o644); err != nil {
+		return fmt.Errorf("bootstrap: write progress.json: %w", err)
+	}
+	return nil
+}
+
+// feature is the JSON structure for entries in feature-list.json.
+type feature struct {
+	Name   string `json:"name"`
+	Source string `json:"source"`
+	Status string `json:"status"`
+}
+
+// GenerateFeatureList creates a feature-list.json skeleton from the profile's
+// detected entry points and frameworks. Does not overwrite an existing file.
+// INV: Never modifies an existing file.
+func GenerateFeatureList(profile *RepoProfile, dir string) error {
+	target := filepath.Join(dir, "feature-list.json")
+	if _, err := os.Stat(target); err == nil {
+		return nil
+	}
+	var features []feature
+	for _, ep := range profile.EntryPoints {
+		features = append(features, feature{
+			Name:   ep.Name,
+			Source: "entry-point",
+			Status: "pending",
+		})
+	}
+	for _, fw := range profile.Frameworks {
+		features = append(features, feature{
+			Name:   fw.Name,
+			Source: "framework",
+			Status: "pending",
+		})
+	}
+	if features == nil {
+		features = []feature{}
+	}
+	b, err := json.MarshalIndent(features, "", "  ")
+	if err != nil {
+		return fmt.Errorf("bootstrap: marshal feature list: %w", err)
+	}
+	if err := os.WriteFile(target, b, 0o644); err != nil {
+		return fmt.Errorf("bootstrap: write feature-list.json: %w", err)
+	}
+	return nil
+}
+
+// Bootstrap runs the full analysis and generation pipeline for a repository:
+// analyze the repo, write AGENTS.md, generate docs structure, and create
+// feature list. Existing files are never overwritten.
+// INV: Never modifies existing files — only creates new ones.
+func Bootstrap(path string) (*RepoProfile, error) {
+	profile, err := AnalyzeRepo(path)
+	if err != nil {
+		return nil, fmt.Errorf("bootstrap: analyze repo: %w", err)
+	}
+
+	var errs []string
+
+	if err := WriteAgentsMD(profile, path); err != nil {
+		errs = append(errs, err.Error())
+	}
+	if err := GenerateDocsStructure(profile, path); err != nil {
+		errs = append(errs, err.Error())
+	}
+	if err := GenerateFeatureList(profile, path); err != nil {
+		errs = append(errs, err.Error())
+	}
+
+	if len(errs) > 0 {
+		return profile, fmt.Errorf("bootstrap: generation errors: %s", strings.Join(errs, "; "))
+	}
+	return profile, nil
 }
 
 // clampScore ensures a score is within [0.0, 1.0].

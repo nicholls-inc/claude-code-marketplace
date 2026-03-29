@@ -297,3 +297,124 @@ func TestPropAllSevenDimensionsAlwaysPresent(t *testing.T) {
 		}
 	})
 }
+
+func TestPropWriteAgentsMDAlwaysContainsHeading(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		numLangs := rapid.IntRange(0, 5).Draw(t, "numLangs")
+		numEPs := rapid.IntRange(0, 5).Draw(t, "numEPs")
+		numFWs := rapid.IntRange(0, 3).Draw(t, "numFWs")
+
+		var langs []Language
+		for i := 0; i < numLangs; i++ {
+			langs = append(langs, Language{
+				Name:       rapid.StringMatching(`[A-Z][a-z]+`).Draw(t, "langName"),
+				FileCount:  rapid.IntRange(1, 100).Draw(t, "fileCount"),
+				Confidence: rapid.Float64Range(0, 1).Draw(t, "confidence"),
+			})
+		}
+
+		var eps []EntryPoint
+		for i := 0; i < numEPs; i++ {
+			eps = append(eps, EntryPoint{
+				Name:    rapid.StringMatching(`[a-z]+`).Draw(t, "epName"),
+				Command: rapid.StringMatching(`[a-z]+ [a-z./]+`).Draw(t, "epCmd"),
+			})
+		}
+
+		var fws []Framework
+		for i := 0; i < numFWs; i++ {
+			fws = append(fws, Framework{
+				Name:     rapid.StringMatching(`[A-Z][a-z]+`).Draw(t, "fwName"),
+				Language: rapid.StringMatching(`[A-Z][a-z]+`).Draw(t, "fwLang"),
+			})
+		}
+
+		profile := &RepoProfile{
+			Languages:   langs,
+			EntryPoints: eps,
+			Frameworks:  fws,
+		}
+
+		dir := propTempDir(t)
+		if err := WriteAgentsMD(profile, dir); err != nil {
+			t.Fatalf("WriteAgentsMD: %v", err)
+		}
+
+		data, err := os.ReadFile(filepath.Join(dir, "AGENTS.md"))
+		if err != nil {
+			t.Fatalf("read AGENTS.md: %v", err)
+		}
+
+		if !strings.HasPrefix(string(data), "# AGENTS.md") {
+			t.Fatalf("AGENTS.md missing heading, starts with: %q", string(data[:min(50, len(data))]))
+		}
+	})
+}
+
+func TestPropBootstrapNeverOverwrites(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		fileChoices := []string{
+			"main.go", "go.mod", "Makefile", "package.json", "app.py",
+		}
+
+		numFiles := rapid.IntRange(1, len(fileChoices)).Draw(t, "numFiles")
+		var files []string
+		used := make(map[int]bool)
+		for i := 0; i < numFiles; i++ {
+			idx := rapid.IntRange(0, len(fileChoices)-1).Draw(t, "idx")
+			if !used[idx] {
+				files = append(files, fileChoices[idx])
+				used[idx] = true
+			}
+		}
+
+		root := propTempDir(t)
+		for _, f := range files {
+			p := filepath.Join(root, f)
+			_ = os.MkdirAll(filepath.Dir(p), 0o755)
+			_ = os.WriteFile(p, []byte("// gen"), 0o644)
+		}
+
+		// First run.
+		_, err := Bootstrap(root)
+		if err != nil {
+			t.Fatalf("first Bootstrap: %v", err)
+		}
+
+		// Snapshot generated files.
+		snapshots := make(map[string][]byte)
+		generatedFiles := []string{
+			"AGENTS.md",
+			"feature-list.json",
+			"docs/architecture.md",
+			"docs/getting-started.md",
+			"docs/adr/0001-initial-setup.md",
+		}
+		for _, f := range generatedFiles {
+			p := filepath.Join(root, f)
+			data, err := os.ReadFile(p)
+			if err != nil {
+				continue
+			}
+			snapshots[f] = data
+		}
+
+		// Second run.
+		_, err = Bootstrap(root)
+		if err != nil {
+			t.Fatalf("second Bootstrap: %v", err)
+		}
+
+		// Verify no files changed.
+		for f, original := range snapshots {
+			p := filepath.Join(root, f)
+			data, err := os.ReadFile(p)
+			if err != nil {
+				t.Fatalf("file %q disappeared after second run: %v", f, err)
+			}
+			if string(data) != string(original) {
+				t.Fatalf("file %q was overwritten by second Bootstrap run", f)
+			}
+		}
+	})
+}
