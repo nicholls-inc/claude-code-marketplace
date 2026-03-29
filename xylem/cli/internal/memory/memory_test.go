@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"testing"
 	"time"
+	"unicode/utf8"
 )
 
 // ---------- NewStore ----------
@@ -146,6 +148,28 @@ func TestSanitizeValueTruncation(t *testing.T) {
 	got := SanitizeValue(string(buf))
 	if len(got) != maxValueLen {
 		t.Fatalf("len = %d, want %d", len(got), maxValueLen)
+	}
+}
+
+func TestSanitizeValueUTF8Boundary(t *testing.T) {
+	// Build a string of multi-byte runes that, when byte-sliced at maxValueLen,
+	// would split a rune. U+1F600 (😀) is 4 bytes in UTF-8.
+	emoji := "😀" // 4 bytes
+	count := (maxValueLen / len(emoji)) + 1
+	input := strings.Repeat(emoji, count)
+
+	got := SanitizeValue(input)
+
+	if !utf8.ValidString(got) {
+		t.Fatal("truncated value is not valid UTF-8")
+	}
+	if len(got) > maxValueLen {
+		t.Fatalf("truncated value exceeds maxValueLen: %d > %d", len(got), maxValueLen)
+	}
+	// The result should be the largest multiple of 4 that fits in maxValueLen.
+	expectedLen := (maxValueLen / len(emoji)) * len(emoji)
+	if len(got) != expectedLen {
+		t.Fatalf("expected len %d, got %d", expectedLen, len(got))
 	}
 }
 
@@ -363,6 +387,39 @@ func TestStoreReadInvalidType(t *testing.T) {
 	}
 }
 
+// ---------- Path Traversal ----------
+
+func TestStorePathTraversal(t *testing.T) {
+	dir := t.TempDir()
+	s, err := NewStore("m1", dir)
+	if err != nil {
+		t.Fatalf("new store: %v", err)
+	}
+
+	tests := []struct {
+		name string
+		key  string
+	}{
+		{"dot-dot escape", "../escape"},
+		{"slash in key", "sub/dir"},
+		{"backslash in key", "sub\\dir"},
+		{"dot-dot only", ".."},
+		{"complex traversal", "../../etc/passwd"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			e := makeEntry("m1", tt.key, "malicious", Procedural)
+			err := s.Write(e)
+			if err == nil {
+				t.Fatalf("expected error for key %q, got nil", tt.key)
+			}
+			if !strings.Contains(err.Error(), "invalid") {
+				t.Fatalf("expected path validation error, got: %v", err)
+			}
+		})
+	}
+}
+
 // ---------- Handoff ----------
 
 func TestHandoffSaveLoad(t *testing.T) {
@@ -393,6 +450,15 @@ func TestHandoffSaveLoad(t *testing.T) {
 	}
 	if len(loaded.NextSteps) != 1 || loaded.NextSteps[0] != "retry task-b" {
 		t.Fatalf("next_steps mismatch: %v", loaded.NextSteps)
+	}
+	if len(loaded.Unresolved) != 1 || loaded.Unresolved[0] != "task-c" {
+		t.Fatalf("unresolved mismatch: %v", loaded.Unresolved)
+	}
+	if loaded.CreatedAt.IsZero() {
+		t.Fatal("expected non-zero CreatedAt")
+	}
+	if delta := time.Since(loaded.CreatedAt); delta > 5*time.Second {
+		t.Fatalf("CreatedAt too far in the past: %v", delta)
 	}
 }
 
@@ -544,5 +610,10 @@ func TestKVStoreConcurrentAccess(t *testing.T) {
 		}(i)
 	}
 	wg.Wait()
+
+	// All keys must have been deleted.
+	if remaining := len(kv.Keys()); remaining != 0 {
+		t.Fatalf("expected 0 keys after deletion, got %d", remaining)
+	}
 }
 

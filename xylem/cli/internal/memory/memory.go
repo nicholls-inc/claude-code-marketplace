@@ -9,11 +9,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"sync"
 	"time"
 	"unicode"
+	"unicode/utf8"
 )
 
 // MemoryType classifies memory entries into one of three categories.
@@ -37,6 +39,25 @@ var validMemoryTypes = map[MemoryType]bool{
 
 // maxValueLen is the maximum byte length for a sanitized value.
 const maxValueLen = 1 << 20 // 1 MiB
+
+// safePathComponent matches strings containing only safe filesystem characters.
+var safePathComponent = regexp.MustCompile(`^[a-zA-Z0-9._-]+$`)
+
+// sanitizePathComponent rejects strings that could escape a directory when
+// used in filepath.Join. It disallows path separators, ".." sequences, and
+// any character outside [a-zA-Z0-9._-].
+func sanitizePathComponent(s string) error {
+	if s == "" {
+		return fmt.Errorf("path component must not be empty")
+	}
+	if strings.Contains(s, "..") {
+		return fmt.Errorf("path component must not contain %q", "..")
+	}
+	if !safePathComponent.MatchString(s) {
+		return fmt.Errorf("path component %q contains invalid characters (allowed: a-zA-Z0-9._-)", s)
+	}
+	return nil
+}
 
 // Entry is a single memory record stored on disk.
 type Entry struct {
@@ -95,11 +116,16 @@ func SanitizeValue(value string) string {
 	s := b.String()
 	if len(s) > maxValueLen {
 		s = s[:maxValueLen]
+		// Ensure we don't split a multi-byte rune at the boundary.
+		for len(s) > 0 && !utf8.ValidString(s) {
+			s = s[:len(s)-1]
+		}
 	}
 	return s
 }
 
 // Store provides mission-scoped, filesystem-backed memory storage.
+// Store is not safe for concurrent use. Callers must synchronize access externally.
 type Store struct {
 	missionID string
 	basePath  string
@@ -117,9 +143,13 @@ func NewStore(missionID string, basePath string) (*Store, error) {
 	return &Store{missionID: missionID, basePath: basePath}, nil
 }
 
-// entryPath returns the filesystem path for an entry.
-func (s *Store) entryPath(memType MemoryType, key string) string {
-	return filepath.Join(s.basePath, s.missionID, string(memType), key+".json")
+// entryPath returns the filesystem path for an entry. It validates that key
+// contains only safe path characters to prevent directory traversal.
+func (s *Store) entryPath(memType MemoryType, key string) (string, error) {
+	if err := sanitizePathComponent(key); err != nil {
+		return "", fmt.Errorf("entry path: invalid key: %w", err)
+	}
+	return filepath.Join(s.basePath, s.missionID, string(memType), key+".json"), nil
 }
 
 // typeDir returns the directory for a given memory type under this mission.
@@ -141,6 +171,11 @@ func (s *Store) Write(entry Entry) error {
 		return fmt.Errorf("write: validation failed: %s", strings.Join(vr.Errors, "; "))
 	}
 
+	path, err := s.entryPath(entry.Type, entry.Key)
+	if err != nil {
+		return fmt.Errorf("write: %w", err)
+	}
+
 	dir := s.typeDir(entry.Type)
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return fmt.Errorf("write: create dir: %w", err)
@@ -151,7 +186,6 @@ func (s *Store) Write(entry Entry) error {
 		return fmt.Errorf("write: marshal: %w", err)
 	}
 
-	path := s.entryPath(entry.Type, entry.Key)
 	if err := os.WriteFile(path, data, 0o644); err != nil {
 		return fmt.Errorf("write: save file: %w", err)
 	}
@@ -165,7 +199,11 @@ func (s *Store) Read(memType MemoryType, key string) (*Entry, error) {
 		return nil, fmt.Errorf("read: invalid memory type: %q", memType)
 	}
 
-	path := s.entryPath(memType, key)
+	path, err := s.entryPath(memType, key)
+	if err != nil {
+		return nil, fmt.Errorf("read: %w", err)
+	}
+
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("read: %w", err)
@@ -228,7 +266,11 @@ func (s *Store) Delete(memType MemoryType, key string) error {
 		return fmt.Errorf("delete: invalid memory type: %q", memType)
 	}
 
-	path := s.entryPath(memType, key)
+	path, err := s.entryPath(memType, key)
+	if err != nil {
+		return fmt.Errorf("delete: %w", err)
+	}
+
 	if err := os.Remove(path); err != nil {
 		return fmt.Errorf("delete: %w", err)
 	}
@@ -257,12 +299,24 @@ func NewHandoff(missionID, sessionID string) *HandoffArtifact {
 }
 
 // handoffFileName returns the deterministic filename for a handoff artifact.
-func handoffFileName(missionID, sessionID string) string {
-	return fmt.Sprintf("handoff_%s_%s.json", missionID, sessionID)
+// It validates that missionID and sessionID contain only safe path characters.
+func handoffFileName(missionID, sessionID string) (string, error) {
+	if err := sanitizePathComponent(missionID); err != nil {
+		return "", fmt.Errorf("handoff filename: invalid mission ID: %w", err)
+	}
+	if err := sanitizePathComponent(sessionID); err != nil {
+		return "", fmt.Errorf("handoff filename: invalid session ID: %w", err)
+	}
+	return fmt.Sprintf("handoff_%s_%s.json", missionID, sessionID), nil
 }
 
 // Save persists the handoff artifact to dir.
 func (h *HandoffArtifact) Save(dir string) error {
+	fname, err := handoffFileName(h.MissionID, h.SessionID)
+	if err != nil {
+		return fmt.Errorf("save handoff: %w", err)
+	}
+
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return fmt.Errorf("save handoff: create dir: %w", err)
 	}
@@ -270,7 +324,7 @@ func (h *HandoffArtifact) Save(dir string) error {
 	if err != nil {
 		return fmt.Errorf("save handoff: marshal: %w", err)
 	}
-	path := filepath.Join(dir, handoffFileName(h.MissionID, h.SessionID))
+	path := filepath.Join(dir, fname)
 	if err := os.WriteFile(path, data, 0o644); err != nil {
 		return fmt.Errorf("save handoff: write: %w", err)
 	}
@@ -279,7 +333,12 @@ func (h *HandoffArtifact) Save(dir string) error {
 
 // LoadHandoff reads a handoff artifact from dir.
 func LoadHandoff(missionID, sessionID, dir string) (*HandoffArtifact, error) {
-	path := filepath.Join(dir, handoffFileName(missionID, sessionID))
+	fname, err := handoffFileName(missionID, sessionID)
+	if err != nil {
+		return nil, fmt.Errorf("load handoff: %w", err)
+	}
+
+	path := filepath.Join(dir, fname)
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("load handoff: %w", err)
