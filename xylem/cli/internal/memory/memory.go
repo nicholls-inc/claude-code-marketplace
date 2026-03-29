@@ -130,6 +130,13 @@ func SanitizeValue(value string) string {
 type Store struct {
 	missionID string
 	basePath  string
+	validator *SemanticValidator
+}
+
+// SetValidator configures an optional SemanticValidator that runs additional
+// semantic checks on Write. Pass nil to disable semantic validation.
+func (s *Store) SetValidator(v *SemanticValidator) {
+	s.validator = v
 }
 
 // NewStore creates a Store rooted at basePath for the given mission. It
@@ -170,6 +177,24 @@ func (s *Store) Write(entry Entry) error {
 	vr := ValidateEntry(entry)
 	if !vr.Valid {
 		return fmt.Errorf("write: validation failed: %s", strings.Join(vr.Errors, "; "))
+	}
+
+	// Run semantic validation if a validator is configured.
+	if s.validator != nil {
+		existing, err := s.List(entry.Type)
+		if err != nil {
+			return fmt.Errorf("write: load existing entries: %w", err)
+		}
+		svr := s.validator.Validate(entry, existing)
+		if !svr.Valid {
+			var msgs []string
+			for _, c := range svr.Checks {
+				if c.Severity == "error" {
+					msgs = append(msgs, c.Check+": "+c.Message)
+				}
+			}
+			return fmt.Errorf("write: semantic validation failed: %s", strings.Join(msgs, "; "))
+		}
 	}
 
 	path, err := s.entryPath(entry.Type, entry.Key)

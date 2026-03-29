@@ -799,6 +799,176 @@ func TestKVStoreKeys(t *testing.T) {
 	}
 }
 
+// ---------- Semantic Validation ----------
+
+func TestSemanticContradictionDetected(t *testing.T) {
+	dir := t.TempDir()
+	s, err := NewStore("m1", dir)
+	if err != nil {
+		t.Fatalf("new store: %v", err)
+	}
+	s.SetValidator(DefaultSemanticValidator())
+
+	e1 := makeEntry("m1", "go-version", "1.21", Semantic)
+	if err := s.Write(e1); err != nil {
+		t.Fatalf("write first: %v", err)
+	}
+
+	e2 := makeEntry("m1", "go-version", "1.22", Semantic)
+	existing, err := s.List(Semantic)
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	result := s.validator.Validate(e2, existing)
+
+	found := false
+	for _, c := range result.Checks {
+		if c.Check == "contradiction" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Fatal("expected contradiction warning when value changes for same key")
+	}
+}
+
+func TestSemanticNoContradictionOnSameValue(t *testing.T) {
+	dir := t.TempDir()
+	s, err := NewStore("m1", dir)
+	if err != nil {
+		t.Fatalf("new store: %v", err)
+	}
+	s.SetValidator(DefaultSemanticValidator())
+
+	e := makeEntry("m1", "go-version", "1.21", Semantic)
+	if err := s.Write(e); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	existing, err := s.List(Semantic)
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	result := s.validator.Validate(e, existing)
+
+	for _, c := range result.Checks {
+		if c.Check == "contradiction" {
+			t.Fatal("unexpected contradiction for same key+value")
+		}
+	}
+}
+
+func TestSemanticHallucinationRepeatedChars(t *testing.T) {
+	v := DefaultSemanticValidator()
+	e := Entry{Type: Semantic, Key: "test", Value: "aaaaaaaaa", MissionID: "m1"}
+	result := v.Validate(e, nil)
+
+	found := false
+	for _, c := range result.Checks {
+		if c.Check == "hallucination" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Fatal("expected hallucination warning for repeated characters")
+	}
+}
+
+func TestSemanticHallucinationPlaceholder(t *testing.T) {
+	v := DefaultSemanticValidator()
+	for _, placeholder := range []string{"TBD", "TODO", "N/A", "tbd", "n/a"} {
+		e := Entry{Type: Semantic, Key: "test", Value: placeholder, MissionID: "m1"}
+		result := v.Validate(e, nil)
+
+		found := false
+		for _, c := range result.Checks {
+			if c.Check == "hallucination" {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Fatalf("expected hallucination warning for placeholder %q", placeholder)
+		}
+	}
+}
+
+func TestSemanticHallucinationCleanValue(t *testing.T) {
+	v := DefaultSemanticValidator()
+	e := Entry{Type: Semantic, Key: "test", Value: "Go is a statically typed language", MissionID: "m1"}
+	result := v.Validate(e, nil)
+
+	for _, c := range result.Checks {
+		if c.Check == "hallucination" {
+			t.Fatalf("unexpected hallucination warning for clean value: %s", c.Message)
+		}
+	}
+}
+
+func TestSemanticDuplicationDetected(t *testing.T) {
+	v := DefaultSemanticValidator()
+	existing := []Entry{
+		{Type: Semantic, Key: "lang", Value: "Go is great", MissionID: "m1"},
+	}
+	e := Entry{Type: Semantic, Key: "language", Value: "Go is great", MissionID: "m1"}
+	result := v.Validate(e, existing)
+
+	found := false
+	for _, c := range result.Checks {
+		if c.Check == "duplication" {
+			found = true
+			break
+		}
+	}
+	if !found {
+		t.Fatal("expected duplication warning for identical value under different key")
+	}
+}
+
+func TestSemanticValidatorNilSkipsChecks(t *testing.T) {
+	dir := t.TempDir()
+	s, err := NewStore("m1", dir)
+	if err != nil {
+		t.Fatalf("new store: %v", err)
+	}
+	// Deliberately do NOT call SetValidator — validator is nil.
+
+	// Write an entry with a placeholder value that would trigger hallucination
+	// if the validator were active.
+	e := makeEntry("m1", "placeholder-key", "TBD", Semantic)
+	if err := s.Write(e); err != nil {
+		t.Fatalf("write should succeed with nil validator: %v", err)
+	}
+}
+
+func TestStoreWriteSemanticError(t *testing.T) {
+	dir := t.TempDir()
+	s, err := NewStore("m1", dir)
+	if err != nil {
+		t.Fatalf("new store: %v", err)
+	}
+	// Configure a validator with MaxKeyReuse=1 so the second write triggers an error.
+	v := DefaultSemanticValidator()
+	v.MaxKeyReuse = 1
+	s.SetValidator(v)
+
+	e := makeEntry("m1", "reused-key", "first value", Semantic)
+	if err := s.Write(e); err != nil {
+		t.Fatalf("first write: %v", err)
+	}
+
+	e2 := makeEntry("m1", "reused-key", "second value", Semantic)
+	err = s.Write(e2)
+	if err == nil {
+		t.Fatal("expected semantic error when MaxKeyReuse exceeded")
+	}
+	if !strings.Contains(err.Error(), "semantic validation failed") {
+		t.Fatalf("expected semantic validation error, got: %v", err)
+	}
+}
+
 func TestKVStoreConcurrentAccess(t *testing.T) {
 	kv := NewKVStore()
 	var wg sync.WaitGroup
