@@ -1,11 +1,7 @@
-// Package observability provides span attribute types for OpenTelemetry
-// instrumentation of xylem components. It defines attribute-extraction
-// functions that convert domain types into key-value pairs suitable for
-// attaching to OTel spans.
-//
-// This is a foundation package: it defines the attribute schema and
-// conversion logic. Actual OTel SDK integration (creating spans, exporting
-// traces) is a follow-up.
+// Package observability provides OpenTelemetry instrumentation for xylem
+// components. It defines span attribute types with extraction functions that
+// convert domain types into key-value pairs, and wraps the OTel SDK to
+// provide tracer lifecycle management, span creation, and stdout export.
 package observability
 
 import (

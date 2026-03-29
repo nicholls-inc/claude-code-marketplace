@@ -1,10 +1,13 @@
 package observability
 
 import (
+	"context"
 	"strings"
 	"testing"
 
 	"github.com/nicholls-inc/claude-code-marketplace/xylem/cli/internal/signal"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"go.opentelemetry.io/otel/sdk/trace/tracetest"
 	"pgregory.net/rapid"
 )
 
@@ -125,6 +128,8 @@ func TestPropMissionAttributesAlwaysContainID(t *testing.T) {
 	})
 }
 
+// --- Signal bridge property tests ---
+
 // genSignal generates a random signal.Signal.
 func genSignal() *rapid.Generator[signal.Signal] {
 	return rapid.Custom(func(t *rapid.T) signal.Signal {
@@ -196,5 +201,86 @@ func TestPropSignalSetAttributesDeterministic(t *testing.T) {
 					i, a[i].Key, a[i].Value, b[i].Key, b[i].Value)
 			}
 		}
+	})
+}
+
+// --- Tracer property tests ---
+
+// genSpanAttribute generates a random SpanAttribute with printable keys/values.
+func genSpanAttribute() *rapid.Generator[SpanAttribute] {
+	return rapid.Custom(func(t *rapid.T) SpanAttribute {
+		return SpanAttribute{
+			Key:   rapid.StringMatching(`[a-z][a-z0-9_.]{0,30}`).Draw(t, "key"),
+			Value: rapid.StringMatching(`[a-zA-Z0-9_ -]{0,50}`).Draw(t, "value"),
+		}
+	})
+}
+
+// genSpanAttributeSlice generates a slice of SpanAttribute.
+func genSpanAttributeSlice() *rapid.Generator[[]SpanAttribute] {
+	return rapid.Custom(func(t *rapid.T) []SpanAttribute {
+		n := rapid.IntRange(0, 30).Draw(t, "count")
+		attrs := make([]SpanAttribute, n)
+		for i := range n {
+			attrs[i] = genSpanAttribute().Draw(t, "attr")
+		}
+		return attrs
+	})
+}
+
+func TestPropAttachSpanAttributesPreservesCount(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		attrs := genSpanAttributeSlice().Draw(t, "attrs")
+
+		exporter := tracetest.NewInMemoryExporter()
+		provider := sdktrace.NewTracerProvider(
+			sdktrace.WithSyncer(exporter),
+			sdktrace.WithSampler(sdktrace.AlwaysSample()),
+		)
+		tr := provider.Tracer("prop-test")
+
+		_, span := tr.Start(context.Background(), "prop-span")
+		AttachSpanAttributes(span, attrs)
+		span.End()
+
+		spans := exporter.GetSpans()
+		if len(spans) != 1 {
+			t.Fatalf("expected 1 span, got %d", len(spans))
+		}
+
+		// Deduplicate: OTel keeps only the last value for duplicate keys,
+		// so the expected count is the number of unique keys.
+		unique := make(map[string]struct{})
+		for _, a := range attrs {
+			unique[a.Key] = struct{}{}
+		}
+		got := len(spans[0].Attributes)
+		if got != len(unique) {
+			t.Fatalf("expected %d unique attributes, got %d", len(unique), got)
+		}
+
+		_ = provider.Shutdown(context.Background())
+	})
+}
+
+func TestPropStartSpanNeverPanics(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		attrs := genSpanAttributeSlice().Draw(t, "attrs")
+		name := rapid.StringMatching(`[a-z][a-z0-9-]{0,20}`).Draw(t, "name")
+
+		exporter := tracetest.NewInMemoryExporter()
+		provider := sdktrace.NewTracerProvider(
+			sdktrace.WithSyncer(exporter),
+			sdktrace.WithSampler(sdktrace.AlwaysSample()),
+		)
+		tracer := &Tracer{
+			provider: provider,
+			tracer:   provider.Tracer("prop-test"),
+		}
+
+		sc := tracer.StartSpan(context.Background(), name, attrs)
+		sc.End()
+
+		_ = provider.Shutdown(context.Background())
 	})
 }
