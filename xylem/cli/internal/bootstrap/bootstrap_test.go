@@ -1251,3 +1251,248 @@ func TestBootstrapIntegration(t *testing.T) {
 		t.Fatalf("feature-list.json not created: %v", err)
 	}
 }
+
+func TestDetectConventionFiles(t *testing.T) {
+	root := t.TempDir()
+
+	// Create a subdirectory with an eslint config.
+	subDir := filepath.Join(root, "frontend")
+	if err := os.MkdirAll(subDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(subDir, ".eslintrc.json"), []byte("{}"), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	instructions := DetectConventionFiles(root)
+
+	if len(instructions) != 1 {
+		t.Fatalf("expected 1 instruction, got %d: %+v", len(instructions), instructions)
+	}
+
+	inst := instructions[0]
+	if inst.Level != DirLevel {
+		t.Fatalf("Level = %v, want DirLevel", inst.Level)
+	}
+	if inst.Path != "frontend" {
+		t.Fatalf("Path = %q, want %q", inst.Path, "frontend")
+	}
+	if inst.Source != ".eslintrc.json" {
+		t.Fatalf("Source = %q, want %q", inst.Source, ".eslintrc.json")
+	}
+	if !strings.Contains(inst.Content, "Linter") {
+		t.Fatalf("Content = %q, want it to contain %q", inst.Content, "Linter")
+	}
+}
+
+func TestDetectConventionFilesEmpty(t *testing.T) {
+	root := t.TempDir()
+
+	instructions := DetectConventionFiles(root)
+
+	if instructions != nil {
+		t.Fatalf("expected nil slice for empty repo, got %d instructions", len(instructions))
+	}
+}
+
+func TestMergeInstructionsOverride(t *testing.T) {
+	repo := []Instruction{
+		{Level: RepoLevel, Path: "src", Source: ".eslintrc", Content: "repo-level linter"},
+	}
+	dir := []Instruction{
+		{Level: DirLevel, Path: "src", Source: ".eslintrc", Content: "dir-level linter"},
+	}
+
+	result := MergeInstructions(nil, repo, dir)
+
+	if len(result.Instructions) != 1 {
+		t.Fatalf("expected 1 instruction after merge, got %d", len(result.Instructions))
+	}
+	if result.Instructions[0].Level != DirLevel {
+		t.Fatalf("expected DirLevel to win, got %v", result.Instructions[0].Level)
+	}
+	if result.Instructions[0].Content != "dir-level linter" {
+		t.Fatalf("Content = %q, want %q", result.Instructions[0].Content, "dir-level linter")
+	}
+}
+
+func TestMergeInstructionsOrdering(t *testing.T) {
+	org := []Instruction{
+		{Level: OrgLevel, Path: "z-dir", Source: "alpha", Content: "org z"},
+	}
+	repo := []Instruction{
+		{Level: RepoLevel, Path: "a-dir", Source: "beta", Content: "repo a"},
+	}
+	dir := []Instruction{
+		{Level: DirLevel, Path: "a-dir", Source: "alpha", Content: "dir a-alpha"},
+		{Level: DirLevel, Path: "m-dir", Source: "gamma", Content: "dir m"},
+	}
+
+	result := MergeInstructions(org, repo, dir)
+
+	if len(result.Instructions) != 4 {
+		t.Fatalf("expected 4 instructions, got %d", len(result.Instructions))
+	}
+
+	// Verify sorted by Path then Source.
+	for i := 1; i < len(result.Instructions); i++ {
+		prev := result.Instructions[i-1]
+		curr := result.Instructions[i]
+		if prev.Path > curr.Path || (prev.Path == curr.Path && prev.Source > curr.Source) {
+			t.Fatalf("instructions not sorted: [%d]={Path:%q,Source:%q} before [%d]={Path:%q,Source:%q}",
+				i-1, prev.Path, prev.Source, i, curr.Path, curr.Source)
+		}
+	}
+}
+
+func TestWriteDirInstructionsNeverOverwrites(t *testing.T) {
+	root := t.TempDir()
+
+	// Create pre-existing AGENTS.md in a subdirectory.
+	subDir := filepath.Join(root, "sub")
+	if err := os.MkdirAll(subDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	original := "# My custom AGENTS.md\n"
+	if err := os.WriteFile(filepath.Join(subDir, "AGENTS.md"), []byte(original), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	instrSet := InstructionSet{
+		Instructions: []Instruction{
+			{Level: DirLevel, Path: "sub", Source: ".eslintrc", Content: "Linter config: .eslintrc"},
+		},
+	}
+
+	if err := WriteDirInstructions(instrSet, root); err != nil {
+		t.Fatalf("WriteDirInstructions: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(subDir, "AGENTS.md"))
+	if err != nil {
+		t.Fatalf("read: %v", err)
+	}
+	if string(data) != original {
+		t.Fatalf("AGENTS.md was overwritten: got %q, want %q", string(data), original)
+	}
+}
+
+func TestWriteDirInstructionsCreatesNew(t *testing.T) {
+	root := t.TempDir()
+
+	instrSet := InstructionSet{
+		Instructions: []Instruction{
+			{Level: DirLevel, Path: "lib", Source: ".prettierrc", Content: "Formatter config: .prettierrc"},
+		},
+	}
+
+	if err := WriteDirInstructions(instrSet, root); err != nil {
+		t.Fatalf("WriteDirInstructions: %v", err)
+	}
+
+	data, err := os.ReadFile(filepath.Join(root, "lib", "AGENTS.md"))
+	if err != nil {
+		t.Fatalf("read AGENTS.md: %v", err)
+	}
+
+	content := string(data)
+	if !strings.Contains(content, "## Directory Instructions") {
+		t.Fatalf("missing heading in generated AGENTS.md: %s", content)
+	}
+	if !strings.Contains(content, "Formatter config: .prettierrc") {
+		t.Fatalf("missing convention entry in generated AGENTS.md: %s", content)
+	}
+}
+
+func TestWriteDirInstructionsSkipsRoot(t *testing.T) {
+	root := t.TempDir()
+
+	instrSet := InstructionSet{
+		Instructions: []Instruction{
+			{Level: DirLevel, Path: ".", Source: ".eslintrc", Content: "Linter config: .eslintrc"},
+		},
+	}
+
+	if err := WriteDirInstructions(instrSet, root); err != nil {
+		t.Fatalf("WriteDirInstructions: %v", err)
+	}
+
+	// Root AGENTS.md should NOT be created by WriteDirInstructions.
+	if _, err := os.Stat(filepath.Join(root, "AGENTS.md")); err == nil {
+		t.Fatal("WriteDirInstructions should not create AGENTS.md at repo root")
+	}
+}
+
+func TestDetectInstructionHierarchy(t *testing.T) {
+	root := t.TempDir()
+
+	// Create a convention file.
+	subDir := filepath.Join(root, "pkg")
+	if err := os.MkdirAll(subDir, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(subDir, ".golangci.yml"), []byte("# config"), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	profile := &RepoProfile{
+		Languages: []Language{
+			{Name: "Go", FileCount: 5},
+		},
+		Frameworks: []Framework{
+			{Name: "Go Modules", Language: "Go"},
+		},
+	}
+
+	instrSet := DetectInstructionHierarchy(root, profile)
+
+	// Should have repo-level from profile + dir-level from convention file.
+	if len(instrSet.Instructions) < 2 {
+		t.Fatalf("expected at least 2 instructions, got %d: %+v", len(instrSet.Instructions), instrSet.Instructions)
+	}
+
+	// Check ordering: sorted by Path then Source.
+	for i := 1; i < len(instrSet.Instructions); i++ {
+		prev := instrSet.Instructions[i-1]
+		curr := instrSet.Instructions[i]
+		if prev.Path > curr.Path || (prev.Path == curr.Path && prev.Source > curr.Source) {
+			t.Fatalf("instructions not sorted at index %d", i)
+		}
+	}
+
+	// Verify we have both repo-level and dir-level instructions.
+	hasRepo := false
+	hasDir := false
+	for _, inst := range instrSet.Instructions {
+		if inst.Level == RepoLevel {
+			hasRepo = true
+		}
+		if inst.Level == DirLevel {
+			hasDir = true
+		}
+	}
+	if !hasRepo {
+		t.Fatal("expected repo-level instructions from profile")
+	}
+	if !hasDir {
+		t.Fatal("expected dir-level instructions from convention files")
+	}
+}
+
+func TestInstructionLevelString(t *testing.T) {
+	tests := []struct {
+		level InstructionLevel
+		want  string
+	}{
+		{OrgLevel, "org"},
+		{RepoLevel, "repo"},
+		{DirLevel, "dir"},
+		{InstructionLevel(99), "unknown"},
+	}
+	for _, tt := range tests {
+		got := tt.level.String()
+		if got != tt.want {
+			t.Fatalf("InstructionLevel(%d).String() = %q, want %q", tt.level, got, tt.want)
+		}
+	}
+}

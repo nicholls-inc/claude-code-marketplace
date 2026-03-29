@@ -592,28 +592,34 @@ func scoreValidationHarness(path string) (float64, []string, bool) {
 	return clampScore(score), gaps, len(gaps) > 0
 }
 
+// linterConfigs lists known linter configuration files.
+var linterConfigs = []string{
+	".eslintrc", ".eslintrc.js", ".eslintrc.json", ".eslintrc.yml", "eslint.config.js", "eslint.config.mjs",
+	".golangci.yml", ".golangci.yaml",
+	".flake8", ".pylintrc", "pyproject.toml",
+	".rubocop.yml",
+	"rustfmt.toml", ".rustfmt.toml",
+}
+
+// formatterConfigs lists known formatter configuration files.
+var formatterConfigs = []string{
+	".prettierrc", ".prettierrc.json", ".prettierrc.yml", ".prettierrc.js",
+	".editorconfig",
+	"rustfmt.toml", ".rustfmt.toml",
+	".clang-format",
+}
+
 func scoreLintingFormatting(path string) (float64, []string, bool) {
 	score := 0.0
 	var gaps []string
 
-	if anyFileExists(path, []string{
-		".eslintrc", ".eslintrc.js", ".eslintrc.json", ".eslintrc.yml", "eslint.config.js", "eslint.config.mjs",
-		".golangci.yml", ".golangci.yaml",
-		".flake8", ".pylintrc", "pyproject.toml",
-		".rubocop.yml",
-		"rustfmt.toml", ".rustfmt.toml",
-	}) {
+	if anyFileExists(path, linterConfigs) {
 		score += 0.5
 	} else {
 		gaps = append(gaps, "no linter configuration found")
 	}
 
-	if anyFileExists(path, []string{
-		".prettierrc", ".prettierrc.json", ".prettierrc.yml", ".prettierrc.js",
-		".editorconfig",
-		"rustfmt.toml", ".rustfmt.toml",
-		".clang-format",
-	}) {
+	if anyFileExists(path, formatterConfigs) {
 		score += 0.5
 	} else {
 		gaps = append(gaps, "no formatter configuration found")
@@ -920,6 +926,12 @@ func Bootstrap(path string) (*RepoProfile, error) {
 	if err := WriteAgentsMD(profile, path); err != nil {
 		errs = append(errs, err.Error())
 	}
+
+	instrSet := DetectInstructionHierarchy(path, profile)
+	if err := WriteDirInstructions(instrSet, path); err != nil {
+		errs = append(errs, err.Error())
+	}
+
 	if err := GenerateDocsStructure(profile, path); err != nil {
 		errs = append(errs, err.Error())
 	}

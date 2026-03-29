@@ -351,6 +351,80 @@ func TestPropWriteAgentsMDAlwaysContainsHeading(t *testing.T) {
 	})
 }
 
+func TestPropMergeInstructionsIdempotent(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		n := rapid.IntRange(0, 10).Draw(t, "numInstructions")
+		levels := []InstructionLevel{OrgLevel, RepoLevel, DirLevel}
+
+		var instructions []Instruction
+		for i := 0; i < n; i++ {
+			instructions = append(instructions, Instruction{
+				Level:   levels[rapid.IntRange(0, 2).Draw(t, "levelIdx")],
+				Path:    rapid.StringMatching(`[a-z]{1,5}(/[a-z]{1,5})?`).Draw(t, "path"),
+				Content: rapid.StringMatching(`[a-z ]{5,20}`).Draw(t, "content"),
+				Source:  rapid.StringMatching(`\.[a-z]{3,8}`).Draw(t, "source"),
+			})
+		}
+
+		// First merge: treat all as dir-level input.
+		first := MergeInstructions(nil, nil, instructions)
+		// Second merge: merge the result again.
+		second := MergeInstructions(nil, nil, first.Instructions)
+
+		if len(first.Instructions) != len(second.Instructions) {
+			t.Fatalf("not idempotent: first merge has %d, second has %d",
+				len(first.Instructions), len(second.Instructions))
+		}
+
+		for i := range first.Instructions {
+			if first.Instructions[i] != second.Instructions[i] {
+				t.Fatalf("not idempotent at index %d: %+v vs %+v",
+					i, first.Instructions[i], second.Instructions[i])
+			}
+		}
+	})
+}
+
+func TestPropMergeInstructionsOrderDeterministic(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		n := rapid.IntRange(0, 15).Draw(t, "numInstructions")
+		levels := []InstructionLevel{OrgLevel, RepoLevel, DirLevel}
+
+		var org, repo, dir []Instruction
+		for i := 0; i < n; i++ {
+			inst := Instruction{
+				Level:   levels[rapid.IntRange(0, 2).Draw(t, "levelIdx")],
+				Path:    rapid.StringMatching(`[a-z]{1,4}`).Draw(t, "path"),
+				Content: rapid.StringMatching(`[a-z ]{3,10}`).Draw(t, "content"),
+				Source:  rapid.StringMatching(`\.[a-z]{2,5}`).Draw(t, "source"),
+			}
+			switch inst.Level {
+			case OrgLevel:
+				org = append(org, inst)
+			case RepoLevel:
+				repo = append(repo, inst)
+			default:
+				dir = append(dir, inst)
+			}
+		}
+
+		result1 := MergeInstructions(org, repo, dir)
+		result2 := MergeInstructions(org, repo, dir)
+
+		if len(result1.Instructions) != len(result2.Instructions) {
+			t.Fatalf("non-deterministic: first has %d, second has %d",
+				len(result1.Instructions), len(result2.Instructions))
+		}
+
+		for i := range result1.Instructions {
+			if result1.Instructions[i] != result2.Instructions[i] {
+				t.Fatalf("non-deterministic at index %d: %+v vs %+v",
+					i, result1.Instructions[i], result2.Instructions[i])
+			}
+		}
+	})
+}
+
 func TestPropBootstrapNeverOverwrites(t *testing.T) {
 	rapid.Check(t, func(t *rapid.T) {
 		fileChoices := []string{
