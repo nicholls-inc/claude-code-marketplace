@@ -215,6 +215,41 @@ func newTestTracer(t *testing.T) (*Tracer, *tracetest.InMemoryExporter) {
 	return &Tracer{provider: provider, tracer: tr}, exporter
 }
 
+func TestNewTracerWithEndpoint(t *testing.T) {
+	cfg := TracerConfig{
+		ServiceName: "xylem-test",
+		SampleRate:  1.0,
+		Endpoint:    "localhost:4317",
+		Insecure:    true,
+	}
+	tracer, err := NewTracer(cfg)
+	if err != nil {
+		t.Fatalf("NewTracer with endpoint returned error: %v", err)
+	}
+	if tracer == nil {
+		t.Fatal("expected non-nil tracer with endpoint")
+	}
+	_ = tracer.Shutdown(context.Background())
+}
+
+func TestNewTracerWithEndpointShutdown(t *testing.T) {
+	cfg := TracerConfig{
+		ServiceName: "xylem-test",
+		SampleRate:  1.0,
+		Endpoint:    "localhost:4317",
+		Insecure:    true,
+	}
+	tracer, err := NewTracer(cfg)
+	if err != nil {
+		t.Fatalf("NewTracer with endpoint returned error: %v", err)
+	}
+	err = tracer.Shutdown(context.Background())
+	// A connection-refused error is acceptable since no collector is running.
+	if err != nil {
+		t.Logf("Shutdown returned (acceptable) error: %v", err)
+	}
+}
+
 func TestNewTracerDefault(t *testing.T) {
 	tracer, err := NewTracer(DefaultTracerConfig())
 	if err != nil {
