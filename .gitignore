@@ -1,8 +1,4 @@
 .sisyphus/
 .claude/worktrees/
 node_modules/
-.xylem/
-xylem/cli/cmd/xylem/xylem
-xylem/cli/xylem
 field-reports/
-.xylem.yml

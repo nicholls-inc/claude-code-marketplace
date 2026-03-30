@@ -28,14 +28,6 @@ Field report plugin. Generates structured performance reports on plugins, skills
 
 - **Skills** (`field-report/skills/`): `/field-report`
 
-### xylem (`xylem/`)
-
-Generic multi-source session scheduler for autonomous agent work.
-
-- **Go CLI** (`xylem/cli/`): Scans pluggable sources (GitHub issues, manual enqueue), manages work queue, launches Claude sessions in isolated git worktrees
-- **Skills** (`xylem/skills/`): `/fix-bug`, `/implement-feature`
-- **Config**: `.xylem.yml` per target repo
-
 ## Development — crosscheck
 
 ```bash

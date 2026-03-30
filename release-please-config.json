@@ -1,17 +1,5 @@
 {
   "packages": {
-    "xylem": {
-      "release-type": "go",
-      "package-name": "xylem",
-      "component": "xylem",
-      "extra-files": [
-        {
-          "type": "json",
-          "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
-        }
-      ]
-    },
     "crosscheck": {
       "release-type": "node",
       "package-name": "crosscheck",
