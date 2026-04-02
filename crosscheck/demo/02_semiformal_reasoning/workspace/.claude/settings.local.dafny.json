@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__plugin_crosscheck_dafny__dafny_verify"
+    ],
+    "deny": [
+      "Read(../*, **)",
+      "Glob(../*, **)",
+      "Grep(../*, **)"
+    ]
+  }
+}

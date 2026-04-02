@@ -2,3 +2,4 @@
 .claude/worktrees/
 node_modules/
 field-reports/
+__pycache__/
