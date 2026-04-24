@@ -32,7 +32,15 @@ Before asking anything, orient yourself:
 
 1. Read the repo root: list top-level files, detect the primary language(s), and note whether `docs/`, `.claude/`, `.pre-commit-config.yaml`, `lefthook.yml`, `.husky/`, `.github/workflows/`, `.gitlab-ci.yml`, or `.circleci/` already exist.
 2. If `docs/assurance/ROADMAP.md` already exists, **stop**. Emit: "Repo already has `docs/assurance/ROADMAP.md`. Re-running `/assurance-init` would overwrite governance. If you want to refresh scaffolding, delete the existing files first or run `/assurance-status` to see current state." Then exit.
-3. If `/assurance-layer-audit` has not been run yet in this session (no prior layer-projection output visible), recommend running it first:
+3. **Pre-flight overwrite check.** Even when the ROADMAP is absent, any of the other artifacts this skill writes may already exist from a prior partial run or unrelated tooling. Before proceeding, stat every target path (exact list below) and build a `pre_existing` set:
+   - `docs/assurance/{immediate,next,medium-term,aspirational}/README.md`
+   - `.claude/rules/protected-surfaces.md`
+   - `docs/invariants/README.md`
+   - `docs/invariants/<module>.md` for each module candidate (from `$ARGUMENTS` if supplied, otherwise deferred until Step 2)
+   - `.pre-commit-config.yaml`, `lefthook.yml`, `.husky/pre-commit-assurance-placeholder`
+   - `.github/workflows/assurance.yml`, `.gitlab-ci.yml`, `.circleci/config.yml`
+   If the set is non-empty, list the colliding paths to the user and ask: "These files already exist and would be modified or overwritten. Skip (keep existing), overwrite, or abort? (skip/overwrite/abort)". Default to `skip` on ambiguous answers. Record the decision and honour it in every write step below: when the decision is `skip`, leave the existing file untouched and note the skip in the Step 8 summary; when `overwrite`, replace the file; `abort` exits immediately with no writes.
+4. If `/assurance-layer-audit` has not been run yet in this session (no prior layer-projection output visible), recommend running it first:
 
    > Tip: `/assurance-layer-audit` produces a per-layer reach projection that informs which modules are worth seeding as invariants. Running it first takes ~15 min and makes the answers below more grounded. Proceed without the audit? (yes/no)
 
@@ -254,18 +262,20 @@ hard-failing on a freshly scaffolded repo.
 
 Using the answers from Step 2, write **two** stub files that the user will fill in when `/invariant-coverage-scaffold` runs next. Do not attempt to implement the coverage check itself — that's the next skill's job. These stubs exist only to anchor the dual-track shape.
 
+When appending to an existing YAML file (pre-commit, lefthook, gitlab, circleci), first grep the file for the literal token `assurance-gate-placeholder`. If already present, skip the append and record that the stub is already in place — do NOT emit a second entry. If the target file exists but the Step 1 overwrite decision was `skip`, do not append; instead surface a note in the summary that the user must add the placeholder manually.
+
 **Pre-commit stub.** Based on the Q1 answer:
 
-- `pre-commit.com` → append a placeholder repo entry to `.pre-commit-config.yaml` (create the file if missing). Use hook id `assurance-gate-placeholder` with a `language: fail` and a message instructing the user to run `/invariant-coverage-scaffold`.
-- `lefthook` → append a placeholder command to `lefthook.yml` under `pre-commit.commands.assurance-gate-placeholder`.
-- `husky` → create `.husky/pre-commit-assurance-placeholder` (an executable shell script that echoes the instruction and exits non-zero).
+- `pre-commit.com` → append a placeholder repo entry to `.pre-commit-config.yaml` (create the file if missing, with a minimal `repos:` list). Use hook id `assurance-gate-placeholder` with a `language: fail` and a message instructing the user to run `/invariant-coverage-scaffold`. Preserve existing entries — parse the file as YAML and append under the existing `repos:` key rather than blindly concatenating text.
+- `lefthook` → append a placeholder command to `lefthook.yml` under `pre-commit.commands.assurance-gate-placeholder`. Parse existing YAML and merge; do not clobber other `pre-commit.commands.*` entries.
+- `husky` → create `.husky/pre-commit-assurance-placeholder` (an executable shell script that echoes the instruction and exits non-zero). Note in the summary that husky does not auto-invoke this filename — the user must wire it into `.husky/pre-commit` manually, or `/invariant-coverage-scaffold` will do it later.
 - `none` → write no file, but state in the summary: "No pre-commit framework configured. The dual-track principle requires a fast local gate; install one (pre-commit.com, lefthook, or husky) before `/invariant-coverage-scaffold`."
 
 **CI stub.** Based on the Q2 answer:
 
-- GitHub Actions → write `.github/workflows/assurance.yml` with a single job `assurance-gate-placeholder` that runs `echo "run /invariant-coverage-scaffold to install the real gate" && exit 1` on push and pull_request.
-- GitLab CI → append a `assurance-gate-placeholder` job to `.gitlab-ci.yml`.
-- CircleCI → append the equivalent to `.circleci/config.yml`.
+- GitHub Actions → write `.github/workflows/assurance.yml` with a single job `assurance-gate-placeholder` that runs `echo "run /invariant-coverage-scaffold to install the real gate" && exit 1` on push and pull_request. If the file already exists from Step 1, honour the overwrite decision.
+- GitLab CI → append a `assurance-gate-placeholder` job to `.gitlab-ci.yml` (parse YAML, preserve existing jobs).
+- CircleCI → append the equivalent to `.circleci/config.yml` (parse YAML, preserve existing jobs and workflows).
 - Other → write a `docs/assurance/ci-stub.md` describing the expected job shape (name, trigger, failing step) and ask the user to port it to their CI.
 
 Annotate each stub with `# TODO(/invariant-coverage-scaffold): replace this placeholder with the real coverage check` so the intent is traceable.
@@ -319,6 +329,9 @@ After both skills run, `/assurance-status` Phase 1 should pass.
       `/invariant-coverage-scaffold`
 - [ ] No xylem- or crosscheck-specific references leaked into the generated
       files (text should read as repo-agnostic)
+- [ ] Pre-flight overwrite check (Step 1.3) ran and any pre-existing target
+      files were either skipped or overwritten per the user's decision — no
+      silent clobbering occurred
 ```
 
 ## Arguments
