@@ -2,7 +2,7 @@
 name: invariant-coverage-scaffold
 description: >-
   Generate a bidirectional invariant-to-test coverage gate for a repo that uses
-  docs/invariants/*.md plus `// Invariant IN: <ID>` test comments. Emits both a
+  docs/invariants/*.md plus `// Invariant <ID>: <Name>` test comments. Emits both a
   pre-commit hook and a CI job (dual-track enforcement), adapted to the target
   repo's language and test framework. v1 supports Go, Python, TypeScript;
   Rust/Ruby/Java are deferred to later versions. Triggers: "invariant coverage",
@@ -14,7 +14,7 @@ argument-hint: "[optional: language override — go | python | typescript]"
 
 ## Description
 
-Scaffold the mechanical gate that enforces the bidirectional link between invariant IDs declared in `docs/invariants/*.md` and `// Invariant IN: <ID>` comments in property-test files. The gate catches two failure modes:
+Scaffold the mechanical gate that enforces the bidirectional link between invariant IDs declared in `docs/invariants/*.md` and `// Invariant <ID>: <Name>` comments in property-test files (e.g. `// Invariant I1: QueueEnqueueDequeue`). The gate catches two failure modes:
 
 1. **Silent test drop.** An invariant exists in the doc but no test references it → coverage is claimed that does not exist.
 2. **Orphan test comment.** A test references an invariant ID that is not declared in any module doc → stale or typo'd reference.
@@ -27,6 +27,14 @@ This skill generates both enforcement points required by the dual-track enforcem
 The skill is a generator, not a runtime. It emits scripts and config files adapted to the target repo's language and tooling, then wires them into the existing hook framework and CI system.
 
 **Language coverage (v1):** Go, Python, TypeScript. **Deferred to later versions:** Rust, Ruby, Java. If the target repo is one of the deferred languages, emit a clear notice and stop — do not fabricate a template.
+
+**Boundary vs `/assurance-init`:** `/assurance-init` scaffolds the governance skeleton (ROADMAP, horizon dirs, `docs/invariants/` with seed module docs, `.claude/rules/protected-surfaces.md`). This skill installs the mechanical coverage gate on top. Expected ordering:
+
+1. `/assurance-init` (or the equivalent manual setup) — creates `docs/invariants/*.md` with `**I1. Name.**` headers.
+2. `/draft-invariants` for each seeded module — populates real invariant prose.
+3. `/invariant-coverage-scaffold` (this skill) — wires the enforcement gate.
+
+If `docs/invariants/` is missing when this skill runs, stop and recommend `/assurance-init` before proceeding. Do not create `docs/invariants/` as a side effect — that is `/assurance-init`'s responsibility.
 
 ## Instructions
 
@@ -127,6 +135,8 @@ Each template contains:
 - The CI workflow snippet for GitHub Actions and GitLab CI.
 - The actionable error message (including the exact fix command) the script prints on failure.
 
+If a coverage script already exists at the target path, **do not overwrite**. Diff the existing content against the template, show the user the differences, and ask before replacing. On a clean re-run with no drift, skip the write and report "script already up to date".
+
 Fill the placeholders using the choices from Steps 1–4. Write the script to the standard location:
 
 - Go → `scripts/check_invariant_coverage.go` (as a `//go:build ignore` tool) or `cli/cmd/check-invariants/main.go` if a `cli/` tree already exists.
@@ -153,6 +163,8 @@ Add a CI job or step that calls the same script. Use the CI snippet from the tem
 - **GitHub Actions** — if `.github/workflows/ci.yml` or similar exists, add a step. If none exist, create `.github/workflows/invariant-coverage.yml` as a minimal standalone workflow.
 - **GitLab CI** — add a job to `.gitlab-ci.yml`.
 - **Generic** — emit `ci/invariant-coverage.sh` with a clear "Call this from your CI pipeline" comment.
+
+Before adding a step or job, **grep the target file for an existing `invariant-coverage` entry**. If one is already present, skip the write and report "CI step already wired". Never append a duplicate step on a re-run.
 
 The CI step must fail the build (`exit 1`) when the script fails. Do not downgrade to warning-only — that defeats dual-track enforcement.
 
@@ -184,7 +196,7 @@ Verification:
 Next steps:
   - Commit the new files.
   - Run /draft-invariants on any module that has no invariant doc yet.
-  - Add `// Invariant IN: <ID>` comments to property tests that lack them.
+  - Add `// Invariant <ID>: <Name>` comments to property tests that lack them.
 ```
 
 ### Verification Checklist
@@ -202,7 +214,7 @@ Run each item against the generated script before considering the gate live:
 - [ ] Script runs in under 10 seconds on a repo with ~200 invariants (measure with `time <command>`).
 - [ ] Pre-commit hook is wired and fires on changes to `docs/invariants/**/*.md` or property-test files.
 - [ ] CI job is wired and fails the build on coverage gaps (verify with a throwaway PR that removes a test comment).
-- [ ] Error messages include the exact fix command (e.g., `add \`// Invariant IN: <ID>\` to a test`).
+- [ ] Error messages include the exact fix command (e.g., `add \`// Invariant <ID>: <Name>\` to a test`).
 - [ ] Regex format is strict: `// Invariant <ID>: <Name>` is the only accepted comment form; `// Invariant: <ID>` and similar variations are rejected.
 - [ ] Invariant IDs contain a digit by construction (typos that drop the digit surface as missing-coverage on the original ID, not as orphans — documented behavior).
 ```
