@@ -34,10 +34,10 @@ You are running a two-LLM round-trip informalization pipeline over one protected
 
 Before doing any LLM work, open `.assurance/intent-check-fp-tracker.csv` (create it if missing; see `references/fp-tracker-schema.md` for the exact header).
 
-Compute the rolling false-positive rate over the **last 2 weeks of entries** (rows where `date` is within 14 days of today):
+Compute the rolling false-positive rate over the **last 2 weeks of entries** (rows where `date` is within 14 days of today **AND `human_verdict` is non-empty** — empty cells are awaiting review and are excluded from both numerator and denominator; see the pseudocode in `references/fp-tracker-schema.md`):
 
-- FP rate = count(`human_verdict` == `spurious`) / count(all rows in window)
-- If the window has fewer than 3 rows, treat the rate as unknown and proceed with a warning.
+- FP rate = count(`human_verdict` == `spurious`) / count(rows in window with non-empty `human_verdict`)
+- If the window has fewer than 3 classified rows, treat the rate as unknown and proceed with a warning.
 - If the FP rate **> 30%**, refuse to run. Tell the user:
 
   > The Layer-5 round-trip pipeline's rolling false-positive rate is `<rate>%` over the last 14 days (threshold: 30%). The kill criterion in the assurance hierarchy says this layer's strategy needs rework before it keeps gating commits. Do not re-enable until (a) the prompt or model is revised, or (b) human review has reclassified enough entries to drop the rate below 30%. See `references/fp-tracker-schema.md` for the exact computation.
@@ -114,7 +114,7 @@ date,invariant_touched,phase_verdict,human_verdict
 
 - `date` — today in `YYYY-MM-DD`.
 - `invariant_touched` — a short label identifying the invariant under test, e.g. `queue.md I2 (6-of-19 field mutation coverage)`. Match the style of the xylem tracker (see `references/fp-tracker-schema.md`).
-- `phase_verdict` — `pass` if `match == true`, `fail` otherwise.
+- `phase_verdict` — `pass` if `match == true` **AND** `confidence_pct >= 80`; `fail` otherwise. This must match the `verdict` written to the attestation in Step 6 — low-confidence matches are tracked as `fail` so the kill criterion picks up prompt weakness, and the attestation hook refuses the commit.
 - `human_verdict` — leave **empty** at skill-run time. A human reviewer fills this in later as `genuine`, `genuine-planted`, `partial`, or `spurious`. The kill-criterion math ignores empty cells (see `references/fp-tracker-schema.md` for the append logic and the rolling-window computation).
 
 The schema matches xylem's CSV verbatim — this is the plan's "adopt plan defaults" decision. Do not add columns; do not rename columns.
