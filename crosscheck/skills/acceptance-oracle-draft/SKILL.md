@@ -93,7 +93,7 @@ This is a placeholder — the user may already have a CI system with established
 
 ### Step 6: Propose a Storage Boundary
 
-Recommend that scenarios live **outside** the coding-agent's write scope to preserve the external-oracle property (see `docs/research/assurance-hierarchy.md` §External Acceptance Oracle — scenarios authored by humans, not by the agent under test). Two options:
+Recommend that scenarios live **outside** the coding-agent's write scope to preserve the external-oracle property (the external-oracle principle: scenarios are authored by humans, not by the agent under test — see the assurance-hierarchy notes if your repo has them checked in under `docs/research/`). Two options:
 
 - **Sibling directory** — e.g. `../<repo-name>-acceptance/` outside the main working tree.
 - **Separate repo** — e.g. `<org>/<repo-name>-acceptance`, referenced as a git submodule or CI checkout.

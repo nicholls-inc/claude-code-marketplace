@@ -37,6 +37,7 @@ then:                                 # list of mechanically-verifiable assertio
   - exit_code: 0                      # CLI only
   - stdout_matches: '^build complete in \d+ms$'   # regex, line-anchored by default
   - stderr_empty: true
+  - stderr_matches: 'config file .+ not found'    # regex over stderr lines
   - http_status: 201                  # HTTP only
   - json_schema: schemas/job.schema.json           # path to a JSON Schema file
   - latency_under_ms: 300
@@ -82,6 +83,7 @@ The same schema expressed as JSON, for teams that prefer it:
 | `stdout_matches: <regex>` | cli | At least one stdout line matches. |
 | `stdout_equals: <string>` | cli | Full stdout equals string. |
 | `stderr_empty: true` | cli | stderr has zero bytes. |
+| `stderr_matches: <regex>` | cli | At least one stderr line matches. |
 | `http_status: <int>` | http | Response status equals. |
 | `json_schema: <path>` | http, cli (JSON output) | Response/stdout parses and validates against the JSON Schema. |
 | `header_matches` | http | Response header matches regex. |
@@ -168,7 +170,7 @@ for f in "$SCENARIO_DIR"/*.yaml; do
   prio=$(yq '.priority' "$f")
   timeout_s=$(yq '.timeout_seconds' "$f")
   surface=$(yq '.surface' "$f")
-  verdict=skip reason="unsupported surface: $surface"
+  verdict=skip; reason="unsupported surface: $surface"
 
   if [[ "$surface" == cli ]]; then
     # Read argv as a JSON array and exec it directly (no shell re-parsing).
@@ -177,16 +179,20 @@ for f in "$SCENARIO_DIR"/*.yaml; do
     timeout "$timeout_s" "${argv[@]}" >/tmp/oracle.out 2>&1
     rc=$?
     if [[ -n "$expected_rc" && "$rc" -ne "$expected_rc" ]]; then
-      verdict=fail reason="exit_code=$rc expected=$expected_rc"
+      verdict=fail; reason="exit_code=$rc expected=$expected_rc"
     else
-      verdict=pass reason=""
+      verdict=pass; reason=""
       # TODO: evaluate stdout_matches, file_exists, latency_under_ms, etc.
     fi
   fi
   # TODO: implement surface=http (curl; http_status, json_schema, header_matches).
   # TODO: implement surface=daemon (log_line_within_seconds, health_check).
 
-  if [[ "$verdict" == pass ]]; then pass=$((pass + 1)); else fail=$((fail + 1)); fi
+  case "$verdict" in
+    pass) pass=$((pass + 1)) ;;
+    fail) fail=$((fail + 1)) ;;
+    skip) : ;;  # skipped scenarios don't count toward pass/fail
+  esac
   results=$(jq --arg n "$name" --arg p "$prio" --arg v "$verdict" --arg r "$reason" \
     '. + [{name: $n, priority: $p, verdict: $v, reason: $r}]' <<<"$results")
   echo "[$verdict] $name ($prio) $reason"
