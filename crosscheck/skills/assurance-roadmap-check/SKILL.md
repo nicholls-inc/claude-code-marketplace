@@ -62,8 +62,9 @@ For each item doc, extract the declared Status and its supporting fields:
 1. **Status line** — look for the first `**Status:**` or `Status:` line in the first ~25 lines of the doc. The value is the phrase after the colon and before the next `**` or newline. Normalise trailing context (e.g., `Done — PR #665 merged 2026-04-19` → declared status `Done` plus landing metadata).
 2. **PR references** — capture any `#<number>` or `PR #<number>` tokens on the Status line or within the first few lines. These are the strong signal for "Done" verification.
 3. **Reason** — for `Deferred`, look for a `Reason:` field on the same line or on the following line. If absent, flag it in Step 4.
-4. **Expected artifacts** — scan the doc's **Deliverables** / **Files to touch** / **Scope** sections for explicit file paths. These anchor the "does the artifact exist?" check in Step 3.
-5. **Item ID** — the leading `NN-slug` from the filename (e.g., `01-invariant-test-coverage-ci.md` → `01`). Use it in the output table.
+4. **Blocker** — for `Blocked`, look for a `Blocker:` field on the same line or on the following line (this is the label scaffolded by `/assurance-init`; tolerate legacy variants `Blocks on:` / `Depends on:` but prefer `Blocker:`). If absent, flag it in Step 4.
+5. **Expected artifacts** — scan the doc's **Deliverables** / **Files to touch** / **Scope** sections for explicit file paths. These anchor the "does the artifact exist?" check in Step 3.
+6. **Item ID** — the leading `NN-slug` from the filename (e.g., `01-invariant-test-coverage-ci.md` → `01`). Use it in the output table.
 
 **If the Status field is missing entirely:**
 - Record the doc under a `MALFORMED` bucket with drift type `Missing Status field`. Do not attempt to infer.
@@ -97,9 +98,9 @@ For each item, emit one of the following drift classifications. An item may trig
 | **Overclaim — Done but no PR** | Status `Done`, but no merged PR is discoverable and no cited PR number resolves. | Open `<file>` and change `**Status:** Done` to `**Status:** In progress` (or cite the PR number if one exists but wasn't captured). |
 | **Overclaim — Done but artifact absent** | Status `Done`, PR merged, but an expected artifact path from Deliverables/Files-to-touch is missing from the repo. | Investigate whether the artifact was rolled back or renamed; update the doc's Deliverables list or restore the artifact. |
 | **Underclaim — Not started but artifact exists** | Status `Not started`, but expected artifact paths are already present in the repo. | Open `<file>` and change `**Status:** Not started` to `**Status:** Done — PR #<N> merged <date>`, using `git log -- <artifact-path>` to find the landing PR. |
-| **Stale In progress** | Status `In progress`, no commits touching the relevant files in > 30 days. | Confirm the gap with `git log --since='30 days ago' -- <paths>`. If genuinely paused, change Status to `Blocked` and add a `**Blocks on:** <pointer>` line; otherwise revert to `Not started` with a rationale. |
+| **Stale In progress** | Status `In progress`, no commits touching the relevant files in > 30 days. | Confirm the gap with `git log --since='30 days ago' -- <paths>`. If genuinely paused, change Status to `Blocked` and add a `**Blocker:** <pointer>` line (the label scaffolded by `/assurance-init`); otherwise revert to `Not started` with a rationale. |
 | **Missing Reason** | Status `Deferred` with no `Reason:` field. | Open `<file>` and add a `**Reason:** <why this was deferred>` line immediately after the Status line. Link the superseding item if one exists. |
-| **Blocked without blocker** | Status `Blocked` with no explicit pointer to the blocker (another item doc, issue, or external dependency). | Open `<file>` and add a `**Blocks on:** <pointer>` or `**Depends on:** <pointer>` line naming the blocker. |
+| **Blocked without blocker** | Status `Blocked` with no explicit pointer to the blocker (another item doc, issue, or external dependency). | Open `<file>` and add a `**Blocker:** <pointer>` line naming the blocker (matches the label scaffolded by `/assurance-init`). |
 | **Malformed** | Status field missing, misspelled, or not in the controlled vocabulary. | Open `<file>` and replace the Status value with one of: `Not started`, `In progress`, `Blocked`, `Done`, `Deferred`. |
 | **ROADMAP mismatch** | The item doc's Status is out of sync with how `ROADMAP.md` summarises it. | Update whichever of the two is stale; the item doc is the source of truth, so `ROADMAP.md` is the more common edit. |
 
