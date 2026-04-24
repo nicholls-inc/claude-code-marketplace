@@ -119,8 +119,10 @@ Apply the following ecosystem rules verbatim.
 - Python: Reachable via Dafny → Python extraction, with the caveat that Python
   has no static type system to carry the guarantees. Extracted code is
   `_dafny.BigRational`-style, not native floats.
-- TypeScript / JavaScript: Reachable via Dafny → JS extraction, or via
-  `lemmafit` (Midspiral's Dafny-to-TS watcher) if installed.
+- TypeScript / JavaScript: Reachable in principle via Dafny's JS backend, or
+  via `lemmafit` (Midspiral's Dafny-to-TS watcher) if installed. Note that
+  the `crosscheck` plugin's `/extract-code` skill currently targets Python
+  and Go only — TS/JS extraction is not wired through `crosscheck` today.
 - Rust: Reachable via Rust-native verifiers (Verus, Prusti, Creusot, Kani for
   bounded model checking). Rust is the only ecosystem with **native**
   verification; Dafny extraction is not the primary route.
