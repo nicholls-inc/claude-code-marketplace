@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.2.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.1.0...crosscheck-v2.2.0) (2026-04-24)
+
+
+### Features
+
+* **crosscheck:** add /acceptance-oracle-draft skill ([#123](https://github.com/nicholls-inc/claude-code-marketplace/issues/123)) ([47f4668](https://github.com/nicholls-inc/claude-code-marketplace/commit/47f46688967d2783b04b36a856d1238a36a225ed))
+* **crosscheck:** add /assurance-init skill ([#116](https://github.com/nicholls-inc/claude-code-marketplace/issues/116)) ([1dbff96](https://github.com/nicholls-inc/claude-code-marketplace/commit/1dbff96b257baa24ccf3f446a4253394c3fa75b3))
+* **crosscheck:** add /assurance-layer-audit skill ([#115](https://github.com/nicholls-inc/claude-code-marketplace/issues/115)) ([db2bd23](https://github.com/nicholls-inc/claude-code-marketplace/commit/db2bd23e973873d3a60fedc48445b27905c508e7))
+* **crosscheck:** add /assurance-roadmap-check skill ([#120](https://github.com/nicholls-inc/claude-code-marketplace/issues/120)) ([8bc7fdf](https://github.com/nicholls-inc/claude-code-marketplace/commit/8bc7fdf374a8d9948ccc59181dfd61d66a29fc35))
+* **crosscheck:** add /assurance-status skill ([#114](https://github.com/nicholls-inc/claude-code-marketplace/issues/114)) ([5797502](https://github.com/nicholls-inc/claude-code-marketplace/commit/579750293874ae5bb5bea47e84f6521558389d78))
+* **crosscheck:** add /intent-check skill ([#122](https://github.com/nicholls-inc/claude-code-marketplace/issues/122)) ([6c64735](https://github.com/nicholls-inc/claude-code-marketplace/commit/6c647359c6a04f110e4291ace370c12b2cbb3c52))
+* **crosscheck:** add /invariant-coverage-scaffold skill ([#121](https://github.com/nicholls-inc/claude-code-marketplace/issues/121)) ([d2c52b0](https://github.com/nicholls-inc/claude-code-marketplace/commit/d2c52b0ff8d5f010c5ab0ddd2afb8d7447339ec5))
+* **crosscheck:** add /protected-surface-amend skill ([#118](https://github.com/nicholls-inc/claude-code-marketplace/issues/118)) ([5a8ce83](https://github.com/nicholls-inc/claude-code-marketplace/commit/5a8ce83c0818efda6db5e6aa2f004cd421269bc9))
+* **crosscheck:** add /spec-adversary skill ([#119](https://github.com/nicholls-inc/claude-code-marketplace/issues/119)) ([7aa57a5](https://github.com/nicholls-inc/claude-code-marketplace/commit/7aa57a5555ead21748d8c7e03d34e97c0fa4b1db))
+* **crosscheck:** add hellebuyck orchestrator agent ([#117](https://github.com/nicholls-inc/claude-code-marketplace/issues/117)) ([c06b0f6](https://github.com/nicholls-inc/claude-code-marketplace/commit/c06b0f603d8fdcdcf115e915f5f0bf3437da8d2e))
+
 ## [2.1.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.0.1...crosscheck-v2.1.0) (2026-03-13)
 
 
