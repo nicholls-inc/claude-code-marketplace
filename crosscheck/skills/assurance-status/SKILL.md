@@ -122,13 +122,13 @@ Report any protected-surface edit from the review window that lacks a governance
 Read `.assurance/intent-check-fp-tracker.csv` (columns: `date,invariant_touched,phase_verdict,human_verdict`).
 
 - If the file does not exist, note "FP tracker not initialised" and recommend `/intent-check` to establish the tracker.
-- If it exists:
-  1. Filter rows to the rolling 2-week window ending today.
-  2. Count rows where `phase_verdict` disagrees with `human_verdict` — those are false positives.
-  3. If `total_rows_in_window == 0`, report sample size 0 and verdict `INSUFFICIENT DATA` — do not compute a rate or compare against the kill criterion.
-  4. Otherwise, compute `FP rate = false_positives / total_rows_in_window`.
+- If it exists, use the canonical FP-rate definition from `/intent-check` (see `references/fp-tracker-schema.md` in that skill — the pseudocode there is authoritative):
+  1. Filter rows to the rolling 2-week window ending today (`date` within 14 days).
+  2. Exclude rows with empty `human_verdict` from both numerator and denominator — they are awaiting review and bias the rate either way.
+  3. Let `window_size = count(rows in window with non-empty human_verdict)`. If `window_size == 0`, report sample size 0 and verdict `INSUFFICIENT DATA` — do not compute a rate or compare against the kill criterion.
+  4. Otherwise, compute `FP rate = count(human_verdict == "spurious") / window_size`. `partial` does NOT count as spurious (the pipeline was still doing useful work).
   5. Compare against the 30% kill criterion.
-  6. Report the rolling rate, sample size, and the verdict: `OK` if below 20%, `AT RISK` if 20% ≤ rate < 30%, `TRIPPED` if rate ≥ 30%.
+  6. Report the rolling rate, `window_size`, and the verdict: `OK` if below 20%, `AT RISK` if 20% ≤ rate < 30%, `TRIPPED` if rate ≥ 30%.
 
 If `TRIPPED`, surface it prominently in Step 2.6.
 
