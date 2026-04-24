@@ -125,9 +125,10 @@ Read `.assurance/intent-check-fp-tracker.csv` (columns: `date,invariant_touched,
 - If it exists:
   1. Filter rows to the rolling 2-week window ending today.
   2. Count rows where `phase_verdict` disagrees with `human_verdict` — those are false positives.
-  3. Compute `FP rate = false_positives / total_rows_in_window`.
-  4. Compare against the 30% kill criterion.
-  5. Report the rolling rate, sample size, and the verdict: `OK` if below 20%, `AT RISK` if 20% ≤ rate < 30%, `TRIPPED` if rate ≥ 30%.
+  3. If `total_rows_in_window == 0`, report sample size 0 and verdict `INSUFFICIENT DATA` — do not compute a rate or compare against the kill criterion.
+  4. Otherwise, compute `FP rate = false_positives / total_rows_in_window`.
+  5. Compare against the 30% kill criterion.
+  6. Report the rolling rate, sample size, and the verdict: `OK` if below 20%, `AT RISK` if 20% ≤ rate < 30%, `TRIPPED` if rate ≥ 30%.
 
 If `TRIPPED`, surface it prominently in Step 2.6.
 
@@ -188,7 +189,7 @@ Present the full dashboard in this order:
 - Sample size: N
 - False positives: M
 - FP rate: X%  (kill criterion: 30%)
-- Verdict: OK | AT RISK | TRIPPED
+- Verdict: OK | AT RISK | TRIPPED | INSUFFICIENT DATA
 
 ### verify-kernel
 - Last run: <timestamp or "unknown">
