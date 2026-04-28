@@ -15,11 +15,11 @@ argument-hint: "[optional: path to repo root, defaults to cwd]"
 ## Description
 
 Pre-onboarding diagnostic for the 6-layer assurance hierarchy (see
-`assurance-hierarchy.md` in the research literature). Inspects a repo, detects
-its primary language and existing tooling, and emits a repo-specific projection
-table for Layers 1–6 — **derived for this repo**, not copied from the canonical
-xylem projection. Concludes with a prioritised gap list and a recommended next
-step (typically `/assurance-init`).
+`../../../docs/research/assurance-hierarchy.md`). Inspects a repo, detects its
+primary language and existing tooling, and emits a repo-specific projection
+table for Layers 1–6 — **derived for this repo**, not copied from any canonical
+per-layer projection. Concludes with a prioritised gap list and a recommended
+next step (typically `/assurance-init`).
 
 Run before any other `/assurance-*` skill, so the user knows what reach is
 realistic for their ecosystem before they invest in scaffolding.
@@ -177,7 +177,9 @@ Apply the following ecosystem rules verbatim.
 ### Step 5: Emit the Projection Table
 
 Produce a markdown section titled `## Assurance Hierarchy — <repo> Projection`
-that mirrors the xylem projection format. For each layer, emit a row with:
+that follows the per-layer projection format described in
+`../../../docs/research/assurance-hierarchy.md`. For each layer, emit a row
+with:
 
 - **Layer #** and short name.
 - **Hierarchy reach** — the canonical one-line description (what the layer
@@ -185,41 +187,25 @@ that mirrors the xylem projection format. For each layer, emit a row with:
 - **This repo's reach today** — derived from Steps 2–4. State tooling limits
   explicitly.
 
-Example shape (derive the content; do not copy xylem's values):
+Example shape (the point of the example is the format — derive every value
+from this repo, do not copy any reference example):
 
 ```
 ## Assurance Hierarchy — <repo> Projection
 
-**Primary language:** Go (secondary: TypeScript frontend, tracked separately).
+**Primary language:** <detected primary> (secondary: <detected secondary>, tracked separately).
 
-**Layer 1 (formally verified pure code).** Reachable for pure, sequential
-functions via Dafny through the `crosscheck` plugin. No `.dfy` files or spec
-registry present today — Layer 1 is **available but not yet used**. Candidates
-likely in `internal/queue/` and `internal/retry/` based on file names; confirm
-via `/suggest-specs`.
-
-**Layer 2 (compilation correctness).** **Not addressable.** No verified Go
-compiler exists; `gc` is part of the trusted computing base.
-
-**Layer 3 (contract graph verification).** Pairwise contracts via Gobra
-possible near-term for a narrow module (not installed). End-to-end subgraph
-verification aspirational — no Go-native contract-graph verifier in general
-use.
-
-**Layer 4 (implementation-spec alignment).** Available the moment Layer 1
-lands. Requires `dafny_verify` wired into pre-commit or CI on touched `.dfy`
-files. Not wired today.
-
-**Layer 5 (spec-intent alignment).** Available via `/intent-check` once
-`docs/invariants/` exists with at least one module doc. Probabilistic (~96%);
-enforce the 30% FP kill criterion from the start.
-
-**Layer 6 (spec completeness).** Best-effort. Blocked on the same prerequisite
-(`docs/invariants/`). `/spec-adversary` and `/acceptance-oracle-draft`
-will be runnable after `/assurance-init`.
+| Layer | Reach | Tooling | Notes |
+|---|---|---|---|
+| Layer 1 (formally verified pure code) | Restricted to pure functional logic | Dafny 4.x via `crosscheck` | Compiles to Python/Go; no concurrency model |
+| Layer 2 (compilation correctness) | Not addressable | — | Compiler/runtime in trusted base |
+| Layer 3 (contract graph verification) | Pairwise: partial; end-to-end: aspirational | <ecosystem contract tool, if any> | No general-purpose subgraph verifier |
+| Layer 4 (implementation–spec alignment) | Available once Layer 1 lands | `dafny_verify` in pre-commit / CI | Triggered on touched spec or impl files |
+| Layer 5 (spec–intent alignment) | Probabilistic (~96%) | `/intent-check` (two-LLM round-trip) | Requires populated `docs/invariants/` |
+| Layer 6 (spec completeness) | Best-effort | `/spec-adversary`, `/acceptance-oracle-draft` | Requires at least one module invariant doc |
 ```
 
-Derive every bullet from what Steps 2–4 actually found. If the repo already
+Derive every row from what Steps 2–4 actually found. If the repo already
 has `.dfy` files, say so. If it has `docs/invariants/` already populated, say
 so and recommend `/assurance-status` rather than `/assurance-init`.
 
@@ -283,7 +269,7 @@ hand-roll a coverage script for now."
 - [ ] Primary language detected with a cited manifest path (e.g., `go.mod:1`)
 - [ ] Secondary languages recorded separately, not merged into the primary projection
 - [ ] Existing tooling signals cited with file paths, not just named
-- [ ] Per-layer projection derived from the detected tooling, not copied from the xylem canonical
+- [ ] Per-layer projection derived from the detected tooling, not copied from any reference example
 - [ ] Every "not addressable" claim names the specific missing tool (e.g., "no verified Go compiler")
 - [ ] Rust repos note MIR-level partial Layer 2 reach rather than silent omission
 - [ ] Python / Ruby / Java / C# repos explicitly state Layer 1 is unreachable without a verifier bridge
