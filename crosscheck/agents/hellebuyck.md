@@ -135,7 +135,7 @@ Every result must pass these quality gates before delivery:
 
 **For spec-chain verification output (`/intent-check`, `/spec-adversary`):**
 - **Structural separation** — `/intent-check` uses two distinct model contexts (back-translator blind to original requirement, diff-checker compares)
-- **FP-tracker appended** — `/intent-check` writes a CSV row matching the xylem schema (`date,invariant_touched,phase_verdict,human_verdict`) and a JSON attestation with `protected_files / content_hash / verdict / checked_at / pipeline_output`
+- **FP-tracker appended** — `/intent-check` writes a CSV row matching the FP-tracker schema documented in `../skills/intent-check/references/fp-tracker-schema.md` (`date,invariant_touched,phase_verdict,human_verdict`) and a JSON attestation with `protected_files / content_hash / verdict / checked_at / pipeline_output`
 - **Signal-to-noise** — `/spec-adversary` proposes ≤3 candidate invariants, each with accept/reject/defer radio formatting; avoid spraying low-value suggestions
 - **Best-effort honesty** — Layer 6 output is explicitly labelled best-effort; no false claim of completeness
 
