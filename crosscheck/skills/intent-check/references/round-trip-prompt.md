@@ -1,6 +1,6 @@
 # Round-trip informalization: the two verbatim prompts
 
-This document contains the two prompt templates used by `/intent-check`. They are intentionally verbatim and intentionally strict — the calibration work in `/Users/harry.nicholls/repos/xylem/docs/assurance/next/15-intent-check-calibration.md` identified both as load-bearing fixes for the FP rate (rationale blindness, carve-out blindness, contradictory-output models).
+This document contains the two prompt templates used by `/intent-check`. They are intentionally verbatim and intentionally strict — upstream calibration work identified both as load-bearing fixes for the FP rate (rationale blindness, carve-out blindness, contradictory-output models).
 
 Do not soften either prompt without updating the skill's verification checklist and re-running the kill-criterion math on the rolling window.
 
@@ -54,7 +54,7 @@ TEST:
 
 ### Why Section 2 is mandatory
 
-Calibration finding FP #6 (xylem session 2026-04-23): a test at
+Calibration finding FP #6 (calibration session 2026-04-23): a test at
 `queue_invariants_prop_test.go:452-457` carried a 6-line rationale explaining
 that clock values were zeroed because of wall-clock drift between runs. The
 earlier single-paragraph back-translator described the *behaviour* accurately

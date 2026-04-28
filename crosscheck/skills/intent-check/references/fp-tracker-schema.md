@@ -2,7 +2,7 @@
 
 `/intent-check` appends one row to `.assurance/intent-check-fp-tracker.csv` per pipeline run. The tracker is the only persistent record of round-trip verdicts and is the input to the 30% kill criterion that decides whether Layer 5 stays online.
 
-The schema matches the xylem tracker at `/Users/harry.nicholls/repos/xylem/docs/assurance/next/07-fp-tracker.csv` verbatim. Parity is deliberate — the plan's "adopt plan defaults" decision mandates using the xylem schema so calibration work done in one repo transfers to the next.
+The schema is inherited verbatim from the upstream design referenced in `../../../docs/research/assurance-hierarchy.md`. Parity is deliberate — keeping the columns, types, and enum values fixed means calibration work done in one repo transfers cleanly to the next.
 
 ## Schema
 
@@ -19,7 +19,7 @@ date,invariant_touched,phase_verdict,human_verdict
 | `phase_verdict`   | enum   | skill      | `pass` when diff-checker `match=true` AND `confidence_pct>=80`; otherwise `fail`.          |
 | `human_verdict`   | enum   | human      | One of `genuine`, `genuine-planted`, `partial`, `spurious`, or empty (awaiting review).   |
 
-**`invariant_touched` naming convention.** The label must be stable enough that two runs against the same invariant produce grep-comparable strings. Follow the xylem style:
+**`invariant_touched` naming convention.** The label must be stable enough that two runs against the same invariant produce grep-comparable strings. Follow this style:
 
 ```
 <module-doc>.md <invariant-id> (<short scope descriptor>)
@@ -115,9 +115,9 @@ Skill behaviour against this number:
 | >= 3          | <= 30%          | Proceed silently.                                                                         |
 | >= 3          | > 30%           | **Refuse to run.** Emit the kill-criterion message from Step 0 of the skill.              |
 
-Why 30%: the threshold is inherited from xylem `07-intent-check-phase.md` acceptance criteria and confirmed in `15-intent-check-calibration.md`. A pipeline that cries wolf more than ~1 time in 3 erodes trust faster than the spec-intent drift it was meant to catch.
+Why 30%: the threshold is inherited from the upstream design (see `../../../docs/research/assurance-hierarchy.md` for the rationale). A pipeline that cries wolf more than ~1 time in 3 erodes trust faster than the spec-intent drift it was meant to catch.
 
-Why 14 days: matches the xylem "2 weeks of live operation" acceptance criterion. Short enough that a recent prompt regression trips the kill quickly; long enough that a single bad day doesn't overreact.
+Why 14 days: matches the "2 weeks of live operation" acceptance criterion from the same source. Short enough that a recent prompt regression trips the kill quickly; long enough that a single bad day doesn't overreact.
 
 Why ignore empty `human_verdict`: the reviewer hasn't ruled yet. Counting empty cells either way biases the rate. The cost is that a repo with zero human review will see `window_size=0` forever — that is the correct signal (no evidence either way).
 
@@ -127,6 +127,6 @@ Why ignore empty `human_verdict`: the reviewer hasn't ruled yet. Counting empty 
 - **Weekly:** scan for trends — is any invariant generating only spurious flags? If so, the prose is probably ambiguous; consider amending it via `/protected-surface-amend` rather than re-labelling flags.
 - **Before any prompt change:** snapshot the tracker so the FP-rate impact of the prompt change is measurable.
 
-## Interoperability with xylem
+## Schema portability
 
-If you run `/intent-check` in a repo that already inherits a xylem-shaped tracker, the rows are directly concatenatable — the columns, types, and enum values are identical. This is the primary benefit of parity.
+Because the columns, types, and enum values are fixed, rows from different repos are directly concatenatable into a single dataset. This is the primary benefit of holding the schema steady — calibration analyses (FP-rate trends, prompt-regression detection, per-invariant noise profiling) can pool data across repos without bespoke ETL.
