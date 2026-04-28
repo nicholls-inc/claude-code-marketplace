@@ -17,7 +17,7 @@ argument-hint: "[optional: invariant doc path] [optional: covering test path]"
 
 Operationalise Layer 5 (spec-intent alignment) of the assurance hierarchy as a portable, repo-agnostic Claude Code skill. The input is a triple — an **invariant prose description**, a **covering property test**, and the **code diff** the user wants to ship. The output is a structured verdict (match / mismatch + confidence + reason), an appended row in a per-repo false-positive tracker CSV, and a content-hashed JSON attestation that a companion pre-commit hook can check without invoking an LLM.
 
-The skill is a portable analog of Midspiral's `claimcheck` and xylem's `xylem-intent-check` binary. It is structurally adversarial by construction: the back-translator is **blind to the original intent prose**, so it cannot tautologically restate it, and the diff-checker is forced to scan for carve-outs and rationale comments before rendering a verdict. These two prompt-level guardrails are the Phase-1 calibration fixes that drive the false-positive rate below the 30% kill criterion.
+The skill is a portable analog of Midspiral's `claimcheck` and an internal Go-binary precursor. It is structurally adversarial by construction: the back-translator is **blind to the original intent prose**, so it cannot tautologically restate it, and the diff-checker is forced to scan for carve-outs and rationale comments before rendering a verdict. These two prompt-level guardrails are the Phase-1 calibration fixes that drive the false-positive rate below the 30% kill criterion.
 
 This is a methodology skill. It does not ship a binary — Claude drives the pipeline itself, reading files, invoking the two prompts in the required order, writing the tracker row and the attestation, and running the kill-criterion math before committing. The companion pre-commit hook (described in `references/attestation-schema.md`) is fast and LLM-free: it only checks hashes and verdicts.
 
@@ -113,11 +113,11 @@ date,invariant_touched,phase_verdict,human_verdict
 ```
 
 - `date` — today in `YYYY-MM-DD`.
-- `invariant_touched` — a short label identifying the invariant under test, e.g. `queue.md I2 (6-of-19 field mutation coverage)`. Match the style of the xylem tracker (see `references/fp-tracker-schema.md`).
+- `invariant_touched` — a short label identifying the invariant under test, e.g. `queue.md I2 (6-of-19 field mutation coverage)`. Match the style described in `references/fp-tracker-schema.md`.
 - `phase_verdict` — `pass` if `match == true` **AND** `confidence_pct >= 80`; `fail` otherwise. This must match the `verdict` written to the attestation in Step 6 — low-confidence matches are tracked as `fail` so the kill criterion picks up prompt weakness, and the attestation hook refuses the commit.
 - `human_verdict` — leave **empty** at skill-run time. A human reviewer fills this in later as `genuine`, `genuine-planted`, `partial`, or `spurious`. The kill-criterion math ignores empty cells (see `references/fp-tracker-schema.md` for the append logic and the rolling-window computation).
 
-The schema matches xylem's CSV verbatim — this is the plan's "adopt plan defaults" decision. Do not add columns; do not rename columns.
+The schema is fixed — do not add columns and do not rename columns. Stability across repos is what makes the rows directly concatenatable for cross-repo calibration analysis.
 
 ### Step 6: Write the Attestation
 
@@ -183,7 +183,7 @@ If `match == false`, tell the user exactly what the back-translator perceived vs
 - [ ] Back-translation contains both Section 1 (behavioural guarantees) and Section 2 (rationale comments, verbatim with file:line)
 - [ ] Diff-checker performed the mandatory Step 1 carve-out scan before rendering a verdict
 - [ ] Diff-checker output passes semantic validation (no contradictory match/reason, reason >= 20 chars when non-empty)
-- [ ] FP-tracker row appended with the exact xylem schema (date, invariant_touched, phase_verdict, human_verdict)
+- [ ] FP-tracker row appended with the exact schema (date, invariant_touched, phase_verdict, human_verdict)
 - [ ] Attestation emitted with sorted protected_files, SHA-256 content_hash, verdict, RFC3339 checked_at, and pipeline_output
 - [ ] Pre-commit hook behaviour described (not installed) so the user can wire it up via their hook config
 - [ ] User given the remediation path if verdict is fail (fix code / fix test / amend invariant with /protected-surface-amend)

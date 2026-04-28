@@ -2,7 +2,7 @@
 
 `/intent-check` writes `.assurance/intent-check-attestation.json` on every run. The attestation is the deterministic, LLM-free record that a companion pre-commit hook uses to decide whether a commit touching protected-surface files is allowed.
 
-The pattern is lifted from xylem (`/Users/harry.nicholls/repos/xylem/docs/assurance/next/07-intent-check-phase.md`, lines 34–58) and generalised so any repo can adopt it without a Go binary.
+The pattern is lifted from the upstream design (see `../../../docs/research/assurance-hierarchy.md`) and generalised so any repo can adopt it without a Go binary.
 
 ## Why an attestation (not just a CI job)
 
