@@ -37,8 +37,8 @@ Find and read the target repo's protected-surfaces rule file:
 
 Read the rule file and extract the two canonical classes (mirrors the plan's partition):
 
-- **Class A — Harness/workflow definitions.** Agent config, prompts, pipeline definitions, workflow YAMLs. Examples (xylem): `.xylem/HARNESS.md`, `.xylem.yml`, `.xylem/workflows/*.yaml`, `.xylem/prompts/*/*.md`.
-- **Class B — Module invariant specifications & property tests.** Load-bearing contracts for modules and the tests that enforce them. Examples (xylem): `docs/invariants/*.md`, `cli/internal/*/invariants_prop_test.go`, `cli/internal/*/*_invariants_prop_test.go`.
+- **Class A — Harness/workflow definitions.** Agent config, prompts, pipeline definitions, workflow YAMLs. Examples: `.claude/agents/*.md`, `.claude/settings.json`, `CLAUDE.md`, `.github/workflows/*.yml`, `.github/copilot-instructions.md`.
+- **Class B — Module invariant specifications & property tests.** Load-bearing contracts for modules and the tests that enforce them. Examples: `docs/invariants/*.md` and the module-level property-test files that enforce them — by repo convention, e.g. `**/invariants_prop_test.{go,py,ts}`.
 
 If the rule file partitions differently (e.g., more than two classes, or different labels), adopt its vocabulary verbatim and map it back to A/B in a footnote on the amendment block. Do not force a repo's taxonomy into A/B if the repo has elaborated it.
 
@@ -210,6 +210,6 @@ Target protected-surface file path; optionally a short change summary.
 
 Examples:
 - `/protected-surface-amend docs/invariants/queue.md "add I15 drain-on-shutdown invariant"`
-- `/protected-surface-amend .xylem/workflows/fix-bug.yaml "insert intent-check phase before commit"`
+- `/protected-surface-amend .claude/agents/byfuglien.md "tighten output validation step"`
 - `/protected-surface-amend cli/internal/queue/queue_invariants_prop_test.go` — asks for the change summary interactively
 - `/protected-surface-amend` — asks for the target file interactively
