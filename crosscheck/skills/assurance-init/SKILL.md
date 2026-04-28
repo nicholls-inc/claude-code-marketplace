@@ -78,7 +78,7 @@ If the user passed a comma-separated list as `$ARGUMENTS`, use those names and c
 
 ### Step 3: Write `docs/assurance/ROADMAP.md`
 
-Create the file with the following sections (filled with generalised language — strip any crosscheck- or xylem-specific references):
+Create the file with the following sections (filled with generalised language — strip any tool-name-specific references):
 
 1. **Purpose** — one paragraph: "This directory tracks the execution of the 6-layer assurance hierarchy as applied pragmatically to this repository. It exists so the plan survives across long timeframes without depending on conversation context or ephemeral plan files. Each numbered item below has its own standalone doc under `immediate/`, `next/`, `medium-term/`, or `aspirational/`. That doc is the source of truth for scope, acceptance criteria, and kill criteria."
 2. **Strategic Context** — state the long-term goal: "deterministic AI-driven software development": formally verified kernels for critical pure logic, contract graphs for integration boundaries, and spec-intent alignment checks for everything else. Include a "current projection" placeholder table with the six layers and `TODO: fill from /assurance-layer-audit output` in each reach cell.
@@ -327,7 +327,7 @@ After both skills run, `/assurance-status` Phase 1 should pass.
       the real gate)
 - [ ] Summary names the next two skills: `/draft-invariants` then
       `/invariant-coverage-scaffold`
-- [ ] No xylem- or crosscheck-specific references leaked into the generated
+- [ ] No tool-name-specific references leaked into the generated
       files (text should read as repo-agnostic)
 - [ ] Pre-flight overwrite check (Step 1.3) ran and any pre-existing target
       files were either skipped or overwritten per the user's decision — no
