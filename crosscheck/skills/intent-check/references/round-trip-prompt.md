@@ -54,16 +54,9 @@ TEST:
 
 ### Why Section 2 is mandatory
 
-Calibration finding FP #6 (calibration session 2026-04-23): a test at
-`queue_invariants_prop_test.go:452-457` carried a 6-line rationale explaining
-that clock values were zeroed because of wall-clock drift between runs. The
-earlier single-paragraph back-translator described the *behaviour* accurately
-("ignores clock values") but did not surface the *rationale*. The diff-checker
-then compared the literal behaviour against the spec's literal wording and
-flagged a substantive gap — a false positive.
+Calibration finding FP #6 (calibration session 2026-04-23): a test at `queue_invariants_prop_test.go:452-457` carried a 6-line rationale explaining that clock values were zeroed because of wall-clock drift between runs. The earlier single-paragraph back-translator described the *behaviour* accurately ("ignores clock values") but did not surface the *rationale*. The diff-checker then compared the literal behaviour against the spec's literal wording and flagged a substantive gap — a false positive.
 
-Forcing Section 2 to list rationale comments verbatim, with file+line anchors,
-makes the rationale first-class evidence rather than an optional summary.
+Forcing Section 2 to list rationale comments verbatim, with file+line anchors, makes the rationale first-class evidence rather than an optional summary.
 
 ## Prompt 2: Diff-checker (sees both original intent + back-translation)
 
@@ -154,26 +147,16 @@ BACK-TRANSLATION (both sections from the blind back-translator):
 
 ### Why Step 1 is mandatory (not merely recommended)
 
-Calibration: the diff-checker has been observed to capture the spec's main
-claim but silently ignore conditional scope modifiers when rendering a verdict.
-This is a latent failure mode that hides behind partially-correct findings.
-Forcing a *visible* Step 1 output — quoted clauses, classified by taxonomy —
-means the model cannot silently skip the scan.
+Calibration: the diff-checker has been observed to capture the spec's main claim but silently ignore conditional scope modifiers when rendering a verdict. This is a latent failure mode that hides behind partially-correct findings. Forcing a *visible* Step 1 output — quoted clauses, classified by taxonomy — means the model cannot silently skip the scan.
 
 ## Semantic validation (applied by Claude after parsing, not part of the prompt)
 
-After unmarshaling the diff-checker's JSON, the skill applies two defensive
-rules:
+After unmarshaling the diff-checker's JSON, the skill applies two defensive rules:
 
-1. `match == true` AND `mismatch_reason` non-empty → contradictory output.
-   Flip to `match=false, confidence_pct=40, confidence_basis="spec-ambiguous",
-   mismatch_category="missing_property"`. Fail-closed interpretation is safer
-   than trusting either half of the contradiction.
-2. `match == false` AND `len(strip(mismatch_reason)) < 20` → reject as
-   truncation. Ask the user to re-run.
+1. `match == true` AND `mismatch_reason` non-empty → contradictory output. Flip to `match=false, confidence_pct=40, confidence_basis="spec-ambiguous", mismatch_category="missing_property"`. Fail-closed interpretation is safer than trusting either half of the contradiction.
+2. `match == false` AND `len(strip(mismatch_reason)) < 20` → reject as truncation. Ask the user to re-run.
 
-These rules live in the skill, not the prompt, so they catch model
-contradictions even if the prompt is tampered with.
+These rules live in the skill, not the prompt, so they catch model contradictions even if the prompt is tampered with.
 
 ## Placeholder expansion order (exact)
 
@@ -184,7 +167,4 @@ contradictions even if the prompt is tampered with.
 | `{invariant_prose}` | The relevant invariant section from `docs/invariants/<module>.md` |
 | `{back_translation}`| Section 1 + Section 2 from Prompt 1, verbatim               |
 
-Claude must substitute these placeholders literally, without paraphrasing,
-truncating, or re-formatting the inputs. If a file is too large to fit in the
-context window, scope it down rather than summarising it — a summary by the
-same LLM that runs the pipeline is contamination.
+Claude must substitute these placeholders literally, without paraphrasing, truncating, or re-formatting the inputs. If a file is too large to fit in the context window, scope it down rather than summarising it — a summary by the same LLM that runs the pipeline is contamination.
