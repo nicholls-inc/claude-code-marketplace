@@ -254,9 +254,7 @@ line when the property test lands.
 - `docs/assurance/ROADMAP.md` — strategic context.
 ```
 
-The `<!-- aspirational -->` markers indicate invariants that are declared but
-not yet covered by a property test — this keeps the future coverage gate from
-hard-failing on a freshly scaffolded repo.
+The `<!-- aspirational -->` markers indicate invariants that are declared but not yet covered by a property test — this keeps the future coverage gate from hard-failing on a freshly scaffolded repo.
 
 ### Step 7: Emit Pre-commit and CI Stubs (Dual-Track)
 
