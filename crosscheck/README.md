@@ -1,16 +1,63 @@
 # Crosscheck
 
-Crosscheck Claude's code claims using two complementary approaches: **formal verification** via Dafny for provably correct Python/Go code, and **semi-formal reasoning** for structured code analysis with evidence-grounded certificates.
-
-The agent, Byfuglien (/ˈbʌflɪn/), checks Claude's claims like their namesake checked opponents: no unsupported claims survive, no unverified code ships.
+Crosscheck checks Claude's code claims with two orchestrator agents — `byfuglien` (implementation) and `hellebuyck` (specification) — coordinating three pillars of assurance. The first pillar is formal verification with Dafny, producing provably correct Python/Go from natural-language specs. The second is semi-formal reasoning, which forces evidence-grounded certificates before any conclusion about a piece of code. The third is a 6-layer assurance hierarchy with governance scaffolding, so claims about correctness keep holding as the code evolves.
 
 ![03122-ezgif com-optimize](https://github.com/user-attachments/assets/260bd90a-59d1-4d5e-aada-4411d2db397b)
 
+## Quickstart
 
-Crosscheck was inspired by a desire for rigorous guarantees about AI generated code, and enhanced by this research: 
-* [Agentic Code Reasoning](https://arxiv.org/abs/2603.01896) (Ugare & Chandra, 2026), which demonstrated that structured semi-formal reasoning dramatically improves LLM accuracy on patch equivalence, fault localization, and code question answering
-* [Abductive Vibe Coding](https://arxiv.org/abs/2601.01199) (Murphy, Babikian & Chechik, 2026), whose hierarchical claim trees and Goal Structuring Notation informed the `/rationale` skill
-* [Vibe Coding Needs Vibe Reasoning](https://arxiv.org/abs/2511.00202) (Mitchell & Shaaban, 2025), whose autoformalization and continuous verification proposals shaped the `/suggest-specs` and `/check-regressions` skills.
+Install from the marketplace:
+
+```
+claude plugin marketplace add nicholls-inc/claude-code-marketplace
+claude plugin install crosscheck@nicholls
+```
+
+Then ask Claude to use one of the orchestrator agents:
+
+```
+Use the byfuglien agent to verify your bug fix
+Use the hellebuyck agent to scope this repo's assurance reach
+```
+
+## The two orchestrator agents
+
+**Byfuglien** (/ˈbʌflɪn/) owns the implementation chain: formal verification with Dafny and semi-formal reasoning over existing code. It covers Layers 1–3 of the assurance hierarchy — code-level correctness, behavioural evidence, and impl-level invariants. Named after Dustin Byfuglien, the crosschecking enforcer: no unsupported claim survives, no unverified code ships.
+
+**Hellebuyck** owns the specification chain: Layers 4–6 of the assurance hierarchy (impl–spec alignment, spec–intent alignment, and spec completeness) plus the governance scaffolding that keeps specs honest as code evolves. Named after Connor Hellebuyck, the goalie — the last line of defence when proof runs out and you have to argue that the spec itself was the right one.
+
+→ For the full handoff seam between the two agents, see [`./docs/agents.md`](./docs/agents.md).
+
+## Skills overview
+
+**Formal verification** — `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`. Dafny-backed proofs of business logic, with optional lightweight contracts and property-based tests when full proof is overkill.
+
+**Semi-formal reasoning** — `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`. Evidence-grounded code analysis adapted from "Agentic Code Reasoning" (Ugare & Chandra, 2026): premises, execution traces, and alternative-hypothesis checks before any conclusion.
+
+**Spec management & adequacy** — `/check-regressions`, `/suggest-specs`, `/rationale`. Keep verified specs from drifting, propose new spec targets, and bridge formal and informal verification with structured adequacy arguments.
+
+**Assurance hierarchy & governance** — nine skills covering Layers 4–6: `/intent-check`, `/spec-adversary`, `/acceptance-oracle-draft`, `/invariant-coverage-scaffold`, `/protected-surface-amend`, `/assurance-layer-audit`, `/assurance-init`, `/assurance-status`, `/assurance-roadmap-check`. Onboard a repo, audit its reach on the ladder, and keep governance notes from rotting.
+
+→ Full skill catalogue with trigger phrases at [`./docs/skills.md`](./docs/skills.md). For the assurance flow specifically, see [`./docs/assurance-hierarchy.md`](./docs/assurance-hierarchy.md).
+
+### Worked examples
+
+One teaser per category — see the linked docs for full usage.
+
+```
+/spec-iterate "function that returns the maximum element of a non-empty integer array"
+/reason "Is this function thread-safe?" src/cache.py
+/rationale src/sort.py "must return a sorted permutation of the input"
+/assurance-layer-audit
+```
+
+## Research grounding
+
+- [Agentic Code Reasoning](https://arxiv.org/abs/2603.01896) (Ugare & Chandra, 2026) — structured semi-formal reasoning improves LLM accuracy on patch equivalence, fault localization, and code question answering.
+- [Abductive Vibe Coding](https://arxiv.org/abs/2601.01199) (Murphy, Babikian & Chechik, 2026) — hierarchical claim trees and Goal Structuring Notation inform `/rationale`.
+- [Vibe Coding Needs Vibe Reasoning](https://arxiv.org/abs/2511.00202) (Mitchell & Shaaban, 2025) — autoformalization and continuous verification shape `/suggest-specs` and `/check-regressions`.
+- The 6-layer assurance hierarchy framework — see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md).
+- Brief literature review of formal verification + AI-assisted code assurance — see [`./docs/research/literature-review.md`](./docs/research/literature-review.md).
 
 ## Prerequisites
 
@@ -18,18 +65,7 @@ Crosscheck was inspired by a desire for rigorous guarantees about AI generated c
 - **Node.js** >= 18 — for the MCP server
 - **Claude Code** — with plugin support
 
-## Installation
-
-### The Easy Way
-```
-# Add the marketplace
-claude plugin marketplace add nicholls-inc/claude-code-marketplace
-
-# Install plugins
-claude plugin install crosscheck@nicholls
-```
-
-### Local Install
+## Local install
 
 **1. Clone this repo**
 
@@ -45,7 +81,7 @@ git clone https://github.com/nicholls-inc/claude-code-marketplace.git
 
 This builds a multi-stage Docker image (~300-400MB) with Dafny 4.11.0 and Z3.
 
-**2. Build the MCP server**
+**3. Build the MCP server**
 
 ```bash
 cd mcp-server
@@ -61,143 +97,7 @@ Point Claude Code at this plugin directory:
 claude --plugin-dir ./crosscheck
 ```
 
-## Usage
-
-### Orchestrator Agent — Byfuglien
-
-The `byfuglien` (/ˈbʌflɪn/) agent is the unified orchestrator. It classifies tasks, routes to the appropriate skill, and validates output quality. Named after Dustin Byfuglien — the crosschecking enforcer.
-
-For formal verification tasks, it runs the full pipeline: spec refinement → verified implementation → code extraction. For reasoning tasks, it selects the right analysis skill and enforces evidence standards.
-
-Ask Claude to:
-```
-Use the byfuglien agent to verify your bug fix
-```
-
-### Skills — Formal Verification
-
-Four skills for Dafny-backed formal verification:
-
-#### `/spec-iterate` — Specification Refinement
-
-Draft and verify a Dafny formal specification from a natural language description.
-
-```
-/spec-iterate "function that returns the maximum element of a non-empty integer array"
-```
-
-#### `/generate-verified` — Verified Implementation
-
-Generate a Dafny implementation body that satisfies a verified spec.
-
-```
-/generate-verified
-```
-
-#### `/extract-code` — Compile & Extract
-
-Compile verified Dafny to Python or Go, with boilerplate stripped.
-
-```
-/extract-code to python
-/extract-code to go
-```
-
-#### `/lightweight-verify` — Lightweight Verification Alternatives
-
-For functions where full formal verification is overkill, generate lightweight verification artifacts: design-by-contract assertions, property-based tests, or documented runtime invariant checks.
-
-```
-/lightweight-verify "function that returns the maximum element of a non-empty integer list" python
-/lightweight-verify "binary search on a sorted array returning the index or -1" go
-```
-
-### Skills — Semi-formal Reasoning
-
-Four skills for structured code analysis, adapted from the "Agentic Code Reasoning" paper (Ugare & Chandra, Meta, 2026). Semi-formal reasoning forces evidence gathering, execution tracing, and alternative hypothesis checking before any conclusion — preventing unsupported claims and confirmation bias.
-
-**Key results from the paper:**
-- Patch equivalence: 78%-88% accuracy (curated), 93% on real-world patches
-- Code question answering: 87% accuracy on RubberDuckBench (+9pp over standard)
-- Fault localization: +5-12pp over standard reasoning
-
-#### `/reason` — Semi-formal Code Reasoning
-
-General-purpose structured reasoning for any code question. Produces an evidence-backed certificate with premises, execution traces, alternative hypothesis checks, and formal conclusions. Includes optional deep-analysis mode with function trace tables and data flow analysis for code behavior questions.
-
-```
-/reason "Is this function thread-safe?" src/cache.py
-/reason "What does this function actually do?" src/utils.ts:42
-/reason "Will this refactor change the public API behavior?"
-```
-
-#### `/compare-patches` — Patch Equivalence Verification
-
-Determine whether two code patches are semantically equivalent by tracing execution through the test suite.
-
-```
-/compare-patches
-```
-
-#### `/locate-fault` — Fault Localization
-
-Locate the root cause of a failing test using 4-phase structured analysis: test semantics, code path tracing, divergence analysis, and ranked predictions.
-
-```
-/locate-fault "test_year_before_1000 fails with AttributeError" tests/test_dateformat.py
-```
-
-#### `/trace-execution` — Execution Path Tracing
-
-Hypothesis-driven execution path tracing that builds complete call graphs from entry point to leaf functions.
-
-```
-/trace-execution "format(value, format_string)" django/utils/dateformat.py
-/trace-execution "What happens when UserService.authenticate() is called with an expired token?"
-```
-
-### Skills — Spec Management & Adequacy
-
-Three skills for ongoing spec management and bridging formal/informal verification:
-
-#### `/check-regressions` — Regression Detection
-
-Scan the spec registry for verified Dafny specs whose associated source files have changed. Re-verify affected specs and report which properties still hold.
-
-```
-/check-regressions
-/check-regressions max-of-array
-/check-regressions --hard-only
-```
-
-#### `/suggest-specs` — Specification Discovery
-
-Analyze code to propose candidate formal specifications. Identifies functions that would benefit from verification and generates natural-language spec proposals.
-
-```
-/suggest-specs src/billing/calc.py
-/suggest-specs merge_intervals
-/suggest-specs
-```
-
-#### `/rationale` — Structured Adequacy Argument
-
-Build a hierarchical claim tree arguing that code adequately satisfies requirements. Each leaf is classified by verification method (formal, behavioral, static, semantic) and verified where possible.
-
-```
-/rationale src/sort.py "must return a sorted permutation of the input"
-/rationale billing/calc.py:42 "energy conservation: period1 + period2 == total"
-```
-
-## Core Principles — Semi-formal Reasoning
-
-1. Every claim must cite file:line evidence
-2. Always read actual code — never guess from function names
-3. Check alternative hypotheses before concluding
-4. The structured format IS the reasoning process, not just output formatting
-5. Name resolution matters — check for shadowing at every scope
-
-## MCP Tools
+## MCP tools
 
 The plugin exposes three MCP tools:
 
@@ -213,7 +113,7 @@ The plugin exposes three MCP tools:
 - **Source as string**: LLM passes Dafny code directly; the MCP server handles all file I/O internally
 - **Boilerplate stripping**: Compiled output has Dafny runtime imports and files removed automatically
 - **No Dafny artifacts committed**: Only clean Python/Go output is the deliverable
-- **On-demand skill loading**: The Byfuglien agent reads skill SKILL.md files on-demand via the Read tool, keeping baseline context lean
+- **On-demand skill loading**: Orchestrator agents read skill SKILL.md files on-demand via the Read tool, keeping baseline context lean
 
 ## Development
 
@@ -235,7 +135,7 @@ npm run test:e2e           # End-to-end tests (requires Docker)
 - vitest with fast-check for property-based testing
 - Docker image name configured via `DAFNY_DOCKER_IMAGE` env var (default: `crosscheck-dafny:latest`)
 
-## Known Limitations
+## Known limitations
 
 - **IO/networking**: Cannot be formally verified; requires `{:extern}` stubs
 - **Concurrency**: Dafny does not model concurrency; only sequential correctness is verified
