@@ -1,8 +1,18 @@
 # Crosscheck
 
+AI agents write plausible code fast. Plausible isn't the same as correct, and "looks fine" doesn't survive contact with production. Crosscheck gives you six layers of progressively stronger correctness checks, and four of them are shipping today.
+
 Crosscheck checks Claude's code claims with two orchestrator agents — `byfuglien` (implementation) and `hellebuyck` (specification) — coordinating three pillars of assurance. The first pillar is formal verification with Dafny, producing provably correct Python/Go from natural-language specs. The second is semi-formal reasoning, which forces evidence-grounded certificates before any conclusion about a piece of code. The third is a 6-layer assurance hierarchy with governance scaffolding, so claims about correctness keep holding as the code evolves.
 
 ![03122-ezgif com-optimize](https://github.com/user-attachments/assets/260bd90a-59d1-4d5e-aada-4411d2db397b)
+
+What you can run right now:
+- Layer 1 — proof, not vibes. /spec-iterate → /generate-verified → /extract-code produces Dafny-verified Python or Go. The compiler refuses to emit code that doesn't satisfy its spec. /lightweight-verify adds contracts and property tests where full verification is overkill.
+- Layer 4 — your spec and your code can't drift. /invariant-coverage-scaffold installs a pre-commit + CI gate tying every documented invariant to a covering test. /protected-surface-amend forces a structured governance note on every edit to load-bearing files. /check-regressions re-verifies specs whose source has moved.
+- Layer 5 — your spec actually matches what you meant. /intent-check runs round-trip informalization (~96% accuracy) so AI-drafted invariants get caught when they say something subtly different from the prose. /acceptance-oracle-draft locks user-observable flows into mechanically-verifiable scenarios upfront.
+- Layer 6 — what is your spec still missing? /spec-adversary adversarially probes stable modules for undocumented invariants.
+
+Why this matters for AI-driven development: the failure mode of an LLM coder isn't bad syntax — it's silent semantic drift, deleted guarantees, and under-specified contracts. Every layer here is a different machine-checkable trap for exactly that. Start with /assurance-layer-audit to see what's reachable in your repo, then /assurance-init to scaffold the governance, and /assurance-status weekly to watch for drift.
 
 ## Quickstart
 
