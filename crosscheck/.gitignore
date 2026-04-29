@@ -1,4 +1,6 @@
 node_modules/
 *.dfy
+# Layer 4 formal specs are intentionally tracked
+!mcp-server/specs/*.dfy
 /tmp/dafny-*
 .DS_Store
