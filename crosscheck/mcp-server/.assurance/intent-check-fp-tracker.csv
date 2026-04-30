@@ -1,0 +1,3 @@
+date,invariant_touched,phase_verdict,human_verdict
+2026-04-29,parseDafnyOutput.md I1-I7 (all invariants),pass,
+2026-04-29,shouldExclude.md I1-I6 (all invariants),pass,

@@ -1,0 +1,23 @@
+{
+  "protected_files": [
+    "crosscheck/docs/invariants/parseDafnyOutput.md",
+    "crosscheck/docs/invariants/shouldExclude.md",
+    "crosscheck/mcp-server/specs/parseDafnyOutput.dfy",
+    "crosscheck/mcp-server/specs/shouldExclude.dfy",
+    "crosscheck/mcp-server/src/__tests__/property/parseDafnyOutput.prop.test.ts",
+    "crosscheck/mcp-server/src/__tests__/property/shouldExclude.prop.test.ts"
+  ],
+  "content_hash": "337a3c2249df784b67e4bd3117de22bb9019df64ffb56132f69ba58f6fd25733",
+  "verdict": "pass",
+  "checked_at": "2026-04-29T15:05:00Z",
+  "pipeline_output": {
+    "back_translation": "### Run 1 \u2014 parseDafnyOutput\n\n#### Section 1: Behavioural guarantees\nThe function concatenates stdout and stderr with a newline, splits by newline, discards empty/whitespace-only lines, then iterates. Each line is placed in errors if it case-insensitively matches Error AND does not start with Dafny program verifier; otherwise placed in warnings if it case-insensitively matches Warning. Lines matching neither are discarded. Tests enforce: (a) every error contains error CI, (b) every warning contains warning CI, (c) errors and warnings are disjoint, (d) a line matching both goes to errors only, (e) Dafny program verifier-prefixed lines are excluded from errors, (f) empty input produces empty output, (g) total categorized <= non-empty input lines.\n\n#### Section 2: Rationale comments\nNone. The exclusion !/^Dafny program verifier/.test(line) is a silent carve-out \u2014 the Dafny verifier summary is metadata, not a diagnostic.\n\n### Run 2 \u2014 shouldExclude\n\n#### Section 1: Behavioural guarantees\nThe function extracts a basename from the file path, then applies target-specific rules. For Python: excludes if basename == _dafny.py, or path contains _dafny.py, or basename == __pycache__, or path contains __pycache__. For Go: excludes if basename == dafny.go or System_.go, or path contains /dafny/ or /System_/ as a path segment. Tests confirm the exclusion rules and target isolation \u2014 Python patterns do not affect Go and vice versa.\n\n#### Section 2: Rationale comments\nNone. The exclusion lists are defined as exported module-level constants (PYTHON_EXCLUDE_FILES, GO_EXCLUDE_FILES, GO_EXCLUDE_DIRS) \u2014 implicit documentation.",
+    "diff_result": {
+      "match": true,
+      "mismatch_reason": "",
+      "mismatch_category": "clean_match",
+      "confidence_pct": 91,
+      "confidence_basis": "rationale-absent"
+    }
+  }
+}
