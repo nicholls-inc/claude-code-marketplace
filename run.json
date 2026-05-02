@@ -177,14 +177,125 @@
     "in_place": false
   },
   "graph_source": "digraph Hello {\n    graph [goal=\"Say hello and demonstrate a basic Fabro workflow\"]\n    rankdir=LR\n\n    start [shape=Mdiamond, label=\"Start\"]\n    exit  [shape=Msquare, label=\"Exit\"]\n\n    greet [label=\"Greet\", prompt=\"Say hello! Introduce yourself and explain that this is a test of the Fabro workflow engine.\"]\n\n    start -> greet -> exit\n}\n",
-  "start": null,
-  "status": {
-    "kind": "starting"
+  "start": {
+    "run_id": "01KQMXVXVY5KEE2SK54YD1Z4XK",
+    "start_time": "2026-05-02T18:05:42.616000339Z",
+    "run_branch": "fabro/run/01KQMXVXVY5KEE2SK54YD1Z4XK",
+    "base_sha": "7f4f9fbcc48320687b6b75fec7227b979abd5445"
   },
-  "status_updated_at": "2026-05-02T18:05:31.435804649Z",
+  "status": {
+    "kind": "running"
+  },
+  "status_updated_at": "2026-05-02T18:05:42.616020773Z",
   "pending_control": null,
-  "checkpoint": null,
-  "checkpoints": [],
+  "checkpoint": {
+    "timestamp": "2026-05-02T18:05:50.349460760Z",
+    "current_node": "greet",
+    "completed_nodes": [
+      "start",
+      "greet"
+    ],
+    "node_retries": {},
+    "context_values": {
+      "internal.node_visit_count": 1,
+      "internal.retry_count.start": 0,
+      "thread.start.current_node": "greet",
+      "graph.goal": "Say hello and demonstrate a basic Fabro workflow",
+      "failure_signature": "",
+      "internal.thread_id": "start",
+      "response.greet": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured and reproducible way.\n\nHere's what's happening under the hood in a typical Fabro workflow:\n\n1. **Task Definition** — A goal is specified (like this one: \"Say hello and demonstrate a basic Fabro workflow\").\n2. **Agent Execution** — An AI agent (me, Claude) is invoked to carry out the task, with access to tools, context, and a working directory.\n3. **Tool Use** — The agent can read/write files, run shell commands, search the web, spawn sub-agents, and more — all in service of the goal.\n4. **Structured Output** — Results are captured, and the workflow can branch, loop, or chain into further steps.\n\nIn this case, the workflow is beautifully simple: **say hello** ✅\n\nIf you'd like to see a more complex Fabro workflow in action — like exploring the codebase, running tests, or making code changes — just say the word! 🚀",
+      "internal.work_dir": "/workspace",
+      "failure_class": "",
+      "graph.rankdir": "LR",
+      "last_stage": "greet",
+      "outcome": "succeeded",
+      "internal.run_id": "01KQMXVXVY5KEE2SK54YD1Z4XK",
+      "internal.fidelity": "compact",
+      "current_node": "greet",
+      "last_response": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured ",
+      "internal.retry_count.greet": 0
+    },
+    "node_outcomes": {
+      "greet": {
+        "status": "succeeded",
+        "context_updates": {
+          "last_stage": "greet",
+          "last_response": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured ",
+          "response.greet": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured and reproducible way.\n\nHere's what's happening under the hood in a typical Fabro workflow:\n\n1. **Task Definition** — A goal is specified (like this one: \"Say hello and demonstrate a basic Fabro workflow\").\n2. **Agent Execution** — An AI agent (me, Claude) is invoked to carry out the task, with access to tools, context, and a working directory.\n3. **Tool Use** — The agent can read/write files, run shell commands, search the web, spawn sub-agents, and more — all in service of the goal.\n4. **Structured Output** — Results are captured, and the workflow can branch, loop, or chain into further steps.\n\nIn this case, the workflow is beautifully simple: **say hello** ✅\n\nIf you'd like to see a more complex Fabro workflow in action — like exploring the codebase, running tests, or making code changes — just say the word! 🚀"
+        },
+        "notes": "Stage completed: greet",
+        "usage": {
+          "input": {
+            "usage": {
+              "model": {
+                "provider": "anthropic",
+                "model_id": "claude-sonnet-4-6"
+              },
+              "tokens": {
+                "input_tokens": 356,
+                "output_tokens": 270,
+                "reasoning_tokens": 0,
+                "cache_read_tokens": 0,
+                "cache_write_tokens": 3896
+              }
+            },
+            "facts": {
+              "provider": "anthropic",
+              "cache_write_5m_tokens": 3896,
+              "cache_write_1h_tokens": 0
+            }
+          },
+          "total_usd_micros": 19728
+        }
+      },
+      "start": {
+        "status": "succeeded",
+        "usage": null
+      }
+    },
+    "next_node_id": "exit",
+    "node_visits": {
+      "start": 1,
+      "greet": 1
+    }
+  },
+  "checkpoints": [
+    [
+      20,
+      {
+        "timestamp": "2026-05-02T18:05:44.188608133Z",
+        "current_node": "start",
+        "completed_nodes": [
+          "start"
+        ],
+        "node_retries": {},
+        "context_values": {
+          "internal.work_dir": "/workspace",
+          "internal.retry_count.start": 0,
+          "internal.run_id": "01KQMXVXVY5KEE2SK54YD1Z4XK",
+          "current_node": "start",
+          "graph.goal": "Say hello and demonstrate a basic Fabro workflow",
+          "failure_class": "",
+          "internal.fidelity": "compact",
+          "internal.thread_id": null,
+          "failure_signature": "",
+          "graph.rankdir": "LR",
+          "internal.node_visit_count": 1,
+          "outcome": "succeeded"
+        },
+        "node_outcomes": {
+          "start": {
+            "status": "succeeded",
+            "usage": null
+          }
+        },
+        "next_node_id": "greet",
+        "node_visits": {
+          "start": 1
+        }
+      }
+    ]
+  ],
   "conclusion": null,
   "retro": null,
   "retro_prompt": null,
@@ -201,5 +312,41 @@
   "pull_request": null,
   "superseded_by": null,
   "pending_interviews": {},
-  "stages": {}
+  "stages": {
+    "start@1": {
+      "first_event_seq": 17,
+      "prompt": null,
+      "response": null,
+      "completion": {
+        "outcome": "succeeded",
+        "notes": null,
+        "failure_reason": null,
+        "timestamp": "2026-05-02T18:05:44.188177934Z"
+      },
+      "provider_used": null,
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    },
+    "greet@1": {
+      "first_event_seq": 21,
+      "prompt": null,
+      "response": null,
+      "completion": null,
+      "provider_used": {
+        "mode": "agent",
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6"
+      },
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    }
+  }
 }
