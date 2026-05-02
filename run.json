@@ -189,7 +189,7 @@
   "status_updated_at": "2026-05-02T18:05:42.616020773Z",
   "pending_control": null,
   "checkpoint": {
-    "timestamp": "2026-05-02T18:05:50.349460760Z",
+    "timestamp": "2026-05-02T18:05:53.432658710Z",
     "current_node": "greet",
     "completed_nodes": [
       "start",
@@ -197,25 +197,29 @@
     ],
     "node_retries": {},
     "context_values": {
+      "last_response": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured ",
+      "outcome": "succeeded",
+      "failure_class": "",
       "internal.node_visit_count": 1,
       "internal.retry_count.start": 0,
+      "graph.rankdir": "LR",
+      "internal.work_dir": "/workspace",
       "thread.start.current_node": "greet",
       "graph.goal": "Say hello and demonstrate a basic Fabro workflow",
-      "failure_signature": "",
-      "internal.thread_id": "start",
-      "response.greet": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured and reproducible way.\n\nHere's what's happening under the hood in a typical Fabro workflow:\n\n1. **Task Definition** — A goal is specified (like this one: \"Say hello and demonstrate a basic Fabro workflow\").\n2. **Agent Execution** — An AI agent (me, Claude) is invoked to carry out the task, with access to tools, context, and a working directory.\n3. **Tool Use** — The agent can read/write files, run shell commands, search the web, spawn sub-agents, and more — all in service of the goal.\n4. **Structured Output** — Results are captured, and the workflow can branch, loop, or chain into further steps.\n\nIn this case, the workflow is beautifully simple: **say hello** ✅\n\nIf you'd like to see a more complex Fabro workflow in action — like exploring the codebase, running tests, or making code changes — just say the word! 🚀",
-      "internal.work_dir": "/workspace",
-      "failure_class": "",
-      "graph.rankdir": "LR",
-      "last_stage": "greet",
-      "outcome": "succeeded",
       "internal.run_id": "01KQMXVXVY5KEE2SK54YD1Z4XK",
-      "internal.fidelity": "compact",
+      "response.greet": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured and reproducible way.\n\nHere's what's happening under the hood in a typical Fabro workflow:\n\n1. **Task Definition** — A goal is specified (like this one: \"Say hello and demonstrate a basic Fabro workflow\").\n2. **Agent Execution** — An AI agent (me, Claude) is invoked to carry out the task, with access to tools, context, and a working directory.\n3. **Tool Use** — The agent can read/write files, run shell commands, search the web, spawn sub-agents, and more — all in service of the goal.\n4. **Structured Output** — Results are captured, and the workflow can branch, loop, or chain into further steps.\n\nIn this case, the workflow is beautifully simple: **say hello** ✅\n\nIf you'd like to see a more complex Fabro workflow in action — like exploring the codebase, running tests, or making code changes — just say the word! 🚀",
+      "last_stage": "greet",
       "current_node": "greet",
-      "last_response": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured ",
-      "internal.retry_count.greet": 0
+      "failure_signature": "",
+      "internal.retry_count.greet": 0,
+      "internal.fidelity": "compact",
+      "internal.thread_id": "start"
     },
     "node_outcomes": {
+      "start": {
+        "status": "succeeded",
+        "usage": null
+      },
       "greet": {
         "status": "succeeded",
         "context_updates": {
@@ -247,16 +251,13 @@
           },
           "total_usd_micros": 19728
         }
-      },
-      "start": {
-        "status": "succeeded",
-        "usage": null
       }
     },
     "next_node_id": "exit",
+    "git_commit_sha": "1896a983a2d175079ce83833c986fe51c02ecbd0",
     "node_visits": {
-      "start": 1,
-      "greet": 1
+      "greet": 1,
+      "start": 1
     }
   },
   "checkpoints": [
@@ -294,9 +295,114 @@
           "start": 1
         }
       }
+    ],
+    [
+      31,
+      {
+        "timestamp": "2026-05-02T18:05:53.432658710Z",
+        "current_node": "greet",
+        "completed_nodes": [
+          "start",
+          "greet"
+        ],
+        "node_retries": {},
+        "context_values": {
+          "last_response": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured ",
+          "outcome": "succeeded",
+          "failure_class": "",
+          "internal.node_visit_count": 1,
+          "internal.retry_count.start": 0,
+          "graph.rankdir": "LR",
+          "internal.work_dir": "/workspace",
+          "thread.start.current_node": "greet",
+          "graph.goal": "Say hello and demonstrate a basic Fabro workflow",
+          "internal.run_id": "01KQMXVXVY5KEE2SK54YD1Z4XK",
+          "response.greet": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured and reproducible way.\n\nHere's what's happening under the hood in a typical Fabro workflow:\n\n1. **Task Definition** — A goal is specified (like this one: \"Say hello and demonstrate a basic Fabro workflow\").\n2. **Agent Execution** — An AI agent (me, Claude) is invoked to carry out the task, with access to tools, context, and a working directory.\n3. **Tool Use** — The agent can read/write files, run shell commands, search the web, spawn sub-agents, and more — all in service of the goal.\n4. **Structured Output** — Results are captured, and the workflow can branch, loop, or chain into further steps.\n\nIn this case, the workflow is beautifully simple: **say hello** ✅\n\nIf you'd like to see a more complex Fabro workflow in action — like exploring the codebase, running tests, or making code changes — just say the word! 🚀",
+          "last_stage": "greet",
+          "current_node": "greet",
+          "failure_signature": "",
+          "internal.retry_count.greet": 0,
+          "internal.fidelity": "compact",
+          "internal.thread_id": "start"
+        },
+        "node_outcomes": {
+          "start": {
+            "status": "succeeded",
+            "usage": null
+          },
+          "greet": {
+            "status": "succeeded",
+            "context_updates": {
+              "last_stage": "greet",
+              "last_response": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured ",
+              "response.greet": "Hello! 👋\n\nI'm Claude, an AI coding assistant made by Anthropic. This is a test of the **Fabro workflow engine** — a system for orchestrating automated, multi-step AI-driven tasks in a structured and reproducible way.\n\nHere's what's happening under the hood in a typical Fabro workflow:\n\n1. **Task Definition** — A goal is specified (like this one: \"Say hello and demonstrate a basic Fabro workflow\").\n2. **Agent Execution** — An AI agent (me, Claude) is invoked to carry out the task, with access to tools, context, and a working directory.\n3. **Tool Use** — The agent can read/write files, run shell commands, search the web, spawn sub-agents, and more — all in service of the goal.\n4. **Structured Output** — Results are captured, and the workflow can branch, loop, or chain into further steps.\n\nIn this case, the workflow is beautifully simple: **say hello** ✅\n\nIf you'd like to see a more complex Fabro workflow in action — like exploring the codebase, running tests, or making code changes — just say the word! 🚀"
+            },
+            "notes": "Stage completed: greet",
+            "usage": {
+              "input": {
+                "usage": {
+                  "model": {
+                    "provider": "anthropic",
+                    "model_id": "claude-sonnet-4-6"
+                  },
+                  "tokens": {
+                    "input_tokens": 356,
+                    "output_tokens": 270,
+                    "reasoning_tokens": 0,
+                    "cache_read_tokens": 0,
+                    "cache_write_tokens": 3896
+                  }
+                },
+                "facts": {
+                  "provider": "anthropic",
+                  "cache_write_5m_tokens": 3896,
+                  "cache_write_1h_tokens": 0
+                }
+              },
+              "total_usd_micros": 19728
+            }
+          }
+        },
+        "next_node_id": "exit",
+        "git_commit_sha": "1896a983a2d175079ce83833c986fe51c02ecbd0",
+        "node_visits": {
+          "greet": 1,
+          "start": 1
+        }
+      }
     ]
   ],
-  "conclusion": null,
+  "conclusion": {
+    "timestamp": "2026-05-02T18:05:53.446586522Z",
+    "status": "succeeded",
+    "duration_ms": 10816,
+    "final_git_commit_sha": "1896a983a2d175079ce83833c986fe51c02ecbd0",
+    "stages": [
+      {
+        "stage_id": "start",
+        "stage_label": "start",
+        "duration_ms": 0,
+        "retries": 0
+      },
+      {
+        "stage_id": "greet",
+        "stage_label": "greet",
+        "duration_ms": 6160,
+        "billing_usd_micros": 19728,
+        "retries": 0
+      }
+    ],
+    "billing": {
+      "input_tokens": 356,
+      "output_tokens": 270,
+      "total_tokens": 4522,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 3896,
+      "total_usd_micros": 19728
+    },
+    "total_retries": 0
+  },
   "retro": null,
   "retro_prompt": null,
   "retro_response": null,
@@ -313,6 +419,24 @@
   "superseded_by": null,
   "pending_interviews": {},
   "stages": {
+    "exit@1": {
+      "first_event_seq": 34,
+      "prompt": null,
+      "response": null,
+      "completion": {
+        "outcome": "succeeded",
+        "notes": null,
+        "failure_reason": null,
+        "timestamp": "2026-05-02T18:05:53.432793543Z"
+      },
+      "provider_used": null,
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    },
     "start@1": {
       "first_event_seq": 17,
       "prompt": null,
@@ -335,7 +459,12 @@
       "first_event_seq": 21,
       "prompt": null,
       "response": null,
-      "completion": null,
+      "completion": {
+        "outcome": "succeeded",
+        "notes": "Stage completed: greet",
+        "failure_reason": null,
+        "timestamp": "2026-05-02T18:05:50.349311350Z"
+      },
       "provider_used": {
         "mode": "agent",
         "provider": "anthropic",
