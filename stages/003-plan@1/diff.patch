@@ -1,0 +1,73 @@
+diff --git a/plan.md b/plan.md
+new file mode 100644
+index 0000000..b038c85
+--- /dev/null
++++ b/plan.md
+@@ -0,0 +1,67 @@
++# Plan: Field Report: Crosscheck Plugin Performance in wistful-pet Session
++
++## Verification track
++semi-formal
++
++## Steps
++
++1. **Add "Verify the Fix" step to `/reason` skill** — `crosscheck/skills/reason/SKILL.md`
++   - Insert new Step 5b between Step 5 (Formal Conclusion) and Step 6 (Summary)
++   - Title: "Step 5b: Verify the Proposed Fix"
++   - Mandate checking if the proposed solution introduces new instances of the same bug pattern (race conditions, data integrity issues, side-effect bypasses)
++   - Requires structured analysis: "Does this fix introduce: [RACE CONDITIONS] / [DATA INTEGRITY ISSUES] / [SIDE-EFFECT BYPASSES] / [OTHER BUGS]?"
++
++2. **Add exhaustive reading instruction to `/trace-execution` skill** — `crosscheck/skills/trace-execution/SKILL.md`
++   - Extend Step 2 (Structured File Exploration) with explicit exhaustive-read instruction
++   - Add rule: "Read the ENTIRE function body, line by line. Pay specific attention to filter/guard clauses that constrain which inputs reach later stages."
++   - Add to OBSERVATIONS template: "COVERAGE: [COMPLETE - all N lines read] / [PARTIAL - lines X-Y skipped]"
++
++3. **Add confidence calibration to `/trace-execution` skill** — `crosscheck/skills/trace-execution/SKILL.md`
++   - Extend Step 6 (Execution Summary) with confidence level similar to `/reason`
++   - Add mandatory field: "CONFIDENCE: [HIGH / MEDIUM / LOW] — HIGH requires all functions in path read in entirety; MEDIUM if any function partially read; LOW if external boundaries dominate"
++   - Add mechanical constraint: "If COVERAGE for any function in the path shows PARTIAL, confidence MUST be MEDIUM or below"
++
++4. **Update byfuglien's validation rules for `/trace-execution` output** — `crosscheck/agents/byfuglien.md`
++   - In Phase 4 (Validate Output), under "For semi-formal reasoning output", add new bullet for `/trace-execution` specifically:
++   - "**Completeness check** — if execution summary shows PARTIAL completeness, confidence must be MEDIUM or below; reject HIGH confidence claims from partial traces"
++   - "**Coverage verification** — spot-check that entry point functions were read in entirety (all lines, not skimmed)"
++
++## Tests / properties to add
++
++No automated tests required — this is a refactor of behavioral artifacts (skill methodologies and agent validation rules). Verification is manual via session testing.
++
++## Verification approach
++
++**Semi-formal reasoning via `/compare-patches`** (deferred to verify_byfuglien stage):
++
++1. **Structural integrity check**: Does each modified skill still have all required sections (Description, Instructions, Arguments)? Are step numbers sequential?
++
++2. **Patch comparison anchor**: The field report identifies three critical failures:
++   - W1: Missed filter in entry function → addressed by Step 2 (exhaustive read instruction + coverage tracking)
++   - W2: Overconfident assertion on incomplete trace → addressed by Step 3 (confidence calibration with mechanical constraint)
++   - W3: Proposed fix reintroduced TOCTOU → addressed by Step 1 (verify the fix step)
++
++3. **Execution trace simulation**: Given the wistful-pet scenario (TOCTOU race in Django model's `enroll_user`), would the updated skills force the behaviors that were missing?
++   - `/reason` Step 5b: Would it mandate checking if the proposed `leave() + create()` fix introduces a new race? **YES** — explicit check for race conditions in proposed fix.
++   - `/trace-execution` Step 2 coverage rule: Would it prevent skimming the sync task entry function? **YES** — "read ENTIRE function body, line by line" is explicit.
++   - `/trace-execution` Step 6 confidence calibration: Would it prevent the "definitively possible" claim on a partial trace? **YES** — mechanical constraint ties confidence to coverage completeness.
++
++4. **Validation cascade check**: Does byfuglien's Phase 4 enforcement actually reject violations?
++   - New rule: "reject HIGH confidence claims from partial traces" — would catch the W2 scenario.
++   - New rule: "spot-check that entry point functions were read in entirety" — would catch the W1 scenario.
++
++5. **No regression to other skills**: `/reason` and `/trace-execution` are independent skills. Changes to one don't affect the other's execution, and both are routed independently by byfuglien. No cross-skill dependencies introduced.
++
++## Risk register
++
++- **Risk**: Adding Step 5b to `/reason` could make sessions too long if the proposed fix is complex
++  - **Mitigation**: Step 5b applies the same structured format as Steps 1-5. The verification is scoped to "does this fix introduce the same bug class?" — not a full re-analysis. Estimated 1-2 minutes added to 4-minute reasoning sessions.
++
++- **Risk**: Exhaustive read instruction in `/trace-execution` could cause agents to read hundreds of lines in large functions
++  - **Mitigation**: The instruction is "read ENTIRE function body" for functions *in the trace path*, not all functions in the codebase. Execution traces typically involve 3-5 key functions. Also, large functions are a code smell — exhaustive reading pressure may surface refactoring opportunities.
++
++- **Risk**: Confidence calibration could be gamed (agent claims COMPLETE coverage when it was PARTIAL)
++  - **Mitigation**: The COVERAGE field is a structured self-report in the OBSERVATIONS output. Byfuglien's Phase 4 validation includes spot-checking entry point functions. This is not a cryptographic proof of coverage, but it's sufficient for internal reasoning artifacts where the agent has no adversarial incentive to lie.
++
++- **Risk**: Changes to behavioral artifacts might have unintended effects on agent behavior
++  - **Mitigation**: All changes are additive (new steps, new fields, new validation rules). No existing steps are removed or semantically altered. The `/reason` and `/trace-execution` skills remain structurally compatible with existing byfuglien routing logic.
