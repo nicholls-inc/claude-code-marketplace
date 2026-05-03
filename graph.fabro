@@ -1,0 +1,97 @@
+// Fabro workflow: issue-resolver
+//
+// Goal (run-supplied):  GitHub issue ID — bare number ("42"), short ref
+//                       ("#42"), or qualified ref ("owner/repo#42").
+//
+// Pipeline:
+//   start → analyze → plan → review (loop) → implement → verify (parallel) → exit
+//
+// The plan/review pair iterates at most twice (max_visits=2 on plan;
+// force-progress condition on the review gate after two visits).
+// Verification fans out to byfuglien (code correctness, real Dafny via MCP)
+// and hellebuyck (spec-intent + adversarial spec) and rejoins via wait_all.
+// Either verifier returning outcome=failed marks the run failed (goal_gate).
+
+digraph IssueResolver {
+    graph [
+        goal            = "Resolve a GitHub issue with verified planning, adversarial review, and dual-agent verification",
+        rankdir         = "LR",
+        max_node_visits = "20"
+    ]
+
+    start [shape=Mdiamond, label="Start"]
+    exit  [shape=Msquare,  label="Exit"]
+
+    analyze [
+        label            = "Analyze",
+        prompt           = "@prompts/analyze.md",
+        reasoning_effort = "high",
+        timeout          = "900s"
+    ]
+
+    plan [
+        label            = "Plan",
+        prompt           = "@prompts/plan.md",
+        reasoning_effort = "high",
+        max_visits       = 2,
+        timeout          = "600s"
+    ]
+
+    review [
+        label            = "Adversarial Review",
+        prompt           = "@prompts/review.md",
+        reasoning_effort = "high",
+        timeout          = "600s"
+    ]
+
+    implement [
+        label   = "Implement",
+        prompt  = "@prompts/implement.md",
+        timeout = "1800s"
+    ]
+
+    // --- Parallel verification fan-out -----------------------------------
+
+    verify_fanout [
+        shape       = component,
+        label       = "Verify (parallel)",
+        join_policy = "wait_all"
+    ]
+
+    verify_byfuglien [
+        label            = "Verify · byfuglien (code)",
+        prompt           = "@prompts/verify_byfuglien.md",
+        reasoning_effort = "high",
+        goal_gate        = "true",
+        timeout          = "900s"
+    ]
+
+    verify_hellebuyck [
+        label            = "Verify · hellebuyck (spec/intent)",
+        prompt           = "@prompts/verify_hellebuyck.md",
+        reasoning_effort = "high",
+        goal_gate        = "true",
+        timeout          = "900s"
+    ]
+
+    verify_join [shape=tripleoctagon, label="Reconcile verification"]
+
+    // --- Edges -----------------------------------------------------------
+
+    start -> analyze
+    analyze -> plan
+    plan -> review
+
+    // Review gate (priority: conditions evaluated first, highest weight wins)
+    review -> implement [label="approve",        condition="preferred_label=approve",                weight=10]
+    review -> implement [label="force-progress", condition="context.internal.node_visit_count >= 2", weight=8]
+    review -> plan      [label="revise",         condition="preferred_label=revise",                 weight=5]
+    review -> implement [label="default",                                                            weight=1]
+
+    implement -> verify_fanout
+    verify_fanout -> verify_byfuglien
+    verify_fanout -> verify_hellebuyck
+    verify_byfuglien  -> verify_join
+    verify_hellebuyck -> verify_join
+    verify_join -> exit
+}
