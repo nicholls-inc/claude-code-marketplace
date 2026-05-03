@@ -1,0 +1,123 @@
+diff --git a/crosscheck/agents/byfuglien.md b/crosscheck/agents/byfuglien.md
+index ab137cd..0000798 100644
+--- a/crosscheck/agents/byfuglien.md
++++ b/crosscheck/agents/byfuglien.md
+@@ -132,6 +132,8 @@ Every result must pass these quality gates before delivery:
+ - **Alternative hypothesis check** — at least one alternative considered and ruled out with evidence; if missing, add it before delivering
+ - **Confidence level** — HIGH/MEDIUM/LOW stated with justification
+ - **Claim classification** — premises and claims are tagged with `[STATIC]`/`[SEMANTIC]`/`[BEHAVIORAL]`/`[FORMAL]`
++- **Completeness check for `/trace-execution`** — if execution summary shows PARTIAL completeness, confidence must be MEDIUM or below; reject HIGH confidence claims from partial traces
++- **Coverage verification for `/trace-execution`** — spot-check that entry point functions were read in entirety: re-read the first function in the trace path, count lines via `wc -l`, compare to the line range cited in COVERAGE field. If mismatch detected (agent claimed COMPLETE but line count shows unread ranges), downgrade confidence to MEDIUM and append validation note: "[byfuglien: coverage incomplete, confidence adjusted]". If agent incorrectly reports COVERAGE = COMPLETE when lines were skipped, byfuglien's spot-check detects the mismatch and downgrades confidence. Agent does not re-run skill; output is annotated with correction.
+ 
+ **For all output:**
+ - **Verification checklist present** — output includes a Verification Checklist section with all bracketed items filled in from the analysis
+@@ -159,4 +161,4 @@ If any gate fails, re-execute the skill with explicit instructions to address th
+ ### General
+ - Respect user choice — if the user wants a specific skill, use it without further argument
+ - Offer alternatives — after completing one skill, suggest if another would add value
+-- Assess before committing — always classify before diving into a skill
++- Assess before committing — always classify before diving into a skill
+\ No newline at end of file
+diff --git a/crosscheck/skills/reason/SKILL.md b/crosscheck/skills/reason/SKILL.md
+index dd3fa06..ce88272 100644
+--- a/crosscheck/skills/reason/SKILL.md
++++ b/crosscheck/skills/reason/SKILL.md
+@@ -157,6 +157,31 @@ CONFIDENCE: [HIGH / MEDIUM / LOW]
+ 
+ If the confidence is LOW, explicitly list which premises remain unverified and what additional investigation would be needed to raise confidence.
+ 
++### Step 5b: Verify the Proposed Fix
++
++If the conclusion includes a proposed fix or solution, verify that the fix does not introduce new bugs. This step verifies the *prescription* (the fix), whereas Step 4 (Alternative Hypothesis Check) verified the *diagnosis* (the root cause analysis). Non-overlapping responsibilities.
++
++**Mandatory verification checklist:**
++```
++FIX VERIFICATION:
++Does this fix introduce:
++  [RACE CONDITIONS]: [YES / NO / UNCLEAR] — [specific analysis]
++  [DATA INTEGRITY ISSUES]: [YES / NO / UNCLEAR] — [specific analysis]
++  [SIDE-EFFECT BYPASSES]: [YES / NO / UNCLEAR] — [specific analysis]
++  [OTHER BUGS]: [YES / NO / UNCLEAR] — [specific analysis]
++```
++
++**Complexity threshold for abbreviated analysis:** If the proposed fix is >20 lines OR modifies >2 functions, Step 5b may be abbreviated to checklist-only analysis: "Does this fix fall into [RACE/INTEGRITY/BYPASS/OTHER] class? [YES/NO/UNCLEAR]" without full execution trace re-derivation.
++
++**Termination bound:** Step 5b depth ≤ 1. Single-pass checklist analysis only — no recursive `/reason` invocations for nested fix verification. If a fix is so complex it requires nested reasoning, flag as [UNCLEAR] and recommend breaking the fix into smaller increments.
++
++**Rules for fix verification:**
++- For each category, provide specific analysis citing the fix's code
++- If UNCLEAR, state what additional investigation would clarify
++- If any category shows YES, the fix must be revised before delivery
++- Simple fixes (≤20 lines, ≤2 functions) require full analysis
++- Complex fixes may use checklist mode to avoid unbounded analysis time
++
+ ### Step 6: Summary
+ 
+ Present a concise human-readable summary of the finding. This should be 2-5 sentences that a developer can quickly scan to understand:
+@@ -191,4 +216,4 @@ Examples:
+ - `/reason "Does this handler properly validate all user input?" src/api/routes.py src/api/validators.py`
+ - `/reason "What does this function actually do?" src/utils.ts:42`
+ - `/reason "Is there a difference between using .at() vs bracket notation here?" src/utils.ts`
+-- `/reason "Do we need this null check?" src/parser.py:45`
++- `/reason "Do we need this null check?" src/parser.py:45`
+\ No newline at end of file
+diff --git a/crosscheck/skills/trace-execution/SKILL.md b/crosscheck/skills/trace-execution/SKILL.md
+index 8a7f153..3116fb0 100644
+--- a/crosscheck/skills/trace-execution/SKILL.md
++++ b/crosscheck/skills/trace-execution/SKILL.md
+@@ -50,6 +50,8 @@ OBSERVATIONS from [filename]:
+   O[N] [STATIC|SEMANTIC|BEHAVIORAL]: [Key observation about the code, with line numbers]
+   O[N] [STATIC|SEMANTIC|BEHAVIORAL]: [Another observation, with line numbers]
+ 
++COVERAGE: [COMPLETE - lines 1-N read] / [PARTIAL - lines X-Y read, M-P skipped]
++
+ HYPOTHESIS UPDATE:
+   H[N]: [CONFIRMED | REFUTED | REFINED] - [Explanation]
+ 
+@@ -61,6 +63,19 @@ NEXT ACTION RATIONALE: [Why reading another file, or why
+                         enough evidence to conclude]
+ ```
+ 
++**Exhaustive reading rule:** Read the ENTIRE function body, line by line. Pay specific attention to filter/guard clauses that constrain which inputs reach later stages. Never skim or skip lines in functions that are part of the execution path.
++
++**Coverage tracking mechanics:**
++- COVERAGE field must cite specific line ranges (e.g., "lines 1-87 read")
++- COMPLETE requires continuous range from function start to end (verified by line count)
++- PARTIAL explicitly lists skipped ranges (e.g., "lines 1-50, 200-230 read; lines 51-199, 231-500 skipped")
++- Agent determines coverage by tracking `read_file` calls with offset/limit and comparing to function definition boundaries from grep/glob results
++
++**Edge case rules:**
++- **0-line functions** (abstract methods, pure delegation): COVERAGE = COMPLETE by default (nothing to skip)
++- **500+ line functions**: Agent may declare strategic PARTIAL coverage with explicit reasoning: "COVERAGE: PARTIAL - lines 1-50, 200-230 read (entry + critical path); lines 51-199, 231-500 skipped (error handlers, logging)" — incompleteness is acceptable if declared
++- **Interrupted reads** (e.g., reads lines 1-50 of 100): COVERAGE = PARTIAL with exact range cited. Partial state persists in OBSERVATIONS output; agent does not retroactively upgrade to COMPLETE.
++
+ **Claim classification tags** — tag each observation with its verification class:
+ - `[STATIC]` — verified by reading code (file:line evidence present)
+ - `[SEMANTIC]` — requires domain knowledge or subjective judgment
+@@ -137,8 +152,19 @@ Return value: [what ultimately gets returned to the caller]
+ COMPLETENESS: [FULL / PARTIAL]
+ - FULL: All calls traced to leaf functions or documented external boundaries
+ - PARTIAL: [list what was not traced and why]
++
++CONFIDENCE: [HIGH / MEDIUM / LOW]
++- HIGH: All functions in path read in entirety (COVERAGE = COMPLETE for all), all OBSERVATIONS are [STATIC]
++- MEDIUM: Any function partially read (COVERAGE = PARTIAL for any), or any OBSERVATION is [SEMANTIC] or [BEHAVIORAL]
++- LOW: External boundaries dominate, or critical functions unread
+ ```
+ 
++**Mechanical constraint for confidence calibration:**
++- If COVERAGE for any function in the path shows PARTIAL, confidence MUST be MEDIUM or below
++- If any OBSERVATION is tagged [SEMANTIC] or [BEHAVIORAL] (vs [STATIC]), confidence MUST be MEDIUM or below
++- HIGH confidence requires: (all functions COVERAGE = COMPLETE) ∧ (all OBSERVATIONS are [STATIC], derived from code structure alone)
++- This prevents HIGH confidence on semantically ambiguous traces even when coverage is complete
++
+ ### Step 7: Verification Checklist
+ 
+ Present this checklist alongside the execution summary:
+@@ -169,4 +195,4 @@ A function name, file:line location, or scenario description to trace.
+ Examples:
+ - `/trace-execution "format(value, format_string)" django/utils/dateformat.py`
+ - `/trace-execution "What happens when UserService.authenticate() is called with an expired token?"`
+-- `/trace-execution src/parser.py:142`
++- `/trace-execution src/parser.py:142`
+\ No newline at end of file
