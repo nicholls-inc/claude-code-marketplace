@@ -1,0 +1,113 @@
+// Fabro workflow: issue-resolver
+//
+// Goal (run-supplied):  GitHub issue ID — bare number ("42"), short ref
+//                       ("#42"), or qualified ref ("owner/repo#42").
+//
+// Pipeline (linear — no loops):
+//   start → analyze → plan → review
+//                            ├─ approve → implement
+//                            └─ revise  → plan_revise → implement
+//   implement → verify (parallel) → exit
+//
+// The reviewer gets exactly one shot. If they request revision, the
+// plan_revise node addresses every concern in a single pass and goes
+// straight to implementation — there is NO second review.
+//
+// Verification fans out to byfuglien (code correctness, real Dafny via MCP)
+// and hellebuyck (spec-intent + adversarial spec) and rejoins via wait_all.
+// Either verifier returning outcome=failed marks the run failed (goal_gate).
+
+digraph IssueResolver {
+    graph [
+        goal            = "Resolve a GitHub issue with verified planning, adversarial review, and dual-agent verification",
+        rankdir         = "LR",
+        max_node_visits = "20"
+    ]
+
+    start [shape=Mdiamond, label="Start"]
+    exit  [shape=Msquare,  label="Exit"]
+
+    analyze [
+        label            = "Analyze",
+        prompt           = "@prompts/analyze.md",
+        reasoning_effort = "high",
+        timeout          = "900s"
+    ]
+
+    plan [
+        label            = "Plan",
+        prompt           = "@prompts/plan.md",
+        reasoning_effort = "high",
+        timeout          = "600s"
+    ]
+
+    review [
+        label            = "Adversarial Review (one-shot)",
+        prompt           = "@prompts/review.md",
+        reasoning_effort = "high",
+        timeout          = "600s"
+    ]
+
+    plan_revise [
+        label            = "Plan · revise (one-shot)",
+        prompt           = "@prompts/plan_revise.md",
+        reasoning_effort = "high",
+        timeout          = "600s"
+    ]
+
+    implement [
+        label   = "Implement",
+        prompt  = "@prompts/implement.md",
+        timeout = "1800s"
+    ]
+
+    // --- Parallel verification fan-out -----------------------------------
+
+    verify_fanout [
+        shape       = component,
+        label       = "Verify (parallel)",
+        join_policy = "wait_all"
+    ]
+
+    verify_byfuglien [
+        label            = "Verify · byfuglien (code)",
+        prompt           = "@prompts/verify_byfuglien.md",
+        reasoning_effort = "high",
+        goal_gate        = "true",
+        timeout          = "900s"
+    ]
+
+    verify_hellebuyck [
+        label            = "Verify · hellebuyck (spec/intent)",
+        prompt           = "@prompts/verify_hellebuyck.md",
+        reasoning_effort = "high",
+        goal_gate        = "true",
+        timeout          = "900s"
+    ]
+
+    verify_join [shape=tripleoctagon, label="Reconcile verification"]
+
+    // --- Edges -----------------------------------------------------------
+
+    start -> analyze
+    analyze -> plan
+    plan -> review
+
+    // Review gate (priority: conditions evaluated first, highest weight wins).
+    // Approve → implement directly. Revise → plan_revise (one revision pass)
+    // → implement directly. No second review; no loop back to plan.
+    // The default fallback fires only if the reviewer fails to emit a
+    // directive at all, in which case we proceed forward conservatively.
+    review -> implement   [label="approve", condition="preferred_label=approve", weight=10]
+    review -> plan_revise [label="revise",  condition="preferred_label=revise",  weight=5]
+    review -> implement   [label="default",                                      weight=1]
+
+    plan_revise -> implement
+
+    implement -> verify_fanout
+    verify_fanout -> verify_byfuglien
+    verify_fanout -> verify_hellebuyck
+    verify_byfuglien  -> verify_join
+    verify_hellebuyck -> verify_join
+    verify_join -> exit
+}
