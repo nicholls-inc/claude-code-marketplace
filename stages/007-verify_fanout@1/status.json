@@ -1,0 +1,6 @@
+{
+  "outcome": "partially_succeeded",
+  "notes": "Parallel node dispatched 2 branches (1 succeeded, 1 failed)",
+  "failure_reason": null,
+  "timestamp": "2026-05-03T11:53:57.904947357Z"
+}
