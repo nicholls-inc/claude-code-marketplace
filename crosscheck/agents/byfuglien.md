@@ -132,6 +132,8 @@ Every result must pass these quality gates before delivery:
 - **Alternative hypothesis check** — at least one alternative considered and ruled out with evidence; if missing, add it before delivering
 - **Confidence level** — HIGH/MEDIUM/LOW stated with justification
 - **Claim classification** — premises and claims are tagged with `[STATIC]`/`[SEMANTIC]`/`[BEHAVIORAL]`/`[FORMAL]`
+- **Completeness check for `/trace-execution`** — if execution summary shows PARTIAL completeness, confidence must be MEDIUM or below; reject HIGH confidence claims from partial traces
+- **Coverage verification for `/trace-execution`** — spot-check that entry point functions were read in entirety: re-read the first function in the trace path, count lines via `wc -l`, compare to the line range cited in COVERAGE field. If mismatch detected (agent claimed COMPLETE but line count shows unread ranges), downgrade confidence to MEDIUM and append validation note: "[byfuglien: coverage incomplete, confidence adjusted]". If agent incorrectly reports COVERAGE = COMPLETE when lines were skipped, byfuglien's spot-check detects the mismatch and downgrades confidence. Agent does not re-run skill; output is annotated with correction.
 
 **For all output:**
 - **Verification checklist present** — output includes a Verification Checklist section with all bracketed items filled in from the analysis
