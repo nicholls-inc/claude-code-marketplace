@@ -50,6 +50,8 @@ OBSERVATIONS from [filename]:
   O[N] [STATIC|SEMANTIC|BEHAVIORAL]: [Key observation about the code, with line numbers]
   O[N] [STATIC|SEMANTIC|BEHAVIORAL]: [Another observation, with line numbers]
 
+COVERAGE: [COMPLETE - lines 1-N read] / [PARTIAL - lines X-Y read, M-P skipped]
+
 HYPOTHESIS UPDATE:
   H[N]: [CONFIRMED | REFUTED | REFINED] - [Explanation]
 
@@ -60,6 +62,19 @@ UNRESOLVED:
 NEXT ACTION RATIONALE: [Why reading another file, or why
                         enough evidence to conclude]
 ```
+
+**Exhaustive reading rule:** Read the ENTIRE function body, line by line. Pay specific attention to filter/guard clauses that constrain which inputs reach later stages. Never skim or skip lines in functions that are part of the execution path.
+
+**Coverage tracking mechanics:**
+- COVERAGE field must cite specific line ranges (e.g., "lines 1-87 read")
+- COMPLETE requires continuous range from function start to end (verified by line count)
+- PARTIAL explicitly lists skipped ranges (e.g., "lines 1-50, 200-230 read; lines 51-199, 231-500 skipped")
+- Agent determines coverage by tracking `read_file` calls with offset/limit and comparing to function definition boundaries from grep/glob results
+
+**Edge case rules:**
+- **0-line functions** (abstract methods, pure delegation): COVERAGE = COMPLETE by default (nothing to skip)
+- **500+ line functions**: Agent may declare strategic PARTIAL coverage with explicit reasoning: "COVERAGE: PARTIAL - lines 1-50, 200-230 read (entry + critical path); lines 51-199, 231-500 skipped (error handlers, logging)" — incompleteness is acceptable if declared
+- **Interrupted reads** (e.g., reads lines 1-50 of 100): COVERAGE = PARTIAL with exact range cited. Partial state persists in OBSERVATIONS output; agent does not retroactively upgrade to COMPLETE.
 
 **Claim classification tags** — tag each observation with its verification class:
 - `[STATIC]` — verified by reading code (file:line evidence present)
@@ -137,7 +152,18 @@ Return value: [what ultimately gets returned to the caller]
 COMPLETENESS: [FULL / PARTIAL]
 - FULL: All calls traced to leaf functions or documented external boundaries
 - PARTIAL: [list what was not traced and why]
+
+CONFIDENCE: [HIGH / MEDIUM / LOW]
+- HIGH: All functions in path read in entirety (COVERAGE = COMPLETE for all), all OBSERVATIONS are [STATIC]
+- MEDIUM: Any function partially read (COVERAGE = PARTIAL for any), or any OBSERVATION is [SEMANTIC] or [BEHAVIORAL]
+- LOW: External boundaries dominate, or critical functions unread
 ```
+
+**Mechanical constraint for confidence calibration:**
+- If COVERAGE for any function in the path shows PARTIAL, confidence MUST be MEDIUM or below
+- If any OBSERVATION is tagged [SEMANTIC] or [BEHAVIORAL] (vs [STATIC]), confidence MUST be MEDIUM or below
+- HIGH confidence requires: (all functions COVERAGE = COMPLETE) ∧ (all OBSERVATIONS are [STATIC], derived from code structure alone)
+- This prevents HIGH confidence on semantically ambiguous traces even when coverage is complete
 
 ### Step 7: Verification Checklist
 
