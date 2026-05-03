@@ -1,0 +1,32 @@
+_version = 1
+
+[workflow]
+graph = "workflow.fabro"
+
+[run.sandbox]
+provider = "local"
+
+[run.model]
+name = "claude-sonnet-4-5"
+
+# Mount the crosscheck Dafny MCP server so the verify nodes have real
+# formal-verification tooling, not just prompt-level rhetoric.
+#
+# The path is supplied via CROSSCHECK_MCP_PATH so the workflow is portable
+# across machines / forks. Set it before running, e.g.:
+#
+#   export CROSSCHECK_MCP_PATH=/opt/claude-code-marketplace/crosscheck/mcp-server/dist/index.js
+#
+[run.agent.mcps.crosscheck-dafny]
+type            = "stdio"
+command         = ["node", "{{ env.CROSSCHECK_MCP_PATH }}"]
+startup_timeout = "30s"
+tool_timeout    = "180s"
+
+# Surface the Dafny image override into the MCP server's environment.
+[run.sandbox.env]
+DAFNY_DOCKER_IMAGE = "crosscheck-dafny:latest"
+
+# Capture the artifacts the workflow drops in working_dir.
+[run.artifacts]
+include = ["plan.md", "stages/**", "*.dfy"]
