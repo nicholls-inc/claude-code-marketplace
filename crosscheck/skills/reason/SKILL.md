@@ -157,6 +157,31 @@ CONFIDENCE: [HIGH / MEDIUM / LOW]
 
 If the confidence is LOW, explicitly list which premises remain unverified and what additional investigation would be needed to raise confidence.
 
+### Step 5b: Verify the Proposed Fix
+
+If the conclusion includes a proposed fix or solution, verify that the fix does not introduce new bugs. This step verifies the *prescription* (the fix), whereas Step 4 (Alternative Hypothesis Check) verified the *diagnosis* (the root cause analysis). Non-overlapping responsibilities.
+
+**Mandatory verification checklist:**
+```
+FIX VERIFICATION:
+Does this fix introduce:
+  [RACE CONDITIONS]: [YES / NO / UNCLEAR] — [specific analysis]
+  [DATA INTEGRITY ISSUES]: [YES / NO / UNCLEAR] — [specific analysis]
+  [SIDE-EFFECT BYPASSES]: [YES / NO / UNCLEAR] — [specific analysis]
+  [OTHER BUGS]: [YES / NO / UNCLEAR] — [specific analysis]
+```
+
+**Complexity threshold for abbreviated analysis:** If the proposed fix is >20 lines OR modifies >2 functions, Step 5b may be abbreviated to checklist-only analysis: "Does this fix fall into [RACE/INTEGRITY/BYPASS/OTHER] class? [YES/NO/UNCLEAR]" without full execution trace re-derivation.
+
+**Termination bound:** Step 5b depth ≤ 1. Single-pass checklist analysis only — no recursive `/reason` invocations for nested fix verification. If a fix is so complex it requires nested reasoning, flag as [UNCLEAR] and recommend breaking the fix into smaller increments.
+
+**Rules for fix verification:**
+- For each category, provide specific analysis citing the fix's code
+- If UNCLEAR, state what additional investigation would clarify
+- If any category shows YES, the fix must be revised before delivery
+- Simple fixes (≤20 lines, ≤2 functions) require full analysis
+- Complex fixes may use checklist mode to avoid unbounded analysis time
+
 ### Step 6: Summary
 
 Present a concise human-readable summary of the finding. This should be 2-5 sentences that a developer can quickly scan to understand:
