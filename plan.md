@@ -1,0 +1,107 @@
+# Plan: Field Report: Crosscheck Plugin Performance in wistful-pet Session
+
+## Verification track
+semi-formal
+
+## Context
+
+This refactor addresses performance and quality issues identified in a field report analyzing the crosscheck plugin's usage in a wistful-pet session. The files involved are:
+- `crosscheck/skills/reason/SKILL.md`
+- `crosscheck/skills/trace-execution/SKILL.md`
+- `crosscheck/agents/byfuglien.md`
+
+Based on the semi-formal verification track and the nature of these artifacts, the likely issues are around:
+1. Clarity of instructions in the skills
+2. Workflow efficiency and guidance
+3. Quality gate enforcement in the byfuglien orchestrator
+4. Evidence citation requirements
+
+## Steps
+
+### 1. Review and clarify `/reason` skill abort conditions
+**File:** `crosscheck/skills/reason/SKILL.md`
+**Changes:**
+- Add explicit abort thresholds for missing file evidence
+- Strengthen the requirement that premises MUST cite file:line locations
+- Add guidance on when to abort vs. when to state "Insufficient data"
+- Ensure consistency between evidence requirements and abort conditions
+
+### 2. Strengthen `/trace-execution` hypothesis-driven workflow
+**File:** `crosscheck/skills/trace-execution/SKILL.md`
+**Changes:**
+- Add explicit guidance on hypothesis confidence calibration
+- Clarify when to continue tracing vs. when to conclude with partial results
+- Add abort conditions for cases where entry points cannot be located
+- Ensure NEXT ACTION RATIONALE is mandatory, not optional
+
+### 3. Enhance byfuglien quality gates for semi-formal reasoning
+**File:** `crosscheck/agents/byfuglien.md`
+**Changes:**
+- Strengthen the "Evidence grounding" quality gate to reject claims without file:line citations
+- Add explicit re-execution instructions when quality gates fail
+- Clarify what constitutes a "complete" certificate vs. "partial" analysis
+- Add examples of what to reject in Phase 4 validation
+
+### 4. Add cross-references between skills and orchestrator
+**Files:** All three files
+**Changes:**
+- Ensure `/reason` and `/trace-execution` explicitly reference their validation by byfuglien
+- Add notes in byfuglien about common failure modes for each skill
+- Cross-link related skills (e.g., when `/trace-execution` should be used vs. `/reason`)
+
+## Tests / properties to add
+
+Since this is a refactor of documentation/instruction artifacts (SKILL.md and agent.md files), verification will be through:
+
+1. **Instruction completeness check** — Verify each skill has:
+   - Clear abort conditions
+   - Evidence requirements stated explicitly
+   - Quality gates that can be mechanically checked
+
+2. **Consistency verification** — Ensure:
+   - Byfuglien's quality gates match the evidence format required by `/reason` and `/trace-execution`
+   - Abort conditions in skills align with validation criteria in byfuglien
+   - Classification tags (`[STATIC]`, `[SEMANTIC]`, etc.) are consistently defined
+
+3. **Workflow coherence trace** — Trace through a hypothetical invocation:
+   - User asks a code question
+   - Byfuglien classifies and routes to `/reason`
+   - `/reason` produces output
+   - Byfuglien validates against quality gates
+   - Verify the loop is complete and unambiguous
+
+## Verification approach
+
+**Semi-formal reasoning applied to the refactor itself:**
+
+### Premise gathering:
+- P1: Field reports identify instruction ambiguity as a source of performance degradation
+- P2: The current `/reason` and `/trace-execution` skills have evidence requirements but unclear abort thresholds
+- P3: Byfuglien's Phase 4 validation gates exist but lack specificity about what to reject
+
+### Execution trace:
+- C1: Strengthening abort conditions in skills prevents premature conclusions (depends on P1, P2)
+- C2: Explicit re-execution guidance in byfuglien closes the quality enforcement loop (depends on P1, P3)
+- C3: Cross-references between artifacts improve discoverability and consistency (depends on P1, P2, P3)
+
+### Alternative hypothesis check:
+- **Alternative**: The performance issues are due to model limitations, not instruction clarity
+- **Check**: Review the field report artifacts (if available) for evidence of instruction-following vs. capability failures
+- **Expected refutation**: If instructions were clear but ignored, we'd see explicit instruction text quoted in the field report with deviations noted. If instructions were ambiguous, we'd see variations in behavior without clear guidance violations.
+
+### Confidence:
+**MEDIUM** — The plan assumes typical field report findings based on the classification and files involved. Without access to the actual analysis output or field report, some assumptions may not align with the specific issues identified. If the analyze stage output becomes available, this plan should be revised.
+
+## Risk register
+
+1. **Risk:** Plan may not address the actual issues from the field report
+   - **Mitigation:** This plan focuses on common quality issues in semi-formal reasoning skills. If review stage identifies misalignment with analysis findings, revision will incorporate specific concerns.
+
+2. **Risk:** Changes to instruction artifacts are subjective and hard to verify mechanically
+   - **Mitigation:** The verification approach includes concrete premises and execution traces. Changes will be evaluated by tracing through hypothetical invocations and checking for logical gaps.
+
+3. **Risk:** Over-specification may reduce agent flexibility
+   - **Mitigation:** Focus on clarifying existing requirements rather than adding new constraints. Abort conditions target cases where proceeding would produce unreliable output, not edge cases where adaptation is valuable.
+
+4. **Risk:** Cross-references between files may become maintenance burden
+   - **Mitigation:** Limit cross-references to structural relationships (orchestrator → skills) and critical failure modes, not implementation details.
