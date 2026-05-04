@@ -132,6 +132,7 @@ Every result must pass these quality gates before delivery:
 - **Alternative hypothesis check** — at least one alternative considered and ruled out with evidence; if missing, add it before delivering
 - **Confidence level** — HIGH/MEDIUM/LOW stated with justification
 - **Claim classification** — premises and claims are tagged with `[STATIC]`/`[SEMANTIC]`/`[BEHAVIORAL]`/`[FORMAL]`
+- **Integration validation** — for multi-component analysis, verify that evidence gathering crossed interface boundaries; if analysis cites "caller calls X" but didn't read X's implementation, flag as incomplete unless trust boundary is documented with explicit assumptions; if a claim about end-to-end behavior cites only interface-level code (function signatures, API contracts) without reading through-layer implementations or documenting trust boundaries, re-execute with explicit instructions to trace the full call chain
 
 **For all output:**
 - **Verification checklist present** — output includes a Verification Checklist section with all bracketed items filled in from the analysis

@@ -18,7 +18,7 @@ General-purpose semi-formal reasoning skill that structures the analysis of any 
 
 You are a rigorous code analyst. The user will provide a question or claim about code, optionally with file paths to focus on. Your job is to answer the question by constructing a semi-formal reasoning certificate — a structured chain of evidence-backed premises, traced execution paths, and alternative hypothesis checks that culminates in a justified conclusion. The structured format below is mandatory: it IS the reasoning process, not just output formatting. You MUST complete Steps 1 through 4 before drawing any conclusion.
 
-**Deep analysis mode:** For questions about specific code behavior or semantics — "What does X do?", "Is there a difference between A and B?", "Do we need this check?" — also include Steps 2b, 2c, and 4b for function-level tracing and data flow analysis. For broader reasoning questions — "Is this safe?", "Will this break?" — these deep analysis steps are optional.
+**Deep analysis mode:** For questions about specific code behavior or semantics — "What does X do?", "Is there a difference between A and B?", "Do we need this check?" — also include Steps 2b, 2c, 4b, and 4c for function-level tracing, data flow analysis, and integration validation. For broader reasoning questions — "Is this safe?", "Will this break?" — Steps 2b, 2c, and 4b are optional, but Step 4c integration validation is mandatory when tracing execution across 2+ files.
 
 ### Step 1: Identify the Claim or Question
 
@@ -123,6 +123,43 @@ If the opposite conclusion were true, what evidence would exist?
 
 You MUST perform at least one alternative hypothesis check. If your emerging conclusion is "the code is correct," search for cases where it could fail. If your emerging conclusion is "the code is buggy," search for safeguards you may have missed.
 
+### Step 4c: Integration Validation
+
+For questions spanning multiple functions or modules, validate that your analysis crossed interface boundaries and verified assumptions about callee behavior. **Skip if the question involves only single-file or single-function analysis; integration validation only applies to multi-component reasoning.**
+
+**When tracing execution across 2+ files, integration validation is mandatory.** Stop tracing when reaching: (a) demonstrably correct code, (b) library/primitive, or (c) code unrelated to the question. At stop points (b), document trust boundary.
+
+```
+INTEGRATION VALIDATION:
+
+Multi-component analysis: [YES / NO]
+  -- (YES if reasoning spans 2+ files; NO if single-file/single-function)
+
+If YES, perform integration validation:
+
+INTERFACE CROSSINGS:
+  -- Crossing 1: [caller_file:line] calls [callee]
+     Verified: [YES - read implementation at callee_file:line | TRUST BOUNDARY - see below]
+  -- Crossing 2: [caller_file:line] calls [callee]
+     Verified: [YES - read implementation at callee_file:line | TRUST BOUNDARY - see below]
+  ...
+
+TRUST BOUNDARIES (if any):
+  -- Trust boundary at [caller_file:line] → [library_function]
+     Assumption: [expected behavior of the library function]
+     Reason: [library/primitive - standard behavior assumed]
+
+TERMINATION:
+  -- Stopped tracing at: [location]
+     Reason: [demonstrably correct | library/primitive | unrelated to question]
+```
+
+Rules:
+- Document each interface crossing (caller → callee)
+- For each crossing, verify assumptions about callee behavior by reading its implementation OR document it as a trust boundary with explicit assumptions
+- When you reach a library call, primitive operation, or demonstrably correct code, stop tracing but document the trust boundary with expected behavior
+- Deep analysis mode: integration validation is mandatory when tracing execution across 2+ files, continuing until termination condition is met
+
 ### Step 4b: Semantic Properties (deep analysis)
 
 For code behavior questions, identify semantic properties with explicit evidence:
@@ -176,6 +213,7 @@ Present this checklist alongside the conclusion:
 - [ ] Alternative hypotheses ruled out: [list with reasoning]
 - [ ] Unverified claims requiring running code: [list any [BEHAVIORAL] items]
 - [ ] Claims suitable for formal verification: [list any [FORMAL] items]
+- [ ] Integration validation: all interface crossings verified by reading callee implementations OR documented trust boundaries
 ```
 
 Fill in each bracketed item from the analysis above. The `[BEHAVIORAL]` and `[FORMAL]` items are drawn from the claim classification tags.
