@@ -444,40 +444,46 @@
   "status_updated_at": "2026-05-04T11:31:26.021656094Z",
   "pending_control": null,
   "checkpoint": {
-    "timestamp": "2026-05-04T11:33:13.324694034Z",
-    "current_node": "analyze",
+    "timestamp": "2026-05-04T11:34:08.612152942Z",
+    "current_node": "plan",
     "completed_nodes": [
       "start",
-      "analyze"
+      "analyze",
+      "plan"
     ],
     "node_retries": {},
     "context_values": {
+      "thread.analyze.current_node": "plan",
+      "failure_signature": "",
+      "internal.thread_id": "analyze",
+      "verification_track": "semi-formal",
+      "internal.retry_count.start": 0,
+      "internal.retry_count.analyze": 0,
+      "plan_step_count": 3,
       "files_involved": [
         "crosscheck/agents/byfuglien.md",
         "crosscheck/skills/reason/SKILL.md",
         "crosscheck/skills/locate-fault/SKILL.md"
       ],
+      "issue_ref": "nicholls-inc/claude-code-marketplace#61",
+      "last_response": "## Summary\n\nI've created a plan that addresses the end-to-end integration gap issue in crosscheck's semi-formal reasoning skills. The core problem is that `/locate-fault` and `/reason` can produce com",
+      "failure_class": "",
+      "graph.max_node_visits": "20",
+      "internal.node_visit_count": 1,
       "graph.goal": "61",
       "analysis_classification": "refactor",
-      "issue_ref": "nicholls-inc/claude-code-marketplace#61",
-      "failure_signature": "",
-      "internal.thread_id": "start",
       "internal.fidelity": "compact",
-      "verification_track": "semi-formal",
-      "last_stage": "analyze",
-      "internal.retry_count.start": 0,
+      "internal.retry_count.plan": 0,
+      "last_stage": "plan",
       "outcome": "succeeded",
-      "internal.retry_count.analyze": 0,
       "internal.run_id": "01KQSC3PVDR5W0BB3EC9J7Z8XJ",
       "issue_title": "crosscheck: component-correct verification misses end-to-end integration gaps",
       "response.analyze": "Excellent! Now I have a complete picture. Let me summarize my findings and produce the analysis.\n\n---\n\n# Analysis of Issue #61: crosscheck component-correct verification misses end-to-end integration gaps\n\n## 1. Issue Summary\n\n**Title:** crosscheck: component-correct verification misses end-to-end integration gaps\n\n**Problem Statement:** The byfuglien orchestrator's `/reason` skill verified an implementation as \"correct with high confidence\" when it actually had a critical bug. Session `7bbdb4de` verified individual code components (override path works, parsing works, hasRemote check works) but never traced the complete user scenario from entry point to resolution. The bug persisted until a new session (`50b3317c`) ran behavioral tests in the actual failing environment, exposing that `DetectDefaultBranch` fails before `Create()`'s `hasRemote` check is ever reached in zero-remote repositories.\n\n## 2. Files Involved\n\n- **crosscheck/agents/byfuglien.md:1-162** — Orchestrator agent that classifies tasks, routes to skills, and validates output quality; Phase 4 validation rules (lines 113-139) govern semi-formal reasoning output\n- **crosscheck/skills/reason/SKILL.md:1-194** — Semi-formal code reasoning skill that produces evidence certificates; Step 3 (lines 93-111) defines execution path tracing requirements\n- **crosscheck/skills/locate-fault/SKILL.md:1-174** — Fault localization skill using 4-phase methodology; demonstrates behavioral testing approach (Phase 2) that caught the gap\n- **crosscheck/demo/02_semiformal_reasoning/SCRIPT.md:1-100** — Demo showing how `/locate-fault` traces from crash site to root cause through structured phases\n- **crosscheck/demo/03_structured_reasoning/SCRIPT.md:1-80** — Demo showing how `/reason` verifies properties through premise gathering and execution traces\n\n## 3. Evidence Trace\n\n### Test Semantics (Issue Report Analysis)\n\n**T1 [STATIC]**: Session `bd420e82` (plan verification) correctly identified that `symbolic-ref refs/remotes/origin/HEAD` does not fix the zero-remote case.\n- Evidence: Issue body, Alternative Hypothesis 2 — \"REFUTED — the symbolic-ref fallback does NOT fix the no-origin case.\"\n\n**T2 [STATIC]**: Session `7bbdb4de` (implementation verification) produced a certificate with 6 verified claims (C1-C6) about individual code paths.\n- Evidence: Issue body — \"Session `7bbdb4de` msg 40: 'All six claims verified correct with high confidence'\"\n\n**T3 [BEHAVIORAL]**: Session `50b3317c` (diagnosis from affected repo) ran `git symbolic-ref refs/remotes/origin/HEAD` in the actual zero-remote repo and observed it fail.\n- Evidence: Issue body — \"ran actual git commands in the affected repo... All returned real failure outputs. Evidence: 'exit 1', 'exit 128', 'no git remotes found'\"\n\n**T4 [STATIC]**: The expected user scenario is: \"user with zero remotes, no `default_branch` config, runs `xylem drain`\"\n- Evidence: Issue body — \"The certificate verified that each new code path... works correctly in isolation, but never traced the end-to-end scenario\"\n\n### Code Path Tracing\n\n**P1 [STATIC]**: `/reason` skill Step 3 (lines 93-111) requires tracing execution paths from entry point through to result.\n- Evidence: crosscheck/skills/reason/SKILL.md:93-111 — \"For each relevant code path, trace through it step by step... Trace: [entry point] -> [call 1 at file:line] -> [call 2 at file:line] -> [result]\"\n\n**P2 [STATIC]**: `/reason` skill Step 3 does NOT explicitly require end-to-end scenario tracing from user action to resolution.\n- Evidence: crosscheck/skills/reason/SKILL.md:93-111 — The instructions say \"For each relevant code path\" but do not mandate that one path must be the complete user failure scenario.\n\n**P3 [STATIC]**: Byfuglien's Phase 4 validation (lines 129-135) checks for certificate completeness, evidence grounding, and alternative hypotheses, but does not explicitly require end-to-end scenario verification.\n- Evidence: crosscheck/agents/byfuglien.md:129-135 — Lists \"Certificate completeness,\" \"Evidence grounding,\" \"Alternative hypothesis check,\" \"Confidence level,\" \"Claim classification\" but no requirement for integration scenarios.\n\n**P4 [STATIC]**: `/locate-fault` demonstrates behavioral testing at Phase 2 where actual commands are run in the affected environment.\n- Evidence: crosscheck/skills/locate-fault/SKILL.md:49-91 — Shows structured HYPOTHESIS → file read → OBSERVATIONS → verification cycle\n\n**P5 [SEMANTIC]**: Component verification (verifying individual functions work) differs from integration verification (verifying the complete user scenario succeeds).\n- Evidence: Software testing literature; demonstrated by issue — session `7bbdb4de` verified components but missed integration gap\n\n### Divergence Analysis\n\n**D1 [STATIC]**: Session `7bbdb4de`'s byfuglien certificate verified claims like \"No-origin Create() skips fetch\" (Claim 3) without first verifying that control flow would reach `Create()` in the zero-remote scenario.\n- Evidence: Issue body — \"Claim 3 — No-origin Create() skips fetch... This claim is correct in isolation but irrelevant if DetectDefaultBranch fails first.\"\n\n**D2 [BEHAVIORAL]**: The actual failure mode (zero remotes → `DetectDefaultBranch` fails → never reaches `Create()`) was only discovered when session `50b3317c` ran `git` commands in the affected repo.\n- Evidence: Issue body — \"Session `50b3317c` byfuglien ran `git symbolic-ref refs/remotes/origin/HEAD` in the actual affected repo... producing behavioral evidence that static analysis alone cannot provide.\"\n\n**D3 [SEMANTIC]**: Earlier byfuglien findings were not carried forward between sessions — session `bd420e82` correctly identified the symbolic-ref limitation, but session `7bbdb4de` did not re-check it.\n- Evidence: Issue body — \"Session `bd420e82`'s byfuglien explicitly identified that '`symbolic-ref refs/remotes/origin/HEAD` does NOT fix the no-origin case'... But when the implementation was verified in `7bbdb4de`, the byfuglien had no access to the previous certificate\"\n\n## 4. Root-Cause Hypothesis\n\n**Primary Hypothesis (HIGH confidence):** The `/reason` skill's Step 3 instruction for execution path tracing is insufficient. It requires tracing \"each relevant code path\" but does not mandate that implementation verifications must include at least one end-to-end trace starting from the user's reported failure scenario. This allowed session `7bbdb4de` to verify 6 component claims without ever composing them into the complete user flow that would have revealed the `DetectDefaultBranch` failure.\n\n**Supporting Evidence:**\n- crosscheck/skills/reason/SKILL.md:93-111 — Step 3 says \"For each relevant code path, trace through it step by step\" but doesn't specify that one path must be the complete user scenario\n- Issue body Lesson 1 — \"The byfuglien certificate in `7bbdb4de` verified 6 individual claims... but never composed them into the actual failure scenario\"\n\n**Alternative Hypothesis 1 (MEDIUM confidence):** Byfuglien's Phase 4 validation rules lack a specific gate for integration scenario coverage. The validation checks certificate completeness and evidence grounding but does not require that implementation verifications include behavioral testing or end-to-end traces.\n\n**Supporting Evidence:**\n- crosscheck/agents/byfuglien.md:129-135 — Phase 4 validation lists 5 quality gates but none explicitly check for end-to-end scenario coverage\n- Issue body Lesson 2 — \"Behavioral testing in the affected environment catches gaps that static analysis misses\"\n\n**Alternative Hypothesis 2 (MEDIUM confidence):** The confidence rating guidance in `/reason` Step 5 (line 152-156) should explicitly downgrade confidence to MEDIUM when behavioral claims remain untested or when the verification is for a bug fix but doesn't test the fix in the original failure environment.\n\n**Supporting Evidence:**\n- crosscheck/skills/reason/SKILL.md:152-156 — Defines HIGH as \"All premises verified by reading code, no unresolved questions\" but doesn't account for untested integration scenarios\n- Issue body — \"The confidence should have been MEDIUM at best, because the zero-remote end-to-end scenario was never tested\"\n\n## 5. Classification\n\n**Classification:** `refactor`\n\n**Verification track:** `semi-formal`\n\n**Rationale:** This is a behavior-preserving structural change to the `/reason` skill instructions and byfuglien validation rules. The change needs to preserve the skill's existing component verification capabilities while adding mandatory end-to-end scenario tracing for implementation verifications. The change is self-referential — we're modifying the crosscheck plugin's reasoning infrastructure, which is itself designed for verifying code changes. Semi-formal reasoning via `/compare-patches` would be appropriate for verifying that the updated skill instructions preserve existing capabilities while adding the new requirement. The issue explicitly requests improvements to the reasoning methodology (Lessons 1-3), which are structural changes to how verification is performed, not algorithmic properties suitable for formal proof.\n\n---\n\n```json\n{\n  \"context_updates\": {\n    \"issue_ref\": \"nicholls-inc/claude-code-marketplace#61\",\n    \"issue_title\": \"crosscheck: component-correct verification misses end-to-end integration gaps\",\n    \"analysis_classification\": \"refactor\",\n    \"verification_track\": \"semi-formal\",\n    \"files_involved\": [\n      \"crosscheck/agents/byfuglien.md\",\n      \"crosscheck/skills/reason/SKILL.md\",\n      \"crosscheck/skills/locate-fault/SKILL.md\"\n    ]\n  }\n}\n```",
-      "current_node": "analyze",
-      "last_response": "Excellent! Now I have a complete picture. Let me summarize my findings and produce the analysis.\n\n---\n\n# Analysis of Issue #61: crosscheck component-correct verification misses end-to-end integration ",
-      "failure_class": "",
-      "graph.max_node_visits": "20",
+      "current_node": "plan",
+      "response.plan": "## Summary\n\nI've created a plan that addresses the end-to-end integration gap issue in crosscheck's semi-formal reasoning skills. The core problem is that `/locate-fault` and `/reason` can produce component-correct analyses that miss bugs lurking across interface boundaries—when a test exercises multiple modules but the analysis stops at the caller without reading the callee.\n\n**The solution adds mandatory integration validation phases:**\n\n1. **Phase 5 to `/locate-fault`**: After ranking predictions, verify the trace crossed all component boundaries in the test's execution path\n2. **Step 4c to `/reason`**: For multi-file questions, mandate documenting each interface crossing and reading callee implementations\n3. **Enhanced byfuglien validation**: Enforce integration checks in the orchestrator—if output cites only interface-level code without through-layer verification, reject and re-execute\n\n**Verification via semi-formal reasoning**: The plan includes execution traces on contrived multi-file bugs, certificate inspection to verify cross-boundary tracing, and `/rationale` adequacy checks to confirm the integration validation itself is sound.\n\n**Risks are managed** through skip conditions (single-file bugs exempt), termination criteria (stop at primitives/unrelated code), and active enforcement by byfuglien to prevent users bypassing the new phases.\n\n```json\n{\n  \"context_updates\": {\n    \"plan_track\": \"semi-formal\",\n    \"plan_step_count\": 3\n  }\n}\n```",
+      "plan_track": "semi-formal",
       "graph.rankdir": "LR",
       "internal.work_dir": "/workspace",
-      "internal.node_visit_count": 1,
       "thread.start.current_node": "analyze"
     },
     "node_outcomes": {
@@ -525,12 +531,50 @@
           },
           "total_usd_micros": 273932
         }
+      },
+      "plan": {
+        "status": "succeeded",
+        "context_updates": {
+          "plan_track": "semi-formal",
+          "last_stage": "plan",
+          "plan_step_count": 3,
+          "last_response": "## Summary\n\nI've created a plan that addresses the end-to-end integration gap issue in crosscheck's semi-formal reasoning skills. The core problem is that `/locate-fault` and `/reason` can produce com",
+          "response.plan": "## Summary\n\nI've created a plan that addresses the end-to-end integration gap issue in crosscheck's semi-formal reasoning skills. The core problem is that `/locate-fault` and `/reason` can produce component-correct analyses that miss bugs lurking across interface boundaries—when a test exercises multiple modules but the analysis stops at the caller without reading the callee.\n\n**The solution adds mandatory integration validation phases:**\n\n1. **Phase 5 to `/locate-fault`**: After ranking predictions, verify the trace crossed all component boundaries in the test's execution path\n2. **Step 4c to `/reason`**: For multi-file questions, mandate documenting each interface crossing and reading callee implementations\n3. **Enhanced byfuglien validation**: Enforce integration checks in the orchestrator—if output cites only interface-level code without through-layer verification, reject and re-execute\n\n**Verification via semi-formal reasoning**: The plan includes execution traces on contrived multi-file bugs, certificate inspection to verify cross-boundary tracing, and `/rationale` adequacy checks to confirm the integration validation itself is sound.\n\n**Risks are managed** through skip conditions (single-file bugs exempt), termination criteria (stop at primitives/unrelated code), and active enforcement by byfuglien to prevent users bypassing the new phases.\n\n```json\n{\n  \"context_updates\": {\n    \"plan_track\": \"semi-formal\",\n    \"plan_step_count\": 3\n  }\n}\n```"
+        },
+        "notes": "Stage completed: plan",
+        "usage": {
+          "input": {
+            "usage": {
+              "model": {
+                "provider": "anthropic",
+                "model_id": "claude-sonnet-4-5"
+              },
+              "tokens": {
+                "input_tokens": 11336,
+                "output_tokens": 1843,
+                "reasoning_tokens": 139,
+                "cache_read_tokens": 8802,
+                "cache_write_tokens": 13884
+              }
+            },
+            "facts": {
+              "provider": "anthropic",
+              "cache_write_5m_tokens": 13884,
+              "cache_write_1h_tokens": 0
+            }
+          },
+          "total_usd_micros": 118443
+        },
+        "files_touched": [
+          "/workspace/plan.md"
+        ]
       }
     },
-    "next_node_id": "plan",
+    "next_node_id": "review",
     "node_visits": {
       "start": 1,
-      "analyze": 1
+      "analyze": 1,
+      "plan": 1
     }
   },
   "checkpoints": [
@@ -567,6 +611,100 @@
         "next_node_id": "analyze",
         "node_visits": {
           "start": 1
+        }
+      }
+    ],
+    [
+      81,
+      {
+        "timestamp": "2026-05-04T11:33:16.472268636Z",
+        "current_node": "analyze",
+        "completed_nodes": [
+          "start",
+          "analyze"
+        ],
+        "node_retries": {},
+        "context_values": {
+          "analysis_classification": "refactor",
+          "internal.retry_count.analyze": 0,
+          "thread.start.current_node": "analyze",
+          "last_stage": "analyze",
+          "graph.max_node_visits": "20",
+          "internal.run_id": "01KQSC3PVDR5W0BB3EC9J7Z8XJ",
+          "internal.thread_id": "start",
+          "internal.retry_count.start": 0,
+          "internal.work_dir": "/workspace",
+          "outcome": "succeeded",
+          "graph.goal": "61",
+          "verification_track": "semi-formal",
+          "issue_title": "crosscheck: component-correct verification misses end-to-end integration gaps",
+          "failure_class": "",
+          "failure_signature": "",
+          "internal.fidelity": "compact",
+          "files_involved": [
+            "crosscheck/agents/byfuglien.md",
+            "crosscheck/skills/reason/SKILL.md",
+            "crosscheck/skills/locate-fault/SKILL.md"
+          ],
+          "internal.node_visit_count": 1,
+          "last_response": "Excellent! Now I have a complete picture. Let me summarize my findings and produce the analysis.\n\n---\n\n# Analysis of Issue #61: crosscheck component-correct verification misses end-to-end integration ",
+          "graph.rankdir": "LR",
+          "issue_ref": "nicholls-inc/claude-code-marketplace#61",
+          "current_node": "analyze",
+          "response.analyze": "Excellent! Now I have a complete picture. Let me summarize my findings and produce the analysis.\n\n---\n\n# Analysis of Issue #61: crosscheck component-correct verification misses end-to-end integration gaps\n\n## 1. Issue Summary\n\n**Title:** crosscheck: component-correct verification misses end-to-end integration gaps\n\n**Problem Statement:** The byfuglien orchestrator's `/reason` skill verified an implementation as \"correct with high confidence\" when it actually had a critical bug. Session `7bbdb4de` verified individual code components (override path works, parsing works, hasRemote check works) but never traced the complete user scenario from entry point to resolution. The bug persisted until a new session (`50b3317c`) ran behavioral tests in the actual failing environment, exposing that `DetectDefaultBranch` fails before `Create()`'s `hasRemote` check is ever reached in zero-remote repositories.\n\n## 2. Files Involved\n\n- **crosscheck/agents/byfuglien.md:1-162** — Orchestrator agent that classifies tasks, routes to skills, and validates output quality; Phase 4 validation rules (lines 113-139) govern semi-formal reasoning output\n- **crosscheck/skills/reason/SKILL.md:1-194** — Semi-formal code reasoning skill that produces evidence certificates; Step 3 (lines 93-111) defines execution path tracing requirements\n- **crosscheck/skills/locate-fault/SKILL.md:1-174** — Fault localization skill using 4-phase methodology; demonstrates behavioral testing approach (Phase 2) that caught the gap\n- **crosscheck/demo/02_semiformal_reasoning/SCRIPT.md:1-100** — Demo showing how `/locate-fault` traces from crash site to root cause through structured phases\n- **crosscheck/demo/03_structured_reasoning/SCRIPT.md:1-80** — Demo showing how `/reason` verifies properties through premise gathering and execution traces\n\n## 3. Evidence Trace\n\n### Test Semantics (Issue Report Analysis)\n\n**T1 [STATIC]**: Session `bd420e82` (plan verification) correctly identified that `symbolic-ref refs/remotes/origin/HEAD` does not fix the zero-remote case.\n- Evidence: Issue body, Alternative Hypothesis 2 — \"REFUTED — the symbolic-ref fallback does NOT fix the no-origin case.\"\n\n**T2 [STATIC]**: Session `7bbdb4de` (implementation verification) produced a certificate with 6 verified claims (C1-C6) about individual code paths.\n- Evidence: Issue body — \"Session `7bbdb4de` msg 40: 'All six claims verified correct with high confidence'\"\n\n**T3 [BEHAVIORAL]**: Session `50b3317c` (diagnosis from affected repo) ran `git symbolic-ref refs/remotes/origin/HEAD` in the actual zero-remote repo and observed it fail.\n- Evidence: Issue body — \"ran actual git commands in the affected repo... All returned real failure outputs. Evidence: 'exit 1', 'exit 128', 'no git remotes found'\"\n\n**T4 [STATIC]**: The expected user scenario is: \"user with zero remotes, no `default_branch` config, runs `xylem drain`\"\n- Evidence: Issue body — \"The certificate verified that each new code path... works correctly in isolation, but never traced the end-to-end scenario\"\n\n### Code Path Tracing\n\n**P1 [STATIC]**: `/reason` skill Step 3 (lines 93-111) requires tracing execution paths from entry point through to result.\n- Evidence: crosscheck/skills/reason/SKILL.md:93-111 — \"For each relevant code path, trace through it step by step... Trace: [entry point] -> [call 1 at file:line] -> [call 2 at file:line] -> [result]\"\n\n**P2 [STATIC]**: `/reason` skill Step 3 does NOT explicitly require end-to-end scenario tracing from user action to resolution.\n- Evidence: crosscheck/skills/reason/SKILL.md:93-111 — The instructions say \"For each relevant code path\" but do not mandate that one path must be the complete user failure scenario.\n\n**P3 [STATIC]**: Byfuglien's Phase 4 validation (lines 129-135) checks for certificate completeness, evidence grounding, and alternative hypotheses, but does not explicitly require end-to-end scenario verification.\n- Evidence: crosscheck/agents/byfuglien.md:129-135 — Lists \"Certificate completeness,\" \"Evidence grounding,\" \"Alternative hypothesis check,\" \"Confidence level,\" \"Claim classification\" but no requirement for integration scenarios.\n\n**P4 [STATIC]**: `/locate-fault` demonstrates behavioral testing at Phase 2 where actual commands are run in the affected environment.\n- Evidence: crosscheck/skills/locate-fault/SKILL.md:49-91 — Shows structured HYPOTHESIS → file read → OBSERVATIONS → verification cycle\n\n**P5 [SEMANTIC]**: Component verification (verifying individual functions work) differs from integration verification (verifying the complete user scenario succeeds).\n- Evidence: Software testing literature; demonstrated by issue — session `7bbdb4de` verified components but missed integration gap\n\n### Divergence Analysis\n\n**D1 [STATIC]**: Session `7bbdb4de`'s byfuglien certificate verified claims like \"No-origin Create() skips fetch\" (Claim 3) without first verifying that control flow would reach `Create()` in the zero-remote scenario.\n- Evidence: Issue body — \"Claim 3 — No-origin Create() skips fetch... This claim is correct in isolation but irrelevant if DetectDefaultBranch fails first.\"\n\n**D2 [BEHAVIORAL]**: The actual failure mode (zero remotes → `DetectDefaultBranch` fails → never reaches `Create()`) was only discovered when session `50b3317c` ran `git` commands in the affected repo.\n- Evidence: Issue body — \"Session `50b3317c` byfuglien ran `git symbolic-ref refs/remotes/origin/HEAD` in the actual affected repo... producing behavioral evidence that static analysis alone cannot provide.\"\n\n**D3 [SEMANTIC]**: Earlier byfuglien findings were not carried forward between sessions — session `bd420e82` correctly identified the symbolic-ref limitation, but session `7bbdb4de` did not re-check it.\n- Evidence: Issue body — \"Session `bd420e82`'s byfuglien explicitly identified that '`symbolic-ref refs/remotes/origin/HEAD` does NOT fix the no-origin case'... But when the implementation was verified in `7bbdb4de`, the byfuglien had no access to the previous certificate\"\n\n## 4. Root-Cause Hypothesis\n\n**Primary Hypothesis (HIGH confidence):** The `/reason` skill's Step 3 instruction for execution path tracing is insufficient. It requires tracing \"each relevant code path\" but does not mandate that implementation verifications must include at least one end-to-end trace starting from the user's reported failure scenario. This allowed session `7bbdb4de` to verify 6 component claims without ever composing them into the complete user flow that would have revealed the `DetectDefaultBranch` failure.\n\n**Supporting Evidence:**\n- crosscheck/skills/reason/SKILL.md:93-111 — Step 3 says \"For each relevant code path, trace through it step by step\" but doesn't specify that one path must be the complete user scenario\n- Issue body Lesson 1 — \"The byfuglien certificate in `7bbdb4de` verified 6 individual claims... but never composed them into the actual failure scenario\"\n\n**Alternative Hypothesis 1 (MEDIUM confidence):** Byfuglien's Phase 4 validation rules lack a specific gate for integration scenario coverage. The validation checks certificate completeness and evidence grounding but does not require that implementation verifications include behavioral testing or end-to-end traces.\n\n**Supporting Evidence:**\n- crosscheck/agents/byfuglien.md:129-135 — Phase 4 validation lists 5 quality gates but none explicitly check for end-to-end scenario coverage\n- Issue body Lesson 2 — \"Behavioral testing in the affected environment catches gaps that static analysis misses\"\n\n**Alternative Hypothesis 2 (MEDIUM confidence):** The confidence rating guidance in `/reason` Step 5 (line 152-156) should explicitly downgrade confidence to MEDIUM when behavioral claims remain untested or when the verification is for a bug fix but doesn't test the fix in the original failure environment.\n\n**Supporting Evidence:**\n- crosscheck/skills/reason/SKILL.md:152-156 — Defines HIGH as \"All premises verified by reading code, no unresolved questions\" but doesn't account for untested integration scenarios\n- Issue body — \"The confidence should have been MEDIUM at best, because the zero-remote end-to-end scenario was never tested\"\n\n## 5. Classification\n\n**Classification:** `refactor`\n\n**Verification track:** `semi-formal`\n\n**Rationale:** This is a behavior-preserving structural change to the `/reason` skill instructions and byfuglien validation rules. The change needs to preserve the skill's existing component verification capabilities while adding mandatory end-to-end scenario tracing for implementation verifications. The change is self-referential — we're modifying the crosscheck plugin's reasoning infrastructure, which is itself designed for verifying code changes. Semi-formal reasoning via `/compare-patches` would be appropriate for verifying that the updated skill instructions preserve existing capabilities while adding the new requirement. The issue explicitly requests improvements to the reasoning methodology (Lessons 1-3), which are structural changes to how verification is performed, not algorithmic properties suitable for formal proof.\n\n---\n\n```json\n{\n  \"context_updates\": {\n    \"issue_ref\": \"nicholls-inc/claude-code-marketplace#61\",\n    \"issue_title\": \"crosscheck: component-correct verification misses end-to-end integration gaps\",\n    \"analysis_classification\": \"refactor\",\n    \"verification_track\": \"semi-formal\",\n    \"files_involved\": [\n      \"crosscheck/agents/byfuglien.md\",\n      \"crosscheck/skills/reason/SKILL.md\",\n      \"crosscheck/skills/locate-fault/SKILL.md\"\n    ]\n  }\n}\n```"
+        },
+        "node_outcomes": {
+          "start": {
+            "status": "succeeded",
+            "usage": null
+          },
+          "analyze": {
+            "status": "succeeded",
+            "context_updates": {
+              "verification_track": "semi-formal",
+              "last_stage": "analyze",
+              "issue_title": "crosscheck: component-correct verification misses end-to-end integration gaps",
+              "last_response": "Excellent! Now I have a complete picture. Let me summarize my findings and produce the analysis.\n\n---\n\n# Analysis of Issue #61: crosscheck component-correct verification misses end-to-end integration ",
+              "response.analyze": "Excellent! Now I have a complete picture. Let me summarize my findings and produce the analysis.\n\n---\n\n# Analysis of Issue #61: crosscheck component-correct verification misses end-to-end integration gaps\n\n## 1. Issue Summary\n\n**Title:** crosscheck: component-correct verification misses end-to-end integration gaps\n\n**Problem Statement:** The byfuglien orchestrator's `/reason` skill verified an implementation as \"correct with high confidence\" when it actually had a critical bug. Session `7bbdb4de` verified individual code components (override path works, parsing works, hasRemote check works) but never traced the complete user scenario from entry point to resolution. The bug persisted until a new session (`50b3317c`) ran behavioral tests in the actual failing environment, exposing that `DetectDefaultBranch` fails before `Create()`'s `hasRemote` check is ever reached in zero-remote repositories.\n\n## 2. Files Involved\n\n- **crosscheck/agents/byfuglien.md:1-162** — Orchestrator agent that classifies tasks, routes to skills, and validates output quality; Phase 4 validation rules (lines 113-139) govern semi-formal reasoning output\n- **crosscheck/skills/reason/SKILL.md:1-194** — Semi-formal code reasoning skill that produces evidence certificates; Step 3 (lines 93-111) defines execution path tracing requirements\n- **crosscheck/skills/locate-fault/SKILL.md:1-174** — Fault localization skill using 4-phase methodology; demonstrates behavioral testing approach (Phase 2) that caught the gap\n- **crosscheck/demo/02_semiformal_reasoning/SCRIPT.md:1-100** — Demo showing how `/locate-fault` traces from crash site to root cause through structured phases\n- **crosscheck/demo/03_structured_reasoning/SCRIPT.md:1-80** — Demo showing how `/reason` verifies properties through premise gathering and execution traces\n\n## 3. Evidence Trace\n\n### Test Semantics (Issue Report Analysis)\n\n**T1 [STATIC]**: Session `bd420e82` (plan verification) correctly identified that `symbolic-ref refs/remotes/origin/HEAD` does not fix the zero-remote case.\n- Evidence: Issue body, Alternative Hypothesis 2 — \"REFUTED — the symbolic-ref fallback does NOT fix the no-origin case.\"\n\n**T2 [STATIC]**: Session `7bbdb4de` (implementation verification) produced a certificate with 6 verified claims (C1-C6) about individual code paths.\n- Evidence: Issue body — \"Session `7bbdb4de` msg 40: 'All six claims verified correct with high confidence'\"\n\n**T3 [BEHAVIORAL]**: Session `50b3317c` (diagnosis from affected repo) ran `git symbolic-ref refs/remotes/origin/HEAD` in the actual zero-remote repo and observed it fail.\n- Evidence: Issue body — \"ran actual git commands in the affected repo... All returned real failure outputs. Evidence: 'exit 1', 'exit 128', 'no git remotes found'\"\n\n**T4 [STATIC]**: The expected user scenario is: \"user with zero remotes, no `default_branch` config, runs `xylem drain`\"\n- Evidence: Issue body — \"The certificate verified that each new code path... works correctly in isolation, but never traced the end-to-end scenario\"\n\n### Code Path Tracing\n\n**P1 [STATIC]**: `/reason` skill Step 3 (lines 93-111) requires tracing execution paths from entry point through to result.\n- Evidence: crosscheck/skills/reason/SKILL.md:93-111 — \"For each relevant code path, trace through it step by step... Trace: [entry point] -> [call 1 at file:line] -> [call 2 at file:line] -> [result]\"\n\n**P2 [STATIC]**: `/reason` skill Step 3 does NOT explicitly require end-to-end scenario tracing from user action to resolution.\n- Evidence: crosscheck/skills/reason/SKILL.md:93-111 — The instructions say \"For each relevant code path\" but do not mandate that one path must be the complete user failure scenario.\n\n**P3 [STATIC]**: Byfuglien's Phase 4 validation (lines 129-135) checks for certificate completeness, evidence grounding, and alternative hypotheses, but does not explicitly require end-to-end scenario verification.\n- Evidence: crosscheck/agents/byfuglien.md:129-135 — Lists \"Certificate completeness,\" \"Evidence grounding,\" \"Alternative hypothesis check,\" \"Confidence level,\" \"Claim classification\" but no requirement for integration scenarios.\n\n**P4 [STATIC]**: `/locate-fault` demonstrates behavioral testing at Phase 2 where actual commands are run in the affected environment.\n- Evidence: crosscheck/skills/locate-fault/SKILL.md:49-91 — Shows structured HYPOTHESIS → file read → OBSERVATIONS → verification cycle\n\n**P5 [SEMANTIC]**: Component verification (verifying individual functions work) differs from integration verification (verifying the complete user scenario succeeds).\n- Evidence: Software testing literature; demonstrated by issue — session `7bbdb4de` verified components but missed integration gap\n\n### Divergence Analysis\n\n**D1 [STATIC]**: Session `7bbdb4de`'s byfuglien certificate verified claims like \"No-origin Create() skips fetch\" (Claim 3) without first verifying that control flow would reach `Create()` in the zero-remote scenario.\n- Evidence: Issue body — \"Claim 3 — No-origin Create() skips fetch... This claim is correct in isolation but irrelevant if DetectDefaultBranch fails first.\"\n\n**D2 [BEHAVIORAL]**: The actual failure mode (zero remotes → `DetectDefaultBranch` fails → never reaches `Create()`) was only discovered when session `50b3317c` ran `git` commands in the affected repo.\n- Evidence: Issue body — \"Session `50b3317c` byfuglien ran `git symbolic-ref refs/remotes/origin/HEAD` in the actual affected repo... producing behavioral evidence that static analysis alone cannot provide.\"\n\n**D3 [SEMANTIC]**: Earlier byfuglien findings were not carried forward between sessions — session `bd420e82` correctly identified the symbolic-ref limitation, but session `7bbdb4de` did not re-check it.\n- Evidence: Issue body — \"Session `bd420e82`'s byfuglien explicitly identified that '`symbolic-ref refs/remotes/origin/HEAD` does NOT fix the no-origin case'... But when the implementation was verified in `7bbdb4de`, the byfuglien had no access to the previous certificate\"\n\n## 4. Root-Cause Hypothesis\n\n**Primary Hypothesis (HIGH confidence):** The `/reason` skill's Step 3 instruction for execution path tracing is insufficient. It requires tracing \"each relevant code path\" but does not mandate that implementation verifications must include at least one end-to-end trace starting from the user's reported failure scenario. This allowed session `7bbdb4de` to verify 6 component claims without ever composing them into the complete user flow that would have revealed the `DetectDefaultBranch` failure.\n\n**Supporting Evidence:**\n- crosscheck/skills/reason/SKILL.md:93-111 — Step 3 says \"For each relevant code path, trace through it step by step\" but doesn't specify that one path must be the complete user scenario\n- Issue body Lesson 1 — \"The byfuglien certificate in `7bbdb4de` verified 6 individual claims... but never composed them into the actual failure scenario\"\n\n**Alternative Hypothesis 1 (MEDIUM confidence):** Byfuglien's Phase 4 validation rules lack a specific gate for integration scenario coverage. The validation checks certificate completeness and evidence grounding but does not require that implementation verifications include behavioral testing or end-to-end traces.\n\n**Supporting Evidence:**\n- crosscheck/agents/byfuglien.md:129-135 — Phase 4 validation lists 5 quality gates but none explicitly check for end-to-end scenario coverage\n- Issue body Lesson 2 — \"Behavioral testing in the affected environment catches gaps that static analysis misses\"\n\n**Alternative Hypothesis 2 (MEDIUM confidence):** The confidence rating guidance in `/reason` Step 5 (line 152-156) should explicitly downgrade confidence to MEDIUM when behavioral claims remain untested or when the verification is for a bug fix but doesn't test the fix in the original failure environment.\n\n**Supporting Evidence:**\n- crosscheck/skills/reason/SKILL.md:152-156 — Defines HIGH as \"All premises verified by reading code, no unresolved questions\" but doesn't account for untested integration scenarios\n- Issue body — \"The confidence should have been MEDIUM at best, because the zero-remote end-to-end scenario was never tested\"\n\n## 5. Classification\n\n**Classification:** `refactor`\n\n**Verification track:** `semi-formal`\n\n**Rationale:** This is a behavior-preserving structural change to the `/reason` skill instructions and byfuglien validation rules. The change needs to preserve the skill's existing component verification capabilities while adding mandatory end-to-end scenario tracing for implementation verifications. The change is self-referential — we're modifying the crosscheck plugin's reasoning infrastructure, which is itself designed for verifying code changes. Semi-formal reasoning via `/compare-patches` would be appropriate for verifying that the updated skill instructions preserve existing capabilities while adding the new requirement. The issue explicitly requests improvements to the reasoning methodology (Lessons 1-3), which are structural changes to how verification is performed, not algorithmic properties suitable for formal proof.\n\n---\n\n```json\n{\n  \"context_updates\": {\n    \"issue_ref\": \"nicholls-inc/claude-code-marketplace#61\",\n    \"issue_title\": \"crosscheck: component-correct verification misses end-to-end integration gaps\",\n    \"analysis_classification\": \"refactor\",\n    \"verification_track\": \"semi-formal\",\n    \"files_involved\": [\n      \"crosscheck/agents/byfuglien.md\",\n      \"crosscheck/skills/reason/SKILL.md\",\n      \"crosscheck/skills/locate-fault/SKILL.md\"\n    ]\n  }\n}\n```",
+              "files_involved": [
+                "crosscheck/agents/byfuglien.md",
+                "crosscheck/skills/reason/SKILL.md",
+                "crosscheck/skills/locate-fault/SKILL.md"
+              ],
+              "analysis_classification": "refactor",
+              "issue_ref": "nicholls-inc/claude-code-marketplace#61"
+            },
+            "notes": "Stage completed: analyze",
+            "usage": {
+              "input": {
+                "usage": {
+                  "model": {
+                    "provider": "anthropic",
+                    "model_id": "claude-sonnet-4-5"
+                  },
+                  "tokens": {
+                    "input_tokens": 23620,
+                    "output_tokens": 4357,
+                    "reasoning_tokens": 106,
+                    "cache_read_tokens": 136070,
+                    "cache_write_tokens": 25415
+                  }
+                },
+                "facts": {
+                  "provider": "anthropic",
+                  "cache_write_5m_tokens": 25415,
+                  "cache_write_1h_tokens": 0
+                }
+              },
+              "total_usd_micros": 273932
+            }
+          }
+        },
+        "next_node_id": "plan",
+        "git_commit_sha": "28aed7b7ea5f729081d5510e5b73c940392293f1",
+        "node_visits": {
+          "start": 1,
+          "analyze": 1
         }
       }
     ]
@@ -608,6 +746,28 @@
     },
     "analyze@1": {
       "first_event_seq": 20,
+      "prompt": null,
+      "response": null,
+      "completion": {
+        "outcome": "succeeded",
+        "notes": "Stage completed: analyze",
+        "failure_reason": null,
+        "timestamp": "2026-05-04T11:33:13.324531296Z"
+      },
+      "provider_used": {
+        "mode": "agent",
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-5"
+      },
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    },
+    "plan@1": {
+      "first_event_seq": 84,
       "prompt": null,
       "response": null,
       "completion": null,
