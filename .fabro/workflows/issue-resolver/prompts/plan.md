@@ -32,7 +32,7 @@ Your preamble already contains:
    - <test name — what it asserts>
 
    ## Verification approach
-   <How verify_byfuglien will check this. For `formal` track, name the
+   <How the verify stage will check this. For `formal` track, name the
    Dafny spec(s) that will be written. For `lightweight`, name the
    property-based tests / contract assertions. For `semi-formal`, name
    the execution traces / patch-comparison anchors.>
