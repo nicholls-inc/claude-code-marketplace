@@ -1,0 +1,460 @@
+{
+  "spec": {
+    "run_id": "01KQSC3PVDR5W0BB3EC9J7Z8XJ",
+    "settings": {
+      "project": {
+        "name": null,
+        "description": null,
+        "directory": ".",
+        "metadata": {}
+      },
+      "workflow": {
+        "name": null,
+        "description": null,
+        "graph": "workflow.fabro",
+        "metadata": {}
+      },
+      "run": {
+        "goal": {
+          "type": "inline",
+          "value": "61"
+        },
+        "working_dir": null,
+        "metadata": {},
+        "inputs": {},
+        "model": {
+          "provider": "anthropic",
+          "name": "claude-sonnet-4-5",
+          "fallbacks": []
+        },
+        "git": {
+          "author": null
+        },
+        "prepare": {
+          "commands": [],
+          "timeout_ms": 300000
+        },
+        "execution": {
+          "mode": "normal",
+          "approval": "prompt",
+          "retros": true
+        },
+        "checkpoint": {
+          "exclude_globs": []
+        },
+        "sandbox": {
+          "provider": "docker",
+          "preserve": false,
+          "devcontainer": false,
+          "env": {
+            "DAFNY_DOCKER_IMAGE": "crosscheck-dafny:latest"
+          },
+          "local": {
+            "worktree_mode": "always"
+          },
+          "docker": {
+            "image": "buildpack-deps:noble",
+            "network_mode": null,
+            "memory_limit": 4000000000,
+            "cpu_quota": 200000,
+            "env_vars": {},
+            "skip_clone": false
+          },
+          "daytona": null
+        },
+        "notifications": {},
+        "interviews": {
+          "provider": null,
+          "slack": null,
+          "discord": null,
+          "teams": null
+        },
+        "agent": {
+          "permissions": null,
+          "mcps": {
+            "crosscheck-dafny": {
+              "name": "crosscheck-dafny",
+              "transport": {
+                "type": "stdio",
+                "command": [
+                  "node",
+                  "{{ env.CROSSCHECK_MCP_PATH }}"
+                ],
+                "env": {}
+              },
+              "startup_timeout_secs": 30,
+              "tool_timeout_secs": 180
+            }
+          }
+        },
+        "hooks": [],
+        "scm": {
+          "provider": null,
+          "owner": null,
+          "repository": null,
+          "github": null
+        },
+        "pull_request": {
+          "enabled": true,
+          "draft": true,
+          "auto_merge": false,
+          "merge_strategy": "squash"
+        },
+        "artifacts": {
+          "include": [
+            "plan.md",
+            "stages/**",
+            "*.dfy"
+          ]
+        }
+      }
+    },
+    "graph": {
+      "name": "IssueResolver",
+      "nodes": {
+        "plan_revise": {
+          "id": "plan_revise",
+          "attrs": {
+            "timeout": {
+              "Duration": {
+                "secs": 600,
+                "nanos": 0
+              }
+            },
+            "label": {
+              "String": "Plan · revise (one-shot)"
+            },
+            "prompt": {
+              "String": "# Stage 2b — Plan · revise (one-shot)\n\nYou are the planner, on your single revision pass. The adversarial reviewer\nhas flagged concerns with the original `plan.md`. Your job is to address\n**every** concern in **one** pass.\n\n**There is no second review.** After this stage, the implementer reads\n`plan.md` and executes it directly. If you skip a concern, it ships.\n\n## What you have\n\nYour preamble contains:\n\n- The full **plan** stage response (your original plan).\n- The full **review** stage response (the reviewer's verdict and concerns).\n- `review_concerns` in context — the itemised list the reviewer wrote.\n- `plan.md` already exists in the working directory; it is the original plan.\n\n## What to do\n\n1. Re-read `plan.md` so you know what you wrote originally.\n2. List every concern from `review_concerns` explicitly. Number them.\n3. For each concern, state plainly:\n   - **How the revised plan addresses it** — concrete change to a step, a\n     test, a verification approach, or the risk register. Cite which\n     section of `plan.md` you're editing.\n   - **Or — why the concern is invalid** — with code-level evidence\n     (`path/to/file.py:LINE`). If you reject a concern, say so and justify\n     it; do not silently ignore it.\n4. **Update `plan.md` in place.** Overwrite the file with the revised plan.\n   Same structure as the original (Verification track / Steps / Tests /\n   Verification approach / Risk register), now incorporating the changes.\n5. If the reviewer's concerns reveal that the analysis itself was wrong\n   (e.g. classification was off, key files missed), update the relevant\n   sections of `plan.md` accordingly. The plan can change track if needed.\n\n## Output\n\nRespond with:\n\n1. **Concern-by-concern resolution table.** For each numbered review concern:\n   - The concern text (one line)\n   - Status: `addressed` | `rejected (with rationale)`\n   - Affected `plan.md` section\n2. A brief summary (under 150 words) of what materially changed in the plan.\n\nThe implement stage reads `plan.md` directly; you don't need to re-paste it.\n\nEnd with this JSON block:\n\n```json\n{\n  \"context_updates\": {\n    \"plan_revised\": true,\n    \"concerns_addressed\": <integer count>,\n    \"concerns_rejected\": <integer count>,\n    \"plan_track\": \"<verification track in the revised plan>\"\n  }\n}\n```\n\n## Discipline\n\n- One pass. Every concern gets a status. No hand-waving.\n- If you reject a concern, the implementer and the verify stage will see\n  your rationale in the run log — make it bulletproof.\n- Don't expand scope to address concerns. Address them with the minimum\n  surgical change. The reviewer's job was to catch missed essentials,\n  not to volunteer a redesign.\n"
+            },
+            "reasoning_effort": {
+              "String": "high"
+            }
+          }
+        },
+        "exit": {
+          "id": "exit",
+          "attrs": {
+            "shape": {
+              "String": "Msquare"
+            },
+            "label": {
+              "String": "Exit"
+            }
+          }
+        },
+        "plan": {
+          "id": "plan",
+          "attrs": {
+            "reasoning_effort": {
+              "String": "high"
+            },
+            "label": {
+              "String": "Plan"
+            },
+            "timeout": {
+              "Duration": {
+                "secs": 600,
+                "nanos": 0
+              }
+            },
+            "prompt": {
+              "String": "# Stage 2 — Plan\n\nYou are the planner. Turn the analysis from the previous stage into a\nconcrete, sequenced implementation plan that the implement stage will\nexecute step-by-step.\n\n## What you have\n\nYour preamble already contains:\n\n- The full **analyze** stage response (issue summary, files, classification,\n  verification track).\n- `analysis_classification` and `verification_track` in context.\n\n## What to do\n\n1. **Read** any files mentioned in `files_involved` so your plan is grounded\n   in actual code, not the analyzer's summary.\n2. **Write `plan.md`** to the working directory. Structure:\n\n   ```markdown\n   # Plan: <issue title>\n\n   ## Verification track\n   <formal | lightweight | semi-formal>\n\n   ## Steps\n   1. <action — file path — what changes>\n   2. ...\n\n   ## Tests / properties to add\n   - <test name — what it asserts>\n\n   ## Verification approach\n   <How the verify stage will check this. For `formal` track, name the\n   Dafny spec(s) that will be written. For `lightweight`, name the\n   property-based tests / contract assertions. For `semi-formal`, name\n   the execution traces / patch-comparison anchors.>\n\n   ## Risk register\n   - <known risk — mitigation>\n   ```\n\n3. Keep the plan small and reversible. A bug fix is one or two changes,\n   not a refactor. Don't smuggle in unrelated cleanups.\n\n## What happens next\n\nThe adversarial reviewer reads `plan.md` and gets exactly one chance to\nflag concerns. If they revise, you'll get one revision pass via the\n`plan_revise` stage to address every concern, and then implementation\nruns directly. So write the plan as if it might ship as-is — don't\nleave gaps for the reviewer to catch.\n\n## Output\n\nRespond with a brief summary (under 250 words) of what you wrote to\n`plan.md`. The reviewer reads `plan.md` directly; you don't need to\nre-paste it in your response.\n\nEnd with this JSON block:\n\n```json\n{\n  \"context_updates\": {\n    \"plan_track\": \"<verification track from your plan>\",\n    \"plan_step_count\": <integer>\n  }\n}\n```\n"
+            }
+          }
+        },
+        "start": {
+          "id": "start",
+          "attrs": {
+            "shape": {
+              "String": "Mdiamond"
+            },
+            "label": {
+              "String": "Start"
+            }
+          }
+        },
+        "analyze": {
+          "id": "analyze",
+          "attrs": {
+            "prompt": {
+              "String": "# Stage 1 — Analyze\n\nYou are the **byfuglien** orchestrator: an evidence-grounded analyst.\nYour job is to read the GitHub issue, locate the relevant code, and\nproduce a verified-reasoning analysis the planner will rely on.\n\n## Goal reference\n\nThe run goal is:\n\n```\n61\n```\n\nParse it as a GitHub issue reference. Accept any of:\n\n- bare number — `42`\n- short ref — `#42`\n- qualified ref — `owner/repo#42`\n\nIf no `owner/repo` prefix is present, use the current repository\n(detect via `gh repo view --json nameWithOwner -q .nameWithOwner`).\n\n## Step 1 — Read the issue\n\nFetch the issue body, title, comments, and labels:\n\n```bash\ngh issue view <ISSUE_REF> --json number,title,body,labels,comments\n```\n\nQuote the issue title and the first ~500 characters of the body in\nyour analysis output so downstream stages don't have to re-fetch.\n\n## Step 2 — Locate related code\n\nFind the code surface the issue is about. Use real evidence —\n`grep`, `find`, `rg`, or reading specific files. Cite every claim\nin `path/to/file.py:LINE` form. **No \"probably,\" no \"likely.\"**\n\nWhen the issue describes a failure / regression, follow the\nfour-phase `/locate-fault` methodology:\n\n1. **Test semantics** — what does the failing test actually assert?\n2. **Code path** — trace from entry point to the assertion site.\n3. **Divergence** — at which line does observed behaviour part from expected?\n4. **Ranked predictions** — top 1–3 root-cause hypotheses, each with\n   the file:line that would prove or refute it.\n\n## Step 3 — Classify (byfuglien matrix)\n\nPick exactly one classification. This drives which verification track\nthe planner will choose.\n\n| Classification | Verification track | When to pick |\n|---|---|---|\n| `algorithmic`   | `formal`        | Pure sequential logic, quantified properties, sorting, parsing, math |\n| `safety-critical` | `formal`      | Auth, crypto, money, state machines that must not regress |\n| `crud-io`       | `lightweight`   | Database, network, filesystem, framework glue |\n| `concurrency`   | `lightweight`   | Locks, channels, async — Dafny cannot model these |\n| `floating-point` | `lightweight`  | IEEE-754 math — Dafny `real` is BigRational |\n| `fault-localize` | `semi-formal`  | \"Why is this broken?\" — locate-fault dominates |\n| `refactor`      | `semi-formal`   | Behaviour-preserving structural change — compare-patches at verify time |\n\n## Step 4 — Output\n\nProduce a Markdown analysis with these sections:\n\n1. **Issue summary** (title + 2–3 sentence problem statement)\n2. **Files involved** (bulleted list of `path:line-range` with one-line role)\n3. **Evidence trace** (the locate-fault four phases, if applicable, otherwise\n   a plain execution trace)\n4. **Root-cause hypothesis** (single best, plus 1–2 alternatives kept alive)\n5. **Classification** (one row from the matrix above, with rationale)\n\nEnd your response with **exactly** this JSON block on its own lines so the\nplanner picks it up via the preamble:\n\n```json\n{\n  \"context_updates\": {\n    \"issue_ref\": \"<ISSUE_REF as resolved>\",\n    \"issue_title\": \"<verbatim title>\",\n    \"analysis_classification\": \"<one of: algorithmic | safety-critical | crud-io | concurrency | floating-point | fault-localize | refactor>\",\n    \"verification_track\": \"<one of: formal | lightweight | semi-formal>\",\n    \"files_involved\": [\"path/to/file.py\", \"...\"]\n  }\n}\n```\n\n## Discipline\n\n- Cite or be silent. Every causal claim → `path:line`.\n- Keep at least one alternative hypothesis alive until the evidence\n  rules it out.\n- If after 5 reasonable searches you still cannot locate the relevant\n  code, say so explicitly. Do not invent paths."
+            },
+            "timeout": {
+              "Duration": {
+                "secs": 900,
+                "nanos": 0
+              }
+            },
+            "label": {
+              "String": "Analyze"
+            },
+            "reasoning_effort": {
+              "String": "high"
+            }
+          }
+        },
+        "fix": {
+          "id": "fix",
+          "attrs": {
+            "timeout": {
+              "Duration": {
+                "secs": 1200,
+                "nanos": 0
+              }
+            },
+            "reasoning_effort": {
+              "String": "high"
+            },
+            "prompt": {
+              "String": "# Stage 6 — Fix verification failures (ONE-SHOT)\n\nYou are the implementer, on your single fix pass. The verify stage\nflagged one or more failures. Your job is to address **every** failure\nin **one** pass.\n\n## You get exactly ONE chance.\n\n- This is your only fix pass. After this stage, the workflow exits to\n  a PR.\n- Whatever you don't address — fix or document — reaches the PR\n  unflagged.\n- No new scope. Address only what verify flagged.\n\n## What you have\n\nYour preamble contains:\n\n- The full **verify** stage response (failures listed across Check 1,\n  Check 2, Check 3).\n- `verify_concerns` in context — the itemised list verify wrote.\n- The **implement** stage's response (`files_changed`, artifact paths,\n  declared verification track).\n- `plan.md` is on disk; the codebase is in whatever state implement\n  left it.\n\n## What to do\n\n1. Re-read `plan.md` and the verify response so you know exactly what\n   was promised and what was flagged.\n2. List every concern from `verify_concerns`. Number them.\n3. For each concern, do exactly **one** of:\n   - **Fix** — edit the code, edit the artifact, add a missing\n     artifact. Cite which file changed.\n   - **Defer** — the concern is a real issue but cannot be addressed\n     in this pass without scope creep or external input. State the\n     concrete reason. Deferred concerns surface on the PR for human\n     triage.\n\n   Do **not** silently ignore a concern. Every numbered item gets a\n   status.\n\n4. After all fixes: re-run the verification artifacts on the declared\n   track:\n   - **`formal`** — `mcp__plugin_crosscheck_dafny__dafny_verify` on\n     each `.dfy`.\n   - **`lightweight` / `semi-formal`** — the named property tests /\n     regression tests.\n\n   Quote the new exit status / test output verbatim. Record the final\n   status as `green`, `red`, or `mixed` (some artifacts green, some\n   red).\n\n5. Commit fix changes. Conventional Commits — `fix:` prefix. The\n   commit message body lists fixed concerns and any deferred ones,\n   so the PR description carries the verification status forward.\n\n## Output\n\nMarkdown report with:\n\n1. **Concern resolution table** — for each numbered concern: status\n   (`fixed` | `deferred`), affected file, one-line evidence.\n2. **Re-run verification output** — verbatim Dafny exit status / test\n   output tail.\n3. **Final status** (`green` | `red` | `mixed`) with a one-paragraph\n   summary of what is and isn't verified.\n\nEnd with this JSON block:\n\n```json\n{\n  \"outcome\": \"succeeded\",\n  \"context_updates\": {\n    \"fix_attempted\": true,\n    \"fix_concerns_total\": <integer>,\n    \"fix_concerns_resolved\": <integer>,\n    \"fix_concerns_deferred\": <integer>,\n    \"verification_status_after_fix\": \"<green|red|mixed>\"\n  }\n}\n```\n\n## Discipline\n\n- One pass. Every concern gets a status — fixed or deferred, never\n  silent.\n- Surgical changes only. The verify stage's job was to surface\n  failures; do not volunteer a redesign.\n- Honest re-run. If your fix didn't actually make the artifact pass,\n  record `red` or `mixed` — do not claim `green` you didn't observe.\n- Deferred items are not failures of this stage; they are inputs to\n  human triage on the PR.\n"
+            },
+            "label": {
+              "String": "Fix verification failures (one-shot)"
+            }
+          }
+        },
+        "implement": {
+          "id": "implement",
+          "attrs": {
+            "prompt": {
+              "String": "# Stage 4 — Implement (with verification artifacts)\n\nYou are the implementer. Read the approved plan and execute it\nstep-by-step. Do exactly what the plan says — no more, no less. The\nverification artifacts the plan named are part of \"done\" — if they\ndon't pass, this stage fails.\n\n## Read\n\n1. Open `plan.md`. This is the source of truth for what to do.\n2. Note the **verification track** declared in the plan. Your\n   implementation must produce passing artifacts on that track before\n   you finish.\n\n## Execute\n\n### For every plan step\n\n- Make the file edits the step describes.\n- Run any relevant local checks (typecheck, lint, fast unit tests) as\n  you go. Don't accumulate a giant uncommitted blast radius.\n- If a step turns out to be wrong (file doesn't exist, API is\n  different from what the plan assumed), **stop and report**. The\n  plan/review loop produced a bad plan; surface that, don't silently\n  rewrite it.\n\n### Verification artifacts (HARD GATE)\n\nPer the plan's declared track:\n\n- **`formal`** — Write Dafny spec(s) under the path the plan named.\n  Call `mcp__plugin_crosscheck_dafny__dafny_verify` and quote the\n  exit status verbatim in your output. If verification reports\n  unproven obligations, this stage **fails**. Use\n  `mcp__plugin_crosscheck_dafny__dafny_compile` if the plan requires\n  extracting verified Python/Go.\n- **`lightweight`** — Add the contract assertions and property-based\n  tests the plan named. Run them locally. Quote the last 30 lines of\n  test output verbatim. If any test fails, this stage **fails**.\n- **`semi-formal`** — Add the execution-trace anchors / regression\n  tests the plan named. Run them. If any regression test fails, this\n  stage **fails**.\n\nThis is non-negotiable. The downstream verify stage attests coverage,\nnot correctness — it trusts your artifacts. If you hand it broken\nartifacts, the gate is wrong.\n\n### Tests\n\nAdd the tests `plan.md → ## Tests / properties to add` listed. Run\nthe project's full test suite (`npm test`, `pytest`, `go test ./...`,\netc. — look at the repo's CONTRIBUTING / package files to choose).\nTests must pass before you finish.\n\n### Commit\n\nMake commits as you go (one logical commit per plan step is fine, or\none combined commit at the end if changes are tightly coupled). Use\nConventional Commits — this repo's CLAUDE.md notes that `docs:` is\nblocked for behavioural artifacts.\n\nThe Fabro project config has draft-PR auto-creation enabled, so\ncommitted work surfaces as a PR after the workflow completes.\n\n## Output\n\nRespond with:\n\n1. A bulleted list of plan steps and what you actually did for each.\n2. **Verification evidence** — the verbatim Dafny exit status / test\n   output tail / regression test output, depending on track.\n3. A summary of any deviations from the plan and *why*.\n\nEnd with one of:\n\nPass:\n\n```json\n{\n  \"outcome\": \"succeeded\",\n  \"context_updates\": {\n    \"implementation_complete\": true,\n    \"files_changed\": [\"path/a\", \"path/b\", \"...\"],\n    \"tests_added\": [\"test_name\", \"...\"],\n    \"verification_track\": \"<the track you actually implemented to>\",\n    \"verification_artifact_paths\": [\"path/to/spec.dfy\", \"...\"],\n    \"verification_status\": \"green\"\n  }\n}\n```\n\nFail (artifacts didn't pass):\n\n```json\n{\n  \"outcome\": \"failed\",\n  \"failure_reason\": \"<one-paragraph triage suitable for a CI summary, citing the failing artifact and exit status>\",\n  \"context_updates\": {\n    \"files_changed\": [\"...\"],\n    \"verification_status\": \"red\"\n  }\n}\n```\n\n## Discipline\n\n- The plan is the spec. Drift kills accountability.\n- Verification artifacts are part of done. A passing implementation\n  with a failing Dafny check is a failed stage, not a partial success.\n- If you genuinely cannot finish a step (broken environment, missing\n  dependency), commit what you have and emit `outcome: \"failed\"` with\n  the environmental cause named.\n"
+            },
+            "label": {
+              "String": "Implement (with verification artifacts)"
+            },
+            "timeout": {
+              "Duration": {
+                "secs": 1800,
+                "nanos": 0
+              }
+            }
+          }
+        },
+        "verify": {
+          "id": "verify",
+          "attrs": {
+            "prompt": {
+              "String": "# Stage 5 — Verify · coverage attestation (ONE-SHOT)\n\nYou are the **byfuglien** crosschecking enforcer at the gate. Your\njob is narrow: confirm that the verification artifacts the implementer\nproduced **actually cover the change** and **are green**.\n\nYou do not re-classify. You do not re-derive. You do not re-run intent\nanalysis (that lived at review time). You attest.\n\n## You get exactly ONE chance.\n\n- This is your only verification pass.\n- If you flag failures, the `fix` stage gets **one** attempt to address\n  what you list, and then the workflow exits to a PR. There is no\n  second verify.\n- **Frontload everything.** Run **all three checks** even if Check 1\n  fails — do not short-circuit. The fix stage works one-shot off your\n  list, and whatever you don't surface reaches the PR unflagged.\n- Every concern must be self-contained: file path, exact failure,\n  enough context that the fix stage can act without re-reading verify's\n  reasoning chain.\n\n## Read\n\n1. The implement stage's response (in your preamble) — note\n   `verification_track`, `verification_artifact_paths`,\n   `verification_status`, `files_changed`.\n2. `plan.md` — the spec the implementer worked to.\n3. The artifacts themselves: the `.dfy` files / property tests /\n   regression tests the implementer named.\n4. The actual diff (`git diff` on `files_changed`) — you need to know\n   what surface changed.\n\n## Three checks. Run all three. Collect every failure.\n\n### Check 1 — Artifacts exist\n\nFor each path in `verification_artifact_paths`: does the file exist\non disk? List every missing artifact. Do not stop at the first.\n\n### Check 2 — Artifacts are green\n\n- **`formal`** — Re-run `mcp__plugin_crosscheck_dafny__dafny_verify`\n  on each `.dfy` file. Quote each exit status. List every artifact\n  that reports unproven obligations, with the failing assertion's\n  file:line.\n- **`lightweight` / `semi-formal`** — Run the named tests. Quote the\n  last 30 lines of output. List every failing test by name.\n\nIf implement reported `verification_status: green` but your re-run is\nred, **flag it loudly** in the report — the implementer's self-report\nwas wrong, and that is exactly the independence check this stage\nexists for.\n\n### Check 3 — Artifacts cover the changed surface\n\nThis is the only judgment call you make. For each file in\n`files_changed`, is there at least one verification artifact that\nreferences it (Dafny spec for the function, property test for the\nbehaviour, regression test for the path)?\n\nRead 2–3 representative artifacts and confirm each names a function,\ntype, or property that *actually exists in the diff*. Build a coverage\nmap: every `files_changed` entry → covering artifact, or `UNCOVERED`.\nList every `UNCOVERED` entry and every artifact that points at code\nthe diff didn't change. This is the \"passing Dafny spec for a\ndifferent function\" trap; it is the one thing the implementer cannot\ncredibly check on themselves.\n\n## Decide\n\nPass if all three checks passed clean.\nFail if any check produced one or more failures. List **every**\nfailure across **all three** checks — not just the first.\n\n## Output\n\nMarkdown report with:\n\n1. **Check 1** — artifact existence (every path · ok / missing)\n2. **Check 2** — artifact green status (verbatim tool output for each)\n3. **Check 3** — coverage map (every `files_changed` entry → covering\n   artifact, or `UNCOVERED`)\n4. **Verdict** (one line — pass or fail)\n\nEnd with **exactly one** of these JSON blocks:\n\nPass:\n\n```json\n{\n  \"outcome\": \"succeeded\",\n  \"preferred_next_label\": \"pass\",\n  \"context_updates\": {\n    \"verify_verdict\": \"pass\",\n    \"verify_evidence\": \"<one-paragraph summary>\"\n  }\n}\n```\n\nFail:\n\n```json\n{\n  \"outcome\": \"succeeded\",\n  \"preferred_next_label\": \"fail\",\n  \"context_updates\": {\n    \"verify_verdict\": \"fail\",\n    \"verify_concerns\": \"1. <self-contained failure with file:line>\\n2. <…>\\n…\",\n    \"verify_evidence\": \"<one-paragraph summary>\"\n  }\n}\n```\n\n(Note: `outcome` is `succeeded` even on verdict-fail. The verify agent\nsucceeded at its job — it found problems. The run continues to `fix`.)\n\n## Discipline\n\n- A passing artifact you didn't read is not evidence.\n- A green Dafny report against the wrong spec is the trap. Check 3\n  is the only thing standing between that trap and a merged PR.\n- Cite `file:line` for every coverage claim.\n- Frontload. There is no second verify. Every failure not on your\n  list reaches the PR unflagged.\n- This stage is thin by design. If you find yourself re-doing the\n  implementer's reasoning, stop — that's drift back into the old\n  parallel-verify shape.\n"
+            },
+            "reasoning_effort": {
+              "String": "medium"
+            },
+            "timeout": {
+              "Duration": {
+                "secs": 300,
+                "nanos": 0
+              }
+            },
+            "label": {
+              "String": "Verify · coverage attestation (one-shot)"
+            }
+          }
+        },
+        "review": {
+          "id": "review",
+          "attrs": {
+            "timeout": {
+              "Duration": {
+                "secs": 600,
+                "nanos": 0
+              }
+            },
+            "reasoning_effort": {
+              "String": "high"
+            },
+            "label": {
+              "String": "Adversarial Review (one-shot · intent + spec)"
+            },
+            "prompt": {
+              "String": "# Stage 3 — Adversarial Review (ONE-SHOT · intent + spec)\n\nYou are an **independent, adversarial reviewer**. Your job is *not* to\napprove. Your job is to find what the planner missed — across both\n**intent fit** (does the plan solve the issue's actual problem?) and\n**spec adequacy** (are the right invariants stated?).\n\nThis stage absorbs both the spec-adversary and intent-check roles.\nThere is no separate intent review at verify time. Whatever you don't\ncatch here will ship.\n\n## You get exactly ONE chance.\n\n- This is your **only** turn. No second review.\n- If you choose **revise**, the planner gets **one** revision pass\n  (`plan_revise`) to address your concerns, and then implementation\n  runs directly.\n- **Frontload everything.** Every probe you'd run on a second pass —\n  run it now. Every edge case, every missing invariant, every intent\n  gap — name it now.\n\n## Step 1 — Back-translate the plan (as blind as you can)\n\nOpen `plan.md`. Read it end-to-end. Then, **before** re-reading the\nissue body or the analyze stage's framing in your preamble, write a\n3–5 sentence prose description of what the plan *actually does* —\npurely from the plan itself. Treat it as a self-contained explanation\na stranger would read.\n\nYou will already have seen the issue framing in the analyze response.\nPerfect blindness isn't possible here, but the discipline of writing\nthe back-translation from `plan.md` *only*, without scrolling back to\nthe issue, is the lever that catches drift. Don't skip it; don't\nparaphrase the analyze stage's summary.\n\n## Step 2 — Diff against intent\n\nNow re-read the original issue body (in the analyze response).\nCompare:\n\n- What did the issue ask for?\n- What does your back-translation describe?\n\nCategorize the gap:\n\n- **Aligned** — back-translation and issue describe the same change.\n- **Under-specified** — back-translation is narrower (plan only fixes\n  part of what was asked).\n- **Over-specified** — back-translation is broader (scope creep).\n- **Misaligned** — plan addresses a different problem than the issue.\n\nAnything other than **aligned** (or under-specified-by-design, where\nthe issue itself flagged a phased rollout) is a revise.\n\n## Step 3 — Probe (run every probe; no skipping)\n\nFor each, write either \"pass — <one line>\" or a numbered concern with\na `plan.md` section reference.\n\n1. **Hidden assumptions.** What state, ordering, or invariant does\n   each step silently assume? Is the assumption justified by code\n   evidence?\n2. **Missing edge cases.** Empty inputs, max-size inputs, zero,\n   negative, NaN, unicode, concurrent callers, partial failure mid-step.\n3. **Test adequacy.** Would the proposed tests fail if the bug were\n   reintroduced by a careless edit? Or are they tautological /\n   mock-heavy?\n4. **Verification track fit.** If the plan claimed `formal` track, is\n   the problem actually Dafny-tractable (no IO, no concurrency, no\n   floating-point)? If it claimed `lightweight`, is it dodging a real\n   correctness obligation that warrants formal proof?\n5. **Scope creep.** Does the plan change anything not required by the\n   issue? Reject scope drift.\n6. **Reversibility / blast radius.** Can this be rolled back? Does it\n   touch shared infrastructure that needs explicit confirmation?\n\n## Step 4 — Missing invariants (spec-adversary)\n\nPropose up to **3** invariants the plan does not state but should.\nFor each:\n\n> **Missing invariant N** — <one-sentence statement>\n>   - **Why it matters** — <user-visible consequence if violated>\n>   - **Triage** — accept (must be added before merge) | defer\n>     (worth a follow-up issue) | reject (out of scope, justified)\n\nPropose first, then triage. Don't self-reject before stating the\ninvariant. Any `accept`-priority invariant is a revise.\n\n## Decide\n\n- **Approve** only if: back-translation is aligned, every probe came\n  back clean, no `accept`-priority missing invariants. Approval is\n  the rare case.\n- **Revise** otherwise. List every concern raised — intent gap, any\n  failed probe, any `accept`-priority invariant — as numbered,\n  self-contained items. The planner addresses each in a single pass\n  with no further dialogue.\n\n## Output\n\nRun every step in your written response, then end with **exactly one**\nof these JSON blocks:\n\nApprove:\n\n```json\n{\n  \"preferred_next_label\": \"approve\",\n  \"context_updates\": {\n    \"review_verdict\": \"approve\",\n    \"intent_gap\": \"aligned\"\n  }\n}\n```\n\nRevise:\n\n```json\n{\n  \"preferred_next_label\": \"revise\",\n  \"context_updates\": {\n    \"review_verdict\": \"revise\",\n    \"intent_gap\": \"<aligned|under-specified|over-specified|misaligned>\",\n    \"review_concerns\": \"1. <concern, self-contained>\\n2. <concern>\\n…\"\n  }\n}\n```\n\n## Discipline\n\n- No flattery. No \"the plan is generally good.\"\n- Never approve a plan you didn't read end-to-end.\n- If you can't decide between approve and revise, choose revise — the\n  planner gets one more pass and the cost is one extra stage.\n- Frontload. There is no second review. There is no verify-time\n  intent check. This is the last adversarial pass.\n"
+            }
+          }
+        }
+      },
+      "edges": [
+        {
+          "from": "start",
+          "to": "analyze",
+          "attrs": {}
+        },
+        {
+          "from": "analyze",
+          "to": "plan",
+          "attrs": {}
+        },
+        {
+          "from": "plan",
+          "to": "review",
+          "attrs": {}
+        },
+        {
+          "from": "review",
+          "to": "implement",
+          "attrs": {
+            "condition": {
+              "String": "preferred_label=approve"
+            },
+            "weight": {
+              "Integer": 10
+            },
+            "label": {
+              "String": "approve"
+            }
+          }
+        },
+        {
+          "from": "review",
+          "to": "plan_revise",
+          "attrs": {
+            "weight": {
+              "Integer": 5
+            },
+            "condition": {
+              "String": "preferred_label=revise"
+            },
+            "label": {
+              "String": "revise"
+            }
+          }
+        },
+        {
+          "from": "review",
+          "to": "implement",
+          "attrs": {
+            "weight": {
+              "Integer": 1
+            },
+            "label": {
+              "String": "default"
+            }
+          }
+        },
+        {
+          "from": "plan_revise",
+          "to": "implement",
+          "attrs": {}
+        },
+        {
+          "from": "implement",
+          "to": "verify",
+          "attrs": {}
+        },
+        {
+          "from": "verify",
+          "to": "exit",
+          "attrs": {
+            "weight": {
+              "Integer": 10
+            },
+            "condition": {
+              "String": "preferred_label=pass"
+            },
+            "label": {
+              "String": "pass"
+            }
+          }
+        },
+        {
+          "from": "verify",
+          "to": "fix",
+          "attrs": {
+            "weight": {
+              "Integer": 10
+            },
+            "condition": {
+              "String": "preferred_label=fail"
+            },
+            "label": {
+              "String": "fail"
+            }
+          }
+        },
+        {
+          "from": "verify",
+          "to": "exit",
+          "attrs": {
+            "label": {
+              "String": "default"
+            },
+            "weight": {
+              "Integer": 1
+            }
+          }
+        },
+        {
+          "from": "fix",
+          "to": "exit",
+          "attrs": {}
+        }
+      ],
+      "attrs": {
+        "max_node_visits": {
+          "String": "20"
+        },
+        "rankdir": {
+          "String": "LR"
+        },
+        "goal": {
+          "String": "61"
+        }
+      }
+    },
+    "workflow_slug": "issue-resolver",
+    "source_directory": "/opt/claude-code-marketplace",
+    "provenance": {
+      "server": {
+        "version": "0.221.0-nightly.0"
+      },
+      "client": {
+        "user_agent": "fabro-cli/0.220.0-nightly.2",
+        "name": "fabro-cli",
+        "version": "0.220.0-nightly.2"
+      },
+      "subject": {
+        "login": "hnipps",
+        "auth_method": "github"
+      }
+    },
+    "manifest_blob": "8c3e92383025d672f3551d9fc8db5e01a6c95b6a80d29b53d9c6a0d4f60ff580",
+    "definition_blob": "e2ecc1528be8a226657df315c79d3b11c81d36a59eada93c4003bf308278f06b",
+    "git": {
+      "origin_url": "https://github.com/nicholls-inc/claude-code-marketplace",
+      "branch": "hn/fabro",
+      "sha": "60d3bef255b5d49981b6bee1a48738b7a2a8f6e7",
+      "dirty": "clean",
+      "push_outcome": {
+        "type": "succeeded",
+        "remote": "origin",
+        "branch": "hn/fabro"
+      }
+    },
+    "in_place": false
+  },
+  "graph_source": "// Fabro workflow: issue-resolver\n//\n// Goal (run-supplied):  GitHub issue ID — bare number (\"42\"), short ref\n//                       (\"#42\"), or qualified ref (\"owner/repo#42\").\n//\n// Pipeline (linear — bounded one-shot revisions, no loops):\n//   start → analyze → plan → review\n//                            ├─ approve → implement\n//                            └─ revise  → plan_revise → implement\n//   implement → verify\n//                ├─ pass → exit\n//                └─ fail → fix → exit\n//\n// Adversarial assurance lives at REVIEW (intent + spec-adversary, one-shot).\n// Verification TOOLING (Dafny / property tests) lives inside IMPLEMENT —\n// implement stage fails its own artifacts if they don't pass.\n// VERIFY is a thin coverage attestation (artifacts exist · green · cover\n// the diff) and gets ONE shot — must frontload every failure it sees.\n// FIX gets ONE shot to address verify's list and exits.\n// The workflow always exits to a PR; verification status surfaces via\n// commits and the run log, not via workflow halt.\n\ndigraph IssueResolver {\n    graph [\n        goal            = \"Resolve a GitHub issue with adversarial planning, verified implementation, coverage attestation, and one-shot fix\",\n        rankdir         = \"LR\",\n        max_node_visits = \"20\"\n    ]\n\n    start [shape=Mdiamond, label=\"Start\"]\n    exit  [shape=Msquare,  label=\"Exit\"]\n\n    analyze [\n        label            = \"Analyze\",\n        prompt           = \"@prompts/analyze.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"900s\"\n    ]\n\n    plan [\n        label            = \"Plan\",\n        prompt           = \"@prompts/plan.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"600s\"\n    ]\n\n    review [\n        label            = \"Adversarial Review (one-shot · intent + spec)\",\n        prompt           = \"@prompts/review.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"600s\"\n    ]\n\n    plan_revise [\n        label            = \"Plan · revise (one-shot)\",\n        prompt           = \"@prompts/plan_revise.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"600s\"\n    ]\n\n    implement [\n        label   = \"Implement (with verification artifacts)\",\n        prompt  = \"@prompts/implement.md\",\n        timeout = \"1800s\"\n    ]\n\n    verify [\n        label            = \"Verify · coverage attestation (one-shot)\",\n        prompt           = \"@prompts/verify.md\",\n        reasoning_effort = \"medium\",\n        timeout          = \"300s\"\n    ]\n\n    fix [\n        label            = \"Fix verification failures (one-shot)\",\n        prompt           = \"@prompts/fix.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"1200s\"\n    ]\n\n    start -> analyze\n    analyze -> plan\n    plan -> review\n\n    review -> implement   [label=\"approve\", condition=\"preferred_label=approve\", weight=10]\n    review -> plan_revise [label=\"revise\",  condition=\"preferred_label=revise\",  weight=5]\n    review -> implement   [label=\"default\",                                      weight=1]\n\n    plan_revise -> implement\n    implement -> verify\n\n    verify -> exit [label=\"pass\",    condition=\"preferred_label=pass\", weight=10]\n    verify -> fix  [label=\"fail\",    condition=\"preferred_label=fail\", weight=10]\n    verify -> exit [label=\"default\",                                   weight=1]\n\n    fix -> exit\n}\n",
+  "start": null,
+  "status": {
+    "kind": "starting"
+  },
+  "status_updated_at": "2026-05-04T11:31:24.219868720Z",
+  "pending_control": null,
+  "checkpoint": null,
+  "checkpoints": [],
+  "conclusion": null,
+  "retro": null,
+  "retro_prompt": null,
+  "retro_response": null,
+  "sandbox": {
+    "provider": "docker",
+    "working_directory": "/workspace",
+    "identifier": "dafbfb2bf664e908ec136e3a68cf194accde13c06dd259c6eb8b867948eb0d39",
+    "repo_cloned": true,
+    "clone_origin_url": "https://github.com/nicholls-inc/claude-code-marketplace",
+    "clone_branch": "hn/fabro"
+  },
+  "final_patch": null,
+  "pull_request": null,
+  "superseded_by": null,
+  "pending_interviews": {},
+  "stages": {}
+}
