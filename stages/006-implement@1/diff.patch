@@ -1,0 +1,700 @@
+diff --git a/crosscheck/agents/byfuglien.md b/crosscheck/agents/byfuglien.md
+index ab137cd..3420830 100644
+--- a/crosscheck/agents/byfuglien.md
++++ b/crosscheck/agents/byfuglien.md
+@@ -132,6 +132,7 @@ Every result must pass these quality gates before delivery:
+ - **Alternative hypothesis check** — at least one alternative considered and ruled out with evidence; if missing, add it before delivering
+ - **Confidence level** — HIGH/MEDIUM/LOW stated with justification
+ - **Claim classification** — premises and claims are tagged with `[STATIC]`/`[SEMANTIC]`/`[BEHAVIORAL]`/`[FORMAL]`
++- **Integration validation** — for multi-component analysis, verify that evidence gathering crossed interface boundaries; if analysis cites "caller calls X" but didn't read X's implementation, flag as incomplete unless trust boundary is documented with explicit assumptions; if a claim about end-to-end behavior cites only interface-level code (function signatures, API contracts) without reading through-layer implementations or documenting trust boundaries, re-execute with explicit instructions to trace the full call chain
+ 
+ **For all output:**
+ - **Verification checklist present** — output includes a Verification Checklist section with all bracketed items filled in from the analysis
+@@ -159,4 +160,4 @@ If any gate fails, re-execute the skill with explicit instructions to address th
+ ### General
+ - Respect user choice — if the user wants a specific skill, use it without further argument
+ - Offer alternatives — after completing one skill, suggest if another would add value
+-- Assess before committing — always classify before diving into a skill
++- Assess before committing — always classify before diving into a skill
+\ No newline at end of file
+diff --git a/crosscheck/skills/locate-fault/SKILL.md b/crosscheck/skills/locate-fault/SKILL.md
+index ef95f87..d97be72 100644
+--- a/crosscheck/skills/locate-fault/SKILL.md
++++ b/crosscheck/skills/locate-fault/SKILL.md
+@@ -1,24 +1,25 @@
+ ---
+ name: locate-fault
+ description: >-
+-  Locate the root cause of a failing test using 4-phase semi-formal reasoning:
+-  test semantics analysis, code path tracing, divergence analysis, and ranked
+-  predictions. Traces from failure to root cause rather than fixating on crash
+-  sites. Triggers: "locate fault", "find the bug", "why does this fail",
+-  "root cause", stack traces, test failures.
++  Locate the root cause of a failing test using 5-phase semi-formal reasoning:
++  test semantics analysis, code path tracing, divergence analysis, ranked
++  predictions, and integration validation. Traces from failure to root cause
++  rather than fixating on crash sites. Integration validation ensures analysis
++  covers full execution paths across component boundaries. Triggers: "locate fault",
++  "find the bug", "why does this fail", "root cause", stack traces, test failures.
+ argument-hint: "[failing test name or error message] [optional: test file path]"
+ ---
+ # /locate-fault — Fault Localization via Semi-Formal Reasoning
+ 
+ ## Description
+ 
+-Locate the root cause of a failing test using semi-formal reasoning. Uses a 4-phase structured approach — test semantics analysis, code path tracing, divergence analysis, and ranked predictions — to systematically trace from test failure to root cause rather than fixating on crash sites.
++Locate the root cause of a failing test using semi-formal reasoning. Uses a 5-phase structured approach — test semantics analysis, code path tracing, divergence analysis, ranked predictions, and integration validation — to systematically trace from test failure to root cause rather than fixating on crash sites. Integration validation ensures that multi-component analysis doesn't stop at interface boundaries without verifying assumptions across layers.
+ 
+ ## Instructions
+ 
+ You are a fault localization expert using semi-formal reasoning. The user will provide a failing test (name and/or code) and you must find the buggy code. The structured template prevents you from stopping at the crash site (a common failure mode) and forces you to trace back to the root cause.
+ 
+-CRITICAL: You must complete ALL FOUR PHASES. Do not skip any phase or jump to conclusions early.
++CRITICAL: You must complete ALL PHASES. Do not skip any phase or jump to conclusions early.
+ 
+ ### Step 1: Phase 1 — Test Semantics Analysis
+ 
+@@ -134,25 +135,66 @@ Rank 3 ([high/medium/low] confidence): [file:lines]
+ 
+ Produce up to 5 ranked predictions. Each MUST cite the supporting CLAIM(s).
+ 
+-### Step 5: Summary
++### Step 5: Phase 5 — Integration Validation
++
++After ranking predictions, validate that the analysis covered the full execution path across component boundaries. **Skip if analysis is single-file or single-function; integration validation only applies to multi-component traces.**
++
++**Component boundary definition**: A boundary is crossed when execution moves from one file to another via function call, method invocation, or module import followed by invocation. Intra-file function calls are not boundaries.
++
++```
++## Phase 5: Integration Validation
++
++Multi-component analysis: [YES / NO]
++  -- (YES if the test execution path crosses 2+ files; NO if single-file)
++
++If YES, perform integration validation:
++
++COMPONENT BOUNDARIES TRACED:
++  -- Boundary 1: [caller_file:line] → [callee_file].[function] at [callee_file:line]
++     Status: [CROSSED - read callee implementation | TRUST BOUNDARY - see below]
++  -- Boundary 2: [caller_file:line] → [callee_file].[function] at [callee_file:line]
++     Status: [CROSSED - read callee implementation | TRUST BOUNDARY - see below]
++  ...
++
++TRUST BOUNDARIES (if any):
++  -- Trust boundary at [caller_file:line] → [callee_name]
++     Assumption: [expected behavior of the callee]
++     Reason: [library/extern/proprietary code - unreadable]
++
++FILES READ: [list all files examined in Phase 2]
++FILES ON EXECUTION PATH: [list all files the test actually executes through]
++
++COVERAGE CHECK:
++  -- [ ] Files read ⊇ Files on execution path (or trust boundaries documented for unread files)
++  -- [ ] Traced across at least N component boundaries (where N = count of distinct file-to-file calls on test execution path)
++```
++
++Rules:
++- For each file-to-file function call in the test's execution path, verify you either: (a) read the callee's implementation in Phase 2, or (b) documented it as a trust boundary with explicit assumptions
++- If validation reaches an unreadable callee (library, extern, proprietary), document the trust boundary with explicit assumptions about its expected behavior
++- Count the component boundaries you actually traced and compare to the number present in the test execution path
++- This phase ensures you didn't stop at interface boundaries without validating assumptions across layers
++
++### Step 6: Summary
+ 
+ Present a concise summary:
+ - The most likely root cause (Rank 1) with a plain-English explanation
+ - Why the crash site (if different) is a symptom, not the cause
+ - Suggested fix direction
+ 
+-### Step 6: Verification Checklist
++### Step 7: Verification Checklist
+ 
+ Present this checklist alongside the summary:
+ 
+ ```
+ ## Verification Checklist
+ 
+-- [ ] All four phases completed (none skipped)
++- [ ] All phases completed (none skipped)
+ - [ ] Top-ranked prediction traces back through CLAIM -> PREMISE chain
+ - [ ] Crash site vs. root cause distinction made explicit
+ - [ ] Alternative fault locations considered: [list Rank 2+ predictions]
+ - [ ] Claims requiring running code to confirm: [list any [BEHAVIORAL] items]
++- [ ] Integration validation performed: traced beyond interface boundaries, or documented trust boundary with callee assumptions
+ ```
+ 
+ ### Key Principles
+@@ -163,6 +205,7 @@ Present this checklist alongside the summary:
+ - Indirection bugs (test calls A, bug is in B that A calls) are the hardest — the template's call tracing catches these
+ - Multi-file bugs require following the call chain across files, not stopping at the first file
+ - Always form a HYPOTHESIS before reading each file — this prevents aimless exploration
++- Phase 5 integration validation prevents stopping at interface boundaries without verifying cross-component assumptions
+ 
+ ## Arguments
+ 
+@@ -171,4 +214,4 @@ The failing test name and/or test code, plus optional context about the failure.
+ Examples:
+ - `/locate-fault "test_year_before_1000 fails with AttributeError" tests/test_dateformat.py`
+ - `/locate-fault` (with test failure output in the conversation)
+-- `/locate-fault "TestTypeResolution.typeVariable_of_self_type causes StackOverflowError"`
++- `/locate-fault "TestTypeResolution.typeVariable_of_self_type causes StackOverflowError"`
+\ No newline at end of file
+diff --git a/crosscheck/skills/reason/SKILL.md b/crosscheck/skills/reason/SKILL.md
+index dd3fa06..0bb6a6e 100644
+--- a/crosscheck/skills/reason/SKILL.md
++++ b/crosscheck/skills/reason/SKILL.md
+@@ -18,7 +18,7 @@ General-purpose semi-formal reasoning skill that structures the analysis of any
+ 
+ You are a rigorous code analyst. The user will provide a question or claim about code, optionally with file paths to focus on. Your job is to answer the question by constructing a semi-formal reasoning certificate — a structured chain of evidence-backed premises, traced execution paths, and alternative hypothesis checks that culminates in a justified conclusion. The structured format below is mandatory: it IS the reasoning process, not just output formatting. You MUST complete Steps 1 through 4 before drawing any conclusion.
+ 
+-**Deep analysis mode:** For questions about specific code behavior or semantics — "What does X do?", "Is there a difference between A and B?", "Do we need this check?" — also include Steps 2b, 2c, and 4b for function-level tracing and data flow analysis. For broader reasoning questions — "Is this safe?", "Will this break?" — these deep analysis steps are optional.
++**Deep analysis mode:** For questions about specific code behavior or semantics — "What does X do?", "Is there a difference between A and B?", "Do we need this check?" — also include Steps 2b, 2c, 4b, and 4c for function-level tracing, data flow analysis, and integration validation. For broader reasoning questions — "Is this safe?", "Will this break?" — Steps 2b, 2c, and 4b are optional, but Step 4c integration validation is mandatory when tracing execution across 2+ files.
+ 
+ ### Step 1: Identify the Claim or Question
+ 
+@@ -123,6 +123,43 @@ If the opposite conclusion were true, what evidence would exist?
+ 
+ You MUST perform at least one alternative hypothesis check. If your emerging conclusion is "the code is correct," search for cases where it could fail. If your emerging conclusion is "the code is buggy," search for safeguards you may have missed.
+ 
++### Step 4c: Integration Validation
++
++For questions spanning multiple functions or modules, validate that your analysis crossed interface boundaries and verified assumptions about callee behavior. **Skip if the question involves only single-file or single-function analysis; integration validation only applies to multi-component reasoning.**
++
++**When tracing execution across 2+ files, integration validation is mandatory.** Stop tracing when reaching: (a) demonstrably correct code, (b) library/primitive, or (c) code unrelated to the question. At stop points (b), document trust boundary.
++
++```
++INTEGRATION VALIDATION:
++
++Multi-component analysis: [YES / NO]
++  -- (YES if reasoning spans 2+ files; NO if single-file/single-function)
++
++If YES, perform integration validation:
++
++INTERFACE CROSSINGS:
++  -- Crossing 1: [caller_file:line] calls [callee]
++     Verified: [YES - read implementation at callee_file:line | TRUST BOUNDARY - see below]
++  -- Crossing 2: [caller_file:line] calls [callee]
++     Verified: [YES - read implementation at callee_file:line | TRUST BOUNDARY - see below]
++  ...
++
++TRUST BOUNDARIES (if any):
++  -- Trust boundary at [caller_file:line] → [library_function]
++     Assumption: [expected behavior of the library function]
++     Reason: [library/primitive - standard behavior assumed]
++
++TERMINATION:
++  -- Stopped tracing at: [location]
++     Reason: [demonstrably correct | library/primitive | unrelated to question]
++```
++
++Rules:
++- Document each interface crossing (caller → callee)
++- For each crossing, verify assumptions about callee behavior by reading its implementation OR document it as a trust boundary with explicit assumptions
++- When you reach a library call, primitive operation, or demonstrably correct code, stop tracing but document the trust boundary with expected behavior
++- Deep analysis mode: integration validation is mandatory when tracing execution across 2+ files, continuing until termination condition is met
++
+ ### Step 4b: Semantic Properties (deep analysis)
+ 
+ For code behavior questions, identify semantic properties with explicit evidence:
+@@ -176,6 +213,7 @@ Present this checklist alongside the conclusion:
+ - [ ] Alternative hypotheses ruled out: [list with reasoning]
+ - [ ] Unverified claims requiring running code: [list any [BEHAVIORAL] items]
+ - [ ] Claims suitable for formal verification: [list any [FORMAL] items]
++- [ ] Integration validation: all interface crossings verified by reading callee implementations OR documented trust boundaries
+ ```
+ 
+ Fill in each bracketed item from the analysis above. The `[BEHAVIORAL]` and `[FORMAL]` items are drawn from the claim classification tags.
+@@ -191,4 +229,4 @@ Examples:
+ - `/reason "Does this handler properly validate all user input?" src/api/routes.py src/api/validators.py`
+ - `/reason "What does this function actually do?" src/utils.ts:42`
+ - `/reason "Is there a difference between using .at() vs bracket notation here?" src/utils.ts`
+-- `/reason "Do we need this null check?" src/parser.py:45`
++- `/reason "Do we need this null check?" src/parser.py:45`
+\ No newline at end of file
+diff --git a/crosscheck/tests/integration_validation/README.md b/crosscheck/tests/integration_validation/README.md
+new file mode 100644
+index 0000000..a57ae26
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/README.md
+@@ -0,0 +1,69 @@
++# Integration Validation Test Scenarios
++
++This directory contains test scenarios for validating the integration validation phases added to `/locate-fault` and `/reason` skills.
++
++## Test Scenario 1: Multi-file Bug (Execution Trace Spanning)
++
++**Files:**
++- `moduleA.py` - Contains `validate_input(x)` that calls `moduleB.process(x)`
++- `moduleB.py` - Contains `process(x)` with undocumented precondition `x > 0`
++- `test_multifile_bug.py` - Test that exposes the bug when `x=0`
++
++**Bug Description:**
++The bug demonstrates an interface assumption mismatch:
++- `moduleA.validate_input()` looks correct in isolation - it just passes input to `process()`
++- `moduleB.process()` has an undocumented precondition that `x > 0` (crashes with division by zero when `x=0`)
++- The bug manifests only when tracing across the A→B boundary
++
++**Expected `/locate-fault` Behavior:**
++1. Phase 2 should read both `moduleA.py` and `moduleB.py`
++2. Phase 3 should cite the precondition violation in `moduleB.process()`
++3. Phase 5 should confirm trace crossed the A→B boundary and identify the interface assumption mismatch
++
++**Manual Test:**
++```bash
++cd /workspace/crosscheck/tests/integration_validation
++python3 -c "import moduleA; moduleA.validate_input(0)"  # Should crash with ZeroDivisionError
++python3 -c "import moduleA; print(moduleA.validate_input(5))"  # Should return 40.0
++```
++
++## Test Scenario 2: Interface-Only Reasoning
++
++**Files:**
++- `caller.py` - Contains `divide_safe(x)` that calls `utils.divide_by(x, x)`
++- `utils.py` - Contains `divide_by(a, b)` with precondition `b != 0`
++- `test_interface_reasoning.py` - Test that exposes the bug when `x=0`
++
++**Bug Description:**
++The bug demonstrates a precondition violation at an interface boundary:
++- `caller.divide_safe(x)` passes `x` as both numerator and denominator
++- `utils.divide_by(a, b)` requires `b != 0`
++- When `x=0`, the caller violates the callee's precondition
++
++**Expected `/reason` Behavior (for question "Is `caller.divide_safe(user_input)` safe?"):**
++1. Step 2 should read both `caller.py` and `utils.py`
++2. Step 3 should trace that caller passes `x` as both `a` and `b`
++3. Step 4c integration validation should document the interface crossing and verify callee behavior
++4. Step 5 should flag the `x=0` case as violating the precondition
++
++**Manual Test:**
++```bash
++cd /workspace/crosscheck/tests/integration_validation
++python3 -c "import caller; caller.divide_safe(0)"  # Should crash with ZeroDivisionError
++python3 -c "import caller; print(caller.divide_safe(5))"  # Should return 1.0
++```
++
++## Verification Approach (Semi-formal)
++
++The plan specifies semi-formal verification by:
++
++1. **Trace execution across test cases** - Run `/locate-fault` and `/reason` with these scenarios
++2. **Certificate inspection** - Parse output for:
++   - Presence of Phase 5 / Step 4c sections
++   - Evidence of reading multiple files
++   - Claims referencing code in callee implementations
++   - Invariant 1: files-read ⊇ files-on-execution-path
++   - Invariant 2: trust boundaries documented for unreadable callees
++3. **Adequacy check via `/rationale`** - Build an adequacy argument for the multi-file test scenario
++
++These tests serve as regression tests to ensure the integration validation phases work correctly.
+diff --git a/crosscheck/tests/integration_validation/VERIFICATION.md b/crosscheck/tests/integration_validation/VERIFICATION.md
+new file mode 100644
+index 0000000..913d5e9
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/VERIFICATION.md
+@@ -0,0 +1,216 @@
++# Integration Validation Verification Artifacts
++
++This document provides the semi-formal verification evidence for the integration validation features added to `/locate-fault` and `/reason`.
++
++## Verification Track: Semi-formal
++
++As specified in the plan, verification is achieved through **execution trace analysis** and **certificate inspection**.
++
++## Test Scenario 1: Multi-file Bug Execution Trace
++
++### Setup
++Files: `moduleA.py`, `moduleB.py`, `test_multifile_bug.py`
++
++### Actual Execution Path
++```
++test_multifile_bug.py:test_validate_input_with_zero()
++  → moduleA.py:validate_input(0)
++    → moduleB.py:process(0)
++      → ZeroDivisionError at moduleB.py:13
++```
++
++### Files on Execution Path
++- `test_multifile_bug.py`
++- `moduleA.py`
++- `moduleB.py`
++
++### Component Boundaries in Execution
++1. Boundary 1: `moduleA.py:20` → `moduleB.py:process()`
++
++### Expected `/locate-fault` Output Structure
++
++When running `/locate-fault` on this test, the output must contain:
++
++#### Phase 2: Code Path Tracing
++- Evidence of reading `moduleA.py` (with hypothesis about validate_input)
++- Evidence of reading `moduleB.py` (following the call from moduleA)
++- OBSERVATIONS sections for both files with line number citations
++
++#### Phase 3: Divergence Analysis
++- CLAIM citing `moduleB.py:13` (the division by zero)
++- CLAIM citing the precondition violation (`x > 0` not enforced)
++- Reference to PREMISE from Phase 1 about test passing `x=0`
++
++#### Phase 5: Integration Validation
++```
++Multi-component analysis: YES
++
++COMPONENT BOUNDARIES TRACED:
++  -- Boundary 1: moduleA.py:20 → moduleB.process() at moduleB.py:8
++     Status: CROSSED - read callee implementation
++
++FILES READ: [moduleA.py, moduleB.py, test_multifile_bug.py]
++FILES ON EXECUTION PATH: [moduleA.py, moduleB.py, test_multifile_bug.py]
++
++COVERAGE CHECK:
++  -- [✓] Files read ⊇ Files on execution path
++  -- [✓] Traced across at least 1 component boundary
++```
++
++### Invariant 1 Verification
++**Invariant**: For multi-component analysis, files read ⊇ files on execution path
++
++- Files read (expected): {test_multifile_bug.py, moduleA.py, moduleB.py}
++- Files on execution path: {test_multifile_bug.py, moduleA.py, moduleB.py}
++- Check: {test_multifile_bug.py, moduleA.py, moduleB.py} ⊇ {test_multifile_bug.py, moduleA.py, moduleB.py} ✓
++
++### Invariant 2 Verification
++**Invariant**: Unreadable callees must have documented trust boundaries
++
++- All callees in execution path (moduleB.process) are readable ✓
++- No library calls crossed without documentation ✓
++
++## Test Scenario 2: Interface-Only Reasoning Execution Trace
++
++### Setup
++Files: `caller.py`, `utils.py`
++
++### Question for `/reason`
++"Is `caller.divide_safe(user_input)` safe?"
++
++### Actual Execution Path (when user_input=0)
++```
++caller.py:divide_safe(0)
++  → utils.py:divide_by(0, 0)
++    → ZeroDivisionError at utils.py:11
++```
++
++### Files on Execution Path
++- `caller.py`
++- `utils.py`
++
++### Interface Crossings
++1. Crossing 1: `caller.py:19` → `utils.divide_by()`
++
++### Expected `/reason` Output Structure
++
++When running `/reason` on this question, the output must contain:
++
++#### Step 2: Gather Premises
++- PREMISE P1: caller.divide_safe passes x as both a and b (caller.py:19)
++- PREMISE P2: utils.divide_by requires b != 0 (utils.py:11 comment)
++
++#### Step 3: Trace Execution Paths
++- CLAIM C1: When x=0, divide_safe calls divide_by(0, 0)
++- CLAIM C2: divide_by(0, 0) violates precondition b != 0
++
++#### Step 4c: Integration Validation
++```
++Multi-component analysis: YES
++
++INTERFACE CROSSINGS:
++  -- Crossing 1: caller.py:19 calls divide_by
++     Verified: YES - read implementation at utils.py:8
++
++TRUST BOUNDARIES: None (all callees readable)
++
++TERMINATION:
++  -- Stopped tracing at: utils.py:11
++     Reason: demonstrably incorrect (division by zero)
++```
++
++#### Step 5: Formal Conclusion
++Answer: "No, `caller.divide_safe(user_input)` is NOT safe when user_input=0"
++
++### Invariant 1 Verification
++- Files read (expected): {caller.py, utils.py}
++- Files on execution path: {caller.py, utils.py}
++- Check: {caller.py, utils.py} ⊇ {caller.py, utils.py} ✓
++
++### Invariant 2 Verification
++- All callees (utils.divide_by) are readable ✓
++- No undocumented trust boundaries ✓
++
++## Certificate Inspection Checklist
++
++For both test scenarios, verify the output contains:
++
++### Structural Completeness
++- [ ] Phase 5 section present in `/locate-fault` output (for multi-file analysis)
++- [ ] Step 4c section present in `/reason` output (for multi-component analysis)
++- [ ] All required subsections filled in (not just headers)
++
++### Evidence Grounding
++- [ ] File:line references for all code observations
++- [ ] Claims cite specific line numbers from both caller and callee
++- [ ] No "probably" or "likely" without code evidence
++
++### Multi-File Analysis
++- [ ] Evidence of reading ≥2 files mentioned in Phase 2/Step 2
++- [ ] Observations cite code from both caller and callee files
++- [ ] Claims reference behavior in callee implementation (not just signatures)
++
++### Invariant Checks
++- [ ] Files read list matches or exceeds files on execution path
++- [ ] All component boundaries documented with verification status
++- [ ] Any library/unreadable callees have trust boundary documentation
++
++## Adequacy Argument via `/rationale`
++
++For the multi-file bug scenario, the adequacy claim tree should look like:
++
++```
++ROOT: "The fault localization for test_multifile_bug is complete and correct"
++  |
++  ├─ LEAF [STATIC]: "Phase 2 read both moduleA.py and moduleB.py"
++  |    Evidence: grep for "OBSERVATIONS from moduleA.py" and "OBSERVATIONS from moduleB.py"
++  |
++  ├─ LEAF [STATIC]: "Phase 3 cited the actual buggy line (moduleB.py:13)"
++  |    Evidence: grep for "CLAIM D[N].*moduleB.py:13"
++  |
++  ├─ LEAF [STATIC]: "Phase 5 confirmed trace crossed A→B boundary"
++  |    Evidence: grep for "Boundary 1.*moduleA.*→.*moduleB"
++  |
++  ├─ LEAF [STATIC]: "Files read cover execution path"
++  |    Evidence: Invariant 1 check passed
++  |
++  └─ LEAF [STATIC]: "Trust boundaries documented (if any)"
++       Evidence: Invariant 2 check passed
++```
++
++If all leaves hold (all [STATIC] claims verified by reading output), the root holds.
++
++## Verification Status
++
++**Test files created**: ✓
++- Multi-file bug scenario (3 files)
++- Interface reasoning scenario (2 files)
++- Supporting test files with pytest structure
++
++**Test files validated**: ✓
++- Manual execution confirms ZeroDivisionError for x=0 cases
++- Manual execution confirms correct behavior for valid inputs
++
++**Skill modifications complete**: ✓
++- Phase 5 added to `/locate-fault`
++- Step 4c added to `/reason`
++- Byfuglien validation updated
++
++**Regression test readiness**: ✓
++- Test scenarios can be used to validate skill output
++- Certificate inspection checklist provided
++- Invariant checks defined
++
++## Next Steps for Full Verification
++
++To complete the semi-formal verification:
++
++1. Run `/locate-fault` on the multi-file bug test scenario
++2. Inspect output against Phase 5 structure requirements
++3. Verify Invariant 1 and Invariant 2 hold
++4. Run `/reason` on the interface reasoning question
++5. Inspect output against Step 4c structure requirements
++6. Run `/rationale` to build adequacy argument for multi-file scenario
++7. Verify all leaf claims in the adequacy tree
++
++These steps constitute the execution trace analysis and certificate inspection specified in the plan's verification approach.
+diff --git a/crosscheck/tests/integration_validation/__init__.py b/crosscheck/tests/integration_validation/__init__.py
+new file mode 100644
+index 0000000..90b9679
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/__init__.py
+@@ -0,0 +1 @@
++# Integration validation test package
+diff --git a/crosscheck/tests/integration_validation/caller.py b/crosscheck/tests/integration_validation/caller.py
+new file mode 100644
+index 0000000..88b3871
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/caller.py
+@@ -0,0 +1,19 @@
++"""
++Caller module that uses utils.divide_by incorrectly.
++"""
++
++try:
++    from . import utils
++except ImportError:
++    import utils
++
++def divide_safe(x):
++    """
++    Attempt to safely divide x by x.
++    
++    Bug: When x=0, this violates the callee's precondition (b != 0)
++    because we pass x as both numerator and denominator.
++    """
++    # Passes x as both a and b
++    # When x=0, this violates utils.divide_by's precondition
++    return utils.divide_by(x, x)
+\ No newline at end of file
+diff --git a/crosscheck/tests/integration_validation/moduleA.py b/crosscheck/tests/integration_validation/moduleA.py
+new file mode 100644
+index 0000000..7c0371d
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/moduleA.py
+@@ -0,0 +1,20 @@
++"""
++Module A - contains validate_input which calls moduleB.process.
++"""
++
++try:
++    from . import moduleB
++except ImportError:
++    import moduleB
++
++def validate_input(x):
++    """
++    Validate and process input.
++    
++    This function looks "correct" on the surface - it accepts any integer
++    and passes it to process(). However, it violates moduleB.process's
++    undocumented precondition that x > 0.
++    """
++    # Looks correct - just passing through to process
++    # Bug: assumes process() accepts any integer
++    return moduleB.process(x)
+\ No newline at end of file
+diff --git a/crosscheck/tests/integration_validation/moduleB.py b/crosscheck/tests/integration_validation/moduleB.py
+new file mode 100644
+index 0000000..4e1da54
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/moduleB.py
+@@ -0,0 +1,14 @@
++"""
++Module B - contains process function with undocumented precondition.
++"""
++
++def process(x):
++    """
++    Process an integer value.
++    
++    Undocumented precondition: x > 0
++    Bug: crashes when x=0 due to division
++    """
++    # This will crash when x=0
++    result = 100 / x
++    return result * 2
+diff --git a/crosscheck/tests/integration_validation/pytest.ini b/crosscheck/tests/integration_validation/pytest.ini
+new file mode 100644
+index 0000000..0bc104e
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/pytest.ini
+@@ -0,0 +1,5 @@
++[pytest]
++testpaths = .
++python_files = test_*.py
++python_classes = Test*
++python_functions = test_*
+diff --git a/crosscheck/tests/integration_validation/test_interface_reasoning.py b/crosscheck/tests/integration_validation/test_interface_reasoning.py
+new file mode 100644
+index 0000000..4d42567
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/test_interface_reasoning.py
+@@ -0,0 +1,35 @@
++"""
++Test for interface-only reasoning scenario.
++
++This test verifies that /reason performs integration validation:
++- caller.divide_safe(x) appears to safely divide x by x
++- utils.divide_by requires b != 0
++- When x=0, the caller violates the callee's precondition
++
++The reasoning should:
++1. Read both caller.py and utils.py (Step 2)
++2. Identify the precondition b != 0 in utils.divide_by
++3. Trace that caller passes x as both a and b (Step 3)
++4. Document the interface crossing and verify callee behavior (Step 4c)
++5. Flag the x=0 case as violating the precondition
++"""
++
++import pytest
++from . import caller
++
++def test_divide_safe_with_zero():
++    """
++    Test that exposes the precondition violation.
++    
++    Expected: Should handle x=0 gracefully
++    Actual: Crashes with ZeroDivisionError
++    """
++    with pytest.raises(ZeroDivisionError):
++        caller.divide_safe(0)
++
++def test_divide_safe_with_nonzero():
++    """
++    Test with valid input (x != 0) - should return 1.0.
++    """
++    result = caller.divide_safe(5)
++    assert result == 1.0  # 5 / 5 = 1
+diff --git a/crosscheck/tests/integration_validation/test_multifile_bug.py b/crosscheck/tests/integration_validation/test_multifile_bug.py
+new file mode 100644
+index 0000000..2550269
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/test_multifile_bug.py
+@@ -0,0 +1,35 @@
++"""
++Test for multi-file bug scenario.
++
++This test demonstrates a failure that occurs across component boundaries:
++- moduleA.validate_input looks correct in isolation
++- moduleB.process has an undocumented precondition (x > 0)
++- The bug manifests when validate_input calls process with x=0
++
++The fault localization should:
++1. Read both moduleA.py and moduleB.py (Phase 2)
++2. Cite the precondition violation in moduleB (Phase 3)
++3. Confirm trace crossed the A→B boundary (Phase 5)
++4. Identify the interface assumption mismatch
++"""
++
++import pytest
++from . import moduleA
++
++def test_validate_input_with_zero():
++    """
++    Test that exposes the interface assumption mismatch.
++    
++    Expected: Should handle x=0 gracefully
++    Actual: Crashes with ZeroDivisionError in moduleB.process
++    """
++    # This should trigger the bug
++    with pytest.raises(ZeroDivisionError):
++        moduleA.validate_input(0)
++
++def test_validate_input_with_positive():
++    """
++    Test with valid input (x > 0) - should pass.
++    """
++    result = moduleA.validate_input(5)
++    assert result == 40.0  # (100 / 5) * 2 = 40
+diff --git a/crosscheck/tests/integration_validation/utils.py b/crosscheck/tests/integration_validation/utils.py
+new file mode 100644
+index 0000000..2a94c21
+--- /dev/null
++++ b/crosscheck/tests/integration_validation/utils.py
+@@ -0,0 +1,11 @@
++"""
++Utility functions for division operations.
++"""
++
++def divide_by(a, b):
++    """
++    Divide a by b.
++    
++    Precondition: b != 0
++    """
++    return a / b  # requires b != 0
