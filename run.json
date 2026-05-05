@@ -1,0 +1,205 @@
+{
+  "spec": {
+    "run_id": "01KQWJ57F4XSE0KA8KXTZE0GEH",
+    "settings": {
+      "project": {
+        "name": null,
+        "description": null,
+        "directory": ".",
+        "metadata": {}
+      },
+      "workflow": {
+        "name": null,
+        "description": null,
+        "graph": "workflow.fabro",
+        "metadata": {}
+      },
+      "run": {
+        "goal": {
+          "type": "inline",
+          "value": "Verify the gh CLI is installed and authenticated inside the sandbox"
+        },
+        "working_dir": null,
+        "metadata": {},
+        "inputs": {},
+        "model": {
+          "provider": "anthropic",
+          "name": "claude-sonnet-4-6",
+          "fallbacks": []
+        },
+        "git": {
+          "author": null
+        },
+        "prepare": {
+          "commands": [],
+          "timeout_ms": 300000
+        },
+        "execution": {
+          "mode": "normal",
+          "approval": "prompt",
+          "retros": true
+        },
+        "checkpoint": {
+          "exclude_globs": []
+        },
+        "sandbox": {
+          "provider": "docker",
+          "preserve": false,
+          "devcontainer": false,
+          "env": {},
+          "local": {
+            "worktree_mode": "always"
+          },
+          "docker": {
+            "image": "ghcr.io/nicholls-inc/fabro-agent-base:latest",
+            "network_mode": null,
+            "memory_limit": 4000000000,
+            "cpu_quota": 200000,
+            "env_vars": {},
+            "skip_clone": false
+          },
+          "daytona": null
+        },
+        "notifications": {},
+        "interviews": {
+          "provider": null,
+          "slack": null,
+          "discord": null,
+          "teams": null
+        },
+        "agent": {
+          "permissions": null,
+          "mcps": {}
+        },
+        "hooks": [],
+        "scm": {
+          "provider": null,
+          "owner": null,
+          "repository": null,
+          "github": null
+        },
+        "pull_request": {
+          "enabled": true,
+          "draft": true,
+          "auto_merge": false,
+          "merge_strategy": "squash"
+        },
+        "artifacts": {
+          "include": []
+        }
+      }
+    },
+    "graph": {
+      "name": "GhAuthCheck",
+      "nodes": {
+        "check": {
+          "id": "check",
+          "attrs": {
+            "label": {
+              "String": "gh auth check"
+            },
+            "prompt": {
+              "String": "# gh auth check\n\nYou are running inside a Fabro sandbox built from\n`ghcr.io/nicholls-inc/fabro-agent-base`. The only goal of this run is to\nconfirm that the `gh` CLI is installed and authenticated. Do not modify\nany files. Do not call any other tools.\n\n## Steps\n\n1. Run `which gh` and report the path (or that it is missing).\n2. Run `gh --version` and report the output.\n3. Run `gh auth status` and report the full output verbatim.\n4. Run `gh api user --jq .login` and report the returned login\n   (or the error if it fails).\n5. Run `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n   and report the output (this exercises an authenticated read against the\n   image's own repo).\n\n## Output format\n\nProduce a single Markdown report with one section per step above. Each\nsection must include:\n\n- The exact command you ran.\n- The exit code.\n- The stdout/stderr verbatim, in a fenced code block.\n\nEnd with a one-line verdict: either `VERDICT: gh auth OK` or\n`VERDICT: gh auth FAILED — <short reason>`.\n"
+            }
+          }
+        },
+        "exit": {
+          "id": "exit",
+          "attrs": {
+            "shape": {
+              "String": "Msquare"
+            },
+            "label": {
+              "String": "Exit"
+            }
+          }
+        },
+        "start": {
+          "id": "start",
+          "attrs": {
+            "label": {
+              "String": "Start"
+            },
+            "shape": {
+              "String": "Mdiamond"
+            }
+          }
+        }
+      },
+      "edges": [
+        {
+          "from": "start",
+          "to": "check",
+          "attrs": {}
+        },
+        {
+          "from": "check",
+          "to": "exit",
+          "attrs": {}
+        }
+      ],
+      "attrs": {
+        "goal": {
+          "String": "Verify the gh CLI is installed and authenticated inside the sandbox"
+        },
+        "rankdir": {
+          "String": "LR"
+        }
+      }
+    },
+    "workflow_slug": "gh-auth-check",
+    "source_directory": "/opt/claude-code-marketplace",
+    "provenance": {
+      "server": {
+        "version": "0.221.0-nightly.0"
+      },
+      "client": {
+        "user_agent": "fabro-cli/0.220.0-nightly.2",
+        "name": "fabro-cli",
+        "version": "0.220.0-nightly.2"
+      },
+      "subject": {
+        "login": "hnipps",
+        "auth_method": "github"
+      }
+    },
+    "manifest_blob": "f1a550ab746d2ff59c31463df10f1a3b61fa8256cc6b0f647f23c5171e14c925",
+    "definition_blob": "83e389ba2f8b351d20d8d33ea5a0112f0bdb344031f228d285bae8ea5362766d",
+    "git": {
+      "origin_url": "https://github.com/nicholls-inc/claude-code-marketplace",
+      "branch": "hn/fabro",
+      "sha": "60d3bef255b5d49981b6bee1a48738b7a2a8f6e7",
+      "dirty": "dirty",
+      "push_outcome": {
+        "type": "not_attempted"
+      }
+    },
+    "in_place": false
+  },
+  "graph_source": "// Fabro workflow: gh-auth-check\n//\n// Throwaway smoke test confirming the fabro-agent-base image ships\n// `gh` and that GitHub credentials are wired into the sandbox.\n// Single node: invoke gh, report what was observed verbatim.\n\ndigraph GhAuthCheck {\n    graph [goal=\"Verify the gh CLI is installed and authenticated inside the sandbox\"]\n    rankdir=LR\n\n    start [shape=Mdiamond, label=\"Start\"]\n    exit  [shape=Msquare,  label=\"Exit\"]\n\n    check [\n        label  = \"gh auth check\",\n        prompt = \"@prompts/check.md\"\n    ]\n\n    start -> check -> exit\n}\n",
+  "start": null,
+  "status": {
+    "kind": "starting"
+  },
+  "status_updated_at": "2026-05-05T17:14:48.739839966Z",
+  "pending_control": null,
+  "checkpoint": null,
+  "checkpoints": [],
+  "conclusion": null,
+  "retro": null,
+  "retro_prompt": null,
+  "retro_response": null,
+  "sandbox": {
+    "provider": "docker",
+    "working_directory": "/workspace",
+    "identifier": "2e88f2778c9a3ec72c89a31118b9532e7e5bbaac1d3c26144d08ba9ab3a6d2e9",
+    "repo_cloned": true,
+    "clone_origin_url": "https://github.com/nicholls-inc/claude-code-marketplace",
+    "clone_branch": "hn/fabro"
+  },
+  "final_patch": null,
+  "pull_request": null,
+  "superseded_by": null,
+  "pending_interviews": {},
+  "stages": {}
+}
