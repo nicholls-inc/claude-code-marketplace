@@ -39,7 +39,7 @@ Exhaustive index of all 20 skills in the crosscheck plugin, grouped by category.
 
 | Skill | Trigger phrases | One-line summary | Owner |
 |-------|----------------|------------------|-------|
-| [`/intent-check`](../skills/intent-check/SKILL.md) | "intent check", "round-trip check", "spec-intent alignment" | Round-trip informalisation over (invariant prose, covering test, code diff) with FP tracking and a 30% kill criterion. | hellebuyck |
+| [`/intent-check`](../skills/intent-check/SKILL.md) | "intent check", "round-trip check", "spec-intent alignment" | Round-trip informalisation over (invariant prose, covering test, code diff) with FP tracking and a configurable kill criterion (default 30%, see SKILL Configuration). | hellebuyck |
 | [`/acceptance-oracle-draft`](../skills/acceptance-oracle-draft/SKILL.md) | "acceptance oracle", "draft scenarios", "user-observable flows" | Draft mechanically-verifiable user-flow acceptance scenarios; rejects subjective criteria. | hellebuyck |
 
 ## Assurance hierarchy — Layer 6 (spec completeness)

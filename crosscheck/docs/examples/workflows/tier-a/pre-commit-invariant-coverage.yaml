@@ -1,0 +1,19 @@
+# Snippet — paste into your existing .pre-commit-config.yaml under `repos:`.
+#
+# This is the local hook half of the dual-track Layer 4 invariant-coverage
+# gate. The CI half lives in .github/workflows/assurance.yml. Both run the
+# same script (scripts/check_invariant_coverage.py) so a passing local
+# commit and a passing CI build agree on what coverage means.
+#
+# The dual-track principle: every assurance check has both a pre-commit
+# hook AND a CI job. Pre-commit catches drift before it ships; CI catches
+# drift that bypassed the hook (--no-verify, fresh clones, web edits).
+
+  - repo: local
+    hooks:
+      - id: invariant-coverage
+        name: Invariant coverage (docs/invariants/ <-> tests/)
+        entry: python3 scripts/check_invariant_coverage.py
+        language: system
+        pass_filenames: false
+        files: '^(docs/invariants/.*\.md|tests/.*test_.*\.py)$'

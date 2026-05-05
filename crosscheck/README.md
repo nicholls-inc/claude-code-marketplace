@@ -2,17 +2,23 @@
 
 AI agents write plausible code fast. Plausible isn't the same as correct, and "looks fine" doesn't survive contact with production. Crosscheck gives you six layers of progressively stronger correctness checks, and four of them are shipping today.
 
-Crosscheck checks Claude's code claims with two orchestrator agents — `byfuglien` (implementation) and `hellebuyck` (specification) — coordinating three pillars of assurance. The first pillar is formal verification with Dafny, producing provably correct Python/Go from natural-language specs. The second is semi-formal reasoning, which forces evidence-grounded certificates before any conclusion about a piece of code. The third is a 6-layer assurance hierarchy with governance scaffolding, so claims about correctness keep holding as the code evolves.
+Crosscheck checks Claude's code claims with two orchestrator agents — `byfuglien` (implementation) and `hellebuyck` (specification) — coordinating three pillars of assurance. The first pillar is formal verification with Dafny — code is verified against its spec, then compiled to Python or Go via the Dafny backends. Layer 1 covers the verified core; embedding it correctly in your application is your responsibility, and Layer 2 of the hierarchy (compilation correctness) treats the Dafny-to-Python/Go backend as part of your trusted computing base — see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md). The second pillar is semi-formal reasoning, which forces evidence-grounded certificates before any conclusion about a piece of code. The third is a 6-layer assurance hierarchy with governance scaffolding, so claims about correctness keep holding as the code evolves.
 
 ![03122-ezgif com-optimize](https://github.com/user-attachments/assets/260bd90a-59d1-4d5e-aada-4411d2db397b)
 
-What you can run right now:
-- Layer 1 — proof, not vibes. /spec-iterate → /generate-verified → /extract-code produces Dafny-verified Python or Go. The compiler refuses to emit code that doesn't satisfy its spec. /lightweight-verify adds contracts and property tests where full verification is overkill.
-- Layer 4 — your spec and your code can't drift. /invariant-coverage-scaffold installs a pre-commit + CI gate tying every documented invariant to a covering test. /protected-surface-amend forces a structured governance note on every edit to load-bearing files. /check-regressions re-verifies specs whose source has moved.
-- Layer 5 — your spec actually matches what you meant. /intent-check runs round-trip informalization (~96% accuracy) so AI-drafted invariants get caught when they say something subtly different from the prose. /acceptance-oracle-draft locks user-observable flows into mechanically-verifiable scenarios upfront.
-- Layer 6 — what is your spec still missing? /spec-adversary adversarially probes stable modules for undocumented invariants.
+Why this matters for AI-driven development: the failure mode of an LLM coder isn't bad syntax — it's silent semantic drift, deleted guarantees, and under-specified contracts. Every layer here is a different machine-checkable trap for exactly that.
 
-Why this matters for AI-driven development: the failure mode of an LLM coder isn't bad syntax — it's silent semantic drift, deleted guarantees, and under-specified contracts. Every layer here is a different machine-checkable trap for exactly that. Start with /assurance-layer-audit to see what's reachable in your repo, then /assurance-init to scaffold the governance, and /assurance-status weekly to watch for drift.
+**Recommended order** (the default workflow, evaluations first):
+
+1. `/assurance-layer-audit` — diagnose what's actually reachable in your repo before you commit to any layer.
+2. `/assurance-init` — scaffold the governance skeleton: ROADMAP, protected surfaces, seed invariant docs.
+3. `/acceptance-oracle-draft` — lock the user-observable flows into mechanically-verifiable scenarios. Treat as a user-perspective oracle that sits alongside the hierarchy (the docs file it under "Supporting Workflow Elements" — see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md)). Highest-leverage starting point per the literature on intent formalization (Lahiri 2026; Phoenix-style "evaluations as the codebase").
+4. `/intent-check` and `/invariant-coverage-scaffold` — pin invariant prose to covering tests so the two cannot drift, and run round-trip intent verification on AI-drafted invariants (~96% accuracy on curated benchmarks; real-PR accuracy unmeasured — see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md)).
+5. **Optional, when the code shape supports it:** `/spec-iterate` → `/generate-verified` → `/extract-code` for Dafny-verified cores. Empirical reach for Layer 1 is roughly 22–27% of typical full-stack codebases ([`./docs/research/logic-distribution-analysis.md`](./docs/research/logic-distribution-analysis.md)); reach for your repo will vary. `/lightweight-verify` adds contracts and property tests where full proof is overkill.
+6. `/spec-adversary` once a module has a ratified invariant doc — iterative best-effort probing for undocumented properties; it has its own signal-to-noise kill criteria (see the SKILL).
+7. **Weekly cadence:** `/assurance-status` for drift detection and `/assurance-roadmap-check` to keep ROADMAP item statuses honest.
+
+Layers shipping today (1, 4, 5, 6) plus the orthogonal semi-formal reasoning skills are summarised in the persona table below; full per-skill catalogue at [`./docs/skills.md`](./docs/skills.md).
 
 ## Quickstart
 
@@ -32,21 +38,34 @@ Use the hellebuyck agent to scope this repo's assurance reach
 
 ## The two orchestrator agents
 
-**Byfuglien** (/ˈbʌflɪn/) owns the implementation chain: formal verification with Dafny and semi-formal reasoning over existing code. It covers Layers 1–3 of the assurance hierarchy — code-level correctness, behavioural evidence, and impl-level invariants. Named after Dustin Byfuglien, the crosschecking enforcer: no unsupported claim survives, no unverified code ships.
+**Byfuglien** (/ˈbʌflɪn/) owns the implementation chain: formal verification with Dafny and semi-formal reasoning over existing code. It owns Layer 1 (Dafny formal verification) and the regression-detection slice of Layer 4 (`/check-regressions`). Layers 2–3 are deliberately not addressed — Layer 2 is a trusted-computing-base concern, Layer 3 (contract graph verification) is a research frontier outside niche stacks; see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md). Byfuglien also owns the four semi-formal reasoning skills, which sit outside the layer hierarchy entirely. Named after Dustin Byfuglien, the crosschecking enforcer: no unsupported claim survives, no unverified code ships.
 
 **Hellebuyck** owns the specification chain: Layers 4–6 of the assurance hierarchy (impl–spec alignment, spec–intent alignment, and spec completeness) plus the governance scaffolding that keeps specs honest as code evolves. Named after Connor Hellebuyck, the goalie — the last line of defence when proof runs out and you have to argue that the spec itself was the right one.
+
+The split is principled in shape but **asymmetric in substance** — Byfuglien anchors a single deterministic layer and four orthogonal reasoning skills; Hellebuyck carries three layers (deterministic → probabilistic → best-effort) plus governance. The table below names the skill ownership directly so the asymmetry is legible.
+
+| Byfuglien (impl chain) | Hellebuyck (spec chain) | Orthogonal: semi-formal reasoning |
+|---|---|---|
+| Layer 1: `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`, `/suggest-specs` | Layer 4 (alignment): `/invariant-coverage-scaffold`, `/protected-surface-amend` | `/reason` |
+| Layer 4 (regression): `/check-regressions` | Layer 5: `/intent-check`, `/acceptance-oracle-draft` | `/compare-patches` |
+| Spec-management bridge: `/rationale` | Layer 6: `/spec-adversary` | `/locate-fault` |
+|  | Governance index: `/assurance-init`, `/assurance-layer-audit`, `/assurance-status`, `/assurance-roadmap-check` | `/trace-execution` |
+
+The four semi-formal reasoning skills are not part of the 6-layer hierarchy. They are evidence-grounded code-analysis tools adapted from Ugare & Chandra (2026) and live as a third axis — Byfuglien-routed because they reason about implementation, but layer-agnostic.
 
 → For the full handoff seam between the two agents, see [`./docs/agents.md`](./docs/agents.md).
 
 ## Skills overview
 
-**Formal verification** — `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`. Dafny-backed proofs of business logic, with optional lightweight contracts and property-based tests when full proof is overkill.
+The persona table above maps every skill to its orchestrator and (where applicable) layer. The shape of the catalogue, by purpose:
 
-**Semi-formal reasoning** — `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`. Evidence-grounded code analysis adapted from "Agentic Code Reasoning" (Ugare & Chandra, 2026): premises, execution traces, and alternative-hypothesis checks before any conclusion.
+**Formal verification** — Dafny-backed proofs of business logic, with optional lightweight contracts and property-based tests when full proof is overkill.
 
-**Spec management & adequacy** — `/check-regressions`, `/suggest-specs`, `/rationale`. Keep verified specs from drifting, propose new spec targets, and bridge formal and informal verification with structured adequacy arguments.
+**Semi-formal reasoning** — evidence-grounded code analysis adapted from "Agentic Code Reasoning" (Ugare & Chandra, 2026): premises, execution traces, and alternative-hypothesis checks before any conclusion. Sits outside the 6-layer hierarchy.
 
-**Assurance hierarchy & governance** — nine skills covering Layers 4–6: `/intent-check`, `/spec-adversary`, `/acceptance-oracle-draft`, `/invariant-coverage-scaffold`, `/protected-surface-amend`, `/assurance-layer-audit`, `/assurance-init`, `/assurance-status`, `/assurance-roadmap-check`. Onboard a repo, audit its reach on the ladder, and keep governance notes from rotting.
+**Spec management & adequacy** — keep verified specs from drifting, propose new spec targets, and bridge formal and informal verification with structured adequacy arguments.
+
+**Assurance hierarchy & governance** — onboard a repo, audit its reach on the ladder, draft acceptance oracles, run the round-trip intent check, and keep governance notes from rotting.
 
 → Full skill catalogue with trigger phrases at [`./docs/skills.md`](./docs/skills.md). For the assurance flow specifically, see [`./docs/assurance-hierarchy.md`](./docs/assurance-hierarchy.md).
 
