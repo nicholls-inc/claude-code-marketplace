@@ -72,9 +72,21 @@ How far each layer reaches in practice depends on the host language, the maturit
 
 **Layer 4 (implementation-spec alignment).** Reachable wherever Layer 1 is reachable. Enforced via CI gates that run `dafny_verify` on touched specs and via the `/invariant-coverage-scaffold` skill, which generates a bidirectional invariant-to-test coverage gate so every documented invariant has a covering test and every "Invariant <ID>" comment points at a real doc.
 
-**Layer 5 (spec-intent alignment).** Reachable as a probabilistic check using LLM round-trip informalization. The `/intent-check` skill implements this for invariant-prose / covering-test / code-diff triples, with a false-positive tracker and a 30% kill criterion. Expect ~96% accuracy on curated benchmarks; real-PR accuracy will only be known once it has run on protected-surface diffs for some time.
+**Layer 5 (spec-intent alignment).** Reachable as a probabilistic check using LLM round-trip informalization. The `/intent-check` skill implements this for invariant-prose / covering-test / code-diff triples, with a false-positive tracker and a configurable kill criterion (default 30% rolling FP rate over a 14-day window with `n ≥ 3` minimum sample). See "Calibration of Layer-5 thresholds" below for the rationale and the env vars that override the defaults. Expect ~96% accuracy on curated benchmarks; real-PR accuracy will only be known once it has run on protected-surface diffs for some time.
 
 **Layer 6 (spec completeness).** Best-effort. The `/spec-adversary` skill probes a module's invariant doc for missing properties, and `/acceptance-oracle-draft` generates mechanically-verifiable user-perspective scenarios as an empirical complement to invariant coverage. No theorem proves spec completeness; both are iterative practices, not gates.
+
+## Calibration of Layer-5 thresholds
+
+The Layer 5 kill criterion as currently shipped (30% rolling FP rate, 14-day window, `n ≥ 3` minimum sample size) is **founder intuition, not labelled-pilot data**. There is no calibration trace of the form "threshold set by N-day pilot, M human verdicts, trip line at distribution elbow" backing it. The numbers were chosen so that (a) Layer 5 is taken offline before it gates more than ~1 in 3 commits incorrectly, (b) the window is long enough to absorb a single bad day without tripping, and (c) the minimum sample blocks single-row noise. None of those bounds are empirically validated yet.
+
+The implementation surfaces three environment variables so each adopter can override the defaults once they have their own labelled trace:
+
+- `CROSSCHECK_FP_TRIPPED_THRESHOLD` (default `0.30`) — kill threshold.
+- `CROSSCHECK_FP_AT_RISK_THRESHOLD` (default `0.20`) — escalation threshold.
+- `CROSSCHECK_FP_WINDOW_DAYS` (default `14`) — rolling window length.
+
+The same env vars are read by `/intent-check` (Step 0 pre-check) and `/assurance-status` (Step 2.4 dashboard) so the FP rate shown to a contributor is computed identically across the two skills. The reference squad workflows in `crosscheck/docs/examples/workflows/` use the same values; tune all three together when calibrating. The Noisy-but-Valid framework (Feng et al., 2026) is one published protocol for deriving such thresholds from a labelled pilot.
 
 ## Supporting Workflow Elements
 

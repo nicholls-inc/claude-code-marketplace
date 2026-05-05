@@ -1,8 +1,8 @@
 # FP tracker CSV — schema, append logic, kill-criterion computation
 
-`/intent-check` appends one row to `.assurance/intent-check-fp-tracker.csv` per pipeline run. The tracker is the only persistent record of round-trip verdicts and is the input to the 30% kill criterion that decides whether Layer 5 stays online.
+`/intent-check` appends one row to `.assurance/intent-check-fp-tracker.csv` per pipeline run. The tracker is the only persistent record of round-trip verdicts and is the input to the configurable kill criterion (default 30% rolling FP rate over a 14-day window) that decides whether Layer 5 stays online.
 
-The schema is inherited verbatim from the upstream design referenced in `../../../docs/research/assurance-hierarchy.md`. Parity is deliberate — keeping the columns, types, and enum values fixed means calibration work done in one repo transfers cleanly to the next.
+The schema is inherited verbatim from the upstream design referenced in `../../../docs/research/assurance-hierarchy.md`. Parity is deliberate — keeping the columns, types, and enum values fixed means calibration work done in one repo transfers cleanly to the next. The numerical thresholds are not part of the schema; they are configurable via the env vars listed in the parent SKILL's "## Configuration" section.
 
 ## Schema
 
@@ -79,13 +79,14 @@ Claude runs these steps in order:
 
 Never mutate existing rows. If the user wants to correct an earlier `human_verdict`, they edit the CSV by hand.
 
-## 30% kill-criterion computation
+## Kill-criterion computation (default 30% over 14 days, configurable)
 
-The kill criterion says: if the rolling false-positive rate over the last 14 days of entries exceeds 30%, Layer 5 is not earning its cost and the pipeline must not keep gating commits.
+The kill criterion says: if the rolling false-positive rate over the last `CROSSCHECK_FP_WINDOW_DAYS` days of entries exceeds `CROSSCHECK_FP_TRIPPED_THRESHOLD`, Layer 5 is not earning its cost and the pipeline must not keep gating commits. Defaults are 14 days and `0.30`. Both are configurable per the parent SKILL's "## Configuration" section.
 
-**Pseudocode:**
+**Pseudocode** (defaults shown; substitute env-var values when configured):
 
 ```python
+import os
 from datetime import date, timedelta
 
 def kill_criterion_fp_rate(rows: list[dict], today: date) -> tuple[float, int]:
@@ -94,7 +95,8 @@ def kill_criterion_fp_rate(rows: list[dict], today: date) -> tuple[float, int]:
     Rows with empty human_verdict are ignored.
     Rows with human_verdict=='partial' count as NOT spurious.
     """
-    cutoff = today - timedelta(days=14)
+    window_days = int(os.environ.get("CROSSCHECK_FP_WINDOW_DAYS", "14"))
+    cutoff = today - timedelta(days=window_days)
     window = [
         r for r in rows
         if date.fromisoformat(r["date"]) >= cutoff
@@ -106,18 +108,18 @@ def kill_criterion_fp_rate(rows: list[dict], today: date) -> tuple[float, int]:
     return (spurious / len(window), len(window))
 ```
 
-Skill behaviour against this number:
+Skill behaviour against this number (let `tripped = CROSSCHECK_FP_TRIPPED_THRESHOLD`, default `0.30`):
 
-| `window_size` | `fp_rate`       | Skill action                                                                              |
-|---------------|-----------------|-------------------------------------------------------------------------------------------|
-| 0             | N/A             | Proceed with a warning; note the tracker is empty and no kill-criterion signal is available. |
-| 1–2           | any             | Proceed with a warning; sample too small to trust.                                         |
-| >= 3          | <= 30%          | Proceed silently.                                                                         |
-| >= 3          | > 30%           | **Refuse to run.** Emit the kill-criterion message from Step 0 of the skill.              |
+| `window_size` | `fp_rate`        | Skill action                                                                              |
+|---------------|------------------|-------------------------------------------------------------------------------------------|
+| 0             | N/A              | Proceed with a warning; note the tracker is empty and no kill-criterion signal is available. |
+| 1–2           | any              | Proceed with a warning; sample too small to trust.                                         |
+| >= 3          | `<= tripped`     | Proceed silently.                                                                         |
+| >= 3          | `> tripped`      | **Refuse to run.** Emit the kill-criterion message from Step 0 of the skill.              |
 
-Why 30%: the threshold is inherited from the upstream design (see `../../../docs/research/assurance-hierarchy.md` for the rationale). A pipeline that cries wolf more than ~1 time in 3 erodes trust faster than the spec-intent drift it was meant to catch.
+Why the 30% default: a pipeline that cries wolf more than ~1 time in 3 erodes trust faster than the spec-intent drift it was meant to catch. The number is **founder intuition, not labelled-pilot data** — see `../../../docs/research/assurance-hierarchy.md`'s "Calibration of Layer-5 thresholds" section for the rationale and the override mechanism.
 
-Why 14 days: matches the "2 weeks of live operation" acceptance criterion from the same source. Short enough that a recent prompt regression trips the kill quickly; long enough that a single bad day doesn't overreact.
+Why the 14-day default: matches the "2 weeks of live operation" acceptance criterion from the same source. Short enough that a recent prompt regression trips the kill quickly; long enough that a single bad day doesn't overreact. Same caveat applies — defaults, not validated thresholds.
 
 Why ignore empty `human_verdict`: the reviewer hasn't ruled yet. Counting empty cells either way biases the rate. The cost is that a repo with zero human review will see `window_size=0` forever — that is the correct signal (no evidence either way).
 
