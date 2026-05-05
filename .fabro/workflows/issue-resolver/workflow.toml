@@ -4,10 +4,13 @@ _version = 1
 graph = "workflow.fabro"
 
 [run.sandbox]
-provider = "local"
+provider = "docker"
+
+[run.sandbox.docker]
+image = "ghcr.io/nicholls-inc/fabro-agent-base:0.1.0"
 
 [run.model]
-name = "claude-sonnet-4-5"
+name = "claude-sonnet-4-6"
 
 # Mount the crosscheck Dafny MCP server so the verify nodes have real
 # formal-verification tooling, not just prompt-level rhetoric.

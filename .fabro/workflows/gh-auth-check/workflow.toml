@@ -1,0 +1,13 @@
+_version = 1
+
+[workflow]
+graph = "workflow.fabro"
+
+[run.sandbox]
+provider = "docker"
+
+[run.sandbox.docker]
+image = "ghcr.io/nicholls-inc/fabro-agent-base:0.1.0"
+
+[run.model]
+name = "claude-sonnet-4-6"
