@@ -1,6 +1,6 @@
 # Crosscheck Skill Catalogue
 
-Exhaustive index of all 20 skills in the crosscheck plugin, grouped by category. See [`../README.md`](../README.md) for the plugin overview, and [`./agents.md`](./agents.md) for the orchestrator agent pages (`byfuglien`, `hellebuyck`).
+Exhaustive index of all 21 skills in the crosscheck plugin, grouped by category. See [`../README.md`](../README.md) for the plugin overview, and [`./agents.md`](./agents.md) for the orchestrator agent pages (`byfuglien`, `hellebuyck`).
 
 ## Formal verification
 
@@ -32,6 +32,7 @@ Exhaustive index of all 20 skills in the crosscheck plugin, grouped by category.
 
 | Skill | Trigger phrases | One-line summary | Owner |
 |-------|----------------|------------------|-------|
+| [`/assurance-probe`](../skills/assurance-probe/SKILL.md) | "test strength", "how strong are the tests", "probe invariant coverage", "weak tests" | Deterministically score the test strength of every covered invariant using a 5-dimension grep-able rubric; emits a strength table sorted weakest-first. | hellebuyck |
 | [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md) | "invariant coverage", "coverage gate", "scaffold invariant check" | Generate a pre-commit + CI gate linking invariant docs to property tests (Go/Python/TypeScript in v1). | hellebuyck |
 | [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md) | "amend protected file", "protected surface amendment", "governance note" | Generate the governance-note amendment block required when editing a protected-surface file. | hellebuyck |
 

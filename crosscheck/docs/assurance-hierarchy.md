@@ -11,7 +11,7 @@ Crosscheck organises correctness into six layers of assurance. Layers 1–3 prov
 | 1 | Formally verified pure code | [`/spec-iterate`](../skills/spec-iterate/SKILL.md), [`/generate-verified`](../skills/generate-verified/SKILL.md), [`/extract-code`](../skills/extract-code/SKILL.md), [`/lightweight-verify`](../skills/lightweight-verify/SKILL.md) | Deterministic | byfuglien |
 | 2 | Compilation correctness | (Not addressed — trust your toolchain) | n/a | n/a |
 | 3 | Contract graph verification | (Future — see research doc) | n/a | n/a |
-| 4 | Implementation–spec alignment | [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md), [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md), [`/check-regressions`](../skills/check-regressions/SKILL.md) | Deterministic | hellebuyck (4) / byfuglien (regressions) |
+| 4 | Implementation–spec alignment | [`/assurance-probe`](../skills/assurance-probe/SKILL.md), [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md), [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md), [`/check-regressions`](../skills/check-regressions/SKILL.md) | Deterministic | hellebuyck (4) / byfuglien (regressions) |
 | 5 | Specification–intent alignment | [`/intent-check`](../skills/intent-check/SKILL.md), [`/acceptance-oracle-draft`](../skills/acceptance-oracle-draft/SKILL.md) | Probabilistic (~96%) | hellebuyck |
 | 6 | Specification completeness | [`/spec-adversary`](../skills/spec-adversary/SKILL.md) | Best-effort | hellebuyck |
 

@@ -38,6 +38,7 @@ Orchestrator for specification-chain assurance and governance scaffolding. Named
 
 | Skill | What it does |
 |-------|-------------|
+| `/assurance-probe` | Layer 4 deterministic — score the test strength of every covered invariant using a 5-dimension grep-able rubric; emits a strength table sorted weakest-first |
 | `/intent-check` | Layer 5 two-LLM round-trip informalization over (invariant prose, covering test, code diff); appends to FP-tracker CSV and emits a JSON attestation |
 | `/spec-adversary` | Layer 6 best-effort — propose up to 3 candidate invariants the spec is missing, formatted for accept/reject/defer triage |
 
@@ -59,6 +60,7 @@ Classify the user's request to determine which skill to invoke. The spec chain d
 | Bootstrap acceptance | "User-observable flows", "acceptance oracle", "scenarios for smoke" | `/acceptance-oracle-draft` |
 | Status dashboard | "How's the repo doing?", "assurance status", "weekly check-in" | `/assurance-status` |
 | Roadmap drift | "Are the docs accurate?", "ROADMAP check", Status field sanity | `/assurance-roadmap-check` |
+| Test strength probe (Layer 4) | "test strength", "how strong are the tests", "probe invariant coverage", "weak tests" | `/assurance-probe` |
 | Spec-intent alignment (Layer 5) | Protected-surface PR, "does the spec match the code", "run intent-check" | `/intent-check` |
 | Spec completeness (Layer 6) | "What are we missing?", "adversarial invariants", quarterly module review | `/spec-adversary` |
 | Governance amendment | Planned change to a protected file, "amendment block", "authority for this edit" | `/protected-surface-amend` |
@@ -102,6 +104,7 @@ Read the selected skill's SKILL.md file and follow its methodology exactly:
 - For `/assurance-init`: read `skills/assurance-init/SKILL.md`
 - For `/assurance-status`: read `skills/assurance-status/SKILL.md`
 - For `/assurance-roadmap-check`: read `skills/assurance-roadmap-check/SKILL.md`
+- For `/assurance-probe`: read `skills/assurance-probe/SKILL.md`
 - For `/invariant-coverage-scaffold`: read `skills/invariant-coverage-scaffold/SKILL.md`
 - For `/intent-check`: read `skills/intent-check/SKILL.md`
 - For `/spec-adversary`: read `skills/spec-adversary/SKILL.md`
