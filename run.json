@@ -430,14 +430,151 @@
     "in_place": false
   },
   "graph_source": "// Fabro workflow: issue-resolver\n//\n// Goal (run-supplied):  GitHub issue ID — bare number (\"42\"), short ref\n//                       (\"#42\"), or qualified ref (\"owner/repo#42\").\n//\n// Pipeline (linear — bounded one-shot revisions, no loops):\n//   start → analyze → plan → review\n//                            ├─ approve → implement\n//                            └─ revise  → plan_revise → implement\n//   implement → verify\n//                ├─ pass → exit\n//                └─ fail → fix → exit\n//\n// Adversarial assurance lives at REVIEW (intent + spec-adversary, one-shot).\n// Verification TOOLING (Dafny / property tests) lives inside IMPLEMENT —\n// implement stage fails its own artifacts if they don't pass.\n// VERIFY is a thin coverage attestation (artifacts exist · green · cover\n// the diff) and gets ONE shot — must frontload every failure it sees.\n// FIX gets ONE shot to address verify's list and exits.\n// The workflow always exits to a PR; verification status surfaces via\n// commits and the run log, not via workflow halt.\n\ndigraph IssueResolver {\n    graph [\n        goal            = \"Resolve a GitHub issue with adversarial planning, verified implementation, coverage attestation, and one-shot fix\",\n        rankdir         = \"LR\",\n        max_node_visits = \"20\"\n    ]\n\n    start [shape=Mdiamond, label=\"Start\"]\n    exit  [shape=Msquare,  label=\"Exit\"]\n\n    analyze [\n        label            = \"Analyze\",\n        prompt           = \"@prompts/analyze.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"900s\"\n    ]\n\n    plan [\n        label            = \"Plan\",\n        prompt           = \"@prompts/plan.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"600s\"\n    ]\n\n    review [\n        label            = \"Adversarial Review (one-shot · intent + spec)\",\n        prompt           = \"@prompts/review.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"600s\"\n    ]\n\n    plan_revise [\n        label            = \"Plan · revise (one-shot)\",\n        prompt           = \"@prompts/plan_revise.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"600s\"\n    ]\n\n    implement [\n        label   = \"Implement (with verification artifacts)\",\n        prompt  = \"@prompts/implement.md\",\n        timeout = \"1800s\"\n    ]\n\n    verify [\n        label            = \"Verify · coverage attestation (one-shot)\",\n        prompt           = \"@prompts/verify.md\",\n        reasoning_effort = \"medium\",\n        timeout          = \"300s\"\n    ]\n\n    fix [\n        label            = \"Fix verification failures (one-shot)\",\n        prompt           = \"@prompts/fix.md\",\n        reasoning_effort = \"high\",\n        timeout          = \"1200s\"\n    ]\n\n    start -> analyze\n    analyze -> plan\n    plan -> review\n\n    review -> implement   [label=\"approve\", condition=\"preferred_label=approve\", weight=10]\n    review -> plan_revise [label=\"revise\",  condition=\"preferred_label=revise\",  weight=5]\n    review -> implement   [label=\"default\",                                      weight=1]\n\n    plan_revise -> implement\n    implement -> verify\n\n    verify -> exit [label=\"pass\",    condition=\"preferred_label=pass\", weight=10]\n    verify -> fix  [label=\"fail\",    condition=\"preferred_label=fail\", weight=10]\n    verify -> exit [label=\"default\",                                   weight=1]\n\n    fix -> exit\n}\n",
-  "start": null,
-  "status": {
-    "kind": "starting"
+  "start": {
+    "run_id": "01KQVXCSGTF7GSNE4AQB98HEPK",
+    "start_time": "2026-05-05T11:11:58.288851719Z",
+    "run_branch": "fabro/run/01KQVXCSGTF7GSNE4AQB98HEPK",
+    "base_sha": "60d3bef255b5d49981b6bee1a48738b7a2a8f6e7"
   },
-  "status_updated_at": "2026-05-05T11:11:56.499216308Z",
+  "status": {
+    "kind": "running"
+  },
+  "status_updated_at": "2026-05-05T11:11:58.288868713Z",
   "pending_control": null,
-  "checkpoint": null,
-  "checkpoints": [],
+  "checkpoint": {
+    "timestamp": "2026-05-05T11:13:59.858084068Z",
+    "current_node": "analyze",
+    "completed_nodes": [
+      "start",
+      "analyze"
+    ],
+    "node_retries": {},
+    "context_values": {
+      "last_response": "Perfect! Now I have enough context. Let me produce my analysis.\n\n---\n\n# Analysis — Issue #140: assurance-probe (deterministic test-strength layer)\n\n## Issue Summary\n\n**Title:** crosscheck: assurance",
+      "response.analyze": "Perfect! Now I have enough context. Let me produce my analysis.\n\n---\n\n# Analysis — Issue #140: assurance-probe (deterministic test-strength layer)\n\n## Issue Summary\n\n**Title:** crosscheck: assurance-probe — deterministic test-strength layer (design discussion)\n\n**Problem Statement:** The crosscheck plugin has a gap in its 6-layer assurance hierarchy. While Layer 4 mechanically checks that every invariant has a covering test (bidirectional ID match), it does **not verify that the covering test would actually fail if the invariant were violated**. A vacuous test—one that imports the module but never exercises the failure condition—currently passes the Layer 4 gate. The issue proposes a new `/crosscheck:assurance-probe` skill to fill this gap via deterministic mutation testing.\n\n## Files Involved\n\n- `crosscheck/skills/spec-adversary/SKILL.md:1-263` — Layer 6 (spec completeness) skill that adversarially probes for missing invariants; provides the issue-only rotation pattern to mirror\n- `crosscheck/skills/assurance-init/SKILL.md:1-344` — Bootstrap skill that scaffolds governance; establishes dual-track enforcement and the 6-layer hierarchy structure\n- `crosscheck/skills/invariant-coverage-scaffold/SKILL.md:1-150` — Layer 4 skill that installs the **existence** gate (invariant ID ↔ test comment match); the new probe extends this by checking test **strength**\n- `crosscheck/docs/assurance-hierarchy.md:1-41` — Documents the 6-layer hierarchy; Layer 4 currently described as \"Implementation–spec alignment\" (deterministic)\n- `crosscheck/README.md:1-100` — Plugin overview; mentions Layer 4 as \"your spec and your code can't drift\"\n- `crosscheck/demo/06_test_adequacy/SCRIPT.md:1-155` — Demo showing how `/rationale` identifies gaps in test coverage via claim-tree adequacy arguments; relevant pattern for mutation failure detection\n\n## Evidence Trace\n\nSince this is a **feature proposal** (not a bug/regression), there's no failing test to trace. Instead, here's the design gap analysis:\n\n### Phase 1: Current Layer 4 Gate Behavior\n\n**What it checks (per `invariant-coverage-scaffold/SKILL.md:17-20`):**\n1. Every invariant in `docs/invariants/*.md` has a `# Invariant <ID>: <Name>` comment in a test file\n2. Every test comment references an invariant ID that exists in the docs\n\n**What it does NOT check:**\n- Whether the test actually asserts the invariant's property\n- Whether the test would fail if the invariant were violated\n\n**Evidence:** The skill at `invariant-coverage-scaffold/SKILL.md` emits scripts that grep for comment presence, not test behavior. A test with `# Invariant I1: PRIMARY_WORKSPACE_DETERMINISM` above an empty function body passes.\n\n### Phase 2: Proposed Solution (from issue body)\n\n**Mutation probe (deterministic):**\n1. Parse `Failure condition` clause from `docs/invariants/<module>.md`\n2. Apply targeted source mutations (e.g., drop `ORDER BY is_primary DESC` for a deterministic-membership invariant)\n3. Run pytest on the covering test\n4. Record `killed / survived / errored`\n\n**Output:** A committed reproducer script at `scripts/probe/<module>_<YYYYMMDD>.py` + GitHub issue with ≤3 findings + row appended to `.assurance/probe-tracker.csv`\n\n**Pattern mirrors:** `/spec-adversary` (rotation-based, issue-only, SNR kill criterion, bounded output)\n\n### Phase 3: What Makes This Deterministic (Layer 4)\n\nUnlike `/spec-adversary` (Layer 6, best-effort LLM probing), the probe is deterministic because:\n1. **Mutation specification is mechanical** — derived from `Failure condition` clause (not LLM-generated)\n2. **Test execution is deterministic** — same commit + same mutation → same `killed/survived/errored` verdict\n3. **Reproducer is committed** — future runs re-derive the same findings\n\nThis fits Layer 4's \"deterministic\" confidence tier (per `assurance-hierarchy.md:14`).\n\n### Phase 4: Integration Points\n\n**Pre-commit stub:** Already scaffolded by `/assurance-init` (per `assurance-init/SKILL.md:261-280`). The probe does NOT run in pre-commit (too slow); it runs on rotation like `/spec-adversary`.\n\n**Dual-track enforcement:** The probe writes a deterministic script to `scripts/probe/`, but the findings themselves are advisory (issue-only, not a PR gate).\n\n**No overlaps with existing skills:**\n- **Completeness** → `/spec-adversary` (Layer 6)\n- **Accuracy of invariant prose** → `/intent-check` (Layer 5, probabilistic)\n- **Existence of covering test** → `/invariant-coverage-scaffold` (Layer 4, deterministic)\n- **Strength of covering test** → **GAP** ← the probe fills this\n\n## Root-Cause Hypothesis\n\n**Primary hypothesis:** The gap exists because the current Layer 4 gate was designed for **presence verification** only (ID bidirectional match), not **behavioral verification** (test actually enforces the invariant). This is architecturally correct—each layer should have a single responsibility—but it leaves test strength unvalidated.\n\n**Why this wasn't implemented earlier:**\n- `/invariant-coverage-scaffold` focuses on fast local gates (< 5s pre-commit); mutation testing is too slow\n- The rotation-based pattern (`/spec-adversary`) didn't exist at Layer 4 yet, so there was no precedent for \"deterministic, issue-only, rotation-gated\" workflows\n\n**Alternative hypothesis (kept alive):** The gap could be handled by tightening `/intent-check` (Layer 5) to validate test→invariant alignment rather than just spec→intent alignment. **Refutation:** `/intent-check` is probabilistic (~96% accuracy, round-trip informalization). The mutation probe is deterministic and produces a binary `killed/survived` verdict. Different confidence tiers → different layers.\n\n## Classification\n\n**Classification:** `algorithmic`  \n**Verification track:** `formal` (though the implementation is a script, not Dafny—the **determinism** of the output is what matters)\n\n**Rationale:**\n- **Not `crud-io`** — this is about test correctness, not database/network glue\n- **Not `concurrency`** — no locks/channels/async involved\n- **Not `floating-point`** — no IEEE-754 math\n- **Not `fault-localize`** — there's no broken code; this is a feature gap\n- **Not `refactor`** — adding new functionality, not restructuring existing code\n- **`algorithmic`** because the core task is:\n  1. Parse structured data (`Failure condition` clauses)\n  2. Apply deterministic transformations (source mutations)\n  3. Execute tests and classify results (`killed/survived/errored`)\n  \n  All of these are sequential logic, no I/O trust boundaries, deterministic output.\n\nThe verification track is `formal` in the sense that the **output** must be deterministic and reproducible (per the issue's design requirement: \"Re-running the script on the same commit MUST yield bit-identical findings\"). The implementation mechanism (a Python mutation-testing script) is less important than the guarantee it provides.\n\n---\n\n```json\n{\n  \"context_updates\": {\n    \"issue_ref\": \"nicholls-inc/claude-code-marketplace#140\",\n    \"issue_title\": \"crosscheck: assurance-probe — deterministic test-strength layer (design discussion)\",\n    \"analysis_classification\": \"algorithmic\",\n    \"verification_track\": \"formal\",\n    \"files_involved\": [\n      \"crosscheck/skills/spec-adversary/SKILL.md\",\n      \"crosscheck/skills/assurance-init/SKILL.md\",\n      \"crosscheck/skills/invariant-coverage-scaffold/SKILL.md\",\n      \"crosscheck/docs/assurance-hierarchy.md\",\n      \"crosscheck/README.md\",\n      \"crosscheck/demo/06_test_adequacy/SCRIPT.md\"\n    ]\n  }\n}\n```",
+      "internal.retry_count.analyze": 0,
+      "outcome": "succeeded",
+      "internal.node_visit_count": 1,
+      "verification_track": "formal",
+      "thread.start.current_node": "analyze",
+      "files_involved": [
+        "crosscheck/skills/spec-adversary/SKILL.md",
+        "crosscheck/skills/assurance-init/SKILL.md",
+        "crosscheck/skills/invariant-coverage-scaffold/SKILL.md",
+        "crosscheck/docs/assurance-hierarchy.md",
+        "crosscheck/README.md",
+        "crosscheck/demo/06_test_adequacy/SCRIPT.md"
+      ],
+      "internal.fidelity": "compact",
+      "issue_ref": "nicholls-inc/claude-code-marketplace#140",
+      "failure_signature": "",
+      "graph.max_node_visits": "20",
+      "graph.goal": "140",
+      "internal.thread_id": "start",
+      "analysis_classification": "algorithmic",
+      "issue_title": "crosscheck: assurance-probe — deterministic test-strength layer (design discussion)",
+      "last_stage": "analyze",
+      "internal.run_id": "01KQVXCSGTF7GSNE4AQB98HEPK",
+      "failure_class": "",
+      "graph.rankdir": "LR",
+      "current_node": "analyze",
+      "internal.retry_count.start": 0,
+      "internal.work_dir": "/workspace"
+    },
+    "node_outcomes": {
+      "start": {
+        "status": "succeeded",
+        "usage": null
+      },
+      "analyze": {
+        "status": "succeeded",
+        "context_updates": {
+          "analysis_classification": "algorithmic",
+          "last_response": "Perfect! Now I have enough context. Let me produce my analysis.\n\n---\n\n# Analysis — Issue #140: assurance-probe (deterministic test-strength layer)\n\n## Issue Summary\n\n**Title:** crosscheck: assurance",
+          "files_involved": [
+            "crosscheck/skills/spec-adversary/SKILL.md",
+            "crosscheck/skills/assurance-init/SKILL.md",
+            "crosscheck/skills/invariant-coverage-scaffold/SKILL.md",
+            "crosscheck/docs/assurance-hierarchy.md",
+            "crosscheck/README.md",
+            "crosscheck/demo/06_test_adequacy/SCRIPT.md"
+          ],
+          "verification_track": "formal",
+          "issue_title": "crosscheck: assurance-probe — deterministic test-strength layer (design discussion)",
+          "issue_ref": "nicholls-inc/claude-code-marketplace#140",
+          "response.analyze": "Perfect! Now I have enough context. Let me produce my analysis.\n\n---\n\n# Analysis — Issue #140: assurance-probe (deterministic test-strength layer)\n\n## Issue Summary\n\n**Title:** crosscheck: assurance-probe — deterministic test-strength layer (design discussion)\n\n**Problem Statement:** The crosscheck plugin has a gap in its 6-layer assurance hierarchy. While Layer 4 mechanically checks that every invariant has a covering test (bidirectional ID match), it does **not verify that the covering test would actually fail if the invariant were violated**. A vacuous test—one that imports the module but never exercises the failure condition—currently passes the Layer 4 gate. The issue proposes a new `/crosscheck:assurance-probe` skill to fill this gap via deterministic mutation testing.\n\n## Files Involved\n\n- `crosscheck/skills/spec-adversary/SKILL.md:1-263` — Layer 6 (spec completeness) skill that adversarially probes for missing invariants; provides the issue-only rotation pattern to mirror\n- `crosscheck/skills/assurance-init/SKILL.md:1-344` — Bootstrap skill that scaffolds governance; establishes dual-track enforcement and the 6-layer hierarchy structure\n- `crosscheck/skills/invariant-coverage-scaffold/SKILL.md:1-150` — Layer 4 skill that installs the **existence** gate (invariant ID ↔ test comment match); the new probe extends this by checking test **strength**\n- `crosscheck/docs/assurance-hierarchy.md:1-41` — Documents the 6-layer hierarchy; Layer 4 currently described as \"Implementation–spec alignment\" (deterministic)\n- `crosscheck/README.md:1-100` — Plugin overview; mentions Layer 4 as \"your spec and your code can't drift\"\n- `crosscheck/demo/06_test_adequacy/SCRIPT.md:1-155` — Demo showing how `/rationale` identifies gaps in test coverage via claim-tree adequacy arguments; relevant pattern for mutation failure detection\n\n## Evidence Trace\n\nSince this is a **feature proposal** (not a bug/regression), there's no failing test to trace. Instead, here's the design gap analysis:\n\n### Phase 1: Current Layer 4 Gate Behavior\n\n**What it checks (per `invariant-coverage-scaffold/SKILL.md:17-20`):**\n1. Every invariant in `docs/invariants/*.md` has a `# Invariant <ID>: <Name>` comment in a test file\n2. Every test comment references an invariant ID that exists in the docs\n\n**What it does NOT check:**\n- Whether the test actually asserts the invariant's property\n- Whether the test would fail if the invariant were violated\n\n**Evidence:** The skill at `invariant-coverage-scaffold/SKILL.md` emits scripts that grep for comment presence, not test behavior. A test with `# Invariant I1: PRIMARY_WORKSPACE_DETERMINISM` above an empty function body passes.\n\n### Phase 2: Proposed Solution (from issue body)\n\n**Mutation probe (deterministic):**\n1. Parse `Failure condition` clause from `docs/invariants/<module>.md`\n2. Apply targeted source mutations (e.g., drop `ORDER BY is_primary DESC` for a deterministic-membership invariant)\n3. Run pytest on the covering test\n4. Record `killed / survived / errored`\n\n**Output:** A committed reproducer script at `scripts/probe/<module>_<YYYYMMDD>.py` + GitHub issue with ≤3 findings + row appended to `.assurance/probe-tracker.csv`\n\n**Pattern mirrors:** `/spec-adversary` (rotation-based, issue-only, SNR kill criterion, bounded output)\n\n### Phase 3: What Makes This Deterministic (Layer 4)\n\nUnlike `/spec-adversary` (Layer 6, best-effort LLM probing), the probe is deterministic because:\n1. **Mutation specification is mechanical** — derived from `Failure condition` clause (not LLM-generated)\n2. **Test execution is deterministic** — same commit + same mutation → same `killed/survived/errored` verdict\n3. **Reproducer is committed** — future runs re-derive the same findings\n\nThis fits Layer 4's \"deterministic\" confidence tier (per `assurance-hierarchy.md:14`).\n\n### Phase 4: Integration Points\n\n**Pre-commit stub:** Already scaffolded by `/assurance-init` (per `assurance-init/SKILL.md:261-280`). The probe does NOT run in pre-commit (too slow); it runs on rotation like `/spec-adversary`.\n\n**Dual-track enforcement:** The probe writes a deterministic script to `scripts/probe/`, but the findings themselves are advisory (issue-only, not a PR gate).\n\n**No overlaps with existing skills:**\n- **Completeness** → `/spec-adversary` (Layer 6)\n- **Accuracy of invariant prose** → `/intent-check` (Layer 5, probabilistic)\n- **Existence of covering test** → `/invariant-coverage-scaffold` (Layer 4, deterministic)\n- **Strength of covering test** → **GAP** ← the probe fills this\n\n## Root-Cause Hypothesis\n\n**Primary hypothesis:** The gap exists because the current Layer 4 gate was designed for **presence verification** only (ID bidirectional match), not **behavioral verification** (test actually enforces the invariant). This is architecturally correct—each layer should have a single responsibility—but it leaves test strength unvalidated.\n\n**Why this wasn't implemented earlier:**\n- `/invariant-coverage-scaffold` focuses on fast local gates (< 5s pre-commit); mutation testing is too slow\n- The rotation-based pattern (`/spec-adversary`) didn't exist at Layer 4 yet, so there was no precedent for \"deterministic, issue-only, rotation-gated\" workflows\n\n**Alternative hypothesis (kept alive):** The gap could be handled by tightening `/intent-check` (Layer 5) to validate test→invariant alignment rather than just spec→intent alignment. **Refutation:** `/intent-check` is probabilistic (~96% accuracy, round-trip informalization). The mutation probe is deterministic and produces a binary `killed/survived` verdict. Different confidence tiers → different layers.\n\n## Classification\n\n**Classification:** `algorithmic`  \n**Verification track:** `formal` (though the implementation is a script, not Dafny—the **determinism** of the output is what matters)\n\n**Rationale:**\n- **Not `crud-io`** — this is about test correctness, not database/network glue\n- **Not `concurrency`** — no locks/channels/async involved\n- **Not `floating-point`** — no IEEE-754 math\n- **Not `fault-localize`** — there's no broken code; this is a feature gap\n- **Not `refactor`** — adding new functionality, not restructuring existing code\n- **`algorithmic`** because the core task is:\n  1. Parse structured data (`Failure condition` clauses)\n  2. Apply deterministic transformations (source mutations)\n  3. Execute tests and classify results (`killed/survived/errored`)\n  \n  All of these are sequential logic, no I/O trust boundaries, deterministic output.\n\nThe verification track is `formal` in the sense that the **output** must be deterministic and reproducible (per the issue's design requirement: \"Re-running the script on the same commit MUST yield bit-identical findings\"). The implementation mechanism (a Python mutation-testing script) is less important than the guarantee it provides.\n\n---\n\n```json\n{\n  \"context_updates\": {\n    \"issue_ref\": \"nicholls-inc/claude-code-marketplace#140\",\n    \"issue_title\": \"crosscheck: assurance-probe — deterministic test-strength layer (design discussion)\",\n    \"analysis_classification\": \"algorithmic\",\n    \"verification_track\": \"formal\",\n    \"files_involved\": [\n      \"crosscheck/skills/spec-adversary/SKILL.md\",\n      \"crosscheck/skills/assurance-init/SKILL.md\",\n      \"crosscheck/skills/invariant-coverage-scaffold/SKILL.md\",\n      \"crosscheck/docs/assurance-hierarchy.md\",\n      \"crosscheck/README.md\",\n      \"crosscheck/demo/06_test_adequacy/SCRIPT.md\"\n    ]\n  }\n}\n```",
+          "last_stage": "analyze"
+        },
+        "notes": "Stage completed: analyze",
+        "usage": {
+          "input": {
+            "usage": {
+              "model": {
+                "provider": "anthropic",
+                "model_id": "claude-sonnet-4-5"
+              },
+              "tokens": {
+                "input_tokens": 30457,
+                "output_tokens": 3969,
+                "reasoning_tokens": 134,
+                "cache_read_tokens": 373173,
+                "cache_write_tokens": 38210
+              }
+            },
+            "facts": {
+              "provider": "anthropic",
+              "cache_write_5m_tokens": 38210,
+              "cache_write_1h_tokens": 0
+            }
+          },
+          "total_usd_micros": 408154
+        }
+      }
+    },
+    "next_node_id": "plan",
+    "node_visits": {
+      "start": 1,
+      "analyze": 1
+    }
+  },
+  "checkpoints": [
+    [
+      19,
+      {
+        "timestamp": "2026-05-05T11:11:59.947986736Z",
+        "current_node": "start",
+        "completed_nodes": [
+          "start"
+        ],
+        "node_retries": {},
+        "context_values": {
+          "graph.rankdir": "LR",
+          "failure_signature": "",
+          "failure_class": "",
+          "internal.retry_count.start": 0,
+          "graph.max_node_visits": "20",
+          "graph.goal": "140",
+          "internal.fidelity": "compact",
+          "internal.run_id": "01KQVXCSGTF7GSNE4AQB98HEPK",
+          "internal.thread_id": null,
+          "internal.work_dir": "/workspace",
+          "outcome": "succeeded",
+          "current_node": "start",
+          "internal.node_visit_count": 1
+        },
+        "node_outcomes": {
+          "start": {
+            "status": "succeeded",
+            "usage": null
+          }
+        },
+        "next_node_id": "analyze",
+        "node_visits": {
+          "start": 1
+        }
+      }
+    ]
+  ],
   "conclusion": null,
   "retro": null,
   "retro_prompt": null,
@@ -454,5 +591,41 @@
   "pull_request": null,
   "superseded_by": null,
   "pending_interviews": {},
-  "stages": {}
+  "stages": {
+    "analyze@1": {
+      "first_event_seq": 20,
+      "prompt": null,
+      "response": null,
+      "completion": null,
+      "provider_used": {
+        "mode": "agent",
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-5"
+      },
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    },
+    "start@1": {
+      "first_event_seq": 16,
+      "prompt": null,
+      "response": null,
+      "completion": {
+        "outcome": "succeeded",
+        "notes": null,
+        "failure_reason": null,
+        "timestamp": "2026-05-05T11:11:59.947828787Z"
+      },
+      "provider_used": null,
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    }
+  }
 }
