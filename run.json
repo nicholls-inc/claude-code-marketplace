@@ -189,7 +189,7 @@
   "status_updated_at": "2026-05-05T17:14:54.130970555Z",
   "pending_control": null,
   "checkpoint": {
-    "timestamp": "2026-05-05T17:15:09.844006523Z",
+    "timestamp": "2026-05-05T17:15:13.389892289Z",
     "current_node": "check",
     "completed_nodes": [
       "start",
@@ -197,29 +197,25 @@
     ],
     "node_retries": {},
     "context_values": {
+      "response.check": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --version`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n> The custom wrapper at `/usr/local/bin/gh` intercepts **all** `gh` invocations (including `--version`) and immediately errors if `GITHUB_APP_PRIVATE_KEY` is not set. This means the image ships a credential-minting shim rather than the raw `gh` binary, and that shim requires a GitHub App private key to be injected at runtime.\n\n---\n\n### Step 3 — `gh auth status`\n\n**Command:** `gh auth status`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 4 — `gh api user --jq .login`\n\n**Command:** `gh api user --jq .login`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 5 — `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n\n**Command:** `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\nVERDICT: gh auth FAILED — `GITHUB_APP_PRIVATE_KEY` env var is not set; the image's `gh` wrapper cannot mint a GitHub App token and every command fails before reaching the GitHub API.",
+      "internal.work_dir": "/workspace",
+      "failure_class": "",
+      "graph.goal": "Verify the gh CLI is installed and authenticated inside the sandbox",
+      "internal.fidelity": "compact",
       "internal.run_id": "01KQWJ57F4XSE0KA8KXTZE0GEH",
-      "internal.thread_id": "start",
+      "thread.start.current_node": "check",
+      "failure_signature": "",
+      "graph.rankdir": "LR",
+      "outcome": "succeeded",
+      "current_node": "check",
       "internal.retry_count.check": 0,
       "internal.retry_count.start": 0,
-      "failure_signature": "",
-      "graph.goal": "Verify the gh CLI is installed and authenticated inside the sandbox",
-      "current_node": "check",
       "last_response": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --versi",
-      "thread.start.current_node": "check",
-      "internal.fidelity": "compact",
-      "failure_class": "",
       "last_stage": "check",
-      "response.check": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --version`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n> The custom wrapper at `/usr/local/bin/gh` intercepts **all** `gh` invocations (including `--version`) and immediately errors if `GITHUB_APP_PRIVATE_KEY` is not set. This means the image ships a credential-minting shim rather than the raw `gh` binary, and that shim requires a GitHub App private key to be injected at runtime.\n\n---\n\n### Step 3 — `gh auth status`\n\n**Command:** `gh auth status`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 4 — `gh api user --jq .login`\n\n**Command:** `gh api user --jq .login`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 5 — `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n\n**Command:** `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\nVERDICT: gh auth FAILED — `GITHUB_APP_PRIVATE_KEY` env var is not set; the image's `gh` wrapper cannot mint a GitHub App token and every command fails before reaching the GitHub API.",
-      "internal.node_visit_count": 1,
-      "internal.work_dir": "/workspace",
-      "graph.rankdir": "LR",
-      "outcome": "succeeded"
+      "internal.thread_id": "start",
+      "internal.node_visit_count": 1
     },
     "node_outcomes": {
-      "start": {
-        "status": "succeeded",
-        "usage": null
-      },
       "check": {
         "status": "succeeded",
         "context_updates": {
@@ -251,12 +247,17 @@
           },
           "total_usd_micros": 37899
         }
+      },
+      "start": {
+        "status": "succeeded",
+        "usage": null
       }
     },
     "next_node_id": "exit",
+    "git_commit_sha": "88123a1ffb9affff2a742e0db9a53e608cf4a8a1",
     "node_visits": {
-      "start": 1,
-      "check": 1
+      "check": 1,
+      "start": 1
     }
   },
   "checkpoints": [
@@ -294,9 +295,114 @@
           "start": 1
         }
       }
+    ],
+    [
+      43,
+      {
+        "timestamp": "2026-05-05T17:15:13.389892289Z",
+        "current_node": "check",
+        "completed_nodes": [
+          "start",
+          "check"
+        ],
+        "node_retries": {},
+        "context_values": {
+          "response.check": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --version`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n> The custom wrapper at `/usr/local/bin/gh` intercepts **all** `gh` invocations (including `--version`) and immediately errors if `GITHUB_APP_PRIVATE_KEY` is not set. This means the image ships a credential-minting shim rather than the raw `gh` binary, and that shim requires a GitHub App private key to be injected at runtime.\n\n---\n\n### Step 3 — `gh auth status`\n\n**Command:** `gh auth status`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 4 — `gh api user --jq .login`\n\n**Command:** `gh api user --jq .login`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 5 — `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n\n**Command:** `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\nVERDICT: gh auth FAILED — `GITHUB_APP_PRIVATE_KEY` env var is not set; the image's `gh` wrapper cannot mint a GitHub App token and every command fails before reaching the GitHub API.",
+          "internal.work_dir": "/workspace",
+          "failure_class": "",
+          "graph.goal": "Verify the gh CLI is installed and authenticated inside the sandbox",
+          "internal.fidelity": "compact",
+          "internal.run_id": "01KQWJ57F4XSE0KA8KXTZE0GEH",
+          "thread.start.current_node": "check",
+          "failure_signature": "",
+          "graph.rankdir": "LR",
+          "outcome": "succeeded",
+          "current_node": "check",
+          "internal.retry_count.check": 0,
+          "internal.retry_count.start": 0,
+          "last_response": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --versi",
+          "last_stage": "check",
+          "internal.thread_id": "start",
+          "internal.node_visit_count": 1
+        },
+        "node_outcomes": {
+          "check": {
+            "status": "succeeded",
+            "context_updates": {
+              "last_response": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --versi",
+              "last_stage": "check",
+              "response.check": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --version`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n> The custom wrapper at `/usr/local/bin/gh` intercepts **all** `gh` invocations (including `--version`) and immediately errors if `GITHUB_APP_PRIVATE_KEY` is not set. This means the image ships a credential-minting shim rather than the raw `gh` binary, and that shim requires a GitHub App private key to be injected at runtime.\n\n---\n\n### Step 3 — `gh auth status`\n\n**Command:** `gh auth status`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 4 — `gh api user --jq .login`\n\n**Command:** `gh api user --jq .login`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 5 — `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n\n**Command:** `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\nVERDICT: gh auth FAILED — `GITHUB_APP_PRIVATE_KEY` env var is not set; the image's `gh` wrapper cannot mint a GitHub App token and every command fails before reaching the GitHub API."
+            },
+            "notes": "Stage completed: check",
+            "usage": {
+              "input": {
+                "usage": {
+                  "model": {
+                    "provider": "anthropic",
+                    "model_id": "claude-sonnet-4-6"
+                  },
+                  "tokens": {
+                    "input_tokens": 1362,
+                    "output_tokens": 888,
+                    "reasoning_tokens": 0,
+                    "cache_read_tokens": 8388,
+                    "cache_write_tokens": 4794
+                  }
+                },
+                "facts": {
+                  "provider": "anthropic",
+                  "cache_write_5m_tokens": 4794,
+                  "cache_write_1h_tokens": 0
+                }
+              },
+              "total_usd_micros": 37899
+            }
+          },
+          "start": {
+            "status": "succeeded",
+            "usage": null
+          }
+        },
+        "next_node_id": "exit",
+        "git_commit_sha": "88123a1ffb9affff2a742e0db9a53e608cf4a8a1",
+        "node_visits": {
+          "check": 1,
+          "start": 1
+        }
+      }
     ]
   ],
-  "conclusion": null,
+  "conclusion": {
+    "timestamp": "2026-05-05T17:15:13.402959408Z",
+    "status": "succeeded",
+    "duration_ms": 19259,
+    "final_git_commit_sha": "88123a1ffb9affff2a742e0db9a53e608cf4a8a1",
+    "stages": [
+      {
+        "stage_id": "start",
+        "stage_label": "start",
+        "duration_ms": 0,
+        "retries": 0
+      },
+      {
+        "stage_id": "check",
+        "stage_label": "check",
+        "duration_ms": 14050,
+        "billing_usd_micros": 37899,
+        "retries": 0
+      }
+    ],
+    "billing": {
+      "input_tokens": 1362,
+      "output_tokens": 888,
+      "total_tokens": 15432,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 8388,
+      "cache_write_tokens": 4794,
+      "total_usd_micros": 37899
+    },
+    "total_retries": 0
+  },
   "retro": null,
   "retro_prompt": null,
   "retro_response": null,
@@ -317,12 +423,35 @@
       "first_event_seq": 21,
       "prompt": null,
       "response": null,
-      "completion": null,
+      "completion": {
+        "outcome": "succeeded",
+        "notes": "Stage completed: check",
+        "failure_reason": null,
+        "timestamp": "2026-05-05T17:15:09.843865400Z"
+      },
       "provider_used": {
         "mode": "agent",
         "provider": "anthropic",
         "model": "claude-sonnet-4-6"
       },
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    },
+    "exit@1": {
+      "first_event_seq": 46,
+      "prompt": null,
+      "response": null,
+      "completion": {
+        "outcome": "succeeded",
+        "notes": null,
+        "failure_reason": null,
+        "timestamp": "2026-05-05T17:15:13.390029543Z"
+      },
+      "provider_used": null,
       "diff": null,
       "script_invocation": null,
       "script_timing": null,
