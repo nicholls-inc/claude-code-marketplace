@@ -102,24 +102,34 @@ is invoked by the user via `/crosscheck:spec-iterate` →
 scheduled workflow. The squad announces hand-offs to byfuglien when a
 module's invariant doc sets `dafny_candidate: true`.
 
-## Known issue — FP-tracker schema drift
+## FP-tracker schema — harmonised with `/crosscheck:intent-check`
 
-`assurance_squad_select.py` reads `.assurance/fp-tracker.csv` and treats
-`human_verdict == "FP"` as the spurious marker over a rolling 30-day
-window. The `/crosscheck:intent-check` skill writes
-`.assurance/intent-check-fp-tracker.csv` and uses `human_verdict ==
-"spurious"` over a rolling 14-day window. The squad's kill-criterion
-check therefore reads a file the intent-check skill never writes, with a
-verdict marker the schema never produces.
+The squad's kill-criterion check (`assurance_squad_select.py`) and the
+PR-Gate / Recheck verdict templates all read the same FP tracker that
+`/crosscheck:intent-check` writes:
 
-This is a real bug in the source repository and ships here unfixed by
-design — these reference workflows are imported as-is to preserve
-provenance. A follow-up commit harmonises the schema (file path, verdict
-string, window length) to match `/crosscheck:intent-check`. See the
-commit log for the fix and rationale.
+| Field | Value |
+|---|---|
+| File path | `.assurance/intent-check-fp-tracker.csv` |
+| Spurious marker | `human_verdict == "spurious"` (lowercase, post-`.strip()`) |
+| Partial verdict | counted as not-spurious (the pipeline still caught something) |
+| Empty `human_verdict` | excluded from both numerator and denominator (awaiting review) |
+| Window | rolling 14 days |
+| Minimum sample size | `n ≥ 3` before the kill criterion can fire |
+| Threshold | FP rate ≥ 30 % |
 
-If you adopt these workflows in your own repo, take the harmonised
-versions (post-fix), not the as-imported versions.
+Schema parity matters: the squad must read what the skill writes, and
+both must use the same window so the same rate is shown to the user
+across the PR-Gate sticky comment, the Recheck verdict, and the squad's
+status dashboard. The initial import of these workflows had a drift
+between the squad and the skill (different file path, different verdict
+marker, different window) — that drift was harmonised in the same series
+of commits that brought the workflows in. See the git log for the
+provenance.
+
+The 30 % / 14-day / `n ≥ 3` numbers themselves are founder intuition,
+not labelled-pilot data. Tune them for your tolerance once you have ≥30
+classified human verdicts.
 
 ## How to adapt to your repo
 
@@ -135,9 +145,9 @@ versions (post-fix), not the as-imported versions.
    Layer-4 gate that's been green for a few weeks, install gh-aw and
    compile the Tier B workflows. The squad is daily-cadence by
    default; the PR-Gate fires on protected-surface PRs only.
-5. **Calibrate the kill threshold.** The 30% FP rate / 30-day window is
-   founder intuition, not labelled-pilot data. Tune both for your
-   tolerance once you have ≥30 classified human verdicts.
+5. **Calibrate the kill threshold.** The 30 % FP rate / 14-day window /
+   `n ≥ 3` minimum are founder intuition, not labelled-pilot data. Tune
+   them for your tolerance once you have ≥30 classified human verdicts.
 
 ## Adapting the comment convention to other languages
 

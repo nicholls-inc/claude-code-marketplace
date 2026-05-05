@@ -202,8 +202,8 @@ For each plan entry where `action == "run_intent_check"`, invoke
 - The covering test sources (paths in `covering_tests`).
 - The module source diff (`git diff origin/<base>...HEAD -- <module-paths>`).
 
-The skill will append a row to `.assurance/fp-tracker.csv` and emit a JSON
-attestation. **Save the attestation to**
+The skill will append a row to `.assurance/intent-check-fp-tracker.csv`
+and emit a JSON attestation. **Save the attestation to**
 `docs/assurance/attestations/<content_hash>.json` (use the `content_hash`
 from the plan).
 
@@ -222,7 +222,7 @@ For each `run_intent_check` entry, format the result block as:
 > Invariant: `<ID>` (`<name>`) in `docs/invariants/<module>.md`
 > Verdict: **<PASS|FLAG|UNCERTAIN>**
 > Attestation: `sha256:<content_hash>` (`docs/assurance/attestations/<hash>.json`)
-> FP-tracker rolling 30 d: <rate>% (n=<count>)
+> FP-tracker rolling 14 d: <rate>% (n=<count>)
 >
 > <one-paragraph summary of the back-translation diff>
 >

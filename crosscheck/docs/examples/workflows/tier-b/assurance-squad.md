@@ -318,14 +318,17 @@ say so explicitly.
 
 ## Task 8 — FP-tracker review
 
-**Fires when:** `0.20 <= fp_rate < 0.30 && fp_total >= 5`.
+**Fires when:** `0.20 <= fp_rate < 0.30 && fp_total >= 3`.
 **Output:** Issue summarising which invariants fired the most FPs.
 
-Read `.assurance/fp-tracker.csv` rolling 30 d. Group by
+Read `.assurance/intent-check-fp-tracker.csv` rolling 14 d (the file +
+window owned by `/crosscheck:intent-check`). Group by
 `invariant_touched`. The top offenders are either over-precise (and
-need to be relaxed) or the LLM pipeline has a systematic gap. File one
-issue with the table and concrete recommendations. The issue is for
-human decision; do not propose changes here.
+need to be relaxed) or the LLM pipeline has a systematic gap. Treat
+`human_verdict == "spurious"` as the FP marker; treat `partial` as
+not-spurious; ignore empty rows (awaiting review). File one issue with
+the table and concrete recommendations. The issue is for human
+decision; do not propose changes here.
 
 Layer label: `Layer 5 (FP review)`.
 
@@ -333,7 +336,8 @@ Layer label: `Layer 5 (FP review)`.
 
 ## Task 9 — Kill-criterion alert
 
-**Fires when:** `kill_criterion_active == true` (FP rate ≥ 30 %, n ≥ 5).
+**Fires when:** `kill_criterion_active == true` (FP rate ≥ 30 %, n ≥ 3,
+rolling 14 d).
 **Output:** **High-priority** issue paging humans, plus an update to
 `.assurance/kill-criterion.json`.
 
@@ -398,7 +402,7 @@ Body must contain:
    candidate?
 2. **Roadmap drift summary** — pulled from Task 6 if it ran this cycle,
    else from the last drift check timestamp.
-3. **FP-tracker rolling 30 d** — count, FP rate, sparkline if practical.
+3. **FP-tracker rolling 14 d** — count, FP rate, sparkline if practical.
 4. **Kill-criterion state** — active / cleared / never tripped.
 5. **Run history** — newest first, last 10 runs, with selected tasks
    and counts of PRs/issues opened.

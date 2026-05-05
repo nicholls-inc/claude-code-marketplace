@@ -219,7 +219,7 @@ Kill criterion: inactive
 > Invariant: `Q2` (`DEAD_LETTER_TERMINAL`) in `docs/invariants/queue.md`
 > Verdict: **PASS**
 > Attestation: `sha256:7f4f9fb…` (`docs/assurance/attestations/7f4f9fb….json`)
-> FP-tracker rolling 30 d: 12% (n=8)
+> FP-tracker rolling 14 d: 12% (n=8)
 >
 > Back-translation aligned with prose: both describe the n+1th-failure
 > threshold and the no-redelivery property. The off-by-one rewording in
@@ -282,7 +282,7 @@ comment body, the recheck workflow ignores the cache, runs
 > Verdict: **PASS**
 > Attestation: `sha256:c1d8e2a…` (`docs/assurance/attestations/c1d8e2a….json`)
 > Triggered by: `/assurance-recheck` on `@reviewer`
-> FP-tracker rolling 30 d: 12% (n=9)
+> FP-tracker rolling 14 d: 12% (n=9)
 >
 > Fresh back-translation aligned with prose. The new attestation has a
 > different content hash from the cached one because the LLM produced
@@ -303,7 +303,7 @@ The Squad runs at 19:00 UTC. On day 1 of the queue project,
     "has_roadmap": false,
     "invariant_modules": 0,
     "covered_modules": 0,
-    "fp_count_30d": 0,
+    "fp_count_14d": 0,
     "kill_criterion_active": false
   },
   "weights": {
@@ -334,10 +334,8 @@ intent-check FP-tracker data. The squad's weights have flattened into
 maintenance mode: roadmap-drift checks, FP-tracker reviews, and
 spec-adversary rotations across modules.
 
-If the FP rate creeps above 30% over a rolling 30-day window with ≥5
-samples (subject to the known schema-drift caveat in the README — the
-harmonised version uses 14 days and the intent-check schema), the
-kill-criterion fires:
+If the FP rate creeps above 30 % over a rolling 14-day window with ≥3
+classified samples, the kill-criterion fires:
 
 ```json
 {

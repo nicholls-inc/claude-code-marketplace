@@ -184,8 +184,8 @@ with:
 - The module source diff
   (`git diff origin/<base>...HEAD -- <module-paths>`).
 
-The skill will append a row to `.assurance/fp-tracker.csv` and emit a JSON
-attestation. **Save it to**
+The skill will append a row to `.assurance/intent-check-fp-tracker.csv`
+and emit a JSON attestation. **Save it to**
 `docs/assurance/attestations/<content_hash>.json` and push it back to the
 PR branch via the `push-to-pull-request-branch` safe-output.
 
@@ -206,7 +206,7 @@ Post a single PR comment:
 > Verdict: **<PASS|FLAG|UNCERTAIN>**
 > Attestation: `sha256:<content_hash>` (`docs/assurance/attestations/<hash>.json`)
 > Triggered by: `/assurance-recheck` on `<commenter handle>`
-> FP-tracker rolling 30 d: <rate>% (n=<count>)
+> FP-tracker rolling 14 d: <rate>% (n=<count>)
 >
 > <one-paragraph summary of the back-translation diff>
 >

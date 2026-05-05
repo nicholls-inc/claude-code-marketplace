@@ -14,9 +14,18 @@ Outputs:
   <work-dir>/task_selection.json — { phase_signals, weights, selected, ... }
 
 Halt conditions:
-  - kill_criterion_active (FP rate >= 30 % over rolling 30d, n >= 5):
+  - kill_criterion_active (FP rate >= 30 % over rolling 14d, n >= 3):
     zeros out T3 (draft invariants), T5 (acceptance), T7 (spec adversary).
     T9 (kill alert) dominates at weight 100.
+
+Schema parity: this script reads the same FP tracker that
+``/crosscheck:intent-check`` writes — ``.assurance/intent-check-fp-tracker.csv``
+with ``human_verdict`` values from ``{genuine, genuine-planted, partial,
+spurious, ""}``. Spurious is the only value that counts as a false
+positive; ``partial`` is treated as not-spurious (the pipeline still
+caught something useful). Empty rows are awaiting review and are
+excluded from both numerator and denominator. Window is 14 days to
+match the intent-check skill's kill-criterion definition.
 
 Security notes:
   - All filesystem reads route through `_safe_open()` which asserts the
@@ -92,11 +101,16 @@ if os.path.isfile(hooks_path):
             # at least one module is gated; per-module count is best-effort
             covered_modules = invariant_modules
 
-# ---------- FP-tracker rolling 30d ----------
+# ---------- FP-tracker rolling 14d ----------
+# Schema matches /crosscheck:intent-check: file
+# `.assurance/intent-check-fp-tracker.csv`, verdict `spurious` for FP,
+# empty `human_verdict` excluded from both numerator and denominator
+# (row is awaiting review, not a not-spurious signal). Window is 14 days
+# to match the skill's kill-criterion definition.
 fp_count, fp_total, fp_rate = 0, 0, 0.0
-fp_csv = os.path.join(REPO_ROOT, ".assurance/fp-tracker.csv")
+fp_csv = os.path.join(REPO_ROOT, ".assurance/intent-check-fp-tracker.csv")
 if os.path.isfile(fp_csv):
-    cutoff = datetime.date.today() - datetime.timedelta(days=30)
+    cutoff = datetime.date.today() - datetime.timedelta(days=14)
     with _safe_open(fp_csv) as f:
         for row in csv.DictReader(f):
             try:
@@ -105,13 +119,18 @@ if os.path.isfile(fp_csv):
                 continue
             if d < cutoff:
                 continue
+            verdict = row.get("human_verdict", "").strip()
+            if verdict == "":
+                # Awaiting review — not a signal in either direction.
+                continue
             fp_total += 1
-            if row.get("human_verdict", "").upper() == "FP":
+            if verdict == "spurious":
                 fp_count += 1
     fp_rate = (fp_count / fp_total) if fp_total else 0.0
 
-# Require >=5 samples to avoid tripping on a single early FP.
-kill_criterion_active = fp_rate >= 0.30 and fp_total >= 5
+# Require >=3 samples to avoid tripping on a single early FP. Matches the
+# intent-check skill's threshold (`window_size >= 3` in fp-tracker-schema.md).
+kill_criterion_active = fp_rate >= 0.30 and fp_total >= 3
 
 # ---------- Dafny candidates ----------
 dafny_candidates: list[str] = []
@@ -145,7 +164,7 @@ W: dict[str, float] = {
     "T5_acceptance": 15.0 if (covered_modules >= 1 and not has_acceptance) else 1.0,
     "T6_roadmap_drift": 5.0 if has_roadmap else 0.0,
     "T7_spec_adversary": 20.0 if (invariant_modules >= 3 and adversary_target) else 0.0,
-    "T8_fp_review": 25.0 if (0.20 <= fp_rate < 0.30 and fp_total >= 5) else 1.0,
+    "T8_fp_review": 25.0 if (0.20 <= fp_rate < 0.30 and fp_total >= 3) else 1.0,
     "T9_kill_criterion": 100.0 if kill_criterion_active else 0.0,
     "T10_dafny_promotion": 10.0 if dafny_candidates else 0.0,
     "T11_coverage_extension": 8.0 if covered_modules >= 1 else 0.0,
@@ -187,9 +206,9 @@ selection = {
         "has_acceptance": has_acceptance,
         "invariant_modules": invariant_modules,
         "covered_modules": covered_modules,
-        "fp_count_30d": fp_count,
-        "fp_total_30d": fp_total,
-        "fp_rate_rolling_30d": round(fp_rate, 4),
+        "fp_count_14d": fp_count,
+        "fp_total_14d": fp_total,
+        "fp_rate_rolling_14d": round(fp_rate, 4),
         "kill_criterion_active": kill_criterion_active,
         "dafny_candidates": dafny_candidates,
         "adversary_target": adversary_target,
