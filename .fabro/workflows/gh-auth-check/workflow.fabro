@@ -1,0 +1,20 @@
+// Fabro workflow: gh-auth-check
+//
+// Throwaway smoke test confirming the fabro-agent-base image ships
+// `gh` and that GitHub credentials are wired into the sandbox.
+// Single node: invoke gh, report what was observed verbatim.
+
+digraph GhAuthCheck {
+    graph [goal="Verify the gh CLI is installed and authenticated inside the sandbox"]
+    rankdir=LR
+
+    start [shape=Mdiamond, label="Start"]
+    exit  [shape=Msquare,  label="Exit"]
+
+    check [
+        label  = "gh auth check",
+        prompt = "@prompts/check.md"
+    ]
+
+    start -> check -> exit
+}

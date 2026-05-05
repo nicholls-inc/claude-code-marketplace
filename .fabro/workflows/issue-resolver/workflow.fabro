@@ -1,0 +1,97 @@
+// Fabro workflow: issue-resolver
+//
+// Goal (run-supplied):  GitHub issue ID — bare number ("42"), short ref
+//                       ("#42"), or qualified ref ("owner/repo#42").
+//
+// Pipeline (linear — bounded one-shot revisions, no loops):
+//   start → analyze → plan → review
+//                            ├─ approve → implement
+//                            └─ revise  → plan_revise → implement
+//   implement → verify
+//                ├─ pass → exit
+//                └─ fail → fix → exit
+//
+// Adversarial assurance lives at REVIEW (intent + spec-adversary, one-shot).
+// Verification TOOLING (Dafny / property tests) lives inside IMPLEMENT —
+// implement stage fails its own artifacts if they don't pass.
+// VERIFY is a thin coverage attestation (artifacts exist · green · cover
+// the diff) and gets ONE shot — must frontload every failure it sees.
+// FIX gets ONE shot to address verify's list and exits.
+// The workflow always exits to a PR; verification status surfaces via
+// commits and the run log, not via workflow halt.
+
+digraph IssueResolver {
+    graph [
+        goal            = "Resolve a GitHub issue with adversarial planning, verified implementation, coverage attestation, and one-shot fix",
+        rankdir         = "LR",
+        max_node_visits = "20"
+    ]
+
+    start [shape=Mdiamond, label="Start"]
+    exit  [shape=Msquare,  label="Exit"]
+
+    analyze [
+        label            = "Analyze",
+        prompt           = "@prompts/analyze.md",
+        reasoning_effort = "high",
+        timeout          = "900s"
+    ]
+
+    plan [
+        label            = "Plan",
+        prompt           = "@prompts/plan.md",
+        reasoning_effort = "high",
+        timeout          = "600s"
+    ]
+
+    review [
+        label            = "Adversarial Review (one-shot · intent + spec)",
+        prompt           = "@prompts/review.md",
+        reasoning_effort = "high",
+        timeout          = "600s"
+    ]
+
+    plan_revise [
+        label            = "Plan · revise (one-shot)",
+        prompt           = "@prompts/plan_revise.md",
+        reasoning_effort = "high",
+        timeout          = "600s"
+    ]
+
+    implement [
+        label   = "Implement (with verification artifacts)",
+        prompt  = "@prompts/implement.md",
+        timeout = "1800s"
+    ]
+
+    verify [
+        label            = "Verify · coverage attestation (one-shot)",
+        prompt           = "@prompts/verify.md",
+        reasoning_effort = "medium",
+        timeout          = "300s"
+    ]
+
+    fix [
+        label            = "Fix verification failures (one-shot)",
+        prompt           = "@prompts/fix.md",
+        reasoning_effort = "high",
+        timeout          = "1200s"
+    ]
+
+    start -> analyze
+    analyze -> plan
+    plan -> review
+
+    review -> implement   [label="approve", condition="preferred_label=approve", weight=10]
+    review -> plan_revise [label="revise",  condition="preferred_label=revise",  weight=5]
+    review -> implement   [label="default",                                      weight=1]
+
+    plan_revise -> implement
+    implement -> verify
+
+    verify -> exit [label="pass",    condition="preferred_label=pass", weight=10]
+    verify -> fix  [label="fail",    condition="preferred_label=fail", weight=10]
+    verify -> exit [label="default",                                   weight=1]
+
+    fix -> exit
+}
