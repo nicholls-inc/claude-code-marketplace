@@ -8,7 +8,7 @@ Crosscheck checks Claude's code claims with two orchestrator agents — `byfugli
 
 What you can run right now:
 - Layer 1 — proof, not vibes. /spec-iterate → /generate-verified → /extract-code produces Dafny-verified Python or Go. The compiler refuses to emit code that doesn't satisfy its spec. /lightweight-verify adds contracts and property tests where full verification is overkill.
-- Layer 4 — your spec and your code can't drift. /invariant-coverage-scaffold installs a pre-commit + CI gate tying every documented invariant to a covering test. /protected-surface-amend forces a structured governance note on every edit to load-bearing files. /check-regressions re-verifies specs whose source has moved.
+- Layer 4 — your spec and your code can't drift. /invariant-coverage-scaffold installs a pre-commit + CI gate tying every documented invariant to a covering test. /protected-surface-amend forces a structured governance note on every edit to load-bearing files. /check-regressions re-verifies specs whose source has moved. /assurance-probe (Phase 1 – experimental) measures test strength via mutation probes.
 - Layer 5 — your spec actually matches what you meant. /intent-check runs round-trip informalization (~96% accuracy) so AI-drafted invariants get caught when they say something subtly different from the prose. /acceptance-oracle-draft locks user-observable flows into mechanically-verifiable scenarios upfront.
 - Layer 6 — what is your spec still missing? /spec-adversary adversarially probes stable modules for undocumented invariants.
 
@@ -46,7 +46,7 @@ Use the hellebuyck agent to scope this repo's assurance reach
 
 **Spec management & adequacy** — `/check-regressions`, `/suggest-specs`, `/rationale`. Keep verified specs from drifting, propose new spec targets, and bridge formal and informal verification with structured adequacy arguments.
 
-**Assurance hierarchy & governance** — nine skills covering Layers 4–6: `/intent-check`, `/spec-adversary`, `/acceptance-oracle-draft`, `/invariant-coverage-scaffold`, `/protected-surface-amend`, `/assurance-layer-audit`, `/assurance-init`, `/assurance-status`, `/assurance-roadmap-check`. Onboard a repo, audit its reach on the ladder, and keep governance notes from rotting.
+**Assurance hierarchy & governance** — ten skills covering Layers 4–6: `/intent-check`, `/spec-adversary`, `/acceptance-oracle-draft`, `/invariant-coverage-scaffold`, `/protected-surface-amend`, `/assurance-layer-audit`, `/assurance-init`, `/assurance-status`, `/assurance-roadmap-check`, `/assurance-probe` (Phase 1 – experimental). Onboard a repo, audit its reach on the ladder, measure test strength, and keep governance notes from rotting.
 
 → Full skill catalogue with trigger phrases at [`./docs/skills.md`](./docs/skills.md). For the assurance flow specifically, see [`./docs/assurance-hierarchy.md`](./docs/assurance-hierarchy.md).
 
@@ -59,6 +59,7 @@ One teaser per category — see the linked docs for full usage.
 /reason "Is this function thread-safe?" src/cache.py
 /rationale src/sort.py "must return a sorted permutation of the input"
 /assurance-layer-audit
+/assurance-probe validator
 ```
 
 ## Research grounding

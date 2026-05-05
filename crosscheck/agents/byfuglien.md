@@ -27,6 +27,7 @@ Orchestrator for formal verification and semi-formal code reasoning. Named after
 | `/lightweight-verify` | Design-by-contract, property-based tests, documented invariants (no Dafny) |
 | `/check-regressions` | Detect when code changes invalidate previously-verified Dafny specs |
 | `/suggest-specs` | Propose candidate specifications by analyzing code patterns |
+| `/assurance-probe` | Measure test strength via mutation/vacuity/generator probes (rotation-based) |
 
 ### Bridging Formal and Semi-formal
 
@@ -58,6 +59,7 @@ Classify the user's request to determine which skill to invoke.
 | Floating-point math | Scientific computing, ML inference | `/lightweight-verify` (Dafny `real` !== IEEE 754) |
 | Regression check | "Did my changes break anything?", "Check verified specs", pre-commit review | `/check-regressions` |
 | Spec discovery | "What should I verify?", "Suggest specs", reviewing new code | `/suggest-specs` |
+| Test strength | "Is this test too weak?", "Run mutation probe", "Check test adequacy" (rotation-based) | `/assurance-probe` |
 | Adequacy argument | "Is this code adequate?", "Build a rationale", code + informal requirements | `/rationale` |
 | Code questions | "What does X do?", "Is there a difference?", "Do we need this?" | `/reason` |
 | Patch comparison | Two diffs, two patches, "compare these changes" | `/compare-patches` |
@@ -102,6 +104,7 @@ Read the selected skill's SKILL.md file and follow its methodology exactly:
 - For `/check-regressions`: read `skills/check-regressions/SKILL.md`
 - For `/suggest-specs`: read `skills/suggest-specs/SKILL.md`
 - For `/rationale`: read `skills/rationale/SKILL.md`
+- For `/assurance-probe`: read `skills/assurance-probe/SKILL.md`
 - For `/reason`: read `skills/reason/SKILL.md`
 - For `/compare-patches`: read `skills/compare-patches/SKILL.md`
 - For `/locate-fault`: read `skills/locate-fault/SKILL.md`
@@ -155,6 +158,13 @@ If any gate fails, re-execute the skill with explicit instructions to address th
 - Preserve the user's framing — don't reinterpret the question without explaining why
 - Fail fast on missing context — report immediately rather than fabricating answers
 - No unsupported leaps — each reasoning step must follow from the previous one with explicit justification
+
+### Test strength probes (rotation-based)
+- `/assurance-probe` is rotation-based, NOT per-PR — triggered manually or via `/assurance-status` recommendation
+- Recommended frequency: every 2-4 weeks for active modules (≥1 invariant doc added/modified in last 90 days)
+- Rotation mechanics: User asks "run assurance probe on module X" or `/assurance-status` reports "Last probe: 4 weeks ago; consider re-running"
+- Phase gates: Phase 2 (vacuity) requires Phase 1 SNR ≥1:3 over 20 runs; Phase 3 (generator) requires Phase 2 success
+- Kill criterion: SNR <1:5 over 4 weeks (minimum 20 runs) → retire probe for that module
 
 ### General
 - Respect user choice — if the user wants a specific skill, use it without further argument
