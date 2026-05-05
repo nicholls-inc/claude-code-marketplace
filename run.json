@@ -177,14 +177,125 @@
     "in_place": false
   },
   "graph_source": "// Fabro workflow: gh-auth-check\n//\n// Throwaway smoke test confirming the fabro-agent-base image ships\n// `gh` and that GitHub credentials are wired into the sandbox.\n// Single node: invoke gh, report what was observed verbatim.\n\ndigraph GhAuthCheck {\n    graph [goal=\"Verify the gh CLI is installed and authenticated inside the sandbox\"]\n    rankdir=LR\n\n    start [shape=Mdiamond, label=\"Start\"]\n    exit  [shape=Msquare,  label=\"Exit\"]\n\n    check [\n        label  = \"gh auth check\",\n        prompt = \"@prompts/check.md\"\n    ]\n\n    start -> check -> exit\n}\n",
-  "start": null,
-  "status": {
-    "kind": "starting"
+  "start": {
+    "run_id": "01KQWJ57F4XSE0KA8KXTZE0GEH",
+    "start_time": "2026-05-05T17:14:54.130951954Z",
+    "run_branch": "fabro/run/01KQWJ57F4XSE0KA8KXTZE0GEH",
+    "base_sha": "60d3bef255b5d49981b6bee1a48738b7a2a8f6e7"
   },
-  "status_updated_at": "2026-05-05T17:14:48.739839966Z",
+  "status": {
+    "kind": "running"
+  },
+  "status_updated_at": "2026-05-05T17:14:54.130970555Z",
   "pending_control": null,
-  "checkpoint": null,
-  "checkpoints": [],
+  "checkpoint": {
+    "timestamp": "2026-05-05T17:15:09.844006523Z",
+    "current_node": "check",
+    "completed_nodes": [
+      "start",
+      "check"
+    ],
+    "node_retries": {},
+    "context_values": {
+      "internal.run_id": "01KQWJ57F4XSE0KA8KXTZE0GEH",
+      "internal.thread_id": "start",
+      "internal.retry_count.check": 0,
+      "internal.retry_count.start": 0,
+      "failure_signature": "",
+      "graph.goal": "Verify the gh CLI is installed and authenticated inside the sandbox",
+      "current_node": "check",
+      "last_response": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --versi",
+      "thread.start.current_node": "check",
+      "internal.fidelity": "compact",
+      "failure_class": "",
+      "last_stage": "check",
+      "response.check": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --version`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n> The custom wrapper at `/usr/local/bin/gh` intercepts **all** `gh` invocations (including `--version`) and immediately errors if `GITHUB_APP_PRIVATE_KEY` is not set. This means the image ships a credential-minting shim rather than the raw `gh` binary, and that shim requires a GitHub App private key to be injected at runtime.\n\n---\n\n### Step 3 — `gh auth status`\n\n**Command:** `gh auth status`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 4 — `gh api user --jq .login`\n\n**Command:** `gh api user --jq .login`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 5 — `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n\n**Command:** `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\nVERDICT: gh auth FAILED — `GITHUB_APP_PRIVATE_KEY` env var is not set; the image's `gh` wrapper cannot mint a GitHub App token and every command fails before reaching the GitHub API.",
+      "internal.node_visit_count": 1,
+      "internal.work_dir": "/workspace",
+      "graph.rankdir": "LR",
+      "outcome": "succeeded"
+    },
+    "node_outcomes": {
+      "start": {
+        "status": "succeeded",
+        "usage": null
+      },
+      "check": {
+        "status": "succeeded",
+        "context_updates": {
+          "last_response": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --versi",
+          "last_stage": "check",
+          "response.check": "---\n\n## gh Auth Verification Report\n\n---\n\n### Step 1 — `which gh`\n\n**Command:** `which gh`\n**Exit code:** `0`\n\n```\n/usr/local/bin/gh\n```\n\n---\n\n### Step 2 — `gh --version`\n\n**Command:** `gh --version`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n> The custom wrapper at `/usr/local/bin/gh` intercepts **all** `gh` invocations (including `--version`) and immediately errors if `GITHUB_APP_PRIVATE_KEY` is not set. This means the image ships a credential-minting shim rather than the raw `gh` binary, and that shim requires a GitHub App private key to be injected at runtime.\n\n---\n\n### Step 3 — `gh auth status`\n\n**Command:** `gh auth status`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 4 — `gh api user --jq .login`\n\n**Command:** `gh api user --jq .login`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\n### Step 5 — `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n\n**Command:** `gh repo view nicholls-inc/fabro-agent-base --json nameWithOwner,visibility`\n**Exit code:** `1`\n\n```\nstderr: ERROR: GITHUB_APP_PRIVATE_KEY is not set or empty — required to mint GitHub App tokens\n```\n\n---\n\nVERDICT: gh auth FAILED — `GITHUB_APP_PRIVATE_KEY` env var is not set; the image's `gh` wrapper cannot mint a GitHub App token and every command fails before reaching the GitHub API."
+        },
+        "notes": "Stage completed: check",
+        "usage": {
+          "input": {
+            "usage": {
+              "model": {
+                "provider": "anthropic",
+                "model_id": "claude-sonnet-4-6"
+              },
+              "tokens": {
+                "input_tokens": 1362,
+                "output_tokens": 888,
+                "reasoning_tokens": 0,
+                "cache_read_tokens": 8388,
+                "cache_write_tokens": 4794
+              }
+            },
+            "facts": {
+              "provider": "anthropic",
+              "cache_write_5m_tokens": 4794,
+              "cache_write_1h_tokens": 0
+            }
+          },
+          "total_usd_micros": 37899
+        }
+      }
+    },
+    "next_node_id": "exit",
+    "node_visits": {
+      "start": 1,
+      "check": 1
+    }
+  },
+  "checkpoints": [
+    [
+      20,
+      {
+        "timestamp": "2026-05-05T17:14:55.793245647Z",
+        "current_node": "start",
+        "completed_nodes": [
+          "start"
+        ],
+        "node_retries": {},
+        "context_values": {
+          "failure_class": "",
+          "graph.rankdir": "LR",
+          "graph.goal": "Verify the gh CLI is installed and authenticated inside the sandbox",
+          "failure_signature": "",
+          "internal.thread_id": null,
+          "outcome": "succeeded",
+          "current_node": "start",
+          "internal.fidelity": "compact",
+          "internal.retry_count.start": 0,
+          "internal.node_visit_count": 1,
+          "internal.work_dir": "/workspace",
+          "internal.run_id": "01KQWJ57F4XSE0KA8KXTZE0GEH"
+        },
+        "node_outcomes": {
+          "start": {
+            "status": "succeeded",
+            "usage": null
+          }
+        },
+        "next_node_id": "check",
+        "node_visits": {
+          "start": 1
+        }
+      }
+    ]
+  ],
   "conclusion": null,
   "retro": null,
   "retro_prompt": null,
@@ -201,5 +312,41 @@
   "pull_request": null,
   "superseded_by": null,
   "pending_interviews": {},
-  "stages": {}
+  "stages": {
+    "check@1": {
+      "first_event_seq": 21,
+      "prompt": null,
+      "response": null,
+      "completion": null,
+      "provider_used": {
+        "mode": "agent",
+        "provider": "anthropic",
+        "model": "claude-sonnet-4-6"
+      },
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    },
+    "start@1": {
+      "first_event_seq": 17,
+      "prompt": null,
+      "response": null,
+      "completion": {
+        "outcome": "succeeded",
+        "notes": null,
+        "failure_reason": null,
+        "timestamp": "2026-05-05T17:14:55.793152288Z"
+      },
+      "provider_used": null,
+      "diff": null,
+      "script_invocation": null,
+      "script_timing": null,
+      "parallel_results": null,
+      "stdout": null,
+      "stderr": null
+    }
+  }
 }
