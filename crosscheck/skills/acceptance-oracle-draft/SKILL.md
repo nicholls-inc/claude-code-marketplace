@@ -19,6 +19,8 @@ Layer 5 proxy in the assurance hierarchy — **user-perspective / empirical assu
 
 This skill is a methodology doc and scaffold generator. It does **not** execute scenarios; that is the CI job's responsibility. The skill's sole deliverables are: (a) scenario YAML/JSON files, (b) a runner-script stub, (c) a placeholder CI workflow step, and (d) an explicit list of flows that were **rejected** because they could not be mechanically verified.
 
+In Lamport's sense (*Who Builds a House without Drawing Blueprints?*, CACM 2015), an acceptance scenario is a blueprint — the durable artefact the implementation must conform to, written in advance so that imprecision in user-observable behaviour is surfaced before code is written rather than after. The mechanical-verification rule below is what makes the blueprint analogy hold: a blueprint that cannot be checked against the building is not a blueprint.
+
 **CRUCIAL RULE — mechanical verification only.** Every scenario's `then` assertion must be programmatically checkable: exit codes, regex matches, JSON schema validation, HTTP status + body schema, measurable latency thresholds, file existence/content hashes. Subjective criteria ("UX feels good", "response is readable", "user is satisfied") must either be quantified (e.g., "CLI startup < 300 ms measured via `hyperfine`", "response body matches schema `responses/ok.schema.json`") or rejected and reported out-of-scope. The oracle cannot proxy user-perspective assurance if its signals are themselves subjective.
 
 See `references/scenario-schema.md` for the full schema, runner-script pseudocode, and worked rewrites of subjective criteria into mechanical ones.
