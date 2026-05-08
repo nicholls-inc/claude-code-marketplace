@@ -6,8 +6,14 @@ import { v4 as uuidv4 } from "uuid";
 const DAFNY_TMP_PREFIX = "dafny-";
 const STALE_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes
 
-export async function createTempDir(): Promise<string> {
-  const dir = await mkdtemp(join(tmpdir(), `${DAFNY_TMP_PREFIX}${uuidv4()}-`));
+// Prefixes the cleanup sweep recognises. Each tool family registers its own
+// so /dafny_cleanup can remove stale dirs across both Dafny and Lean runs
+// without leaking implementation knowledge into individual tools.
+const TMP_PREFIXES = [DAFNY_TMP_PREFIX, "lean-"];
+
+export async function createTempDir(prefix?: string): Promise<string> {
+  const tag = prefix ?? DAFNY_TMP_PREFIX;
+  const dir = await mkdtemp(join(tmpdir(), `${tag}${uuidv4()}-`));
   return dir;
 }
 
@@ -22,7 +28,7 @@ export async function cleanupStaleDirs(): Promise<number> {
   let cleaned = 0;
 
   for (const entry of entries) {
-    if (!entry.startsWith(DAFNY_TMP_PREFIX)) continue;
+    if (!TMP_PREFIXES.some((p) => entry.startsWith(p))) continue;
 
     const fullPath = join(base, entry);
     try {

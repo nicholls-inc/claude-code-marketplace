@@ -147,32 +147,46 @@ claude --plugin-dir ./crosscheck
 
 ## MCP tools
 
-The plugin exposes three MCP tools:
+The plugin exposes six MCP tools across two engines:
 
-| Tool | Description |
-|------|-------------|
-| `dafny_verify` | Verify Dafny source code |
-| `dafny_compile` | Compile Dafny to Python or Go |
-| `dafny_cleanup` | Remove stale temp directories |
+| Tool | Engine | Description |
+|------|--------|-------------|
+| `dafny_verify` | Dafny | Verify Dafny source code |
+| `dafny_compile` | Dafny | Compile Dafny to Python or Go |
+| `dafny_cleanup` | Dafny + Lean | Remove stale Dafny/Lean temp directories |
+| `lean_check` | Lean | Parse + typecheck Lean 4 source via `lake build` (Mathlib pre-warmed; consumed today by `/lean-spec`) |
+| `lean_run` | Lean | Build + execute a Lean 4 file's `main : IO Unit` (no consumer skill until sub-phase 3b-β) |
+| `lean_test` | Lean | Run a Lean 4 test harness over a module (no consumer skill until sub-phase 3b-β) |
+
+Build the Lean image once before the Lean tools work (subsequent runs reuse the cached image):
+
+```bash
+../scripts/build-lean-docker.sh
+```
+
+The first build is slow (Mathlib oleans). Rebuild only when `mcp-server/lean-harness/lean-toolchain` or the Mathlib pin in `lakefile.lean` changes.
 
 ## Architecture
 
-- **Docker isolation**: Dafny runs in a container with `--network=none`, 512MB memory limit, 1 CPU, and 120s timeout
-- **Source as string**: LLM passes Dafny code directly; the MCP server handles all file I/O internally
-- **Boilerplate stripping**: Compiled output has Dafny runtime imports and files removed automatically
-- **No Dafny artifacts committed**: Only clean Python/Go output is the deliverable
-- **On-demand skill loading**: Orchestrator agents read skill SKILL.md files on-demand via the Read tool, keeping baseline context lean
+- **Two-engine harness**: Dafny image (`crosscheck-dafny:latest`) and Lean image (`crosscheck-lean:latest`) both built locally; selected per-tool. Image names are configurable via `DAFNY_DOCKER_IMAGE` and `LEAN_DOCKER_IMAGE`.
+- **Docker isolation**: Dafny runs with `--network=none`, 512MB memory limit, 1 CPU, and 120s timeout. Lean runs with `--network=none`, 2GB memory (Mathlib oleans are large), 2 CPUs, and 240s timeout.
+- **Mathlib pre-warming**: The Lean image bakes Mathlib oleans into its layers via `lake exe cache get`. Runtime `lake build` on a small file completes in seconds because Mathlib does not recompile.
+- **Source as string**: LLMs pass source code directly; the MCP server handles all file I/O and harness wiring internally.
+- **Boilerplate stripping**: Compiled Dafny output has Dafny runtime imports and files removed automatically.
+- **No verifier artifacts committed**: Only clean Python/Go output (Dafny) or Lean stubs the user reviewed (Lean) are the deliverables.
+- **On-demand skill loading**: Orchestrator agents read skill SKILL.md files on-demand via the Read tool, keeping baseline context lean.
 
 ## Development
 
 ```bash
 cd mcp-server
 npm install
-npm run build              # Type-check + esbuild bundle → dist/index.js
-npm test                   # Unit, integration, property, MCP tests (vitest)
-npm run test:e2e           # End-to-end tests (requires Docker)
-../scripts/build-docker.sh # Build Dafny Docker image
-../scripts/test-mcp.sh     # Smoke tests
+npm run build                   # Type-check + esbuild bundle → dist/index.js
+npm test                        # Unit, integration, property, MCP tests (vitest)
+npm run test:e2e                # End-to-end tests (requires Docker)
+../scripts/build-docker.sh      # Build Dafny Docker image
+../scripts/build-lean-docker.sh # Build Lean+Mathlib Docker image (slow first time)
+../scripts/test-mcp.sh          # Smoke tests
 ```
 
 ### Key conventions
@@ -181,7 +195,7 @@ npm run test:e2e           # End-to-end tests (requires Docker)
 - Strict TypeScript (ES2022 target, Node16 module resolution)
 - Zod for runtime validation of tool inputs
 - vitest with fast-check for property-based testing
-- Docker image name configured via `DAFNY_DOCKER_IMAGE` env var (default: `crosscheck-dafny:latest`)
+- Docker image names configured via `DAFNY_DOCKER_IMAGE` (default `crosscheck-dafny:latest`) and `LEAN_DOCKER_IMAGE` (default `crosscheck-lean:latest`); Lean memory/cpu via `LEAN_DOCKER_MEMORY` / `LEAN_DOCKER_CPUS`
 
 ## Known limitations
 

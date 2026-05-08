@@ -4,6 +4,9 @@ import { z } from "zod";
 import { dafnyVerify } from "./tools/verify.js";
 import { dafnyCompile } from "./tools/compile.js";
 import { dafnyCleanup } from "./tools/cleanup.js";
+import { leanCheck } from "./tools/leanCheck.js";
+import { leanRun } from "./tools/leanRun.js";
+import { leanTest } from "./tools/leanTest.js";
 
 export function createServer(): McpServer {
   const server = new McpServer({
@@ -44,10 +47,52 @@ export function createServer(): McpServer {
 
   server.tool(
     "dafny_cleanup",
-    "Remove stale Dafny temp directories (older than 30 minutes) from /tmp.",
+    "Remove stale Dafny/Lean temp directories (older than 30 minutes) from /tmp.",
     {},
     async () => {
       const result = await dafnyCleanup();
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "lean_check",
+    "Parse + typecheck Lean 4 source via `lake build` in the Mathlib-pre-warmed harness. Returns { success, kind: 'success' | 'parse-error' | 'typecheck-error' | 'build-error' | 'timeout', errors, warnings, sorries }. `sorry` warnings are expected for spec stubs and are surfaced separately from real warnings.",
+    {
+      source: z.string().describe("Lean 4 source code to typecheck"),
+    },
+    async ({ source }) => {
+      const result = await leanCheck({ source });
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "lean_run",
+    "Build + execute a Lean 4 file's `main : IO Unit` entry point. Used by /lean-impl (sub-phase 3b-β) for sanity-checking functional models. Not for spec stubs (which contain `sorry`).",
+    {
+      source: z.string().describe("Lean 4 source code with a `main : IO Unit` entry point"),
+    },
+    async ({ source }) => {
+      const result = await leanRun({ source });
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "lean_test",
+    "Run a Lean 4 test harness (#guard / decide tactics) over a user module. NOTE (3b-α): the runner currently aliases this to `lake build` because `lake test` requires a test driver in lakefile.lean that has not yet been wired; sub-phase 3b-β adds the driver and switches this tool to true `lake test` semantics. Until then, callers expecting test-runner semantics are silently downgraded to compile-time `#guard` checks.",
+    {
+      source: z.string().describe("Lean 4 source code containing test declarations"),
+    },
+    async ({ source }) => {
+      const result = await leanTest({ source });
       return {
         content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
       };

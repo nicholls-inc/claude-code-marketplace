@@ -8,8 +8,8 @@ A collection of Claude Code plugins. Each plugin is a self-contained directory w
 
 Crosscheck plugin. Crosschecks Claude's code claims using Dafny formal verification for provably correct Python/Go code, plus semi-formal reasoning for structured code analysis.
 
-- **MCP server** (`crosscheck/mcp-server/`): TypeScript server exposing three tools — `dafny_verify`, `dafny_compile`, `dafny_cleanup`
-- **Docker isolation**: Dafny 4.11.0 runs in a sandboxed container (no network, 512MB memory, 120s timeout)
+- **MCP server** (`crosscheck/mcp-server/`): TypeScript server exposing six tools across two engines — Dafny (`dafny_verify`, `dafny_compile`, `dafny_cleanup`) and Lean (`lean_check` consumed today by `/lean-spec`; `lean_run` and `lean_test` await consumer skills in sub-phase 3b-β)
+- **Docker isolation**: Dafny 4.11.0 in a sandboxed container (no network, 512MB memory, 120s timeout); Lean 4 + Mathlib in a sister container with Mathlib oleans pre-warmed (no network, 2GB memory, 240s timeout)
 - **Formal verification skills** (`crosscheck/skills/`): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`
 - **Spec management & adequacy skills** (`crosscheck/skills/`): `/check-regressions`, `/suggest-specs`, `/rationale`
 - **Semi-formal reasoning skills** (`crosscheck/skills/`): `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`
@@ -36,8 +36,9 @@ npm install
 npm run build            # Type-check + esbuild bundle → dist/index.js
 npm test                 # Unit, integration, property, MCP tests (vitest)
 npm run test:e2e         # End-to-end tests (requires Docker)
-../scripts/build-docker.sh  # Build Dafny Docker image
-../scripts/test-mcp.sh      # Smoke tests
+../scripts/build-docker.sh       # Build Dafny Docker image
+../scripts/build-lean-docker.sh  # Build Lean+Mathlib Docker image (slow first time)
+../scripts/test-mcp.sh           # Smoke tests
 ```
 
 ## Key conventions
@@ -46,7 +47,7 @@ npm run test:e2e         # End-to-end tests (requires Docker)
 - Strict TypeScript (ES2022 target, Node16 module resolution)
 - Zod for runtime validation of tool inputs
 - Tests use vitest with fast-check for property-based testing
-- Docker image name configured via `DAFNY_DOCKER_IMAGE` env var (default: `crosscheck-dafny:latest`)
+- Docker images configured via `DAFNY_DOCKER_IMAGE` (default `crosscheck-dafny:latest`) and `LEAN_DOCKER_IMAGE` (default `crosscheck-lean:latest`); Lean memory/cpu via `LEAN_DOCKER_MEMORY` / `LEAN_DOCKER_CPUS`
 
 ## Commit conventions
 
