@@ -78,7 +78,7 @@ Residual risk concentrates at the top of the specification chain — Layer 6 —
 
 How far each layer reaches in practice depends on the host language, the maturity of its verification tooling, and the shape of the system being built. The notes below describe what tends to be reachable in mainstream ecosystems (Go, Python, TypeScript, Rust); the crosscheck plugin's skills are referenced where they directly support a layer.
 
-**Layer 1 (formally verified pure code).** Reachable today for sequential, pure logic via Dafny, with extraction to Python or Go. The crosscheck plugin's `/spec-iterate`, `/generate-verified`, and `/extract-code` skills cover this path. Concurrent and effectful code falls outside the verifiable surface and must be handled at higher layers.
+**Layer 1 (formally verified pure code).** Reachable today for sequential, pure logic via Dafny, with extraction to Python or Go. The crosscheck plugin's `/spec-iterate`, `/generate-verified`, and `/extract-code` skills cover this path. The Lean-side pipeline is partial as of sub-phase 3b-α: `/informal-spec` (prose-spec extraction with hard human sign-off) and `/lean-spec` (signed-off prose → Lean 4 stub with `sorry` proof bodies, gated on `lake build` clean) ship the first two of five planned steps; `/lean-impl`, `/correspondence-review`, and `/drt-oracle` remain pending sub-phase 3b-β. Concurrent and effectful code falls outside the verifiable surface and must be handled at higher layers.
 
 **Layer 2 (compilation correctness).** Aspirational outside niche stacks. CompCert exists for C; nothing equivalent exists for Go, Python, TypeScript, or Rust. In mainstream ecosystems, the production compiler is part of the trusted computing base.
 
