@@ -4,6 +4,18 @@
 
 This hierarchy addresses the question: **given a specification, can we be confident the implementation is correct?** It explicitly excludes whether the specification solves the right problem — that is a product discovery concern, not an engineering assurance concern.
 
+## Framing: layered assurance
+
+The 6-layer hierarchy described below is *one structural element* of a broader framework, not the framework itself. The framework is layered formal verification engines + probabilistic complements + stochastic complements, composed and routed per module:
+
+- **Formal verification engines.** Dafny operationalised (Layer 1 verify-and-extract). Lean joining as a peer Layer-1 engine for the executable-model + DRT-oracle role (different from Dafny's role; see Layer 1 below). TLA+/P/Alloy as Layer 4 enrichment for rule-dense modules (state machines, workflows with branches, role hierarchies, invariant-rich data) — pending an ADR for the Layer 4 redefinition.
+- **Probabilistic complements.** Property-based testing and differential random testing exercise large input spaces. The Cedar paper's bug taxonomy (Disselkoen et al. 2024) shows ~15/21 of DRT-found bugs were general implementation bugs (parsing, dependencies, error handling), supporting broad applicability of DRT-as-technique.
+- **Stochastic complements.** `/intent-check` round-trip informalization, `/spec-adversary` heuristic probing, and the four semi-formal reasoning skills cover surfaces formal methods don't reach.
+
+**Verification-Guided Development (VGD)** is one methodology under this framework — Amazon's process for Cedar — that applies *where its four prerequisites are met at the module level*: (1) deterministic algebraic semantics, (2) provable properties, (3) tractable input generation for DRT, (4) resources for dual development. We hypothesise AI-augmented development substantially reduces the marginal cost of (4) in 2026; no empirical baseline exists for AI-augmented dual development (Cedar 2024 used human Lean + human Rust). Treat (4) as untested working assumption. (1)–(3) still bind — they are properties of the *problem*, not the team. `/assurance-layer-audit` and `/assurance-init` operationalise per-module prerequisite assessment as the routing primitive (pending Phase 3d implementation).
+
+**Adoption disposition (Brooker, diagnostic only).** Brooker's *hubris / humility / laziness* triad — believing software can be correct, accepting one's own fallibility, refusing to fix the same bug twice — is useful as self-assessment for teams considering whether VGD-style discipline will stick. It is **not a gate, checklist, or precondition** in any Crosscheck skill. Teams without the disposition will tend to let governance scaffolding decay; that is a known operational risk, not a hiring criterion.
+
 ## The Hierarchy
 
 ### Layer 1: Formally Verified Pure, Functional Code
@@ -11,6 +23,8 @@ This hierarchy addresses the question: **given a specification, can we be confid
 Business logic and core algorithms are written in a formally verifiable language such as Dafny, which compiles to target languages including JavaScript and TypeScript. The formal verification toolchain (Dafny's verifier, or Lean 4 via tools like Axiom or Harmonic's Aristotle) provides mathematical proof that the code satisfies its specification for all possible inputs — not just tested inputs.
 
 This is deterministic assurance: the proof either passes or it doesn't.
+
+**Two engines, two roles.** Dafny and Lean both sit at Layer 1 but in complementary roles, not as alternatives. Dafny is *verify-and-extract*: code is generated from the verified spec and compiled to Python or Go via the Dafny backends. Lean is the *executable model + DRT oracle*: production code is hand- or AI-written (or Dafny-extracted, for partial-verification cases), and a Lean 4 model serves as the oracle for differential random testing. Lean has no production-grade compiler to mainstream languages — the pattern is hand-write production code, validate via DRT, not generate from Lean. Producing usable Lean models is itself a multi-step pipeline (informal spec → Lean spec stub → Lean impl → correspondence review → DRT), well-precedented by GitHub Next's *Lean Squad*. Dafny gives compile-time correctness on the pure-function slice (~22–27% reach band); Lean + DRT gives sample-based correctness on the much larger non-pure slice. Both are needed; Phase 3b lands the Lean side of the engine pair (pending implementation).
 
 ### Layer 2: Compilation Correctness
 
@@ -87,6 +101,15 @@ The implementation surfaces three environment variables so each adopter can over
 - `CROSSCHECK_FP_WINDOW_DAYS` (default `14`) — rolling window length.
 
 The same env vars are read by `/intent-check` (Step 0 pre-check) and `/assurance-status` (Step 2.4 dashboard) so the FP rate shown to a contributor is computed identically across the two skills. The reference squad workflows in `crosscheck/docs/examples/workflows/` use the same values; tune all three together when calibrating. The Noisy-but-Valid framework (Feng et al., 2026) is one published protocol for deriving such thresholds from a labelled pilot.
+
+## What this hierarchy is not good for
+
+Modeled on Newcombe et al.'s *"What Formal Specification Is Not Good For"* (CACM 2015) — explicit methodological scope-limit, distinct from the README's *Known limitations* section which covers technical Dafny constraints.
+
+- **Modules without deterministic algebraic semantics** (heavy framework callbacks, side effects, framework conventions over types) — Layer 1 doesn't reach. Route to Layers 2–5; Layer 1 verification will not be useful here.
+- **Modules without provable properties** — the obstacle is spec design, not tooling. `/spec-iterate` and `/intent-check` apply, but the bottleneck is human articulation of intent.
+- **Modules where input generation is intractable** — DRT may not apply because no random sampling strategy exists. Lean on PBT with hand-curated strategies plus invariant docs.
+- **Sustained emergent performance degradation, networked failure modes under partition, security in adversarial settings** — out of scope for the hierarchy entirely. Performance regressions need profiling and tracing; security needs threat modeling and adversarial review; networked behavior under partition needs TLA+-style behavioral analysis at Layer 4 (pending ADR — see Phase 3c).
 
 ## Supporting Workflow Elements
 

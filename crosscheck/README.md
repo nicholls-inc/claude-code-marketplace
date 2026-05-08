@@ -36,6 +36,25 @@ Use the byfuglien agent to verify your bug fix
 Use the hellebuyck agent to scope this repo's assurance reach
 ```
 
+## What Crosscheck is: layered assurance
+
+Crosscheck is a **layered assurance framework** — formal verification engines, probabilistic complements, and stochastic complements composed and routed per module. The layers (1–6) are summarised in [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md); they are *one structural element* of the framework, not the framework itself.
+
+- **Formal verification engines.** Dafny is operationalised today (verify-and-extract for pure functional cores, ~22–27% reach band). Lean is joining as a peer Layer-1 engine in a different role: executable model + DRT oracle for hand- or AI-written production code, validated via differential random testing. TLA+/P/Alloy enrich Layer 4 (formal upgrade path for invariant docs) — pending an ADR for the layer redefinition.
+- **Probabilistic complements.** Property-based testing and differential random testing surface bugs the proof effort doesn't reach. Cedar's bug taxonomy is the empirical case (~15/21 of DRT-found bugs in their study were general implementation bugs).
+- **Stochastic complements.** `/intent-check` round-trip informalization, `/spec-adversary` heuristic probing, and the four semi-formal reasoning skills (`/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`) cover surfaces formal methods don't reach.
+
+**Verification-Guided Development (VGD)** is one methodology under this framework — Amazon's process for building Cedar — applicable *where its four prerequisites are met at the module level*: (1) deterministic algebraic semantics, (2) provable properties, (3) tractable input generation for DRT, (4) resources for dual development. We hypothesise that AI-augmented development substantially reduces the marginal cost of (4); no empirical baseline exists for AI-augmented dual development, and Cedar 2024 used human-written Lean and Rust. This is a working assumption pending operational data, not a claim. Prerequisites (1)–(3) still bind. `/assurance-layer-audit` and `/assurance-init` will operationalise per-module prerequisite assessment as the routing primitive (pending Phase 3d).
+
+## What Crosscheck is not good for
+
+Modeled on Newcombe et al.'s *"What Formal Specification Is Not Good For"* — explicit scope-limit, methodological. (See *Known limitations* below for the technical Dafny constraints; that's a different question.)
+
+- **Modules without deterministic semantics** (heavy framework callbacks, side effects, untyped framework conventions) — Layer 1 doesn't apply; route to Layers 2–5.
+- **Modules without provable properties** — spec-design problem; `/spec-iterate` + `/intent-check` apply, but the bottleneck is human, not tooling.
+- **Modules where input generation is intractable** — DRT may not apply; lean on PBT + invariant docs.
+- **Sustained emergent performance degradation, networked failure modes, security in adversarial settings** — out of scope for the framework. Performance regressions need profiling; security needs threat modeling; networked behavior under partition needs TLA+-style behavioral analysis at Layer 4 (pending ADR).
+
 ## The two orchestrator agents
 
 **Byfuglien** (/ˈbʌflɪn/) owns the implementation chain: formal verification with Dafny and semi-formal reasoning over existing code. It owns Layer 1 (Dafny formal verification) and the regression-detection slice of Layer 4 (`/check-regressions`). Layers 2–3 are deliberately not addressed — Layer 2 is a trusted-computing-base concern, Layer 3 (contract graph verification) is a research frontier outside niche stacks; see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md). Byfuglien also owns the four semi-formal reasoning skills, which sit outside the layer hierarchy entirely. Named after Dustin Byfuglien, the crosschecking enforcer: no unsupported claim survives, no unverified code ships.
