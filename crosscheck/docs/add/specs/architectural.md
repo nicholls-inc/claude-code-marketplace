@@ -25,9 +25,12 @@ Every module's invariant doc (`docs/invariants/<module>.md`) carries a frontmatt
 ```yaml
 ---
 mode: add | bootstrap
+phase: 0 | 1 | 2 | 3 | 4 | 5
 attested-at: <commit SHA where mode was attested, or "draft">
 ---
 ```
+
+The `phase:` field records the module's current ADD phase per `methodology.md` § Phase structure. Bootstrap-mode modules use `phase: 5` (continuous assurance) as the default since they enter Crosscheck post-construction; ADD-mode modules increment monotonically as the module advances. The integrity rules in S1.2 read this field.
 
 For ADD-mode modules whose invariants live in `docs/add/specs/modules/<module>.md` (the dual location accommodates the source-of-truth difference between the two modes), the same frontmatter format applies in that file.
 
@@ -120,6 +123,7 @@ Cross-module references use the qualified form `M3-billing/I3` per `glossary.md`
 - Does *not* require a covering test or code diff (this is the structural difference from `/intent-check`).
 - Emits a JSON attestation; pre-commit hook may consume the attestation hash.
 - Outputs go to `.assurance/intent-check-prose-fp-tracker.csv` for the FP rate computation. The 30% kill criterion applies, configurable per the existing `/intent-check` env-var pattern.
+- **FP definition:** a False Positive is a flagged divergence between the back-translation and the intent doc that the human reviewer attests is spurious (e.g., wording difference but semantic equivalence). The human marks the flag spurious in the FP-tracker CSV; the rolling 30% threshold is computed over those judgments.
 
 ### S2.4 — `/spec-adversary-prose` (or `/spec-adversary --mode=prose`)
 
@@ -144,6 +148,36 @@ Cross-module references use the qualified form `M3-billing/I3` per `glossary.md`
 - Does *not* propose changes to the spec; produces probing output the human or Hellebuyck can use to amend.
 - Operates on Drafted specs; refuses to probe Ratified ones (those go through full consolidation, not adversarial probing).
 
+### S2.5 — Seam to `/spec-iterate`
+
+**Consumes:** IC3, ADR-004
+**Produces:** integrity rule covering the spec ↦ implementation handoff
+
+ADR-004 says the existing `/spec-iterate` flow is reachable from the spec stack — but the seam between a per-module functional spec section and a `/spec-iterate` invocation must be declared, not implicit, so the linkage-graph integrity check (S1.2) can verify it.
+
+**Declaration form.** A functional spec section that is intended to be implemented via `/spec-iterate` records the intent in its frontmatter:
+
+```yaml
+---
+id: F1.2
+status: Drafted
+consumes: [S2.1, IC3]
+produces: [I1, T1.2]
+implementation: spec-iterate
+---
+```
+
+The `implementation:` field takes one of: `spec-iterate` (Layer-1 verified-Dafny chain), `manual` (agent or human writes code directly without `/spec-iterate`), `external` (the implementation lives outside this repo). Other values require a follow-up ADR.
+
+**Integrity rule.** For any `F` section with `implementation: spec-iterate`, the integrity check (S1.2) requires that the corresponding module directory contain either:
+- a `.dfy` artifact under the module's verification directory matching the `F` section's slug, *or*
+- a Status note in the `F` section explaining why the artifact is not yet present (e.g., `implementation-status: deferred-to-phase-4`).
+
+**What this section deliberately does not specify.**
+- The internals of `/spec-iterate` itself (out of scope; existing skill).
+- The exact Dafny patterns the agent emits when invoking `/spec-iterate` from an `F` section (functional-spec-tier concern).
+- The behaviour when an `F` section's `implementation:` value is `manual` or `external` — those cases follow the standard integrity rule (test must cover invariant; no spec-iterate seam to verify).
+
 ---
 
 ## S3 — ADD-mode adaptations to existing skills
@@ -159,7 +193,12 @@ For each existing skill listed below, the agent must produce a *delta spec* — 
 
 ### S3.2 — `/assurance-init`
 
-**Change:** Detect ADD-mode state (`docs/add/` already exists with an Attested intent doc). On ADD-mode state, the "name 1-3 load-bearing modules" question is replaced with "name 1-3 architectural modules from `docs/add/specs/architectural.md`". Modules thus seeded inherit `mode: add` in their frontmatter. Existing behavior unchanged for repos without `docs/add/`.
+**Change:** Two additive responsibilities.
+
+1. *Detect ADD-mode state* (`docs/add/` already exists with an Attested intent doc). On ADD-mode state, the "name 1-3 load-bearing modules" question is replaced with "name 1-3 architectural modules from `docs/add/specs/architectural.md`". Modules thus seeded inherit `mode: add` and `phase: <current-phase>` in their frontmatter.
+2. *Detect surrounding governance frameworks* — the pre-commit framework in use (pre-commit.com, lefthook, husky, or none) and the CI system in use (GitHub Actions, GitLab CI, CircleCI, or none). Detection is conservative: presence of `.pre-commit-config.yaml`, `lefthook.yml`, or `.husky/` for pre-commit; presence of `.github/workflows/`, `.gitlab-ci.yml`, or `.circleci/config.yml` for CI. The detection result is recorded at `.assurance/governance-detection.json` and is consumed by S6.1 when installing the diff-classification gates.
+
+Existing behavior (load-bearing-module elicitation, governance scaffolding) is unchanged for repos without `docs/add/` and is unchanged for the framework-detection step (the step is purely additive — its output sits alongside existing scaffolding rather than replacing any).
 
 ### S3.3 — `/intent-check`
 
@@ -217,8 +256,8 @@ The Auditor agent's prompt template (S5.1) takes the deterministic-instrumentati
 A new file `agents/<auditor-name>.md` (slug to be chosen by the agent and human, following the existing hockey-figure naming convention). The file structure mirrors `agents/byfuglien.md` and `agents/hellebuyck.md`:
 
 - Scope statement: read-only access; consumes deterministic signals; produces verdicts.
-- Skills owned (none in v1 — the auditor calls `/add-instrumentation` and renders verdicts directly).
-- Tool restrictions: explicitly no write tools that allow modification of `docs/add/`, `docs/invariants/`, `agents/`, `skills/`, `.claude/rules/`.
+- Skills owned (none in v1). The Auditor *invokes* `/add-instrumentation` and renders verdicts directly. If `/add-instrumentation` is implemented as a skill (per S4.1's script-vs-skill choice), the skill is plugin-level and *owned by Hellebuyck* (specification chain); the Auditor invokes but does not own it. This preserves the audit/author separation: the Auditor cannot modify the instrumentation it depends on.
+- Tool restrictions: explicitly no write tools that allow modification of `docs/add/` (except the Auditor's own report directory `docs/add/audit/`, per ADR-005 § Boundary), `docs/invariants/`, `agents/`, `skills/`, `.claude/rules/`. The restriction is **declared in the Auditor's `agents/<auditor-name>.md` frontmatter** as a `tool-allowlist:` block enumerating the permitted tools (read tools, the `/add-instrumentation` invocation, and write tools constrained to `docs/add/audit/<date>.md` and its JSON sidecar). The plugin loader honours the frontmatter at agent-spawn time; agent runs with restricted tools cannot bypass via prompt injection because the constraint is harness-level, not prompt-level.
 - Prompt template: a structured prompt that takes the deterministic output, walks the auditor through per-artifact verdict rendering, and emits the report.
 
 ### S5.2 — Consolidation-pass workflow
@@ -249,7 +288,9 @@ Three artifacts:
 
 2. **CI job**, added to the CI system detected by `/assurance-init` (GitHub Actions, GitLab CI, or CircleCI). The job re-verifies the trailer and appends to `.assurance/diff-classification-log.csv`.
 
-3. **Log schema**, documented in `references/diff-classification-log-schema.md`. Columns: `timestamp`, `commit_sha`, `author`, `classification`, `justification`, `modified_files`, `related_ids`. JSON-lines is acceptable as an alternative format if the agent's implementation prefers it.
+3. **Log schema**, documented in `references/diff-classification-log-schema.md`. Format: **JSON-lines** at `.assurance/diff-classification-log.jsonl`. Each line is a JSON object with keys: `timestamp`, `commit_sha`, `author`, `classification`, `justification`, `modified_files` (array), `related_ids` (array, parsed from commit body — IC, S, B, F, I, T, ADR identifiers).
+
+4. **Squash and rebase handling.** Squash-merging into a protected branch is permitted only when the squashed commit carries a summary `Spec-Diff-Classification` trailer covering the merged range. The CI gate runs on the *final* commit set on the merge target, not the pre-squash commits. Force-pushes that rewrite history on protected branches are rejected at the CI gate; the dual-track principle applies (a fast pre-receive hook on the remote, mirrored by the CI job).
 
 Implementation should follow the precedent of `/invariant-coverage-scaffold` (which generates similar dual-track artifacts).
 
@@ -307,13 +348,13 @@ The agent does not modify any human-authored Ratified artifact. To propose a cha
 |---|---|---|
 | IC1 (Empty-repo entrypoint) | S2.1, S3.1 | `/intent-elicit` is the entry; layer-audit detects empty state |
 | IC2 (Phase 0 explicit) | S2.1 | `/intent-elicit` is the producer |
-| IC3 (Phase 1 derives from intent) | S2.2 | `/spec-derive` |
+| IC3 (Phase 1 derives from intent) | S2.2, S2.5 | `/spec-derive` produces the spec stack; S2.5 declares the seam to `/spec-iterate` |
 | IC4 (Phase 2 prose-vs-prose) | S2.3, S2.4 | the two prose-mode skills |
 | IC5 (Three operating modes) | S1.1, S1.2 | mode tag and per-mode integrity |
 | IC6 (Auditor) | S5.1, S5.2 | agent definition and workflow |
 | IC7 (Diff classification) | S6.1 | gates and log |
 | IC8 (Deterministic instrumentation) | S4.1, S4.2 | tool and auditor input |
-| IC9 (Existing flows unchanged) | S3.* (additive only) | each adaptation is gated on mode/state |
+| IC9 (Existing flows unchanged) | S1.1, S3.* (additive only) | default-to-bootstrap in S1.1; each S3 adaptation is gated on mode/state |
 | IC10 (Documentation surfaces ADD) | S7.* | README, skills.md, agents.md |
 
 Every `IC` is consumed by at least one `S`. (The Phase 2 validation in `acceptance.md` will check this mechanically.)
