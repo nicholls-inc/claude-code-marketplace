@@ -67,7 +67,7 @@ Every commit that modifies an artifact under `docs/add/` (and, when extended, `d
 ---
 
 **IC8 — Deterministic instrumentation complements LLM judgments.**
-Crosscheck-with-ADD ships at least minimal deterministic instrumentation derivable from git history and the linkage graph: edit-frequency hotspots on spec files (Tornhill-style), change-coupling between specs and tests, orphan detection, and cascade-pending detection. The auditor agent consumes these signals before rendering verdicts.
+Crosscheck-with-ADD ships at least minimal deterministic instrumentation derivable from git history and the linkage graph: edit-frequency hotspots on spec files (Tornhill-style), change-coupling between specs and tests, orphan detection, cascade-pending detection, and diff-shape analysis (new clause / modified clause / deleted clause). The auditor agent consumes these signals before rendering verdicts.
 
 *Observable signal:* a script or skill produces these signals as structured output. The auditor agent's prompt explicitly takes the structured output as input. The output format is stable enough that future skills can consume it.
 
