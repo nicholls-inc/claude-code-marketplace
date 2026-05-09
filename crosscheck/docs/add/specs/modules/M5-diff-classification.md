@@ -183,8 +183,8 @@ For each `path ∈ modified_paths`:
 - Compute `is-protected-path(path, mode_resolver)`.
 
 If any path is `Protected`:
-1. Parse the commit message via F5.1.
-2. If the trailer is `None`, return `Rejected` with an actionable hint:
+
+1. Parse the commit message via F5.1. If the trailer is `None`, return `Rejected` with an actionable hint:
    ```
    ERROR: Commit modifies protected path(s) without Spec-Diff-Classification trailer.
 
@@ -195,23 +195,30 @@ If any path is `Protected`:
 
    See crosscheck/docs/add/decisions/ADR-005-diff-classification.md for guidance.
    ```
-3. If any path has `path_class == DocsAddAudit`, additionally check that `author` is in the `audit-authors.allowlist` file. If not, return `Rejected` with a hint citing `crosscheck/docs/add/decisions/ADR-005-diff-classification.md` § Authorship constraint.
+2. If any path has `path_class == DocsAddAudit`, check that `author` is in `.assurance/audit-authors.allowlist`. If not, return `Rejected` citing the authorship constraint.
+3. **Verify attestation files for any LLM-gated work the modified paths require** (per Phase 2 seam validation A-10; mirrors `/intent-check`'s § Step 7 companion-hook pattern). If any modified path falls under a *covered protected surface* — i.e., a surface for which an attestation file is the SSOT proving the heavy LLM work ran — recompute the SHA-256 over the sorted protected files and compare against the attestation:
+   - If `docs/invariants/<module>.md` is touched (Class B governance), check `.assurance/intent-check-attestation.json` exists, its `verdict == "pass"`, and its `content_hash` matches the recomputed hash. If absent / stale / mismatched → reject with hint pointing at `/intent-check`.
+   - If `docs/add/specs/architectural.md` or `docs/add/intent.md` is touched (ADD-mode spec-stack), check `.assurance/intent-check-prose-attestation.json` similarly. If absent / stale / mismatched → reject with hint pointing at `/intent-check-prose`.
+   - The hook does NOT invoke an LLM during this check. It only reads files, recomputes hashes, and compares. Per `/assurance-init`'s ROADMAP block: *"Pre-commit hooks are fast attestation checks only — they must never invoke LLMs or run slow test suites. Heavy verification lives in CI and in dedicated binaries that the pre-commit hook verifies were run."*
+
 4. Otherwise, return `Allowed`.
 
 If no paths are `Protected`, return `Allowed` unconditionally.
 
-The hook is **fast** (no LLM, no network). It runs locally on every commit attempt.
+The hook is **fast** (no LLM, no network). Wall-time budget < 5 s. It runs locally on every commit attempt.
 
 ### Frame conditions
-- Reads `modified_paths`, `commit_message`, `author`, and the `audit-authors.allowlist` file.
+- Reads `modified_paths`, `commit_message`, `author`, the `audit-authors.allowlist` file, and the relevant `.assurance/*-attestation.json` files when the modified paths require attestation verification. Reads protected-file content only to recompute hashes.
 - No mutation of the working tree or commit.
 
 ### Module invariants preserved
 - I1 (trailer ubiquity).
+- I9 (attestation verification on protected surfaces; pre-commit catches commits that bypass the heavy LLM step).
 
 ### Test linkage
 - T5.5 — modify `docs/add/intent.md` with no trailer → Rejected, exit_code != 0, hint contains the trailer template.
 - T5.6 — modify `docs/add/audit/foo.md` with valid trailer but author not in allowlist → Rejected with authorship-constraint hint.
+- T5.6b — modify `docs/add/intent.md` with valid trailer but `intent-check-prose-attestation.json` content_hash mismatched → Rejected with `/intent-check-prose` hint.
 
 ---
 
@@ -303,7 +310,7 @@ If the diff violates any of the above, return `Rejected` with an actionable hint
 
 ---
 
-## Module invariants — `I1`..`I4`
+## Module invariants — `I1`..`I5`
 
 ### I1 — Trailer ubiquity
 For every commit `c` whose `modified_paths` includes any protected path, `c.message` includes a valid `Spec-Diff-Classification` trailer (parsed by F5.1). The pre-commit hook (F5.3) and CI gate (F5.4) are the layered enforcement.
@@ -317,9 +324,12 @@ For squash-merge events, the squashed commit's classification is the most-signif
 ### I4 — Five-class taxonomy
 The set of legal `Spec-Diff-Classification` values is exactly `{propagated-discovery, intent-refinement, drift, retraction, status-transition}`. F5.1's parser rejects any other value.
 
+### I5 — Attestation verification on protected surfaces (per A-10)
+For every commit `c` whose `modified_paths` touch a covered protected surface (`docs/invariants/<module>.md` for `/intent-check`; `docs/add/intent.md` or `docs/add/specs/architectural.md` for `/intent-check-prose`), the corresponding `.assurance/*-attestation.json` exists with `verdict == "pass"` and `content_hash` matching the recomputed SHA-256 over sorted protected files. F5.3 enforces at pre-commit time without invoking an LLM, mirroring `/intent-check`'s § Step 7 companion-hook pattern.
+
 ---
 
-## Test linkage stubs — `T5.1`..`T5.10`
+## Test linkage stubs — `T5.1`..`T5.11`
 
 | ID | Operation | Stub description |
 |---|---|---|
@@ -329,6 +339,7 @@ The set of legal `Spec-Diff-Classification` values is exactly `{propagated-disco
 | T5.4 | F5.2 | docs/invariants/billing.md (bootstrap) → NotProtected |
 | T5.5 | F5.3 | modify intent.md no trailer → Rejected with template hint |
 | T5.6 | F5.3 | modify docs/add/audit/foo.md as non-allowlisted author → Rejected |
+| T5.6b | F5.3 | modify intent.md with valid trailer but stale/mismatched intent-check-prose-attestation → Rejected with /intent-check-prose hint |
 | T5.7 | F5.4 | 3-commit PR all valid → 3 log entries |
 | T5.8 | F5.4 | 3-commit PR one missing trailer → Rejected, no log writes |
 | T5.9 | F5.4 | squash-merge with drift in range, squashed != drift → Rejected |
