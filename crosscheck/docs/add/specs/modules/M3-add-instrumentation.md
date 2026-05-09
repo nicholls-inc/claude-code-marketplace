@@ -300,9 +300,9 @@ Every Auditor verdict cites at least one signal ID emitted by this module. The s
 
 ## What this spec deliberately does not specify
 
-- The implementation language (S4.1 leaves to the agent; recommendation: Python or Go for git/parser ergonomics).
+- The implementation language (S4.1 leaves to the agent; recommendation: Python or Go for git/parser ergonomics, packaged as a script per the Bucket C resolution to "script vs skill").
 - The exact CLI of the tool (e.g., `add-instrumentation --window=30 --output=foo.jsonl`). Operational detail; agent picks during SKILL.md drafting.
-- The pair-spec discovery mechanism for change-coupling (heuristic based on file naming; configurable in v1.x).
+- The pair-spec discovery mechanism for change-coupling. Per Phase 2 seam validation A-14: the existing `/assurance-layer-audit` § Step 3 has a structured tooling-detection table (test framework, property-based testing, formal-verification tooling, governance signals, type checking, linters); the pair discovery should follow the same precedent (filename matching + tooling-table look-up). Configurable in v1.x.
 - Performance bounds (target: under 30s on a 1k-artifact repo per M1/B-future-extension; not enforced as a B invariant in v1).
 
 ## Open questions surfaced by this draft
