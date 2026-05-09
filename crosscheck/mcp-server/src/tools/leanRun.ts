@@ -18,9 +18,11 @@ interface LeanRunOutput {
 /**
  * Compile and execute a Lean file's `main : IO Unit` entry point.
  *
- * Used primarily by /lean-impl (sub-phase 3b-β) for sanity-checking a
- * functional model on a few inputs before /drt-oracle takes over. /lean-spec
- * does NOT call this — spec stubs contain `sorry` and are not meant to run.
+ * Used by /lean-impl for sanity-checking a functional model against
+ * worked-example inputs from the informal spec, and by /drt-oracle as the
+ * Lean-side runner that the external Python harness invokes per random
+ * input. /lean-spec does NOT call this — spec stubs contain `sorry` and are
+ * not meant to run.
  */
 export async function leanRun(input: LeanRunInput): Promise<LeanRunOutput> {
   const tempDir = await createTempDir("lean-");

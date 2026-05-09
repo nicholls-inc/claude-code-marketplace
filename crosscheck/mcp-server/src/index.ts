@@ -73,7 +73,7 @@ export function createServer(): McpServer {
 
   server.tool(
     "lean_run",
-    "Build + execute a Lean 4 file's `main : IO Unit` entry point. Used by /lean-impl (sub-phase 3b-β) for sanity-checking functional models. Not for spec stubs (which contain `sorry`).",
+    "Build + execute a Lean 4 file's `main : IO Unit` entry point. Used by /lean-impl for sanity-checking functional models against worked-example inputs, and by /drt-oracle as the Lean-side runner that the DRT harness invokes per random input. Not for spec stubs (which contain `sorry`).",
     {
       source: z.string().describe("Lean 4 source code with a `main : IO Unit` entry point"),
     },
@@ -87,7 +87,7 @@ export function createServer(): McpServer {
 
   server.tool(
     "lean_test",
-    "Run a Lean 4 test harness (#guard / decide tactics) over a user module. NOTE (3b-α): the runner currently aliases this to `lake build` because `lake test` requires a test driver in lakefile.lean that has not yet been wired; sub-phase 3b-β adds the driver and switches this tool to true `lake test` semantics. Until then, callers expecting test-runner semantics are silently downgraded to compile-time `#guard` checks.",
+    "Run a Lean 4 test harness over a user module. The runner aliases this to `lake build`, which is sufficient for compile-time `#guard` and `decide` checks against literal fixtures. Sub-phase 3b-β chose not to wire a `lake test` driver: `/drt-oracle` invokes `lean_run` against per-def runners under `formal-verification/lean/CrosscheckModel/<Name>Runner.lean` driven by an external Python harness, which gives random-input fuzzing without coupling the MCP surface to a Lake test target. `lean_test` therefore remains the compile-time `#guard` path.",
     {
       source: z.string().describe("Lean 4 source code containing test declarations"),
     },

@@ -6,7 +6,8 @@ description: >-
   declarations with `sorry` proof bodies, and the Mathlib imports needed to make
   the file `lake build` cleanly. Drives the Lean toolchain in a retry loop
   against `lean_check` until the file parses and typechecks. Step 2 of the
-  Lean-side pipeline; downstream of `/informal-spec`, upstream of `/lean-impl`.
+  five-step Lean-side pipeline; downstream of `/informal-spec`, upstream of
+  `/lean-impl`.
   Triggers: "lean spec", "lean spec stub", "lean 4 specification", "translate
   informal spec to lean", "lean pipeline step 2".
 argument-hint: "[module name — e.g. RateLimiter; resolves to formal-verification/specs/<module>_informal.md]"
@@ -25,7 +26,7 @@ The stub is not a proof. It is a type-checked surface that pins down:
 - **`theorem` declarations** stating the preconditions, postconditions, and invariants from the informal spec, with `sorry` in the proof body.
 - **Mathlib imports** needed for the types and tactics the stub references.
 
-Per the Lean-side architecture in `docs/research/assurance-hierarchy.md` ("Two engines, two roles"), Lean is the *executable model + DRT oracle* — it is not a verify-and-extract engine like Dafny, and there is no production-grade Lean-to-Python/Go compiler. The stub produced here is the formal-spec end of the model; `/lean-impl` (pending sub-phase 3b-β) supplies the executable side that the theorems will eventually connect to.
+Per the Lean-side architecture in `docs/research/assurance-hierarchy.md` ("Two engines, two roles"), Lean is the *executable model + DRT oracle* — it is not a verify-and-extract engine like Dafny, and there is no production-grade Lean-to-Python/Go compiler. The stub produced here is the formal-spec end of the model; `/lean-impl` supplies the executable side that the theorems connect to, and `/correspondence-review` then classifies how faithfully the model corresponds to source before `/drt-oracle` runs.
 
 **Hard gate.** The skill returns success only when the file `lake build`s cleanly — every type error fixed, every import resolved. A `sorry` in a proof body is fine; a parse error or typecheck error is not. The skill iterates against the `lean_check` MCP tool until the build is clean or until a 5-attempt retry budget exhausts (matching `/spec-iterate`).
 
@@ -99,7 +100,7 @@ Write the file at `formal-verification/lean/CrosscheckModel/<Name>.lean`. Struct
 Module: <Name>
 Source informal spec: formal-verification/specs/<module>_informal.md
 Sign-off: <YYYY-MM-DD as recorded in the informal spec>
-Pipeline step: 2 of N (/lean-spec). Next: /lean-impl (pending sub-phase 3b-β).
+Pipeline step: 2 of 5 (/lean-spec). Next: /lean-impl (3b.4).
 -/
 
 import Mathlib.Data.List.Basic
@@ -183,7 +184,7 @@ Once `lean_check` returns `success`, present:
 - **The file path:** `formal-verification/lean/CrosscheckModel/<Name>.lean`.
 - **The build status:** `lake build` clean; warnings limited to `sorry`-uses, count `<N>`.
 - **The theorem inventory:** every `theorem` declared, with a one-line restatement of what each one claims (cross-referenced to the informal spec property name).
-- **Pipeline next step: `/lean-impl` (pending sub-phase 3b-β).** Do not claim `/lean-impl` exists yet — it ships in the next sub-phase. State explicitly: *"`/lean-impl` is pending sub-phase 3b-β and is not yet available. When it ships, its intended role is to translate the source implementation into a Lean functional definition that connects to these theorems."* Lead with the pending label so the prose cannot be quoted out of context as a commitment.
+- **Pipeline next step: `/lean-impl` (sub-phase 3b.4).** State the next-step contract explicitly: *"`/lean-impl` translates the source implementation into a Lean functional definition that connects to these theorems and seeds the correspondence document `/correspondence-review` (3b.5) classifies."* Do not run `/lean-impl` automatically; the user invokes it.
 
 ### Step 6: Verification Checklist
 
@@ -192,7 +193,7 @@ Present this checklist alongside the stub:
 ```
 ## Verification Checklist
 
-Before proceeding to /lean-impl (when it lands):
+Before proceeding to /lean-impl:
 - [ ] Every property in the informal spec has a matching `theorem` in the Lean stub.
 - [ ] Every `theorem` name is traceable back to a property in the informal spec by name.
 - [ ] No properties were invented during translation.

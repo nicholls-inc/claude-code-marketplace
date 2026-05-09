@@ -20,10 +20,14 @@ interface LeanTestOutput {
 /**
  * Run a Lean test harness over a user-supplied module.
  *
- * Used by /drt-oracle (sub-phase 3b-β) once the differential pipeline lands.
- * Behaviour today: build the module then exit 0 if every #guard / decide
- * tactic passed. The lean-runner script in the Docker image accepts a "test"
+ * Behaviour: build the module then exit 0 if every #guard / decide tactic
+ * passed. The lean-runner script in the Docker image accepts a "test"
  * subcommand and is responsible for selecting the test target.
+ *
+ * Sub-phase 3b-β scope decision: /drt-oracle uses an external Python harness
+ * driving `lean_run` against per-def runner files rather than `lake test`, so
+ * this tool stays as the compile-time `#guard` path. Useful for in-skill
+ * fixture sanity checks; not the random-input fuzzing surface.
  */
 export async function leanTest(input: LeanTestInput): Promise<LeanTestOutput> {
   const tempDir = await createTempDir("lean-");

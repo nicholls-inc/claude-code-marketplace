@@ -57,7 +57,7 @@ Modeled on Newcombe et al.'s *"What Formal Specification Is Not Good For"* — e
 
 ## The two orchestrator agents
 
-**Byfuglien** (/ˈbʌflɪn/) owns the implementation chain: formal verification with Dafny and semi-formal reasoning over existing code. It owns Layer 1 (Dafny formal verification) and the regression-detection slice of Layer 4 (`/check-regressions`). Layers 2–3 are deliberately not addressed — Layer 2 is a trusted-computing-base concern, Layer 3 (contract graph verification) is a research frontier outside niche stacks; see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md). Byfuglien also owns the four semi-formal reasoning skills, which sit outside the layer hierarchy entirely. Named after Dustin Byfuglien, the crosschecking enforcer: no unsupported claim survives, no unverified code ships.
+**Byfuglien** (/ˈbʌflɪn/) owns the implementation chain: formal verification with Dafny and Lean, plus semi-formal reasoning over existing code. It owns Layer 1 in both engine roles — Dafny (verify-and-extract) and Lean (executable model + DRT oracle, via the five-step `/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` pipeline) — and the regression-detection slice of Layer 4 (`/check-regressions`). Layers 2–3 are deliberately not addressed — Layer 2 is a trusted-computing-base concern, Layer 3 (contract graph verification) is a research frontier outside niche stacks; see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md). Byfuglien also owns the four semi-formal reasoning skills, which sit outside the layer hierarchy entirely. Named after Dustin Byfuglien, the crosschecking enforcer: no unsupported claim survives, no unverified code ships.
 
 **Hellebuyck** owns the specification chain: Layers 4–6 of the assurance hierarchy (impl–spec alignment, spec–intent alignment, and spec completeness) plus the governance scaffolding that keeps specs honest as code evolves. Named after Connor Hellebuyck, the goalie — the last line of defence when proof runs out and you have to argue that the spec itself was the right one.
 
@@ -65,10 +65,10 @@ The split is principled in shape but **asymmetric in substance** — Byfuglien a
 
 | Byfuglien (impl chain) | Hellebuyck (spec chain) | Orthogonal: semi-formal reasoning |
 |---|---|---|
-| Layer 1: `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`, `/suggest-specs` | Layer 4 (alignment): `/invariant-coverage-scaffold`, `/protected-surface-amend` | `/reason` |
-| Layer 4 (regression): `/check-regressions` | Layer 5: `/intent-check`, `/acceptance-oracle-draft` | `/compare-patches` |
-| Spec-management bridge: `/rationale` | Layer 6: `/spec-adversary` | `/locate-fault` |
-|  | Governance index: `/assurance-init`, `/assurance-layer-audit`, `/assurance-status`, `/assurance-roadmap-check` | `/trace-execution` |
+| Layer 1 (Dafny): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`, `/suggest-specs` | Layer 4 (alignment): `/invariant-coverage-scaffold`, `/protected-surface-amend` | `/reason` |
+| Layer 1 (Lean): `/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` | Layer 5: `/intent-check`, `/acceptance-oracle-draft` | `/compare-patches` |
+| Layer 4 (regression): `/check-regressions` | Layer 6: `/spec-adversary` | `/locate-fault` |
+| Spec-management bridge: `/rationale` | Governance index: `/assurance-init`, `/assurance-layer-audit`, `/assurance-status`, `/assurance-roadmap-check` | `/trace-execution` |
 
 The four semi-formal reasoning skills are not part of the 6-layer hierarchy. They are evidence-grounded code-analysis tools adapted from Ugare & Chandra (2026) and live as a third axis — Byfuglien-routed because they reason about implementation, but layer-agnostic.
 
@@ -154,9 +154,9 @@ The plugin exposes six MCP tools across two engines:
 | `dafny_verify` | Dafny | Verify Dafny source code |
 | `dafny_compile` | Dafny | Compile Dafny to Python or Go |
 | `dafny_cleanup` | Dafny + Lean | Remove stale Dafny/Lean temp directories |
-| `lean_check` | Lean | Parse + typecheck Lean 4 source via `lake build` (Mathlib pre-warmed; consumed today by `/lean-spec`) |
-| `lean_run` | Lean | Build + execute a Lean 4 file's `main : IO Unit` (no consumer skill until sub-phase 3b-β) |
-| `lean_test` | Lean | Run a Lean 4 test harness over a module (no consumer skill until sub-phase 3b-β) |
+| `lean_check` | Lean | Parse + typecheck Lean 4 source via `lake build` (Mathlib pre-warmed; build gate for `/lean-spec`, `/lean-impl`, `/correspondence-review`, and `/drt-oracle`) |
+| `lean_run` | Lean | Build + execute a Lean 4 file's `main : IO Unit` (`/lean-impl` smoke checks; `/drt-oracle` per-def runner) |
+| `lean_test` | Lean | Run a Lean 4 test harness over a module (compile-time `#guard` path for fixture sanity checks; aliased to `lake build`) |
 
 Build the Lean image once before the Lean tools work (subsequent runs reuse the cached image):
 

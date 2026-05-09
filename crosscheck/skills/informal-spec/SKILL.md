@@ -32,10 +32,10 @@ This is the Lean-side analogue of the contract-first methodology used elsewhere 
 ```
 informal spec  →  formal spec stub (sorry)  →  implementation model  →  correspondence review  →  DRT
    THIS              /lean-spec (3b.3)          /lean-impl (3b.4)         /correspondence-review     /drt-oracle
-                                                                          (pending sub-phase 3b-β)   (pending 3b-β)
+                                                                          (3b.5)                    (3b.6)
 ```
 
-`/lean-spec` is the immediate downstream consumer; everything to the right is **pending sub-phase 3b-β**. Forward-references in the output file must label those skills as pending so users do not chase artefacts that do not yet exist.
+`/lean-spec` is the immediate downstream consumer; the full five-step pipeline is shipped as of sub-phase 3b-β.
 
 **Composition with `/intent-check`.** Layer 5 round-trip checking validates a triple of (invariant prose, covering test, code diff). `/informal-spec` produces the *prose* arm of that triple in a form that is consumable by `/intent-check` without further editing — same vocabulary, same scope discipline, same explicit carve-out language. The two skills compose cleanly: `/informal-spec` *writes* the prose; `/intent-check` *audits* the prose against the test and code.
 
@@ -62,7 +62,7 @@ Output:
 - **One or more fail (excluding #4).** Present the failure, recommend an alternative path:
   - #1 fail → route to Layer 2–5 (`/lightweight-verify`, `/intent-check`, property-based testing).
   - #2 fail → spec-design problem; recommend `/spec-iterate` or `/draft-invariants`-style prose elicitation first.
-  - #3 fail → DRT will not apply downstream; the Lean *spec* may still be valuable as documentation, but the eventual `/drt-oracle` step (pending sub-phase 3b-β) will skip the module. Tell the user.
+  - #3 fail → DRT will not apply downstream; the Lean *spec* may still be valuable as documentation, but `/drt-oracle` will skip the module. Tell the user.
 - Never block. The user can override and proceed; record the override in the output file's "Fitness assessment" section.
 
 **Output paths are not protected surfaces (yet).** `formal-verification/specs/` is a new directory introduced by sub-phase 3b. It is not Class A or Class B per `crosscheck/.claude/rules/protected-surfaces.md` (the file is the authoritative partition; if it has not yet been added to the repo, treat this directory as unprotected). Do not invoke `/protected-surface-amend` for edits to it. If sub-phase 3b-β reclassifies the directory, that ADR will state so explicitly.
@@ -161,9 +161,9 @@ A2. <question>
 
 ## Pipeline forward references
 - /lean-spec (sub-phase 3b.3) — translates this prose into a Lean 4 spec stub with `sorry` proof bodies.
-- /lean-impl (pending sub-phase 3b-β) — Lean functional model of the implementation.
-- /correspondence-review (pending sub-phase 3b-β) — classifies model-vs-source correspondence.
-- /drt-oracle (pending sub-phase 3b-β) — differential random testing against the model.
+- /lean-impl (sub-phase 3b.4) — Lean functional model of the implementation.
+- /correspondence-review (sub-phase 3b.5) — classifies model-vs-source correspondence.
+- /drt-oracle (sub-phase 3b.6) — differential random testing against the model.
 - /intent-check (Layer 5) — composes with this prose as the spec arm of the (prose, test, code-diff) triple.
 ```
 
@@ -200,7 +200,7 @@ If the user replies `abandon`, leave the file in place (it is still useful docum
 - [ ] Every ambiguity is phrased as a direct question to the user; no defaults, no guesses
 - [ ] Output file written to `formal-verification/specs/<module>_informal.md` with the Step 6 structure
 - [ ] No Lean code, no test code, no implementation in the output file — prose only
-- [ ] Forward references to /lean-spec, /lean-impl, /correspondence-review, /drt-oracle present, with downstream skills labelled `pending sub-phase 3b-β`
+- [ ] Forward references to /lean-spec, /lean-impl, /correspondence-review, /drt-oracle present with their sub-phase ids (3b.3 / 3b.4 / 3b.5 / 3b.6)
 - [ ] Sign-off gate presented verbatim; the skill stopped and did not invoke /lean-spec
 ```
 
