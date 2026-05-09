@@ -38,10 +38,10 @@ ADD-mode users produce architectural, behavioral, and functional specs derived t
 
 ---
 
-**IC4 — Phase 2 spec validation is prose-vs-prose, not prose-vs-test.**
-Crosscheck's existing `/intent-check` requires an `(invariant prose, covering test, code diff)` triple, which is unavailable pre-code. ADD requires a Phase 2 validation step that runs *before* any code or test exists: a fresh agent reads the spec cold, describes the system in its own words, and the description is compared against the Phase 0 intent doc.
+**IC4 — Phase 2 spec validation reuses `/intent-check`'s pipeline with prose-vs-prose inputs.**
+Crosscheck's existing `/intent-check` skill operates on `(invariant prose, covering test, code diff)`. Its load-bearing disciplines — two-prompt structural separation (back-translator blind to original intent), kill-criterion pre-check (FP rate over rolling window), mandatory carve-out scan, fail-closed semantic validation, content-hashed attestation, FP-tracker CSV with stable schema — all transfer to the prose-vs-prose case. ADD's Phase 2 step is therefore the existing pipeline parameterised on a different input shape: instead of `(invariant prose, covering test, code diff)`, the inputs are `(intent doc, spec stack)`. No code or test is required.
 
-*Observable signal:* a new skill (or new mode of an existing one) performs prose-vs-prose intent alignment without requiring a test or code diff as input. It surfaces gaps as a structured report the human attests against.
+*Observable signal:* a new skill (or new mode of `/intent-check`) reuses the existing pipeline structure end-to-end — same env vars (`CROSSCHECK_FP_TRIPPED_THRESHOLD` / `_AT_RISK_THRESHOLD` / `_WINDOW_DAYS`), same tracker-CSV schema, same SHA-256-hashed JSON attestation, same two-section back-translator output, same carve-out scan — substituting only the input artifacts. The architectural spec (S2.3) declares the inheritance explicitly.
 
 ---
 

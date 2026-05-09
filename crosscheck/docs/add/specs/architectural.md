@@ -106,27 +106,51 @@ Cross-module references use the qualified form `M3-billing/I3` per `glossary.md`
 
 ### S2.3 — `/intent-check-prose` (or `/intent-check --mode=prose`)
 
-**Decision required for the agent:** implement as a new skill or as a mode of the existing `/intent-check`. Recommendation: a new skill, because the inputs and back-translation differ structurally enough that a mode flag would tangle the existing prompt template. The agent may overrule this if the implementation is genuinely cleaner as a mode; document the choice in a follow-up ADR.
+**Decision required for the agent:** implement as a new skill or as a mode of the existing `/intent-check`. Recommendation: a new skill, because the inputs differ enough that a mode flag would tangle the existing prompt template. The agent may overrule this if the implementation is genuinely cleaner as a mode; document the choice in a follow-up ADR.
+
+**Inheritance from `/intent-check` (Phase 2 re-draft, propagated discovery from seam validation).** This skill is the existing `/intent-check` pipeline parameterised on a different input shape. The full pipeline structure — Steps 0–8 of `skills/intent-check/SKILL.md` — is inherited verbatim, with the substitutions named below. *Do not re-derive the pipeline*; reuse it. The substantive engineering work of `/intent-check-prose` is the input substitution and the prompt-template adaptation, not the pipeline structure.
+
+**Inheritance substitutions:**
+
+| Aspect | `/intent-check` (existing) | `/intent-check-prose` (this skill) |
+|---|---|---|
+| **Input triple** | `(invariant prose, covering test, code diff)` | `(intent doc, spec stack)` — no test, no code diff |
+| **Back-translator input** | `{code, test}` (blind to invariant prose) | `{spec stack}` (blind to intent doc) |
+| **Diff-checker input** | `{invariant_prose, back_translation}` | `{intent_doc, back_translation}` |
+| **FP-tracker CSV** | `.assurance/intent-check-fp-tracker.csv` columns `date,invariant_touched,phase_verdict,human_verdict` | `.assurance/intent-check-prose-fp-tracker.csv` columns `date,intent_doc_or_section,phase_verdict,human_verdict` |
+| **Attestation file** | `.assurance/intent-check-attestation.json` | `.assurance/intent-check-prose-attestation.json` |
+| **Protected files** | files named in the invariant doc | files comprising the spec stack (intent.md, architectural.md, behavioral.md, per-module specs) |
+
+**Inherited verbatim (no substitution needed):**
+
+- **Env vars and thresholds.** `CROSSCHECK_FP_TRIPPED_THRESHOLD` (default `0.30`), `CROSSCHECK_FP_AT_RISK_THRESHOLD` (default `0.20`), `CROSSCHECK_FP_WINDOW_DAYS` (default `14`), with `n ≥ 3` minimum sample. The same env vars are read by `/intent-check`, `/intent-check-prose`, and `/assurance-status` so the user sees identical rates everywhere.
+- **Two-section back-translator output.** Section 1 (behavioural guarantees / system description) and Section 2 (rationale comments / "Not covered" markers in the spec stack). Both mandatory; missing/empty (other than `None.`) → re-invoke once; fail on second malformed.
+- **Mandatory carve-out scan.** Diff-checker's first step is to scan for scope markers (`Not covered`, `caller-responsibility`, `precondition`, `aspirational`, `known violation`, `privileged`, `exempt`, `out of scope`, `does not apply`) and classify each found clause by the scope-modifier taxonomy. The intent doc's negative-space (`N1`–`N8`) is the natural carve-out source for the prose variant.
+- **Fail-closed semantic validation.** Contradictory output (`match=true` with non-trivial `mismatch_reason`) → flip to fail with `confidence_pct=40`, `confidence_basis=spec-ambiguous`, `mismatch_category=missing_property`. Truncated reason (`match=false` and `len(strip(mismatch_reason)) < 20`) → reject as malformed; ask user to re-run.
+- **Diff-checker output schema.** Verbatim:
+  ```json
+  { "match": ..., "mismatch_reason": ..., "mismatch_category": "...", "confidence_pct": 0-100, "confidence_basis": "..." }
+  ```
+- **Content-hashed attestation.** SHA-256 over sorted, concatenated raw bytes of protected files. Schema:
+  ```json
+  {
+    "protected_files": ["...sorted..."],
+    "content_hash": "<64-hex>",
+    "verdict": "pass" | "fail",
+    "checked_at": "<RFC3339>",
+    "pipeline_output": { "back_translation": "...", "diff_result": {...} }
+  }
+  ```
+- **FP definition.** A False Positive is a flagged divergence the human reviewer attests is spurious (e.g., wording difference but semantic equivalence). `human_verdict` legal values are inherited verbatim: `genuine | genuine-planted | partial | spurious`. Empty cells are awaiting review and are excluded from rolling-rate computation.
+- **Verdict computation.** `phase_verdict = pass` iff `match == true` AND `confidence_pct >= 80`; else `fail`. Low-confidence matches do not count as clean passes — the attestation says `fail` and the user can override via `/protected-surface-amend`.
+
+**Outputs (substituted):** Same shape as `/intent-check`'s outputs, with paths and protected-file set adjusted per the substitution table above. The Markdown rendering for humans includes per-IC coverage analysis (which `S` consumes each `IC`, and whether the consuming section plausibly satisfies the claim).
 
 **Trigger phrases:** "intent check prose", "phase two validation", "validate spec against intent".
 
 **Argument hint:** `[optional: path to intent doc] [optional: path to architectural spec]`
 
-**Owner:** Hellebuyck
-
-**Inputs:** An Attested intent doc and a Drafted architectural spec.
-
-**Outputs:** A structured report at `.assurance/intent-check-prose-report-<timestamp>.json` (and a Markdown rendering for humans) containing:
-- For each `IC`: whether at least one `S` section consumes it, and whether the consuming section's substance plausibly satisfies the claim
-- For each `S`: which `IC`s it consumes, and whether the back-translation by a fresh agent reading only the spec recovers a description plausibly matching the intent doc
-- Gaps: `IC`s not consumed; `S` sections that consume no `IC`; substantive divergences between back-translation and intent
-
-**Behavior contract:**
-- Mirrors the structural-separation pattern of `/intent-check`: one agent (or one prompt) produces the back-translation blind to the intent doc; a second prompt compares.
-- Does *not* require a covering test or code diff (this is the structural difference from `/intent-check`).
-- Emits a JSON attestation; pre-commit hook may consume the attestation hash.
-- Outputs go to `.assurance/intent-check-prose-fp-tracker.csv` for the FP rate computation. The 30% kill criterion applies, configurable per the existing `/intent-check` env-var pattern.
-- **FP definition:** a False Positive is a flagged divergence between the back-translation and the intent doc that the human reviewer attests is spurious (e.g., wording difference but semantic equivalence). The human marks the flag spurious in the FP-tracker CSV; the rolling 30% threshold is computed over those judgments.
+**Owner:** Hellebuyck.
 
 ### S2.4 — `/spec-adversary-prose` (or `/spec-adversary --mode=prose`)
 
