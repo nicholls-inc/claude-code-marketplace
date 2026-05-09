@@ -1,9 +1,10 @@
 # Intent — Build ADD into Crosscheck
 
-**Status:** Attested v1.0
+**Status:** Attested v1.1
 **Phase:** 0 (Intent capture)
 **Project:** Add Assurance Driven Development support to the Crosscheck plugin
-**Last attested:** 2026-05-09 by nicholls-inc (Phase 2 closure on branch claude/validate-add-phase-2-bFneS, comparison report § 9.4)
+**Last attested:** 2026-05-09 by nicholls-inc (Phase 2 re-attestation; re-drafting cascade from seam validation B-3, B-4 — IC4 re-framed as `/intent-check` parameterisation, IC10 references existing dual-track principle. Authorisation for the agent-authored re-attestation commit recorded in commit body.)
+**Prior attestation:** v1.0 — 2026-05-09 by nicholls-inc (Phase 2 closure on branch claude/validate-add-phase-2-bFneS, comparison report § 9.4)
 
 ## Vision
 

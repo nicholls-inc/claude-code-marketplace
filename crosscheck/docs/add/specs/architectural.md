@@ -1,9 +1,11 @@
 # Architectural Spec — ADD in Crosscheck
 
-**Status:** Attested v1.0 (Phase 2 closure 2026-05-09 by nicholls-inc; comparison report § 9.4)
+**Status:** Attested v1.1 (Phase 2 re-attestation 2026-05-09 by nicholls-inc; re-drafting cascade from seam validation B-1, B-2, B-3, B-4)
 **Phase:** 1 (Specification — Architectural tier)
-**Consumes:** IC1, IC2, IC3, IC4, IC5, IC6, IC7, IC8, IC9, IC10, IC11, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005
+**Consumes:** IC1, IC2, IC3, IC4, IC5, IC6, IC7, IC8, IC9, IC10, IC11, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005, plus inherited disciplines from `skills/intent-check/SKILL.md` and `skills/spec-adversary/SKILL.md` (per S2.3, S2.4 declarations)
 **Produces:** the behavioral spec (`docs/add/specs/behavioral.md`, agent-authored) and the per-module functional specs (`docs/add/specs/modules/*.md`, agent-authored)
+**Prior attestation:** v1.0 — 2026-05-09 by nicholls-inc (Phase 2 closure; comparison report § 9.4)
+**Re-drafted sections in v1.1:** S2.3 (inherits `/intent-check` pipeline), S2.5 (`implementation:` enum extended with `lean-pipeline`), S3.6 / S3.7 / S3.8 (added skill adaptations), S7.1 (dual-track-principle reference). Other sections unchanged from v1.0.
 
 ## Purpose
 
