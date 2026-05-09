@@ -61,7 +61,7 @@ Status transitions are monotonic in one of two senses: forward (Drafted → Atte
 
 **Consolidation pass.** A scheduled review by the auditor agent of all artifacts in the repo, producing per-artifact verdicts of Settled / Active / Drifted. Distinct from continuous assurance (which is event-driven).
 
-**Diff classification.** Mandatory tag on every spec-changing commit: Propagated discovery / Intent refinement / Drift / Retraction. See `decisions/ADR-005-diff-classification.md`.
+**Diff classification.** Mandatory tag on every spec-changing commit: Propagated discovery / Intent refinement / Drift / Retraction / Status transition. See `decisions/ADR-005-diff-classification.md`.
 
 **Drift.** A spec change that weakens the spec to match what got built, rather than the implementation matching the spec. Not always wrong, but never silent.
 
