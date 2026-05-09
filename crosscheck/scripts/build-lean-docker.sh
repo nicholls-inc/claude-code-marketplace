@@ -34,7 +34,7 @@ docker run --rm "${IMAGE_NAME}" check /dev/null 2>&1 \
 TIMING_DIR=$(mktemp -d)
 trap 'rm -rf "${TIMING_DIR}"' EXIT
 cat > "${TIMING_DIR}/program.lean" <<'EOF'
-import Mathlib.Data.Nat.Basic
+import Mathlib.Data.Nat.Defs
 example : 1 + 1 = 2 := rfl
 EOF
 echo "Timing baseline: lake build on a 2-line Mathlib-importing file..."

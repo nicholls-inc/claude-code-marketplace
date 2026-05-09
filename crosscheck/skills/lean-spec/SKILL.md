@@ -84,7 +84,7 @@ For each domain type and property, decide which Mathlib namespaces you need. Com
 |---|---|
 | Lists, sequences | `import Mathlib.Data.List.Basic` |
 | Finite sets / multisets | `import Mathlib.Data.Finset.Basic`, `import Mathlib.Data.Multiset.Basic` |
-| Natural-number arithmetic, ordering, `Nat.lt_irrefl` etc. | `import Mathlib.Data.Nat.Basic` |
+| Natural-number arithmetic, ordering, `Nat.lt_irrefl` etc. | `import Mathlib.Data.Nat.Defs` |
 | Linear arithmetic in proof obligations | `import Mathlib.Tactic.Linarith` |
 | Decidability of order / equality on derived types | `import Mathlib.Tactic.DeriveDecidableEq` |
 | Real-number / measure-theoretic claims | `import Mathlib.Analysis.SpecialFunctions.Basic` (only if the informal spec explicitly uses reals) |
