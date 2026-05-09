@@ -31,7 +31,7 @@ The skill is a generator, not a runtime. It emits scripts and config files adapt
 **Boundary vs `/assurance-init`:** `/assurance-init` scaffolds the governance skeleton (ROADMAP, horizon dirs, `docs/invariants/` with seed module docs, `.claude/rules/protected-surfaces.md`). This skill installs the mechanical coverage gate on top. Expected ordering:
 
 1. `/assurance-init` (or the equivalent manual setup) — creates `docs/invariants/*.md` with `**I1. Name.**` headers.
-2. `/draft-invariants` for each seeded module — populates real invariant prose.
+2. `/crosscheck:draft-invariants` for each seeded module — populates real invariant prose.
 3. `/invariant-coverage-scaffold` (this skill) — wires the enforcement gate.
 
 If `docs/invariants/` is missing when this skill runs, stop and recommend `/assurance-init` before proceeding. Do not create `docs/invariants/` as a side effect — that is `/assurance-init`'s responsibility.
@@ -195,7 +195,7 @@ Verification:
 
 Next steps:
   - Commit the new files.
-  - Run /draft-invariants on any module that has no invariant doc yet.
+  - Run /crosscheck:draft-invariants on any module that has no invariant doc yet.
   - Add `// Invariant <ID>: <Name>` comments to property tests that lack them.
 ```
 

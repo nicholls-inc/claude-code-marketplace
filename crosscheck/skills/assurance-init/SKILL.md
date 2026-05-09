@@ -72,7 +72,7 @@ Record the answer.
 
 **Q3 — Seed modules for `docs/invariants/`:**
 
-> Which 1–3 modules should seed `docs/invariants/`? Pick the modules whose behaviour is most load-bearing (a regression here would cascade). These will receive skeleton invariant docs you will fill out with `/draft-invariants` next.
+> Which 1–3 modules should seed `docs/invariants/`? Pick the modules whose behaviour is most load-bearing (a regression here would cascade). These will receive skeleton invariant docs you will fill out with `/crosscheck:draft-invariants` next.
 
 If the user passed a comma-separated list as `$ARGUMENTS`, use those names and confirm. Otherwise ask, then confirm by echoing the module names back. Reject the list if it has more than 3 entries — the onboarding discipline is deliberately narrow.
 
@@ -225,7 +225,7 @@ Then, for each module the user named in Step 2, write `docs/invariants/<module>.
 ```markdown
 # <Module> invariants
 
-Status: Skeleton — populate via `/draft-invariants <module>`.
+Status: Skeleton — populate via `/crosscheck:draft-invariants <module>`.
 
 ## Purpose
 
@@ -295,9 +295,9 @@ Created:
 - <CI stub path>
 
 Next steps — run these in order:
-1. `/draft-invariants <module>` on each seeded module. This expands the I1/I2
+1. `/crosscheck:draft-invariants <module>` on each seeded module. This expands the I1/I2
    skeletons into real prose + governance blocks.
-2. `/invariant-coverage-scaffold` to replace the placeholder hook and CI job
+2. `/crosscheck:invariant-coverage-scaffold` to replace the placeholder hook and CI job
    with the real invariant ↔ test coverage gate.
 
 After both skills run, `/assurance-status` Phase 1 should pass.
@@ -323,8 +323,8 @@ After both skills run, `/assurance-status` Phase 1 should pass.
 - [ ] CI stub file matches the CI answer from Q2
 - [ ] Placeholder hook/CI fail loudly (so no one mistakes the skeleton for
       the real gate)
-- [ ] Summary names the next two skills: `/draft-invariants` then
-      `/invariant-coverage-scaffold`
+- [ ] Summary names the next two skills: `/crosscheck:draft-invariants` then
+      `/crosscheck:invariant-coverage-scaffold`
 - [ ] No tool-name-specific references leaked into the generated
       files (text should read as repo-agnostic)
 - [ ] Pre-flight overwrite check (Step 1.3) ran and any pre-existing target

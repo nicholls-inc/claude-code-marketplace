@@ -163,7 +163,7 @@ Use this table shape:
 | # | Gap | Recommended skill | Expected reach delta |
 |---|-----|-------------------|----------------------|
 | 1 | No governance skeleton (`docs/assurance/`, `.claude/rules/protected-surfaces.md`) | `/assurance-init` | Unblocks Layers 4–6 |
-| 2 | No module invariant docs (`docs/invariants/`) | `/draft-invariants` on 2–3 load-bearing modules | Unblocks Layers 5–6 |
+| 2 | No module invariant docs (`docs/invariants/`) | `/crosscheck:draft-invariants` on 2–3 load-bearing modules | Unblocks Layers 5–6 |
 | 3 | No coverage gate (invariant-ID ↔ test-comment) | `/invariant-coverage-scaffold` | Mechanical Layer 4 enforcement |
 | 4 | No Layer 1 kernel candidates pinned | `/suggest-specs` on `internal/queue/`, `internal/retry/` | Makes Layer 1 concrete |
 | 5 | No spec-intent alignment pipeline | `/intent-check` (after gap 2) | Turns on Layer 5 |
@@ -186,7 +186,7 @@ End with a single-line recommendation that names the next skill and any adjustme
 - **Partially onboarded repos** (some scaffolding present): "Next: `/assurance-status` — partial scaffolding detected; run the onboarding gate before scaffolding more."
 - **Fully onboarded repos** (everything present): "Next: `/assurance-status` for the Phase 2 dashboard, then `/assurance-roadmap-check` for drift."
 
-Attach any audit-specific adjustments, e.g., "Skip `/invariant-coverage-scaffold` until after `/draft-invariants` runs on at least one module," or "Language detected as Ruby — `/invariant-coverage-scaffold` v1 does not yet cover Ruby; hand-roll a coverage script for now."
+Attach any audit-specific adjustments, e.g., "Skip `/invariant-coverage-scaffold` until after `/crosscheck:draft-invariants` runs on at least one module," or "Language detected as Ruby — `/invariant-coverage-scaffold` v1 does not yet cover Ruby; hand-roll a coverage script for now."
 
 ### Step 8: Verification Checklist
 
