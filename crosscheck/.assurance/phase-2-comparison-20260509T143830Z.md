@@ -232,7 +232,114 @@ Pick CSV or JSON-lines (recommend JSON-lines for parser ergonomics) and stop def
 
 ---
 
-## 9. Stop point
+## 9. Attestation checklist (for the human to tick)
+
+Tick each box as you adjudicate. The agent halts past Phase 2 until the **Authorisation to proceed** box at the end is ticked. Until then, the only work the agent will do is editing this file in response to your direct requests.
+
+The amendments are split into two groups: those the agent can execute mechanically without further judgment (batch-approvable) and those that need your decision on approach before any drafting happens.
+
+### 9.1 Agent-executable amendments (batch approval safe)
+
+Each of these is a small, mechanical edit. The agent will execute on the next exchange after the box is ticked, classifying each as `intent-refinement` per ADR-005 (or `propagated-discovery` if that fits better — agent's call at commit time).
+
+- [ ] **A-2** — Add `phase: 0 | 1 | 2 | 3 | 4 | 5` to the S1.1 frontmatter format. ~2 lines in `specs/architectural.md`.
+- [ ] **A-8** — Add diff-shape analysis to IC8's signal enumeration so it matches S4.1. ~2 lines in `intent.md`.
+- [ ] **A-10** — Add `S1.1` to the IC9 row of the IC ↦ S coverage table. 1 line in `specs/architectural.md`.
+- [ ] **A-12** — Clarify in S5.1 that `/add-instrumentation`, if implemented as a skill, is plugin-level and owned by Hellebuyck; the Auditor invokes but does not own it. ~3 lines in `specs/architectural.md`.
+- [ ] **A-13** — Commit on JSON-lines (`.assurance/diff-classification-log.jsonl`) for the diff-classification log; remove the format alternation in S6.1 and ADR-005. ~2 lines total.
+
+**Batch shortcut:** [ ] Approve all five A-* above as a single batch (saves you ticking each one).
+
+### 9.2 Judgment-required amendments (please pick an approach)
+
+Each amendment touches substantive policy or human-authored prose. Tick the option that matches your decision; the agent drafts the change accordingly. If none of the listed options fits, tick "Other" and write a brief note.
+
+- [ ] **A-1 — Disambiguate transitional mode.**
+  - [ ] (a) Amend IC5 wording *and* the methodology's "Operating modes" transitional paragraph as recommended in § 4 / amendment list (joint edit).
+  - [ ] (b) Amend the methodology paragraph only; leave IC5 as-is.
+  - [ ] (c) Amend IC5 only; leave methodology as-is.
+  - [ ] (d) Other: _________________________________
+
+- [ ] **A-3 — Declare the `/spec-iterate` seam.**
+  - [ ] (a) Add a new section S2.5 "Seam to `/spec-iterate`" to the architectural spec.
+  - [ ] (b) Extend S1.2's integrity rules instead.
+  - [ ] (c) Defer to behavioral spec; the agent declares the seam there.
+  - [ ] (d) Other: _________________________________
+
+- [ ] **A-4 — Where does pre-commit framework / CI system detection live?**
+  - [ ] (a) Extend S3.2's `/assurance-init` delta with detection responsibility.
+  - [ ] (b) Inline detection in the S6.1 pre-commit hook + CI job stubs themselves (skill-free).
+  - [ ] (c) New skill `/governance-detect`, separate from `/assurance-init`.
+  - [ ] (d) Other: _________________________________
+
+- [ ] **A-5 — FP semantics in `/intent-check-prose`.**
+  - [ ] (a) Commit on: "FP = a flagged divergence the human reviewer attests is spurious." Reuse the 30% rolling threshold.
+  - [ ] (b) Replace the 30% kill criterion with a different shape: _________________________________
+  - [ ] (c) Drop the kill criterion for v1 of the prose variant; revisit after field data.
+  - [ ] (d) Other: _________________________________
+
+- [ ] **A-6 — Diff-classification trailer survival under rebase / squash-merge.**
+  - [ ] (a) Squash commits to protected branches must carry a summary trailer; CI runs on the final commit only.
+  - [ ] (b) Disallow squash-merge to protected branches; require fast-forward or merge commit.
+  - [ ] (c) CI walks the pre-squash commit set and validates each.
+  - [ ] (d) Other: _________________________________
+
+- [ ] **A-7 — Auditor tool-restriction enforcement mechanism.**
+  - [ ] (a) Claude Code permission allowlist that denies write tools on protected paths.
+  - [ ] (b) Plugin-level tool restriction declared in the Auditor's `agents/<auditor>.md` frontmatter.
+  - [ ] (c) Filesystem read-only mount on the protected paths during Auditor runs.
+  - [ ] (d) Other: _________________________________
+
+- [ ] **A-9 — Backfill `consumes:` for TM1, TM3, TM5, TM6.**
+  - [ ] (a) Map each unconsumed TM to the existing S section or ADR that mitigates it; add `consumes: TMx` to that section.
+  - [ ] (b) Defer until the linkage-graph integrity check is implemented and can flag missing TM coverage automatically.
+  - [ ] (c) Other: _________________________________
+
+- [ ] **A-11a — Classification of status-only commits (Drafted → Attested flips).**
+  - [ ] (a) Status flips use `propagated-discovery` with a "status transition; no content change" justification.
+  - [ ] (b) Add a fifth class `status-transition` to ADR-005's taxonomy.
+  - [ ] (c) Other: _________________________________
+
+- [ ] **A-11b — Protected-path status of `docs/add/audit/` (Auditor reports).**
+  - [ ] (a) Add `docs/add/audit/` to ADR-005's protected paths list.
+  - [ ] (b) Explicitly exempt; the path is agent-write-append-only with its own write-rule.
+  - [ ] (c) Other: _________________________________
+
+### 9.3 Drift candidates (optional reconsideration)
+
+These are negative-space items the agent thought worth surfacing. The default is "leave excluded" — you only need to tick if you want to reconsider.
+
+- [ ] **D-1 — Behavioral-spec prose authoring quality** (already nominally in scope but not load-bearing).
+  - [ ] (a) Confirm in scope as currently structured; no change.
+  - [ ] (b) Add an explicit IC requiring behavioral-spec prose to satisfy a quality bar (e.g., every `B` traces to at least one `IC` and at least one `F`).
+  - [ ] (c) Other: _________________________________
+- [ ] **D-2 — Layer-attribution scaffold** (manual CSV, no automation; v1 hedge against the chicken-and-egg).
+  - [ ] (a) Hold N1 as-is; defer until field data exists.
+  - [ ] (b) Reconsider — ship a manual scaffold so the first ADD-mode user begins generating field data.
+  - [ ] (c) Other: _________________________________
+
+### 9.4 Seed artifact attestation (Drafted → Attested)
+
+Tick once amendments above are adjudicated and the artifact reflects your intent. Attestation is monotonic — once ticked, the agent treats the artifact as Attested and will modify it only via a supersession ADR (per `glossary.md` § Status field). `methodology.md` and `glossary.md` are already Ratified; no tick required here.
+
+- [ ] `crosscheck/docs/add/intent.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/decisions/INDEX.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/decisions/ADR-001-operating-modes.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/decisions/ADR-002-deterministic-llm-split.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/decisions/ADR-003-auditor-agent.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/decisions/ADR-004-greenfield-skill-set.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/decisions/ADR-005-diff-classification.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/specs/architectural.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/acceptance.md` — Drafted → Attested
+- [ ] `crosscheck/docs/add/README.md` — Drafted → Attested
+
+### 9.5 Authorisation to proceed
+
+- [ ] **Proceed.** Amendments above are adjudicated; seed artifacts above are attested (or scoped down with reasons). The agent is authorised to (a) execute the approved A-* amendments and (b) begin Phase 1 lower-tier drafting (`specs/behavioral.md` and per-module functional specs) per S8 of the architectural spec.
+
+---
+
+## 10. Stop point
 
 Per the protocol § Step 6, the agent halts here. It will not draft `specs/behavioral.md`, any per-module functional spec, any new SKILL.md, any agent definition, or any tool until the human:
 
