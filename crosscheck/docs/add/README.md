@@ -1,6 +1,6 @@
 # `docs/add/` — Assurance Driven Development for Crosscheck
 
-**Status:** Drafted v1.0 (awaiting Phase 2 validation by Claude Code agent + human attestation)
+**Status:** Attested v1.0 (Phase 2 closure 2026-05-09 by nicholls-inc)
 
 ## What is this directory
 

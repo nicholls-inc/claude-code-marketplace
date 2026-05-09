@@ -1,6 +1,6 @@
 # ADR-005: Mandatory Diff Classification on Spec-Changing Commits
 
-**Status:** Drafted
+**Status:** Attested (Phase 2 closure 2026-05-09 by nicholls-inc)
 **Date:** 2026-05-09
 **Consumes:** IC7, TM2
 **Produces:** S6.1 (commit-time enforcement gate and audit log)

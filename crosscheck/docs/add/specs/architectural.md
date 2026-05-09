@@ -1,6 +1,6 @@
 # Architectural Spec — ADD in Crosscheck
 
-**Status:** Drafted v1.0 (awaiting Phase 2 validation by the agent and human attestation)
+**Status:** Attested v1.0 (Phase 2 closure 2026-05-09 by nicholls-inc; comparison report § 9.4)
 **Phase:** 1 (Specification — Architectural tier)
 **Consumes:** IC1, IC2, IC3, IC4, IC5, IC6, IC7, IC8, IC9, IC10, IC11, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005
 **Produces:** the behavioral spec (`docs/add/specs/behavioral.md`, agent-authored) and the per-module functional specs (`docs/add/specs/modules/*.md`, agent-authored)

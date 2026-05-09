@@ -1,9 +1,9 @@
 # Intent — Build ADD into Crosscheck
 
-**Status:** Drafted v1.0 (awaiting human attestation)
+**Status:** Attested v1.0
 **Phase:** 0 (Intent capture)
 **Project:** Add Assurance Driven Development support to the Crosscheck plugin
-**Last attested:** N/A (Drafted)
+**Last attested:** 2026-05-09 by nicholls-inc (Phase 2 closure on branch claude/validate-add-phase-2-bFneS, comparison report § 9.4)
 
 ## Vision
 

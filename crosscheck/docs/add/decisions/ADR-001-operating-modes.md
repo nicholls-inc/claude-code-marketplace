@@ -1,6 +1,6 @@
 # ADR-001: Three Operating Modes (Bootstrap / ADD / Transitional)
 
-**Status:** Drafted
+**Status:** Attested (Phase 2 closure 2026-05-09 by nicholls-inc)
 **Date:** 2026-05-09
 **Consumes:** IC5, IC9
 **Produces:** S1.1, S1.2 (constraints on the architectural spec)

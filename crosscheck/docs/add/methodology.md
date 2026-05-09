@@ -1,8 +1,8 @@
 # Assurance Driven Development (ADD)
 
-**Status:** Drafted v1.0
+**Status:** Attested v1.0
 **Supersedes:** none
-**Last attested:** N/A (Drafted; awaiting human attestation per `README.md` lifecycle)
+**Last attested:** 2026-05-09 by nicholls-inc (Phase 2 closure on branch claude/validate-add-phase-2-bFneS)
 
 ## Definition
 

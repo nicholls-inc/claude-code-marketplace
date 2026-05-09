@@ -1,6 +1,6 @@
 # ADR-003: Auditor as a Third Agent Role
 
-**Status:** Drafted
+**Status:** Attested (Phase 2 closure 2026-05-09 by nicholls-inc)
 **Date:** 2026-05-09
 **Consumes:** IC6, TM4
 **Produces:** S5.1 (auditor agent definition), S5.2 (consolidation pass workflow)
