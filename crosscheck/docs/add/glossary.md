@@ -1,6 +1,6 @@
 # ADD Glossary and ID Conventions
 
-**Status:** Ratified v1.0
+**Status:** Attested v1.0 (Phase 2 closure 2026-05-09 by nicholls-inc)
 **Purpose:** A ubiquitous language (Evans, DDD) for ADD. Terms here are used consistently across all artifacts in `docs/add/`, in skill SKILL.md files, in commit messages, and in agent-authored specs. If a term shifts meaning, this file is amended first; the cascade then updates dependent artifacts.
 
 ## ID conventions
@@ -61,7 +61,7 @@ Status transitions are monotonic in one of two senses: forward (Drafted → Atte
 
 **Consolidation pass.** A scheduled review by the auditor agent of all artifacts in the repo, producing per-artifact verdicts of Settled / Active / Drifted. Distinct from continuous assurance (which is event-driven).
 
-**Diff classification.** Mandatory tag on every spec-changing commit: Propagated discovery / Intent refinement / Drift / Retraction. See `decisions/ADR-005-diff-classification.md`.
+**Diff classification.** Mandatory tag on every spec-changing commit: Propagated discovery / Intent refinement / Drift / Retraction / Status transition. See `decisions/ADR-005-diff-classification.md`.
 
 **Drift.** A spec change that weakens the spec to match what got built, rather than the implementation matching the spec. Not always wrong, but never silent.
 

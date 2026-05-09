@@ -1,13 +1,13 @@
 # ADR-005: Mandatory Diff Classification on Spec-Changing Commits
 
-**Status:** Drafted
+**Status:** Attested (Phase 2 closure 2026-05-09 by nicholls-inc)
 **Date:** 2026-05-09
 **Consumes:** IC7, TM2
 **Produces:** S6.1 (commit-time enforcement gate and audit log)
 
 ## Context
 
-The methodology requires every spec-changing commit to carry one of four classifications: Propagated discovery / Intent refinement / Drift / Retraction. The classifications are not just documentation — they are the load-bearing mechanism that distinguishes healthy iteration (which is expected and valuable) from silent spec weakening (which is the failure mode ADD exists to prevent, per TM2).
+The methodology requires every spec-changing commit to carry one of five classifications: Propagated discovery / Intent refinement / Drift / Retraction / Status transition (the last added in Phase 2 per A-11a). The classifications are not just documentation — they are the load-bearing mechanism that distinguishes healthy iteration (which is expected and valuable) from silent spec weakening (which is the failure mode ADD exists to prevent, per TM2). The fifth class isolates status-only flips (Drafted → Attested → Ratified, or supersession marks) from content classifications so the audit log does not conflate them.
 
 Without enforcement at commit time, classification becomes optional and decays. The methodology depends on it being unavoidable.
 
@@ -25,11 +25,11 @@ A two-track enforcement, matching the dual-track principle Crosscheck already us
 
 ### Pre-commit enforcement (fast)
 
-A pre-commit hook detects whether the commit modifies any artifact under `docs/add/`, `docs/invariants/<module>.md` for ADD-mode modules (per ADR-001), `agents/`, `skills/`, or `.claude/rules/`. If yes, the hook requires:
+A pre-commit hook detects whether the commit modifies any artifact under `docs/add/` (including `docs/add/audit/`, with the authorship constraint below), `docs/invariants/<module>.md` for ADD-mode modules (per ADR-001), `agents/`, `skills/`, or `.claude/rules/`. If yes, the hook requires:
 
 1. The commit message contains a structured trailer:
    ```
-   Spec-Diff-Classification: <propagated-discovery | intent-refinement | drift | retraction>
+   Spec-Diff-Classification: <propagated-discovery | intent-refinement | drift | retraction | status-transition>
    Spec-Diff-Justification: <one-line summary; required for drift, optional otherwise>
    ```
 2. For `drift` classification, the justification must answer the canonical question: *"did we want this behavior or did the implementation drift?"* The hook does not parse the answer for content but requires non-empty text.
@@ -57,6 +57,12 @@ Classification applies to artifacts named above. It does *not* apply to:
 - Documentation files outside the listed paths (e.g., README.md changes do not require classification unless they constitute a governance amendment per the protected-surfaces partition).
 - Auto-generated artifacts (e.g., the diff-classification log itself, lockfiles).
 
+### Authorship constraint on `docs/add/audit/`
+
+The Auditor agent's report directory `docs/add/audit/` is a protected path *with an additional authorship rule*: only the Auditor agent (and humans, for adjudication-driven amendments) may write there. Authoring agents (Byfuglien, Hellebuyck) must not write to `docs/add/audit/` even when the trailer is correct, because the report is the audit trail of the auditor's verdicts and authoring-agent writes would compromise the audit/author separation that ADR-003 establishes.
+
+Enforcement: Byfuglien and Hellebuyck have no tool-allowlist entries for writing under `docs/add/audit/` (see `agents/byfuglien.md`, `agents/hellebuyck.md` frontmatter). The pre-commit hook additionally rejects commits modifying `docs/add/audit/` whose author identity does not match the Auditor agent or a human reviewer (configured via `.assurance/audit-authors.allowlist`).
+
 ## Alternatives considered
 
 **A1 — Classification only at PR level, not per commit.** Rejected: a PR with mixed-class commits hides drift inside otherwise-routine refactoring. Per-commit granularity preserves the signal.
@@ -69,11 +75,13 @@ Classification applies to artifacts named above. It does *not* apply to:
 
 **A5 — Five or more classes (e.g., adding "Refinement-of-form" for typo fixes).** Rejected for v1: four classes are already at the edge of what authors can keep straight. Typo fixes do not modify protected artifacts in any meaningful way; the rule "classification applies only to material changes" handles this implicitly.
 
+**A5-amendment (Phase 2, A-11a):** The fifth class `status-transition` was added in Phase 2 to handle Drafted → Attested → Ratified flips (and supersession marks) which are not content changes but do modify protected artifacts. The taxonomy is now five classes, not four. The rejection of A5's "Refinement-of-form" remains: typo-style refinements are still excluded; only status flips earn the fifth class.
+
 ## Consequences
 
 - The architectural spec must define the pre-commit hook and CI job (`S6.1`) and how they integrate with each supported pre-commit framework (pre-commit.com, lefthook, husky) and CI system (GitHub Actions, GitLab CI, CircleCI). The existing `/invariant-coverage-scaffold` skill is the closest precedent.
 - The log schema must be stable enough that consolidation-pass tooling can rely on it. v1 of the schema is committed in the architectural spec; later additions can extend, but column meanings cannot change without an ADR.
-- The four classes are the *only* legal values. New classes require a supersession ADR.
+- The five classes are the *only* legal values. New classes require a supersession ADR.
 - The `/spec-derive` skill (ADR-004) and any other ADD-mode skill that produces spec-changing commits must emit the trailer in the commits they help author. The skill SKILL.md files include this requirement.
 - The Auditor agent's consolidation-pass workflow consumes the log; the Auditor's verdict on a "Settled" artifact requires the artifact's edit history in the log to be free of unclassified entries within the consolidation window.
 
@@ -83,6 +91,6 @@ The phrase *"did we want this behavior or did the implementation drift?"* is the
 
 ## Open questions deferred
 
-- Whether the classification log is a CSV, a JSON-lines file, or something queryable like SQLite. v1 architectural-spec call.
+- ~~Whether the classification log is a CSV, a JSON-lines file, or something queryable like SQLite.~~ **Resolved (Phase 2 amendment A-13):** JSON-lines at `.assurance/diff-classification-log.jsonl`. Schema in S6.1.
 - Whether older commits (pre-this-feature) get retroactively classified or are exempted. v1 default: exempt; the log starts at the feature's introduction.
 - Whether the pre-commit hook enforces classification on Drafted-status artifacts (i.e., before they're attested). v1 default: yes — classification discipline begins from first commit, not from first attestation.

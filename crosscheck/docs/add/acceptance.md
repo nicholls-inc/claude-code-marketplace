@@ -1,7 +1,7 @@
 # Acceptance Criteria and Phase 2 Validation Protocol
 
-**Status:** Drafted v1.0 (awaiting human attestation; Phase 2 protocol is the agent's first task)
-**Consumes:** every IC (IC1–IC10) and every ADR (ADR-001 through ADR-005)
+**Status:** Attested v1.0 (Phase 2 closure 2026-05-09 by nicholls-inc)
+**Consumes:** every IC (IC1–IC11) and every ADR (ADR-001 through ADR-005)
 
 This document serves two functions: it describes what "v1 done" means for the ADD-in-Crosscheck project (acceptance criteria), and it specifies the Phase 2 self-validation protocol the agent runs *before* drafting any further specs or code.
 

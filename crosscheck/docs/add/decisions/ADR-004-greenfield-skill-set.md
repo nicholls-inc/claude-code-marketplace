@@ -1,6 +1,6 @@
 # ADR-004: Minimal Greenfield Skill Set for v1
 
-**Status:** Drafted
+**Status:** Attested (Phase 2 closure 2026-05-09 by nicholls-inc)
 **Date:** 2026-05-09
 **Consumes:** IC1, IC2, IC3, IC4
 **Produces:** S2.1, S2.2, S2.3, S2.4 (per-skill specs in the architectural spec)

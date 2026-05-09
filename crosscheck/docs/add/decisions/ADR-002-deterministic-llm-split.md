@@ -1,6 +1,6 @@
 # ADR-002: Deterministic Tools Detect Signals; LLMs Render Judgments
 
-**Status:** Drafted
+**Status:** Attested (Phase 2 closure 2026-05-09 by nicholls-inc)
 **Date:** 2026-05-09
 **Consumes:** IC8
 **Produces:** S4.1 (instrumentation layer), S4.2 (auditor input contract)

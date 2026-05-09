@@ -1,8 +1,8 @@
 # Assurance Driven Development (ADD)
 
-**Status:** Ratified v1.0
+**Status:** Attested v1.0
 **Supersedes:** none
-**Last attested:** at commit creating this file
+**Last attested:** 2026-05-09 by nicholls-inc (Phase 2 closure on branch claude/validate-add-phase-2-bFneS)
 
 ## Definition
 
@@ -47,7 +47,7 @@ Three modes coexist; modules carry a tag indicating their origin, and governance
 
 **ADD mode.** Clean slate. Start with intent, derive specs, prefigure governance, gate code. Risk: pristine intent that turns out to be unbuildable.
 
-**Transitional mode.** A partially-built system where early modules are bootstrap-mode (governance retrofitted) and new modules are ADD-mode (governance prefigured). The common case in practice. Module boundaries carry the mode tag; governance applied to each module is mode-appropriate. A bootstrap-mode module is not expected to have an intent-attestation trail back to Phase 0; an ADD-mode module is not expected to have its specs treated as recoverable from code.
+**Transitional mode.** A *repo-level* descriptor — not a per-module tag — for a partially-built system where early modules are bootstrap-mode (governance retrofitted) and new modules are ADD-mode (governance prefigured). The common case in practice. Per-module mode tags draw from `{bootstrap, add}` only; the repo is in transitional mode whenever modules disagree. Governance applied to each module is mode-appropriate. A bootstrap-mode module is not expected to have an intent-attestation trail back to Phase 0; an ADD-mode module is not expected to have its specs treated as recoverable from code. See `decisions/ADR-001-operating-modes.md` for the rationale.
 
 ## Phase structure
 
@@ -102,6 +102,7 @@ The single structural element that protects ADD from collapsing into waterfall o
 - **Intent refinement** — the human's understanding of what they want has improved. Phase 0 is amended; Phase 1 cascade re-runs. The most significant kind of change; requires explicit human attestation.
 - **Drift** — the spec is being weakened to match what got built. Flagged; requires human approval and a written justification answering *"did we want this behavior or did the implementation drift?"*. Drift is not always wrong, but it is never silent.
 - **Retraction** — a previously-made claim is being abandoned. Logged with reason; the linkage graph is updated; downstream artifacts that consumed the retracted claim enter Drifted state until amended.
+- **Status transition** — an artifact's Status field flipped (Drafted → Attested, Attested → Ratified, anything → Superseded-by-N or Retracted-with-Reason) without content change. Isolated from the four content classes above so the audit log does not conflate status flips with substantive iteration.
 
 Forcing the agent to *classify the diff* — and the auditor agent to *verify the classification* — is what catches drift early. Healthy convergence shows decreasing rate of cascade-triggering diffs over time, increasing fraction classified as Intent Refinement rather than Propagated Discovery, and stable-or-decreasing rejection rate at human attestation. Thrash shows the opposite. Both signals are computable from the diff log when metadata is recorded structurally. See `decisions/ADR-005-diff-classification.md`.
 

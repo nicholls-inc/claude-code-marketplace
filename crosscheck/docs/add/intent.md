@@ -1,9 +1,10 @@
 # Intent — Build ADD into Crosscheck
 
-**Status:** Drafted v1.0 (awaiting human attestation)
+**Status:** Attested v1.1
 **Phase:** 0 (Intent capture)
 **Project:** Add Assurance Driven Development support to the Crosscheck plugin
-**Last attested:** N/A (Drafted)
+**Last attested:** 2026-05-09 by nicholls-inc (Phase 2 re-attestation; re-drafting cascade from seam validation B-3, B-4 — IC4 re-framed as `/intent-check` parameterisation, IC10 references existing dual-track principle. Authorisation for the agent-authored re-attestation commit recorded in commit body.)
+**Prior attestation:** v1.0 — 2026-05-09 by nicholls-inc (Phase 2 closure on branch claude/validate-add-phase-2-bFneS, comparison report § 9.4)
 
 ## Vision
 
@@ -38,15 +39,15 @@ ADD-mode users produce architectural, behavioral, and functional specs derived t
 
 ---
 
-**IC4 — Phase 2 spec validation is prose-vs-prose, not prose-vs-test.**
-Crosscheck's existing `/intent-check` requires an `(invariant prose, covering test, code diff)` triple, which is unavailable pre-code. ADD requires a Phase 2 validation step that runs *before* any code or test exists: a fresh agent reads the spec cold, describes the system in its own words, and the description is compared against the Phase 0 intent doc.
+**IC4 — Phase 2 spec validation reuses `/intent-check`'s pipeline with prose-vs-prose inputs.**
+Crosscheck's existing `/intent-check` skill operates on `(invariant prose, covering test, code diff)`. Its load-bearing disciplines — two-prompt structural separation (back-translator blind to original intent), kill-criterion pre-check (FP rate over rolling window), mandatory carve-out scan, fail-closed semantic validation, content-hashed attestation, FP-tracker CSV with stable schema — all transfer to the prose-vs-prose case. ADD's Phase 2 step is therefore the existing pipeline parameterised on a different input shape: instead of `(invariant prose, covering test, code diff)`, the inputs are `(intent doc, spec stack)`. No code or test is required.
 
-*Observable signal:* a new skill (or new mode of an existing one) performs prose-vs-prose intent alignment without requiring a test or code diff as input. It surfaces gaps as a structured report the human attests against.
+*Observable signal:* a new skill (or new mode of `/intent-check`) reuses the existing pipeline structure end-to-end — same env vars (`CROSSCHECK_FP_TRIPPED_THRESHOLD` / `_AT_RISK_THRESHOLD` / `_WINDOW_DAYS`), same tracker-CSV schema, same SHA-256-hashed JSON attestation, same two-section back-translator output, same carve-out scan — substituting only the input artifacts. The architectural spec (S2.3) declares the inheritance explicitly.
 
 ---
 
-**IC5 — Three operating modes with per-module tagging.**
-Modules in a Crosscheck-governed repo carry a tag indicating their origin mode (bootstrap / ADD / transitional). Governance applied to each module is mode-appropriate. A bootstrap-mode module is not expected to have an intent-attestation trail back to Phase 0; an ADD-mode module is not expected to have its specs treated as recoverable from code.
+**IC5 — Three operating modes; per-module tags carry the originative two; transitional is a repo-level descriptor.**
+Modules in a Crosscheck-governed repo carry a tag indicating their origin mode, drawn from `{bootstrap, add}`. *Transitional* is not a per-module tag — it is the *repo-level* descriptor that applies when modules disagree (some originated bootstrap-mode, others ADD-mode). Per ADR-001, there is no `mode: transitional` value on any individual module. Governance applied to each module is mode-appropriate. A bootstrap-mode module is not expected to have an intent-attestation trail back to Phase 0; an ADD-mode module is not expected to have its specs treated as recoverable from code.
 
 *Observable signal:* each module's invariant doc (`docs/invariants/<module>.md`) or equivalent metadata records its origin mode. Skills consulting governance (e.g., the consolidation pass) honour the mode tag.
 
@@ -67,7 +68,7 @@ Every commit that modifies an artifact under `docs/add/` (and, when extended, `d
 ---
 
 **IC8 — Deterministic instrumentation complements LLM judgments.**
-Crosscheck-with-ADD ships at least minimal deterministic instrumentation derivable from git history and the linkage graph: edit-frequency hotspots on spec files (Tornhill-style), change-coupling between specs and tests, orphan detection, and cascade-pending detection. The auditor agent consumes these signals before rendering verdicts.
+Crosscheck-with-ADD ships at least minimal deterministic instrumentation derivable from git history and the linkage graph: edit-frequency hotspots on spec files (Tornhill-style), change-coupling between specs and tests, orphan detection, cascade-pending detection, and diff-shape analysis (new clause / modified clause / deleted clause). The auditor agent consumes these signals before rendering verdicts.
 
 *Observable signal:* a script or skill produces these signals as structured output. The auditor agent's prompt explicitly takes the structured output as input. The output format is stable enough that future skills can consume it.
 
@@ -80,10 +81,21 @@ A user who does not invoke any ADD skill or set an ADD-mode flag experiences Cro
 
 ---
 
-**IC10 — Documentation surfaces ADD as a peer to bootstrap mode, not as a replacement.**
+**IC10 — Documentation surfaces ADD as a peer to bootstrap mode, not as a replacement; the dual-track enforcement principle carries forward.**
 The plugin README and `docs/skills.md` and `docs/agents.md` (or successors) describe ADD as an additional operating mode with its own recommended order. The relationship between bootstrap and ADD is honestly described, including the open problems listed in `methodology.md` § Open problems.
 
-*Observable signal:* README contains an "Operating modes" section. The recommended-order sections distinguish bootstrap-mode order from ADD-mode order. The "Honest Map" recommendation from prior synthesis docs is realised, with ADD reach honestly marked.
+ADD's diff-classification gates (IC7) are an instance of the dual-track enforcement principle that `/assurance-init` already writes into every onboarded repo's `docs/assurance/ROADMAP.md` (verbatim block: pre-commit hook + CI job + LLM-free attestation check). The README and skill catalogue should frame ADD as continuing this discipline rather than introducing it.
+
+*Observable signal:* README contains an "Operating modes" section. The recommended-order sections distinguish bootstrap-mode order from ADD-mode order. The "Honest Map" recommendation from prior synthesis docs is realised, with ADD reach honestly marked. The dual-track-enforcement principle is referenced when describing the diff-classification gates, with a pointer back to the existing `/assurance-init` template.
+
+---
+
+**IC11 — Behavioral-spec prose carries linkage quality.**
+The behavioral spec (`B`-tier) authored by the agent in Phase 1 satisfies a minimum linkage quality: every `B` invariant traces via `consumes:` to at least one `IC` (intent claim, possibly via an intermediate `S` section) and via `produces:` to at least one `F` (functional spec section) within its module. A `B` with no `IC` ancestor is *orphaned* (governance violation). A `B` with no `F` descendant has no implementation seam; the integrity check flags it as `dangling-B`. Both conditions are mechanically detectable from the linkage graph.
+
+This claim addresses the methodology's "compositional gap" open problem at the prose-quality level (without requiring a model checker, which is N4): if the `B`-tier has correctly-shaped traces, the prose layer is at least *structurally* a behavioral spec rather than a free-form essay. A model checker integration remains future work; structural integrity is v1.
+
+*Observable signal:* the deterministic linkage-graph integrity check (S1.2 extended; S4.1) reports `orphan-B` and `dangling-B` counts; both must be zero for a Phase-3-or-later module to satisfy IC11. The auditor agent's verdict on a behavioral.md file with non-empty `orphan-B` count is Drifted; with non-empty `dangling-B` count is Active-with-warning. Phase-1 modules in mid-derivation may legitimately carry `dangling-B` until the F-tier is drafted.
 
 ---
 
