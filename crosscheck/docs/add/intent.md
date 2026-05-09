@@ -87,6 +87,15 @@ The plugin README and `docs/skills.md` and `docs/agents.md` (or successors) desc
 
 ---
 
+**IC11 — Behavioral-spec prose carries linkage quality.**
+The behavioral spec (`B`-tier) authored by the agent in Phase 1 satisfies a minimum linkage quality: every `B` invariant traces via `consumes:` to at least one `IC` (intent claim, possibly via an intermediate `S` section) and via `produces:` to at least one `F` (functional spec section) within its module. A `B` with no `IC` ancestor is *orphaned* (governance violation). A `B` with no `F` descendant has no implementation seam; the integrity check flags it as `dangling-B`. Both conditions are mechanically detectable from the linkage graph.
+
+This claim addresses the methodology's "compositional gap" open problem at the prose-quality level (without requiring a model checker, which is N4): if the `B`-tier has correctly-shaped traces, the prose layer is at least *structurally* a behavioral spec rather than a free-form essay. A model checker integration remains future work; structural integrity is v1.
+
+*Observable signal:* the deterministic linkage-graph integrity check (S1.2 extended; S4.1) reports `orphan-B` and `dangling-B` counts; both must be zero for a Phase-3-or-later module to satisfy IC11. The auditor agent's verdict on a behavioral.md file with non-empty `orphan-B` count is Drifted; with non-empty `dangling-B` count is Active-with-warning. Phase-1 modules in mid-derivation may legitimately carry `dangling-B` until the F-tier is drafted.
+
+---
+
 ## Out of scope (negative space)
 
 These items are explicitly *not* part of the v1 ADD integration. Surfacing them here protects against drift toward them.

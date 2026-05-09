@@ -2,7 +2,7 @@
 
 **Status:** Drafted v1.0 (awaiting Phase 2 validation by the agent and human attestation)
 **Phase:** 1 (Specification — Architectural tier)
-**Consumes:** IC1, IC2, IC3, IC4, IC5, IC6, IC7, IC8, IC9, IC10, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005
+**Consumes:** IC1, IC2, IC3, IC4, IC5, IC6, IC7, IC8, IC9, IC10, IC11, ADR-001, ADR-002, ADR-003, ADR-004, ADR-005
 **Produces:** the behavioral spec (`docs/add/specs/behavioral.md`, agent-authored) and the per-module functional specs (`docs/add/specs/modules/*.md`, agent-authored)
 
 ## Purpose
@@ -15,8 +15,8 @@ Sections are numbered hierarchically (`S1`, `S1.1`, `S2`, ...). Each section dec
 
 ## S1 — Operating-mode tagging
 
-**Consumes:** IC5, IC9, ADR-001
-**Produces:** behavioral spec section "B-modes"; constraints on every existing skill that touches governance
+**Consumes:** IC5, IC9, IC11, ADR-001
+**Produces:** behavioral spec section "B-modes"; constraints on every existing skill that touches governance; integrity rules covering B-tier linkage quality (S1.2)
 
 ### S1.1 — Mode tag location and format
 
@@ -42,6 +42,9 @@ The deterministic instrumentation (S4.1) checks linkage-graph integrity. Per ADR
 
 - **Bootstrap-mode modules:** require `docs/invariants/<module>.md` exists, has at least one `I` invariant, and each `I` has a covering test. No requirement to trace back to an `IC`.
 - **ADD-mode modules:** require `docs/add/specs/modules/<module>.md` exists, has at least one `F` functional spec section, each `F` traces via `consumes:` to an `S` architectural section, and each `S` traces to one or more `IC` claims. Tests are required once Phase 4 begins (the integrity check is mode-aware about which phase the module is in, recorded in the same frontmatter).
+- **B-tier linkage quality (per IC11):** every `B` invariant in a module's behavioral spec traces via `consumes:` to at least one `IC` (possibly via an `S` intermediate) and via `produces:` to at least one `F` within its module. Violations are reported as:
+  - `orphan-B` — `B` with no `IC` ancestor. Hard violation; integrity check fails.
+  - `dangling-B` — `B` with no `F` descendant. Soft violation in Phase 1 (legitimate during derivation); hard violation from Phase 3 onwards.
 
 Cross-module references use the qualified form `M3-billing/I3` per `glossary.md`.
 
@@ -356,5 +359,6 @@ The agent does not modify any human-authored Ratified artifact. To propose a cha
 | IC8 (Deterministic instrumentation) | S4.1, S4.2 | tool and auditor input |
 | IC9 (Existing flows unchanged) | S1.1, S3.* (additive only) | default-to-bootstrap in S1.1; each S3 adaptation is gated on mode/state |
 | IC10 (Documentation surfaces ADD) | S7.* | README, skills.md, agents.md |
+| IC11 (B-tier linkage quality) | S1.2 | `orphan-B` and `dangling-B` integrity rules; agent-authored behavioral.md will extend with module-level invariants |
 
 Every `IC` is consumed by at least one `S`. (The Phase 2 validation in `acceptance.md` will check this mechanically.)
