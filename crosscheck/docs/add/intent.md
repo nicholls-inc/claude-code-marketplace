@@ -45,8 +45,8 @@ Crosscheck's existing `/intent-check` requires an `(invariant prose, covering te
 
 ---
 
-**IC5 — Three operating modes with per-module tagging.**
-Modules in a Crosscheck-governed repo carry a tag indicating their origin mode (bootstrap / ADD / transitional). Governance applied to each module is mode-appropriate. A bootstrap-mode module is not expected to have an intent-attestation trail back to Phase 0; an ADD-mode module is not expected to have its specs treated as recoverable from code.
+**IC5 — Three operating modes; per-module tags carry the originative two; transitional is a repo-level descriptor.**
+Modules in a Crosscheck-governed repo carry a tag indicating their origin mode, drawn from `{bootstrap, add}`. *Transitional* is not a per-module tag — it is the *repo-level* descriptor that applies when modules disagree (some originated bootstrap-mode, others ADD-mode). Per ADR-001, there is no `mode: transitional` value on any individual module. Governance applied to each module is mode-appropriate. A bootstrap-mode module is not expected to have an intent-attestation trail back to Phase 0; an ADD-mode module is not expected to have its specs treated as recoverable from code.
 
 *Observable signal:* each module's invariant doc (`docs/invariants/<module>.md`) or equivalent metadata records its origin mode. Skills consulting governance (e.g., the consolidation pass) honour the mode tag.
 

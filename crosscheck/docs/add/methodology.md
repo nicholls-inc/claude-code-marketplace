@@ -47,7 +47,7 @@ Three modes coexist; modules carry a tag indicating their origin, and governance
 
 **ADD mode.** Clean slate. Start with intent, derive specs, prefigure governance, gate code. Risk: pristine intent that turns out to be unbuildable.
 
-**Transitional mode.** A partially-built system where early modules are bootstrap-mode (governance retrofitted) and new modules are ADD-mode (governance prefigured). The common case in practice. Module boundaries carry the mode tag; governance applied to each module is mode-appropriate. A bootstrap-mode module is not expected to have an intent-attestation trail back to Phase 0; an ADD-mode module is not expected to have its specs treated as recoverable from code.
+**Transitional mode.** A *repo-level* descriptor — not a per-module tag — for a partially-built system where early modules are bootstrap-mode (governance retrofitted) and new modules are ADD-mode (governance prefigured). The common case in practice. Per-module mode tags draw from `{bootstrap, add}` only; the repo is in transitional mode whenever modules disagree. Governance applied to each module is mode-appropriate. A bootstrap-mode module is not expected to have an intent-attestation trail back to Phase 0; an ADD-mode module is not expected to have its specs treated as recoverable from code. See `decisions/ADR-001-operating-modes.md` for the rationale.
 
 ## Phase structure
 
