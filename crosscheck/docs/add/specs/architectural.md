@@ -194,16 +194,26 @@ implementation: spec-iterate
 ---
 ```
 
-The `implementation:` field takes one of: `spec-iterate` (Layer-1 verified-Dafny chain), `manual` (agent or human writes code directly without `/spec-iterate`), `external` (the implementation lives outside this repo). Other values require a follow-up ADR.
+The `implementation:` field takes one of:
 
-**Integrity rule.** For any `F` section with `implementation: spec-iterate`, the integrity check (S1.2) requires that the corresponding module directory contain either:
-- a `.dfy` artifact under the module's verification directory matching the `F` section's slug, *or*
-- a Status note in the `F` section explaining why the artifact is not yet present (e.g., `implementation-status: deferred-to-phase-4`).
+- `spec-iterate` — Layer 1 via the Dafny verify-and-extract chain (`/spec-iterate` → `/generate-verified` → `/extract-code`). Reach band ~22-27% per `docs/research/logic-distribution-analysis.md`.
+- `lean-pipeline` (added Phase 2 re-draft, B-2) — Layer 1 via the Lean executable-model + DRT-oracle chain (`/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle`). Used when production code is hand- or AI-written and DRT validates against a Lean model. Per `agents/byfuglien.md`, Dafny and Lean are complementary engines at Layer 1, not alternatives.
+- `manual` — agent or human writes code directly; no Layer 1 verification chain applies.
+- `external` — the implementation lives outside this repo (third-party library, sister repo, etc.).
+
+Other values require a follow-up ADR.
+
+**Integrity rule.** For any `F` section with `implementation:` set to a Layer-1 value, the integrity check (S1.2) requires evidence the chain produced an artifact:
+
+- `implementation: spec-iterate` requires a `.dfy` artifact under the module's verification directory matching the `F` section's slug, *or* an `implementation-status: deferred-to-phase-<n>` note (n in 3..5).
+- `implementation: lean-pipeline` requires (a) a `.lean` artifact under the module's `lean/` directory matching the slug, (b) a correspondence-review verdict in `.assurance/correspondence/<module>/<slug>.json` with `verdict: exact | abstraction | approximation` (`mismatch` is a hard violation), AND (c) a DRT-oracle run record under `.assurance/drt-oracle/<module>/`. Equivalently, an `implementation-status: deferred-to-phase-<n>` note skips the check during phase 1-2 derivation.
+
+For `implementation: manual` or `external`, no seam check applies; the standard integrity rule (test must cover invariant) still binds.
 
 **What this section deliberately does not specify.**
-- The internals of `/spec-iterate` itself (out of scope; existing skill).
-- The exact Dafny patterns the agent emits when invoking `/spec-iterate` from an `F` section (functional-spec-tier concern).
-- The behaviour when an `F` section's `implementation:` value is `manual` or `external` — those cases follow the standard integrity rule (test must cover invariant; no spec-iterate seam to verify).
+- The internals of `/spec-iterate` or the Lean pipeline (out of scope; existing skills).
+- The exact Dafny / Lean patterns the agent emits when invoking either chain from an `F` section (functional-spec-tier concern).
+- The behaviour when an `F` section's `implementation:` value is `manual` or `external` — those cases follow the standard integrity rule.
 
 ---
 
