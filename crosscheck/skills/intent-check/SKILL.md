@@ -17,14 +17,26 @@ argument-hint: "[optional: invariant doc path] [optional: covering test path]"
 
 Operationalise Layer 5 (spec-intent alignment) of the assurance hierarchy as a portable, repo-agnostic Claude Code skill. The input is a triple — an **invariant prose description**, a **covering property test**, and the **code diff** the user wants to ship. The output is a structured verdict (match / mismatch + confidence + reason), an appended row in a per-repo false-positive tracker CSV, and a content-hashed JSON attestation that a companion pre-commit hook can check without invoking an LLM.
 
-The skill is a portable analog of Midspiral's `claimcheck` and an internal Go-binary precursor. It is structurally adversarial by construction: the back-translator is **blind to the original intent prose**, so it cannot tautologically restate it, and the diff-checker is forced to scan for carve-outs and rationale comments before rendering a verdict. These two prompt-level guardrails are the Phase-1 calibration fixes that drive the false-positive rate below the 30% kill criterion.
+The skill is a portable analog of Midspiral's `claimcheck` and an internal Go-binary precursor. It is structurally adversarial by construction: the back-translator is **blind to the original intent prose**, so it cannot tautologically restate it, and the diff-checker is forced to scan for carve-outs and rationale comments before rendering a verdict. These two prompt-level guardrails are the Phase-1 calibration fixes that drive the false-positive rate below the configurable kill criterion (default 30%, see Configuration).
 
 This is a methodology skill. It does not ship a binary — Claude drives the pipeline itself, reading files, invoking the two prompts in the required order, writing the tracker row and the attestation, and running the kill-criterion math before committing. The companion pre-commit hook (described in `references/attestation-schema.md`) is fast and LLM-free: it only checks hashes and verdicts.
 
 Cross-references:
 - `references/round-trip-prompt.md` — verbatim two-prompt template for back-translator + diff-checker, including rationale extraction and carve-out taxonomy.
-- `references/fp-tracker-schema.md` — CSV schema, append logic, and the 30% kill-criterion computation.
+- `references/fp-tracker-schema.md` — CSV schema, append logic, and the kill-criterion computation.
 - `references/attestation-schema.md` — JSON attestation format, SHA-256 computation, and pre-commit hook pseudocode.
+
+## Configuration
+
+The kill-criterion thresholds in Step 0 are configurable via environment variables. Read these once at the start of the skill run; if unset, use the documented defaults.
+
+| Env var | Default | Meaning |
+|---|---|---|
+| `CROSSCHECK_FP_TRIPPED_THRESHOLD` | `0.30` | Rolling FP rate at which Step 0 refuses to run (Layer 5 offline) |
+| `CROSSCHECK_FP_AT_RISK_THRESHOLD` | `0.20` | Rolling FP rate at which the verdict reports `AT RISK` |
+| `CROSSCHECK_FP_WINDOW_DAYS` | `14` | Rolling-window length used to compute the FP rate |
+
+The defaults (30% / 20% / 14 days, with `n ≥ 3` minimum sample size) are **founder intuition, not labelled-pilot data**. Tune them for your tolerance once you have ≥30 classified human verdicts. See `docs/research/assurance-hierarchy.md` for the calibration rationale and `docs/examples/workflows/README.md` for how the same numbers are surfaced in the reference squad workflows. Schema parity matters: any consumer that reads `.assurance/intent-check-fp-tracker.csv` (e.g. `/assurance-status`) must use the same env vars so the user sees the same rate everywhere.
 
 ## Instructions
 
@@ -34,13 +46,15 @@ You are running a two-LLM round-trip informalization pipeline over one protected
 
 Before doing any LLM work, open `.assurance/intent-check-fp-tracker.csv` (create it if missing; see `references/fp-tracker-schema.md` for the exact header).
 
-Compute the rolling false-positive rate over the **last 2 weeks of entries** (rows where `date` is within 14 days of today **AND `human_verdict` is non-empty** — empty cells are awaiting review and are excluded from both numerator and denominator; see the pseudocode in `references/fp-tracker-schema.md`):
+Read the threshold env vars from the Configuration section: `tripped = CROSSCHECK_FP_TRIPPED_THRESHOLD` (default `0.30`) and `window = CROSSCHECK_FP_WINDOW_DAYS` (default `14`). The defaults are founder intuition, not labelled-pilot data — see the Configuration section.
+
+Compute the rolling false-positive rate over the last `window` days of entries (rows where `date` is within `window` days of today **AND `human_verdict` is non-empty** — empty cells are awaiting review and are excluded from both numerator and denominator; see the pseudocode in `references/fp-tracker-schema.md`):
 
 - FP rate = count(`human_verdict` == `spurious`) / count(rows in window with non-empty `human_verdict`)
 - If the window has fewer than 3 classified rows, treat the rate as unknown and proceed with a warning.
-- If the FP rate **> 30%**, refuse to run. Tell the user:
+- If the FP rate **> `tripped`**, refuse to run. Tell the user:
 
-  > The Layer-5 round-trip pipeline's rolling false-positive rate is `<rate>%` over the last 14 days (threshold: 30%). The kill criterion in the assurance hierarchy says this layer's strategy needs rework before it keeps gating commits. Do not re-enable until (a) the prompt or model is revised, or (b) human review has reclassified enough entries to drop the rate below 30%. See `references/fp-tracker-schema.md` for the exact computation.
+  > The Layer-5 round-trip pipeline's rolling false-positive rate is `<rate>%` over the last `<window>` days (threshold: `<tripped>%`, default 30%). The kill criterion in the assurance hierarchy says this layer's strategy needs rework before it keeps gating commits. Do not re-enable until (a) the prompt or model is revised, or (b) human review has reclassified enough entries to drop the rate below the threshold. See `references/fp-tracker-schema.md` for the exact computation and the Configuration section above for the threshold env vars.
 
   Stop. Do not proceed to Step 1.
 
@@ -168,7 +182,7 @@ Present a single summary block to the user:
 Tracker row appended: .assurance/intent-check-fp-tracker.csv
 Attestation written:   .assurance/intent-check-attestation.json
 
-Rolling 14-day FP rate: <rate>% (threshold 30%)
+Rolling FP rate (last <window> days): <rate>%  (threshold: <tripped>%, default 30%)
 ```
 
 If `match == false`, tell the user exactly what the back-translator perceived vs. what the invariant prose claimed, so they can decide whether to fix the code, fix the test, or amend the invariant prose via `/protected-surface-amend`.
@@ -178,7 +192,7 @@ If `match == false`, tell the user exactly what the back-translator perceived vs
 ```
 ## Verification Checklist
 
-- [ ] Kill-criterion pre-check ran before any LLM call (rolling 14-day FP rate < 30%)
+- [ ] Kill-criterion pre-check ran before any LLM call (rolling FP rate over the configured window is below the configured tripped threshold; defaults are 14 days and 30%, both sourced from the Configuration section, not hardcoded)
 - [ ] Back-translator prompt received only {code, test} — never the invariant prose
 - [ ] Back-translation contains both Section 1 (behavioural guarantees) and Section 2 (rationale comments, verbatim with file:line)
 - [ ] Diff-checker performed the mandatory Step 1 carve-out scan before rendering a verdict

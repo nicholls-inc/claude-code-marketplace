@@ -29,6 +29,16 @@ Orchestrator for formal verification and semi-formal code reasoning. Named after
 | `/suggest-specs` | Propose candidate specifications by analyzing code patterns |
 | `/assurance-probe` | Measure test strength via mutation/vacuity/generator probes (rotation-based) |
 
+### Formal Verification (Lean-backed, executable-model + DRT-oracle pipeline)
+
+| Skill | What it does |
+|-------|-------------|
+| `/informal-spec` | Extract a precise prose specification with hard human sign-off (step 1 of 5) |
+| `/lean-spec` | Translate signed-off prose into a Lean 4 stub with `sorry` proof bodies (step 2) |
+| `/lean-impl` | Translate source implementation into a Lean 4 functional model (step 3) |
+| `/correspondence-review` | Classify each Lean def vs source as exact / abstraction / approximation / mismatch (step 4) |
+| `/drt-oracle` | Differential random testing between the Lean model and production code (step 5) |
+
 ### Bridging Formal and Semi-formal
 
 | Skill | What it does |
@@ -60,6 +70,8 @@ Classify the user's request to determine which skill to invoke.
 | Regression check | "Did my changes break anything?", "Check verified specs", pre-commit review | `/check-regressions` |
 | Spec discovery | "What should I verify?", "Suggest specs", reviewing new code | `/suggest-specs` |
 | Test strength | "Is this test too weak?", "Run mutation probe", "Check test adequacy" (rotation-based) | `/assurance-probe` |
+| Lean pipeline (per-module model + DRT) | "Build a Lean model", "DRT this module", "fuzz against the lean spec", hand- or AI-written code with provable properties and a tractable input space | Pipeline: `/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` |
+| Lean pipeline — single step | "informal spec", "lean spec stub", "lean impl", "correspondence review", "drt" | The named step only; check upstream artefacts exist first |
 | Adequacy argument | "Is this code adequate?", "Build a rationale", code + informal requirements | `/rationale` |
 | Code questions | "What does X do?", "Is there a difference?", "Do we need this?" | `/reason` |
 | Patch comparison | Two diffs, two patches, "compare these changes" | `/compare-patches` |
@@ -103,6 +115,11 @@ Read the selected skill's SKILL.md file and follow its methodology exactly:
 - For `/lightweight-verify`: read `skills/lightweight-verify/SKILL.md`
 - For `/check-regressions`: read `skills/check-regressions/SKILL.md`
 - For `/suggest-specs`: read `skills/suggest-specs/SKILL.md`
+- For `/informal-spec`: read `skills/informal-spec/SKILL.md`
+- For `/lean-spec`: read `skills/lean-spec/SKILL.md`
+- For `/lean-impl`: read `skills/lean-impl/SKILL.md`
+- For `/correspondence-review`: read `skills/correspondence-review/SKILL.md`
+- For `/drt-oracle`: read `skills/drt-oracle/SKILL.md`
 - For `/rationale`: read `skills/rationale/SKILL.md`
 - For `/assurance-probe`: read `skills/assurance-probe/SKILL.md`
 - For `/reason`: read `skills/reason/SKILL.md`
@@ -110,7 +127,9 @@ Read the selected skill's SKILL.md file and follow its methodology exactly:
 - For `/locate-fault`: read `skills/locate-fault/SKILL.md`
 - For `/trace-execution`: read `skills/trace-execution/SKILL.md`
 
-For the formal verification pipeline (`/spec-iterate` → `/generate-verified` → `/extract-code`), execute the skills sequentially, getting user approval between phases.
+For the Dafny verify-and-extract pipeline (`/spec-iterate` → `/generate-verified` → `/extract-code`), execute the skills sequentially, getting user approval between phases.
+
+For the Lean executable-model + DRT pipeline (`/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle`), execute sequentially with the contract enforced by each skill: human sign-off after `/informal-spec`, `lake build` clean after `/lean-spec` and `/lean-impl`, mismatch-free correspondence verdict after `/correspondence-review`, then DRT. Do not skip steps; each consumes the previous step's artefact.
 
 ### Phase 4: Validate Output
 

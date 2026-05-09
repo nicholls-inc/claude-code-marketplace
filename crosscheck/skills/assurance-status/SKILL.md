@@ -19,6 +19,18 @@ Report the current state of the 6-layer assurance hierarchy in the target repo. 
 
 The skill is read-only. It does not modify files, write attestations, or kick off verification jobs — it reports. Remediation is delegated to sibling skills (`/assurance-init`, `/assurance-layer-audit`, `/assurance-roadmap-check`, `/intent-check`, `/protected-surface-amend`).
 
+## Configuration
+
+The kill-criterion thresholds used in Step 2.4 are configurable via environment variables. Read these once at the start of the skill run; if unset, use the documented defaults.
+
+| Env var | Default | Meaning |
+|---|---|---|
+| `CROSSCHECK_FP_TRIPPED_THRESHOLD` | `0.30` | Rolling FP rate at which Layer 5 is taken offline |
+| `CROSSCHECK_FP_AT_RISK_THRESHOLD` | `0.20` | Rolling FP rate at which the dashboard escalates to AT RISK |
+| `CROSSCHECK_FP_WINDOW_DAYS` | `14` | Rolling-window length used to compute the FP rate |
+
+The defaults (30% / 20% / 14 days, with `n ≥ 3` minimum sample size) are **founder intuition, not labelled-pilot data**. Tune them for your tolerance once you have ≥30 classified human verdicts. See `docs/research/assurance-hierarchy.md` for the calibration rationale and `docs/examples/workflows/README.md` for how the same numbers are surfaced in the reference squad workflows.
+
 ## Instructions
 
 You are the assurance-hierarchy status reporter. Your job is to tell the user whether their repo is onboarded onto the hierarchy and, if it is, what has drifted since the last check. You run in two phases and **never skip Phase 1**.
@@ -123,12 +135,12 @@ Read `.assurance/intent-check-fp-tracker.csv` (columns: `date,invariant_touched,
 
 - If the file does not exist, note "FP tracker not initialised" and recommend `/intent-check` to establish the tracker.
 - If it exists, use the canonical FP-rate definition from `/intent-check` (see `references/fp-tracker-schema.md` in that skill — the pseudocode there is authoritative):
-  1. Filter rows to the rolling 2-week window ending today (`date` within 14 days).
+  1. Filter rows to the rolling window ending today (`date` within `CROSSCHECK_FP_WINDOW_DAYS`, default 14).
   2. Exclude rows with empty `human_verdict` from both numerator and denominator — they are awaiting review and bias the rate either way.
   3. Let `window_size = count(rows in window with non-empty human_verdict)`. If `window_size == 0`, report sample size 0 and verdict `INSUFFICIENT DATA` — do not compute a rate or compare against the kill criterion.
   4. Otherwise, compute `FP rate = count(human_verdict == "spurious") / window_size`. `partial` does NOT count as spurious (the pipeline was still doing useful work).
-  5. Compare against the 30% kill criterion.
-  6. Report the rolling rate, `window_size`, and the verdict: `OK` if below 20%, `AT RISK` if 20% ≤ rate < 30%, `TRIPPED` if rate ≥ 30%.
+  5. Compare against the kill criterion: `tripped = CROSSCHECK_FP_TRIPPED_THRESHOLD` (default `0.30`), `at_risk = CROSSCHECK_FP_AT_RISK_THRESHOLD` (default `0.20`). The defaults are founder intuition, not labelled-pilot data — see the Configuration section.
+  6. Report the rolling rate, `window_size`, and the verdict: `OK` if `rate < at_risk`, `AT RISK` if `at_risk ≤ rate < tripped`, `TRIPPED` if `rate ≥ tripped`.
 
 If `TRIPPED`, surface it prominently in Step 2.6.
 
@@ -146,7 +158,7 @@ If no `*.dfy` files exist, skip this section and note "No Dafny kernels in repo 
 
 Re-read the ROADMAP's kill-criteria section (if present) and any per-item kill criteria in the horizon docs. Cross-reference against the evidence gathered above:
 
-- intent-check FP rate ≥ 30% → kill criterion tripped.
+- intent-check FP rate ≥ `CROSSCHECK_FP_TRIPPED_THRESHOLD` (default 30%) → kill criterion tripped.
 - Any item-level kill criterion that the earlier steps flagged as met.
 - Any Status drift that explicitly references a kill-criterion trigger (e.g. "If Immediate item X not landed in 4 weeks, re-plan").
 
@@ -185,10 +197,10 @@ Present the full dashboard in this order:
 
 (or: "None in last 30 days.")
 
-### intent-check FP tracker (rolling 2 weeks)
+### intent-check FP tracker (rolling <window> days, default 14)
 - Sample size: N
 - False positives: M
-- FP rate: X%  (kill criterion: 30%)
+- FP rate: X%  (kill criterion: <tripped_threshold>%, default 30%)
 - Verdict: OK | AT RISK | TRIPPED | INSUFFICIENT DATA
 
 ### verify-kernel
@@ -196,7 +208,7 @@ Present the full dashboard in this order:
 - Status: <pass | fail | unknown | N/A>
 
 ### Kill-criterion triggers
-- [TRIPPED] intent-check FP rate ≥ 30% — see next/07 (if applicable)
+- [TRIPPED] intent-check FP rate ≥ tripped threshold (default 30%) — see next/07 (if applicable)
 - (or: "None tripped.")
 
 ### Recommended next steps
@@ -217,7 +229,7 @@ Keep the dashboard terse. The caller runs this often; verbosity erodes signal.
 - [ ] ROADMAP drift was computed against the `Not started / In progress / Blocked / Done / Deferred` vocabulary only — no other status values accepted
 - [ ] Invariant coverage used the repo's coverage-script output when available, not ad-hoc grep, before falling back to grep
 - [ ] Protected-surface review window is explicit (default 30 days) and stated in the dashboard
-- [ ] FP-tracker rate was computed over the rolling 2-week window and compared against the 30% kill criterion
+- [ ] FP-tracker rate was computed over the configured rolling window (default 14 days) and compared against the configured kill criterion (default 30%); the defaults were sourced from the Configuration section, not hardcoded
 - [ ] verify-kernel section was skipped cleanly if no `*.dfy` files exist
 - [ ] Every tripped kill criterion was surfaced in Step 2.6 with a link to its horizon doc
 - [ ] Recommended next steps point at sibling skills (`/assurance-init`, `/assurance-layer-audit`, `/assurance-roadmap-check`, `/intent-check`, `/invariant-coverage-scaffold`, `/protected-surface-amend`) rather than proposing ad-hoc fixes

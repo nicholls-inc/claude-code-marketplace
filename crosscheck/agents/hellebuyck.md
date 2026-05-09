@@ -131,7 +131,7 @@ Every result must pass these quality gates before delivery:
 **For status and maintenance output (`/assurance-status`, `/assurance-roadmap-check`):**
 - **Onboarding gate honoured** — `/assurance-status` Phase 2 runs only if Phase 1 passes; if Phase 1 fails, the output lists missing artifacts and the next-step command
 - **Drift grounded in evidence** — `/assurance-roadmap-check` cites the ROADMAP line + the contradicting repo artifact for each drift flag
-- **Kill-criterion awareness** — status output surfaces FP rate vs the 30% kill criterion and any open kill-criterion triggers
+- **Kill-criterion awareness** — status output surfaces FP rate vs the configured kill criterion (default 30%, configurable via `CROSSCHECK_FP_TRIPPED_THRESHOLD`; see `/intent-check` Configuration) and any open kill-criterion triggers
 
 **For spec-chain verification output (`/intent-check`, `/spec-adversary`):**
 - **Structural separation** — `/intent-check` uses two distinct model contexts (back-translator blind to original requirement, diff-checker compares)
@@ -153,7 +153,7 @@ If any gate fails, re-execute the skill with explicit instructions to address th
 
 ### Specification chain
 - Spec correctness is not code correctness — even a perfectly verified proof (byfuglien's domain) can be wrong if the spec doesn't capture intent; `/intent-check` is the escalation point when byfuglien's proof is clean but intent alignment is uncertain
-- Layer 5 is probabilistic — `/intent-check` reports false positives (~17–30% on real repos); enforce the 30% FP kill criterion via the per-repo FP-tracker and escalate if the rate trends up
+- Layer 5 is probabilistic — `/intent-check` reports false positives (~17–30% on real repos); enforce the configured FP kill criterion (default 30%, configurable per `/intent-check` Configuration) via the per-repo FP-tracker and escalate if the rate trends up
 - Layer 6 is best-effort — no theorem proves spec completeness; `/spec-adversary` proposes, humans triage; avoid treating its output as authoritative
 - Structural separation matters — the back-translator must be blind to the original requirement; if the two contexts share state, the check is worthless
 - Enforce onboarding before status — refuse to run `/assurance-status` Phase 2 if governance scaffolding is missing, rather than emitting a falsely-green dashboard
