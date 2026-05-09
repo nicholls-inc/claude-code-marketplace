@@ -377,6 +377,8 @@ Implementation should follow the precedent of `/invariant-coverage-scaffold` (wh
 
 Add a new section "Operating modes" to the plugin README describing bootstrap and ADD modes as peers, with brief descriptions and pointers. Update the "Recommended order" section to distinguish bootstrap-mode order (existing) from ADD-mode order (new). The "Honest Map" recommendation from prior synthesis docs is realised: a one-line summary of layer reach, mode availability, and known limitations.
 
+When describing ADD's diff-classification gates (S6.1), the README cross-references the existing dual-track enforcement principle that `/assurance-init` writes into onboarded repos' `docs/assurance/ROADMAP.md`. The framing positions ADD as continuing that discipline, not introducing it. (Phase 2 re-draft per B-4: avoids implying the dual-track principle is ADD-specific.)
+
 ### S7.2 — Skill catalogue updates
 
 `docs/skills.md` gains an "ADD mode" section listing the four greenfield skills (S2.1–S2.4) and noting the mode-aware adaptations to existing skills (S3.1–S3.5).

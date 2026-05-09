@@ -80,10 +80,12 @@ A user who does not invoke any ADD skill or set an ADD-mode flag experiences Cro
 
 ---
 
-**IC10 — Documentation surfaces ADD as a peer to bootstrap mode, not as a replacement.**
+**IC10 — Documentation surfaces ADD as a peer to bootstrap mode, not as a replacement; the dual-track enforcement principle carries forward.**
 The plugin README and `docs/skills.md` and `docs/agents.md` (or successors) describe ADD as an additional operating mode with its own recommended order. The relationship between bootstrap and ADD is honestly described, including the open problems listed in `methodology.md` § Open problems.
 
-*Observable signal:* README contains an "Operating modes" section. The recommended-order sections distinguish bootstrap-mode order from ADD-mode order. The "Honest Map" recommendation from prior synthesis docs is realised, with ADD reach honestly marked.
+ADD's diff-classification gates (IC7) are an instance of the dual-track enforcement principle that `/assurance-init` already writes into every onboarded repo's `docs/assurance/ROADMAP.md` (verbatim block: pre-commit hook + CI job + LLM-free attestation check). The README and skill catalogue should frame ADD as continuing this discipline rather than introducing it.
+
+*Observable signal:* README contains an "Operating modes" section. The recommended-order sections distinguish bootstrap-mode order from ADD-mode order. The "Honest Map" recommendation from prior synthesis docs is realised, with ADD reach honestly marked. The dual-track-enforcement principle is referenced when describing the diff-classification gates, with a pointer back to the existing `/assurance-init` template.
 
 ---
 
