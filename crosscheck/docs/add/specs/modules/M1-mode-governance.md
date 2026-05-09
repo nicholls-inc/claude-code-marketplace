@@ -161,15 +161,15 @@ Returns `Violation { kind: PhaseRegressed, ... }` iff:
 
 ---
 
-## F1.3 — `mode-of(module: ModuleRef) → ModeTag`
+## F1.3 — `mode-of(module: ModuleRef) → ModeTag` (dual-location aware)
 
 ```yaml
 ---
 id: F1.3
-status: Drafted
+status: Drafted (re-drafted per Phase 2 seam validation A-11)
 implementation: manual
-consumes: [M1-mode-governance/B3, IC9, S1.1]
-produces: [I3, T1.5, T1.6]
+consumes: [M1-mode-governance/B3, IC9, S1.1, "skills/assurance-init/SKILL.md § Step 6.5 (VGD prereq summary)"]
+produces: [I3, T1.5, T1.6, T1.5b]
 ---
 ```
 
@@ -177,15 +177,22 @@ produces: [I3, T1.5, T1.6]
 `mode-of(module: ModuleRef) → ModeTag`
 
 ### Preconditions
-- `module.invariant_doc_path` exists.
+- The module's invariant doc exists at one of two locations:
+  - `docs/invariants/<module>.md` (bootstrap-mode convention; pre-existing repo state).
+  - `docs/add/specs/modules/<module>.md` (ADD-mode convention; per S1.1 § dual location).
 
 ### Postconditions
 
-If the file at `module.invariant_doc_path` has a YAML frontmatter block at line 1 containing both `mode:` and `phase:` keys with valid values:
-- Returns `ModeTag { mode = <parsed>, phase = <parsed>, attested_at = <parsed or "draft">, source = ExplicitFrontmatter }`.
+The predicate inspects the module's invariant doc in this priority order:
 
-Otherwise (no frontmatter, frontmatter present but missing `mode:` or `phase:`, or values not in the closed enumerations):
-- Returns `ModeTag { mode = bootstrap, phase = 5, attested_at = "draft", source = ImpliedDefault }`.
+1. **YAML frontmatter present at line 1** with both `mode:` and `phase:` keys and valid values:
+   Returns `ModeTag { mode = <parsed>, phase = <parsed>, attested_at = <parsed or "draft">, source = ExplicitFrontmatter }`.
+2. **Prose Status field** matching the existing bootstrap-mode convention from `/assurance-init` (e.g., `Status: Skeleton`, `Status: Active`):
+   Returns `ModeTag { mode = bootstrap, phase = inferred-from-status-line, attested_at = "draft", source = ProseStatus }`. The phase inference: `Skeleton → 0`, `Active or any other → 5`. This branch preserves IC9 — existing bootstrap-mode invariant docs do not need YAML frontmatter retrofit.
+3. **Neither frontmatter nor prose Status**:
+   Returns `ModeTag { mode = bootstrap, phase = 5, attested_at = "draft", source = ImpliedDefault }`.
+
+The location-resolution rule: try `docs/invariants/<module>.md` first, then `docs/add/specs/modules/<module>.md`. If both exist, this is a dual-location violation; return `ModeTag` with an additional `dual_location_violation: true` flag the integrity check (S1.2) reports.
 
 ### Frame conditions
 - Reads the module's invariant doc only.
@@ -195,12 +202,24 @@ Otherwise (no frontmatter, frontmatter present but missing `mode:` or `phase:`, 
 - I3 (default tag is bootstrap, phase 5 — uniformly applied across all governance-consulting skills).
 
 ### Test linkage
-- T1.5 — module with explicit `mode: add, phase: 1` frontmatter, expect `ModeTag { mode=add, phase=1, source=ExplicitFrontmatter }`.
-- T1.6 — module with no frontmatter, expect `ModeTag { mode=bootstrap, phase=5, source=ImpliedDefault }`.
+- T1.5 — module with explicit YAML `mode: add, phase: 1` frontmatter, expect `ModeTag { mode=add, phase=1, source=ExplicitFrontmatter }`.
+- T1.5b — module with `Status: Skeleton` prose line (existing bootstrap convention), expect `ModeTag { mode=bootstrap, phase=0, source=ProseStatus }`.
+- T1.6 — module with no frontmatter and no Status line, expect `ModeTag { mode=bootstrap, phase=5, source=ImpliedDefault }`.
 
 ### Implementation discipline note
 
-This predicate is the single source of truth for mode resolution. Other skills (`/assurance-layer-audit`, `/assurance-init`, `/intent-check`, `/spec-adversary`, `/acceptance-oracle-draft`, the auditor) MUST call `mode-of` rather than re-implementing the read. A duplicated read would risk diverging defaults under future schema additions.
+This predicate is the single source of truth for mode resolution. Per the seam-validation A-9 finding, the *existing* set of governance-consulting skills that MUST call `mode-of` rather than re-implementing the read is broader than initially enumerated:
+
+- Existing Hellebuyck-owned: `/assurance-layer-audit`, `/assurance-init`, `/assurance-status`, `/assurance-roadmap-check`, `/intent-check`, `/spec-adversary`, `/acceptance-oracle-draft`, `/protected-surface-amend`, `/invariant-coverage-scaffold`.
+- New ADD-mode skills (Hellebuyck): `/intent-elicit`, `/spec-derive`, `/intent-check-prose`, `/spec-adversary-prose`.
+- Auditor agent (post-S5).
+- Other skills consulting governance (e.g., the lean pipeline's `/correspondence-review` when it consults invariant docs).
+
+Operationally, the discipline is: any skill that reads a module's `mode:` or `phase:` MUST go through `F1.3`. A duplicated read is an integrity violation analogous to other "single source of truth" patterns in the repo. The architectural-spec list (S3.1–S3.8 plus S2.* plus S5.1) names the specific known consumers; future skills inherit the rule.
+
+### VGD-prerequisite handoff (per Phase 2 seam validation A-12)
+
+The module's invariant doc may also carry a VGD-prerequisite summary block (per `/assurance-init` § Step 6.5: a 4-row table `#1 Deterministic algebraic semantics`, `#2 Provable properties`, `#3 Tractable input generation`, `#4 Dual-development resources` with verdicts). `F1.3` does not parse this block — that's a separate F operation deferred to v1.x — but its presence MUST NOT break parsing. The parser tolerates content following the YAML frontmatter / Status line.
 
 ---
 
@@ -276,7 +295,23 @@ produces: [I5, T1.9, T1.10]
 ### Postconditions
 
 Returns `true` iff BOTH of:
-1. None of the source manifests in the layer-audit's standard manifest list (`package.json`, `requirements.txt`, `Cargo.toml`, `go.mod`, `pom.xml`, `*.csproj`, `Gemfile`, `composer.json`, `pyproject.toml`, `setup.py`) exist anywhere in the working tree.
+
+1. None of the source manifests in the layer-audit's standard manifest list exist anywhere in the working tree. The list is inherited verbatim from `skills/assurance-layer-audit/SKILL.md` § Step 2 (per Phase 2 seam validation A-8); `is-empty-repo` reads `/assurance-layer-audit`'s configuration at runtime rather than carrying its own copy:
+
+   | Manifest | Language |
+   |---|---|
+   | `go.mod`, `go.sum` | Go |
+   | `pyproject.toml`, `setup.py`, `setup.cfg`, `requirements*.txt`, `Pipfile`, `poetry.lock` | Python |
+   | `package.json`, `tsconfig.json`, `pnpm-lock.yaml`, `yarn.lock` | TypeScript / JavaScript |
+   | `Cargo.toml`, `Cargo.lock` | Rust |
+   | `Gemfile`, `*.gemspec` | Ruby |
+   | `pom.xml`, `build.gradle`, `build.gradle.kts` | Java / Kotlin |
+   | `*.csproj`, `*.sln`, `*.fsproj` | C# / .NET |
+   | `mix.exs` | Elixir |
+   | `*.cabal`, `stack.yaml` | Haskell |
+
+   Future additions to the manifest list (e.g., a new ecosystem) update both `/assurance-layer-audit` and `is-empty-repo` simultaneously by virtue of the shared source.
+
 2. `<workspace>/docs/add/intent.md` does not exist.
 
 Otherwise returns `false`.
@@ -307,8 +342,8 @@ The set `{ commit C | C is in module's git history ∧ C set the mode tag to a d
 ### I2 — Phase monotonicity (with re-drafting and supersession exceptions)
 The sequence of `phase:` values across the module's git history is strictly increasing by 1, except that decrements are permitted when accompanied by an explicit `Re-drafting-cause:` trailer naming the upstream commit, and any sequence terminates at a `Status: Retracted-with-Reason` transition.
 
-### I3 — Default uniformity
-For every governance-consulting skill `s` and every module `m` lacking explicit `mode:`/`phase:` frontmatter, the value computed by `s` for `(mode, phase)` of `m` equals `(bootstrap, 5)`. This is enforced by the discipline that all such skills call `F1.3 (mode-of)` rather than computing locally.
+### I3 — Default uniformity (extended scope per A-9)
+For every governance-consulting skill `s` and every module `m` lacking explicit `mode:`/`phase:` frontmatter, the value computed by `s` for `(mode, phase)` of `m` equals `(bootstrap, 5)`. The set of governance-consulting skills includes (post-seam-validation): `/assurance-layer-audit`, `/assurance-init`, `/assurance-status`, `/assurance-roadmap-check`, `/intent-check`, `/spec-adversary`, `/acceptance-oracle-draft`, `/protected-surface-amend`, `/invariant-coverage-scaffold`, the four greenfield ADD skills, the lean pipeline (where it consults invariants), and the Auditor agent. The discipline is enforced structurally: every such skill MUST call `F1.3 (mode-of)` rather than computing locally. A duplicated read is an integrity violation.
 
 ### I4 — Rule-set determinism
 For all valid `(mode, phase)`, the rule set returned by `F1.4 (integrity-rules)` is fixed. No skill or caller can alter the rule set without modifying `F1.4`'s table, which requires a propagated-discovery or intent-refinement classification per ADR-005.
@@ -328,8 +363,9 @@ Each stub references exactly one operation above. The stubs are *failing* until 
 | T1.2 | F1.1 | mode flip with trailer → Ok |
 | T1.3 | F1.2 | phase 0→1→2 → Ok |
 | T1.4 | F1.2 | phase 2→1 without trailer → Violation::PhaseRegressed |
-| T1.5 | F1.3 | explicit frontmatter → ExplicitFrontmatter source |
-| T1.6 | F1.3 | no frontmatter → ImpliedDefault, (bootstrap, 5) |
+| T1.5 | F1.3 | explicit YAML frontmatter → ExplicitFrontmatter source |
+| T1.5b | F1.3 | prose `Status: Skeleton` line (existing bootstrap convention) → ProseStatus, (bootstrap, 0) |
+| T1.6 | F1.3 | no frontmatter and no Status line → ImpliedDefault, (bootstrap, 5) |
 | T1.7 | F1.4 | (add, 1) → phase-1 ADD rule set |
 | T1.8 | F1.4 | (bootstrap, 5) → bootstrap-phase-5 rule set |
 | T1.9 | F1.5 | workspace with only `.gitignore`/`LICENSE`/`README.md` → true |
@@ -342,11 +378,13 @@ Each stub references exactly one operation above. The stubs are *failing* until 
 - The implementation language (per S4.1's deferred choice).
 - The exact format of git-trailer parsing (any robust trailer parser will do; no commitment here).
 - The error rendering for `IntegrityVerdict::Violation` beyond the structured fields. The auditor agent's report and the pre-commit hook will format these for humans separately.
-- The configuration schema for the layer-audit's "standard manifest list." The list above is illustrative; the configuration of the actual list lives in `/assurance-layer-audit`'s SKILL.md (S3.1 delta), not here.
+- The internal structure of `/assurance-layer-audit`'s manifest-list configuration; F1.5 reads from it at runtime per A-8.
+- The format of the VGD-prerequisite summary block; `F1.3` tolerates its presence but does not parse it (deferred to v1.x).
 
 ## Open questions surfaced by this draft
 
 1. **Git-trailer naming.** I chose `Supersedes-mode-of:` and `Re-drafting-cause:` as trailer names. They follow git-trailer conventions and read clearly but were invented here rather than ratified upstream. If you'd prefer different names (or want a single consolidated trailer), flag.
 2. **Phase-skip semantics.** I-2 forbids skipping phases on advance (a `phase: 0 → 2` jump is rejected). This is stricter than the methodology's monotonic-forward rule, which permits skips. I went stricter because the auditor's "Settled" verdict relies on phase-by-phase attestation history; permitting skips would let modules claim phase 4 without a phase-2 attestation trail. Worth your judgment.
 3. **`integrity-rules`'s "continuous-assurance instrumentation hook" rule for phase 5.** I assumed every phase-5 module needs an instrumentation hook. The architectural spec doesn't explicitly require this; I extrapolated from the methodology's "Phase 5 — Continuous assurance" section. If you'd rather wait until S4.1 specifies the hook contract before formalising this rule, easy to weaken to a soft check.
-4. **`is-empty-repo`'s standard manifest list.** Hardcoded a list above. The actual list lives in `/assurance-layer-audit`'s configuration (per S3.1 delta). If `is-empty-repo` consults that configuration at runtime rather than carrying its own copy, the predicate has a runtime dependency on the layer-audit module — couples M1 to S3.1. The alternative (M1 carries its own list) duplicates configuration. Worth your call.
+
+(Open question Q4 from v1.0 — manifest-list ownership — was resolved by the seam-validation pass per Bucket C: F1.5 consumes `/assurance-layer-audit`'s configuration at runtime; coupling acknowledged and acceptable.)
