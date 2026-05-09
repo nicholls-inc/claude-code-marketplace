@@ -242,66 +242,66 @@ The amendments are split into two groups: those the agent can execute mechanical
 
 Each of these is a small, mechanical edit. The agent will execute on the next exchange after the box is ticked, classifying each as `intent-refinement` per ADR-005 (or `propagated-discovery` if that fits better — agent's call at commit time).
 
-- [ ] **A-2** — Add `phase: 0 | 1 | 2 | 3 | 4 | 5` to the S1.1 frontmatter format. ~2 lines in `specs/architectural.md`.
-- [ ] **A-8** — Add diff-shape analysis to IC8's signal enumeration so it matches S4.1. ~2 lines in `intent.md`.
-- [ ] **A-10** — Add `S1.1` to the IC9 row of the IC ↦ S coverage table. 1 line in `specs/architectural.md`.
-- [ ] **A-12** — Clarify in S5.1 that `/add-instrumentation`, if implemented as a skill, is plugin-level and owned by Hellebuyck; the Auditor invokes but does not own it. ~3 lines in `specs/architectural.md`.
-- [ ] **A-13** — Commit on JSON-lines (`.assurance/diff-classification-log.jsonl`) for the diff-classification log; remove the format alternation in S6.1 and ADR-005. ~2 lines total.
+- [x] **A-2** — Add `phase: 0 | 1 | 2 | 3 | 4 | 5` to the S1.1 frontmatter format. ~2 lines in `specs/architectural.md`.
+- [x] **A-8** — Add diff-shape analysis to IC8's signal enumeration so it matches S4.1. ~2 lines in `intent.md`.
+- [x] **A-10** — Add `S1.1` to the IC9 row of the IC ↦ S coverage table. 1 line in `specs/architectural.md`.
+- [x] **A-12** — Clarify in S5.1 that `/add-instrumentation`, if implemented as a skill, is plugin-level and owned by Hellebuyck; the Auditor invokes but does not own it. ~3 lines in `specs/architectural.md`.
+- [x] **A-13** — Commit on JSON-lines (`.assurance/diff-classification-log.jsonl`) for the diff-classification log; remove the format alternation in S6.1 and ADR-005. ~2 lines total.
 
-**Batch shortcut:** [ ] Approve all five A-* above as a single batch (saves you ticking each one).
+**Batch shortcut:** [x] Approve all five A-* above as a single batch (saves you ticking each one).
 
 ### 9.2 Judgment-required amendments (please pick an approach)
 
 Each amendment touches substantive policy or human-authored prose. Tick the option that matches your decision; the agent drafts the change accordingly. If none of the listed options fits, tick "Other" and write a brief note.
 
-- [ ] **A-1 — Disambiguate transitional mode.**
-  - [ ] (a) Amend IC5 wording *and* the methodology's "Operating modes" transitional paragraph as recommended in § 4 / amendment list (joint edit).
+- [x] **A-1 — Disambiguate transitional mode.**
+  - [x] (a) Amend IC5 wording *and* the methodology's "Operating modes" transitional paragraph as recommended in § 4 / amendment list (joint edit).
   - [ ] (b) Amend the methodology paragraph only; leave IC5 as-is.
   - [ ] (c) Amend IC5 only; leave methodology as-is.
   - [ ] (d) Other: _________________________________
 
-- [ ] **A-3 — Declare the `/spec-iterate` seam.**
-  - [ ] (a) Add a new section S2.5 "Seam to `/spec-iterate`" to the architectural spec.
+- [x] **A-3 — Declare the `/spec-iterate` seam.**
+  - [x] (a) Add a new section S2.5 "Seam to `/spec-iterate`" to the architectural spec.
   - [ ] (b) Extend S1.2's integrity rules instead.
   - [ ] (c) Defer to behavioral spec; the agent declares the seam there.
   - [ ] (d) Other: _________________________________
 
-- [ ] **A-4 — Where does pre-commit framework / CI system detection live?**
-  - [ ] (a) Extend S3.2's `/assurance-init` delta with detection responsibility.
+- [x] **A-4 — Where does pre-commit framework / CI system detection live?**
+  - [x] (a) Extend S3.2's `/assurance-init` delta with detection responsibility.
   - [ ] (b) Inline detection in the S6.1 pre-commit hook + CI job stubs themselves (skill-free).
   - [ ] (c) New skill `/governance-detect`, separate from `/assurance-init`.
   - [ ] (d) Other: _________________________________
 
-- [ ] **A-5 — FP semantics in `/intent-check-prose`.**
-  - [ ] (a) Commit on: "FP = a flagged divergence the human reviewer attests is spurious." Reuse the 30% rolling threshold.
+- [x] **A-5 — FP semantics in `/intent-check-prose`.**
+  - [x] (a) Commit on: "FP = a flagged divergence the human reviewer attests is spurious." Reuse the 30% rolling threshold.
   - [ ] (b) Replace the 30% kill criterion with a different shape: _________________________________
   - [ ] (c) Drop the kill criterion for v1 of the prose variant; revisit after field data.
   - [ ] (d) Other: _________________________________
 
-- [ ] **A-6 — Diff-classification trailer survival under rebase / squash-merge.**
-  - [ ] (a) Squash commits to protected branches must carry a summary trailer; CI runs on the final commit only.
+- [x] **A-6 — Diff-classification trailer survival under rebase / squash-merge.**
+  - [x] (a) Squash commits to protected branches must carry a summary trailer; CI runs on the final commit only.
   - [ ] (b) Disallow squash-merge to protected branches; require fast-forward or merge commit.
   - [ ] (c) CI walks the pre-squash commit set and validates each.
   - [ ] (d) Other: _________________________________
 
-- [ ] **A-7 — Auditor tool-restriction enforcement mechanism.**
+- [x] **A-7 — Auditor tool-restriction enforcement mechanism.**
   - [ ] (a) Claude Code permission allowlist that denies write tools on protected paths.
-  - [ ] (b) Plugin-level tool restriction declared in the Auditor's `agents/<auditor>.md` frontmatter.
+  - [x] (b) Plugin-level tool restriction declared in the Auditor's `agents/<auditor>.md` frontmatter.
   - [ ] (c) Filesystem read-only mount on the protected paths during Auditor runs.
   - [ ] (d) Other: _________________________________
 
-- [ ] **A-9 — Backfill `consumes:` for TM1, TM3, TM5, TM6.**
+- [x] **A-9 — Backfill `consumes:` for TM1, TM3, TM5, TM6.**
   - [ ] (a) Map each unconsumed TM to the existing S section or ADR that mitigates it; add `consumes: TMx` to that section.
-  - [ ] (b) Defer until the linkage-graph integrity check is implemented and can flag missing TM coverage automatically.
+  - [x] (b) Defer until the linkage-graph integrity check is implemented and can flag missing TM coverage automatically.
   - [ ] (c) Other: _________________________________
 
-- [ ] **A-11a — Classification of status-only commits (Drafted → Attested flips).**
+- [x] **A-11a — Classification of status-only commits (Drafted → Attested flips).**
   - [ ] (a) Status flips use `propagated-discovery` with a "status transition; no content change" justification.
-  - [ ] (b) Add a fifth class `status-transition` to ADR-005's taxonomy.
+  - [x] (b) Add a fifth class `status-transition` to ADR-005's taxonomy.
   - [ ] (c) Other: _________________________________
 
-- [ ] **A-11b — Protected-path status of `docs/add/audit/` (Auditor reports).**
-  - [ ] (a) Add `docs/add/audit/` to ADR-005's protected paths list.
+- [x] **A-11b — Protected-path status of `docs/add/audit/` (Auditor reports).**
+  - [x] (a) Add `docs/add/audit/` to ADR-005's protected paths list. (only auditor agent must be able to write reports)
   - [ ] (b) Explicitly exempt; the path is agent-write-append-only with its own write-rule.
   - [ ] (c) Other: _________________________________
 
@@ -309,12 +309,12 @@ Each amendment touches substantive policy or human-authored prose. Tick the opti
 
 These are negative-space items the agent thought worth surfacing. The default is "leave excluded" — you only need to tick if you want to reconsider.
 
-- [ ] **D-1 — Behavioral-spec prose authoring quality** (already nominally in scope but not load-bearing).
+- [x] **D-1 — Behavioral-spec prose authoring quality** (already nominally in scope but not load-bearing).
   - [ ] (a) Confirm in scope as currently structured; no change.
-  - [ ] (b) Add an explicit IC requiring behavioral-spec prose to satisfy a quality bar (e.g., every `B` traces to at least one `IC` and at least one `F`).
+  - [x] (b) Add an explicit IC requiring behavioral-spec prose to satisfy a quality bar (e.g., every `B` traces to at least one `IC` and at least one `F`).
   - [ ] (c) Other: _________________________________
 - [ ] **D-2 — Layer-attribution scaffold** (manual CSV, no automation; v1 hedge against the chicken-and-egg).
-  - [ ] (a) Hold N1 as-is; defer until field data exists.
+  - [x] (a) Hold N1 as-is; defer until field data exists.
   - [ ] (b) Reconsider — ship a manual scaffold so the first ADD-mode user begins generating field data.
   - [ ] (c) Other: _________________________________
 
