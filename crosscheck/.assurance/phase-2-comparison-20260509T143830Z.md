@@ -313,7 +313,7 @@ These are negative-space items the agent thought worth surfacing. The default is
   - [ ] (a) Confirm in scope as currently structured; no change.
   - [x] (b) Add an explicit IC requiring behavioral-spec prose to satisfy a quality bar (e.g., every `B` traces to at least one `IC` and at least one `F`).
   - [ ] (c) Other: _________________________________
-- [ ] **D-2 — Layer-attribution scaffold** (manual CSV, no automation; v1 hedge against the chicken-and-egg).
+- [x] **D-2 — Layer-attribution scaffold** (manual CSV, no automation; v1 hedge against the chicken-and-egg).
   - [x] (a) Hold N1 as-is; defer until field data exists.
   - [ ] (b) Reconsider — ship a manual scaffold so the first ADD-mode user begins generating field data.
   - [ ] (c) Other: _________________________________
