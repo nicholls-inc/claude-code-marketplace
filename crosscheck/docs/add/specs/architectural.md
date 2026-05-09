@@ -239,6 +239,41 @@ Existing behavior (load-bearing-module elicitation, governance scaffolding) is u
 
 **Change:** Detect empty-source-tree state. On empty source tree but with an Attested intent doc, derive surfaces from the *intent doc's observable-signal language* rather than from file-tree scanning. Existing surface-detection behavior unchanged when source files exist.
 
+### S3.6 — `/assurance-status` (added Phase 2 re-draft, B-1)
+
+**Change:** Phase 2 of the status dashboard becomes mode-aware. The existing skill reads `docs/invariants/<module>.md` and surfaces ROADMAP drift, FP rate, kill-criterion triggers. Extension:
+
+1. Read mode tags via `M1-mode-governance/F1.3` (`mode-of`).
+2. For each module, classify as bootstrap-mode or ADD-mode.
+3. Bootstrap-mode rows (existing behavior): ROADMAP item statuses, coverage gaps, FP rate from `/intent-check`.
+4. ADD-mode rows (new): IC trace status (which `IC` is consumed by which `S`), Drafted/Attested/Ratified counts per artifact tier, cascade-pending count from M3's deterministic instrumentation, FP rate from `/intent-check-prose` (computed from the *same env vars* as `/intent-check`).
+5. The dashboard aggregates both kinds of rows in a single view; users see all modules with appropriate signals per mode.
+
+The existing `/assurance-status` Phase-1 onboarding gate is unchanged for bootstrap-mode repos. For ADD-mode repos the gate checks for `docs/add/intent.md` with `Status: Attested` instead of `docs/assurance/ROADMAP.md`. Repos in transitional mode (mix) require both gates pass for their respective module sets.
+
+### S3.7 — `/assurance-roadmap-check` (added Phase 2 re-draft, B-1)
+
+**Change:** The drift detector currently scans `docs/assurance/**/*.md` Status fields against actual repo/PR state. Extension: additionally scan `docs/add/**/*.md` for Status-field drift on ADD-mode artifacts.
+
+Drift signals for ADD-mode artifacts:
+- An artifact marked `Status: Attested` whose linkage graph shows it consumed an upstream artifact modified after its `last-attested` field (cascade-pending; should be re-drafted).
+- An artifact marked `Status: Ratified` that has been edited in place since the prior consolidation pass (Ratified-but-amended is a violation).
+- An artifact marked `Status: Superseded-by-N` where the superseding artifact does not exist (broken supersession reference).
+
+The skill emits a unified report covering both ROADMAP-style drift (existing) and ADD-style drift (new), distinguished by source path.
+
+### S3.8 — `/protected-surface-amend` (added Phase 2 re-draft, B-1)
+
+**Change:** The amendment-block generator currently emits governance notes for the two-class partition (Class A: harness/workflow definitions; Class B: module invariants & tests, per `.claude/rules/protected-surfaces.md`).
+
+Extension: ADR-005 adds protected paths for `docs/add/`, `docs/add/audit/`, `agents/`, `skills/`, and `.claude/rules/`. The skill detects which partition a touched file belongs to:
+
+- **Class A (existing)** — harness/workflow + agents/ + .claude/rules/ + `docs/add/` (intent, ADRs, methodology, glossary, architectural spec, acceptance, behavioral, per-module specs). Amendment requires governance note + linkage to a ROADMAP item *or* an ADR.
+- **Class B (existing)** — module invariants + property tests. Amendment requires governance note + linkage to a ROADMAP item.
+- **Class C (new)** — `docs/add/audit/`. Amendment requires Auditor authorship (via `.assurance/audit-authors.allowlist`) OR a human reviewer; governance note explains the override if a human is amending.
+
+The skill emits the appropriate governance-note shape per detected class. The existing `.claude/rules/protected-surfaces.md` template is extended (additively) to include the ADR-005 paths and the new Class C.
+
 ---
 
 ## S4 — Deterministic instrumentation
