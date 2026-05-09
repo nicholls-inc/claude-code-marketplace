@@ -657,8 +657,8 @@ The pre-commit hook does NOT invoke an LLM. It re-reads the protected files, rec
 
 ## Module invariants — `I1`..`I8`
 
-### I1 — Human-attestation-required for IC promotion
-For every commit that flips `Status` of `docs/add/intent.md` from `Drafted` to `Attested`, the commit author MUST be a human (by `.assurance/audit-authors.allowlist`); the agent never authors such a commit. F2.1's guard prevents the agent from synthesising the flip.
+### I1 — PR-approved Status promotion for Attested-tier artifacts (per ADR-006)
+For every commit that flips `Status` of an Attested-tier artifact (currently `docs/add/intent.md`, `docs/add/specs/architectural.md`, any `docs/add/decisions/ADR-*.md`, `docs/add/methodology.md`, `docs/add/glossary.md`, `docs/add/acceptance.md`) into `Attested`, the PR carrying the commit MUST receive at least one approving review by a GitHub identity in `.assurance/audit-authors.allowlist`, posted *after* the latest commit in the PR, by an identity *other than* the PR author. The agent MAY author the commit; the PR review is the human signal. F2.1's guard prevents the agent from synthesising an in-skill `Attested` flip *without* the user's explicit in-session direction; ADR-006's PR gate (enforced by M5/F5.6) is the additional structural check at merge time. This invariant supersedes the v1.0 wording (which forbade agent-authored attestation commits outright); see ADR-006 § Context for the rationale.
 
 ### I2 — Architectural-spec IC coverage
 For every Drafted-or-later architectural spec produced by `/spec-derive`, every `IC` from the consumed intent doc is in the `consumes:` of at least one `S` section. F2.2 is the integrity predicate.

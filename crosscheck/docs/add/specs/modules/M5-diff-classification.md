@@ -310,7 +310,68 @@ If the diff violates any of the above, return `Rejected` with an actionable hint
 
 ---
 
-## Module invariants — `I1`..`I5`
+## F5.6 — `pr-merge-attestation-gate(pr_ref: PRRef, allowlist_path: RelativePath) → EnforceResult`
+
+```yaml
+---
+id: F5.6
+status: Drafted
+implementation: manual
+consumes: [M5-diff-classification/B1, ADR-006, IC1, IC7]
+produces: [I6, T5.11, T5.12]
+---
+```
+
+### Signature
+`pr-merge-attestation-gate(pr_ref: PRRef, allowlist_path: RelativePath) → EnforceResult`
+
+`PRRef := { number: Integer, head_sha: GitSha, base_sha: GitSha, author: AuthorIdent, reviews: List<Review> }`
+
+`Review := { reviewer: AuthorIdent, state: Approved | ChangesRequested | Commented | Dismissed, submitted_at: Timestamp, commit_sha: GitSha }`
+
+### Preconditions
+- The gate runs in CI on every PR event (`opened`, `synchronize`, `reopened`, `ready_for_review`, and on review events).
+- `allowlist_path` defaults to `.assurance/audit-authors.allowlist`.
+- `pr_ref.reviews` is fetched via the host-platform API (e.g., GitHub `/repos/.../pulls/.../reviews`).
+
+### Postconditions
+
+Walk `pr_ref`'s commit range (`base_sha..head_sha`). For each commit `c`:
+
+1. Parse `c.message` via F5.1.
+2. If the trailer is `Some(Trailer { classification: status-transition, ... })`, identify the modified paths in `c`. If any modified path is an **Attested-tier artifact** (per ADR-006: `docs/add/intent.md`, `docs/add/specs/architectural.md`, `docs/add/decisions/ADR-*.md`, `docs/add/methodology.md`, `docs/add/glossary.md`, `docs/add/acceptance.md`), record `c` as a **gated commit**.
+
+If the gated-commit set is non-empty, the merge is gated. Verify ALL of:
+
+- **At least one approving review** (`review.state == Approved`).
+- **By an allowlisted reviewer** (`review.reviewer ∈ allowlist`).
+- **Posted after the latest commit in the PR** (`review.submitted_at >= max(commit.committed_at)` for all commits in the range; equivalent to `review.commit_sha == pr_ref.head_sha`).
+- **By an identity other than the PR author** (`review.reviewer != pr_ref.author`).
+
+If all conditions hold for at least one review, return `Allowed`. Otherwise return `Rejected` with a structured reason naming which condition failed and which gated commits triggered the check.
+
+If the gated-commit set is empty, return `Allowed` unconditionally. Drafted-tier status flips and content commits to Attested-tier artifacts (which would be `propagated-discovery` or `intent-refinement`, not `status-transition`) do NOT trigger the gate.
+
+### Frame conditions
+- Reads `pr_ref` (via host-platform API) and `allowlist_path`.
+- No mutation of the PR or repo.
+
+### Module invariants preserved
+- I6 (Attested-tier promotions are merge-gated by human PR approval).
+
+### Test linkage
+- T5.11 — PR with one `status-transition` commit touching `intent.md`, no approving review → Rejected; reason cites missing approval.
+- T5.12 — PR with one `status-transition` commit touching `intent.md`, an approving review by the PR author themselves → Rejected; reason cites self-approval.
+
+### Implementation discipline note
+
+This check is the in-repo redundancy for the host-platform branch-protection rule (per ADR-006 § Implementation surfaces). Branch protection is the primary gate; F5.6 is the secondary gate that catches branch-protection misconfiguration. Both should be present; either alone is insufficient (branch protection is invisible from the in-repo discipline; F5.6 alone can be bypassed by admin-merge).
+
+The gate operates exclusively on `status-transition` classification, not on path-protection alone. This is intentional: content commits to Attested artifacts trigger re-drafting (transitioning the artifact to Drafted state); the eventual re-attestation IS the `status-transition` commit and IS what gets gated. Content commits in isolation flow at the normal pace under ADR-005's existing pre-commit + CI checks.
+
+---
+
+## Module invariants — `I1`..`I6`
 
 ### I1 — Trailer ubiquity
 For every commit `c` whose `modified_paths` includes any protected path, `c.message` includes a valid `Spec-Diff-Classification` trailer (parsed by F5.1). The pre-commit hook (F5.3) and CI gate (F5.4) are the layered enforcement.
@@ -327,9 +388,12 @@ The set of legal `Spec-Diff-Classification` values is exactly `{propagated-disco
 ### I5 — Attestation verification on protected surfaces (per A-10)
 For every commit `c` whose `modified_paths` touch a covered protected surface (`docs/invariants/<module>.md` for `/intent-check`; `docs/add/intent.md` or `docs/add/specs/architectural.md` for `/intent-check-prose`), the corresponding `.assurance/*-attestation.json` exists with `verdict == "pass"` and `content_hash` matching the recomputed SHA-256 over sorted protected files. F5.3 enforces at pre-commit time without invoking an LLM, mirroring `/intent-check`'s § Step 7 companion-hook pattern.
 
+### I6 — PR-merge gate for Attested-tier promotions (per ADR-006)
+For every PR whose commit range includes at least one commit with `Spec-Diff-Classification: status-transition` touching an Attested-tier artifact (`docs/add/intent.md`, `docs/add/specs/architectural.md`, `docs/add/decisions/ADR-*.md`, `docs/add/methodology.md`, `docs/add/glossary.md`, `docs/add/acceptance.md`), the PR carries at least one approving review by an `audit-authors.allowlist` member, posted after the latest commit, by an identity other than the PR author. F5.6 enforces in CI; branch protection enforces at the host-platform layer.
+
 ---
 
-## Test linkage stubs — `T5.1`..`T5.11`
+## Test linkage stubs — `T5.1`..`T5.12`
 
 | ID | Operation | Stub description |
 |---|---|---|
@@ -344,6 +408,8 @@ For every commit `c` whose `modified_paths` touch a covered protected surface (`
 | T5.8 | F5.4 | 3-commit PR one missing trailer → Rejected, no log writes |
 | T5.9 | F5.4 | squash-merge with drift in range, squashed != drift → Rejected |
 | T5.10 | F5.5 | diff deleting log line → Rejected |
+| T5.11 | F5.6 | PR with status-transition commit on intent.md, no approving review → Rejected; reason cites missing approval |
+| T5.12 | F5.6 | PR with status-transition commit on intent.md, approving review by PR author themselves → Rejected; reason cites self-approval |
 
 ---
 
