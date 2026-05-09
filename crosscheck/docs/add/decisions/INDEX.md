@@ -1,6 +1,6 @@
 # ADR Index
 
-**Status:** Attested v1.0 (Phase 2 closure 2026-05-09 by nicholls-inc)
+**Status:** Attested v1.1 (ADR-006 added 2026-05-09 by nicholls-inc; user policy declaration after Phase 2 re-attestation)
 **Purpose:** Registry of architecture decisions for ADD-in-Crosscheck. Decisions are numbered monotonically and never deleted; supersession creates a new ADR with a back-reference.
 
 ADRs follow the Nygard format: Title / Status / Context / Decision / Alternatives Considered / Consequences. ADRs at this layer encode decisions that constrain the architectural and behavioral specs; lower-level decisions (e.g., "use this prompt template") belong in skill SKILL.md files or in subsequent ADRs.
@@ -14,6 +14,7 @@ ADRs follow the Nygard format: Title / Status / Context / Decision / Alternative
 | [ADR-003](./ADR-003-auditor-agent.md) | Auditor as a third agent role | Attested | IC6, TM4 | S5.1, S5.2 |
 | [ADR-004](./ADR-004-greenfield-skill-set.md) | Minimal greenfield skill set for v1 | Attested | IC1, IC2, IC3, IC4 | S2.1, S2.2, S2.3, S2.4 |
 | [ADR-005](./ADR-005-diff-classification.md) | Mandatory diff classification on spec-changing commits | Attested | IC7, TM2 | S6.1 |
+| [ADR-006](./ADR-006-pr-level-attestation-approval.md) | PR-level human approval gates attestation merges | Attested | IC1, ADR-005 | M2/I1 (amended), M5/F5.6 (new) |
 
 ## Adding a new ADR
 
