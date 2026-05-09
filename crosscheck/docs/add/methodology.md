@@ -1,8 +1,8 @@
 # Assurance Driven Development (ADD)
 
-**Status:** Ratified v1.0
+**Status:** Drafted v1.0
 **Supersedes:** none
-**Last attested:** at commit creating this file
+**Last attested:** N/A (Drafted; awaiting human attestation per `README.md` lifecycle)
 
 ## Definition
 

@@ -1,6 +1,6 @@
 # ADD Glossary and ID Conventions
 
-**Status:** Ratified v1.0
+**Status:** Drafted v1.0
 **Purpose:** A ubiquitous language (Evans, DDD) for ADD. Terms here are used consistently across all artifacts in `docs/add/`, in skill SKILL.md files, in commit messages, and in agent-authored specs. If a term shifts meaning, this file is amended first; the cascade then updates dependent artifacts.
 
 ## ID conventions
