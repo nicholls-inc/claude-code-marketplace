@@ -36,9 +36,28 @@ Use the byfuglien agent to verify your bug fix
 Use the hellebuyck agent to scope this repo's assurance reach
 ```
 
+## What Crosscheck is: layered assurance
+
+Crosscheck is a **layered assurance framework** — formal verification engines, probabilistic complements, and stochastic complements composed and routed per module. The layers (1–6) are summarised in [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md); they are *one structural element* of the framework, not the framework itself.
+
+- **Formal verification engines.** Dafny is operationalised today (verify-and-extract for pure functional cores, ~22–27% reach band). Lean is joining as a peer Layer-1 engine in a different role: executable model + DRT oracle for hand- or AI-written production code, validated via differential random testing. TLA+/P/Alloy enrich Layer 4 (formal upgrade path for invariant docs) — pending an ADR for the layer redefinition.
+- **Probabilistic complements.** Property-based testing and differential random testing surface bugs the proof effort doesn't reach. Cedar's bug taxonomy is the empirical case (~15/21 of DRT-found bugs in their study were general implementation bugs).
+- **Stochastic complements.** `/intent-check` round-trip informalization, `/spec-adversary` heuristic probing, and the four semi-formal reasoning skills (`/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`) cover surfaces formal methods don't reach.
+
+**Verification-Guided Development (VGD)** is one methodology under this framework — Amazon's process for building Cedar — applicable *where its four prerequisites are met at the module level*: (1) deterministic algebraic semantics, (2) provable properties, (3) tractable input generation for DRT, (4) resources for dual development. We hypothesise that AI-augmented development substantially reduces the marginal cost of (4); no empirical baseline exists for AI-augmented dual development, and Cedar 2024 used human-written Lean and Rust. This is a working assumption pending operational data, not a claim. Prerequisites (1)–(3) still bind. `/assurance-layer-audit` and `/assurance-init` will operationalise per-module prerequisite assessment as the routing primitive (pending Phase 3d).
+
+## What Crosscheck is not good for
+
+Modeled on Newcombe et al.'s *"What Formal Specification Is Not Good For"* — explicit scope-limit, methodological. (See *Known limitations* below for the technical Dafny constraints; that's a different question.)
+
+- **Modules without deterministic semantics** (heavy framework callbacks, side effects, untyped framework conventions) — Layer 1 doesn't apply; route to Layers 2–5.
+- **Modules without provable properties** — spec-design problem; `/spec-iterate` + `/intent-check` apply, but the bottleneck is human, not tooling.
+- **Modules where input generation is intractable** — DRT may not apply; lean on PBT + invariant docs.
+- **Sustained emergent performance degradation, networked failure modes, security in adversarial settings** — out of scope for the framework. Performance regressions need profiling; security needs threat modeling; networked behavior under partition needs TLA+-style behavioral analysis at Layer 4 (pending ADR).
+
 ## The two orchestrator agents
 
-**Byfuglien** (/ˈbʌflɪn/) owns the implementation chain: formal verification with Dafny and semi-formal reasoning over existing code. It owns Layer 1 (Dafny formal verification) and the regression-detection slice of Layer 4 (`/check-regressions`). Layers 2–3 are deliberately not addressed — Layer 2 is a trusted-computing-base concern, Layer 3 (contract graph verification) is a research frontier outside niche stacks; see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md). Byfuglien also owns the four semi-formal reasoning skills, which sit outside the layer hierarchy entirely. Named after Dustin Byfuglien, the crosschecking enforcer: no unsupported claim survives, no unverified code ships.
+**Byfuglien** (/ˈbʌflɪn/) owns the implementation chain: formal verification with Dafny and Lean, plus semi-formal reasoning over existing code. It owns Layer 1 in both engine roles — Dafny (verify-and-extract) and Lean (executable model + DRT oracle, via the five-step `/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` pipeline) — and the regression-detection slice of Layer 4 (`/check-regressions`). Layers 2–3 are deliberately not addressed — Layer 2 is a trusted-computing-base concern, Layer 3 (contract graph verification) is a research frontier outside niche stacks; see [`./docs/research/assurance-hierarchy.md`](./docs/research/assurance-hierarchy.md). Byfuglien also owns the four semi-formal reasoning skills, which sit outside the layer hierarchy entirely. Named after Dustin Byfuglien, the crosschecking enforcer: no unsupported claim survives, no unverified code ships.
 
 **Hellebuyck** owns the specification chain: Layers 4–6 of the assurance hierarchy (impl–spec alignment, spec–intent alignment, and spec completeness) plus the governance scaffolding that keeps specs honest as code evolves. Named after Connor Hellebuyck, the goalie — the last line of defence when proof runs out and you have to argue that the spec itself was the right one.
 
@@ -46,10 +65,10 @@ The split is principled in shape but **asymmetric in substance** — Byfuglien a
 
 | Byfuglien (impl chain) | Hellebuyck (spec chain) | Orthogonal: semi-formal reasoning |
 |---|---|---|
-| Layer 1: `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`, `/suggest-specs` | Layer 4 (alignment): `/invariant-coverage-scaffold`, `/protected-surface-amend` | `/reason` |
-| Layer 4 (regression): `/check-regressions` | Layer 5: `/intent-check`, `/acceptance-oracle-draft` | `/compare-patches` |
-| Spec-management bridge: `/rationale` | Layer 6: `/spec-adversary` | `/locate-fault` |
-|  | Governance index: `/assurance-init`, `/assurance-layer-audit`, `/assurance-status`, `/assurance-roadmap-check` | `/trace-execution` |
+| Layer 1 (Dafny): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`, `/suggest-specs` | Layer 4 (alignment): `/invariant-coverage-scaffold`, `/protected-surface-amend` | `/reason` |
+| Layer 1 (Lean): `/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` | Layer 5: `/intent-check`, `/acceptance-oracle-draft` | `/compare-patches` |
+| Layer 4 (regression): `/check-regressions` | Layer 6: `/spec-adversary` | `/locate-fault` |
+| Spec-management bridge: `/rationale` | Governance index: `/assurance-init`, `/assurance-layer-audit`, `/assurance-status`, `/assurance-roadmap-check` | `/trace-execution` |
 
 The four semi-formal reasoning skills are not part of the 6-layer hierarchy. They are evidence-grounded code-analysis tools adapted from Ugare & Chandra (2026) and live as a third axis — Byfuglien-routed because they reason about implementation, but layer-agnostic.
 
@@ -128,32 +147,46 @@ claude --plugin-dir ./crosscheck
 
 ## MCP tools
 
-The plugin exposes three MCP tools:
+The plugin exposes six MCP tools across two engines:
 
-| Tool | Description |
-|------|-------------|
-| `dafny_verify` | Verify Dafny source code |
-| `dafny_compile` | Compile Dafny to Python or Go |
-| `dafny_cleanup` | Remove stale temp directories |
+| Tool | Engine | Description |
+|------|--------|-------------|
+| `dafny_verify` | Dafny | Verify Dafny source code |
+| `dafny_compile` | Dafny | Compile Dafny to Python or Go |
+| `dafny_cleanup` | Dafny + Lean | Remove stale Dafny/Lean temp directories |
+| `lean_check` | Lean | Parse + typecheck Lean 4 source via `lake build` (Mathlib pre-warmed; build gate for `/lean-spec`, `/lean-impl`, `/correspondence-review`, and `/drt-oracle`) |
+| `lean_run` | Lean | Build + execute a Lean 4 file's `main : IO Unit` (`/lean-impl` smoke checks; `/drt-oracle` per-def runner) |
+| `lean_test` | Lean | Run a Lean 4 test harness over a module (compile-time `#guard` path for fixture sanity checks; aliased to `lake build`) |
+
+Build the Lean image once before the Lean tools work (subsequent runs reuse the cached image):
+
+```bash
+../scripts/build-lean-docker.sh
+```
+
+The first build is slow (Mathlib oleans). Rebuild only when `mcp-server/lean-harness/lean-toolchain` or the Mathlib pin in `lakefile.lean` changes.
 
 ## Architecture
 
-- **Docker isolation**: Dafny runs in a container with `--network=none`, 512MB memory limit, 1 CPU, and 120s timeout
-- **Source as string**: LLM passes Dafny code directly; the MCP server handles all file I/O internally
-- **Boilerplate stripping**: Compiled output has Dafny runtime imports and files removed automatically
-- **No Dafny artifacts committed**: Only clean Python/Go output is the deliverable
-- **On-demand skill loading**: Orchestrator agents read skill SKILL.md files on-demand via the Read tool, keeping baseline context lean
+- **Two-engine harness**: Dafny image (`crosscheck-dafny:latest`) and Lean image (`crosscheck-lean:latest`) both built locally; selected per-tool. Image names are configurable via `DAFNY_DOCKER_IMAGE` and `LEAN_DOCKER_IMAGE`.
+- **Docker isolation**: Dafny runs with `--network=none`, 512MB memory limit, 1 CPU, and 120s timeout. Lean runs with `--network=none`, 2GB memory (Mathlib oleans are large), 2 CPUs, and 240s timeout.
+- **Mathlib pre-warming**: The Lean image bakes Mathlib oleans into its layers via `lake exe cache get`. Runtime `lake build` on a small file completes in seconds because Mathlib does not recompile.
+- **Source as string**: LLMs pass source code directly; the MCP server handles all file I/O and harness wiring internally.
+- **Boilerplate stripping**: Compiled Dafny output has Dafny runtime imports and files removed automatically.
+- **No verifier artifacts committed**: Only clean Python/Go output (Dafny) or Lean stubs the user reviewed (Lean) are the deliverables.
+- **On-demand skill loading**: Orchestrator agents read skill SKILL.md files on-demand via the Read tool, keeping baseline context lean.
 
 ## Development
 
 ```bash
 cd mcp-server
 npm install
-npm run build              # Type-check + esbuild bundle → dist/index.js
-npm test                   # Unit, integration, property, MCP tests (vitest)
-npm run test:e2e           # End-to-end tests (requires Docker)
-../scripts/build-docker.sh # Build Dafny Docker image
-../scripts/test-mcp.sh     # Smoke tests
+npm run build                   # Type-check + esbuild bundle → dist/index.js
+npm test                        # Unit, integration, property, MCP tests (vitest)
+npm run test:e2e                # End-to-end tests (requires Docker)
+../scripts/build-docker.sh      # Build Dafny Docker image
+../scripts/build-lean-docker.sh # Build Lean+Mathlib Docker image (slow first time)
+../scripts/test-mcp.sh          # Smoke tests
 ```
 
 ### Key conventions
@@ -162,7 +195,7 @@ npm run test:e2e           # End-to-end tests (requires Docker)
 - Strict TypeScript (ES2022 target, Node16 module resolution)
 - Zod for runtime validation of tool inputs
 - vitest with fast-check for property-based testing
-- Docker image name configured via `DAFNY_DOCKER_IMAGE` env var (default: `crosscheck-dafny:latest`)
+- Docker image names configured via `DAFNY_DOCKER_IMAGE` (default `crosscheck-dafny:latest`) and `LEAN_DOCKER_IMAGE` (default `crosscheck-lean:latest`); Lean memory/cpu via `LEAN_DOCKER_MEMORY` / `LEAN_DOCKER_CPUS`
 
 ## Known limitations
 

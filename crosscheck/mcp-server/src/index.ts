@@ -4,6 +4,9 @@ import { z } from "zod";
 import { dafnyVerify } from "./tools/verify.js";
 import { dafnyCompile } from "./tools/compile.js";
 import { dafnyCleanup } from "./tools/cleanup.js";
+import { leanCheck } from "./tools/leanCheck.js";
+import { leanRun } from "./tools/leanRun.js";
+import { leanTest } from "./tools/leanTest.js";
 
 export function createServer(): McpServer {
   const server = new McpServer({
@@ -44,10 +47,52 @@ export function createServer(): McpServer {
 
   server.tool(
     "dafny_cleanup",
-    "Remove stale Dafny temp directories (older than 30 minutes) from /tmp.",
+    "Remove stale Dafny/Lean temp directories (older than 30 minutes) from /tmp.",
     {},
     async () => {
       const result = await dafnyCleanup();
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "lean_check",
+    "Parse + typecheck Lean 4 source via `lake build` in the Mathlib-pre-warmed harness. Returns { success, kind: 'success' | 'parse-error' | 'typecheck-error' | 'build-error' | 'timeout', errors, warnings, sorries }. `sorry` warnings are expected for spec stubs and are surfaced separately from real warnings.",
+    {
+      source: z.string().describe("Lean 4 source code to typecheck"),
+    },
+    async ({ source }) => {
+      const result = await leanCheck({ source });
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "lean_run",
+    "Build + execute a Lean 4 file's `main : IO Unit` entry point. Used by /lean-impl for sanity-checking functional models against worked-example inputs, and by /drt-oracle as the Lean-side runner that the DRT harness invokes per random input. Not for spec stubs (which contain `sorry`).",
+    {
+      source: z.string().describe("Lean 4 source code with a `main : IO Unit` entry point"),
+    },
+    async ({ source }) => {
+      const result = await leanRun({ source });
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "lean_test",
+    "Run a Lean 4 test harness over a user module. The runner aliases this to `lake build`, which is sufficient for compile-time `#guard` and `decide` checks against literal fixtures. Sub-phase 3b-β chose not to wire a `lake test` driver: `/drt-oracle` invokes `lean_run` against per-def runners under `formal-verification/lean/CrosscheckModel/<Name>Runner.lean` driven by an external Python harness, which gives random-input fuzzing without coupling the MCP surface to a Lake test target. `lean_test` therefore remains the compile-time `#guard` path.",
+    {
+      source: z.string().describe("Lean 4 source code containing test declarations"),
+    },
+    async ({ source }) => {
+      const result = await leanTest({ source });
       return {
         content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
       };
