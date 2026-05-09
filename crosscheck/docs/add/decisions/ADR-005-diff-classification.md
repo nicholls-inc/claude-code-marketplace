@@ -25,7 +25,7 @@ A two-track enforcement, matching the dual-track principle Crosscheck already us
 
 ### Pre-commit enforcement (fast)
 
-A pre-commit hook detects whether the commit modifies any artifact under `docs/add/`, `docs/invariants/<module>.md` for ADD-mode modules (per ADR-001), `agents/`, `skills/`, or `.claude/rules/`. If yes, the hook requires:
+A pre-commit hook detects whether the commit modifies any artifact under `docs/add/` (including `docs/add/audit/`, with the authorship constraint below), `docs/invariants/<module>.md` for ADD-mode modules (per ADR-001), `agents/`, `skills/`, or `.claude/rules/`. If yes, the hook requires:
 
 1. The commit message contains a structured trailer:
    ```
@@ -57,6 +57,12 @@ Classification applies to artifacts named above. It does *not* apply to:
 - Documentation files outside the listed paths (e.g., README.md changes do not require classification unless they constitute a governance amendment per the protected-surfaces partition).
 - Auto-generated artifacts (e.g., the diff-classification log itself, lockfiles).
 
+### Authorship constraint on `docs/add/audit/`
+
+The Auditor agent's report directory `docs/add/audit/` is a protected path *with an additional authorship rule*: only the Auditor agent (and humans, for adjudication-driven amendments) may write there. Authoring agents (Byfuglien, Hellebuyck) must not write to `docs/add/audit/` even when the trailer is correct, because the report is the audit trail of the auditor's verdicts and authoring-agent writes would compromise the audit/author separation that ADR-003 establishes.
+
+Enforcement: Byfuglien and Hellebuyck have no tool-allowlist entries for writing under `docs/add/audit/` (see `agents/byfuglien.md`, `agents/hellebuyck.md` frontmatter). The pre-commit hook additionally rejects commits modifying `docs/add/audit/` whose author identity does not match the Auditor agent or a human reviewer (configured via `.assurance/audit-authors.allowlist`).
+
 ## Alternatives considered
 
 **A1 — Classification only at PR level, not per commit.** Rejected: a PR with mixed-class commits hides drift inside otherwise-routine refactoring. Per-commit granularity preserves the signal.
@@ -83,6 +89,6 @@ The phrase *"did we want this behavior or did the implementation drift?"* is the
 
 ## Open questions deferred
 
-- Whether the classification log is a CSV, a JSON-lines file, or something queryable like SQLite. v1 architectural-spec call.
+- ~~Whether the classification log is a CSV, a JSON-lines file, or something queryable like SQLite.~~ **Resolved (Phase 2 amendment A-13):** JSON-lines at `.assurance/diff-classification-log.jsonl`. Schema in S6.1.
 - Whether older commits (pre-this-feature) get retroactively classified or are exempted. v1 default: exempt; the log starts at the feature's introduction.
 - Whether the pre-commit hook enforces classification on Drafted-status artifacts (i.e., before they're attested). v1 default: yes — classification discipline begins from first commit, not from first attestation.
