@@ -1,0 +1,193 @@
+#!/usr/bin/env python3
+"""
+Assurance probe reproducer script.
+
+This script reproduces mutation probe findings from a specific commit
+and environment. It validates that the environment matches the recorded
+state to ensure bit-identical results.
+
+Generated: {generated_date}
+Module: {module}
+Commit: {commit_sha}
+"""
+
+import importlib.metadata
+import platform
+import subprocess
+import sys
+from pathlib import Path
+
+
+# Recorded environment
+RECORDED_COMMIT = "{commit_sha}"
+RECORDED_PYTHON = ({python_major}, {python_minor})
+RECORDED_PYTEST = "{pytest_version}"
+RECORDED_HYPOTHESIS = "{hypothesis_version}"
+RECORDED_OS = "{os_platform}"  # Informational only
+
+
+def validate_environment():
+    """Validate that current environment matches recorded state."""
+    
+    # Check Git commit
+    try:
+        actual_commit = subprocess.check_output(
+            ['git', 'rev-parse', 'HEAD'],
+            text=True
+        ).strip()
+    except subprocess.CalledProcessError:
+        print("Error: Could not determine current Git commit.")
+        print("Ensure you are in the repository root.")
+        sys.exit(1)
+    
+    if actual_commit != RECORDED_COMMIT:
+        print(f"Error: Reproducer recorded on commit {RECORDED_COMMIT}, "
+              f"currently on {actual_commit}.")
+        print("Findings may not reproduce.")
+        sys.exit(2)
+    
+    # Check Python version
+    actual_python = sys.version_info[:2]
+    if actual_python != RECORDED_PYTHON:
+        print(f"Error: Reproducer requires Python {RECORDED_PYTHON}, "
+              f"got {actual_python}")
+        sys.exit(2)
+    
+    # Check pytest version
+    try:
+        actual_pytest = importlib.metadata.version("pytest")
+    except importlib.metadata.PackageNotFoundError:
+        print("Error: pytest not found in current environment")
+        sys.exit(2)
+    
+    if actual_pytest != RECORDED_PYTEST:
+        print(f"Warning: pytest version mismatch: "
+              f"expected {RECORDED_PYTEST}, got {actual_pytest}")
+    
+    # Check hypothesis version
+    try:
+        actual_hypothesis = importlib.metadata.version("hypothesis")
+    except importlib.metadata.PackageNotFoundError:
+        print("Error: hypothesis not found in current environment")
+        sys.exit(2)
+    
+    if actual_hypothesis != RECORDED_HYPOTHESIS:
+        print(f"Warning: hypothesis version mismatch: "
+              f"expected {RECORDED_HYPOTHESIS}, got {actual_hypothesis}")
+    
+    # Check OS (informational)
+    actual_os = platform.system()
+    if actual_os != RECORDED_OS:
+        print(f"Info: OS differs: expected {RECORDED_OS}, got {actual_os}")
+        print("Results may vary due to platform differences.")
+
+
+def apply_mutation(source_file: Path, original: str, mutated: str) -> None:
+    """Apply mutation to source file."""
+    content = source_file.read_text()
+    
+    if original not in content:
+        print(f"Error: Could not find original expression in {source_file}")
+        print(f"Looking for: {original}")
+        sys.exit(1)
+    
+    mutated_content = content.replace(original, mutated, 1)
+    source_file.write_text(mutated_content)
+
+
+def revert_mutation(source_file: Path, original: str, mutated: str) -> None:
+    """Revert mutation from source file."""
+    content = source_file.read_text()
+    
+    if mutated not in content:
+        print(f"Warning: Could not find mutated expression in {source_file}")
+        print(f"Looking for: {mutated}")
+        return
+    
+    original_content = content.replace(mutated, original, 1)
+    source_file.write_text(original_content)
+
+
+def run_test(test_command: str) -> tuple[int, str, str]:
+    """Run test and capture result."""
+    result = subprocess.run(
+        test_command,
+        shell=True,
+        capture_output=True,
+        text=True,
+        timeout=30
+    )
+    return result.returncode, result.stdout, result.stderr
+
+
+def main():
+    """Run mutation probe reproduction."""
+    
+    print("=" * 80)
+    print("Assurance Probe Reproducer")
+    print("=" * 80)
+    print()
+    
+    # Validate environment
+    print("Validating environment...")
+    validate_environment()
+    print("✓ Environment matches recorded state")
+    print()
+    
+    # Findings to reproduce
+    findings = {findings_data}
+    
+    print(f"Reproducing {len(findings)} finding(s)...")
+    print()
+    
+    for i, finding in enumerate(findings, 1):
+        print(f"Finding {i}/{len(findings)}: {finding['description']}")
+        print(f"  Source: {finding['source_file']}")
+        print(f"  Mutation: {finding['original']} → {finding['mutated']}")
+        print(f"  Test: {finding['test_command']}")
+        print()
+        
+        source_file = Path(finding['source_file'])
+        
+        # Apply mutation
+        print("  Applying mutation...")
+        apply_mutation(source_file, finding['original'], finding['mutated'])
+        
+        try:
+            # Run test
+            print("  Running test...")
+            exit_code, stdout, stderr = run_test(finding['test_command'])
+            
+            # Determine verdict
+            if exit_code == 0:
+                verdict = "survived"
+            elif exit_code != 0:
+                # Check if it's a syntax error or test failure
+                if "SyntaxError" in stderr or "SyntaxError" in stdout:
+                    verdict = "errored (syntax)"
+                else:
+                    verdict = "killed"
+            
+            print(f"  Result: {verdict}")
+            
+            # Compare with expected
+            expected = finding['expected_verdict']
+            if verdict == expected:
+                print(f"  ✓ Matches expected verdict: {expected}")
+            else:
+                print(f"  ✗ Unexpected verdict: got {verdict}, expected {expected}")
+            
+        finally:
+            # Revert mutation
+            print("  Reverting mutation...")
+            revert_mutation(source_file, finding['original'], finding['mutated'])
+        
+        print()
+    
+    print("=" * 80)
+    print("Reproduction complete")
+    print("=" * 80)
+
+
+if __name__ == "__main__":
+    main()

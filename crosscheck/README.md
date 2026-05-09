@@ -84,7 +84,7 @@ The persona table above maps every skill to its orchestrator and (where applicab
 
 **Spec management & adequacy** — keep verified specs from drifting, propose new spec targets, and bridge formal and informal verification with structured adequacy arguments.
 
-**Assurance hierarchy & governance** — onboard a repo, audit its reach on the ladder, draft acceptance oracles, run the round-trip intent check, and keep governance notes from rotting.
+**Assurance hierarchy & governance** — onboard a repo, audit its reach on the ladder, draft acceptance oracles, run the round-trip intent check, measure test strength via mutation probes (`/assurance-probe`, Phase 1 – experimental), and keep governance notes from rotting.
 
 → Full skill catalogue with trigger phrases at [`./docs/skills.md`](./docs/skills.md). For the assurance flow specifically, see [`./docs/assurance-hierarchy.md`](./docs/assurance-hierarchy.md).
 
@@ -97,6 +97,7 @@ One teaser per category — see the linked docs for full usage.
 /reason "Is this function thread-safe?" src/cache.py
 /rationale src/sort.py "must return a sorted permutation of the input"
 /assurance-layer-audit
+/assurance-probe validator
 ```
 
 ## Research grounding
