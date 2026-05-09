@@ -322,20 +322,20 @@ These are negative-space items the agent thought worth surfacing. The default is
 
 Tick once amendments above are adjudicated and the artifact reflects your intent. Attestation is monotonic — once ticked, the agent treats the artifact as Attested and will modify it only via a supersession ADR (per `glossary.md` § Status field). `methodology.md` and `glossary.md` are already Ratified; no tick required here.
 
-- [ ] `crosscheck/docs/add/intent.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/decisions/INDEX.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/decisions/ADR-001-operating-modes.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/decisions/ADR-002-deterministic-llm-split.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/decisions/ADR-003-auditor-agent.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/decisions/ADR-004-greenfield-skill-set.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/decisions/ADR-005-diff-classification.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/specs/architectural.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/acceptance.md` — Drafted → Attested
-- [ ] `crosscheck/docs/add/README.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/intent.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/decisions/INDEX.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/decisions/ADR-001-operating-modes.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/decisions/ADR-002-deterministic-llm-split.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/decisions/ADR-003-auditor-agent.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/decisions/ADR-004-greenfield-skill-set.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/decisions/ADR-005-diff-classification.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/specs/architectural.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/acceptance.md` — Drafted → Attested
+- [x] `crosscheck/docs/add/README.md` — Drafted → Attested
 
 ### 9.5 Authorisation to proceed
 
-- [ ] **Proceed.** Amendments above are adjudicated; seed artifacts above are attested (or scoped down with reasons). The agent is authorised to (a) execute the approved A-* amendments and (b) begin Phase 1 lower-tier drafting (`specs/behavioral.md` and per-module functional specs) per S8 of the architectural spec.
+- [x] **Proceed.** Amendments above are adjudicated; seed artifacts above are attested (or scoped down with reasons). The agent is authorised to (a) execute the approved A-* amendments and (b) begin Phase 1 lower-tier drafting (`specs/behavioral.md` and per-module functional specs) per S8 of the architectural spec.
 
 ---
 
