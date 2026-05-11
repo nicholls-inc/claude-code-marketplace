@@ -4,6 +4,17 @@ Journal for the Crosscheck plugin. Decisions that affect skills, agents, the MCP
 
 ---
 
+## 2026-05-11 — /rationale: promote trust boundaries to C0 top-level branch
+
+**Type:** propagated-discovery
+**Touches:** skills/rationale/SKILL.md (Steps 2, 5, 6)
+**Why:** Lands the snapshot's §2 design decision into the operational prompt. Before this PR, trust boundaries were a single footnote in the final verification checklist (*"Trust boundaries noted (Dafny limitations, extern methods, float precision)"*), buried below the structural soundness check. The snapshot reframed them as a first-class C0 branch because they bound what every other leaf can verify — a verified `sort.py` proof is meaningless if its comparison operator is `{:extern}`. SKILL.md was still pointing the other way.
+**Links:** [snapshot §2](docs/specs/rationale-2026-05-11.md), parent snapshot PR (#169)
+
+Step 2 gains a C0 trust-boundary branch alongside C1/C2/C3, with three generic leaf templates (external dependencies enumerated; domain limitations documented; trust assumptions stated). A new *Why C0 is first-class* paragraph names the conditioning relationship — every downstream claim is conditional on the C0 leaves, and that conditioning is now visible in the tree rather than implicit. Step 5's worked sort example gains two C0 leaves (no extern/IO/network as STATIC; `<=` totality + transitivity as SEMANTIC), and the summary table updates accordingly. Step 6's standalone *"Trust boundaries noted"* footnote bullet is replaced by *"C0 trust-boundary branch enumerated"* — making the check structural rather than ad-hoc.
+
+---
+
 ## 2026-05-11 — /rationale snapshot: defer STATIC citation post-process
 
 **Type:** correction
