@@ -20,6 +20,12 @@ Generate structured performance reports on plugins, skills, and agents by analys
 
 Autonomous agent scheduling for GitHub issues — scans, queues, and launches Claude Code sessions to fix bugs, implement features, and refine issue descriptions.
 
+## Tools
+
+### [claude-github-app](./tools/claude-github-app/README.md)
+
+A local wrapper that intercepts `claude` invocations and injects a GitHub App installation token chosen by working directory, so PRs opened from inside a session are authored by an App bot (`my-app[bot]`). Not a Claude plugin — a Go binary installed to `~/bin/claude` that shadows the real `claude` on PATH and execs it with isolated `GH_CONFIG_DIR` and `GIT_CONFIG_GLOBAL`.
+
 ## Installation
 
 Add the marketplace, then install plugins:

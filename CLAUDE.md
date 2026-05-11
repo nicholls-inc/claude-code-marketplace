@@ -29,6 +29,16 @@ Field report plugin. Generates structured performance reports on plugins, skills
 
 - **Skills** (`field-report/skills/`): `/field-report`
 
+## Tools
+
+### claude-github-app (`tools/claude-github-app/`)
+
+Local Go wrapper that intercepts `claude` invocations and injects a GitHub App installation token chosen by working directory. Not a Claude plugin — a developer tool that lives under `tools/`. Installs to `~/bin/claude` and `~/bin/claude-github-app`, shadowing the real `claude` on PATH and execing it with isolated `GH_CONFIG_DIR` and `GIT_CONFIG_GLOBAL`. First Go module in this repo; uses `github.com/BurntSushi/toml` and `github.com/golang-jwt/jwt/v5`.
+
+- Build: `cd tools/claude-github-app && make build`
+- Install: `make install` (copies binaries to `~/bin/`; user must add `~/bin` to PATH ahead of `~/.local/bin`)
+- Test: `make test` (pure Go, no Docker)
+
 ## Development — crosscheck
 
 ```bash
