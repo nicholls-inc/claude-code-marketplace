@@ -60,6 +60,30 @@ A practitioner-oriented post proposing five independent structural dimensions th
 
 **Relevance:** Complementary but structurally different. Skomarovsky's framework answers "can we verify this?" while the assurance hierarchy answers "given that we can, what layers of confidence do we have?"
 
+### Disselkoen et al. (2024) — Cedar / Verification-Guided Development
+
+This paper documents how AWS built Cedar (an authorization policy language) using Verification-Guided Development (VGD): a Lean 4 executable model with mechanically-proved properties (type soundness and six others), plus differential random testing (DRT) and property-based testing (PBT) that exercise the Lean model against a separately-written Rust production implementation. Reported results: 4 bugs from proofs, 21 bugs from DRT/PBT. The 21-bug taxonomy splits ~15/21 as general implementation bugs (parsing, pretty-printing, IP-address dependency, naming inconsistency, error handling) and ~6/21 as authorization-specific rule-interaction bugs.
+
+**Relevance:** Two distinct claims must be kept separate. **(a) DRT-as-technique generalises** — the bug taxonomy supports broad applicability, not authorization-specific. This grounds the addition of differential random testing as a Crosscheck primitive (`/drt-oracle`, Phase 3b). **(b) VGD-as-methodology Amazon does not generalise** — the paper scopes VGD to safety-critical / TCB systems and lists four prerequisites (deterministic algebraic semantics; provable properties; tractable input generation; resources for dual development). The only generalisation gesture is the conditional Related Work statement that VGD *could be used* to produce a dependability case. Crosscheck applies VGD as one methodology where its prerequisites are met at the module level — not as a unifying frame.
+
+### Newcombe et al. (2014/2015) — Use of Formal Methods at AWS / TLA+
+
+This paper documents how Amazon Web Services uses TLA+ to specify designs and behaviours of distributed systems, not to verify code. It documents 10 systems and 6 bugs in its public table, including a DynamoDB replication bug requiring a 35-step trace that "had passed unnoticed through extensive design reviews, code reviews, and testing." Engineers learn TLA+ in 2–3 weeks. The paper is explicit that TLA+'s reach extends beyond distributed systems to "tricky business logic" and "data modeling" with semantic invariants richer than FK/multiplicity constraints. It includes a "What Formal Specification Is Not Good For" section — sustained emergent performance degradation, security in adversarial settings — which is the precedent for Crosscheck's scope-limit framing.
+
+**Relevance:** Direct evidence base for the behavioural-specification stratum (Layer 4 enrichment, Phase 3c ADR). The applicability criterion is rule-density / state-explosion, not concurrency or distribution. The "What is not good for" section is the model for Crosscheck's equivalent in `assurance-hierarchy.md` and `README.md`.
+
+### Brooker (2022) — Getting into formal specification
+
+A practitioner blog by Marc Brooker (AWS Principal Engineer) tracing his path from Alloy → Spin → TLA+ over several years, driven by EBS control-plane bugs that emerged in bursts after network partitions. The piece offers an adoption-readiness diagnostic: "hubris (software can be correct), humility (I can't write correct software), and laziness (I don't want to fix this again)." Brooker notes TLA+'s applicability beyond distributed systems and observes the field has expanded to include P, Shuttle, Dafny, Kani, and S3's lightweight formal methods.
+
+**Relevance:** Diagnostic language only — used in `assurance-hierarchy.md`'s framing section as self-assessment for teams considering VGD-style discipline, not as an adoption gate or precondition in any skill. Teams without the disposition tend to let governance scaffolding decay; this is operational risk, not selection criterion.
+
+### Lamport (2015) — Who Builds a House without Drawing Blueprints?
+
+Companion piece to Newcombe et al.'s CACM article. Lamport argues that a specification is a blueprint, and the value of blueprints is not that buildings can be automatically generated from them, but that "we think in order to understand what we are doing" and "writing is nature's way of letting you know how sloppy your thinking is." The core philosophical claim — *thinking precedes coding; specifications enable thinking* — is the design-first stance that TLA+, P, and Alloy operationalise.
+
+**Relevance:** The conceptual frame for `/acceptance-oracle-draft` (Phase 3a-ii: a one-paragraph analogy added to the skill's description). An acceptance scenario is a blueprint in Lamport's sense — the durable artefact the implementation must conform to — but the analogy is restricted to that role; "blueprint" is not introduced as an alias for "acceptance oracle" because the skill's Layer-5 user-perspective semantics differ from Lamport's spec-as-thinking-tool framing.
+
 ## Assessment of Novelty
 
 The individual concepts in the hierarchy exist separately in the literature:
@@ -91,3 +115,8 @@ What was not found in this review is a single framework assembling these into a 
 - de Moura, L. "When AI Writes the World's Software, Who Verifies It?" February 2026. https://leodemoura.github.io/blog/2026/02/28/when-ai-writes-the-worlds-software.html
 - Lean FRO. https://lean-lang.org/fro/about/
 - Skomarovsky. "Your AI Just Wrote 500 Lines of Code. Can You Prove Any of It Works?" April 2026. https://skomarovsky.github.io/verification/verification_framework.html
+- Disselkoen, C., et al. "How We Built Cedar: A Verification-Guided Approach." arXiv:2407.01688 (2024). https://arxiv.org/abs/2407.01688
+- Amazon Science. "How we built Cedar with automated reasoning and differential testing." April 2024. https://www.amazon.science/blog/how-we-built-cedar-with-automated-reasoning-and-differential-testing
+- Newcombe, C., et al. "How Amazon Web Services Uses Formal Methods." *Communications of the ACM* 58(4), 66–73 (April 2015). https://cacm.acm.org/magazines/2015/4/184701-how-amazon-web-services-uses-formal-methods/fulltext
+- Brooker, M. "Getting into formal specification, and getting my team into it too." Marc's Blog, 29 July 2022. https://brooker.co.za/blog/2022/07/29/getting-into-tla.html
+- Lamport, L. "Who Builds a House without Drawing Blueprints?" *Communications of the ACM* 58(4), 38–41 (April 2015). https://cacm.acm.org/opinion/who-builds-a-house-without-drawing-blueprints/

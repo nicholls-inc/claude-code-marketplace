@@ -1,8 +1,8 @@
 # Crosscheck Skill Catalogue
 
-Exhaustive index of all 21 skills in the crosscheck plugin, grouped by category. See [`../README.md`](../README.md) for the plugin overview, and [`./agents.md`](./agents.md) for the orchestrator agent pages (`byfuglien`, `hellebuyck`).
+Exhaustive index of all 27 skills in the crosscheck plugin, grouped by category. See [`../README.md`](../README.md) for the plugin overview, and [`./agents.md`](./agents.md) for the orchestrator agent pages (`byfuglien`, `hellebuyck`).
 
-## Formal verification
+## Formal verification (Dafny verify-and-extract)
 
 | Skill | Trigger phrases | One-line summary | Owner |
 |-------|----------------|------------------|-------|
@@ -10,6 +10,19 @@ Exhaustive index of all 21 skills in the crosscheck plugin, grouped by category.
 | [`/generate-verified`](../skills/generate-verified/SKILL.md) | "implement the spec", "generate verified code", "prove the implementation" | Generate a Dafny implementation body that satisfies a verified spec. | byfuglien |
 | [`/extract-code`](../skills/extract-code/SKILL.md) | "extract to python", "extract to go", "compile dafny" | Compile verified Dafny to Python or Go with runtime boilerplate stripped. | byfuglien |
 | [`/lightweight-verify`](../skills/lightweight-verify/SKILL.md) | "lightweight verify", "add contracts", "property-based tests", "assertions" | Generate design-by-contract assertions, property-based tests, or runtime invariants when full Dafny verification is overkill. | byfuglien |
+| [`/assurance-probe`](../skills/assurance-probe/SKILL.md) | "assurance probe", "test strength", "mutation probe", "vacuity probe" | Measure test strength via mutation, vacuity, and generator probes (rotation-based; Phase 1 — experimental). | byfuglien |
+
+## Formal verification (Lean executable-model + DRT-oracle pipeline)
+
+The five-step Lean pipeline. Run sequentially; each consumes the previous step's artefact.
+
+| Skill | Trigger phrases | One-line summary | Owner |
+|-------|----------------|------------------|-------|
+| [`/informal-spec`](../skills/informal-spec/SKILL.md) | "informal spec", "prose spec", "extract specification" | Extract a precise prose specification with hard human sign-off (step 1 of 5). | byfuglien |
+| [`/lean-spec`](../skills/lean-spec/SKILL.md) | "lean spec", "lean spec stub", "translate spec to lean" | Translate signed-off prose into a Lean 4 stub with `sorry` proof bodies (step 2 of 5). | byfuglien |
+| [`/lean-impl`](../skills/lean-impl/SKILL.md) | "lean impl", "lean implementation", "executable lean model" | Translate source implementation into a Lean 4 functional model (step 3 of 5). | byfuglien |
+| [`/correspondence-review`](../skills/correspondence-review/SKILL.md) | "correspondence review", "lean correspondence", "model fidelity" | Classify each Lean def vs source as exact / abstraction / approximation / mismatch (step 4 of 5). | byfuglien |
+| [`/drt-oracle`](../skills/drt-oracle/SKILL.md) | "drt oracle", "differential random testing", "lean drt", "fuzz against lean" | Differential random testing between the Lean model and production code (step 5 of 5). | byfuglien |
 
 ## Semi-formal reasoning
 

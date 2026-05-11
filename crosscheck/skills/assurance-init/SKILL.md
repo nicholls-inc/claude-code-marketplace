@@ -256,6 +256,44 @@ line when the property test lands.
 
 The `<!-- aspirational -->` markers indicate invariants that are declared but not yet covered by a property test — this keeps the future coverage gate from hard-failing on a freshly scaffolded repo.
 
+### Step 6.5: Per-module VGD-prerequisite summary
+
+For each seed module, append a per-module **VGD-prerequisite summary** to its invariant doc. The summary materialises the framework framing in `../../../docs/research/assurance-hierarchy.md` ("Framing: layered assurance") at module granularity, so subsequent reviewers see which engine combination each module is a candidate for.
+
+**Cache check first.** If `/assurance-layer-audit` ran in this session and emitted a Step 4.5 per-module prereq table covering this module, *read that output* and use its verdicts directly. Recompute only if the audit's table is absent or the seed module isn't in it. This avoids duplicating the assessment work the audit already did.
+
+**Compute (only if cache absent).** For each seed module, derive verdicts for prerequisites #1–#3 by inspecting:
+- Module purity (deterministic algebraic semantics — pass/partial/fail);
+- Articulability of properties (provable properties — pass/partial/fail);
+- Input-space tractability (input generation tractability — pass/partial/fail).
+
+Prerequisite #4 (dual-development resources) is *always* `hypothesis-only` — Cedar 2024 used human Lean + human Rust; no empirical baseline exists for AI-augmented dual development. Mark it explicitly so reviewers know not to act on it as a measured signal.
+
+**Write the summary block** by appending to `docs/invariants/<module>.md` immediately after the `## Purpose` section (before `## Invariants`):
+
+```markdown
+## VGD prerequisite summary
+
+| Prereq | Verdict | Evidence |
+|---|---|---|
+| #1 Deterministic algebraic semantics | <pass/partial/fail> | <one-line evidence> |
+| #2 Provable properties | <pass/partial/fail> | <one-line evidence> |
+| #3 Tractable input generation | <pass/partial/fail> | <one-line evidence> |
+| #4 Dual-development resources | hypothesis-only | Untested (D6); no empirical baseline. Cedar 2024 used human Lean + human Rust. |
+
+**Recommended engine combination:** <Dafny / Lean+DRT / both / neither + which Layers 2–6 backfill>
+
+This summary is initial-onboarding metadata. It records the baseline assessment at scaffold time; updates require an amendment block per `.claude/rules/protected-surfaces.md` (Class B governance).
+```
+
+**Honour the Step 1.3 overwrite decision.** The colliding-paths check in Step 1.3 produced a `pre_existing` set and a per-file decision (skip / overwrite / abort). For each seed module:
+
+- If the module's invariant doc was **skipped** in Step 1.3 — do NOT append into the existing file. Instead write a separate `docs/invariants/<module>-prereq-summary.md` containing the same block, and note in the Step 8 summary that the per-module prereq summary was diverted because the user chose to preserve their existing invariant doc.
+- If the module's invariant doc was **overwritten** in Step 1.3 — the file is freshly written by Step 6, so appending is fine.
+- If the module's invariant doc is freshly created (not in `pre_existing`) — append normally.
+
+**Protected-surface partition declaration.** `docs/invariants/*.md` is Class B per `.claude/rules/protected-surfaces.md`. The standard amendment-via-`/protected-surface-amend` discipline applies to *modifications of existing governance artefacts*. Writes performed in this step are part of *initial onboarding* (the artefact is being created, not amended), so they are exempt from the amendment-block requirement. **Subsequent runs** of `/assurance-init` cannot reach this step — Step 1.2 exits early when `docs/assurance/ROADMAP.md` already exists — so the exemption is naturally bounded to the first-onboarding case. Do not extend this exemption to other write paths or skills; updates to the prereq summary after onboarding are governance amendments and require `/protected-surface-amend`.
+
 ### Step 7: Emit Pre-commit and CI Stubs (Dual-Track)
 
 Using the answers from Step 2, write **two** stub files that the user will fill in when `/invariant-coverage-scaffold` runs next. Do not attempt to implement the coverage check itself — that's the next skill's job. These stubs exist only to anchor the dual-track shape.
@@ -290,7 +328,8 @@ Created:
 - docs/assurance/{immediate,next,medium-term,aspirational}/README.md
 - .claude/rules/protected-surfaces.md
 - docs/invariants/README.md
-- docs/invariants/<module>.md  (one per seed module)
+- docs/invariants/<module>.md  (one per seed module, with VGD-prereq summary appended per Step 6.5)
+- docs/invariants/<module>-prereq-summary.md  (only when the module doc was skipped in Step 1.3)
 - <pre-commit stub path>  (or noted absence)
 - <CI stub path>
 
@@ -318,6 +357,14 @@ After both skills run, `/assurance-status` Phase 1 should pass.
 - [ ] `docs/invariants/README.md` exists and links to each seeded module doc
 - [ ] One `docs/invariants/<module>.md` per user-selected module (1–3 total)
       with `Invariants` section skeleton
+- [ ] Each seed module has a VGD-prerequisite summary block (#1–#3 verdicts +
+      `hypothesis-only` for #4 + recommended engine combination), either
+      appended to `<module>.md` or in a separate `<module>-prereq-summary.md`
+      when Step 1.3 chose `skip` for the colliding doc
+- [ ] Cached `/assurance-layer-audit` Step 4.5 output was used where available,
+      not recomputed
+- [ ] Step 6.5 wrote into Class B governance only as initial-onboarding
+      writes (Step 1.2 exits early on subsequent runs, bounding the exemption)
 - [ ] Pre-commit stub file matches the framework answer from Q1 (or the
       "none" branch is flagged in the summary)
 - [ ] CI stub file matches the CI answer from Q2

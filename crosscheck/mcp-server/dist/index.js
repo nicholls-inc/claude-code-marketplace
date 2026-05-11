@@ -20990,18 +20990,25 @@ import { join as join2 } from "node:path";
 
 // src/docker.ts
 import { spawn } from "node:child_process";
-var TIMEOUT_MS = 12e4;
+var DEFAULT_TIMEOUT_MS = 12e4;
+var LEAN_TIMEOUT_MS = 24e4;
 function getDockerImage() {
   return process.env.DAFNY_DOCKER_IMAGE || "crosscheck-dafny:latest";
 }
-async function runDafny(tempDir, args) {
-  const image = getDockerImage();
+function getLeanDockerImage() {
+  return process.env.LEAN_DOCKER_IMAGE || "crosscheck-lean:latest";
+}
+function runDocker(image, tempDir, args, opts) {
+  const memory = opts.memory ?? "512m";
+  const cpus = opts.cpus ?? "1";
+  const timeoutMs = opts.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const network = opts.network ?? "none";
   const dockerArgs = [
     "run",
     "--rm",
-    "--network=none",
-    "--memory=512m",
-    "--cpus=1",
+    `--network=${network}`,
+    `--memory=${memory}`,
+    `--cpus=${cpus}`,
     "-v",
     `${tempDir}:/work`,
     image,
@@ -21015,7 +21022,7 @@ async function runDafny(tempDir, args) {
     const timer = setTimeout(() => {
       timedOut = true;
       proc.kill("SIGKILL");
-    }, TIMEOUT_MS);
+    }, timeoutMs);
     proc.stdout.on("data", (data) => {
       stdout += data.toString();
     });
@@ -21040,6 +21047,24 @@ async function runDafny(tempDir, args) {
         timedOut: false
       });
     });
+  });
+}
+async function runDafny(tempDir, args) {
+  return runDocker(getDockerImage(), tempDir, args, {
+    memory: "512m",
+    cpus: "1",
+    timeoutMs: DEFAULT_TIMEOUT_MS,
+    network: "none"
+  });
+}
+async function runLean(tempDir, args) {
+  const memory = process.env.LEAN_DOCKER_MEMORY || "2g";
+  const cpus = process.env.LEAN_DOCKER_CPUS || "2";
+  return runDocker(getLeanDockerImage(), tempDir, args, {
+    memory,
+    cpus,
+    timeoutMs: LEAN_TIMEOUT_MS,
+    network: "none"
   });
 }
 
@@ -21102,8 +21127,10 @@ var v4_default = v4;
 // src/tempdir.ts
 var DAFNY_TMP_PREFIX = "dafny-";
 var STALE_THRESHOLD_MS = 30 * 60 * 1e3;
-async function createTempDir() {
-  const dir = await mkdtemp(join(tmpdir(), `${DAFNY_TMP_PREFIX}${v4_default()}-`));
+var TMP_PREFIXES = [DAFNY_TMP_PREFIX, "lean-"];
+async function createTempDir(prefix) {
+  const tag = prefix ?? DAFNY_TMP_PREFIX;
+  const dir = await mkdtemp(join(tmpdir(), `${tag}${v4_default()}-`));
   return dir;
 }
 async function removeTempDir(dir) {
@@ -21115,7 +21142,7 @@ async function cleanupStaleDirs() {
   const now = Date.now();
   let cleaned = 0;
   for (const entry of entries) {
-    if (!entry.startsWith(DAFNY_TMP_PREFIX)) continue;
+    if (!TMP_PREFIXES.some((p) => entry.startsWith(p))) continue;
     const fullPath = join(base, entry);
     try {
       const stats = await stat(fullPath);
@@ -21310,6 +21337,128 @@ async function dafnyCleanup() {
   return { cleaned };
 }
 
+// src/tools/leanCheck.ts
+import { writeFile as writeFile3 } from "node:fs/promises";
+import { join as join4 } from "node:path";
+function parseLeanOutput(stdout, stderr) {
+  const combined = stdout + "\n" + stderr;
+  const lines = combined.split("\n").filter((l) => l.trim());
+  const errors = [];
+  const warnings = [];
+  const sorries = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const ESC = String.fromCharCode(27);
+    const clean = trimmed.replace(new RegExp(`${ESC}\\[[0-9;]*m`, "g"), "");
+    if (/declaration uses 'sorry'/i.test(clean)) {
+      sorries.push(clean);
+      continue;
+    }
+    if (/\berror:\s/i.test(clean)) {
+      errors.push(clean);
+    } else if (/\bwarning:\s/i.test(clean)) {
+      warnings.push(clean);
+    }
+  }
+  return { errors, warnings, sorries };
+}
+function classifyLeanFailure(exitCode, errors) {
+  if (exitCode === 0 && errors.length === 0) {
+    return "success";
+  }
+  const hasParse = errors.some(
+    (e) => /(unexpected token|expected|unknown identifier|invalid syntax)/i.test(e)
+  );
+  if (hasParse) return "parse-error";
+  const hasType = errors.some(
+    (e) => /(type mismatch|expected type|application type mismatch|failed to synthesize)/i.test(
+      e
+    )
+  );
+  if (hasType) return "typecheck-error";
+  return "build-error";
+}
+async function leanCheck(input) {
+  const tempDir = await createTempDir("lean-");
+  try {
+    const programPath = join4(tempDir, "program.lean");
+    await writeFile3(programPath, input.source, "utf-8");
+    const result = await runLean(tempDir, ["check", "/work/program.lean"]);
+    if (result.timedOut) {
+      return {
+        success: false,
+        kind: "timeout",
+        errors: ["Lean check timed out after 240 seconds"],
+        warnings: [],
+        sorries: [],
+        rawOutput: (result.stdout + "\n" + result.stderr).trim()
+      };
+    }
+    const { errors, warnings, sorries } = parseLeanOutput(
+      result.stdout,
+      result.stderr
+    );
+    const kind = classifyLeanFailure(result.exitCode, errors);
+    const success = kind === "success";
+    const rawOutput = (result.stdout + "\n" + result.stderr).trim();
+    return {
+      success,
+      kind,
+      errors,
+      warnings,
+      sorries,
+      rawOutput
+    };
+  } finally {
+    await removeTempDir(tempDir);
+  }
+}
+
+// src/tools/leanRun.ts
+import { writeFile as writeFile4 } from "node:fs/promises";
+import { join as join5 } from "node:path";
+async function leanRun(input) {
+  const tempDir = await createTempDir("lean-");
+  try {
+    const programPath = join5(tempDir, "program.lean");
+    await writeFile4(programPath, input.source, "utf-8");
+    const result = await runLean(tempDir, ["run", "/work/program.lean"]);
+    return {
+      success: !result.timedOut && result.exitCode === 0,
+      exitCode: result.exitCode,
+      stdout: result.stdout.trim(),
+      stderr: result.stderr.trim(),
+      timedOut: result.timedOut
+    };
+  } finally {
+    await removeTempDir(tempDir);
+  }
+}
+
+// src/tools/leanTest.ts
+import { writeFile as writeFile5 } from "node:fs/promises";
+import { join as join6 } from "node:path";
+async function leanTest(input) {
+  const tempDir = await createTempDir("lean-");
+  try {
+    const programPath = join6(tempDir, "program.lean");
+    await writeFile5(programPath, input.source, "utf-8");
+    const result = await runLean(tempDir, ["test", "/work/program.lean"]);
+    const { errors, warnings } = parseLeanOutput(result.stdout, result.stderr);
+    const success = !result.timedOut && result.exitCode === 0 && errors.length === 0;
+    return {
+      success,
+      exitCode: result.exitCode,
+      errors,
+      warnings,
+      rawOutput: (result.stdout + "\n" + result.stderr).trim(),
+      timedOut: result.timedOut
+    };
+  } finally {
+    await removeTempDir(tempDir);
+  }
+}
+
 // src/index.ts
 function createServer() {
   const server = new McpServer({
@@ -21345,10 +21494,49 @@ function createServer() {
   );
   server.tool(
     "dafny_cleanup",
-    "Remove stale Dafny temp directories (older than 30 minutes) from /tmp.",
+    "Remove stale Dafny/Lean temp directories (older than 30 minutes) from /tmp.",
     {},
     async () => {
       const result = await dafnyCleanup();
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+  server.tool(
+    "lean_check",
+    "Parse + typecheck Lean 4 source via `lake build` in the Mathlib-pre-warmed harness. Returns { success, kind: 'success' | 'parse-error' | 'typecheck-error' | 'build-error' | 'timeout', errors, warnings, sorries }. `sorry` warnings are expected for spec stubs and are surfaced separately from real warnings.",
+    {
+      source: external_exports.string().describe("Lean 4 source code to typecheck")
+    },
+    async ({ source }) => {
+      const result = await leanCheck({ source });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+  server.tool(
+    "lean_run",
+    "Build + execute a Lean 4 file's `main : IO Unit` entry point. Used by /lean-impl for sanity-checking functional models against worked-example inputs, and by /drt-oracle as the Lean-side runner that the DRT harness invokes per random input. Not for spec stubs (which contain `sorry`).",
+    {
+      source: external_exports.string().describe("Lean 4 source code with a `main : IO Unit` entry point")
+    },
+    async ({ source }) => {
+      const result = await leanRun({ source });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
+      };
+    }
+  );
+  server.tool(
+    "lean_test",
+    "Run a Lean 4 test harness over a user module. The runner aliases this to `lake build`, which is sufficient for compile-time `#guard` and `decide` checks against literal fixtures. Sub-phase 3b-\u03B2 chose not to wire a `lake test` driver: `/drt-oracle` invokes `lean_run` against per-def runners under `formal-verification/lean/CrosscheckModel/<Name>Runner.lean` driven by an external Python harness, which gives random-input fuzzing without coupling the MCP surface to a Lake test target. `lean_test` therefore remains the compile-time `#guard` path.",
+    {
+      source: external_exports.string().describe("Lean 4 source code containing test declarations")
+    },
+    async ({ source }) => {
+      const result = await leanTest({ source });
       return {
         content: [{ type: "text", text: JSON.stringify(result, null, 2) }]
       };

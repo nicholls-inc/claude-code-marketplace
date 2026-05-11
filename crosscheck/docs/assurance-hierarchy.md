@@ -11,7 +11,7 @@ Crosscheck organises correctness into six layers of assurance. Layers 1–3 prov
 | 1 | Formally verified pure code | [`/spec-iterate`](../skills/spec-iterate/SKILL.md), [`/generate-verified`](../skills/generate-verified/SKILL.md), [`/extract-code`](../skills/extract-code/SKILL.md), [`/lightweight-verify`](../skills/lightweight-verify/SKILL.md) | Deterministic | byfuglien |
 | 2 | Compilation correctness | (Not addressed — trust your toolchain) | n/a | n/a |
 | 3 | Contract graph verification | (Future — see research doc) | n/a | n/a |
-| 4 | Implementation–spec alignment | [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md), [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md), [`/check-regressions`](../skills/check-regressions/SKILL.md) | Deterministic | hellebuyck (4) / byfuglien (regressions) |
+| 4 | Implementation–spec alignment | [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md), [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md), [`/check-regressions`](../skills/check-regressions/SKILL.md), [`/assurance-probe`](../skills/assurance-probe/SKILL.md) (Phase 1 – experimental; gates on SNR ≥ 1:3 over 20 runs) | Deterministic | hellebuyck (4) / byfuglien (regressions) |
 | 5 | Specification–intent alignment | [`/intent-check`](../skills/intent-check/SKILL.md), [`/acceptance-oracle-draft`](../skills/acceptance-oracle-draft/SKILL.md) | Probabilistic (~96%) | hellebuyck |
 | 6 | Specification completeness | [`/spec-adversary`](../skills/spec-adversary/SKILL.md) | Best-effort | hellebuyck |
 
@@ -22,7 +22,8 @@ Crosscheck organises correctness into six layers of assurance. Layers 1–3 prov
 3. Run [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md) once per supported language to install the pre-commit + CI gate that ties invariant docs to property tests.
 4. On every protected-surface change: run [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md) to generate the governance-note amendment block; on every invariant-related change: run [`/intent-check`](../skills/intent-check/SKILL.md) to verify the spec→test alignment survived the diff.
 5. Run [`/assurance-status`](../skills/assurance-status/SKILL.md) weekly to surface drift, FP rate, and kill-criterion triggers.
-6. Run [`/spec-adversary`](../skills/spec-adversary/SKILL.md) on stable modules to probe for invariants the spec is missing — Layer 6 is iterative, not deterministic.
+6. Run [`/assurance-probe`](../skills/assurance-probe/SKILL.md) every 2-4 weeks on active modules (rotation-based) to measure test strength via mutation probes.
+7. Run [`/spec-adversary`](../skills/spec-adversary/SKILL.md) on stable modules to probe for invariants the spec is missing — Layer 6 is iterative, not deterministic.
 
 ## When to use what
 
@@ -31,6 +32,7 @@ Crosscheck organises correctness into six layers of assurance. Layers 1–3 prov
 - Adding a new feature with user-observable behaviour? → [`/acceptance-oracle-draft`](../skills/acceptance-oracle-draft/SKILL.md) to lock down the scenarios upfront (hellebuyck).
 - Changing a file that's already governed (e.g. an invariant doc, an agent, a workflow)? → [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md) (hellebuyck).
 - Module has been stable for a while — what might its spec be missing? → [`/spec-adversary`](../skills/spec-adversary/SKILL.md) (hellebuyck).
+- Test passes but you suspect it's too weak to catch real failures? → [`/assurance-probe`](../skills/assurance-probe/SKILL.md) (byfuglien).
 - Forgot whether your repo's onboarded? → [`/assurance-status`](../skills/assurance-status/SKILL.md) (hellebuyck).
 
 ## Closing pointers

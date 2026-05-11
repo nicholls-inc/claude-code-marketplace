@@ -124,6 +124,50 @@ Apply the following ecosystem rules verbatim.
 - Best-effort. Delivered by `/spec-adversary` (candidate-invariant proposals) and `/acceptance-oracle-draft` (mechanically verifiable user-flow scenarios).
 - No ecosystem limit beyond the absence of an operational `docs/invariants/` tree — both skills need at least one module invariant doc to anchor against.
 
+### Step 4.5: VGD-Prerequisite Assessment (Per Module)
+
+The 6-layer reach derived in Step 4 is *repo-wide*. The actual routing decision — which engine(s) to apply where — is *per module*. This step identifies a small set of load-bearing modules and assesses each against the four VGD prerequisites named in `../../../docs/research/assurance-hierarchy.md` (Framing section).
+
+**Module identification.** Auto-detect 2–4 candidate modules using ecosystem heuristics:
+- Go: top-level `internal/` and `pkg/` subpackages with non-trivial logic (not stubs).
+- Python: top-level packages with `__init__.py` plus a `src/<package>/` layout, or directories with concentrated business logic.
+- TypeScript: top-level `src/` subdirectories or `packages/*/src` (monorepo).
+- Rust: members of a workspace or top-level `src/` modules.
+- Otherwise: ask the user to name 2–3 load-bearing modules.
+
+If auto-detection produces nothing useful, ask: *"Name 1–3 load-bearing modules to assess against VGD prerequisites — typical candidates are core domain logic, business rules, parsing/validation, or state machines."*
+
+**For each identified module, emit one row per prerequisite using this format:**
+
+```
+### Module: <module-path>
+
+| VGD Prerequisite | Verdict | Evidence |
+|---|---|---|
+| #1 Deterministic algebraic semantics | pass / partial / fail | <one line: pure functions? framework callbacks? side effects?> |
+| #2 Provable properties | pass / partial / fail | <one line: invariants articulable? edge cases enumerable?> |
+| #3 Tractable input generation | pass / partial / fail | <one line: input space samplable? boundary cases identifiable?> |
+| #4 Dual-development resources | hypothesis-only | Untested under D6: AI-augmented baseline assumed; no empirical baseline exists. (Cedar 2024 used human Lean + human Rust.) |
+
+**Recommended engine combination:** <Dafny / Lean+DRT / both / neither + which Layers 2–6 backfill the gap>
+```
+
+**Verdict semantics:**
+- `pass` — prerequisite holds without significant caveats.
+- `partial` — prerequisite holds for a sub-region of the module (name the region in the evidence column).
+- `fail` — prerequisite does not hold; route this module to layers other than Layer 1 (typically Layers 2–5 cover the gap).
+
+Prerequisite #4 is *always* `hypothesis-only` per the framing in `assurance-hierarchy.md`. Do not mark it `pass` or `fail` — there is no empirical baseline to support either.
+
+**Recommended engine logic (for the engine combination row):**
+- All three of #1–#3 `pass` → Dafny verify-and-extract (if pure) and/or Lean+DRT (if hand-written production code expected). Both can apply.
+- #1 `partial` or `fail` → Layer 1 not the right engine; route to Layers 2–5 (tests, lints, invariant docs + property tests).
+- #2 `fail` → spec-design problem, not engine choice; recommend `/spec-iterate` or `/draft-invariants` to articulate properties first.
+- #3 `fail` → DRT not applicable; lean on PBT with hand-curated strategies + invariant docs.
+- #1 `pass` + module is rule-dense (state machines, role hierarchies, workflow branches) → flag for Layer 4 behavioral-spec enrichment per ADR-0001 (pending implementation).
+
+This step emits material that Step 5 (projection table) and Step 6 (gap list) consume — both should reference per-module verdicts when prioritising.
+
 ### Step 5: Emit the Projection Table
 
 Produce a markdown section titled `## Assurance Hierarchy — <repo> Projection` that follows the per-layer projection format described in `../../../docs/research/assurance-hierarchy.md`. For each layer, emit a row with:
@@ -149,7 +193,7 @@ Example shape (the point of the example is the format — derive every value fro
 | Layer 6 (spec completeness) | Best-effort | `/spec-adversary`, `/acceptance-oracle-draft` | Requires at least one module invariant doc |
 ```
 
-Derive every row from what Steps 2–4 actually found. If the repo already has `.dfy` files, say so. If it has `docs/invariants/` already populated, say so and recommend `/assurance-status` rather than `/assurance-init`.
+Derive every row from what Steps 2–4 actually found. If the repo already has `.dfy` files, say so. If it has `docs/invariants/` already populated, say so and recommend `/assurance-status` rather than `/assurance-init`. **Cross-reference the per-module assessments from Step 4.5** in the Notes column where a layer's reach is materially constrained by which modules pass which prerequisite (e.g., "Layer 1 reach restricted to modules X, Y per prereq assessment").
 
 ### Step 6: Prioritised Gap List
 
@@ -175,6 +219,7 @@ Prioritisation heuristics:
 - Coverage gate before Layer 1 kernel work — a verified kernel with no coverage gate drifts silently.
 - Layer 1 kernel work before Layer 5 probabilistic checks — deterministic assurance first, probabilistic assurance second.
 - Layer 6 work last — best-effort skills benefit from every preceding layer.
+- **Per-module routing wins over per-layer routing.** When a Step 4.5 assessment shows that prerequisite #1 fails for a module, do not propose Layer 1 work for that module — name the alternative path (Layers 2–5) explicitly in the gap row's Recommended skill column.
 
 Cap the list at five items. If there are fewer, emit fewer; if more, keep the top five and note how many were dropped.
 
@@ -197,6 +242,10 @@ Attach any audit-specific adjustments, e.g., "Skip `/invariant-coverage-scaffold
 - [ ] Secondary languages recorded separately, not merged into the primary projection
 - [ ] Existing tooling signals cited with file paths, not just named
 - [ ] Per-layer projection derived from the detected tooling, not copied from any reference example
+- [ ] 2–4 load-bearing modules identified for VGD-prereq assessment (auto-detected or user-named)
+- [ ] Per-module prereq table emitted with verdicts for #1–#3 and `hypothesis-only` for #4
+- [ ] Recommended engine combination per module is consistent with the prereq verdicts
+- [ ] Step 5 projection table cross-references Step 4.5 verdicts where layer reach is module-constrained
 - [ ] Every "not addressable" claim names the specific missing tool (e.g., "no verified Go compiler")
 - [ ] Rust repos note MIR-level partial Layer 2 reach rather than silent omission
 - [ ] Python / Ruby / Java / C# repos explicitly state Layer 1 is unreachable without a verifier bridge
