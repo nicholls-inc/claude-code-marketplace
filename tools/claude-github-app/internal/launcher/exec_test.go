@@ -209,6 +209,97 @@ func TestTempGitConfig_NoBotIdentity(t *testing.T) {
 	}
 }
 
+func TestRenderGitConfig_EmptyTokenRefused(t *testing.T) {
+	if _, err := RenderGitConfig(GitConfigOpts{}); err == nil {
+		t.Fatal("expected error for empty token")
+	}
+}
+
+func TestRenderGitConfig_OmitsUserBlockWhenIdentityMissing(t *testing.T) {
+	s, err := RenderGitConfig(GitConfigOpts{Token: "x"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(s, "[user]") {
+		t.Errorf("expected no [user] block, got:\n%s", s)
+	}
+	if !strings.Contains(s, "Authorization: Bearer x") {
+		t.Errorf("auth header missing:\n%s", s)
+	}
+}
+
+func TestWriteGitConfigAtomic_CreatesFileWithModeAndContents(t *testing.T) {
+	dst := filepath.Join(t.TempDir(), "sub", "gitconfig")
+	err := WriteGitConfigAtomic(dst, GitConfigOpts{
+		Token:    "ghs_abc",
+		BotName:  "my-app[bot]",
+		BotEmail: "1+my-app[bot]@users.noreply.github.com",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	info, err := os.Stat(dst)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if info.Mode().Perm() != 0o600 {
+		t.Errorf("file mode = %#o, want 0600", info.Mode().Perm())
+	}
+	parent, err := os.Stat(filepath.Dir(dst))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if parent.Mode().Perm() != 0o700 {
+		t.Errorf("parent dir mode = %#o, want 0700", parent.Mode().Perm())
+	}
+	data, _ := os.ReadFile(dst)
+	contents := string(data)
+	if !strings.Contains(contents, "Authorization: Bearer ghs_abc") {
+		t.Errorf("auth header missing:\n%s", contents)
+	}
+	if !strings.Contains(contents, "name = my-app[bot]") {
+		t.Errorf("user.name missing:\n%s", contents)
+	}
+}
+
+func TestWriteGitConfigAtomic_OverwritesExistingFile(t *testing.T) {
+	dst := filepath.Join(t.TempDir(), "gitconfig")
+	if err := WriteGitConfigAtomic(dst, GitConfigOpts{Token: "first"}); err != nil {
+		t.Fatal(err)
+	}
+	if err := WriteGitConfigAtomic(dst, GitConfigOpts{Token: "second"}); err != nil {
+		t.Fatal(err)
+	}
+	data, _ := os.ReadFile(dst)
+	if strings.Contains(string(data), "first") {
+		t.Errorf("old token leaked:\n%s", string(data))
+	}
+	if !strings.Contains(string(data), "second") {
+		t.Errorf("new token missing:\n%s", string(data))
+	}
+}
+
+func TestWriteGitConfigAtomic_NoTempFileLeak(t *testing.T) {
+	// After a successful write, the parent dir should contain ONLY the
+	// destination file — no .gitconfig-* temp residue.
+	dir := t.TempDir()
+	dst := filepath.Join(dir, "gitconfig")
+	if err := WriteGitConfigAtomic(dst, GitConfigOpts{Token: "x"}); err != nil {
+		t.Fatal(err)
+	}
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(entries) != 1 || entries[0].Name() != "gitconfig" {
+		var names []string
+		for _, e := range entries {
+			names = append(names, e.Name())
+		}
+		t.Errorf("expected only [gitconfig], got %v", names)
+	}
+}
+
 func TestTempGHConfigDir_ModeAndCleanup(t *testing.T) {
 	dir, cleanup, err := TempGHConfigDir()
 	if err != nil {

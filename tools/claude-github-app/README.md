@@ -24,6 +24,33 @@ which -a claude
 # /Users/you/.local/bin/claude     # real binary; shadowed
 ```
 
+### Optional: install gh + git shims
+
+Installation tokens last ~1h. Once `claude` is exec'd, its inherited `GH_TOKEN` is frozen in the child process — a 90-minute coding session will hit `gh` 401s and `git push` auth failures at the 1h mark. The shims fix this:
+
+```bash
+make install-shims    # builds bin/gh + bin/git and copies to ~/bin/
+# (or `make install-all` for everything in one go)
+```
+
+`~/bin/gh` and `~/bin/git` shadow the real binaries on PATH. Each invocation re-mints from `~/.cache/claude-github-app/<app>.json` if the token is within the 5-minute refresh window. Verify:
+
+```bash
+which -a gh git
+# /Users/you/bin/gh         (shim)
+# /opt/homebrew/bin/gh      (real, found by walking PATH and skipping ~/bin)
+# /Users/you/bin/git        (shim)
+# /usr/bin/git              (real)
+```
+
+**The shims pass through unmodified when CWD doesn't match any `[[mappings]]` entry.** Running `gh repo view` from a non-mapped directory is functionally identical to running real `gh` directly — no token injection, no env changes, no extra GitHub API calls.
+
+Inside a mapped directory, the shims:
+- **gh shim**: overrides `GH_TOKEN` and `GITHUB_TOKEN` in the env passed to real `gh`.
+- **git shim**: writes a fresh gitconfig at `~/.cache/claude-github-app/<app>-gitconfig` and sets `GIT_CONFIG_GLOBAL` to it before exec'ing real `git`.
+
+Cost per invocation: ~5ms on cache hit, ~500ms when minting fresh (≤ once per hour per app).
+
 ## One-time GitHub App setup
 
 1. Create a GitHub App (Settings → Developer settings → GitHub Apps → New).
@@ -102,7 +129,11 @@ git config user.email          # 198765432+my-app[bot]@users.noreply.github.com
 
 ### Mid-session token refresh
 
-Installation tokens last ~1 hour. The wrapper mints fresh at launch only — once `claude` is running, its inherited `GH_TOKEN` cannot be replaced by the parent. Two workarounds:
+Installation tokens last ~1 hour. The wrapper mints fresh at launch only — once `claude` is running, its inherited `GH_TOKEN` cannot be replaced by the parent.
+
+**Recommended: install the gh + git shims** (see "Optional: install gh + git shims" above). With shims installed, every `gh` and `git` invocation auto-refreshes from cache — no user action needed, no restart required.
+
+Without the shims, the manual workarounds below still apply:
 
 ```bash
 # One-shot fresh token for a single gh command
@@ -112,7 +143,7 @@ GH_TOKEN=$(claude-github-app token) gh pr create ...
 claude-github-app git-config-refresh
 ```
 
-For a persistently fresh `GH_TOKEN`, restart `claude`. The wrapper will re-mint.
+For a persistently fresh `GH_TOKEN` inside the claude process itself, restart `claude`. The wrapper will re-mint.
 
 ### Inspecting cached state
 
@@ -134,7 +165,7 @@ The wrapper guarantees the following invariants. See `docs/plan.md` in this PR f
 - **PR-actor:** when an app is mapped and token mint succeeds, `gh pr create` produces a PR with `author.login == "<app>[bot]"`.
 - **Commit-author:** when the bot user ID is known, commits have `author.email = "<id>+<app>[bot]@users.noreply.github.com"`. If bot lookup fails, the wrapper degrades commit-author silently but flags it in the status line.
 
-**§C — Token lifetime.** The wrapper guarantees a valid token only at the moment of `exec`. Tokens expire ~1h later per GitHub policy. Restart `claude` for a persistently fresh token; use `claude-github-app token` / `git-config-refresh` for per-call refresh.
+**§C — Token lifetime.** The wrapper guarantees a valid token only at the moment of `exec`. Tokens expire ~1h later per GitHub policy. The optional gh/git shims relax this to "valid at every `gh`/`git` invocation" by re-minting from the shared cache. For tools other than `gh`/`git`, restart `claude` for a persistently fresh token in-process or use `claude-github-app token` per call.
 
 **§D — Cleanup.** Temp dirs are removed on normal exit, signal-forwarded exit, or recovered panic. Under `SIGKILL` / host crash, residency is bounded by the 24h startup sweep.
 
@@ -156,7 +187,9 @@ The wrapper does NOT defend against:
 |---|---|---|
 | `private key file ... is mode 0644` | PEM perms too broad | `chmod 600 ~/.config/claude-github-app/keys/<app>.pem` |
 | `bot user lookup failed for X` | App slug ≠ `name` in config | Make sure `name` matches the GitHub App's slug (lowercase, hyphenated) exactly |
-| `gh` 401 after ~1h | Token expired mid-session | Restart `claude`, or `GH_TOKEN=$(claude-github-app token) gh ...` |
+| `gh` 401 after ~1h | Token expired mid-session | Install the shim (`make install-shims`), or `GH_TOKEN=$(claude-github-app token) gh ...` |
+| Shim runs but token isn't injected | CWD doesn't match any `[[mappings]]` | Add a mapping for the CWD, or set `default_app` in config |
+| `which gh` returns real gh first | `~/bin` not on PATH before `/opt/homebrew/bin` etc. | Put `export PATH="$HOME/bin:$PATH"` early in `~/.zshrc` |
 | `which claude` returns `/Users/.../.local/bin/claude` first | `~/bin` not on PATH (or not first) | Add `export PATH="$HOME/bin:$PATH"` to the start of `~/.zshrc` |
 | PR author is your personal account | `gh` used cached creds, not `GH_TOKEN` | Confirm `gh auth status` shows `via GH_TOKEN`. Check no `GITHUB_TOKEN` was unset by an outer wrapper |
 | Wrapper hangs after Ctrl-Z | Job control bug | `fg` to resume both; report as bug |
