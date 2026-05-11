@@ -33,20 +33,20 @@ The five-step Lean pipeline. Run sequentially; each consumes the previous step's
 | [`/locate-fault`](../skills/locate-fault/SKILL.md) | "locate fault", "find the bug", "why does this fail", "root cause" | Locate the root cause of a failing test using 4-phase structured analysis. | byfuglien |
 | [`/trace-execution`](../skills/trace-execution/SKILL.md) | "trace execution", "what happens when", "follow the code path", "call graph" | Hypothesis-driven execution-path tracing that builds complete call graphs. | byfuglien |
 
-## Spec management & adequacy
+## Spec management
 
 | Skill | Trigger phrases | One-line summary | Owner |
 |-------|----------------|------------------|-------|
 | [`/check-regressions`](../skills/check-regressions/SKILL.md) | "check regressions", "did my changes break specs", "re-verify" | Re-verify Dafny specs whose source files have changed. | byfuglien |
 | [`/suggest-specs`](../skills/suggest-specs/SKILL.md) | "suggest specs", "what should I verify", "find verification targets" | Analyse code to propose candidate formal specifications. | byfuglien |
-| [`/rationale`](../skills/rationale/SKILL.md) | "build rationale", "is this code adequate", "adequacy argument" | Build a hierarchical claim tree arguing code adequately satisfies its requirements. | byfuglien |
 
-## Assurance hierarchy — Layer 4 (impl–spec alignment)
+## Assurance hierarchy — Layer 4 (impl–spec alignment, semi-formal rationales)
 
 | Skill | Trigger phrases | One-line summary | Owner |
 |-------|----------------|------------------|-------|
 | [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md) | "invariant coverage", "coverage gate", "scaffold invariant check" | Generate a pre-commit + CI gate linking invariant docs to property tests (Go/Python/TypeScript in v1). | hellebuyck |
 | [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md) | "amend protected file", "protected surface amendment", "governance note" | Generate the governance-note amendment block required when editing a protected-surface file. | hellebuyck |
+| [`/rationale`](../skills/rationale/SKILL.md) | "build rationale", "is this code adequate", "adequacy argument" | Build a hierarchical claim tree arguing code adequately satisfies its requirements; leaves classified by verification method. See [snapshot](./specs/rationale-2026-05-11.md). | hellebuyck |
 
 ## Assurance hierarchy — Layer 5 (spec–intent alignment)
 

@@ -47,6 +47,12 @@ Orchestrator for specification-chain assurance and governance scaffolding. Named
 |-------|-------------|
 | `/protected-surface-amend` | Given a planned change to a protected file, generate the governance-note amendment block (rationale, authority, linked roadmap item, diff plan) |
 
+### Adequacy (Layer 4 — semi-formal rationales)
+
+| Skill | What it does |
+|-------|-------------|
+| `/rationale` | Build a hierarchical claim tree arguing code is adequate; leaves tagged FORMAL / BEHAVIORAL / STATIC / SEMANTIC and discharged per class |
+
 ## Task Classification
 
 Classify the user's request to determine which skill to invoke. The spec chain degrades from deterministic (Layer 4, Dafny-backed — that's byfuglien's territory) to probabilistic (Layer 5, `/intent-check`) to best-effort (Layer 6, `/spec-adversary`). Bootstrap tasks precede verification tasks; status tasks require onboarding to be complete.
@@ -62,6 +68,7 @@ Classify the user's request to determine which skill to invoke. The spec chain d
 | Spec-intent alignment (Layer 5) | Protected-surface PR, "does the spec match the code", "run intent-check" | `/intent-check` |
 | Spec completeness (Layer 6) | "What are we missing?", "adversarial invariants", quarterly module review | `/spec-adversary` |
 | Governance amendment | Planned change to a protected file, "amendment block", "authority for this edit" | `/protected-surface-amend` |
+| Adequacy argument | "Is this code adequate?", "Build a rationale", code + informal requirements | `/rationale` |
 | Implementation chain (hand down) | Module turns out to be a Dafny candidate, pure sequential logic, quantified properties | Hand to byfuglien: `/spec-iterate` → `/generate-verified` → `/extract-code` |
 | Proof exists but intent uncertain (escalate up) | byfuglien produced a clean proof; user asks "is the spec capturing intent?" | `/intent-check` (hellebuyck owns this; byfuglien escalates up) |
 | Code reasoning, fault-finding, patches | "Why does this fail?", "what does X do?", patch comparison | Hand to byfuglien: `/reason`, `/locate-fault`, `/compare-patches`, `/trace-execution` |
@@ -107,6 +114,7 @@ Read the selected skill's SKILL.md file and follow its methodology exactly:
 - For `/spec-adversary`: read `skills/spec-adversary/SKILL.md`
 - For `/acceptance-oracle-draft`: read `skills/acceptance-oracle-draft/SKILL.md`
 - For `/protected-surface-amend`: read `skills/protected-surface-amend/SKILL.md`
+- For `/rationale`: read `skills/rationale/SKILL.md`
 
 For the new-repo onboarding sequence (`/assurance-layer-audit` → `/assurance-init` → `/invariant-coverage-scaffold`), execute the skills sequentially, getting user approval between phases. Do not batch-run them — the audit's output informs init's scaffolding choices, and init's output informs which modules get coverage first.
 
@@ -143,6 +151,11 @@ Every result must pass these quality gates before delivery:
 - **Amendment block complete** — rationale, authority, linked roadmap item, diff plan all present
 - **Partition-aware** — amendment cites which class (Harness/workflow vs Module invariants/tests) the touched file belongs to
 - **Authority cited** — authority line names a ROADMAP item, prior attestation, or human decision, not "agent judgement"
+
+**For adequacy output (`/rationale`):**
+- **Claim tree soundness** — tree structure is valid: if all leaves hold, the root holds (structural check; does not catch missing branches — see `../docs/specs/rationale-2026-05-11.md` §7–§8)
+- **Classification accuracy** — leaf claims tagged with the correct verification method (`[FORMAL]`/`[BEHAVIORAL]`/`[STATIC]`/`[SEMANTIC]`)
+- **Actionable output** — every claim has a clear next step (skill to run, test to execute, or judgment to make)
 
 **For all output:**
 - **Verification checklist present** — output includes a Verification Checklist section with all bracketed items filled in from the analysis
