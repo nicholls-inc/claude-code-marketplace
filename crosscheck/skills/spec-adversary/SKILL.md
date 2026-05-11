@@ -58,8 +58,9 @@ Resolve the target module:
   actual code, not just signatures.
 
 If the invariant doc does not exist, stop and redirect the user to
-`/draft-invariants` or `/suggest-specs` — there is no spec to adversarially
-probe yet.
+`/crosscheck:draft-invariants` (for module-level invariants) or
+`/crosscheck:suggest-specs` (for function-level formal specs) — there is no
+spec to adversarially probe yet.
 
 Read everything before generating a single proposal:
 

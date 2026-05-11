@@ -234,14 +234,16 @@ Layer label: `Layer 0 (governance)`.
 
 **Fires when:** `has_roadmap && invariant_modules < 5` AND kill-criterion
 not active.
-**Skill:** `draft-invariants` (then optionally `/crosscheck:spec-adversary`
+**Skill:** `/crosscheck:draft-invariants` (then optionally `/crosscheck:spec-adversary`
 on the result for completeness pre-check).
 **Output:** New `docs/invariants/<module>.md` (PR).
 
 Pick the next ROADMAP item with `Status: Not started`. Use the
-`draft-invariants` methodology: contract-first, anchor each invariant in
-real past failures (grep `git log` for the module path + `fix`/`incident`
-tokens), then gap-analyse against the code. Do **not** ship invariants
+`/crosscheck:draft-invariants` methodology: contract-first (read the prose
+spec when one exists; fall back to user elicitation only when none does),
+anchor each invariant in real past failures (audit-finding traceability
+table, `git log` for module path + `fix`/`incident` tokens), then
+gap-analyse against the code. Do **not** ship invariants
 that aren't anchored in evidence.
 
 The PR body must list invariants with stable IDs (`<MODULE>-001`, etc.)

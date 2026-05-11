@@ -1,6 +1,6 @@
 # Crosscheck Skill Catalogue
 
-Exhaustive index of all 26 skills in the crosscheck plugin, grouped by category. See [`../README.md`](../README.md) for the plugin overview, and [`./agents.md`](./agents.md) for the orchestrator agent pages (`byfuglien`, `hellebuyck`).
+Exhaustive index of all 27 skills in the crosscheck plugin, grouped by category. See [`../README.md`](../README.md) for the plugin overview, and [`./agents.md`](./agents.md) for the orchestrator agent pages (`byfuglien`, `hellebuyck`).
 
 ## Formal verification (Dafny verify-and-extract)
 
@@ -67,6 +67,7 @@ The five-step Lean pipeline. Run sequentially; each consumes the previous step's
 |-------|----------------|------------------|-------|
 | [`/assurance-layer-audit`](../skills/assurance-layer-audit/SKILL.md) | "layer audit", "assurance audit", "hierarchy reach" | Entry-point diagnostic; emits a per-layer reach projection. Run before `/assurance-init`. | hellebuyck |
 | [`/assurance-init`](../skills/assurance-init/SKILL.md) | "assurance init", "onboard to assurance hierarchy", "scaffold assurance" | Interactive bootstrap of governance scaffolding (ROADMAP, protected surfaces, invariant docs). | hellebuyck |
+| [`/draft-invariants`](../skills/draft-invariants/SKILL.md) | "draft invariants", "invariants for X", "property tests for X", "lock down X against drift" | Spec-aware module invariant drafting; reads prose specs first, falls back to user elicitation, produces `docs/invariants/<module>.md` + property tests. | hellebuyck |
 | [`/assurance-status`](../skills/assurance-status/SKILL.md) | "assurance status", "status dashboard" | Onboarding-gated status dashboard surfacing drift, FP rate, kill criteria. | hellebuyck |
 | [`/assurance-roadmap-check`](../skills/assurance-roadmap-check/SKILL.md) | "check assurance roadmap", "roadmap drift" | Weekly roadmap drift detector (Status field vs observed state). | hellebuyck |
 
