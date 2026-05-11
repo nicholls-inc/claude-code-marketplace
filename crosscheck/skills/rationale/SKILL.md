@@ -42,10 +42,14 @@ Build a hierarchical argument tree rooted at "The code adequately satisfies the 
 
 **Root claim:** "Code `[function/module]` is adequate for `[requirements summary]`"
 
-**Decomposition strategy — split into structural, behavioral, and non-functional subclaims:**
+**Decomposition strategy — split into trust-boundary, structural, behavioral, and non-functional subclaims:**
 
 ```
 ROOT: Code is adequate for [requirements]
+├── C0: Trust boundaries
+│   ├── C0.1: External dependencies enumerated (extern methods, IO, network, third-party libraries)
+│   ├── C0.2: Domain limitations documented (float precision, concurrency, generic-type erasure)
+│   └── C0.3: Trust assumptions stated (what is trusted to be correct without verification — comparison operators, allocator, OS primitives)
 ├── C1: Structural correctness
 │   ├── C1.1: Output has correct type/shape
 │   ├── C1.2: All required fields/values populated
@@ -60,6 +64,8 @@ ROOT: Code is adequate for [requirements]
     ├── C3.2: No resource leaks (memory, file handles, connections)
     └── C3.3: Error messages are actionable
 ```
+
+**Why C0 is first-class.** Trust boundaries bound what the rest of the tree can verify at all. A STATIC leaf claiming *"`sort.py:42` implements quicksort correctly"* is meaningless if the comparison function is `{:extern}` or the input arrives from a network call the agent never reads. Promoting trust boundaries to a top-level branch — rather than a footnote on the final checklist — makes them part of the argument structure: every downstream claim is conditional on the C0 leaves, and that conditioning is visible.
 
 Adapt the tree to the specific code. Not all branches apply to every function. Prune irrelevant branches and add domain-specific ones.
 
@@ -123,6 +129,9 @@ The final output is a checklist where each item traces back through the tree to 
 ### Claim Tree
 
 ROOT: Code is adequate for [requirements summary]
+├── C0: Trust boundaries
+│   ├── C0.1 [STATIC]: No extern methods, IO, or network calls in implementation
+│   └── C0.2 [SEMANTIC]: Element comparison operator (`<=`) assumed total and transitive
 ├── C1: Structural correctness
 │   ├── C1.1 [STATIC]: Output type is List[int]
 │   └── C1.2 [STATIC]: Result length equals input length
@@ -137,6 +146,8 @@ ROOT: Code is adequate for [requirements summary]
 
 ### Verification Results
 
+- [x] C0.1 [STATIC]: No extern methods, IO, or network calls — verified at `sort.py:1-30` (pure function, imports limited to stdlib types)
+- [ ] C0.2 [SEMANTIC]: `<=` operator totality and transitivity — **human review required** (downstream FORMAL claims condition on this)
 - [x] C1.1 [STATIC]: Output type is `List[int]` — verified at `sort.py:15` (return type annotation)
 - [x] C1.2 [STATIC]: Result length equals input length — verified at `sort.py:28` (no elements added/removed in loop)
 - [x] C2.1 [FORMAL]: Output is sorted — verified via `dafny_verify` (spec: `ensures forall i :: 0 <= i < |result|-1 ==> result[i] <= result[i+1]`)
@@ -151,9 +162,9 @@ ROOT: Code is adequate for [requirements summary]
 | Verification Method | Total | Verified | Pending |
 |-------------------|-------|----------|---------|
 | FORMAL | 2 | 2 | 0 |
-| STATIC | 2 | 2 | 0 |
+| STATIC | 3 | 3 | 0 |
 | BEHAVIORAL | 3 | 0 | 3 |
-| SEMANTIC | 1 | 0 | 1 |
+| SEMANTIC | 2 | 0 | 2 |
 
 **If all pending items pass, the root claim holds by construction.**
 ```
@@ -170,7 +181,7 @@ ROOT: Code is adequate for [requirements summary]
 - [ ] [STATIC] claims cite specific file:line evidence
 - [ ] [SEMANTIC] claims clearly state what the user must judge
 - [ ] The claim tree structure is sound — if all leaves hold, the root holds
-- [ ] Trust boundaries noted (Dafny limitations, extern methods, float precision)
+- [ ] C0 trust-boundary branch enumerated (extern methods, IO, network, float precision, generic-type erasure, concurrency) — downstream FORMAL/BEHAVIORAL/STATIC claims condition on these leaves
 - [ ] Unaddressed requirements flagged as gaps rather than silently omitted
 ```
 
