@@ -4,6 +4,23 @@ Journal for the Crosscheck plugin. Decisions that affect skills, agents, the MCP
 
 ---
 
+## 2026-05-11 — /rationale: FORMAL routing Layer 1 vs Layer 4
+
+**Type:** propagated-discovery
+**Touches:** skills/rationale/SKILL.md (Steps 3, 4, 6)
+**Why:** Lands the snapshot's §4 FORMAL design into the operational prompt. Before this PR, every FORMAL leaf was routed through a single discharge path — *"draft Dafny spec → offer `/spec-iterate`"* — with no distinction between code that's a Layer 1 candidate (pure, ships as Dafny extraction) and code that needs Layer 4 (effectful/networked/concurrent, Lean as DRT oracle, production code stays as-is). The snapshot named both routes and the picking heuristic; SKILL.md was still pointing only at Layer 1.
+**Links:** [snapshot §4](docs/specs/rationale-2026-05-11.md), parent snapshot PR (#169), C0 branch PR (#173)
+
+Step 3's classification table widens the `[FORMAL]` verification-method cell from a single Dafny route into two layer-tagged routes (Layer 1 Dafny, Layer 4 Lean pipeline). Classification guidelines gain a *FORMAL routing* line that names the purity/effect-profile heuristic — pure-functional shape → Layer 1, effectful/networked/concurrent/shipping-floats → Layer 4.
+
+Step 4's `[FORMAL]` section is restructured around the two discharge routes. *Layer 1* keeps the existing draft-Dafny-spec mechanics. *Layer 4* names the full Lean pipeline (`/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle`), is explicit that the Lean model is **not** shipped, and marks the leaf verified only after `/drt-oracle` reports clean. A new *Picking the route* paragraph encodes the heuristic and instructs the skill to ask the user when ambiguous rather than guess.
+
+Step 6's verification-checklist `[FORMAL]` bullet widens accordingly — routing-by-profile is now an explicit gate the skill self-checks before delivery.
+
+Step 5's worked example is intentionally untouched: the sort case is a clean Layer 1 example, so the existing verification results (`dafny_verify` discharge) still match. A worked Layer 4 example would be a follow-up addition once a candidate effectful module is in hand; not part of this PR.
+
+---
+
 ## 2026-05-11 — /rationale: promote trust boundaries to C0 top-level branch
 
 **Type:** propagated-discovery

@@ -80,7 +80,7 @@ Assign each leaf claim a verification strategy:
 
 | Tag | Meaning | Verification Method |
 |-----|---------|-------------------|
-| `[FORMAL]` | Can be proven mathematically | Candidate Dafny spec → offer `/spec-iterate` |
+| `[FORMAL]` | Can be proven mathematically | Layer 1 (pure code → ships): candidate Dafny spec → `/spec-iterate`. Layer 4 (effectful/networked/concurrent): candidate Lean spec → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` |
 | `[BEHAVIORAL]` | Can be tested by running code | Generate property-based tests or test cases |
 | `[STATIC]` | Can be verified by reading code | Cite evidence at specific `file:line` locations |
 | `[SEMANTIC]` | Requires human domain judgment | Add to human review checklist |
@@ -88,6 +88,7 @@ Assign each leaf claim a verification strategy:
 **Classification guidelines:**
 - Quantified properties ("for all", "there exists", "is a permutation of") → `[FORMAL]`
 - Invariant preservation (sorting, bounds, conservation laws) → `[FORMAL]`
+- FORMAL routing — pure functional shape, no IO/network/concurrency/shipping floats → **Layer 1** (Dafny); effectful, networked, concurrent, or shipping-float implementation → **Layer 4** (Lean pipeline). See Step 4 for the discharge mechanics
 - Edge case handling (empty input, null, overflow) → `[BEHAVIORAL]`
 - Type correctness, field presence, structural shape → `[STATIC]`
 - Business rule alignment, UX quality, naming conventions → `[SEMANTIC]`
@@ -98,11 +99,22 @@ Assign each leaf claim a verification strategy:
 
 For each leaf claim, attempt verification using the classified method:
 
-**`[FORMAL]` claims:**
+**`[FORMAL]` claims — two discharge routes by assurance layer.** Pick the route at classification time using the heuristic in Step 3; the leaf's discharge mechanics differ between routes.
+
+*Layer 1 — pure code shipping to production.*
 - Draft a candidate Dafny specification (preconditions + postconditions)
 - Offer to call `dafny_verify` with the candidate spec
 - If the user approves and verification passes, mark as verified
 - If verification fails, note the failure and suggest `/spec-iterate` for iterative refinement
+- The Dafny implementation is the production artefact (extracted to Python or Go via `/extract-code`); this is the classical Crosscheck Layer 1 case
+
+*Layer 4 — implementation matches a model.* For code where Dafny doesn't reach (impure, effectful, networked, concurrent, shipping floats):
+- Draft a candidate Lean 4 specification stub and walk the pipeline: `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle`
+- The Lean model is **not** shipped — it runs as a differential-testing oracle against the production implementation
+- Routing here is Layer 4 (impl-vs-model alignment), not Layer 1 (pure verified production code); `/lean-impl` and `/drt-oracle` are Layer 4 skills even though they exercise formal-methods machinery
+- Mark as verified only after `/drt-oracle` reports clean (no oracle disagreements) on the chosen input space
+
+*Picking the route.* Ask whether the leaf names a property of pure code with a clean functional shape (Layer 1) or a behavioural correspondence between an effectful implementation and an abstract model (Layer 4). If the production code does IO, networks, holds concurrent state, or ships floats — Layer 4. If it's a pure function whose Dafny equivalent can be the production artefact — Layer 1. When the answer is genuinely ambiguous, ask the user before drafting either spec.
 
 **`[BEHAVIORAL]` claims:**
 - Generate concrete test cases or property-based test code
@@ -176,7 +188,7 @@ ROOT: Code is adequate for [requirements summary]
 
 - [ ] All requirements have at least one corresponding leaf claim in the tree
 - [ ] No leaf claim is left unclassified
-- [ ] [FORMAL] claims have candidate Dafny specs (verified or offered for `/spec-iterate`)
+- [ ] [FORMAL] claims routed by purity/effect profile — Layer 1 (candidate Dafny spec → `/spec-iterate`, production artefact extracted) or Layer 4 (candidate Lean spec → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle`, Lean model used as DRT oracle, not shipped)
 - [ ] [BEHAVIORAL] claims have generated test code the user can run
 - [ ] [STATIC] claims cite specific file:line evidence
 - [ ] [SEMANTIC] claims clearly state what the user must judge
