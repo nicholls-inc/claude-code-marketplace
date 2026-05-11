@@ -29,6 +29,18 @@ Field report plugin. Generates structured performance reports on plugins, skills
 
 - **Skills** (`field-report/skills/`): `/field-report`
 
+## Tools
+
+### claude-github-app (`tools/claude-github-app/`)
+
+Local Go wrapper that intercepts `claude` invocations and injects a GitHub App installation token chosen by working directory. Not a Claude plugin — a developer tool that lives under `tools/`. Installs to `~/bin/claude` and `~/bin/claude-github-app`, shadowing the real `claude` on PATH and execing it with isolated `GH_CONFIG_DIR` and `GIT_CONFIG_GLOBAL`. First Go module in this repo; uses `github.com/BurntSushi/toml` and `github.com/golang-jwt/jwt/v5`.
+
+Optional `gh` + `git` PATH shims (`make install-shims`) solve mid-session token expiry: every `gh`/`git` invocation re-reads the shared `~/.cache/claude-github-app/` cache and re-mints if within the 5-minute refresh window. Unmapped CWDs pass through to real `gh`/`git` unmodified. Shim runtime is in `internal/shim/`; per-tool injection logic in `cmd/gh/main.go` and `cmd/git/main.go`.
+
+- Build: `cd tools/claude-github-app && make build`
+- Install: `make install` (claude + claude-github-app) or `make install-all` (also installs gh + git shims)
+- Test: `make test` (pure Go, no Docker)
+
 ## Development — crosscheck
 
 ```bash
