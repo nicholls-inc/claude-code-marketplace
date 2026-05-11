@@ -4,6 +4,17 @@ Journal for the Crosscheck plugin. Decisions that affect skills, agents, the MCP
 
 ---
 
+## 2026-05-11 — /rationale snapshot: defer STATIC citation post-process
+
+**Type:** correction
+**Touches:** docs/specs/rationale-2026-05-11.md (§4 STATIC, §8 deferred-until-field-evidence)
+**Why:** No fabricated `STATIC` citations observed in `/rationale` invocations to date. The snapshot's §4 declared the deterministic read-and-string-search post-process as part of the design; this is premature surface area against an unobserved failure mode. §8 already establishes the right pattern for this exact reflex — deferred until field evidence — applied there to tree completeness.
+**Links:** [snapshot](docs/specs/rationale-2026-05-11.md), parent snapshot PR (#169), cascade PR (#170)
+
+The §4 STATIC paragraph drops the post-process language and adds a one-line pointer to §8. §8 gains a second deferred concern ("STATIC citation honesty") with the same shape as the existing tree-completeness block — observed-failure trigger, on-shelf option (read-and-string-search), explicit cost framing. Strict v2 reading would make this a new dated snapshot superseding 2026-05-11; chose the lighter-touch amendment within the same week as merge, since this is correction of premature scope rather than design evolution. Downstream effect: the planned SKILL.md catch-up PR series drops from three to two (C0 trust-boundary branch and FORMAL Layer 1 vs Layer 4 routing remain).
+
+---
+
 ## 2026-05-11 — /rationale Layer-4 docs cascade + status flip
 
 **Type:** propagated-discovery
