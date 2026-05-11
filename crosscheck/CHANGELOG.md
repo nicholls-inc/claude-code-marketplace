@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.3.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.2.0...crosscheck-v2.3.0) (2026-05-11)
+
+
+### Features
+
+* **crosscheck:** /journal-context skill (JOURNAL.md walk-up) ([#177](https://github.com/nicholls-inc/claude-code-marketplace/issues/177)) ([8ec2ff1](https://github.com/nicholls-inc/claude-code-marketplace/commit/8ec2ff1227088785798c3dd2e5a456c136955b8e))
+* **crosscheck:** /rationale C0 trust-boundary top-level branch ([#173](https://github.com/nicholls-inc/claude-code-marketplace/issues/173)) ([e467c41](https://github.com/nicholls-inc/claude-code-marketplace/commit/e467c4183169a86ab7ada46706ce6e7e0b8aec26))
+* **crosscheck:** /rationale FORMAL routing Layer 1 vs Layer 4 ([#174](https://github.com/nicholls-inc/claude-code-marketplace/issues/174)) ([bb41e32](https://github.com/nicholls-inc/claude-code-marketplace/commit/bb41e3224b23ddd71f283f2584c572c4cf0af91c))
+* **crosscheck:** add /draft-invariants skill (spec-aware) ([#148](https://github.com/nicholls-inc/claude-code-marketplace/issues/148)) ([cfd30c1](https://github.com/nicholls-inc/claude-code-marketplace/commit/cfd30c1701f2f9c270e0bfb9738c7b17b3b6d837))
+* **crosscheck:** add Layer 4 Dafny spec for extractDifficultyMetrics ([#136](https://github.com/nicholls-inc/claude-code-marketplace/issues/136)) ([7f4f9fb](https://github.com/nicholls-inc/claude-code-marketplace/commit/7f4f9fbcc48320687b6b75fec7227b979abd5445))
+* **crosscheck:** implementation of /assurance-probe skill ([#141](https://github.com/nicholls-inc/claude-code-marketplace/issues/141)) ([4d45de7](https://github.com/nicholls-inc/claude-code-marketplace/commit/4d45de7e874720251ac47ef9ff19e19c2640cde8))
+* **crosscheck:** Layer 4 Dafny specs for parseDafnyOutput and shouldExclude ([#134](https://github.com/nicholls-inc/claude-code-marketplace/issues/134)) ([b8f9bb5](https://github.com/nicholls-inc/claude-code-marketplace/commit/b8f9bb530cb5fc84e2823e682927a71560680926))
+* **crosscheck:** Lean executable-model pipeline + layered-assurance framing ([#147](https://github.com/nicholls-inc/claude-code-marketplace/issues/147)) ([c1bcd49](https://github.com/nicholls-inc/claude-code-marketplace/commit/c1bcd49cd0f480e92c6b5aff97e41510656477dc))
+* **crosscheck:** threshold framing A4 ([#143](https://github.com/nicholls-inc/claude-code-marketplace/issues/143)) ([9f29cc4](https://github.com/nicholls-inc/claude-code-marketplace/commit/9f29cc4116f633129fe481575963def767f8870e))
+* **layer4:** add Dafny L4 spec skeleton for extractDifficultyMetrics ([#135](https://github.com/nicholls-inc/claude-code-marketplace/issues/135)) ([96faa84](https://github.com/nicholls-inc/claude-code-marketplace/commit/96faa84c65fb3c8c3b6527bbd934aad708a0ec43))
+
 ## [2.2.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.1.0...crosscheck-v2.2.0) (2026-04-24)
 
 
