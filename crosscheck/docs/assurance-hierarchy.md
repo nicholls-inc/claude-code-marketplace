@@ -11,7 +11,7 @@ Crosscheck organises correctness into six layers of assurance. Layers 1–3 prov
 | 1 | Formally verified pure code | [`/spec-iterate`](../skills/spec-iterate/SKILL.md), [`/generate-verified`](../skills/generate-verified/SKILL.md), [`/extract-code`](../skills/extract-code/SKILL.md), [`/lightweight-verify`](../skills/lightweight-verify/SKILL.md) | Deterministic | byfuglien |
 | 2 | Compilation correctness | (Not addressed — trust your toolchain) | n/a | n/a |
 | 3 | Contract graph verification | (Future — see research doc) | n/a | n/a |
-| 4 | Implementation–spec alignment | [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md), [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md), [`/check-regressions`](../skills/check-regressions/SKILL.md), [`/assurance-probe`](../skills/assurance-probe/SKILL.md) (Phase 1 – experimental; gates on SNR ≥ 1:3 over 20 runs) | Deterministic | hellebuyck (4) / byfuglien (regressions) |
+| 4 | Implementation–spec alignment + semi-formal rationales | [`/invariant-coverage-scaffold`](../skills/invariant-coverage-scaffold/SKILL.md), [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md), [`/rationale`](../skills/rationale/SKILL.md) (see [snapshot](./specs/rationale-2026-05-11.md)), [`/check-regressions`](../skills/check-regressions/SKILL.md), [`/assurance-probe`](../skills/assurance-probe/SKILL.md) (Phase 1 – experimental; gates on SNR ≥ 1:3 over 20 runs) | Deterministic (4); semi-formal (rationales) | hellebuyck (4 + rationales) / byfuglien (regressions, probe) |
 | 5 | Specification–intent alignment | [`/intent-check`](../skills/intent-check/SKILL.md), [`/acceptance-oracle-draft`](../skills/acceptance-oracle-draft/SKILL.md) | Probabilistic (~96%) | hellebuyck |
 | 6 | Specification completeness | [`/spec-adversary`](../skills/spec-adversary/SKILL.md) | Best-effort | hellebuyck |
 
@@ -29,6 +29,7 @@ Crosscheck organises correctness into six layers of assurance. Layers 1–3 prov
 
 - Writing new business logic that should be provably correct? → [`/spec-iterate`](../skills/spec-iterate/SKILL.md) → [`/generate-verified`](../skills/generate-verified/SKILL.md) → [`/extract-code`](../skills/extract-code/SKILL.md) (byfuglien).
 - Code is correct but you suspect the spec might be wrong? → [`/intent-check`](../skills/intent-check/SKILL.md) (hellebuyck).
+- Code mixes provable, testable, readable, and judgement claims and you want one structured argument? → [`/rationale`](../skills/rationale/SKILL.md) (hellebuyck — Layer 4 semi-formal rationales).
 - Adding a new feature with user-observable behaviour? → [`/acceptance-oracle-draft`](../skills/acceptance-oracle-draft/SKILL.md) to lock down the scenarios upfront (hellebuyck).
 - Changing a file that's already governed (e.g. an invariant doc, an agent, a workflow)? → [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md) (hellebuyck).
 - Module has been stable for a while — what might its spec be missing? → [`/spec-adversary`](../skills/spec-adversary/SKILL.md) (hellebuyck).

@@ -1,6 +1,6 @@
 ---
 Date: 2026-05-11
-Status: Draft
+Status: Snapshot
 Layer: 4 (semi-formal rationales) of the 6-layer assurance hierarchy
 Owner: hellebuyck
 Audience: Harry (red-pen). The operational prompt for the agent lives in `../../skills/rationale/SKILL.md`; this doc is the design intent behind that prompt.

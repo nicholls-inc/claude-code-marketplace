@@ -4,6 +4,17 @@ Journal for the Crosscheck plugin. Decisions that affect skills, agents, the MCP
 
 ---
 
+## 2026-05-11 — /rationale Layer-4 docs cascade + status flip
+
+**Type:** propagated-discovery
+**Touches:** docs/specs/rationale-2026-05-11.md (status field), agents/byfuglien.md, agents/hellebuyck.md, docs/agents.md, docs/skills.md, docs/assurance-hierarchy.md
+**Why:** Downstream from the snapshot merged at 3da376d. The snapshot reassigned `/rationale` from byfuglien (Layers 1–3) to hellebuyck (Layer 4 — semi-formal rationales); the agent pages, skill catalogue, agent overview, and assurance-hierarchy mapping all still pointed the other way. Also flips the snapshot's frontmatter from `Status: Draft` to `Status: Snapshot` per v2 methodology (`docs/add/.retrospective/findings-and-methodology-v2.md:218-223`) — Status: Snapshot = committed, and merge is the ratification signal.
+**Links:** [snapshot](docs/specs/rationale-2026-05-11.md), [v2 methodology](docs/add/.retrospective/findings-and-methodology-v2.md), parent PR (#169)
+
+Single PR, low risk. `/rationale` removed from byfuglien's skill tables, classification, skill-readme list, and Phase 4 quality gates; added to hellebuyck's new "Adequacy (Layer 4 — semi-formal rationales)" subsection with matching classification, skill-readme entry, and validate-output gates (claim tree soundness, classification accuracy, actionable output). `docs/agents.md` moves `/rationale` from byfuglien's "Spec management" bullet to hellebuyck's "Layer 4 (impl–spec alignment)" bullet and rewords the handoff seam — the `/rationale` → `/spec-adversary` chain is now intra-hellebuyck rather than byfuglien→hellebuyck; the seam stands. `docs/skills.md` reflows the "Spec management & adequacy" section into "Spec management" (byfuglien) and folds `/rationale` into the existing "Layer 4 (impl–spec alignment, semi-formal rationales)" section. `docs/assurance-hierarchy.md` extends the Layer 4 row with `/rationale` and adds a "When to use what" pointer. Snapshot text is left untouched apart from the status flip — its byfuglien.md:147 cross-reference becomes stale, but the snapshot is a dated artefact (v2 §3.3); stale line numbers are expected, content stands. SKILL.md catch-up (C0 trust branch, FORMAL Layer 1 vs Layer 4 routing, STATIC citation post-process) ships separately per the snapshot's own callout.
+
+---
+
 ## 2026-05-11 — /rationale design-intent snapshot
 
 **Type:** propagated-discovery

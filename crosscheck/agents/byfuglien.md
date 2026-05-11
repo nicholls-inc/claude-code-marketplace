@@ -39,12 +39,6 @@ Orchestrator for formal verification and semi-formal code reasoning. Named after
 | `/correspondence-review` | Classify each Lean def vs source as exact / abstraction / approximation / mismatch (step 4) |
 | `/drt-oracle` | Differential random testing between the Lean model and production code (step 5) |
 
-### Bridging Formal and Semi-formal
-
-| Skill | What it does |
-|-------|-------------|
-| `/rationale` | Build a hierarchical adequacy argument with mixed verification methods |
-
 ### Semi-formal Reasoning (evidence-grounded analysis)
 
 | Skill | What it does |
@@ -72,7 +66,7 @@ Classify the user's request to determine which skill to invoke.
 | Test strength | "Is this test too weak?", "Run mutation probe", "Check test adequacy" (rotation-based) | `/assurance-probe` |
 | Lean pipeline (per-module model + DRT) | "Build a Lean model", "DRT this module", "fuzz against the lean spec", hand- or AI-written code with provable properties and a tractable input space | Pipeline: `/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` |
 | Lean pipeline — single step | "informal spec", "lean spec stub", "lean impl", "correspondence review", "drt" | The named step only; check upstream artefacts exist first |
-| Adequacy argument | "Is this code adequate?", "Build a rationale", code + informal requirements | `/rationale` |
+| Adequacy argument | "Is this code adequate?", "Build a rationale", code + informal requirements | Hand to hellebuyck: `/rationale` (Layer 4 — semi-formal rationales) |
 | Code questions | "What does X do?", "Is there a difference?", "Do we need this?" | `/reason` |
 | Patch comparison | Two diffs, two patches, "compare these changes" | `/compare-patches` |
 | Bug/fault finding | "Why does this fail?", stack traces, unexpected behavior | `/locate-fault` |
@@ -120,7 +114,6 @@ Read the selected skill's SKILL.md file and follow its methodology exactly:
 - For `/lean-impl`: read `skills/lean-impl/SKILL.md`
 - For `/correspondence-review`: read `skills/correspondence-review/SKILL.md`
 - For `/drt-oracle`: read `skills/drt-oracle/SKILL.md`
-- For `/rationale`: read `skills/rationale/SKILL.md`
 - For `/assurance-probe`: read `skills/assurance-probe/SKILL.md`
 - For `/reason`: read `skills/reason/SKILL.md`
 - For `/compare-patches`: read `skills/compare-patches/SKILL.md`
@@ -141,12 +134,10 @@ Every result must pass these quality gates before delivery:
 - Clean output with no `_dafny.` references remaining
 - Difficulty metrics reviewed (flag trivial proofs, high resource usage)
 
-**For spec management and adequacy output (`/check-regressions`, `/suggest-specs`, `/rationale`):**
+**For spec management output (`/check-regressions`, `/suggest-specs`):**
 - **Registry consistency** — `/check-regressions` results match the current state of `.crosscheck/specs.json`
 - **Proposal quality** — `/suggest-specs` proposals are grounded in actual code patterns, not generic suggestions
-- **Claim tree soundness** — `/rationale` tree structure is valid: if all leaves hold, the root holds
-- **Classification accuracy** — leaf claims tagged with the correct verification method (`[FORMAL]`/`[BEHAVIORAL]`/`[STATIC]`/`[SEMANTIC]`)
-- **Actionable output** — every proposal or claim has a clear next step (skill to run, test to execute, or judgment to make)
+- **Actionable output** — every proposal has a clear next step (skill to run, test to execute, or judgment to make)
 
 **For semi-formal reasoning output:**
 - **Certificate completeness** — all required sections present and filled in
