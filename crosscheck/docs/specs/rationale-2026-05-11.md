@@ -70,9 +70,7 @@ The skill picks the route by asking whether the leaf names a property of pure co
 
 **BEHAVIORAL.** The skill generates test code (concrete cases or property-based) and presents it. It does not run the tests. Marking is *"tests generated — run to verify."*
 
-**STATIC.** The skill reads the code and cites a specific `file:line` range as evidence. Example from `../../skills/rationale/SKILL.md:108`: *"C1.2 verified — all required fields set at `model.py:42-48`."*
-
-A fast deterministic post-process reads each cited range and checks that the keywords from the claim text appear there (or that the cited identifier is defined within the range). Citations failing the check are returned for re-citation or downgraded to SEMANTIC for human review. The check runs without an LLM in the loop — a pure read-and-string-search pass. This catches fabricated citations without relying on the agent to be honest about them.
+**STATIC.** The skill reads the code and cites a specific `file:line` range as evidence. Example from `../../skills/rationale/SKILL.md:108`: *"C1.2 verified — all required fields set at `model.py:42-48`."* No automated check on the citation in this snapshot — the agent's read-and-cite pass is trusted; fabricated-citation handling is deferred until field evidence (see §8).
 
 **SEMANTIC.** The skill states what the human must judge and provides the relevant code context. Marking is *"human review required."*
 
@@ -115,9 +113,17 @@ The shape is borrowed wholesale from the Goal Structuring Notation tradition: th
 
 Trigger to revisit: field reports of `/rationale` invocations where the agent built a sound tree but the user noticed (or was bitten by) a missing branch.
 
+**STATIC citation honesty.** The agent's `file:line` citation is trusted on its face — there is no automated check that the keywords from the claim text actually appear in the cited range, or that the identifier the citation names is defined inside it. A fabricated or sloppy citation (the agent points at a plausible-looking range that doesn't actually contain the evidence) would silently mark a STATIC leaf as verified.
+
+**Deferred.** No citation check is added in this snapshot. Fabricated citations have not been observed in `/rationale` invocations so far; building a deterministic gate against an unobserved failure mode is the same premature-surface-area trap §8 already flags for tree completeness. If invocations start showing fabricated or sloppy citations, the shelf option is:
+
+- *Read-and-string-search post-process* — for each cited range, read the file slice and check that the claim's keywords appear there (or that the cited identifier is defined inside). Failures return for re-citation or downgrade to SEMANTIC. No LLM in the loop. Cost: small, but only earns its place once the failure mode is real.
+
+Trigger to revisit: a field report (or a `/rationale` invocation surfaced in orchestrator audit) where a STATIC leaf was marked verified against a citation that did not actually contain the evidence.
+
 ## 9. Verification approach for this spec
 
-This spec describes prompt content in `../../skills/rationale/SKILL.md`. There is no executable model to verify against. The acceptance criterion is behavioural: a user invokes `/rationale` on a real function and gets a claim tree with a `C0` trust-boundary branch, classified leaves, attempts at verification per class (Dafny for Layer 1 FORMAL, the Lean pipeline for Layer 4 FORMAL, deterministic citation-checked STATIC, generated BEHAVIORAL test code, human-prompt SEMANTIC), and a traceable checklist whose summary table balances. Validation is by direct use, not by a separate verification pipeline.
+This spec describes prompt content in `../../skills/rationale/SKILL.md`. There is no executable model to verify against. The acceptance criterion is behavioural: a user invokes `/rationale` on a real function and gets a claim tree with a `C0` trust-boundary branch, classified leaves, attempts at verification per class (Dafny for Layer 1 FORMAL, the Lean pipeline for Layer 4 FORMAL, `file:line`-cited STATIC, generated BEHAVIORAL test code, human-prompt SEMANTIC), and a traceable checklist whose summary table balances. Validation is by direct use, not by a separate verification pipeline.
 
 The orchestrator's existing soundness check stays in place: *"`/rationale` tree structure is valid: if all leaves hold, the root holds"* (`../../agents/byfuglien.md:147`). That check is structural — it does not catch missing branches; see §7 non-goal and the deferred handling in §8.
 
