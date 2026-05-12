@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,6 +11,13 @@ import (
 	"github.com/nicholls-inc/claude-code-marketplace/tools/claude-github-app/internal/config"
 	"github.com/nicholls-inc/claude-code-marketplace/tools/claude-github-app/internal/token"
 )
+
+// wantBasicHeader mirrors the launcher-package helper so tests assert against
+// the exact wire string the renderer will emit.
+func wantBasicHeader(token string) string {
+	creds := base64.StdEncoding.EncodeToString([]byte("x-access-token:" + token))
+	return "Authorization: Basic " + creds
+}
 
 func TestInjectGitAuth_WritesPerAppConfigAndReturnsEnv(t *testing.T) {
 	tmpHome := t.TempDir()
@@ -49,7 +57,7 @@ func TestInjectGitAuth_WritesPerAppConfigAndReturnsEnv(t *testing.T) {
 	data, _ := os.ReadFile(wantPath)
 	contents := string(data)
 	for _, want := range []string{
-		"Authorization: Bearer ghs_abc",
+		wantBasicHeader("ghs_abc"),
 		"name = my-app[bot]",
 		"email = 42+my-app[bot]@users.noreply.github.com",
 	} {
@@ -96,10 +104,10 @@ func TestInjectGitAuth_RewritesOnSecondCall(t *testing.T) {
 	}
 	wantPath := filepath.Join(tmpHome, ".cache", "claude-github-app", "r-app-gitconfig")
 	data, _ := os.ReadFile(wantPath)
-	if strings.Contains(string(data), "Bearer first") {
+	if strings.Contains(string(data), wantBasicHeader("first")) {
 		t.Errorf("stale token still present after refresh:\n%s", string(data))
 	}
-	if !strings.Contains(string(data), "Bearer second") {
+	if !strings.Contains(string(data), wantBasicHeader("second")) {
 		t.Errorf("new token not written:\n%s", string(data))
 	}
 }

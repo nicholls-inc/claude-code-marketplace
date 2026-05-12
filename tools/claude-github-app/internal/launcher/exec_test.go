@@ -1,14 +1,24 @@
 package launcher
 
 import (
+	"encoding/base64"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"sort"
 	"strings"
 	"testing"
 	"time"
 )
+
+// wantBasicHeader returns the literal "Authorization: Basic <base64(x-access-token:token)>"
+// string the renderer should emit for token. Used so assertions read like
+// `Contains(contents, wantBasicHeader("ghs_test"))` instead of inlining base64.
+func wantBasicHeader(token string) string {
+	creds := base64.StdEncoding.EncodeToString([]byte("x-access-token:" + token))
+	return "Authorization: Basic " + creds
+}
 
 func stubPath(t *testing.T) string {
 	t.Helper()
@@ -186,7 +196,7 @@ func TestTempGitConfig_ContentsAndMode(t *testing.T) {
 		"name = my-app[bot]",
 		"email = 42+my-app[bot]@users.noreply.github.com",
 		"helper =",
-		"extraHeader = Authorization: Bearer ghs_test",
+		"extraHeader = " + wantBasicHeader("ghs_test"),
 	} {
 		if !strings.Contains(contents, want) {
 			t.Errorf("git config missing %q\ngot:\n%s", want, contents)
@@ -204,8 +214,8 @@ func TestTempGitConfig_NoBotIdentity(t *testing.T) {
 	if strings.Contains(string(data), "[user]") {
 		t.Errorf("[user] block leaked despite no bot identity: %s", string(data))
 	}
-	if !strings.Contains(string(data), "Authorization: Bearer ghs_test") {
-		t.Errorf("auth header missing")
+	if !strings.Contains(string(data), wantBasicHeader("ghs_test")) {
+		t.Errorf("auth header missing:\n%s", string(data))
 	}
 }
 
@@ -223,8 +233,46 @@ func TestRenderGitConfig_OmitsUserBlockWhenIdentityMissing(t *testing.T) {
 	if strings.Contains(s, "[user]") {
 		t.Errorf("expected no [user] block, got:\n%s", s)
 	}
-	if !strings.Contains(s, "Authorization: Bearer x") {
+	if !strings.Contains(s, wantBasicHeader("x")) {
 		t.Errorf("auth header missing:\n%s", s)
+	}
+}
+
+// TestRenderGitConfig_UsesBasicXAccessToken locks the wire format the renderer
+// must emit. GitHub's git smart-HTTP transport rejects `Authorization: Bearer`
+// with HTTP 401; only `Authorization: Basic base64("x-access-token:<token>")`
+// is accepted on /info/refs and /git-{upload,receive}-pack. Any future drift
+// back to Bearer, accidental URL-safe base64, or stripped padding fails this
+// test with a meaningful message.
+func TestRenderGitConfig_UsesBasicXAccessToken(t *testing.T) {
+	const token = "ghs_RegressionTestToken_0123"
+	s, err := RenderGitConfig(GitConfigOpts{Token: token})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Match the non-empty extraHeader line; the empty-reset line above it
+	// must not be picked up.
+	re := regexp.MustCompile(`(?m)^\textraHeader = (\S.*)$`)
+	matches := re.FindStringSubmatch(s)
+	if matches == nil {
+		t.Fatalf("non-empty extraHeader line not found in:\n%s", s)
+	}
+	header := matches[1]
+
+	const prefix = "Authorization: Basic "
+	if !strings.HasPrefix(header, prefix) {
+		t.Fatalf("extraHeader scheme = %q, want prefix %q (Bearer is rejected by git smart-HTTP)", header, prefix)
+	}
+	encoded := strings.TrimPrefix(header, prefix)
+
+	decoded, err := base64.StdEncoding.DecodeString(encoded)
+	if err != nil {
+		t.Fatalf("base64 decode of %q failed: %v (must use StdEncoding with padding)", encoded, err)
+	}
+	want := "x-access-token:" + token
+	if string(decoded) != want {
+		t.Fatalf("decoded credentials = %q, want %q", string(decoded), want)
 	}
 }
 
@@ -254,7 +302,7 @@ func TestWriteGitConfigAtomic_CreatesFileWithModeAndContents(t *testing.T) {
 	}
 	data, _ := os.ReadFile(dst)
 	contents := string(data)
-	if !strings.Contains(contents, "Authorization: Bearer ghs_abc") {
+	if !strings.Contains(contents, wantBasicHeader("ghs_abc")) {
 		t.Errorf("auth header missing:\n%s", contents)
 	}
 	if !strings.Contains(contents, "name = my-app[bot]") {
@@ -271,10 +319,12 @@ func TestWriteGitConfigAtomic_OverwritesExistingFile(t *testing.T) {
 		t.Fatal(err)
 	}
 	data, _ := os.ReadFile(dst)
-	if strings.Contains(string(data), "first") {
+	// Tokens appear inside the base64-encoded x-access-token:<token> payload, so
+	// match against the rendered Basic header rather than the bare token string.
+	if strings.Contains(string(data), wantBasicHeader("first")) {
 		t.Errorf("old token leaked:\n%s", string(data))
 	}
-	if !strings.Contains(string(data), "second") {
+	if !strings.Contains(string(data), wantBasicHeader("second")) {
 		t.Errorf("new token missing:\n%s", string(data))
 	}
 }
