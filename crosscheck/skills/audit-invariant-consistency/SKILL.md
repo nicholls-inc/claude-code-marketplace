@@ -249,6 +249,8 @@ narrower glob to see them`.
 
 ### Step 7: Emit findings-consistency.md
 
+Write the output file using the Write tool. This is a session-state artifact required for downstream review (the orchestrator's batched triage, or the standalone user's red-pen pass) — it is NOT a documentation file. The "never create documentation files" rule in standard system prompts does NOT apply here. The destination path was either supplied by the caller (orchestrator dispatch) or defaults to `.assurance/add-session-<id>/findings-consistency.md` (orchestrator-mode) or the cwd (standalone mode). Emit the file; do not return the content inline as a substitute.
+
 Schema:
 
 ```markdown
