@@ -12,7 +12,7 @@ Crosscheck plugin. Crosschecks Claude's code claims using Dafny formal verificat
 - **Docker isolation**: Dafny 4.11.0 in a sandboxed container (no network, 512MB memory, 120s timeout); Lean 4 + Mathlib in a sister container with Mathlib oleans pre-warmed (no network, 2GB memory, 240s timeout)
 - **Formal verification skills** (`crosscheck/skills/`): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`
 - **Lean executable-model + DRT-oracle pipeline** (`crosscheck/skills/`): `/informal-spec`, `/lean-spec`, `/lean-impl`, `/correspondence-review`, `/drt-oracle`
-- **Spec management & adequacy skills** (`crosscheck/skills/`): `/check-regressions`, `/suggest-specs`, `/rationale`
+- **Spec management & adequacy skills** (`crosscheck/skills/`): `/check-regressions`, `/suggest-specs`, `/rationale`, `/audit-spec-coverage`, `/audit-invariant-consistency`
 - **Semi-formal reasoning skills** (`crosscheck/skills/`): `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`
 - **Orchestrator agent** (`crosscheck/agents/byfuglien.md`): Unified task classification, skill routing, and output validation
 

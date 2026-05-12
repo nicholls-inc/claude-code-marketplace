@@ -1,6 +1,6 @@
 # Crosscheck Skill Catalogue
 
-Exhaustive index of all 27 skills in the crosscheck plugin, grouped by category. See [`../README.md`](../README.md) for the plugin overview, and [`./agents.md`](./agents.md) for the orchestrator agent pages (`byfuglien`, `hellebuyck`).
+Exhaustive index of all 29 skills in the crosscheck plugin, grouped by category. See [`../README.md`](../README.md) for the plugin overview, and [`./agents.md`](./agents.md) for the orchestrator agent pages (`byfuglien`, `hellebuyck`).
 
 ## Formal verification (Dafny verify-and-extract)
 
@@ -53,6 +53,7 @@ The five-step Lean pipeline. Run sequentially; each consumes the previous step's
 | Skill | Trigger phrases | One-line summary | Owner |
 |-------|----------------|------------------|-------|
 | [`/intent-check`](../skills/intent-check/SKILL.md) | "intent check", "round-trip check", "spec-intent alignment" | Round-trip informalisation over (invariant prose, covering test, code diff) with FP tracking and a configurable kill criterion (default 30%, see SKILL Configuration). | hellebuyck |
+| [`/audit-invariant-consistency`](../skills/audit-invariant-consistency/SKILL.md) | "are these invariants consistent", "find contradictions", "consistency audit", "invariant contradictions" | Layer 5+6 hybrid — within-module + cross-module + invariant-vs-spec consistency passes. Doc-wide pre-test probe; distinct from `/intent-check`'s single-invariant post-test probe. | hellebuyck |
 | [`/acceptance-oracle-draft`](../skills/acceptance-oracle-draft/SKILL.md) | "acceptance oracle", "draft scenarios", "user-observable flows" | Draft mechanically-verifiable user-flow acceptance scenarios; rejects subjective criteria. | hellebuyck |
 
 ## Assurance hierarchy — Layer 6 (spec completeness)
@@ -60,6 +61,7 @@ The five-step Lean pipeline. Run sequentially; each consumes the previous step's
 | Skill | Trigger phrases | One-line summary | Owner |
 |-------|----------------|------------------|-------|
 | [`/spec-adversary`](../skills/spec-adversary/SKILL.md) | "spec adversary", "what is the spec missing", "propose missing invariants" | Adversarially probe a module's invariant docs for properties the spec is failing to capture. | hellebuyck |
+| [`/audit-spec-coverage`](../skills/audit-spec-coverage/SKILL.md) | "spec coverage", "coverage matrix", "which spec sections lack invariants", "audit-finding coverage" | Layer 6 doc-wide — section→invariant and audit-finding-ID→invariant coverage matrices with a capped, prioritised gap list. Mirror of `/spec-adversary` (probes spec→doc gap instead of code→doc gap). | hellebuyck |
 
 ## Onboarding & status (governance)
 
