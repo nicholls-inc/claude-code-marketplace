@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.4.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.3.0...crosscheck-v2.4.0) (2026-05-12)
+
+
+### Features
+
+* **crosscheck:** /audit-spec-coverage and /audit-invariant-consistency skills ([#179](https://github.com/nicholls-inc/claude-code-marketplace/issues/179)) ([d5b912a](https://github.com/nicholls-inc/claude-code-marketplace/commit/d5b912a1f8ba0639fabc3dc4ae447e3f52eba560))
+* **crosscheck:** add-orchestrator agent (ADD methodology workflow runner) ([#181](https://github.com/nicholls-inc/claude-code-marketplace/issues/181)) ([e76cf46](https://github.com/nicholls-inc/claude-code-marketplace/commit/e76cf4610bbc3902a3a6aa530977e4977b72dd17))
+* **crosscheck:** orchestrator-marker mode for /draft-invariants ([#180](https://github.com/nicholls-inc/claude-code-marketplace/issues/180)) ([320777e](https://github.com/nicholls-inc/claude-code-marketplace/commit/320777e28bb60457c086d52a9ab4e6762d919a42))
+
+
+### Bug Fixes
+
+* **crosscheck:** post-validation skill + agent fixes (D2 + D4) ([#183](https://github.com/nicholls-inc/claude-code-marketplace/issues/183)) ([17059d5](https://github.com/nicholls-inc/claude-code-marketplace/commit/17059d5ff7cd03bd6cefefbb1427bbada0704cb8))
+
 ## [2.3.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.2.0...crosscheck-v2.3.0) (2026-05-11)
 
 
