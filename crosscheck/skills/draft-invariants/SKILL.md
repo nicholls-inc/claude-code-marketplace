@@ -110,6 +110,20 @@ If a spec is found:
 The spec is the authoritative contract. The user's verbal answers are the
 fallback for repos without one.
 
+**Refuse-and-redirect rule.** If §1a discovers a spec and the skill would
+otherwise issue cold `AskUserQuestion` paraphrasing the spec, the skill
+MUST instead emit pre-filled candidates with `<file>:<lines>` citations as
+a single confirmation pass. Paraphrasing options for multi-select is a
+§3.5a violation per the v2 ADD retrospective (see
+`crosscheck/docs/add/.retrospective/findings-and-methodology-v2.md`
+§3.5a Case B, lines 297–303) — fixed-cadence elicitation cold against
+context that already has the answers is exactly the failure mode this
+skill was rewritten to prevent. If the skill cannot construct a confirm
+pass from the spec (e.g. the spec genuinely does not address one of the
+contract questions), it MAY ask a single targeted question for that
+specific gap; it MUST NOT issue a generic interview when reading has
+already answered most of it.
+
 #### 1b. Cold elicitation (only if 1a found nothing)
 
 If no spec exists, ask the user:
@@ -125,6 +139,101 @@ definitions) and docstrings. You MAY NOT open function bodies or private
 files.
 
 If the user cannot answer, interview. Do not guess.
+
+#### 1c. Orchestrator marker mode (deferred red-pen)
+
+This skill may be invoked directly by a user or dispatched by the
+`add-orchestrator` agent as part of the spec-driven fast path. When
+dispatched by the orchestrator, the skill's `§6` red-pen loop is
+deferred — the orchestrator owns a batched cross-module review
+downstream and per-module red-pen would duplicate that gate.
+
+The hand-off is mediated by a content-hashed **marker file**, not a
+caller-supplied flag. A flag would be forgeable from a user prompt; a
+marker file with a content hash over fixed inputs is at least a
+consistency check (see *Coordination mechanism, not tamper-resistance*
+below).
+
+**Detection.** Look for `.assurance/add-session-*/session.json` in the
+current working directory or any ancestor directory. If found, read its
+JSON. The marker has the shape (see also
+`crosscheck/agents/add-orchestrator.md` for the canonical schema):
+
+```json
+{
+  "session_id": "<16-hex-char nonce>",
+  "created_at": "YYYY-MM-DDTHH:MM:SSZ",
+  "spec_path": "<path>",
+  "modules": ["<m1>", "<m2>", ...],
+  "hash_inputs": ["<spec_path>", "<glossary_path>", "<module_map_path>"],
+  "hash_algorithm": "sha256",
+  "hash_value": "<lowercase-hex-sha256>",
+  "hash_discipline_ref": "crosscheck/skills/intent-check/references/attestation-schema.md"
+}
+```
+
+**Validation.** When a marker is detected:
+
+1. Confirm the target module appears in the marker's `modules` array. If
+   not, treat as marker-absent (the marker is scoped to a different
+   session); fall through to the standard §6 red-pen.
+2. Recompute the content hash over `hash_inputs` using the discipline
+   documented at
+   `crosscheck/skills/intent-check/references/attestation-schema.md`
+   lines 76–92 (sorted absolute paths, raw bytes concatenated with no
+   delimiter, single SHA-256, lowercase hex). If the recomputed hash
+   does NOT match `hash_value`, refuse with a clear error: *"Marker hash
+   mismatch — the spec, glossary, or module-map has changed since the
+   orchestrator pre-flight. Re-run `add-orchestrator` to regenerate the
+   marker."*
+3. Confirm the marker JSON parses cleanly and contains all required
+   fields. If malformed, refuse with: *"Marker file malformed —
+   delete `.assurance/add-session-<id>/session.json` and re-run
+   `add-orchestrator`."*
+
+**Effect (when marker is valid).** Suppress the §6 in-skill red-pen
+loop. Generate the invariant doc as usual but write:
+
+- `Status: Draft` (unchanged from standard behaviour — the Status
+  taxonomy is preserved across the v2 ADD retrospective §3.3
+  vocabulary)
+- An additional line `Audit: pending session <session_id>` recording
+  the marker session
+
+When the orchestrator subsequently applies findings (step 10 of its
+workflow), it rewrites the `Audit:` line to `applied session
+<session_id> on <YYYY-MM-DD>`. The `Status:` value remains `Draft`
+until the human approves the PR; at that point a separate edit can
+flip it to `Status: Snapshot` per existing convention.
+
+**Effect (when marker is absent).** The §6 red-pen loop is mandatory
+as before. There is no caller-supplied flag to bypass it. Direct users
+of `/draft-invariants` get the unchanged v1 behaviour.
+
+**Coordination mechanism, not tamper-resistance.** The marker file is
+a coordination mechanism between this skill and the orchestrator. It
+ensures the in-skill red-pen and the orchestrator's red-pen do not
+both fire on the same module, and it catches typo'd manual marker
+files via the hash check. It is **NOT** a security boundary — sub-
+agents share filesystem and tool-permission scope with the parent
+agent, so a determined actor (malicious user prompt, compromised
+sub-agent) can write a forged marker. Future maintainers should not
+treat the marker as a tamper-resistant attestation. The actual safety
+net is the standard `§6` red-pen, which fires whenever the marker is
+absent. Compare `/intent-check`'s `.assurance/intent-check-attestation.json`,
+which uses the same hash discipline but for a different purpose (a
+fast pre-commit check that an LLM pipeline actually ran).
+
+**Sign-off semantics.** The checklist item "User has explicitly signed
+off on English before any test code is written" (see the Checklist
+section below) is satisfied by EITHER the in-skill §6 red-pen OR by
+the orchestrator's downstream batched review of the per-category
+findings files. The orchestrator's apply step (step 10 of its
+workflow) records the sign-off via the `Audit:` line update; that line
+is the durable evidence the obligation transferred. If a downstream
+consumer (e.g. `/invariant-coverage-scaffold`) needs to verify
+sign-off, it can read the `Audit:` line plus the orchestrator's
+`triage-log.md` in the same `.assurance/add-session-<id>/` directory.
 
 ### 2. Anchor in real failures
 
@@ -201,10 +310,25 @@ Do NOT generate tests yet. Wait for the user to:
 
 Iterate until sign-off.
 
+**Marker-mode skip.** If §1c detected a valid orchestrator marker for
+this module, the §6 red-pen loop is deferred — the orchestrator owns a
+batched cross-module review downstream. In marker mode, after Step 5
+emit the invariant doc with `Status: Draft` plus `Audit: pending
+session <session_id>`; skip directly to closing without generating
+property tests in Step 7. The orchestrator will dispatch step 7
+(property tests) separately after its batched audit completes and the
+user signs off the findings files.
+
 ### 7. Translate to property tests
 
-Only after sign-off, generate property tests. Detect the language from the
-repo and use its idiomatic framework:
+Only after sign-off, generate property tests. **In marker mode this step
+does not run** — the orchestrator dispatches it after its batched audit
+and findings triage. In standard mode, sign-off is the explicit "ship
+it" / "looks good" from §6; in marker mode the sign-off is recorded
+downstream in `.assurance/add-session-<id>/triage-log.md` and the
+`Audit: applied …` line is the durable evidence.
+
+Detect the language from the repo and use its idiomatic framework:
 
 - **Go:** `pgregory.net/rapid` — `func TestProp<Name>(t *testing.T) { rapid.Check(t, func(t *rapid.T) { ... }) }`, file suffix `_prop_test.go` or `_invariants_test.go`
 - **Python:** `hypothesis` — `@given(...)` on test functions, stateful tests via `RuleBasedStateMachine`
@@ -300,17 +424,28 @@ testable sketch.
 
 - [ ] Step 1a (spec discovery) executed before any AskUserQuestion call
 - [ ] If a spec was found, the relevant section was read in full and answers
-      were pre-filled with file:line citations
+      were pre-filled with file:line citations (no paraphrasing options for
+      multi-select)
 - [ ] Step 1b (cold elicitation) used only when 1a found no spec
+- [ ] Step 1c (orchestrator marker detection) executed; marker validated or
+      explicitly stated absent
 - [ ] Each invariant cites a real failure (incident, audit-finding ID) or
       is explicitly marked speculative
 - [ ] 5-8 invariants, each one short paragraph
 - [ ] "Not covered" section names the owning layer for each omission
 - [ ] Gap analysis references file:line locations
 - [ ] User has explicitly signed off on English before any test code is
-      written
+      written — satisfied by EITHER §6 in-skill red-pen OR a valid marker
+      file plus the orchestrator's downstream triage being signed off
+      (recorded in `.assurance/add-session-<id>/triage-log.md` and via the
+      `Audit: applied …` line on the invariant doc)
+- [ ] Status line is `Status: Draft` (standard mode) or `Status: Draft` +
+      `Audit: pending session <id>` (marker mode); the `Status:` taxonomy
+      from retrospective §3.3 is preserved
 - [ ] Each property test carries a `// Invariant I<N>: <Name>` comment
       matching the spec heading (bidirectional link enforced by
-      `/crosscheck:invariant-coverage-scaffold`)
+      `/crosscheck:invariant-coverage-scaffold`) — only emitted in standard
+      mode; in marker mode the orchestrator dispatches property-test
+      generation separately
 - [ ] Governance section specifies spec path, test path, protected-surface
       mechanism, and CI path
