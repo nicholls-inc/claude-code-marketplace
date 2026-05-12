@@ -40,6 +40,8 @@ Orchestrator for specification-chain assurance and governance scaffolding. Named
 |-------|-------------|
 | `/intent-check` | Layer 5 two-LLM round-trip informalization over (invariant prose, covering test, code diff); appends to FP-tracker CSV and emits a JSON attestation |
 | `/spec-adversary` | Layer 6 best-effort — propose up to 3 candidate invariants the spec is missing, formatted for accept/reject/defer triage |
+| `/audit-spec-coverage` | Layer 6 doc-wide — emit section→invariant and audit-finding-ID→invariant coverage matrices, cap output at 15 prioritised gaps with 4-path triage blocks |
+| `/audit-invariant-consistency` | Layer 5+6 hybrid — three passes (within-module, cross-module, invariant-vs-spec) emitting capped consistency findings with `Accept (amend spec)` as a first-class triage option |
 
 ### Governance
 
@@ -67,6 +69,8 @@ Classify the user's request to determine which skill to invoke. The spec chain d
 | Roadmap drift | "Are the docs accurate?", "ROADMAP check", Status field sanity | `/assurance-roadmap-check` |
 | Spec-intent alignment (Layer 5) | Protected-surface PR, "does the spec match the code", "run intent-check" | `/intent-check` |
 | Spec completeness (Layer 6) | "What are we missing?", "adversarial invariants", quarterly module review | `/spec-adversary` |
+| Spec coverage probe (Layer 6) | "spec coverage", "coverage matrix", "which spec sections lack invariants", "audit-finding coverage" | `/audit-spec-coverage` |
+| Invariant consistency audit (Layer 5+6) | "are these invariants consistent", "find contradictions", "consistency audit", "invariant contradictions" | `/audit-invariant-consistency` |
 | Governance amendment | Planned change to a protected file, "amendment block", "authority for this edit" | `/protected-surface-amend` |
 | Adequacy argument | "Is this code adequate?", "Build a rationale", code + informal requirements | `/rationale` |
 | Implementation chain (hand down) | Module turns out to be a Dafny candidate, pure sequential logic, quantified properties | Hand to byfuglien: `/spec-iterate` → `/generate-verified` → `/extract-code` |
@@ -112,6 +116,8 @@ Read the selected skill's SKILL.md file and follow its methodology exactly:
 - For `/invariant-coverage-scaffold`: read `skills/invariant-coverage-scaffold/SKILL.md`
 - For `/intent-check`: read `skills/intent-check/SKILL.md`
 - For `/spec-adversary`: read `skills/spec-adversary/SKILL.md`
+- For `/audit-spec-coverage`: read `skills/audit-spec-coverage/SKILL.md`
+- For `/audit-invariant-consistency`: read `skills/audit-invariant-consistency/SKILL.md`
 - For `/acceptance-oracle-draft`: read `skills/acceptance-oracle-draft/SKILL.md`
 - For `/protected-surface-amend`: read `skills/protected-surface-amend/SKILL.md`
 - For `/rationale`: read `skills/rationale/SKILL.md`
@@ -141,11 +147,13 @@ Every result must pass these quality gates before delivery:
 - **Drift grounded in evidence** — `/assurance-roadmap-check` cites the ROADMAP line + the contradicting repo artifact for each drift flag
 - **Kill-criterion awareness** — status output surfaces FP rate vs the configured kill criterion (default 30%, configurable via `CROSSCHECK_FP_TRIPPED_THRESHOLD`; see `/intent-check` Configuration) and any open kill-criterion triggers
 
-**For spec-chain verification output (`/intent-check`, `/spec-adversary`):**
+**For spec-chain verification output (`/intent-check`, `/spec-adversary`, `/audit-spec-coverage`, `/audit-invariant-consistency`):**
 - **Structural separation** — `/intent-check` uses two distinct model contexts (back-translator blind to original requirement, diff-checker compares)
 - **FP-tracker appended** — `/intent-check` writes a CSV row matching the FP-tracker schema documented in `../skills/intent-check/references/fp-tracker-schema.md` (`date,invariant_touched,phase_verdict,human_verdict`) and a JSON attestation with `protected_files / content_hash / verdict / checked_at / pipeline_output`
-- **Signal-to-noise** — `/spec-adversary` proposes ≤3 candidate invariants, each with accept/reject/defer radio formatting; avoid spraying low-value suggestions
-- **Best-effort honesty** — Layer 6 output is explicitly labelled best-effort; no false claim of completeness
+- **Signal-to-noise** — `/spec-adversary` proposes ≤3 candidate invariants; `/audit-spec-coverage` and `/audit-invariant-consistency` cap at ≤15 prioritised findings each. Avoid spraying low-value suggestions
+- **Paired evidence** — `/audit-spec-coverage` cites spec line ranges + invariant IDs; `/audit-invariant-consistency` cites paired file:line evidence (invariant ↔ invariant, or invariant ↔ spec) for every finding
+- **4-path triage** — `/audit-spec-coverage` and `/audit-invariant-consistency` emit a 4-path triage block per finding (`Accept (fix invariant)` / `Accept (amend spec via /protected-surface-amend)` / `Reject` / `Defer`), with the spec-amend path first-class — not buried
+- **Best-effort honesty** — Layer 6 output is explicitly labelled best-effort; every audit skill includes a "What this does NOT catch" section enumerating known blind spots; no false claim of completeness
 
 **For governance output (`/protected-surface-amend`):**
 - **Amendment block complete** — rationale, authority, linked roadmap item, diff plan all present

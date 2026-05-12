@@ -66,8 +66,8 @@ The split is principled in shape but **asymmetric in substance** — Byfuglien a
 | Byfuglien (impl chain) | Hellebuyck (spec chain) | Orthogonal: semi-formal reasoning |
 |---|---|---|
 | Layer 1 (Dafny): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`, `/suggest-specs` | Layer 4 (alignment): `/invariant-coverage-scaffold`, `/protected-surface-amend` | `/reason` |
-| Layer 1 (Lean): `/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` | Layer 5: `/intent-check`, `/acceptance-oracle-draft` | `/compare-patches` |
-| Layer 4 (regression): `/check-regressions` | Layer 6: `/spec-adversary` | `/locate-fault` |
+| Layer 1 (Lean): `/informal-spec` → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle` | Layer 5: `/intent-check`, `/audit-invariant-consistency`, `/acceptance-oracle-draft` | `/compare-patches` |
+| Layer 4 (regression): `/check-regressions` | Layer 6: `/spec-adversary`, `/audit-spec-coverage` | `/locate-fault` |
 | Spec-management bridge: `/rationale` | Governance index: `/assurance-init`, `/assurance-layer-audit`, `/assurance-status`, `/assurance-roadmap-check` | `/trace-execution` |
 
 The four semi-formal reasoning skills are not part of the 6-layer hierarchy. They are evidence-grounded code-analysis tools adapted from Ugare & Chandra (2026) and live as a third axis — Byfuglien-routed because they reason about implementation, but layer-agnostic.
