@@ -256,11 +256,17 @@ the user to confirm.
 
 ### 3. Draft candidate invariants (5-8)
 
-Use this format exactly:
+**Heading convention (load-bearing — do NOT vary).** Each invariant MUST be introduced by a level-2 heading of the exact form `## I<N>: <Name>`, where `<N>` is a stable monotonic integer (`I1`, `I2`, …) and `<Name>` is a short PascalCase or kebab-style identifier. The heading is the grep anchor that downstream tooling (`/invariant-coverage-scaffold`, `// Invariant Ix: <Name>` test comments) relies on. Examples that are correct: `## I1: RedactionSentinelString`, `## I7: BothSetFileWins`. Examples that are WRONG and MUST NOT be produced: `### I1 RedactionSentinelString` (h3, not h2), `## Engine selection — single embedding API` (prose-section heading with the ID buried in body), `**I1. RedactionSentinelString.**` (bold-prefix in paragraph; this was the legacy v1 style and is grandfathered for already-shipped docs only). Group invariants under a single `## Invariants` parent only if you need to use `### I<N>: <Name>` (h3) consistently for every invariant — never mix h2 and h3 invariant headings in the same doc.
+
+When dispatched by `add-orchestrator` with the orchestrator marker active, every invariant heading in this doc MUST be h2 (`## I<N>: <Name>`). The heading-convention discipline is enforced at the per-subagent quality gate in `add-orchestrator.md` Step 6.
+
+Use this body format exactly under each heading:
 
 ```
-**IN. Name — short imperative.**
+## I<N>: <Name>
+
 <One or two sentence statement of the property in plain English.>
+
 - *Why:* <real failure class this blocks, tied to specific past incident or audit-finding ID where possible>
 - *Test:* <concrete sketch of how to translate this into a property-based or fuzz test>
 ```
