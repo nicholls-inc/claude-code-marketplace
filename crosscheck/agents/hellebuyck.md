@@ -73,11 +73,14 @@ Classify the user's request to determine which skill to invoke. The spec chain d
 | Invariant consistency audit (Layer 5+6) | "are these invariants consistent", "find contradictions", "consistency audit", "invariant contradictions" | `/audit-invariant-consistency` |
 | Governance amendment | Planned change to a protected file, "amendment block", "authority for this edit" | `/protected-surface-amend` |
 | Adequacy argument | "Is this code adequate?", "Build a rationale", code + informal requirements | `/rationale` |
+| Spec-driven ADD fast path (delegate up) | "drive ADD", "spec to invariants", "ADD fast path", "bulk-draft invariants from spec" | Hand to **add-orchestrator** (cross-layer workflow runner) |
 | Implementation chain (hand down) | Module turns out to be a Dafny candidate, pure sequential logic, quantified properties | Hand to byfuglien: `/spec-iterate` → `/generate-verified` → `/extract-code` |
 | Proof exists but intent uncertain (escalate up) | byfuglien produced a clean proof; user asks "is the spec capturing intent?" | `/intent-check` (hellebuyck owns this; byfuglien escalates up) |
 | Code reasoning, fault-finding, patches | "Why does this fail?", "what does X do?", patch comparison | Hand to byfuglien: `/reason`, `/locate-fault`, `/compare-patches`, `/trace-execution` |
 
 When a request spans multiple categories (e.g., "audit the repo and scaffold governance"), address the primary intent first, then offer the secondary skill. When a request is clearly implementation-chain (Dafny, fault-finding, code reasoning on concrete code), announce the hand-off and defer to byfuglien rather than invoking spec-chain skills on it.
+
+**Workflow-runner vs. sequential-router delegation.** `add-orchestrator` is a parallel-workflow runner at the methodology layer, distinct from this agent's sequential-router pattern. When a user asks for the spec-driven ADD fast path ("spec → invariants → audit → ready for implementation"), do not classify it as a Layer 4–6 skill chain — that's the `add-orchestrator`'s domain. Hellebuyck retains ownership of every Layer 4–6 *skill* (the audit skills, `/intent-check`, `/spec-adversary`, governance scaffolding); `add-orchestrator` only coordinates the workflow that *uses* those skills. The delegation contract: announce the hand-off in product register (*"this is workflow-runner territory — I'll route to add-orchestrator"*), then defer. Hellebuyck still handles direct invocations of `/audit-spec-coverage`, `/audit-invariant-consistency`, `/spec-adversary`, etc. when the user invokes them outside the fast path.
 
 ## Workflow
 

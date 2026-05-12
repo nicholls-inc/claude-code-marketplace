@@ -1,6 +1,8 @@
 # Crosscheck agents
 
-Crosscheck ships two complementary orchestrators, both named after Winnipeg Jets. **Byfuglien** — the bruising defenceman whose crosscheck gave the plugin its name — enforces implementation correctness. **Hellebuyck** — the goaltender, last line of defence — takes over when formal proof is clean but the spec itself might be the wrong spec. Use byfuglien to prove code matches a spec; use hellebuyck to interrogate whether that spec is the right one and stays mechanically enforced.
+Crosscheck ships three orchestrators. Two are sequential routers — **Byfuglien** (the bruising defenceman whose crosscheck gave the plugin its name) enforces implementation correctness; **Hellebuyck** (the goaltender, last line of defence) interrogates whether the spec is the right spec and stays mechanically enforced. The third, **add-orchestrator**, is a parallel-workflow runner at the methodology layer: it drives the ADD (Assurance-Driven Development) fast path from signed-off spec to approved invariant docs, dispatching subagents per module in parallel and aggregating a batched audit into per-category findings files for human triage.
+
+Use byfuglien to prove code matches a spec. Use hellebuyck to interrogate whether that spec is the right one. Use add-orchestrator when you have a signed-off spec and want it turned into a vetted invariant set ready to hand off to byfuglien (verification) or hellebuyck (ongoing governance).
 
 ## Byfuglien — implementation chain
 
@@ -27,9 +29,26 @@ Crosscheck ships two complementary orchestrators, both named after Winnipeg Jets
 
 **When to invoke.** "Onboard this repo to the assurance hierarchy." "What is the spec missing?" "Did my changes break any invariants?" "Is the spec actually capturing what we mean?" "Show me the assurance status of this repo."
 
+## add-orchestrator — ADD methodology workflow runner
+
+**Role.** Workflow runner at the methodology layer above the byfuglien/hellebuyck partition. Drives the ADD spec-driven fast path: signed-off spec → bulk-drafted invariants → batched audit → user-triaged findings → approved invariant docs ready for implementation. **Parallel-workflow-runner pattern** — dispatches N subagents per module concurrently in a single assistant turn, runs a parallel audit, aggregates findings across all subagents into per-category files for batched human triage. See [`../agents/add-orchestrator.md`](../agents/add-orchestrator.md).
+
+**Skills it composes** (does not own — it coordinates the workflow that uses these skills, all of which remain owned by hellebuyck):
+
+- Bulk drafting: [`/draft-invariants`](../skills/draft-invariants/SKILL.md) (in marker-aware mode — orchestrator-deferred red-pen)
+- Audit: [`/audit-spec-coverage`](../skills/audit-spec-coverage/SKILL.md), [`/audit-invariant-consistency`](../skills/audit-invariant-consistency/SKILL.md)
+- Spec amendment: [`/protected-surface-amend`](../skills/protected-surface-amend/SKILL.md) (when a finding's accept-path is "amend spec")
+
+**Hand-off contracts** (closing-recommendation only — never auto-chains):
+
+- byfuglien for verification-chain follow-on: `/lightweight-verify` for IO/concurrency-heavy modules (the dominant case); `/spec-iterate` → `/generate-verified` → `/extract-code` for Dafny-suitable; Lean pipeline for tractable-input modules
+- hellebuyck for ongoing governance: `/invariant-coverage-scaffold` (gated on `/assurance-init`), `/spec-adversary` on coverage-thinnest modules, `/intent-check` per protected-surface PR
+
+**When to invoke.** "Drive the ADD fast path on this spec." "Bulk-draft invariants from `<spec-path>`." "Spec to invariants." Discoverability note: the trigger surface is workflow-shaped and disjoint from `awesome-copilot/agents/project-scaffold.md`'s generic project-scaffolding triggers.
+
 ## Handoff seam
 
-Byfuglien proves the code is correct against the spec. Hellebuyck checks the spec is the right spec and that the spec→test→code chain stays mechanically enforced. Concrete escalation patterns:
+Byfuglien proves the code is correct against the spec. Hellebuyck checks the spec is the right spec and that the spec→test→code chain stays mechanically enforced. add-orchestrator turns a spec into the invariant set that hellebuyck will govern and that byfuglien will eventually verify against. Concrete escalation patterns:
 
 - Byfuglien proves your sort is correct — hellebuyck's [`/intent-check`](../skills/intent-check/SKILL.md) confirms the spec actually says "sorted permutation" and not just "monotonically increasing".
 - Byfuglien handles a CRUD endpoint's code reasoning — hellebuyck's [`/rationale`](../skills/rationale/SKILL.md) builds the adequacy argument, and [`/spec-adversary`](../skills/spec-adversary/SKILL.md) probes for missing invariants the rationale didn't anticipate.
@@ -40,6 +59,7 @@ Byfuglien proves the code is correct against the spec. Hellebuyck checks the spe
 ```
 Use the byfuglien agent to verify your bug fix against the spec
 Use the hellebuyck agent to check what invariants this module is missing
+Use the add-orchestrator agent to drive ADD on this spec
 ```
 
 ## See also
