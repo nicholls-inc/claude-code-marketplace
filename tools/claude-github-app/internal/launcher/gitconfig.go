@@ -1,6 +1,7 @@
 package launcher
 
 import (
+	"encoding/base64"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,7 +10,12 @@ import (
 
 // GitConfigOpts controls the contents of the temp GIT_CONFIG_GLOBAL file.
 type GitConfigOpts struct {
-	Token    string // required — Bearer token for http.extraHeader
+	// Token is required. It is the GitHub App installation token used as the
+	// password in HTTP Basic auth (username "x-access-token") for the
+	// http.extraHeader entry. GitHub's git smart-HTTP transport rejects
+	// Bearer auth on /info/refs and /git-{upload,receive}-pack with HTTP 401,
+	// even though the same token works as Bearer against api.github.com.
+	Token    string
 	BotName  string // optional — set [user] block when both BotName and BotEmail are set
 	BotEmail string
 }
@@ -28,10 +34,13 @@ func RenderGitConfig(opts GitConfigOpts) (string, error) {
 	}
 	// Clear any inherited credential helper so git doesn't reach for the keychain.
 	fmt.Fprintf(&b, "[credential]\n\thelper =\n")
-	// First extraHeader empty value clears any inherited header chain (defensive);
-	// second sets ours. git concatenates extraHeader values, so resetting first
-	// is the documented pattern.
-	fmt.Fprintf(&b, "[http]\n\textraHeader =\n\textraHeader = Authorization: Bearer %s\n", opts.Token)
+	// First extraHeader empty value clears any inherited header chain (defensive
+	// — git concatenates extraHeader multivar values, so resetting first prevents
+	// any system-level header from being appended alongside ours). Second sets
+	// our auth: Basic base64("x-access-token:<token>"). Bearer is rejected by
+	// git's smart-HTTP transport with 401 — see GitConfigOpts.Token doc.
+	creds := base64.StdEncoding.EncodeToString([]byte("x-access-token:" + opts.Token))
+	fmt.Fprintf(&b, "[http]\n\textraHeader =\n\textraHeader = Authorization: Basic %s\n", creds)
 	return b.String(), nil
 }
 
