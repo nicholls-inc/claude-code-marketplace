@@ -24,7 +24,12 @@ Check the user's arguments for the target language:
 - `to python` or `to py` → Python
 - `to go` or `to golang` → Go
 
-If not specified, ask the user which target language they want.
+If not specified, **infer from repo state**:
+- `go.mod` present → Go
+- `pyproject.toml` / `setup.py` / `requirements*.txt` / `Pipfile` present → Python
+- Both present → use the language with the most source files; report the choice.
+
+Only fall back to asking the user when neither is present or both have comparable source-file counts. Detection is a one-line report ("Detected language: <X> from <evidence path>; pass `to <other>` to override"), not a chat-blocking gate.
 
 ### Step 2: Compile
 
@@ -70,9 +75,16 @@ For each output file, present:
 | `dafny.Map` | `map[K]V` |
 | `dafny.Set` | Custom or `map[T]bool` |
 
-### Step 4.5: Generate Property-Based Test Suggestions
+### Step 4.5: Generate Property-Based Tests (write to disk)
 
 Analyze the Dafny source's `ensures` clauses and translate them into property-based test code for the target language. This bridges the abstraction gap between verified Dafny specifications and the extracted code, which may use different types, precision, or mutability semantics.
+
+Write the generated tests to disk so an orchestrator/CI can execute them without the user copy-pasting:
+
+- Python: `tests/test_<extracted_module>_properties.py` (or `<extracted_module>_properties_test.py` if the repo uses suffix convention)
+- Go: `<extracted_module>_properties_test.go` (next to the extracted source file)
+
+Report the written paths. The code blocks below show the shape of what is written; the actual files are the artifact.
 
 **For Python (using Hypothesis):**
 
@@ -124,18 +136,17 @@ When translating postconditions, watch for these semantic gaps between Dafny and
 | `{:extern}` methods in source | Extern implementations not verified — write focused unit tests |
 | Dafny `BigRational` compiled output | Runtime type not native — may need type assertions |
 
-### Step 5.5: Register Spec (Optional)
+### Step 5.5: Register Spec
 
-After successful extraction, offer to register the verified spec in the project's spec registry (`.crosscheck/specs.json`). This enables `/check-regressions` to detect when future code changes invalidate the verified properties.
+After successful extraction, register the verified spec in the project's spec registry (`.crosscheck/specs.json`) by default. This enables `/check-regressions` to detect when future code changes invalidate the verified properties.
 
-**If the registry file does not exist:**
-- Ask: "Would you like to create a spec registry? This enables `/check-regressions` to detect when future edits break verified properties."
-- If yes, create `.crosscheck/specs.json` with `{"version": 1, "specs": []}` and proceed
+**If the registry file does not exist:** create it with `{"version": 1, "specs": []}` and proceed. The registry is the load-bearing artifact for regression detection; opting out at extraction time means the spec is invisible to future runs of `/check-regressions`, which is almost never what the user wants. If the user wants to opt out, they can remove the entry afterward via `jq` or a hand edit — that is a one-line operation and `git revert` is always available.
 
-**If the registry exists:**
-- Ask: "Would you like to register this spec in the registry for regression detection?"
+**If the registry exists:** auto-register without asking. The user opted into the registry by creating it; re-asking each time is admin ceremony.
 
-**If the user agrees**, add an entry with:
+Report the write ("Registered spec `<id>` in .crosscheck/specs.json"). The user reverts if needed.
+
+**Generate the entry with:**
 - `id`: A slug derived from the Dafny method name (e.g., `MaxOfArray` → `max-of-array`)
 - `function`: The Dafny method/function name
 - `description`: Brief natural-language description of what the spec verifies
@@ -160,16 +171,25 @@ Provide brief guidance on:
 
 **Abstraction Gap Checklist:**
 
-Present this checklist to the user and flag any items that are especially relevant given the extracted code:
+The checklist mixes items the agent verified during this run with items only the human or integration-test layer can confirm. Split per byfuglien's rule — pre-fill what the agent observed, keep human-action items as decisions.
 
-- [ ] All property-based tests from Step 4.5 pass
-- [ ] Boundary values tested (empty inputs, maximum sizes, zero, negative)
-- [ ] Type mapping replacements do not alter behavior (especially BigRational -> float)
-- [ ] No `_dafny.` runtime references remain
-- [ ] If extern methods exist, their implementations are tested independently
-- [ ] Integration tests cover the function in its actual calling context
-- [ ] Dafny limitation gaps don't affect your use case (IO, concurrency, float precision)
-- [ ] Informally-stated requirements not in the Dafny spec are covered by other tests
+```
+## Evidence Summary (agent-verified during this run)
+
+- Compilation succeeded via dafny_compile to <language>.
+- `_dafny.` runtime references: <count remaining, with file:line refs, or "none">.
+- Type mapping table generated for <language>; replacements flagged where they alter precision (e.g., BigRational → float).
+- {:extern} methods detected in source: <list, or "none">.
+- Property-based tests written to <test file paths>.
+
+## Decisions for Review / Integration
+
+- [ ] Boundary values tested (empty inputs, maximum sizes, zero, negative) — review the PBT files for coverage; add cases if gaps remain.
+- [ ] If extern methods exist: their implementations are tested independently — verify those tests exist.
+- [ ] Integration tests cover the function in its actual calling context — add at the call site if missing.
+- [ ] Dafny limitation gaps don't affect your use case (IO, concurrency, float precision).
+- [ ] Informally-stated requirements not in the Dafny spec are covered by other tests.
+```
 
 ## Arguments
 
