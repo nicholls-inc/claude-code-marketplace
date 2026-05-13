@@ -344,4 +344,4 @@ Examples:
   spec against all invariant docs in `docs/invariants/`.
 - `/audit-spec-coverage docs/specs/queue.md docs/invariants/queue*.md` —
   narrower glob for a single module's invariant set.
-- `/audit-spec-coverage` — prompt for the spec path; do not guess.
+- `/audit-spec-coverage` — auto-detect: glob `docs/design/*spec*.md`, `docs/specs/*.md`, `docs/SPEC.md`, `SPEC.md`, `docs/architecture/*.md` and pick the most recently modified candidate; default invariant glob to `docs/invariants/*.md`. Report the inferred paths and proceed. Only ask for an explicit spec path when zero candidates exist.
