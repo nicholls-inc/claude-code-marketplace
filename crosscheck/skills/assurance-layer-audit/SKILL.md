@@ -233,6 +233,54 @@ End with a single-line recommendation that names the next skill and any adjustme
 
 Attach any audit-specific adjustments, e.g., "Skip `/invariant-coverage-scaffold` until after `/crosscheck:draft-invariants` runs on at least one module," or "Language detected as Ruby — `/invariant-coverage-scaffold` v1 does not yet cover Ruby; hand-roll a coverage script for now."
 
+### Step 7.5: Emit Machine-Readable Result Artifact
+
+In addition to the chat output, write a structured JSON artifact at `.assurance/layer-audit-result.json` (creating `.assurance/` if missing). This artifact is consumed by `/assurance-init` to skip questions whose answers are inferable from this audit's findings (per `crosscheck/docs/orchestrator-coordination.md` §2 on findings-as-artifacts).
+
+Schema:
+
+```json
+{
+  "schema_version": 1,
+  "generated_at": "<YYYY-MM-DDTHH:MM:SSZ>",
+  "repo_root": "<absolute path>",
+  "primary_language": "<Go|Python|TypeScript|Rust|Ruby|Java|C#|Elixir|Haskell|other>",
+  "secondary_languages": ["<lang>", ...],
+  "tooling": {
+    "test_framework": "<name-or-null>",
+    "pbt_framework": "<name-or-null>",
+    "formal_verification": ["<dafny|lean|gobra|verus|...>", ...],
+    "pre_commit_framework": "<pre-commit.com|lefthook|husky|none>",
+    "ci_system": "<GitHub Actions|GitLab CI|CircleCI|Other:<name>|none>",
+    "existing_assurance_scaffold": <true|false>
+  },
+  "layer_reach": {
+    "layer_1": {"reach": "<short reach description>", "notes": "<tooling and limits>"},
+    "layer_2": {"reach": "<...>", "notes": "<...>"},
+    "layer_3": {"reach": "<...>", "notes": "<...>"},
+    "layer_4": {"reach": "<...>", "notes": "<...>"},
+    "layer_5": {"reach": "<...>", "notes": "<...>"},
+    "layer_6": {"reach": "<...>", "notes": "<...>"}
+  },
+  "module_assessments": [
+    {
+      "module_path": "<path>",
+      "prereq_1": {"verdict": "<pass|partial|fail>", "evidence": "<one-line>"},
+      "prereq_2": {"verdict": "<pass|partial|fail>", "evidence": "<one-line>"},
+      "prereq_3": {"verdict": "<pass|partial|fail>", "evidence": "<one-line>"},
+      "prereq_4": {"verdict": "hypothesis-only", "evidence": "Untested under D6"},
+      "recommended_engines": "<Dafny / Lean+DRT / both / neither + which Layers 2–6 backfill>"
+    }
+  ],
+  "top_gaps": [
+    {"rank": 1, "gap": "<...>", "skill": "<...>", "delta": "<...>"}
+  ],
+  "recommended_next_skill": "/assurance-init | /assurance-status | /assurance-roadmap-check"
+}
+```
+
+Every field MUST be populated from Steps 2–6's findings. Do not invent data the audit did not gather. The artifact is overwritten on subsequent runs (no append discipline).
+
 ### Step 8: Verification Checklist
 
 ```
@@ -251,7 +299,8 @@ Attach any audit-specific adjustments, e.g., "Skip `/invariant-coverage-scaffold
 - [ ] Python / Ruby / Java / C# repos explicitly state Layer 1 is unreachable without a verifier bridge
 - [ ] Gap list capped at 5, ordered by payoff/hour, each row names a concrete next skill
 - [ ] Final recommendation names the next skill and any adjustments from the gap list
-- [ ] Output is diagnostic, not prescriptive — no scaffolding written by this skill
+- [ ] `.assurance/layer-audit-result.json` written with every schema field populated from Steps 2–6's findings (Step 7.5)
+- [ ] Output is diagnostic, not prescriptive — no scaffolding written by this skill (the JSON artifact is metadata about this audit, not a governance scaffold)
 ```
 
 ## Arguments
