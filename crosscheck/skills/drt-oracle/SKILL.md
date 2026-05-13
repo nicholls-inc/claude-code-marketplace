@@ -95,12 +95,16 @@ You are running differential random testing with a Lean model as oracle and prod
 
    > Correspondence review found `<n>` mismatch classification(s). DRT does not run against mismatched models — divergences would be model bugs, not source bugs. Resolve the mismatches per the doc's "Mismatch issues opened" section, then re-run.
 
-5. **D4 case selection.** Ask the user which of the five D4 cases (a–e above) applies. The harness construction depends on it:
-   - **(a)** harness drives one production implementation against the Lean model.
-   - **(b), (c)** harness drives the composed/chained system against a Lean model that mirrors the composition; per-kernel models alone are insufficient.
-   - **(d)** harness drives two extracted implementations against each other (Lean is the *expected* oracle but the divergence is between the two extracts).
-   - **(e)** harness exercises only the unverified post-region of each method; verified pre-regions are out of scope.
-   If the user is unsure, default to (a) and document the assumption.
+5. **D4 case selection — infer from upstream artifacts.** Determine which of the five D4 cases (a–e above) applies by reading the correspondence doc and the source paths it records. Do not cold-ask the user; ask only when inference produces an ambiguous result.
+
+   Inference rules (apply in order; first match wins):
+
+   - The correspondence doc's "Source files modelled" section lists exactly one path under a mainstream-language directory (`*.py`, `*.go`, `*.ts`, `*.rs`) and no `_dafny` imports are present → **(a)**.
+   - The recorded source path is annotated as Dafny-extracted (presence of `_dafny` imports, or `// dafny.dtr` annotations, or the correspondence doc's input shape says "(b) Dafny-extracted code") → **(e)** per-method partial verification, *unless* a second extract exists (Python and Go both present for the same Dafny source) in which case → **(d)** cross-extract validation.
+   - Multiple source paths under different kernel directories with composition annotations in the correspondence doc → **(b)** or **(c)** depending on whether the doc names the composition explicitly.
+   - All other cases → emit a `REQUIRES HUMAN VERIFICATION:` line in the divergence report header and default to **(a)** with the assumption documented.
+
+   The user may override via an explicit `--d4-case=<a|b|c|d|e>` argument. The skill records the inferred case + its evidence in the divergence report's header.
 
 6. **Locate the production implementation.** This is the SUT path the user gave to `/lean-impl`. Confirm the file still exists at the path recorded in the correspondence doc. For case (d), there are two SUT paths.
 
@@ -223,18 +227,14 @@ This makes DRT a feedback loop, not a one-shot. Future runs of `/correspondence-
 
 ### Step 6: Hand-off
 
-Present:
+Single-paragraph handoff. The divergence report at `formal-verification/tests/<name>/drt_report.md` is the deliverable; do not re-present Step 4 content here.
 
-- The divergence report path and verdict summary.
-- The list of failures (if any) with minimised witnesses.
-- Any correspondence-error divergences (with the recommendation to re-run `/correspondence-review`).
-- Any `approximation` skips (with the user's option to convert to `abstraction` if the divergence-class concern is unfounded — but only via re-running `/correspondence-review`, not by editing the skip list directly).
+Emit one of two lines:
 
-If there are zero failures, state that clearly:
+- **Zero failures:** "DRT pass at `<report path>`: `<n>` defs tested, `<N>` inputs/def, seed `<S>`, zero divergences. `<j>` skip(s) (approximation). Absence of divergences is evidence, not proof."
+- **One or more failures:** "DRT report at `<report path>`: `<k>` failure(s) across `<n>` defs. Witnesses minimised in the report. Re-run upstream skill per the per-failure classification — `/correspondence-review` for correspondence-errors, `/lean-impl` or `/spec-iterate`-style spec revision for spec/source/model gaps. This skill does not propose fixes."
 
-> DRT pass: `<n>` definitions tested (`<m>` exact, `<k>` abstraction), `<N>` random inputs each, RNG seed `<S>`, zero divergences. `<j>` definition(s) skipped (approximation). DRT does not prove correctness; absence of divergences is evidence, not proof.
-
-If there are failures, do not propose fixes — failures may be production bugs, model bugs, spec gaps, or correspondence errors, and the divergence-classification step is the user's call. State the witness, point at the upstream skill that should run next per the classification, and stop.
+The report is the artifact; the chat handoff is one line.
 
 ### Verification Checklist
 

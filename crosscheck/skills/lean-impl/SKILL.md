@@ -187,23 +187,25 @@ Present:
 - **The correspondence stub:** path to `formal-verification/correspondence/<Name>.md`, summary of how many definitions are pending classification.
 - **Pipeline next step: `/correspondence-review` (sub-phase 3b.5).** State explicitly: *"`/correspondence-review` classifies each Lean definition's correspondence to source as exact / abstraction / approximation / mismatch. `/drt-oracle` (3b.6) only runs on regions classified `exact` or `abstraction`; it skips `approximation` and blocks on `mismatch`. Do not invoke `/drt-oracle` until `/correspondence-review` has run."*
 
-### Verification Checklist
+### Evidence Summary
+
+Emit an Evidence Summary block — agent-verified items only. The skill performed all the checks below during the run; the human reads to confirm but does not re-execute.
 
 ```
-## Verification Checklist
+## Evidence Summary (agent-verified during this run)
 
-Before proceeding to /correspondence-review:
-- [ ] Step 0 prerequisite check passed: spec stub exists, builds clean, sign-off date matches informal spec
-- [ ] Source-implementation inventory presented to user and confirmed
-- [ ] Modelling strategy chosen explicitly per function (pure transliteration / pure model of imperative / pure model of effectful)
-- [ ] Every `def := sorry` from /lean-spec replaced with a real definition
-- [ ] No `sorry` remains in any `def` body (theorem `sorry` bodies untouched is correct)
-- [ ] Every non-trivial definition carries a `-- src:` comment citing the source file:line range
-- [ ] Termination handled: every recursive `def` either terminates obviously or has an explicit `decreasing_by` measure
-- [ ] Partial source functions wrapped in `Option`/`Except`; no fake totality via `panic!` / unreachable / default-return
-- [ ] `lake build` clean on the whole file; only `sorry`-uses on theorems remain as warnings
-- [ ] Correspondence stub at `formal-verification/correspondence/<Name>.md` written with definitions listed but unclassified
-- [ ] Lean file header updated to "Pipeline step: 3 of 5"
+- Step 0 prerequisite check passed: spec stub exists, builds clean, sign-off date matches informal spec.
+- Source-implementation inventory recorded in the correspondence stub's "Source files modelled" section.
+- Modelling strategy chosen per function: pure transliteration <N>, pure model of imperative <M>, pure model of effectful <K>.
+- All `def := sorry` from /lean-spec replaced with real definitions; no `sorry` remains in any `def` body.
+- Every non-trivial definition carries a `-- src:` comment citing the source file:line range.
+- Termination: every recursive `def` either terminates obviously or carries an explicit `decreasing_by` measure.
+- Partial source functions wrapped in `Option`/`Except` where applicable; no fake totality via `panic!` / unreachable / default-return.
+- `lake build` clean on the whole file; warnings limited to `sorry`-uses on theorems (count: <N>).
+- Correspondence stub at `formal-verification/correspondence/<Name>.md` written with definitions listed but unclassified — this is `/correspondence-review`'s downstream input.
+- Lean file header updated to "Pipeline step: 3 of 5".
+
+Classification of definitions as exact / abstraction / approximation / mismatch is `/correspondence-review`'s job, not this skill's. No checklist items for the human to redo any of the above.
 ```
 
 ## Arguments

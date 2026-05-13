@@ -181,7 +181,9 @@ If the user replies `signed off`, append a marker line to the spec file's last s
 Human sign-off: <YYYY-MM-DD>
 ```
 
-The format is load-bearing — `/lean-spec`'s Step 0 prerequisite check uses the literal regex `^Human sign-off:\s*\d{4}-\d{2}-\d{2}\s*$` to gate execution. Use today's date in ISO-8601 (`YYYY-MM-DD`). Do not deviate from this format; "Signed off: ...", "approved", or freeform language will not pass the gate. Once the marker is written, tell the user `/lean-spec` is ready to run.
+The format is load-bearing — `/lean-spec`'s Step 0 prerequisite check uses the literal regex `^Human sign-off:\s*\d{4}-\d{2}-\d{2}\s*$` to gate execution. Use today's date in ISO-8601 (`YYYY-MM-DD`). Do not deviate from this format; "Signed off: ...", "approved", or freeform language will not pass the gate.
+
+Once the marker is written, the file's presence + sign-off date is the orchestrator-readable handoff: byfuglien (or any caller driving the chain) detects the marker and advances to `/lean-spec` automatically. The skill does not need to tell the user "`/lean-spec` is ready" — that treats the user as the workflow driver. Emit a one-line confirmation that the marker was written and the spec is now eligible for pipeline-step 2.
 
 If the user replies `revise`, incorporate the notes and re-present the same prompt — looping is expected and correct.
 
