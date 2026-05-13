@@ -166,7 +166,27 @@ List each tripped criterion with a one-line justification and point at the relev
 
 #### Step 2.7: Compose the dashboard
 
-Present the full dashboard in this order:
+Write the dashboard to a structured markdown artifact at
+`.assurance/status-<YYYY-MM-DD>.md` (per
+`crosscheck/docs/orchestrator-coordination.md` §2). The file is the
+deliverable; the chat output is a one-paragraph summary referencing the
+file. The schema below is the file body; the chat summary references the
+verdict counts plus the file path.
+
+Required frontmatter:
+
+```yaml
+---
+session: standalone
+category: assurance-status
+generated_at: <YYYY-MM-DDTHH:MM:SSZ>
+onboarding_gate: pass|fail
+fp_verdict: OK|AT_RISK|TRIPPED|INSUFFICIENT_DATA
+tripped_kill_criteria: <count>
+---
+```
+
+Body — present the full dashboard in this order:
 
 ```
 ## Assurance Status — <repo name> — <today's date>
@@ -210,6 +230,18 @@ Present the full dashboard in this order:
 ### Kill-criterion triggers
 - [TRIPPED] intent-check FP rate ≥ tripped threshold (default 30%) — see next/07 (if applicable)
 - (or: "None tripped.")
+
+### Kill-criterion blind spots
+
+This dashboard is a structural drift detector. It does NOT catch:
+
+1. **Silent invariant weakening** that does not yet fail a covering test (use `/intent-check` post-PR).
+2. **Cross-module noun-vs-noun semantic drift** where two modules name the same concept differently (use `/audit-invariant-consistency`).
+3. **Section-level spec gaps** where the prose spec asserts a constraint no invariant captures (use `/audit-spec-coverage`).
+4. **Test-strength rot** — invariant tests that pass mutation despite mutants surviving (use `/assurance-probe`).
+5. **Workflow / harness drift** — protected-surface edits that landed without a governance note are reported here, but the *quality* of the note is not assessed.
+
+This list is the operational complement to the kill-criterion triggers above: the triggers tell you what to act on; the blind spots tell you what this dashboard cannot tell you.
 
 ### Recommended next steps
 - <skill> — <one-line reason>

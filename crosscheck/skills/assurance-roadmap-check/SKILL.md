@@ -106,7 +106,25 @@ For each item, emit one of the following drift classifications. An item may trig
 
 ### Step 5: Emit Report
 
-Present a structured table with the columns below. Group rows by drift type, then by horizon, so the user sees concentrations of drift at a glance.
+Write the drift report to a structured markdown artifact at
+`.assurance/roadmap-drift-<YYYY-MM-DD>.md` (per
+`crosscheck/docs/orchestrator-coordination.md` §2). The file is the
+deliverable; the chat output is a summary referencing the file.
+
+Required frontmatter:
+
+```yaml
+---
+session: standalone
+category: roadmap-drift
+generated_at: <YYYY-MM-DDTHH:MM:SSZ>
+horizon_filter: <horizon-or-"all">
+total_drift_items: <K>
+clean_items: <M>
+---
+```
+
+Body — present a structured table with the columns below. Group rows by drift type, then by horizon, so the user sees concentrations of drift at a glance.
 
 ```
 ## Assurance Roadmap Drift Report
