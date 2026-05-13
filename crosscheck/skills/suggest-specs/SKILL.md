@@ -87,57 +87,71 @@ For each high-value and medium-value function, propose candidate specs in natura
 - "The caller assumes the output is sorted, but nothing enforces this"
 - "This modifies shared state — should the state transition be monotonic?"
 
-### Step 4: Present Proposals
+### Step 4: Emit Proposal Queue Artifact
 
-Present proposals in a structured table:
+Proposals are an artifact for orchestrator or human review, not a chat dispatch list. Write the structured queue to `.assurance/suggest-specs-queue.json` (creating `.assurance/` if missing). The file is the deliverable; the chat table below is a summary, not the primary output.
 
-```
-## Specification Proposals
+Schema (see also `crosscheck/docs/orchestrator-coordination.md` §2 on findings-as-artifacts):
 
-| # | Function | Location | Proposed Spec | Value | Recommended Skill |
-|---|----------|----------|--------------|-------|-------------------|
-| 1 | split_energy() | billing/calc.py:42 | `period1 + period2 == total` (energy conservation) | HIGH | `/spec-iterate` |
-| 2 | merge_intervals() | utils/intervals.py:15 | Output intervals are non-overlapping and cover all input intervals | HIGH | `/spec-iterate` |
-| 3 | validate_token() | auth/tokens.py:88 | Returns true iff token is well-formed and not expired | MEDIUM | `/lightweight-verify` |
-| 4 | format_date() | display/format.py:12 | Output matches ISO 8601 pattern | LOW | Skip |
-```
-
-For each HIGH-value proposal, expand the spec:
-
-```
-### Proposal 1: split_energy()
-
-**Location:** billing/calc.py:42
-**Current behavior:** Splits a total energy value into two billing periods based on a date ratio
-
-**Proposed preconditions:**
-- `total >= 0` (energy cannot be negative)
-- `0.0 <= ratio <= 1.0` (ratio represents a fraction of the billing period)
-
-**Proposed postconditions:**
-- `period1 + period2 == total` (energy conservation — no energy created or lost)
-- `period1 == total * ratio` (proportional split)
-- `period1 >= 0 and period2 >= 0` (non-negative outputs)
-
-**Inferred from:**
-- Docstring: "Split total energy proportionally across two periods"
-- Test at tests/test_billing.py:67: `assert p1 + p2 == total`
-- No existing test for negative inputs or ratio boundaries
-
-**Trust boundary note:** Uses floating-point arithmetic — Dafny `real` type provides exact rational arithmetic, so the formal spec will be stronger than the runtime behavior. Add epsilon-tolerance property-based tests after extraction.
+```json
+{
+  "schema_version": 1,
+  "generated_at": "<YYYY-MM-DDTHH:MM:SSZ>",
+  "scope": "<file path | function name | directory | recent-changes>",
+  "total_proposals": <n>,
+  "proposals": [
+    {
+      "id": "P1",
+      "function": "split_energy",
+      "location": "billing/calc.py:42",
+      "value_tier": "HIGH | MEDIUM | LOW",
+      "queued_for": "/spec-iterate | /lightweight-verify | skip",
+      "status": "proposed",
+      "summary": "<one-line spec summary>",
+      "preconditions": ["<bullet>", ...],
+      "postconditions": ["<bullet>", ...],
+      "loop_invariants": ["<bullet>", ...],
+      "implicit_invariants": ["<bullet>", ...],
+      "inferred_from": ["<docstring | test path | call-site evidence>", ...],
+      "trust_boundary_notes": "<floats | IO | concurrency caveats, or null>"
+    }
+  ]
+}
 ```
 
-### Step 5: User Selection
+`status: "proposed"` is the only initial value. Downstream (orchestrator triage or human review via PR) transitions it to `approved`, `rejected`, or `processed` as the proposal is acted on.
 
-Ask the user which proposals to act on. For each selected proposal:
+Also emit a chat-readable summary table (this is the human-facing recap; the JSON is the artifact):
 
-- **HIGH-value** → "Ready to formalize. Run `/spec-iterate` with this proposal as the starting point."
-- **MEDIUM-value** → "Run `/lightweight-verify` to generate design-by-contract assertions and property-based tests."
-- **Declined** → Record the decision. The user may revisit later.
+```
+## Specification Proposals (queued at .assurance/suggest-specs-queue.json)
 
-If the user selects multiple proposals, process them sequentially, starting with the highest-value ones.
+| ID | Function | Location | Proposed Spec | Value | Queued for |
+|---|----------|----------|---------------|-------|------------|
+| P1 | split_energy() | billing/calc.py:42 | `period1 + period2 == total` (energy conservation) | HIGH | `/spec-iterate` |
+| P2 | merge_intervals() | utils/intervals.py:15 | Output intervals are non-overlapping and cover all input intervals | HIGH | `/spec-iterate` |
+| P3 | validate_token() | auth/tokens.py:88 | Returns true iff token is well-formed and not expired | MEDIUM | `/lightweight-verify` |
+| P4 | format_date() | display/format.py:12 | Output matches ISO 8601 pattern | LOW | skip |
+```
 
-### Step 6: Report
+The "Queued for" column reflects the routing decision; it is **not** an instruction to the user to invoke that skill. An orchestrator driving the verification chain reads the JSON, takes proposals with `value_tier in {HIGH, MEDIUM}` and `status: "proposed"`, and dispatches `/spec-iterate` or `/lightweight-verify` itself. The user's role is to review the queue (typically in a PR alongside the code change that prompted the run) and approve/reject entries by editing their `status` field — not to retype skill invocations.
+
+### Step 5: Hand Off
+
+Report the queue location and the high-level distribution:
+
+```
+Wrote .assurance/suggest-specs-queue.json
+- HIGH-value proposals (→ /spec-iterate): <N>
+- MEDIUM-value proposals (→ /lightweight-verify): <N>
+- LOW-value proposals (→ skip): <N>
+
+Review the queue (typically by editing status fields to approved/rejected). An orchestrator driving the verification chain consumes the JSON directly; the user does not need to invoke /spec-iterate or /lightweight-verify by hand for each proposal.
+```
+
+Do **not** ask the user which proposals to act on, and do **not** auto-invoke `/spec-iterate` or `/lightweight-verify` from this skill. Auto-invocation would just punt the elicitation problem one skill downstream (both target skills have their own decision points). The clean separation: this skill proposes, the orchestrator dispatches, the human reviews via the queue file.
+
+### Step 6: Verification Checklist
 
 ```
 ## Verification Checklist
@@ -146,8 +160,8 @@ If the user selects multiple proposals, process them sequentially, starting with
 - [ ] Proposed specs accurately reflect the function's documented and tested behavior
 - [ ] Implicit invariants (caller assumptions, loop properties) have been surfaced
 - [ ] Trust boundary notes included where Dafny limitations apply (IO, concurrency, floats)
-- [ ] Declined proposals recorded with reasoning for future review
-- [ ] Selected proposals have a clear next step (`/spec-iterate` or `/lightweight-verify`)
+- [ ] `.assurance/suggest-specs-queue.json` written with every field populated per the schema
+- [ ] Chat summary references the queue file location; no "now run /spec-iterate" instructions aimed at the user
 ```
 
 ## Arguments
