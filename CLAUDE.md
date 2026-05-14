@@ -64,12 +64,19 @@ npm run test:e2e         # End-to-end tests (requires Docker)
 
 ## Commit conventions
 
-Conventional commits enforced via commitlint + husky. The `docs:` prefix is **blocked** for commits touching behavioral artifact files (`SKILL.md`, `agents/*.md`). These files define agent/skill behavior and are functional code — use `feat:`, `fix:`, or `refactor:` based on the nature of the change.
+Conventional commits enforced via commitlint + husky.
+
+**Behavioral artifacts** (`SKILL.md`, `agents/*.md`) define agent/skill behavior and are functional code. Commits that touch them must use a release-triggering type:
+
+- `feat(<plugin>):` — new or expanded behavior (minor bump)
+- `fix(<plugin>):` — corrective behavior change (patch bump)
+
+`docs:` and `refactor:` are **both blocked** on behavioral artifacts (enforced by `.husky/commit-msg`). release-please treats `refactor:` as non-user-facing, so behavior changes filed as `refactor:` will silently stall the release pipeline — that is the failure mode behind the 2.4.0 → 2.5.0 backlog. If a change to `SKILL.md` or `agents/*.md` is genuinely non-behavioral (rare — usually internal renames or comment-only edits), split it into a separate commit that does not touch a behavioral artifact.
 
 - `feat(field-report): add new analysis dimension` — new skill behavior
 - `fix(crosscheck): correct abort threshold in /reason` — bug fix in skill logic
-- `refactor(crosscheck): simplify byfuglien routing` — structural change to agent
-- `docs(crosscheck): update README installation steps` — actual documentation (allowed)
+- `refactor(crosscheck): extract shared helper in mcp-server` — non-behavioral structural change outside `SKILL.md`/`agents/*.md`
+- `docs(crosscheck): update README installation steps` — actual documentation (not a behavioral artifact)
 
 ## Dafny limitations to keep in mind
 

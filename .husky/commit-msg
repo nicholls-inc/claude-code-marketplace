@@ -3,17 +3,31 @@
 # Standard commitlint check
 npx --no -- commitlint --edit "$1"
 
-# Block docs: prefix on behavioral artifact files (SKILL.md, agents/*.md)
-# These files define agent/skill behavior and must use feat:/fix:/refactor: etc.
+# Block docs: and refactor: prefixes on behavioral artifact files (SKILL.md, agents/*.md).
+# - docs: would lie about what changed.
+# - refactor: is treated as non-user-facing by release-please and silently stalls
+#   the release pipeline. Behavior changes to skills/agents must use feat: or fix:.
 MSG=$(head -1 "$1")
+BLOCKED_TYPE=""
 if echo "$MSG" | grep -qE '^docs(\(.*\))?(!)?:'; then
+  BLOCKED_TYPE="docs"
+elif echo "$MSG" | grep -qE '^refactor(\(.*\))?(!)?:'; then
+  BLOCKED_TYPE="refactor"
+fi
+
+if [ -n "$BLOCKED_TYPE" ]; then
   BEHAVIORAL_FILES=$(git diff --cached --name-only | grep -E '(SKILL\.md|agents/.*\.md)$' || true)
   if [ -n "$BEHAVIORAL_FILES" ]; then
     echo ""
-    echo "ERROR: commits touching behavioral artifacts must not use the 'docs:' prefix."
+    echo "ERROR: commits touching behavioral artifacts must not use the '${BLOCKED_TYPE}:' prefix."
     echo ""
-    echo "  SKILL.md and agents/*.md define agent behavior — they are functional code,"
-    echo "  not documentation. Use feat:, fix:, or refactor: instead."
+    echo "  SKILL.md and agents/*.md define agent behavior — they are functional code."
+    echo "  release-please ignores docs: and refactor: for versioning, so changes filed"
+    echo "  under these prefixes never trigger a release. Use feat: (new behavior) or"
+    echo "  fix: (corrective behavior) instead."
+    echo ""
+    echo "  If the change is genuinely non-behavioral, split it into a separate commit"
+    echo "  that does not touch any of these files."
     echo ""
     echo "  Affected files:"
     echo "$BEHAVIORAL_FILES" | sed 's/^/    /'
