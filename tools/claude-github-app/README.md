@@ -68,8 +68,18 @@ If the real `claude` shows up first, the wrapper won't run. Reorder your `PATH` 
 GitHub installation tokens last about an hour. The wrapper only mints once, at launch — so a 90-minute coding session reliably ends with `gh: 401 Bad credentials` and `git push` auth failures around the one-hour mark. The shims fix that:
 
 ```bash
-make install-shims    # adds ~/bin/gh and ~/bin/git
+make install-shims    # adds ~/agent-bin/gh and ~/agent-bin/git
 # (already included if you ran `make install-all`)
+```
+
+The shims install to `~/agent-bin/` rather than `~/bin/` so they don't shadow the real `gh`/`git` in your interactive shell. They only intercept inside contexts that prepend `~/agent-bin` to `PATH`. For Claude Code, add it to `env.PATH` in `~/.claude/settings.json`:
+
+```json
+{
+  "env": {
+    "PATH": "/Users/you/agent-bin:/usr/local/bin:/usr/bin:/bin"
+  }
+}
 ```
 
 Every `gh` or `git` invocation re-reads the shared cache at `~/.cache/claude-github-app/<app>.json` and re-mints if the token is within five minutes of expiry. Cost: ~5ms on a cache hit, ~500ms when minting fresh (at most once per app per hour).
@@ -81,15 +91,17 @@ Inside a mapped directory, the shims do the minimum needed:
 - `gh` shim: sets `GH_TOKEN` and `GITHUB_TOKEN` in the env passed to real `gh`.
 - `git` shim: writes a fresh gitconfig to the cache and points `GIT_CONFIG_GLOBAL` at it before exec'ing real `git`.
 
-Verify after install:
+Verify after install, from a context where `~/agent-bin` is on `PATH` (e.g. inside a Claude Code session with the `env.PATH` above):
 
 ```bash
 $ which -a gh git
-/Users/you/bin/gh         # shim
-/opt/homebrew/bin/gh      # real, found by walking PATH past ~/bin
-/Users/you/bin/git        # shim
+/Users/you/agent-bin/gh   # shim
+/opt/homebrew/bin/gh      # real, found by walking PATH past ~/agent-bin
+/Users/you/agent-bin/git  # shim
 /usr/bin/git              # real
 ```
+
+In your regular interactive shell, `which gh` should resolve straight to the real binary — that's intentional.
 
 ## One-time GitHub App setup
 
@@ -245,7 +257,7 @@ The wrapper does **not** defend against:
 |---|---|---|
 | `private key file ... is mode 0644` | PEM permissions too loose | `chmod 600 ~/.config/claude-github-app/keys/<app>.pem` |
 | `bot user lookup failed for X` | App slug doesn't match `name` in config | Make `name` match the GitHub App slug exactly (lowercase, hyphenated) |
-| `gh` returns 401 after ~1h | Installation token expired mid-session | Install shims (`make install-shims`), or `GH_TOKEN=$(claude-github-app token) gh ...` |
+| `gh` returns 401 after ~1h | Installation token expired mid-session | Install shims (`make install-shims`) and ensure `~/agent-bin` is on `PATH` in that context, or `GH_TOKEN=$(claude-github-app token) gh ...` |
 | Shim runs but doesn't inject a token | CWD has no matching `[[mappings]]` entry | Add a mapping, or set `default_app` in config |
 | `which gh` returns real `gh` first | `~/bin` not first on PATH | Put `export PATH="$HOME/bin:$PATH"` early in `~/.zshrc` |
 | `which claude` shows `~/.local/bin/claude` first | Same — PATH ordering | Same fix |
