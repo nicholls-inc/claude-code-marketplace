@@ -4,6 +4,18 @@ Journal for the Crosscheck plugin. Decisions that affect skills, agents, the MCP
 
 ---
 
+## 2026-05-14 — release pipeline: drain the 2.4.0 → 2.5.0 backlog and harden the commit convention
+
+**Type:** release-process / governance
+**Touches:** [CLAUDE.md](../CLAUDE.md) (commit conventions), [.husky/commit-msg](../.husky/commit-msg) (enforcement), this entry triggers `Release-As: 2.5.0` for the crosscheck component.
+**Why:** Sixteen commits landed after the 2.4.0 release without producing a release PR. The Release workflow ran every time and reported `No user facing commits found since c62ea3c... - skipping`. Cause: every one of those commits was `refactor(crosscheck): …` — release-please's default semver rules only treat `feat:` and `fix:` (and `feat!:` / `BREAKING CHANGE`) as user-facing. `refactor:` is silently ignored for versioning. The previous convention allowed `refactor:` for behavioral changes to `SKILL.md` / `agents/*.md`, which is exactly the failure mode that produced the backlog.
+
+The fix is two-track. **Convention:** behavior changes to behavioral artifacts must be `feat:` (new behavior) or `fix:` (corrective). `refactor:` is reserved for structural changes that genuinely do not alter behavior — and when they touch a behavioral artifact, they must be split into a separate commit that does not. **Enforcement:** `.husky/commit-msg` now blocks `refactor:` on behavioral artifacts in the same way it already blocks `docs:`, with an error message that names release-please as the reason. Without enforcement, the convention is just prose and the same drift recurs.
+
+This entry is also the carrier for the `Release-As: 2.5.0` trailer on the merging PR — it touches `crosscheck/` so release-please attributes the trailer to the crosscheck component, and it documents the rationale in the place a future maintainer will look when the next release misbehaves.
+
+---
+
 ## 2026-05-11 — /rationale: FORMAL routing Layer 1 vs Layer 4
 
 **Type:** propagated-discovery
