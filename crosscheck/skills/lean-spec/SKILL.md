@@ -173,7 +173,16 @@ For each `must-fix` failure, apply these repair strategies before retrying:
 
 If the budget exhausts, present the best version with remaining errors. Ask the user:
 
-> The Lean stub did not build cleanly within the 5-attempt budget. Remaining errors: `<summary>`. Do you want to (a) adjust the informal spec at `formal-verification/specs/<module>_informal.md` to remove the property that is forcing this failure, or (b) adjust the Lean translation strategy (e.g., model a domain type differently, weaken a theorem statement)?
+After 5 unsuccessful attempts, do not ask the user a chat-blocking question. Write a structured failure artifact at `formal-verification/specs/<module>_lean-spec-failure.md` containing the best stub achieved, per-attempt error logs, agent diagnosis of why each attempt failed, and a triage block for PR-time review:
+
+```markdown
+**Triage (mark exactly one):**
+- [ ] Adjust the informal spec — <one-line on which property to remove or relax>
+- [ ] Adjust the Lean translation strategy — <one-line on the modelling change needed>
+- [ ] Abandon — the property cannot be expressed in Lean within budget
+```
+
+Stop after writing the artifact. An orchestrator (or the human at PR time) picks the triage path; re-running `/lean-spec` with the relaxed input is then mechanical.
 
 Do not silently weaken theorems to make the build pass. If a property cannot be stated in Lean as written in the informal spec, that is a finding, not a bug to paper over.
 
@@ -186,23 +195,22 @@ Once `lean_check` returns `success`, present:
 - **The theorem inventory:** every `theorem` declared, with a one-line restatement of what each one claims (cross-referenced to the informal spec property name).
 - **Pipeline step 3 of 5 ready (`/lean-impl`).** State the contract: *"`/lean-impl` translates the source implementation into a Lean functional definition that connects to these theorems and seeds the correspondence document `/correspondence-review` (3b.5) classifies."* The hand-off is mediated by file presence (clean-building Lean stub at the canonical path); whoever drives the pipeline next — orchestrator (`byfuglien`) or human — picks it up. This skill does not assume the human is the driver.
 
-### Step 6: Verification Checklist
+### Step 6: Evidence Summary
 
-Present this checklist alongside the stub:
+Emit an Evidence Summary block — agent-verified items only. Every item is something this skill checked during the run; the human reads it to confirm but does not re-perform the check.
 
 ```
-## Verification Checklist
+## Evidence Summary (agent-verified during this run)
 
-Before proceeding to /lean-impl:
-- [ ] Every property in the informal spec has a matching `theorem` in the Lean stub.
-- [ ] Every `theorem` name is traceable back to a property in the informal spec by name.
-- [ ] No properties were invented during translation.
-- [ ] All `-- TODO(spec ambiguity):` markers from the informal spec carried through.
-- [ ] `lake build` clean; only `sorry`-related warnings remain.
-- [ ] Sign-off date in the file header matches the date in the informal spec.
+- Informal spec read from formal-verification/specs/<module>_informal.md with sign-off date <Y-M-D>.
+- Properties translated: <N> (every property in the informal spec maps 1:1 to a Lean `theorem`).
+- No invented properties: every `theorem` traces back to an informal-spec property by name.
+- `-- TODO(spec ambiguity):` markers carried through: <N> (one per ambiguity in the informal spec's Ambiguities section).
+- `lake build` clean; warnings limited to `sorry`-uses (count: <N>).
+- Sign-off date in the Lean file header matches the informal spec.
+
+Anything not on this list is downstream work — proof bodies live with `/lean-impl`, correspondence-to-source lives with `/correspondence-review`. No checklist items for the human to redo this skill's verification.
 ```
-
-Fill in concrete counts where applicable (e.g., "12 properties translated; 12 theorems declared"). The checklist surfaces what this skill *didn't* do — the proof bodies, the implementation, and the correspondence to source code all lie downstream.
 
 ## Arguments
 
