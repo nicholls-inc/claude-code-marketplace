@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.4.0...crosscheck-v2.5.0) (2026-05-14)
+
+
+### Miscellaneous Chores
+
+* **crosscheck:** release 2.5.0 and enforce feat/fix on behavioral artifacts ([#202](https://github.com/nicholls-inc/claude-code-marketplace/issues/202)) ([814ae61](https://github.com/nicholls-inc/claude-code-marketplace/commit/814ae6110d14cdcdec24bef79762e1a492afe4eb))
+
 ## [2.4.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.3.0...crosscheck-v2.4.0) (2026-05-12)
 
 
