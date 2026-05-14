@@ -40,41 +40,61 @@ Before asking anything, orient yourself:
    - `.pre-commit-config.yaml`, `lefthook.yml`, `.husky/pre-commit-assurance-placeholder`
    - `.github/workflows/assurance.yml`, `.gitlab-ci.yml`, `.circleci/config.yml`
    If the set is non-empty, list the colliding paths to the user and ask: "These files already exist and would be modified or overwritten. Skip (keep existing), overwrite, or abort? (skip/overwrite/abort)". Default to `skip` on ambiguous answers. Record the decision and honour it in every write step below: when the decision is `skip`, leave the existing file untouched and note the skip in the Step 8 summary; when `overwrite`, replace the file; `abort` exits immediately with no writes.
-4. If `/assurance-layer-audit` has not been run yet in this session (no prior layer-projection output visible), recommend running it first:
+4. **Consume `/assurance-layer-audit` result if present.** Look for `.assurance/layer-audit-result.json` (see `crosscheck/docs/orchestrator-coordination.md` §2 on findings-as-artifacts). If found and `schema_version == 1`, parse it and bind the following:
+   - `tooling.pre_commit_framework` → answers Step 2 Q1.
+   - `tooling.ci_system` → answers Step 2 Q2.
+   - `module_assessments[]` → seeds the seed-module candidate list for Step 2 Q3, ranked by recommended-engine viability (modules where prereqs #1–#3 are `pass` come first).
+   - The full `module_assessments[]` → Step 6.5 cache. Per-module verdicts are read directly from the JSON, not recomputed.
 
-   > Tip: `/assurance-layer-audit` produces a per-layer reach projection that informs which modules are worth seeding as invariants. Running it first takes ~15 min and makes the answers below more grounded. Proceed without the audit? (yes/no)
+   If the file is absent, emit a single non-blocking line and continue:
+   > Tip: `/assurance-layer-audit` produces a richer per-layer projection and pre-fills the answers below. Skipping for now; Step 2 will ask interactively.
 
-   If the user says yes, continue. Otherwise wait for them to run the audit.
+   Do **not** gate the skill on running the audit. Skipping is a supported path; the audit is an upstream enrichment, not a prerequisite.
 
 ### Step 2: Gather Dual-Track Enforcement Answers
 
-Ask three questions. Collect all three before writing any files.
+Three answers are needed: pre-commit framework, CI system, and seed modules. Pre-fill from the layer-audit JSON (Step 1.4) and from Step 1's own detection where possible; ask only for fields that cannot be inferred.
 
 **Q1 — Pre-commit framework:**
 
-> Which pre-commit framework does this repo use?
-> 1. `pre-commit.com` (the Python-based framework, `.pre-commit-config.yaml`)
-> 2. `lefthook` (`lefthook.yml`)
-> 3. `husky` (Node-based, `.husky/`)
-> 4. None — repo has no pre-commit hooks today
+- If `layer-audit-result.json.tooling.pre_commit_framework` is set, use it directly (no prompt). Report the bound value in the Step 8 summary.
+- Else if Step 1's repo scan unambiguously detected one framework (e.g., only `.pre-commit-config.yaml` present), use the detected value.
+- Else ask the user:
 
-Record the answer. If the user picks "None", note that the dual-track enforcement principle requires a fast local gate; `/invariant-coverage-scaffold` will later recommend installing one, but this skill will not force it.
+  > Which pre-commit framework does this repo use?
+  > 1. `pre-commit.com` (the Python-based framework, `.pre-commit-config.yaml`)
+  > 2. `lefthook` (`lefthook.yml`)
+  > 3. `husky` (Node-based, `.husky/`)
+  > 4. None — repo has no pre-commit hooks today
+
+If the resolved answer is "None", note that the dual-track enforcement principle requires a fast local gate; `/invariant-coverage-scaffold` will later recommend installing one, but this skill will not force it.
 
 **Q2 — CI system:**
 
-> Which CI system does this repo use?
-> 1. GitHub Actions (`.github/workflows/`)
-> 2. GitLab CI (`.gitlab-ci.yml`)
-> 3. CircleCI (`.circleci/`)
-> 4. Other — please name it
+- If `layer-audit-result.json.tooling.ci_system` is set, use it directly.
+- Else if Step 1's scan unambiguously detected one CI system, use the detected value.
+- Else ask the user:
 
-Record the answer.
+  > Which CI system does this repo use?
+  > 1. GitHub Actions (`.github/workflows/`)
+  > 2. GitLab CI (`.gitlab-ci.yml`)
+  > 3. CircleCI (`.circleci/`)
+  > 4. Other — please name it
 
 **Q3 — Seed modules for `docs/invariants/`:**
 
-> Which 1–3 modules should seed `docs/invariants/`? Pick the modules whose behaviour is most load-bearing (a regression here would cascade). These will receive skeleton invariant docs you will fill out with `/crosscheck:draft-invariants` next.
+Seed-module choice is a real scope decision the human owns. But the question can be pre-filled to a sensible default:
 
-If the user passed a comma-separated list as `$ARGUMENTS`, use those names and confirm. Otherwise ask, then confirm by echoing the module names back. Reject the list if it has more than 3 entries — the onboarding discipline is deliberately narrow.
+- If `$ARGUMENTS` supplied a comma-separated list (≤ 3), use those names; confirm by echoing them back.
+- Else if `layer-audit-result.json.module_assessments[]` ranked modules by recommended-engine viability, take the top 3 with prereqs #1–#3 all `pass` (or the top 3 with the most `pass`/`partial` verdicts if none are fully `pass`). Report the choice with one-line evidence per module, and offer the user a single override prompt:
+
+  > Seeding `docs/invariants/` with: <module1>, <module2>, <module3> (from layer-audit assessment). Reply `keep` to accept, or list 1–3 alternatives.
+
+- Else ask interactively:
+
+  > Which 1–3 modules should seed `docs/invariants/`? Pick the modules whose behaviour is most load-bearing (a regression here would cascade). These will receive skeleton invariant docs you will fill out with `/crosscheck:draft-invariants` next.
+
+In all cases, reject lists with more than 3 entries — the onboarding discipline is deliberately narrow.
 
 ### Step 3: Write `docs/assurance/ROADMAP.md`
 
@@ -260,7 +280,7 @@ The `<!-- aspirational -->` markers indicate invariants that are declared but no
 
 For each seed module, append a per-module **VGD-prerequisite summary** to its invariant doc. The summary materialises the framework framing in `../../../docs/research/assurance-hierarchy.md` ("Framing: layered assurance") at module granularity, so subsequent reviewers see which engine combination each module is a candidate for.
 
-**Cache check first.** If `/assurance-layer-audit` ran in this session and emitted a Step 4.5 per-module prereq table covering this module, *read that output* and use its verdicts directly. Recompute only if the audit's table is absent or the seed module isn't in it. This avoids duplicating the assessment work the audit already did.
+**Cache check first.** Read verdicts from `.assurance/layer-audit-result.json` (the structured artifact `/assurance-layer-audit` writes in its Step 7.5). For each seed module, look up the matching entry in `module_assessments[]` and reuse its `prereq_1`/`prereq_2`/`prereq_3` verdicts and evidence verbatim. Recompute only if the JSON is absent or the seed module isn't in it. This avoids duplicating the assessment work the audit already did and guarantees consistency between the two skills' verdicts.
 
 **Compute (only if cache absent).** For each seed module, derive verdicts for prerequisites #1–#3 by inspecting:
 - Module purity (deterministic algebraic semantics — pass/partial/fail);
@@ -316,14 +336,45 @@ When appending to an existing YAML file (pre-commit, lefthook, gitlab, circleci)
 
 Annotate each stub with `# TODO(/invariant-coverage-scaffold): replace this placeholder with the real coverage check` so the intent is traceable.
 
-### Step 8: Summarise and Point at the Next Two Skills
+### Step 8: Emit Handoff Artifact and Summarise
 
-Emit a final report:
+Two outputs:
+
+**8a. Machine-readable handoff artifact.** Write `.assurance/init-result.json` so orchestrators (or a subsequent skill chain) can consume the result without re-parsing chat output. Schema:
+
+```json
+{
+  "schema_version": 1,
+  "generated_at": "<YYYY-MM-DDTHH:MM:SSZ>",
+  "scaffold": {
+    "roadmap": "docs/assurance/ROADMAP.md",
+    "horizons": ["docs/assurance/immediate/README.md", "docs/assurance/next/README.md", "docs/assurance/medium-term/README.md", "docs/assurance/aspirational/README.md"],
+    "protected_surfaces_rule": ".claude/rules/protected-surfaces.md",
+    "invariants_index": "docs/invariants/README.md",
+    "invariant_docs": ["docs/invariants/<module>.md", ...],
+    "prereq_summary_diversions": ["docs/invariants/<module>-prereq-summary.md", ...],
+    "pre_commit_stub": "<path-or-null>",
+    "ci_stub": "<path-or-null>"
+  },
+  "pre_existing_decisions": {"<path>": "skip|overwrite", ...},
+  "seed_modules": ["<m1>", "<m2>", "<m3>"],
+  "pre_commit_framework": "<pre-commit.com|lefthook|husky|none>",
+  "ci_system": "<GitHub Actions|GitLab CI|CircleCI|Other:<name>|none>",
+  "recommended_next_skills": [
+    {"skill": "/crosscheck:draft-invariants", "args": "<module>", "rationale": "Expand I1/I2 skeletons into real invariants"},
+    {"skill": "/crosscheck:invariant-coverage-scaffold", "args": "", "rationale": "Replace placeholder gate with the real invariant ↔ test coverage check"}
+  ]
+}
+```
+
+If a downstream orchestrator drives the chain, it reads this artifact and dispatches the recommended skills itself — the user does not retype them.
+
+**8b. Chat summary.** Emit a brief human-readable report:
 
 ```
 ## Assurance init complete
 
-Created:
+Wrote:
 - docs/assurance/ROADMAP.md
 - docs/assurance/{immediate,next,medium-term,aspirational}/README.md
 - .claude/rules/protected-surfaces.md
@@ -332,15 +383,16 @@ Created:
 - docs/invariants/<module>-prereq-summary.md  (only when the module doc was skipped in Step 1.3)
 - <pre-commit stub path>  (or noted absence)
 - <CI stub path>
+- .assurance/init-result.json  (handoff artifact for orchestrators / next skill in chain)
 
-Next steps — run these in order:
-1. `/crosscheck:draft-invariants <module>` on each seeded module. This expands the I1/I2
-   skeletons into real prose + governance blocks.
-2. `/crosscheck:invariant-coverage-scaffold` to replace the placeholder hook and CI job
-   with the real invariant ↔ test coverage gate.
+Pre-commit framework: <resolved from layer-audit JSON or Q1>
+CI system: <resolved from layer-audit JSON or Q2>
+Seed modules: <chosen list, with source — "from layer-audit", "from $ARGUMENTS", or "user-selected">
 
-After both skills run, `/assurance-status` Phase 1 should pass.
+Recommended continuation: `/crosscheck:draft-invariants <module>` on each seeded module, then `/crosscheck:invariant-coverage-scaffold` to install the real coverage gate. An orchestrator driving this chain reads .assurance/init-result.json and dispatches automatically.
 ```
+
+The chat summary is for the human running this skill directly. Orchestrators consume the JSON.
 
 ### Step 9: Verification Checklist
 
@@ -361,8 +413,12 @@ After both skills run, `/assurance-status` Phase 1 should pass.
       `hypothesis-only` for #4 + recommended engine combination), either
       appended to `<module>.md` or in a separate `<module>-prereq-summary.md`
       when Step 1.3 chose `skip` for the colliding doc
-- [ ] Cached `/assurance-layer-audit` Step 4.5 output was used where available,
-      not recomputed
+- [ ] `.assurance/layer-audit-result.json` was read in Step 1.4 if present and
+      its `tooling.pre_commit_framework`, `tooling.ci_system`, and
+      `module_assessments[]` populated the corresponding answers without
+      asking the user
+- [ ] Cached `/assurance-layer-audit` per-module prereq verdicts were used in
+      Step 6.5 where available, not recomputed
 - [ ] Step 6.5 wrote into Class B governance only as initial-onboarding
       writes (Step 1.2 exits early on subsequent runs, bounding the exemption)
 - [ ] Pre-commit stub file matches the framework answer from Q1 (or the
@@ -370,8 +426,11 @@ After both skills run, `/assurance-status` Phase 1 should pass.
 - [ ] CI stub file matches the CI answer from Q2
 - [ ] Placeholder hook/CI fail loudly (so no one mistakes the skeleton for
       the real gate)
-- [ ] Summary names the next two skills: `/crosscheck:draft-invariants` then
-      `/crosscheck:invariant-coverage-scaffold`
+- [ ] `.assurance/init-result.json` written with every schema field
+      populated (Step 8a) — orchestrators consume this artifact rather than
+      re-parsing chat output
+- [ ] Chat summary (Step 8b) names the next two skills and notes that an
+      orchestrator can dispatch them automatically from the JSON artifact
 - [ ] No tool-name-specific references leaked into the generated
       files (text should read as repo-agnostic)
 - [ ] Pre-flight overwrite check (Step 1.3) ran and any pre-existing target

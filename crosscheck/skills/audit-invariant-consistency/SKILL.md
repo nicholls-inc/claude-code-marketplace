@@ -458,4 +458,4 @@ Examples:
   — all three passes against the ngst spec.
 - `/audit-invariant-consistency docs/invariants/queue*.md` — narrow glob
   for the queue module family.
-- `/audit-invariant-consistency` — prompt for the glob; do not guess.
+- `/audit-invariant-consistency` — default to `docs/invariants/*.md` and report the inferred glob. Only ask for an explicit glob when zero invariant docs match the default.

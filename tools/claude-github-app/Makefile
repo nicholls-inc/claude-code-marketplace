@@ -2,6 +2,7 @@
 
 BIN_DIR := bin
 INSTALL_DIR := $(HOME)/bin
+SHIM_INSTALL_DIR := $(HOME)/agent-bin
 GOFLAGS := -trimpath
 LDFLAGS := -s -w
 
@@ -36,19 +37,22 @@ install: build
 	@echo "If $$HOME/bin is not first on PATH, add this to ~/.zshrc:"
 	@echo '  export PATH="$$HOME/bin:$$PATH"'
 
-# install-shims globally shadows gh and git on PATH. Every gh/git invocation
-# (inside or outside a claude session) will route through the shim, which
-# re-mints the GitHub App token if stale. Unmapped CWDs are passed through
-# to the real binary unmodified, so it's safe — but it IS shadowing.
+# install-shims installs gh and git shims into a separate directory so they
+# only shadow real gh/git inside contexts that explicitly prepend it to PATH
+# (e.g. Claude Code sessions via ~/.claude/settings.json env.PATH). The user's
+# interactive shell is left untouched. Every gh/git invocation through the
+# shim re-mints the GitHub App token if stale; unmapped CWDs pass through to
+# the real binary unmodified.
 install-shims: build-shims
-	@mkdir -p $(INSTALL_DIR)
-	install -m 0755 $(BIN_DIR)/gh $(BIN_DIR)/git $(INSTALL_DIR)/
+	@mkdir -p $(SHIM_INSTALL_DIR)
+	install -m 0755 $(BIN_DIR)/gh $(BIN_DIR)/git $(SHIM_INSTALL_DIR)/
 	@echo
 	@echo "Installed:"
-	@echo "  $(INSTALL_DIR)/gh   (shadows real gh inside mapped CWDs)"
-	@echo "  $(INSTALL_DIR)/git  (shadows real git inside mapped CWDs)"
+	@echo "  $(SHIM_INSTALL_DIR)/gh   (shadows real gh inside mapped CWDs)"
+	@echo "  $(SHIM_INSTALL_DIR)/git  (shadows real git inside mapped CWDs)"
 	@echo
-	@echo "Verify shadowing order with: which -a gh git"
+	@echo "Ensure $(SHIM_INSTALL_DIR) is on PATH in contexts that need the shims"
+	@echo "(e.g. ~/.claude/settings.json env.PATH). Verify with: which -a gh git"
 
 install-all: install install-shims
 

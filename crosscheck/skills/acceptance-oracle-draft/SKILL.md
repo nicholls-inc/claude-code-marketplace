@@ -39,21 +39,57 @@ Before proposing any scenario, enumerate the surfaces the repo exposes to extern
 - **GitHub integration flows** — webhook handlers, CI bots, PR-comment posters. Signals: emitted comment text matching regex, labels applied, status check posted.
 - **UI interactions** — if the repo ships a UI, only the *programmatically-observable* parts count (DOM assertions via Playwright/Selenium, accessibility-tree shape, network calls emitted). Pure-visual assertions are rejected.
 
-Detect surfaces automatically where possible (look for `cmd/`, `cli/`, `main.go`, `openapi.yaml`, `routes/`, `.github/workflows/`, `packages/*/src`), then ask the user:
+Detect surfaces automatically by inspecting repo state (do not ask cold). Check for:
 
-> Which surfaces should I include? I detected: `<list>`. Confirm or add others. For each selected surface, the default top-N is 10 (range 3–15).
+- `cmd/`, `cli/`, `main.go` and any binary entrypoints in `package.json` `bin:`, `pyproject.toml` `[project.scripts]`, etc. → CLI surface.
+- `openapi.yaml`/`openapi.json`/`swagger.*`, `routes/`, framework-specific route files (`controllers/`, `*Controller.*`, `*.routes.ts`), gRPC `.proto` files → HTTP/gRPC surface.
+- Long-running daemon entrypoints (`systemd` units, Dockerfile `CMD`, `*Daemon*`, `*Worker*`, queue consumers) → daemon surface.
+- `.github/workflows/`, webhook-handler routes, `*WebhookHandler*` → GitHub integration surface.
+- `packages/*/src`, `apps/web/`, framework UI directories → UI surface (only the programmatically-observable parts count; flag as such).
 
-Do not proceed to Step 2 until the user has confirmed the surface list and N.
+Report what was detected with file:line evidence per surface. **Default to including every detected surface with N=10** unless the user redirects. Present a single confirmation pass:
 
-### Step 2: Elicit Top-N Flows per Surface
+> Detected surfaces (default top-N = 10 each):
+> - CLI: <evidence path>
+> - HTTP: <evidence path>
+> - <...>
+>
+> Reply `keep` to accept, or list the surfaces to include / N override (e.g. `cli only N=5`).
 
-For each selected surface, drive flow elicitation with these three questions (ask them explicitly; don't paraphrase):
+The "do not proceed until the user confirms" gate is removed — agent proceeds with the detected default when the user does not redirect within the same turn. Surface selection is genuinely scope (a real decision) but it does not require a blocking elicitation when the agent's detection is unambiguous.
 
-1. **"What happens if a new user runs this for the first time?"** — captures happy-path and first-run invariants (config not present, auth not set, etc.).
-2. **"What happens on error X?"** — enumerate at least two error modes per surface (missing input, malformed input, missing dependency, network failure, auth failure, permission denied).
-3. **"What's the observable success signal?"** — forces the user to name the mechanical signal *before* the scenario is drafted. If they can't name one, the flow is a candidate for rejection in Step 7.
+### Step 2: Pre-fill Flow Candidates per Surface
 
-Collect flows as a flat list `[(surface, flow-name, expected-signal, priority)]`. Priority values: `P0` (blocking regression — must pass for release), `P1` (important), `P2` (nice to have). Keep `P0` flows to roughly 1/3 of the top-N so the gate remains actionable when something fails.
+Mirror `/draft-invariants` §1a discipline: pre-fill flow candidates from repo state with file:line citations, then present them as a single confirmation pass. Do **not** elicit cold by asking the three questions below — those are now the *agent's checklist for what to extract*, not a script for interviewing the user.
+
+For each selected surface, scan the repo for these signals and draft candidates:
+
+- **CLI surface** — `<binary> --help` output (parse subcommands), README quickstart blocks, error message catalog (`grep` for `Error:`, `return fmt.Errorf`, `raise <Class>` with messages), exit code returns. The first-run path comes from the help text + README; error modes come from the error-message catalog.
+- **HTTP/gRPC** — OpenAPI / proto definitions (every documented endpoint is a candidate), route handler files for status codes and error responses, existing test files for assertion shapes.
+- **Daemon** — startup log lines (`grep` for `log.Info` / `print` at the top of `main`), signal-handler implementations, queue-emission patterns.
+- **GitHub integration** — workflow `on:` triggers, webhook handler routes, comment-templates / status-check posters in handler source.
+- **UI** — route definitions, e2e test specs (these often already define the mechanical signals — adopt them verbatim).
+
+For each candidate flow, draft:
+
+1. **Happy-path signal:** `<observable signal with file:line evidence>` — agent's first-pass; if no candidate, flag the gap.
+2. **At least two error modes:** drafted from grepped error returns; cite the source location for each.
+3. **Mechanical success signal:** drafted from API docs / test assertions / CLI help text. This is the **only** field where the agent should defer to a single follow-up question if it cannot extract a concrete predicate from repo state — the success signal is the irreducible governance commitment per Step 7's mechanical-verification rule.
+
+Present the candidate list to the user in a single confirmation pass (per surface):
+
+```
+## CLI surface — candidate flows (drafted from <evidence paths>)
+
+| # | Flow name | Happy path | Error modes | Success signal | Priority |
+|---|-----------|------------|-------------|----------------|----------|
+| 1 | <slug> | <citation>:<lines> | <2+ citations> | <predicate> | P0 |
+| 2 | <slug> | ... | ... | ... | P1 |
+```
+
+The user red-pens: strikes flows that aren't load-bearing, adjusts priorities, fills in success signals the agent couldn't extract. **Only flows where the success signal cannot be drafted from repo state become an irreducible AskUserQuestion** — the rest go through as confirm-or-edit.
+
+Collect approved flows as `[(surface, flow-name, expected-signal, priority)]`. Priority values: `P0` (blocking regression — must pass for release), `P1` (important), `P2` (nice to have). Keep `P0` flows to roughly 1/3 of the top-N so the gate remains actionable when something fails.
 
 ### Step 3: Draft Scenario Skeletons
 
@@ -118,25 +154,28 @@ This is non-negotiable. At the end of the output, print a section titled `## Rej
 
 This section is the **coverage boundary** of the oracle. The user needs it to know what the oracle is **not** catching.
 
-### Step 8: Verification Checklist
+### Step 8: Evidence Summary and Decisions for Review
 
-Present this checklist alongside the emitted files:
+Split the post-draft handoff into two blocks: an Evidence Summary the agent pre-fills with what it just did, and Decisions for Review the human acts on at PR time.
 
 ```
-## Verification Checklist
+## Evidence Summary (agent-verified during this run)
 
-After this draft, verify:
-- [ ] Every scenario's `then` assertion is programmatically checkable — no "user is satisfied", no "looks right", no "feels fast".
-- [ ] At least 3 scenarios are ready to go live within 4 weeks (kill criterion: fewer than 3 = top-N was wrong, re-scope).
-- [ ] 10 scenarios are active within 12 weeks.
-- [ ] A deliberately introduced regression in a covered flow triggers the gate locally (`./acceptance/run.sh` returns non-zero).
-- [ ] Scenarios are stored outside the coding-agent's write scope before the oracle becomes a merge gate (sibling dir or separate repo).
-- [ ] Rejected flows are listed explicitly so the coverage boundary is visible.
-- [ ] The CI workflow snippet targets the correct `paths:` filter (user-observable source paths only).
-- [ ] False-positive rate is monitored — if >30% of failures are scenario brittleness rather than real regressions, simplify the scenarios.
+- Mechanical-verification rule: every scenario's `then` assertion was checked against the schema's allowed assertion types (`exit_code`, `stdout_matches`, `http_status`, `json_schema`, `latency_under_ms`, `file_exists`, `file_sha256`, `log_line_within_seconds`). Subjective phrasings were rejected to §Rejected Flows. <N> scenarios passed, <M> were rejected.
+- Surfaces covered: <list>. Source-path filters for the CI workflow were derived from the detected surface roots: <list>.
+- Runner stub written at acceptance/run.sh; supports all assertion types used by the drafted scenarios. TODOs annotated for any unhandled assertion types.
+- Rejected flows enumerated in §Rejected Flows with reasons and suggested mechanical rewrites.
+
+## Decisions for Review (human owns these at PR time)
+
+- [ ] Storage boundary: the initial draft lives at `acceptance/scenarios/` inside the repo for review. Decide whether to move it to a sibling directory or separate repo before wiring the oracle into the merge gate. (See Step 6 for the rationale.)
+- [ ] Kill-criterion calibration: confirm that at least 3 of the drafted scenarios are realistically deployable within 4 weeks; if fewer, the top-N is too ambitious and should be re-scoped.
+- [ ] 12-week target: confirm 10 scenarios is the right active-count target for this repo's release cadence.
+- [ ] False-positive ceiling: confirm the 30% scenario-brittleness ceiling is acceptable; tighten if the repo has a stricter regression policy.
+- [ ] Regression test: introduce a deliberate regression in a covered flow and confirm the gate triggers locally (`./acceptance/run.sh` returns non-zero).
 ```
 
-Fill in the bracketed items with specifics from the current draft.
+The Evidence Summary block is closed-loop — the agent fills it in with what it just did and the human reads to verify. The Decisions block is the irreducible human-judgment surface. Do not mix them.
 
 ## Arguments
 

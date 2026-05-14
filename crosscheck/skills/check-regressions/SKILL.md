@@ -102,17 +102,19 @@ For each spec that fails re-verification, produce a structured diagnostic:
 - Revert the code change if the original property should be preserved
 ```
 
-### Step 5: Update Registry
+### Step 5: Update Registry (write-by-default)
 
 For specs that passed re-verification:
-- Update `lastVerified` to the current timestamp
-- Update `dafnySourceHash` if the spec changed
+- Update `lastVerified` to the current timestamp.
+- Update `dafnySourceHash` if the spec changed.
 
-Present the updated registry entries and offer to write the changes to `.crosscheck/specs.json`.
+**Write the updated registry to `.crosscheck/specs.json` directly.** Persisting the regression-check result is the whole point of the run; pausing to ask for permission to save the result is admin theater. The user can `git diff` / `git revert` if they don't want the update committed.
 
-### Step 6: Report
+If the user passed `--dry-run`, skip the write and report the diff that would have been applied.
 
-Present a final summary:
+### Step 6: Actions Taken and Decisions for Review
+
+Two blocks — admin work the agent performed (Actions Taken) and judgment items the human owns (Decisions for Review). Per byfuglien's rule, never mix them.
 
 ```
 ## Regression Check Summary
@@ -121,16 +123,21 @@ Present a final summary:
 - **Unchanged:** N (no action needed)
 - **Re-verified (pass):** N (registry updated)
 - **Re-verified (fail):** N (see diagnostics above)
-- **Missing:** N (consider cleanup)
+- **Missing:** N (deletion candidates)
 
-## Verification Checklist
+## Actions Taken (agent did these during the run)
 
-- [ ] All CODE_CHANGED specs have been re-verified or have diagnostics
-- [ ] SPEC_CHANGED entries reviewed for intentional vs. accidental spec drift
-- [ ] MISSING entries reviewed — remove from registry if function was intentionally deleted
-- [ ] Soft constraint entries have their property-based tests run separately
-- [ ] Failing specs have a clear remediation path (update spec or revert code)
-- [ ] Registry file updated with new timestamps for passing specs
+- Re-verified <N> CODE_CHANGED specs via dafny_verify; each has a per-spec diagnostic in Step 4 above.
+- Updated `lastVerified` timestamps for <N> passing specs.
+- Updated `dafnySourceHash` for <N> SPEC_CHANGED entries that re-verified clean.
+- Wrote `.crosscheck/specs.json` (skip with `--dry-run`).
+
+## Decisions for Review (human owns these)
+
+- [ ] Re-verified-fail specs: pick remediation per Step 4 diagnostic (update spec OR revert code OR document as intentional behavior change).
+- [ ] SPEC_CHANGED entries that re-verified clean: confirm the spec evolution was intentional, not accidental drift.
+- [ ] MISSING entries: remove from registry if the function was intentionally deleted; otherwise restore the source file.
+- [ ] Soft-constraint entries: confirm their property-based tests still pass (the agent does not run them in this skill).
 ```
 
 ## Arguments

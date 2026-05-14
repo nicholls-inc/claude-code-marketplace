@@ -350,29 +350,86 @@ IN: <Name>` linking it back to the spec — this is the bidirectional link
 that `/crosscheck:invariant-coverage-scaffold` enforces in CI and
 pre-commit.
 
-### 8. Governance
+### 8. Governance — emit artifacts, not user instructions
 
-Output a concrete governance plan covering all four items:
+Inspect repo state directly and emit two agent-authored artifacts. Do not
+ask the user, and do not list "run skill X" instructions — orchestrators
+or human PR reviewers consume what this step writes.
 
-1. **Spec location.** Default: `docs/invariants/<module>.md`. Adjust if the
-   repo has an existing `docs/` convention (check `docs/architecture/`,
-   `docs/adr/`).
-2. **Test location.** Same package as the module, in `*_invariants_test.go`
-   / `test_<module>_invariants.py` / equivalent.
-3. **Protected surfaces.** Search the repo for:
-   - `.claude/rules/protected-surfaces.md` — append the spec doc and test
-     files (Class B per the standard partition).
-   - `CODEOWNERS` — add entries requiring human review for the spec and
-     tests.
-   - `.github/branch-protection` / ruleset configs.
-   If none exist, recommend running `/crosscheck:assurance-init` first, or
-   creating `.claude/rules/protected-surfaces.md` with the standard block
-   listing both paths.
-4. **CI enforcement.** Confirm the property tests run in CI. If CI uses
-   `go test ./...` / `pytest` / equivalent they are already covered —
-   verify and say so. If not, recommend running
-   `/crosscheck:invariant-coverage-scaffold` to install the bidirectional
-   invariant ↔ test coverage gate.
+**8a. PR-pasteable governance fragment.** Emit a markdown fragment named
+`docs/invariants/<module>.governance-fragment.md` (or append to the main
+output document under a `## Governance` heading, depending on the output
+mode in `## Output structure`). The fragment is filled from repo
+inspection — every line cites a file path. Schema:
+
+```markdown
+## Governance
+
+**Spec location:** docs/invariants/<module>.md  (or repo-specific override
+detected at <evidence path>)
+**Test location:** <detected path>  (matched against <pattern>)
+**Protected-surfaces classification:** Class B  (per
+.claude/rules/protected-surfaces.md:<line>; if the rule file is absent,
+this row reads "MISSING — protected-surfaces.md must be scaffolded; see
+.assurance/draft-invariants-<module>-protected-surfaces.patch for the
+proposed entry").
+**CODEOWNERS coverage:** <detected entry or "MISSING — see patch artifact">.
+**CI enforcement:** <detected CI workflow path + the test command that
+runs the property tests, or "MISSING — property tests are not exercised
+by any detected CI job; install /crosscheck:invariant-coverage-scaffold's
+gate to fix">.
+```
+
+The fragment is human-reviewable in the PR alongside the invariant doc
+itself; it does not require the user to take separate action.
+
+**8b. protected-surfaces patch artifact (only when needed).** If
+`.claude/rules/protected-surfaces.md` does not list the new invariant doc
+or the matching property-test glob under Class B, write a patch artifact
+at `.assurance/draft-invariants-<module>-protected-surfaces.patch`
+containing the exact diff that would add the entries. Schema:
+
+```diff
+--- a/.claude/rules/protected-surfaces.md
++++ b/.claude/rules/protected-surfaces.md
+@@ <hunk header> @@
+ ## Class B — Module invariant specifications and tests
+ ...
++- `docs/invariants/<module>.md`
++- `<repo-test-glob-for-module>`
+```
+
+If the rule file itself is missing entirely, write the patch as a full
+new-file proposal listing the standard two-class partition, plus the new
+entries. Either way, the patch is an artifact the PR reviewer applies (or
+an orchestrator dispatches via `/protected-surface-amend` for the
+Class B amendment) — **not** an instruction telling the user to do it
+themselves.
+
+**Repo inspection rules.** When pre-filling the fragment, derive every
+field from observation:
+
+- Spec location: default `docs/invariants/<module>.md`; override if the
+  repo's `docs/` layout already shows a different convention
+  (`docs/architecture/<module>/invariants.md`, etc.) — cite the evidence.
+- Test location: pattern-match by language (`*_invariants_test.go`,
+  `test_<module>_invariants.py`, `<module>.invariants.spec.ts`), then
+  verify by grep that the file actually exists. If multiple candidates
+  match, list all and flag the ambiguity in the fragment.
+- CODEOWNERS: read `CODEOWNERS` (root, `.github/`, or `docs/`); match the
+  spec and test paths against existing rules; emit MISSING when absent.
+- CI enforcement: read `.github/workflows/*.yml` /
+  `.gitlab-ci.yml` / `.circleci/config.yml`; identify any job that runs
+  the language's standard test command (`go test`, `pytest`, etc.);
+  confirm coverage and cite the workflow path + job name. If no covering
+  job, mark MISSING and reference the patch artifact (`8b`) for the
+  amendment route.
+
+A missing protected-surfaces entry, missing CODEOWNERS entry, or missing
+CI coverage is **not** a hard stop — it is a finding the artifact
+surfaces. The downstream PR review decides whether to land the patch in
+the same PR, in a follow-up, or to accept the gap with a documented
+reason.
 
 ## Output structure
 

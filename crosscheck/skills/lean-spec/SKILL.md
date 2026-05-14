@@ -58,7 +58,7 @@ Before doing any Lean work, verify the input artefact exists and has been signed
 
    Do not attempt to fall back to other sign-off conventions (`Approved-by:`, GitHub-style trailers, etc.). The contract between `/informal-spec` and `/lean-spec` is exactly the marker above; either it's there or the upstream skill hasn't done its job.
 
-4. **Confirm the output path is writable.** The target is `formal-verification/lean/CrosscheckModel/<Name>.lean`, where `<Name>` is the module name in `PascalCase`. If a file already exists at that path, ask the user before overwriting; offer to rename to `<Name>_v2.lean` instead. **A renamed v2 stub still consumes the same informal spec at `formal-verification/specs/<module>_informal.md` and inherits the same sign-off date** — do not allow a v2 stub to skip Step 0.3 or to be paired with an older informal-spec revision than what is currently signed off. If the user wants v2 to follow a different informal spec, that is a fresh `/informal-spec` run, not a `/lean-spec` rename.
+4. **Confirm the output path is writable; default policy is auto-rename.** The target is `formal-verification/lean/CrosscheckModel/<Name>.lean`, where `<Name>` is the module name in `PascalCase`. If a file already exists at that path, **auto-rename the existing file** to `<Name>_v<n>.lean` (where `<n>` is the lowest unused integer ≥ 2) and proceed with a fresh write at the original path. Report the rename in the Step 5 hand-off so the user sees it. Do not pause to ask — the deterministic policy is "old file renamed, new file at canonical path"; if the user wanted the old file preserved at the canonical path they can revert via git. **A renamed v<n> stub still consumes the same informal spec at `formal-verification/specs/<module>_informal.md` and inherits the same sign-off date** — do not allow a renamed stub to skip Step 0.3 or to be paired with an older informal-spec revision than what is currently signed off. If the user wants the renamed file to follow a different informal spec, that is a fresh `/informal-spec` run, not a `/lean-spec` rename.
 
 5. **Output paths are not protected surfaces (yet).** `formal-verification/specs/` and `formal-verification/lean/` are new directories introduced by sub-phase 3b. They are not Class A or Class B per `crosscheck/.claude/rules/protected-surfaces.md` (the file is the authoritative partition; if it has not yet been added to the repo, treat these directories as unprotected). Do not invoke `/protected-surface-amend` for edits to these paths. If sub-phase 3b-β reclassifies them, that ADR will state so explicitly.
 
@@ -74,7 +74,7 @@ Open `formal-verification/specs/<module>_informal.md` and extract a structured i
 - **Examples.** Concrete worked examples in the spec — these become docstring fixtures, not theorems, but flag any where the example reveals a property the spec text didn't state explicitly.
 - **Ambiguities flagged for later.** The `/informal-spec` skill marks these inline; carry them forward as `-- TODO(spec ambiguity):` comments in the Lean file rather than guessing.
 
-Present this inventory to the user before writing Lean. They should confirm the inventory matches what they signed off on. If it doesn't, that is a signal the informal spec needs revision — stop and direct them back to `/informal-spec` rather than papering over the gap in Lean.
+Record this inventory in the Lean file header (Step 3 includes it as a structured comment block). Do **not** stop to ask the user to confirm it before writing Lean — the inventory is mechanically derived from the signed-off informal spec, so a re-confirmation gate just duplicates the sign-off that already happened in `/informal-spec`. The inventory becomes reviewable as part of the Lean file in PR review; if the user spots an inventory error then, that signals the informal spec needs revision (re-run `/informal-spec`, then re-run `/lean-spec`).
 
 ### Step 2: Plan the Mathlib Surface
 
@@ -193,7 +193,7 @@ Once `lean_check` returns `success`, present:
 - **The file path:** `formal-verification/lean/CrosscheckModel/<Name>.lean`.
 - **The build status:** `lake build` clean; warnings limited to `sorry`-uses, count `<N>`.
 - **The theorem inventory:** every `theorem` declared, with a one-line restatement of what each one claims (cross-referenced to the informal spec property name).
-- **Pipeline next step: `/lean-impl` (sub-phase 3b.4).** State the next-step contract explicitly: *"`/lean-impl` translates the source implementation into a Lean functional definition that connects to these theorems and seeds the correspondence document `/correspondence-review` (3b.5) classifies."* Do not run `/lean-impl` automatically; the user invokes it.
+- **Pipeline step 3 of 5 ready (`/lean-impl`).** State the contract: *"`/lean-impl` translates the source implementation into a Lean functional definition that connects to these theorems and seeds the correspondence document `/correspondence-review` (3b.5) classifies."* The hand-off is mediated by file presence (clean-building Lean stub at the canonical path); whoever drives the pipeline next — orchestrator (`byfuglien`) or human — picks it up. This skill does not assume the human is the driver.
 
 ### Step 6: Evidence Summary
 

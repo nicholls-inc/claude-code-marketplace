@@ -146,8 +146,25 @@ next batch.
 
 ### Step 4: Emit the proposal block
 
-For each proposal, produce this exact shape. The radio-button block is
-load-bearing — humans fill it in during review.
+Write the findings to a structured markdown artifact at
+`.assurance/spec-adversary/<module>-<YYYY-MM-DD>.md` (per
+`crosscheck/docs/orchestrator-coordination.md` §2). The file is the
+deliverable; the chat output is a summary referencing the file.
+
+Required frontmatter:
+
+```yaml
+---
+session: <id-or-"standalone">
+category: spec-adversary
+generated_at: <YYYY-MM-DDTHH:MM:SSZ>
+module: <module>
+total_proposals: <n>
+---
+```
+
+For each proposal, produce this exact shape inside the file. The
+radio-button block is load-bearing — humans fill it in during review.
 
 ```
 ### Proposal 1: <short invariant name>
@@ -186,9 +203,12 @@ is a legitimate outcome and is more honest than low-signal filler.
 
 ### Step 5: Log accepted proposals to the tracker
 
-Remind the user that the tracker file `.assurance/spec-adversary-tracker.md`
-records every run. After the human fills in the triage blocks and the PR
-merges, append a new section using this template:
+The tracker file `.assurance/spec-adversary-tracker.md` records every run.
+Append the per-run row at skill-run time with `proposed`, `accepted`,
+`rejected`, `deferred` counts where `proposed = <n>` and the others are
+`null` (awaiting human review). After the human fills in the triage blocks
+in the findings file and the PR merges, an orchestrator (or the user) updates
+the row with the resolved counts. The schema is:
 
 ```
 ## <YYYY-MM-DD> — <module>

@@ -100,35 +100,48 @@ Call `dafny_verify` with the spec. If verification fails:
 2. Determine if the spec itself is inconsistent or if it just needs syntax fixes
 3. Adjust and retry
 
-**Maximum 5 verification attempts.** If still failing after 5 attempts:
-- Present the best version with remaining errors
-- Explain what's causing the failures
-- Ask the user if they want to adjust requirements
+**Maximum 5 verification attempts.** If still failing after 5 attempts, do not ask the user a chat-blocking question. Instead, emit a structured failure artifact at `.crosscheck/work/dafny/<spec-id>/spec-iterate-failure.md` containing the best version, per-attempt error logs, the agent's diagnosis of why each attempt failed, and a triage block with three explicit paths the human can pick at PR review:
 
-### Step 6: Present for Approval
-
-Once the spec verifies, present it to the user with:
-- The verified Dafny spec
-- Plain English summary of what it guarantees
-- Any caveats or limitations
-
-Wait for user approval before considering the spec final.
-
-### Step 7: Verification Checklist
-
-Present this checklist to the user alongside the approved spec:
-
-```
-## Verification Checklist
-
-After approving this spec, verify:
-- [ ] Spec captures all intended behavior (review each `requires`/`ensures` clause)
-- [ ] No informally-stated requirements were left out of the formalization
-- [ ] `{:extern}` trust boundaries identified (if any)
-- [ ] Dafny limitation gaps acknowledged: [list any IO/concurrency/float gaps]
+```markdown
+**Triage (mark exactly one):**
+- [ ] Relax requirements — <one-line description of what to weaken in the spec>
+- [ ] Fix the spec semantics — <one-line description of the semantic gap the agent identified>
+- [ ] Abandon — formal verification is not the right tool for this property
 ```
 
-Fill in the bracketed items with specifics from the current spec. This checklist surfaces what Dafny *didn't* prove — the trust boundaries between formal guarantees and assumptions.
+Stop after writing the artifact. The reviewer red-pens at PR time; an orchestrator can re-dispatch `/spec-iterate` with the relaxed input.
+
+### Step 6: Write Spec Artifact and Present for Approval
+
+Persist the verified spec to `.crosscheck/work/dafny/<spec-id>/spec.dfy` per the persistence convention (`crosscheck/docs/orchestrator-coordination.md` §3). `<spec-id>` defaults to the slugified primary function name; the user may override at invocation time. Subsequent skills in the Dafny chain (`/generate-verified`, `/extract-code`, `/check-regressions`) consume this file directly — the user is not the state-carrier.
+
+Present to the user:
+- The path to the written spec file.
+- Plain English summary of what it guarantees.
+- The Evidence Summary block (below).
+
+Wait for user approval before treating the spec as final. The approval is the legitimate governance moment — the user is signing off on the binding artifact downstream skills consume.
+
+### Step 7: Evidence Summary and Decisions for Review
+
+Split the post-verification handoff. The agent has already detected limitations during Step 2 — pre-fill them. The human's role is to ratify intent, not re-run the analysis.
+
+```
+## Evidence Summary (agent-verified during this run)
+
+- Spec verifies via dafny_verify — all `requires`/`ensures` clauses internally consistent.
+- {:extern} trust boundaries detected during Step 2: <list with file:line refs, or "none">.
+- Dafny limitation gaps detected during Step 2 (IO/concurrency/float/external libraries): <list, or "none applicable">.
+- Spec written to .crosscheck/work/dafny/<spec-id>/spec.dfy.
+
+## Decisions for Review (human owns these)
+
+- [ ] Does the spec capture all intended behavior? Review each `requires`/`ensures` clause against the original natural-language description.
+- [ ] Are there informally-stated requirements not formalized? Either add them to the spec or document as out-of-scope.
+- [ ] If trust boundaries were flagged: are the `{:extern}` assumptions safe in the production context?
+```
+
+The Evidence Summary block reports what the agent already detected (no checklist for the user to redo). The Decisions block is the irreducible human-judgment surface.
 
 ## Arguments
 
