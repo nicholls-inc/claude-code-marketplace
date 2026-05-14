@@ -31,9 +31,15 @@ Do NOT create a GitHub issue. Update tracker CSV with `accepted=0, rejected=0, d
 
 ## When to use
 
-**Rotation-based only** (not per-PR). Trigger manually via:
-- Byfuglien query: "run assurance probe on module X"
-- `/assurance-status` recommendation: "Last probe: 4 weeks ago; consider re-running"
+**Rotation-based only** (not per-PR). The skill is designed to be dispatched by an orchestrator or a scheduled agent — rotation is mechanical state-tracking, not a user-driven decision.
+
+Triggers (in order of preference):
+
+- **Scheduled agent / cron** — preferred. A scheduled job emits a marker (per `crosscheck/docs/orchestrator-coordination.md` §1) when a module is due, and this skill consumes it. The marker schema includes the module, the last-probe date, and the next-probe target.
+- **Orchestrator dispatch** — `add-orchestrator` or `hellebuyck` runs the rotation as part of a broader assurance check.
+- **Direct user invocation** — supported when the user explicitly runs `/assurance-probe <module>`. Not the primary path; the rotation cadence is a system property, not a user prompt to remember.
+
+The `/assurance-status` "consider re-running" line is now a structured emit consumed by the rotation scheduler, not a prompt the user is expected to act on by typing the next command.
 
 **Frequency**: Every 2-4 weeks for active modules (≥1 invariant doc added/modified in last 90 days).
 

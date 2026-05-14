@@ -60,13 +60,13 @@ Compute the rolling false-positive rate over the last `window` days of entries (
 
 ### Step 1: Gather the Triple
 
-Determine the three inputs:
+Determine the three inputs by inference; ask only when inference fails.
 
-1. **Invariant prose.** Default location: `docs/invariants/<module>.md`. If the user named a specific module or file, use that. If multiple invariant docs are touched by the diff, ask the user which one to focus on — run the pipeline once per (invariant, test, diff) triple.
-2. **Covering property test.** The test file(s) that exercise the invariant. Prefer tests whose comments reference the invariant ID (e.g. `// I2:` or `// invariant I2`). If you cannot identify a covering test, stop and tell the user — the pipeline is undefined without one.
+1. **Invariant prose.** Default location: `docs/invariants/<module>.md`. If the user named a specific module or file, use that. If multiple invariant docs are touched by the diff, **fan out** — run the pipeline in parallel, one invocation per (invariant, test, diff) triple. The orchestrator (or this skill itself when invoked under `add-orchestrator`) dispatches the parallel runs and aggregates verdicts. Do not block on a single-pick AskUserQuestion.
+2. **Covering property test.** Auto-resolve by grepping the test directories for `// Invariant <ID>:` (or the repo's equivalent comment convention) matching the invariant IDs touched by the diff. Cross-check with `git diff --staged --name-only` to prefer tests in the staged set. If no covering test is found after both passes, stop and tell the user — the pipeline is undefined without one.
 3. **Code diff.** Staged changes in the current working tree: `git diff --staged` plus any relevant already-committed changes on the branch. Scope the diff to files implicated by the invariant — not the entire PR.
 
-If any of the three is missing, ask the user to supply it (path or inline) before proceeding. Do not guess.
+Ask the user to supply a path inline only when (a) the staged diff is empty (nothing to check), or (b) covering tests exist but none are linked to the invariant ID via comments. In all other cases, the agent resolves the triple from repo state and reports its inferences in the Step 8 summary.
 
 Record the set of **protected files** touched by this run — the union of the invariant doc paths, the covering test paths, and any code files that the invariant doc explicitly protects. This set is later written into the attestation as `protected_files`.
 
@@ -160,11 +160,20 @@ Write `.assurance/intent-check-attestation.json` with the schema documented in `
 
 The attestation must be written **before** the commit that touches the protected files. The companion pre-commit hook (described in `references/attestation-schema.md`) re-reads the protected files, recomputes the hash, and fails the commit if the attestation is absent, stale, or the verdict is not `pass`.
 
-### Step 7: Companion Pre-Commit Hook (describe, don't install)
+### Step 7: Companion Pre-Commit Hook (draft to disk, do not install)
 
-The skill does not install the hook for the user — installing hooks is a repo-level governance decision. But it must **describe** the hook so the user can wire it up. Point the user at `references/attestation-schema.md`, which contains the full pseudocode. Summarise in two lines:
+The skill does not auto-install the hook — installing a hook is a Class A protected-surface decision per `.claude/rules/protected-surfaces.md`, so it must land via `/protected-surface-amend` rather than being silently added. But the skill can do everything *up to* installation: it writes a draft hook script to disk that the user reviews and applies.
 
-> A fast pre-commit hook (< 1 s, no LLM) that scans staged files for any match to the protected-surface patterns, and — if found — reads `.assurance/intent-check-attestation.json`, recomputes the content hash, and rejects the commit unless the attestation exists, its verdict is `pass`, and its hash matches. The hook is installed once per repo and calls `/intent-check` only when the user re-runs it manually.
+Detect the user's pre-commit framework once (mirror `/invariant-coverage-scaffold`'s detection: `.pre-commit-config.yaml` → pre-commit.com; `lefthook.yml` → lefthook; `.husky/` → husky; else `none`). Emit a draft file at one of:
+
+- `.assurance/intent-check-hook.draft.pre-commit.yaml` (for pre-commit.com — a snippet the user merges into their config).
+- `.assurance/intent-check-hook.draft.lefthook.yml` (lefthook).
+- `.assurance/intent-check-hook.draft.husky.sh` (husky — full executable hook script).
+- `.assurance/intent-check-hook.draft.md` (none / unknown — pseudocode reference for a hand-rolled hook).
+
+Each draft contains the < 1 s, no-LLM logic from `references/attestation-schema.md`: scan staged files against the protected-surface patterns; if any match, read `.assurance/intent-check-attestation.json`, recompute the content hash, and reject the commit unless the attestation exists, its verdict is `pass`, and its hash matches.
+
+Report the written draft path. The user reviews and applies via `/protected-surface-amend` (Class A amendment). The skill itself does not modify the user's existing hook configuration.
 
 ### Step 8: Report
 
@@ -187,20 +196,44 @@ Rolling FP rate (last <window> days): <rate>%  (threshold: <tripped>%, default 3
 
 If `match == false`, tell the user exactly what the back-translator perceived vs. what the invariant prose claimed, so they can decide whether to fix the code, fix the test, or amend the invariant prose via `/protected-surface-amend`.
 
+### Step 9: What this does NOT catch
+
+The round-trip pipeline is Layer 5 best-effort. It is probabilistic and has well-characterised blind spots. Surface them in the report so the user knows the coverage boundary:
+
+```markdown
+## What this does NOT catch
+
+This skill is a two-LLM round-trip probe over (invariant prose, covering test, code diff). It cannot detect:
+
+1. **Code-test-diff inconsistencies the back-translator's vocabulary cannot express.** If the back-translator is missing the domain noun, the round-trip produces a false `match`. Use `/spec-adversary` for the code-vs-doc gap probe.
+2. **Cross-module invariant contradictions.** This skill scopes to one invariant doc at a time. Use `/audit-invariant-consistency` for cross-module passes.
+3. **Spec sections an invariant should cover but doesn't.** Use `/audit-spec-coverage` for the section → invariant coverage matrix.
+4. **Behaviour not reachable from the staged diff.** The pipeline is diff-scoped; properties tested by code outside the diff but invalidated by the diff via call graph propagation are not probed.
+5. **Property-test brittleness.** A `pass` result does not mean the test is strong; use `/assurance-probe` (mutation + vacuity + generator probes) for test-strength.
+
+The 30% FP kill criterion is the operational floor — if more than 30% of `pass` verdicts are reclassified as `spurious` on human review, the prompt or model is the problem, not the user's invariant docs.
+```
+
 ### Verification Checklist
 
 ```
-## Verification Checklist
+## Evidence Summary (agent-verified during this run)
 
-- [ ] Kill-criterion pre-check ran before any LLM call (rolling FP rate over the configured window is below the configured tripped threshold; defaults are 14 days and 30%, both sourced from the Configuration section, not hardcoded)
-- [ ] Back-translator prompt received only {code, test} — never the invariant prose
-- [ ] Back-translation contains both Section 1 (behavioural guarantees) and Section 2 (rationale comments, verbatim with file:line)
-- [ ] Diff-checker performed the mandatory Step 1 carve-out scan before rendering a verdict
-- [ ] Diff-checker output passes semantic validation (no contradictory match/reason, reason >= 20 chars when non-empty)
-- [ ] FP-tracker row appended with the exact schema (date, invariant_touched, phase_verdict, human_verdict)
-- [ ] Attestation emitted with sorted protected_files, SHA-256 content_hash, verdict, RFC3339 checked_at, and pipeline_output
-- [ ] Pre-commit hook behaviour described (not installed) so the user can wire it up via their hook config
-- [ ] User given the remediation path if verdict is fail (fix code / fix test / amend invariant with /protected-surface-amend)
+- Kill-criterion pre-check ran before any LLM call; rolling FP rate over the configured window is below the configured tripped threshold (defaults: 14 days, 30%, sourced from Configuration env vars).
+- Triple resolved from repo state where possible: invariant doc <auto-detected | provided>, covering test <grep-resolved | provided>, code diff <git-staged | provided>.
+- Multi-invariant runs (if applicable): fanned out to <N> parallel invocations; this report aggregates verdicts.
+- Back-translator received only {code, test} — never the invariant prose.
+- Back-translation contains both Section 1 (behavioural guarantees) and Section 2 (rationale comments, verbatim with file:line).
+- Diff-checker performed the mandatory Step 1 carve-out scan.
+- Diff-checker output passed semantic validation (no contradictory match/reason, reason >= 20 chars when non-empty).
+- FP-tracker row appended with the exact schema (date, invariant_touched, phase_verdict, human_verdict).
+- Attestation emitted with sorted protected_files, SHA-256 content_hash, verdict, RFC3339 checked_at, and pipeline_output.
+- Draft pre-commit hook written to .assurance/intent-check-hook.draft.<framework> — user reviews and applies via /protected-surface-amend (Class A).
+- "What this does NOT catch" section emitted with the five blind spots enumerated.
+
+## Decisions for Review (if verdict is fail)
+
+- [ ] Pick remediation: fix the code, fix the test, or amend the invariant prose via /protected-surface-amend.
 ```
 
 ## Arguments
