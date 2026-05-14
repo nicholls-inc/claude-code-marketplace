@@ -21,6 +21,8 @@ You are a verification expert building a structured adequacy argument. The goal 
 
 This skill bridges Crosscheck's formal verification (Dafny) and semi-formal reasoning (evidence certificates) into a unified argument structure.
 
+**Persistence (per `crosscheck/docs/orchestrator-coordination.md` §3).** All artifacts produced by a `/rationale` run land at `.crosscheck/work/rationale/<YYYY-MM-DD-HHMMSS>-<short-slug>/`. The slug is derived from the target (`<function>` or `<module-path-slug>`). The directory contains: `claim-tree.md` (the deliverable), `tests/` (generated test files), and `verification-summary.md` (the per-leaf verdict table). Chat output references the directory and summarises; the directory contents are the artifact reviewers and orchestrators consume.
+
 ### Step 1: Gather Requirements
 
 Identify the code and its requirements:
@@ -99,41 +101,40 @@ Assign each leaf claim a verification strategy:
 
 For each leaf claim, attempt verification using the classified method:
 
-**`[FORMAL]` claims — two discharge routes by assurance layer.** Pick the route at classification time using the heuristic in Step 3; the leaf's discharge mechanics differ between routes.
+**`[FORMAL]` claims — hand off to byfuglien.** The Layer 1 / Layer 4 routing decision and the discharge of Dafny or Lean pipeline steps belong to byfuglien (`crosscheck/agents/byfuglien.md`), which owns the implementation-chain pipelines end-to-end. This skill does **not** enumerate `/spec-iterate` / `/lean-spec` / `/lean-impl` / `/correspondence-review` / `/drt-oracle` as commands for the user to run.
 
-*Layer 1 — pure code shipping to production.*
-- Draft a candidate Dafny specification (preconditions + postconditions)
-- Offer to call `dafny_verify` with the candidate spec
-- If the user approves and verification passes, mark as verified
-- If verification fails, note the failure and suggest `/spec-iterate` for iterative refinement
-- The Dafny implementation is the production artefact (extracted to Python or Go via `/extract-code`); this is the classical Crosscheck Layer 1 case
+For each `[FORMAL]` leaf:
 
-*Layer 4 — implementation matches a model.* For code where Dafny doesn't reach (impure, effectful, networked, concurrent, shipping floats):
-- Draft a candidate Lean 4 specification stub and walk the pipeline: `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle`
-- The Lean model is **not** shipped — it runs as a differential-testing oracle against the production implementation
-- Routing here is Layer 4 (impl-vs-model alignment), not Layer 1 (pure verified production code); `/lean-impl` and `/drt-oracle` are Layer 4 skills even though they exercise formal-methods machinery
-- Mark as verified only after `/drt-oracle` reports clean (no oracle disagreements) on the chosen input space
+1. Classify the leaf by purity profile and record the routing verdict in `claim-tree.md`:
+   - **Layer 1 candidate** — pure functional shape, no IO/network/concurrency, not shipping floats. Pipeline chain owned by byfuglien starts at `/spec-iterate`.
+   - **Layer 4 candidate** — effectful, networked, concurrent, or shipping floats. Pipeline chain owned by byfuglien starts at `/lean-spec`.
+   - **Ambiguous** — record the leaf as `Routing: ambiguous (see <evidence>)` and let byfuglien (or the human reviewer) pick at pipeline-dispatch time.
 
-*Picking the route.* Ask whether the leaf names a property of pure code with a clean functional shape (Layer 1) or a behavioural correspondence between an effectful implementation and an abstract model (Layer 4). If the production code does IO, networks, holds concurrent state, or ships floats — Layer 4. If it's a pure function whose Dafny equivalent can be the production artefact — Layer 1. When the answer is genuinely ambiguous, ask the user before drafting either spec.
+2. Mark the leaf as `Pending byfuglien dispatch` with the routing verdict. Do not draft the Dafny or Lean stub here; byfuglien's pipeline draws those when the chain runs.
+
+3. If the run is happening under an orchestrator (`add-orchestrator` marker present per `crosscheck/docs/orchestrator-coordination.md` §1), record the routing verdict in `claim-tree.md`'s frontmatter so the orchestrator can dispatch byfuglien directly. Otherwise, the chat summary names byfuglien as the next step; the user does not re-type pipeline-step commands.
 
 **`[BEHAVIORAL]` claims:**
-- Generate concrete test cases or property-based test code
-- Present the test code to the user
-- Mark as "tests generated — run to verify"
+
+Write the generated test code to a file under `<run-dir>/tests/` (per the persistence convention introduced in the Description above). One file per leaf, named `test_<leaf-id>.<ext>` where `<ext>` matches the target language. Do **not** paste the test code inline as the primary output — the file IS the artifact.
+
+- Record the file path in `claim-tree.md` as the verification evidence: `Evidence: tests/test_C2_3.py (generated)`.
+- Mark the leaf as `Pending test execution` — an orchestrator or CI run executes the file; the user does not paste and run by hand.
+- If the run is under an orchestrator and the orchestrator has a test-runner subagent, the orchestrator dispatches it on the new files. Otherwise the chat summary points at the written paths and notes "run via `pytest <run-dir>/tests/` / `go test ./...` / equivalent".
 
 **`[STATIC]` claims:**
-- Read the relevant code and cite specific evidence
-- Example: "C1.2 verified — all required fields set at `model.py:42-48`"
-- Mark as verified with evidence
+- Read the relevant code and cite specific evidence in `claim-tree.md`.
+- Example: `Evidence: model.py:42-48 — all required fields set in constructor`.
+- Mark as `Verified (static)` — these are closed-loop in the same run.
 
 **`[SEMANTIC]` claims:**
-- State what the user must judge
-- Provide relevant code context to aid the judgment
-- Mark as "human review required"
+- State what the human must judge.
+- Record the surrounding code context (function path + line range) in `claim-tree.md` so the human has the evidence at PR-review time.
+- Mark as `Pending human review` — these are the irreducible human-judgment leaves and are the legitimate governance surface for `/rationale`.
 
-### Step 5: Present Traceable Checklist
+### Step 5: Emit Traceable Checklist Artifact
 
-The final output is a checklist where each item traces back through the tree to the root. The checklist is the deliverable — if all items pass, the root claim holds by construction.
+Write `<run-dir>/claim-tree.md` containing the claim tree, per-leaf classification + evidence, and the verdict summary table. The file is the deliverable. The chat output references the file path and summarises counts; it does not paste the full tree as primary output.
 
 ```
 ## Rationale: [function/module] is adequate for [requirements]
@@ -162,12 +163,12 @@ ROOT: Code is adequate for [requirements summary]
 - [ ] C0.2 [SEMANTIC]: `<=` operator totality and transitivity — **human review required** (downstream FORMAL claims condition on this)
 - [x] C1.1 [STATIC]: Output type is `List[int]` — verified at `sort.py:15` (return type annotation)
 - [x] C1.2 [STATIC]: Result length equals input length — verified at `sort.py:28` (no elements added/removed in loop)
-- [x] C2.1 [FORMAL]: Output is sorted — verified via `dafny_verify` (spec: `ensures forall i :: 0 <= i < |result|-1 ==> result[i] <= result[i+1]`)
-- [x] C2.2 [FORMAL]: Output is permutation of input — verified via `dafny_verify` (spec: `ensures multiset(result) == multiset(input)`)
-- [ ] C2.3 [BEHAVIORAL]: Empty input → empty output — test generated, run `test_sort_empty()` to verify
-- [ ] C2.4 [BEHAVIORAL]: Single-element → unchanged — test generated, run `test_sort_single()` to verify
-- [ ] C3.1 [BEHAVIORAL]: Performance under 100ms for 10k elements — benchmark generated, run to verify
-- [ ] C3.2 [SEMANTIC]: Function name and docstring accurate — **human review required**
+- [ ] C2.1 [FORMAL]: Output is sorted — Routing: Layer 1 (pure functional). Pending byfuglien dispatch.
+- [ ] C2.2 [FORMAL]: Output is permutation of input — Routing: Layer 1. Pending byfuglien dispatch.
+- [ ] C2.3 [BEHAVIORAL]: Empty input → empty output — `<run-dir>/tests/test_C2_3.py` written. Pending test execution.
+- [ ] C2.4 [BEHAVIORAL]: Single-element → unchanged — `<run-dir>/tests/test_C2_4.py` written. Pending test execution.
+- [ ] C3.1 [BEHAVIORAL]: Performance under 100ms for 10k elements — `<run-dir>/tests/test_C3_1.py` written. Pending test execution.
+- [ ] C3.2 [SEMANTIC]: Function name and docstring accurate — Pending human review at PR time. Evidence: `sort.py:1-30`.
 
 ### Summary
 
@@ -181,21 +182,31 @@ ROOT: Code is adequate for [requirements summary]
 **If all pending items pass, the root claim holds by construction.**
 ```
 
-### Step 6: Verification Checklist
+### Step 6: Evidence Summary and Decisions for Review
+
+Split the post-run handoff into two blocks. The Evidence Summary block lists what the agent verified during the run; the Decisions block lists the irreducible human-judgment items the human acts on at PR time.
 
 ```
-## Verification Checklist
+## Evidence Summary (agent-verified during this run)
 
-- [ ] All requirements have at least one corresponding leaf claim in the tree
-- [ ] No leaf claim is left unclassified
-- [ ] [FORMAL] claims routed by purity/effect profile — Layer 1 (candidate Dafny spec → `/spec-iterate`, production artefact extracted) or Layer 4 (candidate Lean spec → `/lean-spec` → `/lean-impl` → `/correspondence-review` → `/drt-oracle`, Lean model used as DRT oracle, not shipped)
-- [ ] [BEHAVIORAL] claims have generated test code the user can run
-- [ ] [STATIC] claims cite specific file:line evidence
-- [ ] [SEMANTIC] claims clearly state what the user must judge
-- [ ] The claim tree structure is sound — if all leaves hold, the root holds
-- [ ] C0 trust-boundary branch enumerated (extern methods, IO, network, float precision, generic-type erasure, concurrency) — downstream FORMAL/BEHAVIORAL/STATIC claims condition on these leaves
-- [ ] Unaddressed requirements flagged as gaps rather than silently omitted
+- All requirements mapped to at least one leaf claim in the tree (or flagged as a gap).
+- No leaf claim left unclassified.
+- C0 trust-boundary branch enumerated for this code (extern methods, IO, network, float precision, generic-type erasure, concurrency).
+- [STATIC] leaves verified inline with file:line evidence — count: <N>.
+- [FORMAL] leaves classified by Layer 1 / Layer 4 routing — count: <N> Layer 1, <M> Layer 4, <K> ambiguous. Pending byfuglien dispatch.
+- [BEHAVIORAL] leaves materialised as test files under <run-dir>/tests/ — count: <N>. Pending test execution.
+- Artifact written to <run-dir>/claim-tree.md.
+
+## Decisions for Review (human owns these at PR time)
+
+- [ ] [SEMANTIC] leaves: <N> claims require human domain judgment. See claim-tree.md for the per-leaf code context.
+- [ ] [FORMAL] ambiguous-routing leaves: <K> claims could not be cleanly placed in Layer 1 or Layer 4. Reviewer (or byfuglien at dispatch time) selects the route.
+- [ ] Unaddressed requirements: <N> requirements have no covering leaf claim. Decide whether to add a leaf, accept the gap with a documented reason, or revise the requirements.
+
+If all Decisions resolve favorably (judgments approved, ambiguous routings selected, gaps addressed), and the Pending byfuglien dispatch + Pending test execution items run clean, the root claim holds by construction.
 ```
+
+The Evidence Summary lists what the agent did. The Decisions block is the legitimate human-judgment surface. Mixing the two is the "blank checklist of the analysis" anti-pattern the rest of this refactor removes.
 
 ## Arguments
 
