@@ -3,3 +3,4 @@
 node_modules/
 field-reports/
 __pycache__/
+.worktrees/
