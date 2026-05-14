@@ -55,10 +55,6 @@ type RunOpts struct {
 // SIGPIPE is unconditionally ignored by this process; the child inherits the
 // default disposition so it can detect broken pipes if it wants to.
 func Run(opts RunOpts) (int, error) {
-	// Ignore SIGPIPE in the wrapper so a status-line write to a closed stderr
-	// during a `claude --version | head -1` style invocation doesn't kill us.
-	signal.Ignore(syscall.SIGPIPE)
-
 	cmd := exec.Command(opts.RealClaude, opts.Args...)
 	cmd.Env = opts.Env
 	cmd.Stdin = os.Stdin
@@ -70,6 +66,12 @@ func Run(opts RunOpts) (int, error) {
 	if err := cmd.Start(); err != nil {
 		return 127, fmt.Errorf("start claude (%s): %w", opts.RealClaude, err)
 	}
+
+	// Ignore SIGPIPE in the wrapper so a status-line write to a closed stderr
+	// during a `claude --version | head -1` style invocation doesn't kill us.
+	// Done after cmd.Start() so the child inherits the default disposition,
+	// not SIG_IGN.
+	signal.Ignore(syscall.SIGPIPE)
 
 	// Forward signals to the child. SIGTSTP is special: we forward it then
 	// raise SIGSTOP on ourselves so shell job control sees the wrapper as
