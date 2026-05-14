@@ -42,9 +42,9 @@ Present these in a table:
 | Result is a member of `items` | Postcondition | The returned value exists in the original input |
 | All examined elements are <= current max | Invariant | The running maximum is always >= all previously seen elements |
 
-### Step 3: Choose Verification Strategy
+### Step 3: Choose Verification Strategy (default to the recommendation)
 
-Present three options and recommend one based on the use case:
+The skill defaults to the recommended option for the detected use case. The three options below describe the trade-offs the agent uses to pick. If the user passes `--strategy=dbc|pbt|runtime` as an argument, that overrides. If neither is set, the agent reports the chosen strategy with the one-line evidence ("Defaulted to <X> because <Y>; pass `--strategy=<other>` to override") and proceeds — no chat-blocking gate.
 
 #### Option A: Design-by-Contract (Lowest overhead)
 
@@ -205,45 +205,38 @@ func MaxOfSlice(items []int) int {
 }
 ```
 
-### Step 4: Generate Artifacts
+### Step 4: Generate Artifacts (write to disk)
 
-Based on the user's choice (or your recommendation if they defer), generate:
+Persist artifacts under `.crosscheck/work/lightweight/<target-path-as-slug>/` per the persistence convention (`crosscheck/docs/orchestrator-coordination.md` §3). File persistence is **mandatory** — the user needs the artifacts to drop into their codebase, and chat-only output forces them to be the state-carrier. Write:
 
-1. **Function with embedded contracts** — the annotated function ready to drop into their codebase
-2. **Companion test file** (if Option B or C) — property-based tests covering all identified contracts
-3. **Verification gap note** — a brief summary of what full formal verification would have additionally guaranteed:
-   - Proofs hold for ALL inputs, not just tested samples
-   - Termination is guaranteed
-   - Absence of runtime errors (index out of bounds, integer overflow) is proven
-   - Properties are checked statically at compile time, not at runtime
+1. **`annotated.<py|go>`** — the function with embedded contracts/assertions applied.
+2. **`tests/test_properties.<py|go>`** — companion property-based tests (Option B or C).
+3. **`verification-gap.md`** — a brief note on what full formal verification would have additionally guaranteed (universal correctness, termination, absence of runtime errors, static checking).
 
-### Step 5: Verification Checklist
+Report the directory and file paths. If the user runs `/lightweight-verify` on the same target twice, the second run overwrites the first; the directory always reflects current verification state for that target.
 
-Present this checklist alongside the generated artifacts:
+### Step 5: Evidence Summary and Decisions for Review
 
 ```
-## Verification Checklist
+## Evidence Summary (agent-verified during this run)
 
-- [ ] Contracts match intended behavior (review pre/postconditions table)
-- [ ] Property-based tests cover edge cases (empty, boundary, negative)
-- [ ] Runtime checks enabled in appropriate environments
-- [ ] Properties that would benefit from full formal verification: [list candidates]
+- Contracts extracted from the input description and presented in the table above.
+- Strategy selected: <DbC | PBT | Runtime> (reason: <one-line evidence>).
+- Annotated function written to <path>.
+- Companion test file written to <path> (Option B or C only).
+- Verification gap note written to <path>.
+
+## Decisions for Review (human owns these)
+
+- [ ] Contracts match intended behavior — review the pre/postconditions table in Step 2 and the annotated function.
+- [ ] Property-based tests cover edge cases (empty, boundary, negative) — add cases if gaps remain.
+- [ ] Runtime checks enabled in appropriate environments — confirm `DEBUG_CONTRACTS` (or equivalent) is set where postcondition checking is desired.
+- [ ] Properties that would benefit from full formal verification: <agent's pre-filled candidates, or "none">.
 ```
 
-Fill in the bracketed items based on the contracts identified in Step 2.
+### Step 6: Upgrade Path (one-line, not a sales pitch)
 
-### Step 6: Upgrade Path
-
-Present guidance for upgrading to full formal verification later:
-
-- Run `/spec-iterate` with the extracted contracts as a starting point
-- Pre/postconditions translate directly to Dafny `requires`/`ensures` clauses
-- Loop invariants map to Dafny `invariant` annotations
-- Full formal verification additionally proves:
-  - **Termination**: the function always completes (no infinite loops)
-  - **Absence of runtime errors**: no out-of-bounds access, no division by zero
-  - **Universal correctness**: properties hold for ALL possible inputs, not just those tested
-  - **Static guarantees**: verification happens at build time, zero runtime cost
+Pre/postconditions in the annotated function translate directly to Dafny `requires`/`ensures` clauses. To escalate to full formal verification, run `/spec-iterate` against the contract table from Step 2. See `verification-gap.md` for what full verification adds.
 
 ## Arguments
 

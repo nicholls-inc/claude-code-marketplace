@@ -72,6 +72,17 @@ If the `difficulty` field is absent (older server version), skip this section gr
 3. Apply the fix
 4. Re-verify
 
+After 5 unsuccessful attempts, do not ask the user a chat-blocking question. Emit a structured failure artifact at `.crosscheck/work/dafny/<spec-id>/generate-verified-failure.md` containing the best version, per-attempt error logs, diagnosis, and a triage block at PR review:
+
+```markdown
+**Triage (mark exactly one):**
+- [ ] Simplify the spec — <one-line on what to weaken>
+- [ ] Restructure the implementation — <one-line on the algorithmic change needed>
+- [ ] Abandon — the spec/impl combination is too hard to discharge in this form
+```
+
+Stop after writing the artifact. An orchestrator can re-dispatch with the relaxed input.
+
 ### Step 4: Post-Generation Checks
 
 After generating verified code, check for these patterns and warn:
@@ -100,26 +111,30 @@ If verification succeeds, present:
 | Empty lemma bodies | {N} | OK (0) / Review needed (>0) |
 | Overall | Trivial/Moderate/Complex | — |
 
-If overall assessment is Trivial, add the note: "Consider using `/lightweight-verify` for similar future functions."
+If all 5 attempts fail, the structured failure artifact from Step 3 is the deliverable. Do not paste the best version into chat as the primary output; the artifact path is the handoff.
 
-If all 5 attempts fail, present:
-- The best version achieved
-- Remaining verification errors with explanations
-- Suggestions for simplifying the spec or implementation
+### Step 6: Write Verified Artifact and Evidence Summary
 
-### Step 6: Verification Checklist
+Persist the verified implementation to `.crosscheck/work/dafny/<spec-id>/impl.dfy` per the persistence convention. The downstream `/extract-code` and `/check-regressions` skills consume this file directly.
 
-Present this checklist alongside the verified implementation:
+Present an Evidence Summary, not a checklist:
 
 ```
-## Verification Checklist
+## Evidence Summary (agent-verified during this run)
 
-Before proceeding to extraction, verify:
-- [ ] All postconditions are meaningful (no trivially-true ensures clauses)
-- [ ] Proof complexity is acceptable (review difficulty summary table)
-- [ ] Empty lemma bodies reviewed (if any flagged)
-- [ ] Target-language pitfalls noted (`real` types, generics, underscore identifiers)
+- Implementation verifies via dafny_verify — all postconditions discharged.
+- Proof complexity (from difficulty metrics, if present): solver <Xms>, resource <N>, hints <K>, empty lemma bodies <N> — overall <Trivial|Moderate|Complex>.
+- Empty lemma bodies flagged: <list with line refs, or "none">.
+- Target-language pitfalls detected in Step 4: <list with file:line refs, or "none">.
+- Implementation written to .crosscheck/work/dafny/<spec-id>/impl.dfy.
+
+## Decisions for Review (human owns these at PR time, if any)
+
+- [ ] Empty-lemma-body finding (only if flagged): are the trivial properties intentional, or do they indicate over-claimed postconditions?
+- [ ] Trivial-proof finding (only if flagged + spec has meaningful postconditions): would `/lightweight-verify` have sufficed for this property?
 ```
+
+The "Consider using `/lightweight-verify`" aside on trivial proofs is moved into the Decisions block as a structured question, not a fire-and-forget chat aside — it is only surfaced when the metrics actually indicate triviality on a non-trivial-looking spec.
 
 ## Arguments
 
