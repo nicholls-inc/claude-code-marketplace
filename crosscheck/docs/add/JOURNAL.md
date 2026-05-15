@@ -4,6 +4,20 @@ Journal for the assurance-driven development work specifically. This is the deep
 
 ---
 
+## 2026-05-15 — first mature-repo field test of v3: pipeline shipped, six concrete improvement targets
+
+**Type:** field-test
+**Touches:** [field report](../reports/add-orchestrator-field-report-2026-05-15.md), [orchestrator improvements backlog](orchestrator-improvements.md)
+**Why:** The v3 README said the shape was unvalidated until at least one mature-repo and one greenfield spec session had been driven against it. This entry records the first mature-repo run. The pipeline shipped the feature; six concrete orchestrator gaps surfaced and are now in the backlog.
+
+The load-bearing finding is the **recovery property**. Mid-implementation, an agent destroyed ~2h of production-code work via an incorrect `git restore` loop, and recovery cost ~36 minutes because the spec + invariants + failing tests + per-file plan were already on disk. Every orchestrator change that makes the contract durable earlier pays back in this property; every change that defers it makes the methodology brittle in exactly that failure mode. Improvement target #1 (commit scaffolding before implementation) is the response.
+
+The load-bearing operator feedback during the run is the second-most-important input: *keep ADD in force; automate more of finding triage where the action is mechanical.* The 38-finding triage step was where friction concentrated despite the parallel fan-out and parallel audits running at machine speed (~15 minutes total). Improvement target #2 (mechanical-vs-judgement finding classification) is the response.
+
+One of two field tests the v3 README named as preconditions for writing a methodology doc. The other (greenfield) is still pending — until both have run, the v3 hypothesis stays a hypothesis.
+
+---
+
 ## 2026-05-11 — v1 stack out, v3 starts here [ADR-0001]
 
 **Type:** retraction
