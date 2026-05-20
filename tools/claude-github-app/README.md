@@ -103,6 +103,34 @@ $ which -a gh git
 
 In your regular interactive shell, `which gh` should resolve straight to the real binary — that's intentional.
 
+### Claude Code's filesystem sandbox
+
+If your `~/.claude/settings.json` enables `sandbox.filesystem`, the shim's cache writes will be denied by macOS `sandbox-exec` and you'll see:
+
+```
+claude-github-app: ABORT — inject env for git: write gitconfig
+~/.cache/claude-github-app/<app>-gitconfig: create temp git config:
+open ~/.cache/claude-github-app/.gitconfig-NNNN: operation not permitted
+```
+
+Allowlist the cache directory and (recommended) keep the token files out of Claude's Read-tool surface:
+
+```json
+{
+  "sandbox": {
+    "filesystem": {
+      "allowWrite": ["~/.cache/claude-github-app"],
+      "allowRead":  ["~/.cache/claude-github-app"]
+    }
+  },
+  "permissions": {
+    "deny": ["Read(~/.cache/claude-github-app/**)"]
+  }
+}
+```
+
+The `allowWrite`/`allowRead` entries let the shim child process write and re-read its cache under the sandbox. The `permissions.deny` entry stops the LLM's own Read tool from pulling installation tokens into the conversation context — tokens are short-lived (5-min refresh, 1h max) and scoped to the App's `repository_ids`, but the principle is to keep credentials out of the model's hands unless it actually needs them.
+
 ## One-time GitHub App setup
 
 Do this once per App.
@@ -258,6 +286,7 @@ The wrapper does **not** defend against:
 | `private key file ... is mode 0644` | PEM permissions too loose | `chmod 600 ~/.config/claude-github-app/keys/<app>.pem` |
 | `bot user lookup failed for X` | App slug doesn't match `name` in config | Make `name` match the GitHub App slug exactly (lowercase, hyphenated) |
 | `gh` returns 401 after ~1h | Installation token expired mid-session | Install shims (`make install-shims`) and ensure `~/agent-bin` is on `PATH` in that context, or `GH_TOKEN=$(claude-github-app token) gh ...` |
+| `ABORT — ... operation not permitted` writing to `~/.cache/claude-github-app/...` | Claude Code filesystem sandbox is blocking the shim's cache write | Allowlist the cache dir in `~/.claude/settings.json` — see "Claude Code's filesystem sandbox" above |
 | Shim runs but doesn't inject a token | CWD has no matching `[[mappings]]` entry | Add a mapping, or set `default_app` in config |
 | `which gh` returns real `gh` first | `~/bin` not first on PATH | Put `export PATH="$HOME/bin:$PATH"` early in `~/.zshrc` |
 | `which claude` shows `~/.local/bin/claude` first | Same — PATH ordering | Same fix |
