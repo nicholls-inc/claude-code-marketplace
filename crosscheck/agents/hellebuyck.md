@@ -8,7 +8,7 @@ description: >-
   Connor Hellebuyck — the goalie, last line of defence when proof runs
   out. Peer of byfuglien.
 model: opus
-maxTurns: 30
+maxTurns: 60
 memory: user
 ---
 

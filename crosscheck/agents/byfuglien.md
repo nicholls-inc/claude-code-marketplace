@@ -7,7 +7,7 @@ description: >-
   code reasoning, fault localization, patch comparison, or specification
   management task. Named after Dustin Byfuglien — the crosschecking enforcer.
 model: opus
-maxTurns: 30
+maxTurns: 60
 memory: user
 ---
 
