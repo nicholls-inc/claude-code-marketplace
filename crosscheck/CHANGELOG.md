@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.5.0...crosscheck-v2.5.1) (2026-05-28)
+
+
+### Bug Fixes
+
+* **crosscheck:** raise byfuglien and hellebuyck agent turn limits ([#212](https://github.com/nicholls-inc/claude-code-marketplace/issues/212)) ([96aeadd](https://github.com/nicholls-inc/claude-code-marketplace/commit/96aeadd730a04fb72ebb2e1ef41d0f4b1a69594b))
+
 ## [2.5.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.4.0...crosscheck-v2.5.0) (2026-05-14)
 
 
