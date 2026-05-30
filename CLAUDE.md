@@ -14,6 +14,7 @@ Crosscheck plugin. Crosschecks Claude's code claims using Dafny formal verificat
 - **Lean executable-model + DRT-oracle pipeline** (`crosscheck/skills/`): `/informal-spec`, `/lean-spec`, `/lean-impl`, `/correspondence-review`, `/drt-oracle`
 - **Spec management & adequacy skills** (`crosscheck/skills/`): `/check-regressions`, `/suggest-specs`, `/rationale`, `/audit-spec-coverage`, `/audit-invariant-consistency`
 - **Semi-formal reasoning skills** (`crosscheck/skills/`): `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`
+- **Repository context skill** (`crosscheck/skills/`): `/journal-context` (deterministic walk of every `JOURNAL.md` from a path up to the repo root; load the narrative record before non-trivial design work)
 - **Orchestrator agents** (`crosscheck/agents/`): `byfuglien` (implementation chain, sequential router), `hellebuyck` (specification chain, sequential router), `add-orchestrator` (ADD methodology workflow runner; parallel subagent dispatch + batched audit triage; drives spec → approved invariants ready for implementation)
 
 ### awesome-copilot (`awesome-copilot/`)

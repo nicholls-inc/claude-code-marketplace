@@ -88,6 +88,8 @@ The persona table above maps every skill to its orchestrator and (where applicab
 
 **Assurance hierarchy & governance** — onboard a repo, audit its reach on the ladder, draft acceptance oracles, run the round-trip intent check, measure test strength via mutation probes (`/assurance-probe`, Phase 1 – experimental), and keep governance notes from rotting.
 
+**Repository context** — `/journal-context` walks every `JOURNAL.md` from a path up to the repo root (deterministic, read-only), loading the narrative record before non-trivial design work.
+
 → Full skill catalogue with trigger phrases at [`./docs/skills.md`](./docs/skills.md). For the assurance flow specifically, see [`./docs/assurance-hierarchy.md`](./docs/assurance-hierarchy.md).
 
 ### Worked examples
