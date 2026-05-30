@@ -1,3 +1,16 @@
+---
+name: assurance-probe
+description: >-
+  Measure test strength via mutation/vacuity/generator probes (rotation-based).
+  Layer 4 deterministic-strength check: parses the Failure condition clause of
+  each invariant, generates targeted source mutations, and runs covering
+  property-based tests against them, then adds vacuity (branch-coverage delta)
+  and generator-reachability probes. Emits a GitHub issue (<=3 findings per run)
+  with accept/reject/defer triage. Rotation-based, not per-PR — triggered
+  manually or via an /assurance-status recommendation. Triggers: "is this test
+  too weak", "run mutation probe", "check test adequacy", "test strength".
+argument-hint: "[optional: invariant ID or module to probe; default is the next in rotation]"
+---
 # /assurance-probe
 
 **Layer**: 4 (Deterministic strength)  

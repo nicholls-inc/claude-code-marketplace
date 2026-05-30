@@ -1,0 +1,10 @@
+go 1.25
+
+// Repo-level Go workspace so the multi-module tree (each tool/plugin keeps its
+// own go.mod) is buildable from the repo root, e.g.
+//   go run ./crosscheck/conformance
+//   go test ./crosscheck/conformance/...
+use (
+	./crosscheck/conformance
+	./tools/claude-github-app
+)
