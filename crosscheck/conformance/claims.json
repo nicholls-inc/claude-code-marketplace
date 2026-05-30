@@ -8,7 +8,9 @@
       "claim": "Six layers of correctness checks, four shipping today.",
       "reality": "Layers 1,4,5,6 have shipping skills; Layers 2 (compilation correctness) and 3 (contract-graph) do not. README discloses this honestly ('four of them are shipping today').",
       "status": "reviewed-disclosed",
-      "check": {"type": "manual"},
+      "check": {
+        "type": "manual"
+      },
       "tracked_in": ""
     },
     {
@@ -17,7 +19,9 @@
       "claim": "add-orchestrator drives spec -> approved invariant docs READY FOR IMPLEMENTATION.",
       "reality": "Accurate. The agent explicitly stops at the routing recommendation and disclaims implementation-correctness closure. NOT drift.",
       "status": "reviewed-accurate",
-      "check": {"type": "manual"},
+      "check": {
+        "type": "manual"
+      },
       "tracked_in": ""
     },
     {
@@ -26,8 +30,12 @@
       "claim": "ADD includes a Phase 4 gated-implementation loop that drives code to green within three legal commit shapes.",
       "reality": "Designed, not shipped. No implementing agent exists (grep agents/: byfuglien, hellebuyck, add-orchestrator only). This is the run-to-green capability the user expected.",
       "status": "known-gap",
-      "check": {"type": "present_artifact", "path": "agents/lowry.md", "expect_present": false},
-      "tracked_in": "ISSUE#2 / phase4-agent-handoff.md"
+      "check": {
+        "type": "present_artifact",
+        "path": "agents/lowry.md",
+        "expect_present": false
+      },
+      "tracked_in": "docs/add/roadmap.md#claim-phase4"
     },
     {
       "id": "CLAIM-MODES",
@@ -35,8 +43,10 @@
       "claim": "Three operating modes (bootstrap / add / transitional) with module-level mode tags honoured by skills.",
       "reality": "Not wired. add-orchestrator hardwires the signed-off-spec path (Step 1 requires >=10 RFC-2119 keywords) and reads no mode tags. Legacy hardening and empty-repo greenfield have no orchestrated entrypoint.",
       "status": "known-gap",
-      "check": {"type": "manual"},
-      "tracked_in": "ISSUE#3"
+      "check": {
+        "type": "manual"
+      },
+      "tracked_in": "docs/add/roadmap.md#claim-modes"
     },
     {
       "id": "CLAIM-METHODOLOGY-COMMITTED",
@@ -44,8 +54,12 @@
       "claim": "The canonical ADD methodology (methodology.md, glossary.md, the ADRs) lives in the repo.",
       "reality": "Never committed. Only docs/add/README.md, JOURNAL.md, orchestrator-improvements.md shipped. The phase/mode/diff-classification design exists only in design conversation + the phase4-agent-handoff.md brief.",
       "status": "known-gap",
-      "check": {"type": "present_artifact", "path": "docs/add/methodology.md", "expect_present": false},
-      "tracked_in": "ISSUE#1 (epic)"
+      "check": {
+        "type": "present_artifact",
+        "path": "docs/add/methodology.md",
+        "expect_present": false
+      },
+      "tracked_in": "docs/add/roadmap.md#claim-methodology-committed"
     },
     {
       "id": "CLAIM-AUDITOR",
@@ -53,17 +67,23 @@
       "claim": "A Phase 5 Auditor agent renders settled/active/drifted verdicts on every artifact.",
       "reality": "Designed, not shipped. No auditor agent exists.",
       "status": "known-gap",
-      "check": {"type": "present_artifact", "path": "agents/auditor.md", "expect_present": false},
-      "tracked_in": "ISSUE#5"
+      "check": {
+        "type": "present_artifact",
+        "path": "agents/auditor.md",
+        "expect_present": false
+      },
+      "tracked_in": "docs/add/roadmap.md#claim-auditor"
     },
     {
       "id": "CLAIM-SELF-COVERAGE",
       "source": "docs/invariants/",
       "claim": "Crosscheck applies its own assurance machinery to itself.",
-      "reality": "docs/invariants/ covers three helper functions (parseDafnyOutput, shouldExclude, extractDifficultyMetrics) — the plugin verified its leaves, not its trunk (orchestrators, gates, workflow). This conformance oracle is the first trunk-level check.",
+      "reality": "docs/invariants/ covers three helper functions (parseDafnyOutput, shouldExclude, extractDifficultyMetrics) \u2014 the plugin verified its leaves, not its trunk (orchestrators, gates, workflow). This conformance oracle is the first trunk-level check.",
       "status": "known-gap",
-      "check": {"type": "manual"},
-      "tracked_in": "ISSUE#1 (epic)"
+      "check": {
+        "type": "manual"
+      },
+      "tracked_in": "docs/add/roadmap.md#claim-self-coverage"
     }
   ]
 }

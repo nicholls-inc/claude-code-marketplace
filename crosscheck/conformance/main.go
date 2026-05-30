@@ -323,6 +323,10 @@ func analyze(root string) result {
 			r.errors = append(r.errors, fmt.Sprintf(
 				"[ledger] claim %s is UNREVIEWED — triage required", c.ID))
 		}
+		if c.Status == "known-gap" && strings.TrimSpace(c.TrackedIn) == "" {
+			r.errors = append(r.errors, fmt.Sprintf(
+				"[ledger] claim %s is a known-gap with no tracked_in link", c.ID))
+		}
 		if c.Check.Type == "present_artifact" {
 			expect := true
 			if c.Check.ExpectPresent != nil {

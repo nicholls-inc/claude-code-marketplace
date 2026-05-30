@@ -252,6 +252,26 @@ func TestUnreviewedLedgerFails(t *testing.T) {
 	}
 }
 
+func TestKnownGapNeedsTracking(t *testing.T) {
+	// A known-gap with no tracked_in link fails CI.
+	files := baseTree()
+	files["conformance/claims.json"] = `{"version":1,"narrative_claims":[` +
+		`{"id":"C-GAP","claim":"c","reality":"r","status":"known-gap","check":{"type":"manual"}}]}`
+	r := analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "claim C-GAP is a known-gap with no tracked_in link") {
+		t.Errorf("expected known-gap-without-tracking error, got: %v", r.errors)
+	}
+
+	// The same gap with a tracked_in link is clean.
+	files["conformance/claims.json"] = `{"version":1,"narrative_claims":[` +
+		`{"id":"C-GAP","claim":"c","reality":"r","status":"known-gap",` +
+		`"tracked_in":"docs/add/roadmap.md#c-gap","check":{"type":"manual"}}]}`
+	r = analyze(writeTree(t, files))
+	if hasMatch(r.errors, "no tracked_in link") {
+		t.Errorf("known-gap with tracking should not error, got: %v", r.errors)
+	}
+}
+
 func TestReportPassFail(t *testing.T) {
 	pass := report(result{})
 	if !strings.Contains(pass, "RESULT: PASS") {
@@ -281,16 +301,17 @@ func TestGoldenRealTree(t *testing.T) {
 	if len(r.agents) != 3 {
 		t.Errorf("agents discovered = %d, want 3", len(r.agents))
 	}
-	if len(r.refTokens) != 29 {
-		t.Errorf("referenced tokens = %d, want 29", len(r.refTokens))
+	if len(r.refTokens) != 30 {
+		t.Errorf("referenced tokens = %d, want 30", len(r.refTokens))
 	}
 	if len(r.ledger) != 7 {
 		t.Fatalf("ledger claims = %d, want 7", len(r.ledger))
 	}
 
-	// The journal-context orphan is a known, deliberately-unresolved warning.
-	if !hasMatch(r.warnings, "journal-context") {
-		t.Errorf("expected journal-context orphan warning, got warnings: %v", r.warnings)
+	// journal-context is now documented in the README skills overview, so it must
+	// no longer be flagged as an orphan.
+	if hasMatch(r.warnings, "journal-context") {
+		t.Errorf("journal-context should be documented, but is still flagged as an orphan: %v", r.warnings)
 	}
 
 	// The five known-gap claims must all be present in the ledger.

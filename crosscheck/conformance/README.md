@@ -40,17 +40,22 @@ Exit 0 = PASS, 1 = FAIL (any AUTO error, or any `unreviewed` ledger claim, or a
   review `status`, and where possible an auto-check that **re-fires if reality
   changes** (e.g. `agents/lowry.md expect_present:false` flips to FAIL the day
   Phase 4 ships, forcing the ledger to be updated). `status:"unreviewed"` fails
-  CI to force triage of any new claim.
+  CI to force triage of any new claim. A `status:"known-gap"` entry must carry a
+  `tracked_in` link to its section in the ledger-gap roadmap
+  ([`../docs/add/roadmap.md`](../docs/add/roadmap.md)); a known-gap with no link
+  also fails CI, so a "known" gap can never be tracked nowhere.
 
 ## First-run findings (2026-05-30, plugin v2.5.1)
 
 - **ERROR** `assurance-probe` — `SKILL.md` had no frontmatter; couldn't load as a
   skill, yet `byfuglien` routes to it. **Fixed in the PR that introduced this
   oracle** (frontmatter added; this is why the gate is now GREEN).
-- **WARN** `journal-context` — ships but is undocumented in the user-facing doc
-  set (decide: document or de-scope). Left as-is — a human decision.
+- **WARN** `journal-context` — was undocumented in the user-facing doc set; now
+  documented in the README skills overview and the top-level `CLAUDE.md`, so the
+  orphan warning clears.
 - **LEDGER known-gaps** — Phase 4 agent, operating modes, committed methodology,
-  Phase 5 auditor, self-coverage. See `claims.json`; tracked in the epic.
+  Phase 5 auditor, self-coverage. See `claims.json`; each is tracked in the
+  ledger-gap roadmap ([`../docs/add/roadmap.md`](../docs/add/roadmap.md)).
 
 ## Wire to CI (suggested)
 
