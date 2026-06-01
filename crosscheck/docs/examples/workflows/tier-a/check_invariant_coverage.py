@@ -35,9 +35,9 @@ import re
 import sys
 from dataclasses import dataclass
 
-# Matches an invariant heading like ``**Q1. FIFO_ORDER.**``
-# Capture group is the ID (e.g. ``Q1``).
-HEADER_RE = re.compile(r"^\*\*([A-Z]+\d+[a-z]?)\.\s")
+# Matches an invariant heading like ``## I1: FIFO_ORDER``
+# Capture group is the ID (e.g. ``I1``).
+HEADER_RE = re.compile(r"^## (I\d+[a-z]?):")
 
 # Matches a test-comment like ``# Invariant I1: <NAME>.``
 # Accepts both ``//`` and ``#`` to keep the gate portable across languages
@@ -45,7 +45,7 @@ HEADER_RE = re.compile(r"^\*\*([A-Z]+\d+[a-z]?)\.\s")
 COMMENT_RE = re.compile(r"^\s*(?://|#)\s*Invariant\s+([A-Z]+\d+[a-z]?):\s")
 
 # Aspirational marker: ``<!-- aspirational -->`` on the same line as a
-# ``**IN. Name.**`` header means the invariant is declared but not yet
+# ``## I<N>: <Name>`` header means the invariant is declared but not yet
 # expected to have a covering test. Adding a covering test removes the
 # marker; removing the marker without adding a test triggers the gate.
 ASPIRATIONAL_RE = re.compile(r"<!--\s*aspirational\s*-->")
