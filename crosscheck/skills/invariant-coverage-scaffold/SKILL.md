@@ -1,5 +1,6 @@
 ---
 name: invariant-coverage-scaffold
+add-mode: bootstrap
 description: >-
   Generate a bidirectional invariant-to-test coverage gate for a repo that uses
   docs/invariants/*.md plus `// Invariant <ID>: <Name>` test comments. Emits both a
@@ -30,7 +31,7 @@ The skill is a generator, not a runtime. It emits scripts and config files adapt
 
 **Boundary vs `/assurance-init`:** `/assurance-init` scaffolds the governance skeleton (ROADMAP, horizon dirs, `docs/invariants/` with seed module docs, `.claude/rules/protected-surfaces.md`). This skill installs the mechanical coverage gate on top. Expected ordering:
 
-1. `/assurance-init` (or the equivalent manual setup) — creates `docs/invariants/*.md` with `**I1. Name.**` headers.
+1. `/assurance-init` (or the equivalent manual setup) — creates `docs/invariants/*.md` with `## I1: Name` headers.
 2. `/crosscheck:draft-invariants` for each seeded module — populates real invariant prose.
 3. `/invariant-coverage-scaffold` (this skill) — wires the enforcement gate.
 

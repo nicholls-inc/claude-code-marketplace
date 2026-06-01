@@ -1,5 +1,6 @@
 ---
 name: correspondence-review
+add-mode: bootstrap
 description: >-
   Review each Lean definition produced by `/lean-impl` against the actual
   source code and classify correspondence as exact, abstraction, approximation,

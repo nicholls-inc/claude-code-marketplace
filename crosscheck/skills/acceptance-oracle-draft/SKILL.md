@@ -1,5 +1,6 @@
 ---
 name: acceptance-oracle-draft
+add-mode: bootstrap
 description: >-
   Scope the top-N user-observable flows for a repo and emit mechanically-verifiable
   acceptance-scenario skeletons (YAML/JSON) plus a runner-script stub. Does NOT run

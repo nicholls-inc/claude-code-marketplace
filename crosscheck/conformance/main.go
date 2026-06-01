@@ -56,10 +56,14 @@ type skill struct {
 	empty bool
 }
 
-// agent is a discovered agents/<stem>.md artifact.
+// agent is a discovered agents/<stem>.md artifact. body is the agent content
+// with the leading YAML frontmatter stripped, so routing checks scan prose only
+// and never the description (where a `/skill` token is documentation, not a
+// routing edge).
 type agent struct {
 	name string
 	fm   map[string]string
+	body string
 }
 
 // claim is one narrative-ledger entry from claims.json.
@@ -118,6 +122,27 @@ func parseFrontmatter(content string) (map[string]string, string) {
 	return fm, content
 }
 
+// stripFrontmatter returns content with a leading YAML frontmatter block (the
+// text from the opening "---" through the next "\n---" line) removed. If there
+// is no well-formed frontmatter block, the content is returned unchanged. This
+// is the body that routing checks scan, so a `/skill` token in a frontmatter
+// description is never mistaken for a routing edge.
+func stripFrontmatter(content string) string {
+	if !strings.HasPrefix(content, "---") {
+		return content
+	}
+	rel := strings.Index(content[3:], "\n---")
+	if rel == -1 {
+		return content
+	}
+	// Skip past the closing "---" line to the start of the body.
+	rest := content[3+rel+len("\n---"):]
+	if nl := strings.IndexByte(rest, '\n'); nl != -1 {
+		return rest[nl+1:]
+	}
+	return ""
+}
+
 // readFile reads a file as a string, mirroring Python's errors="replace": any
 // read error yields the empty string rather than aborting.
 func readFile(path string) string {
@@ -172,9 +197,10 @@ func discoverAgents(root string) []agent {
 	}
 	sort.Strings(matches)
 	for _, f := range matches {
-		fm, _ := parseFrontmatter(readFile(f))
+		content := readFile(f)
+		fm, _ := parseFrontmatter(content)
 		stem := strings.TrimSuffix(filepath.Base(f), ".md")
-		out = append(out, agent{name: stem, fm: fm})
+		out = append(out, agent{name: stem, fm: fm, body: stripFrontmatter(content)})
 	}
 	return out
 }
@@ -313,6 +339,58 @@ func analyze(root string) result {
 		if mcpSrc != "" && !strings.Contains(mcpSrc, tool) {
 			r.warnings = append(r.warnings, fmt.Sprintf(
 				"[mcp] README claims MCP tool '%s' but it's not found in mcp-server source", tool))
+		}
+	}
+
+	// ---- AUTO 5: orchestration-graph integrity (trunk self-coverage) ----
+	// The phantom check (AUTO 2) only scans the user-facing doc set, so an
+	// orchestrator that routes to a skill/agent which does not exist would slip
+	// through. This extends reference integrity to the *trunk*: every skill or
+	// agent that an agent's body routes to (via `/crosscheck:x` or `/x`) must
+	// resolve to a real artifact. It is the second trunk-level self-check after
+	// this oracle itself (see CLAIM-SELF-COVERAGE, issue #221).
+	//
+	// Only the agent *body* is scanned (a.body has frontmatter stripped): a
+	// `/skill` token in a frontmatter description is documentation, not a routing
+	// edge, and must not raise a routing error.
+	//
+	// Resolution is against the `known` set — skills/agents that registered as
+	// real artifacts (a skills/<x>/SKILL.md or agents/<x>.md with valid
+	// frontmatter). The error wording reflects that: a directory that exists but
+	// lacks a parseable SKILL.md does not register and is reported as unresolved.
+	for _, a := range r.agents {
+		for _, tok := range referencedTokens(a.body) {
+			if _, ok := known[tok]; !ok {
+				r.errors = append(r.errors, fmt.Sprintf(
+					"[routing] agent '%s' routes to '/%s' but no registered skill/agent '%s' resolves "+
+						"(needs skills/%s/SKILL.md or agents/%s.md with valid frontmatter)",
+					a.name, tok, tok, tok, tok))
+			}
+		}
+	}
+
+	// ---- AUTO 6: operating-mode tag coverage (ADD modes, #219) ----
+	// (AUTO 5 — orchestration-graph integrity — is owned by sibling PR #230.)
+	// Every load-bearing module (skill + agent) must declare a valid `add-mode`
+	// frontmatter tag in {add, bootstrap}. This lifts the A3 acceptance oracle's
+	// pass condition (conformance/acceptance) into the blocking lane: the mode
+	// system is only "wired" if every module actually carries its tag, and a new
+	// untagged module fails CI rather than silently opting out. ADR-001 governs
+	// the taxonomy; crosscheck dogfoods it on its own skills/agents (existing
+	// artifacts are `bootstrap` — governance retrofitted; ADD-built agents are
+	// `add`). `transitional` describes a repo, never a module (operating-modes.md
+	// + ADR-001), so it is deliberately NOT a valid per-module tag.
+	validMode := map[string]bool{"add": true, "bootstrap": true}
+	for _, s := range r.skills {
+		if !validMode[s.fm["add-mode"]] {
+			r.errors = append(r.errors, fmt.Sprintf(
+				"[mode] skill '%s' has no valid add-mode tag (got %q, want one of add|bootstrap)", s.name, s.fm["add-mode"]))
+		}
+	}
+	for _, a := range r.agents {
+		if !validMode[a.fm["add-mode"]] {
+			r.errors = append(r.errors, fmt.Sprintf(
+				"[mode] agent '%s' has no valid add-mode tag (got %q, want one of add|bootstrap)", a.name, a.fm["add-mode"]))
 		}
 	}
 

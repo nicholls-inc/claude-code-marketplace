@@ -1,5 +1,6 @@
 ---
 name: extract-code
+add-mode: bootstrap
 description: >-
   Compile verified Dafny to Python or Go with Dafny runtime boilerplate stripped.
   Presents clean output ready for project integration, with type mappings and

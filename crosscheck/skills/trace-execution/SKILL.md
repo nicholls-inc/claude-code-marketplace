@@ -1,5 +1,6 @@
 ---
 name: trace-execution
+add-mode: bootstrap
 description: >-
   Hypothesis-driven execution path tracing that builds complete call graphs from
   entry point to leaf functions. Documents observations with line numbers and updates

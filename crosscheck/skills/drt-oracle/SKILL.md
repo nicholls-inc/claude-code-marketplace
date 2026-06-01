@@ -1,5 +1,6 @@
 ---
 name: drt-oracle
+add-mode: bootstrap
 description: >-
   Differential random testing between a Lean 4 model (the oracle) and a
   production implementation (the system under test), scoped by the

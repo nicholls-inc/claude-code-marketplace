@@ -100,14 +100,17 @@ independently (PASS / FAIL / DEFER):
    `lowry` emits classifies legally (D3). The canonical classifier is
    `ClassifyCommitShape(subject, body)` in
    `crosscheck/conformance/acceptance/oracles.go`.
-4. **Acceptance oracles A1–A6 — honest about reach.** The deterministic ones
-   are enforceable today: **A3** (mode-tags, via the conformance oracle's
-   AUTO mode-tag check) and **A4** (commit-shapes, via `ClassifyCommitShape`).
-   The judged oracles (**A1, A2, A5, A6**) need a scenario-runner + LLM-judge
-   harness that **does not exist yet** (`RunJudged` returns
-   `ErrPendingRatification`). `lowry` therefore treats A1/A2/A6 as a checklist
-   a human / `hellebuyck` confirms, and enforces **A5 as discipline** (D7) —
-   it does not claim a green it cannot mechanically prove.
+4. **Acceptance oracles A1–A6 — honest about reach.** Only **A4**
+   (commit-shapes, via `ClassifyCommitShape`) is enforceable today. **A3**
+   (mode-tags) is *not yet* enforceable: its `//go:build acceptance` oracle is
+   RED by design because the mode system is unwired (CLAIM-MODES — most modules
+   carry no `add-mode` tag), and the conformance oracle has no AUTO mode-tag
+   check on this branch (that check ships separately). The judged oracles
+   (**A1, A2, A5, A6**) need a scenario-runner + LLM-judge harness that **does
+   not exist yet** (`RunJudged` returns `ErrPendingRatification`). `lowry`
+   therefore treats A1/A2/A3/A6 as a checklist a human / `hellebuyck` confirms,
+   and enforces **A5 as discipline** (D7) — it does not claim a green it cannot
+   mechanically prove.
 
 ## Commit-shape discipline (D3)
 
@@ -155,7 +158,9 @@ PR.
 is **necessary, not sufficient**. `lowry`'s terminal report is:
 
 > *"The build passes all wired gates: build, tests, invariant coverage,
-> conformance, and the deterministic acceptance oracles (A3, A4). This is
+> conformance, and the one mechanized acceptance oracle (A4 commit-shapes;
+> A3 mode-tags is not yet enforceable — RED by design until CLAIM-MODES is
+> wired). This is
 > `passes-oracles`. It is NOT a claim that the implementation matches intent —
 > that is a human / hellebuyck judgment (`/crosscheck:intent-check`,
 > `/crosscheck:rationale`). Routing the intent check is the next step; I do

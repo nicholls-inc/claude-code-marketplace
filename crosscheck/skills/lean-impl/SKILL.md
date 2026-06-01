@@ -1,5 +1,6 @@
 ---
 name: lean-impl
+add-mode: bootstrap
 description: >-
   Translate the source implementation into a Lean 4 functional definition that
   the propositions from `/lean-spec` can be connected to. For imperative or

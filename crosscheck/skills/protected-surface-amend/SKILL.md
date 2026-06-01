@@ -1,5 +1,6 @@
 ---
 name: protected-surface-amend
+add-mode: bootstrap
 description: >-
   Given a planned change to a protected-surface file, generate the governance-note
   amendment block that must accompany the edit: change description, rationale,

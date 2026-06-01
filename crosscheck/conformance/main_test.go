@@ -127,9 +127,9 @@ func TestDocumented(t *testing.T) {
 // well-formed agent, both documented, plus an empty ledger. Callers mutate it.
 func baseTree() map[string]string {
 	return map[string]string{
-		"skills/reason/SKILL.md": "---\nname: reason\ndescription: reasons about code\n---\n" +
+		"skills/reason/SKILL.md": "---\nname: reason\nadd-mode: bootstrap\ndescription: reasons about code\n---\n" +
 			"# /reason\n\nA skill body long enough to clear the empty threshold easily.",
-		"agents/byfuglien.md": "---\nname: byfuglien\ndescription: orchestrates verification\n---\n" +
+		"agents/byfuglien.md": "---\nname: byfuglien\nadd-mode: bootstrap\ndescription: orchestrates verification\n---\n" +
 			"# Byfuglien\n\nbody text.",
 		"README.md":               "Crosscheck ships `/reason` and the `byfuglien` orchestrator.",
 		"conformance/claims.json": `{"version":1,"narrative_claims":[]}`,
@@ -151,10 +151,84 @@ func TestPhantomDetection(t *testing.T) {
 	}
 }
 
+func TestRoutingIntegrity(t *testing.T) {
+	files := baseTree()
+	// An agent that routes to a skill which does not exist on disk.
+	files["agents/router.md"] = "---\nname: router\ndescription: routes work\n---\n" +
+		"# Router\n\nFor proofs, hand to `/reason`. For specs, run `/crosscheck:ghost-route` next."
+	files["README.md"] += " The `router` agent coordinates the chain."
+	r := analyze(writeTree(t, files))
+
+	if !hasMatch(r.errors, "[routing]") || !hasMatch(r.errors, "ghost-route") {
+		t.Errorf("expected routing error for ghost-route, got errors: %v", r.errors)
+	}
+	// A real skill the agent routes to must not be flagged.
+	if hasMatch(r.errors, "routes to '/reason'") {
+		t.Errorf("valid routing target '/reason' must not be flagged: %v", r.errors)
+	}
+}
+
+// TestRoutingIgnoresFrontmatter pins the AUTO 5 fix: a `/crosscheck:x` token in
+// an agent's frontmatter `description:` is documentation, not a routing edge, so
+// it must NOT raise a routing error. Only the agent body is scanned.
+func TestRoutingIgnoresFrontmatter(t *testing.T) {
+	files := baseTree()
+	// The phantom token lives ONLY in the frontmatter description; the body
+	// routes to nothing unresolved.
+	files["agents/describer.md"] = "---\nname: describer\n" +
+		"description: orchestrates the chain; can invoke /crosscheck:phantom-fm style skills\n---\n" +
+		"# Describer\n\nFor proofs, hand to `/reason`."
+	files["README.md"] += " The `describer` agent coordinates the chain."
+	r := analyze(writeTree(t, files))
+
+	if hasMatch(r.errors, "phantom-fm") {
+		t.Errorf("a /crosscheck:x token in frontmatter must not raise a routing error: %v", r.errors)
+	}
+	// Sanity: the same token in the *body* would still be caught.
+	files["agents/describer.md"] = "---\nname: describer\ndescription: orchestrates the chain\n---\n" +
+		"# Describer\n\nFor specs, run `/crosscheck:phantom-body` next."
+	r = analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[routing]") || !hasMatch(r.errors, "phantom-body") {
+		t.Errorf("a phantom routing token in the body must still be caught: %v", r.errors)
+	}
+}
+
+// TestStripFrontmatter pins the body-extraction helper that AUTO 5 relies on.
+func TestStripFrontmatter(t *testing.T) {
+	tests := []struct {
+		name    string
+		content string
+		want    string
+	}{
+		{
+			name:    "strips_block",
+			content: "---\nname: x\ndescription: d\n---\nbody line one\nbody line two",
+			want:    "body line one\nbody line two",
+		},
+		{
+			name:    "no_frontmatter_returned_verbatim",
+			content: "# Heading\n\nplain body, no frontmatter",
+			want:    "# Heading\n\nplain body, no frontmatter",
+		},
+		{
+			name:    "unterminated_returned_verbatim",
+			content: "---\nname: broken\nno closing fence",
+			want:    "---\nname: broken\nno closing fence",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := stripFrontmatter(tc.content); got != tc.want {
+				t.Errorf("stripFrontmatter() = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
 func TestOrphanDetection(t *testing.T) {
 	files := baseTree()
 	// Add a skill that no doc mentions.
-	files["skills/lonely/SKILL.md"] = "---\nname: lonely\ndescription: undocumented\n---\n" +
+	files["skills/lonely/SKILL.md"] = "---\nname: lonely\nadd-mode: bootstrap\ndescription: undocumented\n---\n" +
 		"# /lonely\n\nbody text long enough to not be empty at all."
 	r := analyze(writeTree(t, files))
 
@@ -196,6 +270,39 @@ func TestStructuralEmptySkill(t *testing.T) {
 	r := analyze(writeTree(t, files))
 	if !hasMatch(r.errors, "skill 'tiny': SKILL.md is effectively empty") {
 		t.Errorf("expected empty-skill error, got: %v", r.errors)
+	}
+}
+
+func TestModeTagCoverage(t *testing.T) {
+	// A module with no add-mode tag is an ERROR (AUTO 6).
+	files := baseTree()
+	files["skills/untagged/SKILL.md"] = "---\nname: untagged\ndescription: missing its mode\n---\n" +
+		"# /untagged\n\nbody text long enough to not be empty at all."
+	files["README.md"] += " It also ships `/untagged`."
+	r := analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[mode]") || !hasMatch(r.errors, "untagged") {
+		t.Errorf("expected [mode] error for the untagged skill, got: %v", r.errors)
+	}
+	// An invalid mode value is also an ERROR.
+	files["skills/untagged/SKILL.md"] = "---\nname: untagged\nadd-mode: legacy\ndescription: bad mode\n---\n" +
+		"# /untagged\n\nbody text long enough to not be empty at all."
+	r = analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[mode]") || !hasMatch(r.errors, "untagged") {
+		t.Errorf("expected [mode] error for invalid add-mode value, got: %v", r.errors)
+	}
+	// `transitional` is a repo-level mode, NEVER a per-module tag
+	// (operating-modes.md + ADR-001). A module tagged `transitional` is the most
+	// plausible copy-paste error and MUST be rejected (#232 blocker).
+	files["skills/untagged/SKILL.md"] = "---\nname: untagged\nadd-mode: transitional\ndescription: repo-level mode misapplied to a module\n---\n" +
+		"# /untagged\n\nbody text long enough to not be empty at all."
+	r = analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[mode]") || !hasMatch(r.errors, "untagged") {
+		t.Errorf("expected [mode] error for transitional add-mode on a module, got: %v", r.errors)
+	}
+	// baseTree's tagged modules must NOT trip the check.
+	clean := analyze(writeTree(t, baseTree()))
+	if hasMatch(clean.errors, "[mode]") {
+		t.Errorf("tagged baseTree modules must not produce [mode] errors: %v", clean.errors)
 	}
 }
 
@@ -287,7 +394,9 @@ func TestReportPassFail(t *testing.T) {
 // plugin tree (the parent of this package dir). It asserts the stable inventory
 // and the post-fix gate state: assurance-probe now has frontmatter, the
 // journal-context orphan WARNING remains a human decision, and all seven ledger
-// claims (five of them known-gap present_artifact/manual checks) hold.
+// claims hold (three of them known-gap present_artifact/manual checks;
+// CLAIM-METHODOLOGY-COMMITTED and CLAIM-SELF-COVERAGE both triaged to
+// reviewed-disclosed per epic #217 / issue #221).
 func TestGoldenRealTree(t *testing.T) {
 	root := ".." // package dir is crosscheck/conformance; plugin root is crosscheck/
 	if _, err := os.Stat(filepath.Join(root, "skills")); err != nil {
@@ -314,28 +423,12 @@ func TestGoldenRealTree(t *testing.T) {
 		t.Errorf("journal-context should be documented, but is still flagged as an orphan: %v", r.warnings)
 	}
 
-	// The remaining known-gap claims must all be present in the ledger.
-	wantGaps := []string{"CLAIM-MODES", "CLAIM-METHODOLOGY-COMMITTED",
-		"CLAIM-SELF-COVERAGE"}
-	for _, id := range wantGaps {
-		found := false
-		for _, c := range r.ledger {
-			if c.ID == id {
-				found = true
-				if c.Status != "known-gap" {
-					t.Errorf("claim %s status = %q, want known-gap", id, c.Status)
-				}
-			}
-		}
-		if !found {
-			t.Errorf("missing expected ledger claim %s", id)
-		}
-	}
-
-	// CLAIM-PHASE4 (agents/lowry.md, #218) and CLAIM-AUDITOR (agents/auditor.md,
-	// #220) were triaged to reviewed-disclosed once their agents shipped; both
-	// present_artifact checks now expect the agent present.
-	for _, id := range []string{"CLAIM-PHASE4", "CLAIM-AUDITOR"} {
+	// All five originally-known-gap claims were triaged to reviewed-disclosed as
+	// their backing artifacts shipped: CLAIM-PHASE4 (agents/lowry.md, #218),
+	// CLAIM-AUDITOR (agents/auditor.md, #220), CLAIM-MODES (operating modes, #219),
+	// CLAIM-METHODOLOGY-COMMITTED (archived per epic #217), and CLAIM-SELF-COVERAGE
+	// (AUTO 5 orchestration-graph integrity, #221). No known-gap claims remain.
+	for _, id := range []string{"CLAIM-PHASE4", "CLAIM-AUDITOR", "CLAIM-MODES", "CLAIM-METHODOLOGY-COMMITTED", "CLAIM-SELF-COVERAGE"} {
 		found := false
 		for _, c := range r.ledger {
 			if c.ID == id {
