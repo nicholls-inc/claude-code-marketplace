@@ -1,5 +1,6 @@
 ---
 name: reason
+add-mode: bootstrap
 description: >-
   General-purpose semi-formal code reasoning that structures analysis into an
   evidence-driven certificate. Forces premise gathering, execution tracing, and

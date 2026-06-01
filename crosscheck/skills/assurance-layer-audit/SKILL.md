@@ -1,5 +1,6 @@
 ---
 name: assurance-layer-audit
+add-mode: bootstrap
 description: >-
   Entry-point diagnostic for the 6-layer assurance hierarchy. Inspects a repo,
   detects language and tooling, and emits a per-layer projection table (current

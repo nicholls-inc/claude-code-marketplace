@@ -41,8 +41,8 @@
       "id": "CLAIM-MODES",
       "source": "ADD methodology (ADR-001)",
       "claim": "Three operating modes (bootstrap / add / transitional) with module-level mode tags honoured by skills.",
-      "reality": "Not wired. add-orchestrator hardwires the signed-off-spec path (Step 1 requires >=10 RFC-2119 keywords) and reads no mode tags. Legacy hardening and empty-repo greenfield have no orchestrated entrypoint.",
-      "status": "known-gap",
+      "reality": "Wired in v1. The three modes and the module-level add-mode tag are documented in docs/add/operating-modes.md; every crosscheck skill/agent now declares add-mode, enforced in the blocking conformance oracle (AUTO 6) — the A3 acceptance oracle's deterministic pass condition. add-orchestrator Step 0 selects a mode from repo state and routes three entrypoints: add/spec-consult (consume the spec, do NOT cold-elicit — the #150 gate from the ngst greenfield run), bootstrap/legacy-derive (invariants from code), and greenfield/intent-elicit (assurance-init seed; the dedicated ADR-004 S2.1-S2.4 greenfield skills and full per-skill mode-aware branching are incremental follow-ups tracked on #219).",
+      "status": "reviewed-disclosed",
       "check": {
         "type": "manual"
       },

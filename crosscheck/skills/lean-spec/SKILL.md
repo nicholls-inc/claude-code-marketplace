@@ -1,5 +1,6 @@
 ---
 name: lean-spec
+add-mode: bootstrap
 description: >-
   Translate a signed-off informal specification into a Lean 4 specification
   stub: type definitions mirroring the source, function signatures, key theorem

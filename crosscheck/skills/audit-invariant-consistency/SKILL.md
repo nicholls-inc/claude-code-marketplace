@@ -1,5 +1,6 @@
 ---
 name: audit-invariant-consistency
+add-mode: bootstrap
 description: >-
   Layer 5 + 6 hybrid consistency audit. Given a glob of invariant docs and
   an optional spec, runs three passes (within-module contradictions,

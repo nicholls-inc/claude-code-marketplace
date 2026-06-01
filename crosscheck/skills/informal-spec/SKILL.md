@@ -1,5 +1,6 @@
 ---
 name: informal-spec
+add-mode: bootstrap
 description: >-
   Extract a precise prose specification for a module before any Lean code is
   written — preconditions, postconditions, invariants, edge cases, concrete

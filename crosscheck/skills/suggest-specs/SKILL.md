@@ -1,5 +1,6 @@
 ---
 name: suggest-specs
+add-mode: bootstrap
 description: >-
   Analyze code to propose candidate formal specifications. Identifies functions that
   would benefit from verification and generates natural-language preconditions,

@@ -1,5 +1,6 @@
 ---
 name: assurance-status
+add-mode: bootstrap
 description: >-
   Onboarding-gated status dashboard for a repo that has adopted the 6-layer
   assurance hierarchy. Phase 1 runs a deterministic onboarding check (no LLM);

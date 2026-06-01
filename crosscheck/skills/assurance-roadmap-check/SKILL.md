@@ -1,5 +1,6 @@
 ---
 name: assurance-roadmap-check
+add-mode: bootstrap
 description: >-
   Parse each roadmap item under docs/assurance/**/*.md, read its Status field,
   and diff the declared state against observed repo/PR state. Flags drift in

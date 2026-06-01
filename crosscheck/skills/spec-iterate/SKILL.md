@@ -1,5 +1,6 @@
 ---
 name: spec-iterate
+add-mode: bootstrap
 description: >-
   Draft and verify a Dafny formal specification from a natural language description.
   Produces a verified spec with preconditions, postconditions, and invariants.

@@ -1,5 +1,6 @@
 ---
 name: invariant-coverage-scaffold
+add-mode: bootstrap
 description: >-
   Generate a bidirectional invariant-to-test coverage gate for a repo that uses
   docs/invariants/*.md plus `// Invariant <ID>: <Name>` test comments. Emits both a

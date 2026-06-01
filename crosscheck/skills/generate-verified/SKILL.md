@@ -1,5 +1,6 @@
 ---
 name: generate-verified
+add-mode: bootstrap
 description: >-
   Generate a Dafny implementation body that satisfies a verified spec. Iteratively
   adds proof hints, loop invariants, and lemmas until the verifier accepts.

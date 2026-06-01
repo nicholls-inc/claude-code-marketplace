@@ -1,5 +1,6 @@
 ---
 name: lightweight-verify
+add-mode: bootstrap
 description: >-
   Generate lightweight verification artifacts for functions where full formal
   verification is overkill: design-by-contract assertions, property-based tests,
