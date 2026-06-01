@@ -193,6 +193,34 @@ app  = "my-app"
 # app  = "my-app"
 ```
 
+### One App, multiple organizations
+
+A GitHub App installed to several organizations gets a distinct `installation_id` per org. The config doesn't yet support multiple installations per `[[apps]]` entry ([#224](https://github.com/nicholls-inc/claude-code-marketplace/issues/224)). The workaround is to add one `[[apps]]` block per installation, giving each a unique `name`, and point the relevant `[[mappings]]` entries at the right name. The `name` field is an internal alias — it doesn't have to match the GitHub App slug — so use whatever is readable:
+
+```toml
+[[apps]]
+name             = "my-app-org-a"
+client_id        = "Iv23li..."
+installation_id  = 12345678
+private_key_file = "~/.config/claude-github-app/keys/my-app.pem"
+
+[[apps]]
+name             = "my-app-org-b"
+client_id        = "Iv23li..."         # same client_id — same App
+installation_id  = 87654321            # different installation
+private_key_file = "~/.config/claude-github-app/keys/my-app.pem"
+
+[[mappings]]
+path = "/Users/you/repos/org-a/repo"
+app  = "my-app-org-a"
+
+[[mappings]]
+path = "/Users/you/repos/org-b/repo"
+app  = "my-app-org-b"
+```
+
+The downside is that rotating the private key requires updating both blocks. Until the issue above is resolved, this is the only supported path.
+
 The wrapper matches the CWD against `[[mappings]]` by **longest directory prefix**. On miss, it retries with `filepath.EvalSymlinks(cwd)` so symlinked working trees still match. Trailing slashes are normalised. Duplicate `path` entries are rejected at startup.
 
 ## Day-to-day use
