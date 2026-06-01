@@ -151,6 +151,23 @@ func TestPhantomDetection(t *testing.T) {
 	}
 }
 
+func TestRoutingIntegrity(t *testing.T) {
+	files := baseTree()
+	// An agent that routes to a skill which does not exist on disk.
+	files["agents/router.md"] = "---\nname: router\ndescription: routes work\n---\n" +
+		"# Router\n\nFor proofs, hand to `/reason`. For specs, run `/crosscheck:ghost-route` next."
+	files["README.md"] += " The `router` agent coordinates the chain."
+	r := analyze(writeTree(t, files))
+
+	if !hasMatch(r.errors, "[routing]") || !hasMatch(r.errors, "ghost-route") {
+		t.Errorf("expected routing error for ghost-route, got errors: %v", r.errors)
+	}
+	// A real skill the agent routes to must not be flagged.
+	if hasMatch(r.errors, "routes to '/reason'") {
+		t.Errorf("valid routing target '/reason' must not be flagged: %v", r.errors)
+	}
+}
+
 func TestOrphanDetection(t *testing.T) {
 	files := baseTree()
 	// Add a skill that no doc mentions.
@@ -287,7 +304,8 @@ func TestReportPassFail(t *testing.T) {
 // plugin tree (the parent of this package dir). It asserts the stable inventory
 // and the post-fix gate state: assurance-probe now has frontmatter, the
 // journal-context orphan WARNING remains a human decision, and all seven ledger
-// claims (five of them known-gap present_artifact/manual checks) hold.
+// claims hold (four of them known-gap present_artifact/manual checks;
+// CLAIM-SELF-COVERAGE triaged to reviewed-disclosed per issue #221).
 func TestGoldenRealTree(t *testing.T) {
 	root := ".." // package dir is crosscheck/conformance; plugin root is crosscheck/
 	if _, err := os.Stat(filepath.Join(root, "skills")); err != nil {
@@ -314,9 +332,9 @@ func TestGoldenRealTree(t *testing.T) {
 		t.Errorf("journal-context should be documented, but is still flagged as an orphan: %v", r.warnings)
 	}
 
-	// The five known-gap claims must all be present in the ledger.
+	// The remaining known-gap claims must all be present in the ledger.
 	wantGaps := []string{"CLAIM-PHASE4", "CLAIM-MODES", "CLAIM-METHODOLOGY-COMMITTED",
-		"CLAIM-AUDITOR", "CLAIM-SELF-COVERAGE"}
+		"CLAIM-AUDITOR"}
 	for _, id := range wantGaps {
 		found := false
 		for _, c := range r.ledger {
@@ -329,6 +347,24 @@ func TestGoldenRealTree(t *testing.T) {
 		}
 		if !found {
 			t.Errorf("missing expected ledger claim %s", id)
+		}
+	}
+
+	// CLAIM-SELF-COVERAGE was triaged to reviewed-disclosed once a second
+	// trunk-level self-check (the AUTO 5 orchestration-graph integrity check)
+	// shipped beyond this oracle itself (issue #221).
+	{
+		found := false
+		for _, c := range r.ledger {
+			if c.ID == "CLAIM-SELF-COVERAGE" {
+				found = true
+				if c.Status != "reviewed-disclosed" {
+					t.Errorf("claim CLAIM-SELF-COVERAGE status = %q, want reviewed-disclosed", c.Status)
+				}
+			}
+		}
+		if !found {
+			t.Errorf("missing expected ledger claim CLAIM-SELF-COVERAGE")
 		}
 	}
 

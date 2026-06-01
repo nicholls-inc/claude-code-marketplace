@@ -316,6 +316,23 @@ func analyze(root string) result {
 		}
 	}
 
+	// ---- AUTO 5: orchestration-graph integrity (trunk self-coverage) ----
+	// The phantom check (AUTO 2) only scans the user-facing doc set, so an
+	// orchestrator that routes to a skill/agent which does not exist would slip
+	// through. This extends reference integrity to the *trunk*: every skill or
+	// agent that an agent's body routes to (via `/crosscheck:x` or `/x`) must
+	// resolve to a real artifact. It is the second trunk-level self-check after
+	// this oracle itself (see CLAIM-SELF-COVERAGE, issue #221).
+	for _, a := range r.agents {
+		body := readFile(filepath.Join(root, "agents", a.name+".md"))
+		for _, tok := range referencedTokens(body) {
+			if _, ok := known[tok]; !ok {
+				r.errors = append(r.errors, fmt.Sprintf(
+					"[routing] agent '%s' routes to '/%s' but no skills/%s/ or agents/%s.md exists", a.name, tok, tok, tok))
+			}
+		}
+	}
+
 	// ---- LEDGER: narrative claims ----
 	r.ledger = loadLedger(root)
 	for _, c := range r.ledger {
