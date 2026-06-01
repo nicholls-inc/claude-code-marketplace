@@ -287,7 +287,8 @@ func TestReportPassFail(t *testing.T) {
 // plugin tree (the parent of this package dir). It asserts the stable inventory
 // and the post-fix gate state: assurance-probe now has frontmatter, the
 // journal-context orphan WARNING remains a human decision, and all seven ledger
-// claims (five of them known-gap present_artifact/manual checks) hold.
+// claims hold (four still known-gap present_artifact/manual checks;
+// CLAIM-METHODOLOGY-COMMITTED triaged to reviewed-disclosed per epic #217).
 func TestGoldenRealTree(t *testing.T) {
 	root := ".." // package dir is crosscheck/conformance; plugin root is crosscheck/
 	if _, err := os.Stat(filepath.Join(root, "skills")); err != nil {
@@ -314,8 +315,8 @@ func TestGoldenRealTree(t *testing.T) {
 		t.Errorf("journal-context should be documented, but is still flagged as an orphan: %v", r.warnings)
 	}
 
-	// The five known-gap claims must all be present in the ledger.
-	wantGaps := []string{"CLAIM-PHASE4", "CLAIM-MODES", "CLAIM-METHODOLOGY-COMMITTED",
+	// The remaining known-gap claims must all be present in the ledger.
+	wantGaps := []string{"CLAIM-PHASE4", "CLAIM-MODES",
 		"CLAIM-AUDITOR", "CLAIM-SELF-COVERAGE"}
 	for _, id := range wantGaps {
 		found := false
@@ -329,6 +330,24 @@ func TestGoldenRealTree(t *testing.T) {
 		}
 		if !found {
 			t.Errorf("missing expected ledger claim %s", id)
+		}
+	}
+
+	// CLAIM-METHODOLOGY-COMMITTED was triaged to reviewed-disclosed (epic #217
+	// decision: close as archived — the v1 methodology was retracted on
+	// 2026-05-11, not promoted to canonical).
+	{
+		found := false
+		for _, c := range r.ledger {
+			if c.ID == "CLAIM-METHODOLOGY-COMMITTED" {
+				found = true
+				if c.Status != "reviewed-disclosed" {
+					t.Errorf("claim CLAIM-METHODOLOGY-COMMITTED status = %q, want reviewed-disclosed", c.Status)
+				}
+			}
+		}
+		if !found {
+			t.Errorf("missing expected ledger claim CLAIM-METHODOLOGY-COMMITTED")
 		}
 	}
 
