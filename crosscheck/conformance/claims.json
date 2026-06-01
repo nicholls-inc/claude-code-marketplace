@@ -35,7 +35,7 @@
         "path": "agents/lowry.md",
         "expect_present": false
       },
-      "tracked_in": "docs/add/roadmap.md#claim-phase4"
+      "tracked_in": "https://github.com/nicholls-inc/claude-code-marketplace/issues/218"
     },
     {
       "id": "CLAIM-MODES",
@@ -46,7 +46,7 @@
       "check": {
         "type": "manual"
       },
-      "tracked_in": "docs/add/roadmap.md#claim-modes"
+      "tracked_in": "https://github.com/nicholls-inc/claude-code-marketplace/issues/219"
     },
     {
       "id": "CLAIM-METHODOLOGY-COMMITTED",
@@ -59,7 +59,7 @@
         "path": "docs/add/methodology.md",
         "expect_present": false
       },
-      "tracked_in": "docs/add/roadmap.md#claim-methodology-committed"
+      "tracked_in": "https://github.com/nicholls-inc/claude-code-marketplace/issues/217"
     },
     {
       "id": "CLAIM-AUDITOR",
@@ -72,7 +72,7 @@
         "path": "agents/auditor.md",
         "expect_present": false
       },
-      "tracked_in": "docs/add/roadmap.md#claim-auditor"
+      "tracked_in": "https://github.com/nicholls-inc/claude-code-marketplace/issues/220"
     },
     {
       "id": "CLAIM-SELF-COVERAGE",
@@ -83,7 +83,7 @@
       "check": {
         "type": "manual"
       },
-      "tracked_in": "docs/add/roadmap.md#claim-self-coverage"
+      "tracked_in": "https://github.com/nicholls-inc/claude-code-marketplace/issues/221"
     }
   ]
 }

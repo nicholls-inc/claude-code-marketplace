@@ -265,7 +265,7 @@ func TestKnownGapNeedsTracking(t *testing.T) {
 	// The same gap with a tracked_in link is clean.
 	files["conformance/claims.json"] = `{"version":1,"narrative_claims":[` +
 		`{"id":"C-GAP","claim":"c","reality":"r","status":"known-gap",` +
-		`"tracked_in":"docs/add/roadmap.md#c-gap","check":{"type":"manual"}}]}`
+		`"tracked_in":"https://github.com/nicholls-inc/claude-code-marketplace/issues/217","check":{"type":"manual"}}]}`
 	r = analyze(writeTree(t, files))
 	if hasMatch(r.errors, "no tracked_in link") {
 		t.Errorf("known-gap with tracking should not error, got: %v", r.errors)

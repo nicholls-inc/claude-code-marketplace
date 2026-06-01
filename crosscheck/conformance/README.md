@@ -41,9 +41,10 @@ Exit 0 = PASS, 1 = FAIL (any AUTO error, or any `unreviewed` ledger claim, or a
   changes** (e.g. `agents/lowry.md expect_present:false` flips to FAIL the day
   Phase 4 ships, forcing the ledger to be updated). `status:"unreviewed"` fails
   CI to force triage of any new claim. A `status:"known-gap"` entry must carry a
-  `tracked_in` link to its section in the ledger-gap roadmap
-  ([`../docs/add/roadmap.md`](../docs/add/roadmap.md)); a known-gap with no link
-  also fails CI, so a "known" gap can never be tracked nowhere.
+  `tracked_in` link to its tracking issue (the ADD epic
+  [#217](https://github.com/nicholls-inc/claude-code-marketplace/issues/217) and
+  its children); a known-gap with no link also fails CI, so a "known" gap can
+  never be tracked nowhere.
 
 ## First-run findings (2026-05-30, plugin v2.5.1)
 
@@ -54,8 +55,9 @@ Exit 0 = PASS, 1 = FAIL (any AUTO error, or any `unreviewed` ledger claim, or a
   documented in the README skills overview and the top-level `CLAUDE.md`, so the
   orphan warning clears.
 - **LEDGER known-gaps** — Phase 4 agent, operating modes, committed methodology,
-  Phase 5 auditor, self-coverage. See `claims.json`; each is tracked in the
-  ledger-gap roadmap ([`../docs/add/roadmap.md`](../docs/add/roadmap.md)).
+  Phase 5 auditor, self-coverage. See `claims.json`; each is tracked in the ADD
+  epic [#217](https://github.com/nicholls-inc/claude-code-marketplace/issues/217)
+  and its child issues (#218–#221), which replaced the former `docs/add/roadmap.md`.
 
 ## Wire to CI (suggested)
 
