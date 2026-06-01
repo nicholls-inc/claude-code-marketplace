@@ -317,25 +317,28 @@ func analyze(root string) result {
 	}
 
 	// ---- AUTO 6: operating-mode tag coverage (ADD modes, #219) ----
+	// (AUTO 5 — orchestration-graph integrity — is owned by sibling PR #230;
+	// the 4→6 numbering gap is intentional, not a deletion.)
 	// Every load-bearing module (skill + agent) must declare a valid `add-mode`
-	// frontmatter tag in {add, bootstrap, transitional}. This lifts the A3
-	// acceptance oracle's pass condition (conformance/acceptance) into the
-	// blocking lane: the mode system is only "wired" if every module actually
-	// carries its tag, and a new untagged module fails CI rather than silently
-	// opting out. ADR-001 governs the taxonomy; crosscheck dogfoods it on its
-	// own skills/agents (existing artifacts are `bootstrap` — governance
-	// retrofitted; ADD-built agents are `add`).
-	validMode := map[string]bool{"add": true, "bootstrap": true, "transitional": true}
+	// frontmatter tag in {add, bootstrap}. This lifts the A3 acceptance oracle's
+	// pass condition (conformance/acceptance) into the blocking lane: the mode
+	// system is only "wired" if every module actually carries its tag, and a new
+	// untagged module fails CI rather than silently opting out. ADR-001 governs
+	// the taxonomy; crosscheck dogfoods it on its own skills/agents (existing
+	// artifacts are `bootstrap` — governance retrofitted; ADD-built agents are
+	// `add`). `transitional` describes a repo, never a module (operating-modes.md
+	// + ADR-001), so it is deliberately NOT a valid per-module tag.
+	validMode := map[string]bool{"add": true, "bootstrap": true}
 	for _, s := range r.skills {
 		if !validMode[s.fm["add-mode"]] {
 			r.errors = append(r.errors, fmt.Sprintf(
-				"[mode] skill '%s' has no valid add-mode tag (got %q, want one of add|bootstrap|transitional)", s.name, s.fm["add-mode"]))
+				"[mode] skill '%s' has no valid add-mode tag (got %q, want one of add|bootstrap)", s.name, s.fm["add-mode"]))
 		}
 	}
 	for _, a := range r.agents {
 		if !validMode[a.fm["add-mode"]] {
 			r.errors = append(r.errors, fmt.Sprintf(
-				"[mode] agent '%s' has no valid add-mode tag (got %q, want one of add|bootstrap|transitional)", a.name, a.fm["add-mode"]))
+				"[mode] agent '%s' has no valid add-mode tag (got %q, want one of add|bootstrap)", a.name, a.fm["add-mode"]))
 		}
 	}
 

@@ -216,6 +216,15 @@ func TestModeTagCoverage(t *testing.T) {
 	if !hasMatch(r.errors, "[mode]") || !hasMatch(r.errors, "untagged") {
 		t.Errorf("expected [mode] error for invalid add-mode value, got: %v", r.errors)
 	}
+	// `transitional` is a repo-level mode, NEVER a per-module tag
+	// (operating-modes.md + ADR-001). A module tagged `transitional` is the most
+	// plausible copy-paste error and MUST be rejected (#232 blocker).
+	files["skills/untagged/SKILL.md"] = "---\nname: untagged\nadd-mode: transitional\ndescription: repo-level mode misapplied to a module\n---\n" +
+		"# /untagged\n\nbody text long enough to not be empty at all."
+	r = analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[mode]") || !hasMatch(r.errors, "untagged") {
+		t.Errorf("expected [mode] error for transitional add-mode on a module, got: %v", r.errors)
+	}
 	// baseTree's tagged modules must NOT trip the check.
 	clean := analyze(writeTree(t, baseTree()))
 	if hasMatch(clean.errors, "[mode]") {

@@ -1,6 +1,6 @@
 # ADD operating modes
 
-ADD applies to three situations, and the governance that is *appropriate* differs in each. A module carries its situation as a frontmatter `add-mode` tag; skills and gates read the tag and branch. This is the v1 wiring of ADR-001 (operating modes) and ADR-004 (greenfield entrypoints), grounded in the `ngst` greenfield field test (see [`reports/add-greenfield-field-report-ngst.md`](reports/add-greenfield-field-report-ngst.md)).
+ADD applies to three situations, and the governance that is *appropriate* differs in each. A module carries its situation as a frontmatter `add-mode` tag; skills and gates read the tag and branch. This is the v1 wiring of ADR-001 (operating modes) and ADR-004 (greenfield entrypoints), grounded in the `ngst` greenfield field test (recorded in `reports/add-greenfield-field-report-ngst.md`, which lands in #231; the link is intentionally unlinked here until that report merges).
 
 ## The three modes
 
@@ -12,7 +12,7 @@ ADD applies to three situations, and the governance that is *appropriate* differ
 
 `transitional` describes a *repo*, never a module. A module is always `bootstrap` or `add`. A repo is `transitional` the moment its modules disagree — the common case when ADD is adopted on an existing codebase while new modules are written spec-first.
 
-**Default.** A module with no `add-mode` tag defaults to `bootstrap` (ADR-001 §Consequences: existing users must not break). The conformance oracle's AUTO mode-tag check (`crosscheck/conformance` AUTO 6) nonetheless requires every crosscheck skill/agent to *declare* its tag explicitly, so the default never hides an un-triaged module.
+**Default.** A module with no `add-mode` tag defaults to `bootstrap` in consumer repos without AUTO 6 (ADR-001 §Consequences: existing users must not break). The conformance oracle's AUTO mode-tag check (`crosscheck/conformance` AUTO 6) nonetheless requires every crosscheck skill/agent to *declare* its tag explicitly, so the default never hides an un-triaged module.
 
 ## Selecting a mode (the entry-point rule)
 
