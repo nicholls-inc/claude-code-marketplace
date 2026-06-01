@@ -34,11 +34,24 @@ Exit 0 = PASS, 1 = FAIL (any AUTO error, or any `unreviewed` ledger claim, or a
   2. *Phantom* — docs reference a `/skill` or `/crosscheck:skill` that doesn't exist.
   3. *Orphan* — an artifact ships but is referenced in no user-facing doc (WARN).
   4. *MCP* — README-claimed `dafny_*` tools exist in `mcp-server/` source (WARN).
-  5. *Routing* — every skill/agent an agent's body routes to (`/crosscheck:x` or
-     `/x`) resolves to a real artifact. Extends reference integrity to the
-     *trunk*: the phantom check only scans the user-facing doc set, so an
-     orchestrator routing to a non-existent skill would otherwise slip through.
-     The second trunk-level self-check after this oracle itself (CLAIM-SELF-COVERAGE).
+  5. *Routing* — every skill/agent an agent's **body** routes to via a backtick
+     `` `/x` `` or `/crosscheck:x` token resolves to a real artifact (frontmatter
+     is stripped first, so a `/skill` token in a `description:` is not mistaken
+     for a routing edge). Extends reference integrity to the *trunk*: the phantom
+     check only scans the user-facing doc set, so an orchestrator routing to a
+     non-existent skill would otherwise slip through. The second trunk-level
+     self-check after this oracle itself (CLAIM-SELF-COVERAGE).
+
+     **What AUTO 5 does NOT catch** (disclosed reach; tracked in
+     [#221](https://github.com/nicholls-inc/claude-code-marketplace/issues/221)):
+     - *Bare-slash routing* — `/skill` written without backticks is invisible to
+       the routing scanner (it matches only backtick `` `/x` `` and `/crosscheck:x`),
+       so a skill reachable only via bare-slash prose is unchecked (false negative).
+     - *Cross-plugin / example tokens* — a backtick `/token` in an agent body is
+       flagged even when it names a sibling-plugin skill (e.g. `/field-report`), an
+       example, or a flag; there is no cross-plugin allowlist (false positive).
+     - *Plain-prose agent→agent edges* — the dominant routing form (e.g. naming
+       `byfuglien`/`hellebuyck` in prose) is not modelled as a routing edge at all.
 - **LEDGER (`claims.json`, reviewed not auto-proved):** narrative claims that
   can't be checked by reference integrity — layer/phase/mode counts, terminal
   states, self-coverage. Each entry records the claim, the observed reality, a

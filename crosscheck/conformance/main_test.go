@@ -168,6 +168,63 @@ func TestRoutingIntegrity(t *testing.T) {
 	}
 }
 
+// TestRoutingIgnoresFrontmatter pins the AUTO 5 fix: a `/crosscheck:x` token in
+// an agent's frontmatter `description:` is documentation, not a routing edge, so
+// it must NOT raise a routing error. Only the agent body is scanned.
+func TestRoutingIgnoresFrontmatter(t *testing.T) {
+	files := baseTree()
+	// The phantom token lives ONLY in the frontmatter description; the body
+	// routes to nothing unresolved.
+	files["agents/describer.md"] = "---\nname: describer\n" +
+		"description: orchestrates the chain; can invoke /crosscheck:phantom-fm style skills\n---\n" +
+		"# Describer\n\nFor proofs, hand to `/reason`."
+	files["README.md"] += " The `describer` agent coordinates the chain."
+	r := analyze(writeTree(t, files))
+
+	if hasMatch(r.errors, "phantom-fm") {
+		t.Errorf("a /crosscheck:x token in frontmatter must not raise a routing error: %v", r.errors)
+	}
+	// Sanity: the same token in the *body* would still be caught.
+	files["agents/describer.md"] = "---\nname: describer\ndescription: orchestrates the chain\n---\n" +
+		"# Describer\n\nFor specs, run `/crosscheck:phantom-body` next."
+	r = analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[routing]") || !hasMatch(r.errors, "phantom-body") {
+		t.Errorf("a phantom routing token in the body must still be caught: %v", r.errors)
+	}
+}
+
+// TestStripFrontmatter pins the body-extraction helper that AUTO 5 relies on.
+func TestStripFrontmatter(t *testing.T) {
+	tests := []struct {
+		name    string
+		content string
+		want    string
+	}{
+		{
+			name:    "strips_block",
+			content: "---\nname: x\ndescription: d\n---\nbody line one\nbody line two",
+			want:    "body line one\nbody line two",
+		},
+		{
+			name:    "no_frontmatter_returned_verbatim",
+			content: "# Heading\n\nplain body, no frontmatter",
+			want:    "# Heading\n\nplain body, no frontmatter",
+		},
+		{
+			name:    "unterminated_returned_verbatim",
+			content: "---\nname: broken\nno closing fence",
+			want:    "---\nname: broken\nno closing fence",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := stripFrontmatter(tc.content); got != tc.want {
+				t.Errorf("stripFrontmatter() = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
 func TestOrphanDetection(t *testing.T) {
 	files := baseTree()
 	// Add a skill that no doc mentions.

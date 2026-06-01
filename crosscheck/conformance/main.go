@@ -56,10 +56,14 @@ type skill struct {
 	empty bool
 }
 
-// agent is a discovered agents/<stem>.md artifact.
+// agent is a discovered agents/<stem>.md artifact. body is the agent content
+// with the leading YAML frontmatter stripped, so routing checks scan prose only
+// and never the description (where a `/skill` token is documentation, not a
+// routing edge).
 type agent struct {
 	name string
 	fm   map[string]string
+	body string
 }
 
 // claim is one narrative-ledger entry from claims.json.
@@ -118,6 +122,27 @@ func parseFrontmatter(content string) (map[string]string, string) {
 	return fm, content
 }
 
+// stripFrontmatter returns content with a leading YAML frontmatter block (the
+// text from the opening "---" through the next "\n---" line) removed. If there
+// is no well-formed frontmatter block, the content is returned unchanged. This
+// is the body that routing checks scan, so a `/skill` token in a frontmatter
+// description is never mistaken for a routing edge.
+func stripFrontmatter(content string) string {
+	if !strings.HasPrefix(content, "---") {
+		return content
+	}
+	rel := strings.Index(content[3:], "\n---")
+	if rel == -1 {
+		return content
+	}
+	// Skip past the closing "---" line to the start of the body.
+	rest := content[3+rel+len("\n---"):]
+	if nl := strings.IndexByte(rest, '\n'); nl != -1 {
+		return rest[nl+1:]
+	}
+	return ""
+}
+
 // readFile reads a file as a string, mirroring Python's errors="replace": any
 // read error yields the empty string rather than aborting.
 func readFile(path string) string {
@@ -172,9 +197,10 @@ func discoverAgents(root string) []agent {
 	}
 	sort.Strings(matches)
 	for _, f := range matches {
-		fm, _ := parseFrontmatter(readFile(f))
+		content := readFile(f)
+		fm, _ := parseFrontmatter(content)
 		stem := strings.TrimSuffix(filepath.Base(f), ".md")
-		out = append(out, agent{name: stem, fm: fm})
+		out = append(out, agent{name: stem, fm: fm, body: stripFrontmatter(content)})
 	}
 	return out
 }
@@ -323,12 +349,22 @@ func analyze(root string) result {
 	// agent that an agent's body routes to (via `/crosscheck:x` or `/x`) must
 	// resolve to a real artifact. It is the second trunk-level self-check after
 	// this oracle itself (see CLAIM-SELF-COVERAGE, issue #221).
+	//
+	// Only the agent *body* is scanned (a.body has frontmatter stripped): a
+	// `/skill` token in a frontmatter description is documentation, not a routing
+	// edge, and must not raise a routing error.
+	//
+	// Resolution is against the `known` set — skills/agents that registered as
+	// real artifacts (a skills/<x>/SKILL.md or agents/<x>.md with valid
+	// frontmatter). The error wording reflects that: a directory that exists but
+	// lacks a parseable SKILL.md does not register and is reported as unresolved.
 	for _, a := range r.agents {
-		body := readFile(filepath.Join(root, "agents", a.name+".md"))
-		for _, tok := range referencedTokens(body) {
+		for _, tok := range referencedTokens(a.body) {
 			if _, ok := known[tok]; !ok {
 				r.errors = append(r.errors, fmt.Sprintf(
-					"[routing] agent '%s' routes to '/%s' but no skills/%s/ or agents/%s.md exists", a.name, tok, tok, tok))
+					"[routing] agent '%s' routes to '/%s' but no registered skill/agent '%s' resolves "+
+						"(needs skills/%s/SKILL.md or agents/%s.md with valid frontmatter)",
+					a.name, tok, tok, tok, tok))
 			}
 		}
 	}
