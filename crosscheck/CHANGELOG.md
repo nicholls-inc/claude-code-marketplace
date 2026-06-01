@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.6.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.5.1...crosscheck-v2.6.0) (2026-06-01)
+
+
+### Features
+
+* **crosscheck:** add conformance/inventory oracle + fix assurance-probe frontmatter ([#214](https://github.com/nicholls-inc/claude-code-marketplace/issues/214)) ([b67d0cb](https://github.com/nicholls-inc/claude-code-marketplace/commit/b67d0cb87be7e6b3f62cfdd4d3dbdbd842eb6f66))
+* **crosscheck:** add orchestration-graph integrity self-check (trunk coverage, [#221](https://github.com/nicholls-inc/claude-code-marketplace/issues/221)) ([#230](https://github.com/nicholls-inc/claude-code-marketplace/issues/230)) ([d42600c](https://github.com/nicholls-inc/claude-code-marketplace/commit/d42600c99ba7616fd8b76318e4a98bd8b51db486))
+* **crosscheck:** document journal-context and track ledger gaps in conformance oracle ([#216](https://github.com/nicholls-inc/claude-code-marketplace/issues/216)) ([b04f7e0](https://github.com/nicholls-inc/claude-code-marketplace/commit/b04f7e04bb77e4097008e1e943056b13c1a7b8e0))
+* **crosscheck:** draft A1-A6 acceptance oracles for ratification (no Phase 4 build) ([#223](https://github.com/nicholls-inc/claude-code-marketplace/issues/223)) ([e917857](https://github.com/nicholls-inc/claude-code-marketplace/commit/e917857e3ba6e84f697f5e82e030c400ef132adf))
+* **crosscheck:** ship the Phase 4 gated-implementation agent (lowry) ([#218](https://github.com/nicholls-inc/claude-code-marketplace/issues/218)) ([#233](https://github.com/nicholls-inc/claude-code-marketplace/issues/233)) ([fda5b7e](https://github.com/nicholls-inc/claude-code-marketplace/commit/fda5b7ecdd8ef2e5f37d5674d0e6d2d90bd4f2c4))
+* **crosscheck:** ship the Phase 5 Auditor agent (auditor) ([#220](https://github.com/nicholls-inc/claude-code-marketplace/issues/220)) ([#234](https://github.com/nicholls-inc/claude-code-marketplace/issues/234)) ([2c9d255](https://github.com/nicholls-inc/claude-code-marketplace/commit/2c9d255b42222305d96b4f1e6f70f7d4eeb3d5ef))
+* **crosscheck:** wire ADD operating modes + bootstrap/greenfield entrypoints ([#219](https://github.com/nicholls-inc/claude-code-marketplace/issues/219)) ([#232](https://github.com/nicholls-inc/claude-code-marketplace/issues/232)) ([c0beb13](https://github.com/nicholls-inc/claude-code-marketplace/commit/c0beb134ce37e8e8bac724f67805854192ac20f4))
+
+
+### Bug Fixes
+
+* **add:** unify invariant heading convention on h2 `## I<N>:` across the toolchain ([#228](https://github.com/nicholls-inc/claude-code-marketplace/issues/228)) ([c3fd281](https://github.com/nicholls-inc/claude-code-marketplace/commit/c3fd28143034f65e326890a69ea1902f82fe7515))
+
 ## [2.5.1](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.5.0...crosscheck-v2.5.1) (2026-05-28)
 
 
