@@ -1,5 +1,6 @@
 ---
 name: spec-adversary
+add-mode: bootstrap
 description: >-
   Adversarially probe a module's invariant documentation for missing properties.
   Given `docs/invariants/<module>.md` plus the module's code, proposes up to 3

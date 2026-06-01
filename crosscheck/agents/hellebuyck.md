@@ -1,5 +1,6 @@
 ---
 name: hellebuyck
+add-mode: bootstrap
 description: >-
   Orchestrator for specification-chain assurance (Layers 4–6) and
   governance scaffolding. Classifies tasks, routes to /assurance-*,

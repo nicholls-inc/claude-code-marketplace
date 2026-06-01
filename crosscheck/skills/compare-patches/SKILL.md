@@ -1,5 +1,6 @@
 ---
 name: compare-patches
+add-mode: bootstrap
 description: >-
   Determine whether two code patches are semantically equivalent by tracing
   execution through the test suite using semi-formal reasoning. Produces a

@@ -1,5 +1,6 @@
 ---
 name: assurance-init
+add-mode: bootstrap
 description: >-
   Interactive bootstrap that scaffolds the governance skeletons a repo needs to
   adopt the 6-layer assurance hierarchy. Creates docs/assurance/ROADMAP.md + horizon

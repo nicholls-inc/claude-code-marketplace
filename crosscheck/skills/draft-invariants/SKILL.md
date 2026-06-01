@@ -1,5 +1,6 @@
 ---
 name: draft-invariants
+add-mode: bootstrap
 description: >-
   Contract-first methodology for drafting module-level invariants and property
   tests. Reads the project's prose spec first when one exists; falls back to

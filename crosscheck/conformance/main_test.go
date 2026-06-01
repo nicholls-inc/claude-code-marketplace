@@ -127,9 +127,9 @@ func TestDocumented(t *testing.T) {
 // well-formed agent, both documented, plus an empty ledger. Callers mutate it.
 func baseTree() map[string]string {
 	return map[string]string{
-		"skills/reason/SKILL.md": "---\nname: reason\ndescription: reasons about code\n---\n" +
+		"skills/reason/SKILL.md": "---\nname: reason\nadd-mode: bootstrap\ndescription: reasons about code\n---\n" +
 			"# /reason\n\nA skill body long enough to clear the empty threshold easily.",
-		"agents/byfuglien.md": "---\nname: byfuglien\ndescription: orchestrates verification\n---\n" +
+		"agents/byfuglien.md": "---\nname: byfuglien\nadd-mode: bootstrap\ndescription: orchestrates verification\n---\n" +
 			"# Byfuglien\n\nbody text.",
 		"README.md":               "Crosscheck ships `/reason` and the `byfuglien` orchestrator.",
 		"conformance/claims.json": `{"version":1,"narrative_claims":[]}`,
@@ -228,7 +228,7 @@ func TestStripFrontmatter(t *testing.T) {
 func TestOrphanDetection(t *testing.T) {
 	files := baseTree()
 	// Add a skill that no doc mentions.
-	files["skills/lonely/SKILL.md"] = "---\nname: lonely\ndescription: undocumented\n---\n" +
+	files["skills/lonely/SKILL.md"] = "---\nname: lonely\nadd-mode: bootstrap\ndescription: undocumented\n---\n" +
 		"# /lonely\n\nbody text long enough to not be empty at all."
 	r := analyze(writeTree(t, files))
 
@@ -270,6 +270,39 @@ func TestStructuralEmptySkill(t *testing.T) {
 	r := analyze(writeTree(t, files))
 	if !hasMatch(r.errors, "skill 'tiny': SKILL.md is effectively empty") {
 		t.Errorf("expected empty-skill error, got: %v", r.errors)
+	}
+}
+
+func TestModeTagCoverage(t *testing.T) {
+	// A module with no add-mode tag is an ERROR (AUTO 6).
+	files := baseTree()
+	files["skills/untagged/SKILL.md"] = "---\nname: untagged\ndescription: missing its mode\n---\n" +
+		"# /untagged\n\nbody text long enough to not be empty at all."
+	files["README.md"] += " It also ships `/untagged`."
+	r := analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[mode]") || !hasMatch(r.errors, "untagged") {
+		t.Errorf("expected [mode] error for the untagged skill, got: %v", r.errors)
+	}
+	// An invalid mode value is also an ERROR.
+	files["skills/untagged/SKILL.md"] = "---\nname: untagged\nadd-mode: legacy\ndescription: bad mode\n---\n" +
+		"# /untagged\n\nbody text long enough to not be empty at all."
+	r = analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[mode]") || !hasMatch(r.errors, "untagged") {
+		t.Errorf("expected [mode] error for invalid add-mode value, got: %v", r.errors)
+	}
+	// `transitional` is a repo-level mode, NEVER a per-module tag
+	// (operating-modes.md + ADR-001). A module tagged `transitional` is the most
+	// plausible copy-paste error and MUST be rejected (#232 blocker).
+	files["skills/untagged/SKILL.md"] = "---\nname: untagged\nadd-mode: transitional\ndescription: repo-level mode misapplied to a module\n---\n" +
+		"# /untagged\n\nbody text long enough to not be empty at all."
+	r = analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[mode]") || !hasMatch(r.errors, "untagged") {
+		t.Errorf("expected [mode] error for transitional add-mode on a module, got: %v", r.errors)
+	}
+	// baseTree's tagged modules must NOT trip the check.
+	clean := analyze(writeTree(t, baseTree()))
+	if hasMatch(clean.errors, "[mode]") {
+		t.Errorf("tagged baseTree modules must not produce [mode] errors: %v", clean.errors)
 	}
 }
 
@@ -391,7 +424,7 @@ func TestGoldenRealTree(t *testing.T) {
 	}
 
 	// The remaining known-gap claims must all be present in the ledger.
-	wantGaps := []string{"CLAIM-PHASE4", "CLAIM-MODES", "CLAIM-AUDITOR"}
+	wantGaps := []string{"CLAIM-PHASE4", "CLAIM-AUDITOR"}
 	for _, id := range wantGaps {
 		found := false
 		for _, c := range r.ledger {
@@ -404,6 +437,25 @@ func TestGoldenRealTree(t *testing.T) {
 		}
 		if !found {
 			t.Errorf("missing expected ledger claim %s", id)
+		}
+	}
+
+	// CLAIM-MODES was triaged to reviewed-disclosed once the operating-mode
+	// system shipped: add-mode tags on every module (enforced by AUTO 6) +
+	// add-orchestrator Step 0 mode selection + the three documented entrypoints
+	// (issue #219).
+	{
+		found := false
+		for _, c := range r.ledger {
+			if c.ID == "CLAIM-MODES" {
+				found = true
+				if c.Status != "reviewed-disclosed" {
+					t.Errorf("claim CLAIM-MODES status = %q, want reviewed-disclosed", c.Status)
+				}
+			}
+		}
+		if !found {
+			t.Errorf("missing expected ledger claim CLAIM-MODES")
 		}
 	}
 

@@ -1,5 +1,6 @@
 ---
 name: rationale
+add-mode: bootstrap
 description: >-
   Build a hierarchical claim tree arguing that code adequately satisfies its
   requirements. Each leaf claim is classified by verification method (formal,

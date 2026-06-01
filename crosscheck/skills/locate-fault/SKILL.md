@@ -1,5 +1,6 @@
 ---
 name: locate-fault
+add-mode: bootstrap
 description: >-
   Locate the root cause of a failing test using 4-phase semi-formal reasoning:
   test semantics analysis, code path tracing, divergence analysis, and ranked
