@@ -45,7 +45,7 @@ HEADER_RE = re.compile(r"^## (I\d+[a-z]?):")
 COMMENT_RE = re.compile(r"^\s*(?://|#)\s*Invariant\s+([A-Z]+\d+[a-z]?):\s")
 
 # Aspirational marker: ``<!-- aspirational -->`` on the same line as a
-# ``**IN. Name.**`` header means the invariant is declared but not yet
+# ``## I<N>: <Name>`` header means the invariant is declared but not yet
 # expected to have a covering test. Adding a covering test removes the
 # marker; removing the marker without adding a test triggers the gate.
 ASPIRATIONAL_RE = re.compile(r"<!--\s*aspirational\s*-->")
