@@ -1,5 +1,6 @@
 ---
 name: journal-context
+add-mode: bootstrap
 description: >-
   Deterministic walk of the directory tree from a starting path up to the
   enclosing git repository root, dumping every JOURNAL.md it encounters in

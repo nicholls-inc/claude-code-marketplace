@@ -1,5 +1,6 @@
 ---
 name: draft-invariants
+add-mode: bootstrap
 description: >-
   Contract-first methodology for drafting module-level invariants and property
   tests. Reads the project's prose spec first when one exists; falls back to
@@ -256,7 +257,7 @@ the user to confirm.
 
 ### 3. Draft candidate invariants (5-8)
 
-**Heading convention (load-bearing — do NOT vary).** Each invariant MUST be introduced by a level-2 heading of the exact form `## I<N>: <Name>`, where `<N>` is a stable monotonic integer (`I1`, `I2`, …) and `<Name>` is a short PascalCase or kebab-style identifier. The heading is the grep anchor that downstream tooling (`/invariant-coverage-scaffold`, `// Invariant Ix: <Name>` test comments) relies on. Examples that are correct: `## I1: RedactionSentinelString`, `## I7: BothSetFileWins`. Examples that are WRONG and MUST NOT be produced: `### I1 RedactionSentinelString` (h3, not h2), `## Engine selection — single embedding API` (prose-section heading with the ID buried in body), `**I1. RedactionSentinelString.**` (bold-prefix in paragraph; this was the legacy v1 style and is grandfathered for already-shipped docs only). Group invariants under a single `## Invariants` parent only if you need to use `### I<N>: <Name>` (h3) consistently for every invariant — never mix h2 and h3 invariant headings in the same doc.
+**Heading convention (load-bearing — do NOT vary).** Each invariant MUST be introduced by a level-2 heading of the exact form `## I<N>: <Name>`, where `<N>` is a stable monotonic integer (`I1`, `I2`, …) and `<Name>` is a short PascalCase or kebab-style identifier. The heading is the grep anchor that downstream tooling (`/invariant-coverage-scaffold`, `// Invariant Ix: <Name>` test comments) relies on. Examples that are correct: `## I1: RedactionSentinelString`, `## I7: BothSetFileWins`. Examples that are WRONG and MUST NOT be produced: `### I1 RedactionSentinelString` (h3, not h2 — every coverage parser and the orchestrator grep anchor on `^## `, so an h3 heading is invisible to them), `## Engine selection — single embedding API` (prose-section heading with the ID buried in body), `**I1. RedactionSentinelString.**` (bold-prefix in paragraph; this was the legacy v1 style and is grandfathered for already-shipped docs only). The form is h2-only — do NOT use `### I<N>: <Name>` (h3) under a `## Invariants` parent or anywhere else; no parser or gate in the toolchain accepts h3 invariant headings.
 
 When dispatched by `add-orchestrator` with the orchestrator marker active, every invariant heading in this doc MUST be h2 (`## I<N>: <Name>`). The heading-convention discipline is enforced at the per-subagent quality gate in `add-orchestrator.md` Step 6.
 
@@ -442,9 +443,8 @@ order:
 ## Contract (summary from step 1)
 <2-4 sentences; if from a spec, cite the section>
 
-## Invariants
-**I1. ...**
-**I2. ...**
+## I1: <Name>
+## I2: <Name>
 ...
 
 ## Not covered
@@ -469,7 +469,8 @@ code, or write them directly to the test file if the user prefers.
 
 This is the quality bar. An invariant should read like this:
 
-> **I1. At-most-one active per ref.**
+> ## I1: AtMostOneActivePerRef
+>
 > For any non-empty `Ref`, at most one vessel is in `{pending, running,
 > waiting}` at any time. Enqueue of an already-active ref is a no-op.
 > - *Why:* prevents the double-dispatch class of bugs (filed issue #541 for

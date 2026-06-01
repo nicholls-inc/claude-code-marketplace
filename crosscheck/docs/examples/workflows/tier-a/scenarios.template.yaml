@@ -34,7 +34,7 @@ scenarios:
     name: FIFO ordering preserved across enqueue/dequeue
     description: >
       A work queue must dequeue items in the order they were enqueued.
-      This is the ordering contract documented as Invariant Q1 in
+      This is the ordering contract documented as Invariant I1 in
       docs/invariants/queue.md. Three items enqueued in order A, B, C
       must dequeue as A, then B, then C — no reordering, no duplicates,
       no losses.
@@ -72,7 +72,7 @@ scenarios:
     description: >
       An item that fails more than max_retries times must move to the
       dead-letter queue and must NOT be redelivered to the main queue
-      under any subsequent dequeue. This is Invariant Q2 in
+      under any subsequent dequeue. This is Invariant I2 in
       docs/invariants/queue.md (failed-terminal sampling). Regression
       here would silently retry poison messages forever.
     target:

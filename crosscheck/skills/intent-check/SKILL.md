@@ -1,5 +1,6 @@
 ---
 name: intent-check
+add-mode: bootstrap
 description: >-
   Portable round-trip informalization over (invariant prose, covering test,
   code diff) — Layer 5 of the assurance hierarchy. Runs a two-LLM pipeline

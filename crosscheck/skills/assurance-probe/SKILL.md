@@ -1,5 +1,6 @@
 ---
 name: assurance-probe
+add-mode: bootstrap
 description: >-
   Measure test strength via mutation/vacuity/generator probes (rotation-based).
   Layer 4 deterministic-strength check: parses the Failure condition clause of

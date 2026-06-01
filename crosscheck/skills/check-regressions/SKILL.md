@@ -1,5 +1,6 @@
 ---
 name: check-regressions
+add-mode: bootstrap
 description: >-
   Scan the spec registry for verified Dafny specs whose associated source files have
   changed. Re-verify affected specs and report which properties still hold. Use for

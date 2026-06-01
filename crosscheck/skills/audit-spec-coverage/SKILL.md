@@ -1,5 +1,6 @@
 ---
 name: audit-spec-coverage
+add-mode: bootstrap
 description: >-
   Layer 6 spec-coverage probe. Given a prose spec and a glob of invariant
   docs, emits two coverage matrices (spec section → invariant IDs;

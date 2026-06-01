@@ -1,5 +1,6 @@
 ---
 name: add-orchestrator
+add-mode: bootstrap
 description: >-
   ADD (Assurance-Driven Development) methodology workflow runner. Drives
   the spec-driven fast path: signed-off spec → bulk-drafted invariants →
@@ -94,6 +95,7 @@ clean for 65 turns. Mirror that shape.
 
 | Step | Action | Gate |
 |---|---|---|
+| 0 | Select operating mode + entry point | Bundled `AskUserQuestion` if ambiguous |
 | 1 | Locate signed-off spec | None |
 | 2 | Read spec cover-to-cover (silent) | None |
 | 3 | Shared-vocabulary pre-flight (glossary) | None |
@@ -106,9 +108,45 @@ clean for 65 turns. Mirror that shape.
 | 10 | Apply triaged findings | Mechanical apply with format-conformance check |
 | 11 | Write JOURNAL.md entry + closing observation | **User approves PR + merges = ratification** |
 
+### Step 0 — Operating mode and entry point
+
+Before locating a spec, select the operating mode from what the repo
+actually contains (full taxonomy + selection rule in
+`crosscheck/docs/add/operating-modes.md`). The mode routes the session and
+fixes the `add-mode` tag stamped on every invariant doc the session drafts.
+
+- **A spec is present** (the user supplies a path, or Step 1's glob finds
+  one) → **`add` / spec-consult**. The spec is the contract: *consume it*.
+  Do NOT cold-elicit contract questions the spec already answers — that is
+  the #149/#150 failure mode (an interview run against an answered spec,
+  producing referential-integrity drift). Step 2's "read first, ask only
+  what reading cannot tell you" discipline is the gate; honour it. Drafted
+  docs get `add-mode: add`. Proceed to Step 1.
+- **Existing code, no spec** → **`bootstrap` / legacy-derive**. Do not
+  refuse. Run the same workflow sourced from the CODE rather than a spec:
+  the glossary (Step 3) and module map (Step 4) are derived from the file
+  tree, packages, tests, and error handling; Step 6 dispatches
+  `/crosscheck:draft-invariants` in its code-reading path (not a cold
+  interview); drafted docs get `add-mode: bootstrap`. With no spec to audit
+  against, Step 7 runs the consistency + quality audits but skips
+  spec-coverage.
+- **Empty or near-empty repo, no spec** → **greenfield / intent-elicit**.
+  Capture intent first, then derive a spec, then re-enter at the
+  spec-consult case. The dedicated greenfield skills (ADR-004 S2.1–S2.4) are
+  not yet built; until they ship, route the user to
+  `/crosscheck:assurance-init` to seed the skeleton and supply intent, then
+  re-enter Step 0 once a spec exists.
+
+If the situation is genuinely ambiguous (e.g. a repo with both code and a
+candidate spec), surface ONE bundled `AskUserQuestion` naming the candidate
+modes with the selection rule and let the user pick. Record the selected
+mode in the session marker (Step 5) and name it in the closing observation
+(Step 11). The mode is the load-bearing decision this step exists to make;
+everything downstream branches on it.
+
 ### Step 1 — Locate signed-off spec
 
-Resolve the spec path:
+Resolve the spec path (the **`add` / spec-consult** entry from Step 0):
 
 - If the user supplies a path, validate the file exists and is
   non-empty.
@@ -117,13 +155,21 @@ Resolve the spec path:
 - Filter to files whose RFC-2119 keyword count (`MUST`, `MUST NOT`,
   `SHALL`, `SHOULD`, `SHOULD NOT`, `MAY`) is **at least 10 across the
   file**. Below the threshold and the candidate is probably not a
-  signed-off spec.
+  signed-off spec. This ≥10 filter gates the **auto-glob discovery** of
+  signed-off specs only; an explicitly user-supplied path is accepted
+  regardless of keyword count — an informal written spec is still a valid
+  spec-consult contract (`add` mode).
 - If multiple candidates remain, surface ONE bundled
   `AskUserQuestion` with the top 2–4 candidates as options and
   `Recommended` marking the longest/most-keyworded.
-- If zero candidates and the user did not supply a path, refuse:
-  *"I couldn't find a signed-off spec. Drop a path or run
-  `/crosscheck:assurance-init` first to seed one."*
+- If zero candidates and the user did not supply a path, do NOT refuse
+  outright — fall back to Step 0's mode selection: take the **`bootstrap` /
+  legacy-derive** entry if the repo has existing code, or the **greenfield /
+  intent-elicit** entry if it is empty. Refuse only if the user explicitly
+  asked for the signed-off-spec path and none exists: *"I couldn't find a
+  signed-off spec. Drop a path, let me derive invariants from the existing
+  code (bootstrap), or seed intent with `/crosscheck:assurance-init`
+  (greenfield)."*
 
 ### Step 2 — Read the spec
 
@@ -275,7 +321,7 @@ in the orchestrator's main thread. For each subagent:
   1. `docs/invariants/<module>.md` exists
   2. `Status: Draft` line present
   3. `Audit: pending session <session_id>` line present
-  4. ≥ 3 invariant headings of the form `## I<N>: <Name>` (h2, grep-anchorable) present. Other styles (h3, bold-prefix paragraph, prose-section with IDs in body) FAIL this gate — see `crosscheck/skills/draft-invariants/SKILL.md` Step 3 *Heading convention* for the canonical form. Grep: `grep -cE '^## I[0-9]+:' docs/invariants/<module>.md` must return ≥ 3.
+  4. ≥ 3 invariant headings of the form `## I<N>: <Name>` (h2, grep-anchorable) present. Other styles (h3, bold-prefix paragraph, prose-section with IDs in body) FAIL this gate — see `crosscheck/skills/draft-invariants/SKILL.md` Step 3 *Heading convention* for the canonical form. Grep: `grep -cE '^## I[0-9]+[a-z]?:' docs/invariants/<module>.md` must return ≥ 3 (the optional lowercase suffix accepts sub-invariant IDs such as `I1a`).
 
   If any quality-gate criterion fails, treat as a soft failure: record
   the criterion that failed and continue. The downstream audit will

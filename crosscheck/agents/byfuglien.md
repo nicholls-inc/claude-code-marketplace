@@ -1,5 +1,6 @@
 ---
 name: byfuglien
+add-mode: bootstrap
 description: >-
   Orchestrator for formal verification and semi-formal code reasoning.
   Classifies tasks, routes to appropriate verification or reasoning skills,
