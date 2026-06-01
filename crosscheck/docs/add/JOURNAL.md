@@ -4,6 +4,20 @@ Journal for the assurance-driven development work specifically. This is the deep
 
 ---
 
+## 2026-06-01 — greenfield field test recorded: `ngst` (the second README precondition)
+
+**Type:** field-test
+**Touches:** [greenfield field report](../reports/add-greenfield-field-report-ngst.md), [README](README.md), epic [#217](https://github.com/nicholls-inc/claude-code-marketplace/issues/217)
+**Why:** The README named two preconditions before v3 earns a committed methodology doc — one mature-repo (recorded below, 2026-05-15) and one greenfield run. The greenfield run already happened: `~/repos/ngst` was built spec-first, invariant-anchored, from a near-empty repo. This entry records it, so the README's "greenfield pending" line is now stale. Both preconditions are met; the v3 *shape* is validated.
+
+`ngst` exercised the whole pipeline: bootstrap + dual-track coverage gate, `/draft-invariants` (the `secrets` `_FILE`-wins catch — the first concrete proof invariant-first beats "looks fine"), the `add-orchestrator` spec-driven fast path (session `59a24679`: 14 modules, 83 invariants, 26 batched findings, disciplined triage), `/spec-adversary`, and a hand-run Phase-4 loop on the `cli` module (byfuglien + hellebuyck pre- and post-implementation review caught a coverage-gate module-derivation blocker invisible to code review).
+
+The run *empirically motivates the open children* rather than just summarising them: the 14-module parallel draft produced five divergent heading styles (audit finding F1) — the exact inconsistency **#227** unifies. The cold-elicitation trap (`/draft-invariants` interviewing against a spec that already held the answers) produced referential-integrity failure **#150** — what greenfield mode (**#219**) must gate. The manual triage/chaining/amendment/checkbox bookkeeping on the `cli` module is the surface the Phase-4 run-to-green agent (**#218**) must own. And #150 escaped because nothing compared invariants↔spec post-draft — the Phase-5 auditor (**#220**) is that cure.
+
+Conclusion for the methodology doc: the shape is validated but the automation is mid-flight (#218/#219/#220). Committing a canonical `methodology.md` now would lead the implementation rather than follow it — reintroducing the `plausible ≠ correct` gap. Keep it distributed (README + this journal + `orchestrator-improvements.md` + the archived ADRs + the field reports) until the children land; then write the doc to describe what shipped. `CLAIM-METHODOLOGY-COMMITTED` stays `reviewed-disclosed` for the sharper reason: *core-validated and evolving; the doc should follow the automation, not lead it.*
+
+---
+
 ## 2026-05-15 — first mature-repo field test of v3: pipeline shipped, six concrete improvement targets
 
 **Type:** field-test
