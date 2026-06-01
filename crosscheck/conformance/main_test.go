@@ -151,6 +151,80 @@ func TestPhantomDetection(t *testing.T) {
 	}
 }
 
+func TestRoutingIntegrity(t *testing.T) {
+	files := baseTree()
+	// An agent that routes to a skill which does not exist on disk.
+	files["agents/router.md"] = "---\nname: router\ndescription: routes work\n---\n" +
+		"# Router\n\nFor proofs, hand to `/reason`. For specs, run `/crosscheck:ghost-route` next."
+	files["README.md"] += " The `router` agent coordinates the chain."
+	r := analyze(writeTree(t, files))
+
+	if !hasMatch(r.errors, "[routing]") || !hasMatch(r.errors, "ghost-route") {
+		t.Errorf("expected routing error for ghost-route, got errors: %v", r.errors)
+	}
+	// A real skill the agent routes to must not be flagged.
+	if hasMatch(r.errors, "routes to '/reason'") {
+		t.Errorf("valid routing target '/reason' must not be flagged: %v", r.errors)
+	}
+}
+
+// TestRoutingIgnoresFrontmatter pins the AUTO 5 fix: a `/crosscheck:x` token in
+// an agent's frontmatter `description:` is documentation, not a routing edge, so
+// it must NOT raise a routing error. Only the agent body is scanned.
+func TestRoutingIgnoresFrontmatter(t *testing.T) {
+	files := baseTree()
+	// The phantom token lives ONLY in the frontmatter description; the body
+	// routes to nothing unresolved.
+	files["agents/describer.md"] = "---\nname: describer\n" +
+		"description: orchestrates the chain; can invoke /crosscheck:phantom-fm style skills\n---\n" +
+		"# Describer\n\nFor proofs, hand to `/reason`."
+	files["README.md"] += " The `describer` agent coordinates the chain."
+	r := analyze(writeTree(t, files))
+
+	if hasMatch(r.errors, "phantom-fm") {
+		t.Errorf("a /crosscheck:x token in frontmatter must not raise a routing error: %v", r.errors)
+	}
+	// Sanity: the same token in the *body* would still be caught.
+	files["agents/describer.md"] = "---\nname: describer\ndescription: orchestrates the chain\n---\n" +
+		"# Describer\n\nFor specs, run `/crosscheck:phantom-body` next."
+	r = analyze(writeTree(t, files))
+	if !hasMatch(r.errors, "[routing]") || !hasMatch(r.errors, "phantom-body") {
+		t.Errorf("a phantom routing token in the body must still be caught: %v", r.errors)
+	}
+}
+
+// TestStripFrontmatter pins the body-extraction helper that AUTO 5 relies on.
+func TestStripFrontmatter(t *testing.T) {
+	tests := []struct {
+		name    string
+		content string
+		want    string
+	}{
+		{
+			name:    "strips_block",
+			content: "---\nname: x\ndescription: d\n---\nbody line one\nbody line two",
+			want:    "body line one\nbody line two",
+		},
+		{
+			name:    "no_frontmatter_returned_verbatim",
+			content: "# Heading\n\nplain body, no frontmatter",
+			want:    "# Heading\n\nplain body, no frontmatter",
+		},
+		{
+			name:    "unterminated_returned_verbatim",
+			content: "---\nname: broken\nno closing fence",
+			want:    "---\nname: broken\nno closing fence",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := stripFrontmatter(tc.content); got != tc.want {
+				t.Errorf("stripFrontmatter() = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
 func TestOrphanDetection(t *testing.T) {
 	files := baseTree()
 	// Add a skill that no doc mentions.
@@ -287,8 +361,9 @@ func TestReportPassFail(t *testing.T) {
 // plugin tree (the parent of this package dir). It asserts the stable inventory
 // and the post-fix gate state: assurance-probe now has frontmatter, the
 // journal-context orphan WARNING remains a human decision, and all seven ledger
-// claims hold (four still known-gap present_artifact/manual checks;
-// CLAIM-METHODOLOGY-COMMITTED triaged to reviewed-disclosed per epic #217).
+// claims hold (three of them known-gap present_artifact/manual checks;
+// CLAIM-METHODOLOGY-COMMITTED and CLAIM-SELF-COVERAGE both triaged to
+// reviewed-disclosed per epic #217 / issue #221).
 func TestGoldenRealTree(t *testing.T) {
 	root := ".." // package dir is crosscheck/conformance; plugin root is crosscheck/
 	if _, err := os.Stat(filepath.Join(root, "skills")); err != nil {
@@ -316,8 +391,7 @@ func TestGoldenRealTree(t *testing.T) {
 	}
 
 	// The remaining known-gap claims must all be present in the ledger.
-	wantGaps := []string{"CLAIM-PHASE4", "CLAIM-MODES",
-		"CLAIM-AUDITOR", "CLAIM-SELF-COVERAGE"}
+	wantGaps := []string{"CLAIM-PHASE4", "CLAIM-MODES", "CLAIM-AUDITOR"}
 	for _, id := range wantGaps {
 		found := false
 		for _, c := range r.ledger {
@@ -348,6 +422,24 @@ func TestGoldenRealTree(t *testing.T) {
 		}
 		if !found {
 			t.Errorf("missing expected ledger claim CLAIM-METHODOLOGY-COMMITTED")
+		}
+	}
+
+	// CLAIM-SELF-COVERAGE was triaged to reviewed-disclosed once a second
+	// trunk-level self-check (the AUTO 5 orchestration-graph integrity check)
+	// shipped beyond this oracle itself (issue #221).
+	{
+		found := false
+		for _, c := range r.ledger {
+			if c.ID == "CLAIM-SELF-COVERAGE" {
+				found = true
+				if c.Status != "reviewed-disclosed" {
+					t.Errorf("claim CLAIM-SELF-COVERAGE status = %q, want reviewed-disclosed", c.Status)
+				}
+			}
+		}
+		if !found {
+			t.Errorf("missing expected ledger claim CLAIM-SELF-COVERAGE")
 		}
 	}
 

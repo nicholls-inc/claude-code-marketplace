@@ -78,8 +78,8 @@
       "id": "CLAIM-SELF-COVERAGE",
       "source": "docs/invariants/",
       "claim": "Crosscheck applies its own assurance machinery to itself.",
-      "reality": "docs/invariants/ covers three helper functions (parseDafnyOutput, shouldExclude, extractDifficultyMetrics) \u2014 the plugin verified its leaves, not its trunk (orchestrators, gates, workflow). This conformance oracle is the first trunk-level check.",
-      "status": "known-gap",
+      "reality": "Growing \u2014 narrowed from known-gap. docs/invariants/ verifies three leaf helpers via Dafny (parseDafnyOutput, shouldExclude, extractDifficultyMetrics). Trunk coverage now has two mechanical self-checks: (1) this conformance/inventory oracle (docs<->artifacts), and (2) the AUTO 5 orchestration-graph integrity check (every skill/agent an orchestrator routes to via a backtick `/x` or `/crosscheck:x` token in its body must resolve to a real artifact). What AUTO 5 does NOT catch: bare-slash routing (`/skill` without backticks) is invisible, so a skill routed to only via bare-slash is unchecked (false negative); a non-crosscheck backtick `/token` in an agent body is flagged even when it names a sibling-plugin skill, an example, or a flag (false positive, no cross-plugin allowlist); and plain-prose / bare-word agent->agent edges (the dominant form, e.g. auditor.md routing to byfuglien/hellebuyck/lowry in prose) are not modelled at all. These are tracked in #221 as the trunk-coverage epic. Gate-semantics and full-workflow self-checks remain partial; #221 stays open to grow trunk coverage toward reviewed-accurate.",
+      "status": "reviewed-disclosed",
       "check": {
         "type": "manual"
       },
