@@ -1,6 +1,6 @@
 # Crosscheck agents
 
-Crosscheck ships three orchestrators. Two are sequential routers — **Byfuglien** (the bruising defenceman whose crosscheck gave the plugin its name) enforces implementation correctness; **Hellebuyck** (the goaltender, last line of defence) interrogates whether the spec is the right spec and stays mechanically enforced. The third, **add-orchestrator**, is a parallel-workflow runner at the methodology layer: it drives the ADD (Assurance-Driven Development) fast path from signed-off spec to approved invariant docs, dispatching subagents per module in parallel and aggregating a batched audit into per-category findings files for human triage.
+Crosscheck ships four agents. Three are orchestrators — **Byfuglien** (the bruising defenceman whose crosscheck gave the plugin its name) enforces implementation correctness; **Hellebuyck** (the goaltender, last line of defence) interrogates whether the spec is the right spec and stays mechanically enforced; **add-orchestrator** is a parallel-workflow runner at the methodology layer, driving the ADD (Assurance-Driven Development) fast path from signed-off spec to approved invariant docs, dispatching subagents per module in parallel and aggregating a batched audit into per-category findings files for human triage. The fourth, **lowry** (the relentless two-way grinder), runs ADD Phase 4: the gated run-to-green loop that turns those approved invariants into green, governed code — within three legal commit shapes, and without ever weakening the contract to reach green.
 
 Use byfuglien to prove code matches a spec. Use hellebuyck to interrogate whether that spec is the right one. Use add-orchestrator when you have a signed-off spec and want it turned into a vetted invariant set ready to hand off to byfuglien (verification) or hellebuyck (ongoing governance).
 
@@ -46,6 +46,30 @@ Use byfuglien to prove code matches a spec. Use hellebuyck to interrogate whethe
 
 **When to invoke.** "Drive the ADD fast path on this spec." "Bulk-draft invariants from `<spec-path>`." "Spec to invariants." Discoverability note: the trigger surface is workflow-shaped and disjoint from `awesome-copilot/agents/project-scaffold.md`'s generic project-scaffolding triggers.
 
+## lowry — Phase 4 run-to-green loop
+
+**Role.** `lowry` is the ADD Phase 4 gated-implementation agent. It takes the approved
+invariant contract from `add-orchestrator` and drives a red build to green
+within three legal commit shapes (`implementation` / `governance-amendment` /
+`new-invariant`), operating the gate bundle (build, tests, bidirectional
+invariant coverage, the conformance oracle, the deterministic acceptance
+oracles). Its load-bearing discipline (A5): when the only path to green would
+weaken an invariant, it **stops and emits a drift packet** rather than
+weakening the contract. It reports `passes-oracles`, never `matches-intent` —
+that judgment is hellebuyck's / the human's. See [`../agents/lowry.md`](../agents/lowry.md)
+and the design record [`./add/phase4-design-decisions.md`](./add/phase4-design-decisions.md).
+
+**What it owns** (and does not): the loop *between* approved invariants and a
+verified result. It does not author the spec (`add-orchestrator`), produce the
+verification proof (`byfuglien`), or rule on intent (`hellebuyck`).
+
+**Hand-off contracts** (never auto-merges):
+
+- On green → `hellebuyck` for the intent check ([`/intent-check`](../skills/intent-check/SKILL.md), [`/rationale`](../skills/rationale/SKILL.md)) and `byfuglien` for the verification path ([`/lightweight-verify`](../skills/lightweight-verify/SKILL.md), or [`/spec-iterate`](../skills/spec-iterate/SKILL.md) → [`/generate-verified`](../skills/generate-verified/SKILL.md) → [`/extract-code`](../skills/extract-code/SKILL.md)).
+- On a drift packet → the batched human decision resolves the drift before the loop resumes.
+
+**When to invoke.** "Run this to green against the invariants." "Drive the Phase 4 implementation loop." "Implement against the ratified contract."
+
 ## Handoff seam
 
 Byfuglien proves the code is correct against the spec. Hellebuyck checks the spec is the right spec and that the spec→test→code chain stays mechanically enforced. add-orchestrator turns a spec into the invariant set that hellebuyck will govern and that byfuglien will eventually verify against. Concrete escalation patterns:
@@ -60,6 +84,7 @@ Byfuglien proves the code is correct against the spec. Hellebuyck checks the spe
 Use the byfuglien agent to verify your bug fix against the spec
 Use the hellebuyck agent to check what invariants this module is missing
 Use the add-orchestrator agent to drive ADD on this spec
+Use the lowry agent to run the implementation to green against the invariants
 ```
 
 ## See also

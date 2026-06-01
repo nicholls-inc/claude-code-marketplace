@@ -28,12 +28,12 @@
       "id": "CLAIM-PHASE4",
       "source": "ADD methodology (Phase 4)",
       "claim": "ADD includes a Phase 4 gated-implementation loop that drives code to green within three legal commit shapes.",
-      "reality": "Designed, not shipped. No implementing agent exists (grep agents/: byfuglien, hellebuyck, add-orchestrator only). This is the run-to-green capability the user expected.",
-      "status": "known-gap",
+      "reality": "Shipped as a spec. agents/lowry.md specifies the Phase 4 run-to-green loop: entry contract, the gate bundle, the three-shape commit classifier (A4's ClassifyCommitShape, now implemented in conformance/acceptance/oracles.go and passing), the single batched human interrupt, the defer path, the two-tier completion contract (passes-oracles != matches-intent), and the A5 drift-stop kill criterion (stop + emit a drift packet rather than weaken an invariant). Resolved design decisions are in docs/add/phase4-design-decisions.md, grounded in the ngst greenfield run whose cli module was a hand-run of this loop. A4 is mechanically enforceable today; the judged acceptance oracles (A1/A2/A5/A6) await their scenario-runner + LLM-judge harness, so the run-to-green behaviour is specified but not yet harness-validated end-to-end.",
+      "status": "reviewed-disclosed",
       "check": {
         "type": "present_artifact",
         "path": "agents/lowry.md",
-        "expect_present": false
+        "expect_present": true
       },
       "tracked_in": "https://github.com/nicholls-inc/claude-code-marketplace/issues/218"
     },
