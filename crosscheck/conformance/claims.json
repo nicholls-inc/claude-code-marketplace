@@ -52,8 +52,8 @@
       "id": "CLAIM-METHODOLOGY-COMMITTED",
       "source": "docs/add/",
       "claim": "The canonical ADD methodology (methodology.md, glossary.md, the ADRs) lives in the repo.",
-      "reality": "Never committed. Only docs/add/README.md, JOURNAL.md, orchestrator-improvements.md shipped. The phase/mode/diff-classification design exists only in design conversation + the phase4-agent-handoff.md brief.",
-      "status": "known-gap",
+      "reality": "Deliberately NOT committed, by design — decision recorded under epic #217: close as archived, do not promote. v1 (methodology.md, glossary.md, intent.md, the six ADRs) was retracted on 2026-05-11 and moved under docs/add/.retrospective/v1-archive/ after it reproduced its own failure mode (docs/add/JOURNAL.md, 2026-05-11). docs/add/README.md states plainly: 'Don't read this directory for a methodology doc — there isn't one yet, by design.' The v3 shape stays an unvalidated hypothesis until one mature-repo (done 2026-05-15) and one greenfield field test (pending) have run. The ratified A1–A6 acceptance oracles (conformance/acceptance/) are the current authoritative contract; the design rationale lives in the archived ADRs. Promoting the retracted v1 doc verbatim would assert retracted content as canonical — the exact plausible≠correct failure this oracle exists to catch.",
+      "status": "reviewed-disclosed",
       "check": {
         "type": "present_artifact",
         "path": "docs/add/methodology.md",
