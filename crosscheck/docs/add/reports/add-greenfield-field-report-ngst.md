@@ -44,7 +44,7 @@ This is the whole pipeline, end to end, on a real greenfield codebase — not a 
 
 **G1 — Cold-elicitation against an answered spec (→ referential-integrity failure #150).** `/draft-invariants` opened with the *correct* methodology preamble ("anchor against the spec and skeleton") and then immediately ran a cold contract interview the spec already answered. The operator had to redirect (*"here's the spec excerpt"*). When the inferred answers drifted from the spec, the result was referential-integrity failure **#150**. The skill's prose matched the methodology; its behaviour did not. This is exactly the failure the **A1 acceptance oracle** encodes and the failure **greenfield mode (#219)** must prevent with a *"did the spec already answer this?"* gate before any elicitation.
 
-**G2 — Heading-convention divergence (observed in the wild).** The 14-module parallel draft produced **five different heading styles** across subagents (`## I1: Name`, `## IN.1:`, `## I1` no-colon, prose-section-with-buried-ID, and bold-prefix `**I1.**`). Audit finding F1 (High) flagged it; it was *deferred* to the coverage-scaffold rollout. This is the precise inconsistency **#227** fixes — and #227's fix (canonical `## I<N>:` across every parser/gate + a cross-toolchain guard test, PR #228) is therefore *empirically motivated by this run*, not a hypothetical.
+**G2 — Heading-convention divergence (observed in the wild).** The 14-module parallel draft produced **five different heading styles** across subagents (`## I1: Name`, `## IN.1:`, `## I1` no-colon, prose-section-with-buried-ID, and bold-prefix `**I1.**`). Audit finding F1 (High) flagged it; it was *deferred* to the coverage-scaffold rollout. This is the precise inconsistency **#227** unifies — and #227's fix (canonical `## I<N>:` across every parser/gate + a cross-toolchain guard test, in flight as PR #228, unmerged) is therefore *empirically motivated by this run*, not a hypothetical.
 
 **G3 — Manual triage with no stratification or mechanical auto-close.** The operator hand-read all 26 findings, checked boxes, and maintained the triage log by hand. There was no severity stratification, no batch-accept, and no auto-close of mechanical findings — the bottleneck the mature-repo run also reported (orchestrator-improvements #2 / issues #205–#208).
 
@@ -60,7 +60,7 @@ This is the whole pipeline, end to end, on a real greenfield codebase — not a 
 
 | Finding | Implication | Issue |
 |---|---|---|
-| G2 heading divergence | Canonical `## I<N>:` + cross-toolchain guard | **#227 — shipped (PR #228)** |
+| G2 heading divergence | Canonical `## I<N>:` + cross-toolchain guard | **#227 — fix in flight (PR #228, unmerged)** |
 | G1 cold-elicitation #150 | Greenfield mode: spec-diff gate before elicitation; spec preferred over operator answers; placeholder-skeleton = "fill, don't overwrite" | **#219** |
 | (modes in practice) | `secrets` was `bootstrap` (retrofit); the spec-driven modules are `add`; the repo is `transitional`. ngst is a live transitional repo — the mode taxonomy maps cleanly | **#219** |
 | G3 manual triage | Severity stratification + mechanical-finding auto-close + pre-populated triage skeleton | **#218** (acceptance behaviours #205–#208) |
@@ -77,7 +77,7 @@ The `cli`-module session is, in effect, **a hand-run of the Phase 4 loop**: it i
 
 But the same run shows the methodology is still **closing its own gaps**: the back half (Phase 4 run-to-green), greenfield mode, and the Phase 5 auditor are exactly the open children #218/#219/#220, and the heading convention (#227) was only just unified. Committing a single canonical `methodology.md` *now* would document a methodology whose automation is mid-flight — it would lead the implementation rather than follow it, reintroducing the `plausible ≠ correct` gap the conformance oracle exists to catch.
 
-**Recommendation:** keep the methodology deliberately distributed (README + JOURNAL + `orchestrator-improvements.md` + the archived ADRs + this report **are** the methodology record) until the open children land; then write the canonical `docs/add/methodology.md` *describing what shipped*, ratified against both field reports. This keeps `CLAIM-METHODOLOGY-COMMITTED` at `reviewed-disclosed` — but for the sharper reason recorded here: **not "v3 unvalidated," but "v3 core-validated and evolving; the canonical doc should follow the automation, not lead it."**
+**Recommendation:** keep the methodology deliberately distributed (README + JOURNAL + `orchestrator-improvements.md` + the archived ADRs + this report **are** the methodology record) until the open children land; then write the canonical `docs/add/methodology.md` *describing what shipped*, ratified against both field reports. On this branch the committed ledger (`crosscheck/conformance/claims.json`) still holds `CLAIM-METHODOLOGY-COMMITTED` at `known-gap` ("Never committed"); this report argues it *should move to `reviewed-disclosed`* — but that ledger transition is pending **#229** (which resolves the claim explicitly) — for the sharper reason recorded here: **not "v3 unvalidated," but "v3 core-validated and evolving; the canonical doc should follow the automation, not lead it."**
 
 ## 7. Evidence index
 
