@@ -1,6 +1,6 @@
 # Crosscheck agents
 
-Crosscheck ships four agents. Three are orchestrators — **Byfuglien** (the bruising defenceman whose crosscheck gave the plugin its name) enforces implementation correctness; **Hellebuyck** (the goaltender, last line of defence) interrogates whether the spec is the right spec and stays mechanically enforced; **add-orchestrator** is a parallel-workflow runner at the methodology layer, driving the ADD (Assurance-Driven Development) fast path from signed-off spec to approved invariant docs, dispatching subagents per module in parallel and aggregating a batched audit into per-category findings files for human triage. The fourth, **lowry** (the relentless two-way grinder), runs ADD Phase 4: the gated run-to-green loop that turns those approved invariants into green, governed code — within three legal commit shapes, and without ever weakening the contract to reach green.
+Crosscheck ships five agents. Three are orchestrators — **Byfuglien** (the bruising defenceman whose crosscheck gave the plugin its name) enforces implementation correctness; **Hellebuyck** (the goaltender, last line of defence) interrogates whether the spec is the right spec and stays mechanically enforced; **add-orchestrator** is a parallel-workflow runner at the methodology layer, driving the ADD (Assurance-Driven Development) fast path from signed-off spec to approved invariant docs, dispatching subagents per module in parallel and aggregating a batched audit into per-category findings files for human triage. The fourth, **lowry** (the relentless two-way grinder), runs ADD Phase 4: the gated run-to-green loop that turns those approved invariants into green, governed code — within three legal commit shapes, and without ever weakening the contract to reach green. The fifth, **auditor** (Phase 5), is the read-only consolidation agent: it renders `settled` / `active` / `drifted` verdicts over the ADD artifact stack, grounds each in deterministic signals, and proposes remediations a human routes — a distinct peer, so the agent that authored an artifact never audits it.
 
 Use byfuglien to prove code matches a spec. Use hellebuyck to interrogate whether that spec is the right one. Use add-orchestrator when you have a signed-off spec and want it turned into a vetted invariant set ready to hand off to byfuglien (verification) or hellebuyck (ongoing governance).
 
@@ -70,6 +70,34 @@ verification proof (`byfuglien`), or rule on intent (`hellebuyck`).
 
 **When to invoke.** "Run this to green against the invariants." "Drive the Phase 4 implementation loop." "Implement against the ratified contract."
 
+## auditor — Phase 5 consolidation
+
+**Role.** `auditor` is the ADD Phase 5 read-only consolidation agent. It runs
+scheduled or on-demand passes over the ADD artifact stack and renders one
+verdict per artifact — `settled` / `active` / `drifted` — grounded in
+deterministic signals (the `[spec § → invariant]` coverage matrices,
+session-marker hashes, `JOURNAL.md` diff-type lines, git recency, linkage
+orphans, mode tags) and cited by signal ID; the LLM layer adds only severity
+and a proposed remediation. It has **zero write authority outside its own
+report directory** — it produces verdicts for human adjudication, never edits
+the artifacts it audits. See [`../agents/auditor.md`](../agents/auditor.md).
+
+**Why a distinct peer (ADR-003).** The agent that authored an artifact is the
+wrong agent to audit it. `auditor` is a peer to add-orchestrator / byfuglien /
+hellebuyck / lowry, not subordinate — so the audit can never be
+self-confirming. It is the cure for the ngst `#150` referential-integrity
+failure, which escaped because nothing compared invariants to the spec after
+drafting.
+
+**Hand-off contracts.** The auditor writes a single immutable consolidation
+report to `.assurance/audit/<date>-audit.md` and writes nowhere else. Humans
+adjudicate and route accepted remediations to `byfuglien` (code), `hellebuyck`
+(spec/intent), or `lowry` (run-to-green). It does not execute remediations or
+flip `Status` fields.
+
+**When to invoke.** "Run the consolidation audit." "Is anything drifting?"
+"Render settled/active/drifted verdicts on the ADD artifacts."
+
 ## Handoff seam
 
 Byfuglien proves the code is correct against the spec. Hellebuyck checks the spec is the right spec and that the spec→test→code chain stays mechanically enforced. add-orchestrator turns a spec into the invariant set that hellebuyck will govern and that byfuglien will eventually verify against. Concrete escalation patterns:
@@ -85,6 +113,7 @@ Use the byfuglien agent to verify your bug fix against the spec
 Use the hellebuyck agent to check what invariants this module is missing
 Use the add-orchestrator agent to drive ADD on this spec
 Use the lowry agent to run the implementation to green against the invariants
+Use the auditor agent to render settled/active/drifted verdicts on the ADD artifacts
 ```
 
 ## See also

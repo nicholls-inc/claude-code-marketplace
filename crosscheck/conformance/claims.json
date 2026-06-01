@@ -65,12 +65,12 @@
       "id": "CLAIM-AUDITOR",
       "source": "ADD methodology (ADR-003, Phase 5)",
       "claim": "A Phase 5 Auditor agent renders settled/active/drifted verdicts on every artifact.",
-      "reality": "Designed, not shipped. No auditor agent exists.",
-      "status": "known-gap",
+      "reality": "Shipped as a spec. agents/auditor.md specifies the Phase 5 read-only consolidation agent: the settled/active/drifted verdict taxonomy with exact evidence criteria, the deterministic-signals-detect + LLM-renders-judgment split (ADR-002), the signals it consumes (coverage matrices, session-marker hashes, JOURNAL diff-types, git recency, linkage orphans, mode tags), its zero-write-authority-outside-its-report contract, mode-appropriate governance, and cadence. It is a distinct peer (ADR-003) so the authoring agent never audits its own artifact — the cure for the ngst #150 referential-integrity failure that escaped because nothing compared invariants to the spec post-draft. Honest reach: (1) the read-only contract is PROSE-asserted, not harness-enforced — the agent frontmatter format carries no tools: allowlist yet (no agent in this repo has one), so the M4-auditor I3/F4.5 spawn-time enforcement is a behavioral contract, not a sandboxed capability; (2) the shipped taxonomy is 3-valued (settled/active/drifted) — the M4 spec's 4th verdict ActiveWithWarning is deliberately collapsed into active; (3) several drift criteria key off frontmatter (consumes:, add-mode) and an attestation timestamp the current docs/invariants/*.md targets do not carry, so on those artifacts those criteria pass vacuously and a settled verdict attests only 'no signal computable' — the agent discloses this rather than silently emitting a confident settled; (4) the cited ADR-002/003/005 are pending commit (#217), restated inline; (5) a unified instrumentation script and the judged-oracle harness do not exist yet; today the signals are assembled from the conformance oracle + git + session artifacts, and the prose-vs-prose intent verdict is LLM judgment to spot-check.",
+      "status": "reviewed-disclosed",
       "check": {
         "type": "present_artifact",
         "path": "agents/auditor.md",
-        "expect_present": false
+        "expect_present": true
       },
       "tracked_in": "https://github.com/nicholls-inc/claude-code-marketplace/issues/220"
     },

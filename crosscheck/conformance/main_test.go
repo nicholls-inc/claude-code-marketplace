@@ -407,8 +407,8 @@ func TestGoldenRealTree(t *testing.T) {
 	if len(r.skills) != 30 {
 		t.Errorf("skills discovered = %d, want 30", len(r.skills))
 	}
-	if len(r.agents) != 4 {
-		t.Errorf("agents discovered = %d, want 4 (byfuglien, hellebuyck, add-orchestrator, lowry)", len(r.agents))
+	if len(r.agents) != 5 {
+		t.Errorf("agents discovered = %d, want 5 (byfuglien, hellebuyck, add-orchestrator, lowry, auditor)", len(r.agents))
 	}
 	if len(r.refTokens) != 30 {
 		t.Errorf("referenced tokens = %d, want 30", len(r.refTokens))
@@ -423,92 +423,23 @@ func TestGoldenRealTree(t *testing.T) {
 		t.Errorf("journal-context should be documented, but is still flagged as an orphan: %v", r.warnings)
 	}
 
-	// The remaining known-gap claims must all be present in the ledger.
-	wantGaps := []string{"CLAIM-AUDITOR"}
-	for _, id := range wantGaps {
+	// All five originally-known-gap claims were triaged to reviewed-disclosed as
+	// their backing artifacts shipped: CLAIM-PHASE4 (agents/lowry.md, #218),
+	// CLAIM-AUDITOR (agents/auditor.md, #220), CLAIM-MODES (operating modes, #219),
+	// CLAIM-METHODOLOGY-COMMITTED (archived per epic #217), and CLAIM-SELF-COVERAGE
+	// (AUTO 5 orchestration-graph integrity, #221). No known-gap claims remain.
+	for _, id := range []string{"CLAIM-PHASE4", "CLAIM-AUDITOR", "CLAIM-MODES", "CLAIM-METHODOLOGY-COMMITTED", "CLAIM-SELF-COVERAGE"} {
 		found := false
 		for _, c := range r.ledger {
 			if c.ID == id {
 				found = true
-				if c.Status != "known-gap" {
-					t.Errorf("claim %s status = %q, want known-gap", id, c.Status)
+				if c.Status != "reviewed-disclosed" {
+					t.Errorf("claim %s status = %q, want reviewed-disclosed", id, c.Status)
 				}
 			}
 		}
 		if !found {
 			t.Errorf("missing expected ledger claim %s", id)
-		}
-	}
-
-	// CLAIM-PHASE4 was triaged to reviewed-disclosed once agents/lowry.md
-	// shipped (issue #218): the present_artifact check now expects it present.
-	{
-		found := false
-		for _, c := range r.ledger {
-			if c.ID == "CLAIM-PHASE4" {
-				found = true
-				if c.Status != "reviewed-disclosed" {
-					t.Errorf("claim CLAIM-PHASE4 status = %q, want reviewed-disclosed", c.Status)
-				}
-			}
-		}
-		if !found {
-			t.Errorf("missing expected ledger claim CLAIM-PHASE4")
-		}
-	}
-
-	// CLAIM-MODES was triaged to reviewed-disclosed once the operating-mode
-	// system shipped: add-mode tags on every module (enforced by AUTO 6) +
-	// add-orchestrator Step 0 mode selection + the three documented entrypoints
-	// (issue #219).
-	{
-		found := false
-		for _, c := range r.ledger {
-			if c.ID == "CLAIM-MODES" {
-				found = true
-				if c.Status != "reviewed-disclosed" {
-					t.Errorf("claim CLAIM-MODES status = %q, want reviewed-disclosed", c.Status)
-				}
-			}
-		}
-		if !found {
-			t.Errorf("missing expected ledger claim CLAIM-MODES")
-		}
-	}
-
-	// CLAIM-METHODOLOGY-COMMITTED was triaged to reviewed-disclosed (epic #217
-	// decision: close as archived — the v1 methodology was retracted on
-	// 2026-05-11, not promoted to canonical).
-	{
-		found := false
-		for _, c := range r.ledger {
-			if c.ID == "CLAIM-METHODOLOGY-COMMITTED" {
-				found = true
-				if c.Status != "reviewed-disclosed" {
-					t.Errorf("claim CLAIM-METHODOLOGY-COMMITTED status = %q, want reviewed-disclosed", c.Status)
-				}
-			}
-		}
-		if !found {
-			t.Errorf("missing expected ledger claim CLAIM-METHODOLOGY-COMMITTED")
-		}
-	}
-
-	// CLAIM-SELF-COVERAGE was triaged to reviewed-disclosed once a second
-	// trunk-level self-check (the AUTO 5 orchestration-graph integrity check)
-	// shipped beyond this oracle itself (issue #221).
-	{
-		found := false
-		for _, c := range r.ledger {
-			if c.ID == "CLAIM-SELF-COVERAGE" {
-				found = true
-				if c.Status != "reviewed-disclosed" {
-					t.Errorf("claim CLAIM-SELF-COVERAGE status = %q, want reviewed-disclosed", c.Status)
-				}
-			}
-		}
-		if !found {
-			t.Errorf("missing expected ledger claim CLAIM-SELF-COVERAGE")
 		}
 	}
 
