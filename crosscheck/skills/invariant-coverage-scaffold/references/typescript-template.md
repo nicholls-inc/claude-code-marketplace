@@ -12,7 +12,7 @@ Write to `scripts/check-invariant-coverage.ts` (runnable via `npx tsx`). Depende
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, basename, dirname, extname } from "node:path";
 
-const HEADER_RE = /^\*\*([A-Z]+\d+[a-z]?)\.\s/;             // **I1. Name.**
+const HEADER_RE = /^## (I\d+[a-z]?):/;             // "## I1: Name"
 const COMMENT_RE = /^\s*\/\/\s*Invariant\s+([A-Z]+\d+[a-z]?):\s/;
 const ASPIRATIONAL_RE = /<!--\s*aspirational\s*-->/;
 

@@ -52,8 +52,8 @@
       "id": "CLAIM-METHODOLOGY-COMMITTED",
       "source": "docs/add/",
       "claim": "The canonical ADD methodology (methodology.md, glossary.md, the ADRs) lives in the repo.",
-      "reality": "Never committed. Only docs/add/README.md, JOURNAL.md, orchestrator-improvements.md shipped. The phase/mode/diff-classification design exists only in design conversation + the phase4-agent-handoff.md brief.",
-      "status": "known-gap",
+      "reality": "Deliberately NOT committed, by design — decision recorded under epic #217: do not promote a methodology doc yet. v1 (methodology.md, glossary.md, intent.md, the six ADRs) was retracted on 2026-05-11 and moved under docs/add/.retrospective/v1-archive/ after it reproduced its own failure mode (docs/add/JOURNAL.md). docs/add/README.md states there is no canonical methodology doc here, by design. Of the two README preconditions, the mature-repo run has landed (2026-05-15, docs/add/JOURNAL.md); the greenfield run is still pending (tracked in #231). Either way its automation is mid-flight (Phase-4 #218, modes #219, auditor #220). A canonical methodology should FOLLOW that automation, not lead it: committing one now would document a methodology whose back half is unbuilt, reintroducing the plausible!=correct gap this oracle exists to catch. The ratified A1-A6 acceptance oracles (conformance/acceptance/) are the current authoritative contract; the design rationale lives in the archived ADRs. The doc gets written to describe what shipped once the #217 children land.",
+      "status": "reviewed-disclosed",
       "check": {
         "type": "present_artifact",
         "path": "docs/add/methodology.md",
@@ -78,8 +78,8 @@
       "id": "CLAIM-SELF-COVERAGE",
       "source": "docs/invariants/",
       "claim": "Crosscheck applies its own assurance machinery to itself.",
-      "reality": "docs/invariants/ covers three helper functions (parseDafnyOutput, shouldExclude, extractDifficultyMetrics) \u2014 the plugin verified its leaves, not its trunk (orchestrators, gates, workflow). This conformance oracle is the first trunk-level check.",
-      "status": "known-gap",
+      "reality": "Growing \u2014 narrowed from known-gap. docs/invariants/ verifies three leaf helpers via Dafny (parseDafnyOutput, shouldExclude, extractDifficultyMetrics). Trunk coverage now has two mechanical self-checks: (1) this conformance/inventory oracle (docs<->artifacts), and (2) the AUTO 5 orchestration-graph integrity check (every skill/agent an orchestrator routes to via a backtick `/x` or `/crosscheck:x` token in its body must resolve to a real artifact). What AUTO 5 does NOT catch: bare-slash routing (`/skill` without backticks) is invisible, so a skill routed to only via bare-slash is unchecked (false negative); a non-crosscheck backtick `/token` in an agent body is flagged even when it names a sibling-plugin skill, an example, or a flag (false positive, no cross-plugin allowlist); and plain-prose / bare-word agent->agent edges (the dominant form, e.g. auditor.md routing to byfuglien/hellebuyck/lowry in prose) are not modelled at all. These are tracked in #221 as the trunk-coverage epic. Gate-semantics and full-workflow self-checks remain partial; #221 stays open to grow trunk coverage toward reviewed-accurate.",
+      "status": "reviewed-disclosed",
       "check": {
         "type": "manual"
       },

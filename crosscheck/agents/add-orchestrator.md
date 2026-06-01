@@ -321,7 +321,7 @@ in the orchestrator's main thread. For each subagent:
   1. `docs/invariants/<module>.md` exists
   2. `Status: Draft` line present
   3. `Audit: pending session <session_id>` line present
-  4. ≥ 3 invariant headings of the form `## I<N>: <Name>` (h2, grep-anchorable) present. Other styles (h3, bold-prefix paragraph, prose-section with IDs in body) FAIL this gate — see `crosscheck/skills/draft-invariants/SKILL.md` Step 3 *Heading convention* for the canonical form. Grep: `grep -cE '^## I[0-9]+:' docs/invariants/<module>.md` must return ≥ 3.
+  4. ≥ 3 invariant headings of the form `## I<N>: <Name>` (h2, grep-anchorable) present. Other styles (h3, bold-prefix paragraph, prose-section with IDs in body) FAIL this gate — see `crosscheck/skills/draft-invariants/SKILL.md` Step 3 *Heading convention* for the canonical form. Grep: `grep -cE '^## I[0-9]+[a-z]?:' docs/invariants/<module>.md` must return ≥ 3 (the optional lowercase suffix accepts sub-invariant IDs such as `I1a`).
 
   If any quality-gate criterion fails, treat as a soft failure: record
   the criterion that failed and continue. The downstream audit will
