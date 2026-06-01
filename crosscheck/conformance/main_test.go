@@ -298,8 +298,8 @@ func TestGoldenRealTree(t *testing.T) {
 	if len(r.skills) != 30 {
 		t.Errorf("skills discovered = %d, want 30", len(r.skills))
 	}
-	if len(r.agents) != 4 {
-		t.Errorf("agents discovered = %d, want 4 (byfuglien, hellebuyck, add-orchestrator, lowry)", len(r.agents))
+	if len(r.agents) != 5 {
+		t.Errorf("agents discovered = %d, want 5 (byfuglien, hellebuyck, add-orchestrator, lowry, auditor)", len(r.agents))
 	}
 	if len(r.refTokens) != 30 {
 		t.Errorf("referenced tokens = %d, want 30", len(r.refTokens))
@@ -316,7 +316,7 @@ func TestGoldenRealTree(t *testing.T) {
 
 	// The remaining known-gap claims must all be present in the ledger.
 	wantGaps := []string{"CLAIM-MODES", "CLAIM-METHODOLOGY-COMMITTED",
-		"CLAIM-AUDITOR", "CLAIM-SELF-COVERAGE"}
+		"CLAIM-SELF-COVERAGE"}
 	for _, id := range wantGaps {
 		found := false
 		for _, c := range r.ledger {
@@ -332,20 +332,21 @@ func TestGoldenRealTree(t *testing.T) {
 		}
 	}
 
-	// CLAIM-PHASE4 was triaged to reviewed-disclosed once agents/lowry.md
-	// shipped (issue #218): the present_artifact check now expects it present.
-	{
+	// CLAIM-PHASE4 (agents/lowry.md, #218) and CLAIM-AUDITOR (agents/auditor.md,
+	// #220) were triaged to reviewed-disclosed once their agents shipped; both
+	// present_artifact checks now expect the agent present.
+	for _, id := range []string{"CLAIM-PHASE4", "CLAIM-AUDITOR"} {
 		found := false
 		for _, c := range r.ledger {
-			if c.ID == "CLAIM-PHASE4" {
+			if c.ID == id {
 				found = true
 				if c.Status != "reviewed-disclosed" {
-					t.Errorf("claim CLAIM-PHASE4 status = %q, want reviewed-disclosed", c.Status)
+					t.Errorf("claim %s status = %q, want reviewed-disclosed", id, c.Status)
 				}
 			}
 		}
 		if !found {
-			t.Errorf("missing expected ledger claim CLAIM-PHASE4")
+			t.Errorf("missing expected ledger claim %s", id)
 		}
 	}
 

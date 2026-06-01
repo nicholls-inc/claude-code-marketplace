@@ -65,12 +65,12 @@
       "id": "CLAIM-AUDITOR",
       "source": "ADD methodology (ADR-003, Phase 5)",
       "claim": "A Phase 5 Auditor agent renders settled/active/drifted verdicts on every artifact.",
-      "reality": "Designed, not shipped. No auditor agent exists.",
-      "status": "known-gap",
+      "reality": "Shipped as a spec. agents/auditor.md specifies the Phase 5 read-only consolidation agent: the settled/active/drifted verdict taxonomy with exact evidence criteria, the deterministic-signals-detect + LLM-renders-judgment split (ADR-002), the signals it consumes (coverage matrices, session-marker hashes, JOURNAL diff-types, git recency, linkage orphans, mode tags), its zero-write-authority-outside-its-report contract, mode-appropriate governance, and cadence. It is a distinct peer (ADR-003) so the authoring agent never audits its own artifact — the cure for the ngst #150 referential-integrity failure that escaped because nothing compared invariants to the spec post-draft. Honest reach: a unified instrumentation script and the judged-oracle harness do not exist yet; today the signals are assembled from the conformance oracle + git + session artifacts, and the prose-vs-prose intent verdict is LLM judgment to spot-check.",
+      "status": "reviewed-disclosed",
       "check": {
         "type": "present_artifact",
         "path": "agents/auditor.md",
-        "expect_present": false
+        "expect_present": true
       },
       "tracked_in": "https://github.com/nicholls-inc/claude-code-marketplace/issues/220"
     },
