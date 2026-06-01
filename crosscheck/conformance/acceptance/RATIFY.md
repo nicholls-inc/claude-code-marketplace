@@ -49,11 +49,11 @@ once ratified").
 
 ## Ratification checklist
 
-- [ ] A1 pass condition is correct and complete
-- [ ] A2 pass condition is correct and complete
-- [ ] A3 pass condition is correct and complete
-- [ ] A4 pass condition (legal commit-shape grammar) is correct and complete
-- [ ] A5 pass condition is correct and complete *(load-bearing — review closely)*
-- [ ] A6 pass condition is correct and complete
-- [ ] Agreed: a passing run of all six defines Phase 4 acceptance, and Phase 4
+- [x] A1 pass condition is correct and complete
+- [x] A2 pass condition is correct and complete
+- [x] A3 pass condition is correct and complete
+- [x] A4 pass condition (legal commit-shape grammar) is correct and complete
+- [x] A5 pass condition is correct and complete *(load-bearing — review closely)*
+- [x] A6 pass condition is correct and complete
+- [x] Agreed: a passing run of all six defines Phase 4 acceptance, and Phase 4
       build does not start until this box is checked
