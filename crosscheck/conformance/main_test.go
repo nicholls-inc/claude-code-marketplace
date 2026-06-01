@@ -298,8 +298,8 @@ func TestGoldenRealTree(t *testing.T) {
 	if len(r.skills) != 30 {
 		t.Errorf("skills discovered = %d, want 30", len(r.skills))
 	}
-	if len(r.agents) != 3 {
-		t.Errorf("agents discovered = %d, want 3", len(r.agents))
+	if len(r.agents) != 4 {
+		t.Errorf("agents discovered = %d, want 4 (byfuglien, hellebuyck, add-orchestrator, lowry)", len(r.agents))
 	}
 	if len(r.refTokens) != 30 {
 		t.Errorf("referenced tokens = %d, want 30", len(r.refTokens))
@@ -314,8 +314,8 @@ func TestGoldenRealTree(t *testing.T) {
 		t.Errorf("journal-context should be documented, but is still flagged as an orphan: %v", r.warnings)
 	}
 
-	// The five known-gap claims must all be present in the ledger.
-	wantGaps := []string{"CLAIM-PHASE4", "CLAIM-MODES", "CLAIM-METHODOLOGY-COMMITTED",
+	// The remaining known-gap claims must all be present in the ledger.
+	wantGaps := []string{"CLAIM-MODES", "CLAIM-METHODOLOGY-COMMITTED",
 		"CLAIM-AUDITOR", "CLAIM-SELF-COVERAGE"}
 	for _, id := range wantGaps {
 		found := false
@@ -329,6 +329,23 @@ func TestGoldenRealTree(t *testing.T) {
 		}
 		if !found {
 			t.Errorf("missing expected ledger claim %s", id)
+		}
+	}
+
+	// CLAIM-PHASE4 was triaged to reviewed-disclosed once agents/lowry.md
+	// shipped (issue #218): the present_artifact check now expects it present.
+	{
+		found := false
+		for _, c := range r.ledger {
+			if c.ID == "CLAIM-PHASE4" {
+				found = true
+				if c.Status != "reviewed-disclosed" {
+					t.Errorf("claim CLAIM-PHASE4 status = %q, want reviewed-disclosed", c.Status)
+				}
+			}
+		}
+		if !found {
+			t.Errorf("missing expected ledger claim CLAIM-PHASE4")
 		}
 	}
 

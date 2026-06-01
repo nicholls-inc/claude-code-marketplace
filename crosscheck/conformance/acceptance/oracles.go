@@ -88,10 +88,55 @@ var GovernanceSubtags = []string{
 	"propagated-discovery", "intent-refinement", "drift", "retraction",
 }
 
-// ClassifyCommitShape is the A4 seam the Phase 4 build owns. It is NOT
-// implemented here — returning ErrCapabilityAbsent keeps A4 runnable and RED.
+// ClassifyCommitShape is the A4 seam the Phase 4 build owns. It returns the
+// commit shape for a (subject, body) pair, or ShapeIllegal for anything outside
+// the three legal shapes. The grammar is the one the Phase 4 agent
+// (agents/lowry.md) emits and enforces:
+//
+//	implementation: <summary>          -> ShapeImplementation
+//	new-invariant: <summary>           -> ShapeNewInvariant
+//	governance-amendment: <summary>    -> ShapeGovernanceAmendment, but ONLY if the
+//	                                      body carries `amendment-kind: <kind>` with
+//	                                      kind in GovernanceSubtags; otherwise illegal.
+//
+// Rejection is signalled by ShapeIllegal with a nil error — the error return is
+// reserved for genuine evaluation faults, so callers can distinguish "rejected"
+// from "errored".
 func ClassifyCommitShape(subject, body string) (CommitShape, error) {
-	return ShapeIllegal, ErrCapabilityAbsent
+	subject = strings.TrimSpace(subject)
+	switch {
+	case strings.HasPrefix(subject, string(ShapeImplementation)+":"):
+		return ShapeImplementation, nil
+	case strings.HasPrefix(subject, string(ShapeNewInvariant)+":"):
+		return ShapeNewInvariant, nil
+	case strings.HasPrefix(subject, string(ShapeGovernanceAmendment)+":"):
+		if governanceAmendmentKind(body) != "" {
+			return ShapeGovernanceAmendment, nil
+		}
+		return ShapeIllegal, nil
+	default:
+		return ShapeIllegal, nil
+	}
+}
+
+// governanceAmendmentKind returns the valid amendment-kind declared in a commit
+// body, or "" if none of GovernanceSubtags is present. A governance-amendment
+// commit MUST carry exactly one.
+func governanceAmendmentKind(body string) string {
+	const prefix = "amendment-kind:"
+	for _, line := range strings.Split(body, "\n") {
+		line = strings.TrimSpace(line)
+		if !strings.HasPrefix(line, prefix) {
+			continue
+		}
+		val := strings.TrimSpace(strings.TrimPrefix(line, prefix))
+		for _, valid := range GovernanceSubtags {
+			if val == valid {
+				return val
+			}
+		}
+	}
+	return ""
 }
 
 // JudgedRun is the transcript+verdict a judged oracle consumes once the
