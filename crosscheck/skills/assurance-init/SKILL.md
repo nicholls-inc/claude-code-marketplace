@@ -251,9 +251,7 @@ Status: Skeleton — populate via `/crosscheck:draft-invariants <module>`.
 
 <one-paragraph TODO describing what this module is responsible for>
 
-## Invariants
-
-**I1. TODO: first invariant name.** <!-- aspirational -->
+## I1: TODO-first-invariant-name <!-- aspirational -->
 
 <prose describing the property this invariant guarantees>
 
@@ -262,7 +260,7 @@ line when the property test lands.
 
 ---
 
-**I2. TODO: second invariant name.** <!-- aspirational -->
+## I2: TODO-second-invariant-name <!-- aspirational -->
 
 <prose>
 

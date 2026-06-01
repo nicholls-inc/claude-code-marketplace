@@ -442,9 +442,8 @@ order:
 ## Contract (summary from step 1)
 <2-4 sentences; if from a spec, cite the section>
 
-## Invariants
-**I1. ...**
-**I2. ...**
+## I1: <Name>
+## I2: <Name>
 ...
 
 ## Not covered
@@ -469,7 +468,8 @@ code, or write them directly to the test file if the user prefers.
 
 This is the quality bar. An invariant should read like this:
 
-> **I1. At-most-one active per ref.**
+> ## I1: AtMostOneActivePerRef
+>
 > For any non-empty `Ref`, at most one vessel is in `{pending, running,
 > waiting}` at any time. Enqueue of an already-active ref is a no-op.
 > - *Why:* prevents the double-dispatch class of bugs (filed issue #541 for
