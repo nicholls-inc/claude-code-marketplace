@@ -58,7 +58,15 @@ belong in the report body, not the chat opener.
 ## Verdict taxonomy
 
 Every audited artifact gets exactly one verdict, with the exact criteria from
-ADR-003:
+ADR-003 (as restated inline below — the cited ADRs are pending commit in #217):
+
+> **Deliberate narrowing.** The M4-auditor spec defines a fourth verdict,
+> `ActiveWithWarning`. This agent intentionally collapses it into `active`: a
+> warnable-but-legitimate edit is surfaced via the `active` verdict's
+> "remediation when the signal structure is malformed" clause rather than as a
+> separate verdict value. The shipped taxonomy is therefore the 3-valued
+> `settled` / `active` / `drifted`. Restore the 4th value here if a distinct
+> warning state proves load-bearing.
 
 ### `settled`
 No drift or recent-work signal. Linkage graph intact (no orphaned
@@ -66,11 +74,19 @@ cross-references); no edits since last attestation; no upstream dependency
 amended since this artifact's last attestation.
 
 ### `active`
-Legitimate work-in-progress. Recent edits exist but are classified (ADR-005)
-as `propagated-discovery` / `intent-refinement` / `new-invariant`; downstream
-artifacts have acknowledged the upstream edits; no unchecked divergence
-between prose and its linked tests/code. No remediation unless the signal
-structure is malformed.
+Legitimate work-in-progress. Recent edits exist but every one is classified
+(ADR-005, as restated at the diff-type enum below) as one of the non-`drift`
+diff-types — `propagated-discovery` / `intent-refinement` / `status-transition`
+/ `retraction`; downstream artifacts have acknowledged the upstream edits; no
+unchecked divergence between prose and its linked tests/code. No remediation
+unless the signal structure is malformed.
+
+> The `active` whitelist is exactly the ADR-005 diff-type enum minus `drift`
+> (which is the `drifted` signal). The five diff-types thus partition cleanly:
+> `drift` → `drifted`; the other four → `active`. This is the canonical
+> diff-type enum, not the commit-shape vocabulary — there is no
+> `new-invariant` diff-type. Together with criterion 5 (classification
+> mismatch), every recorded diff-type maps to exactly one verdict.
 
 ### `drifted`
 A deterministic signal of divergence that demands human adjudication. **One or
@@ -79,8 +95,13 @@ more** must fire:
 1. **Cascade-pending** — an upstream intent/spec section this artifact
    `consumes:` was amended at commit C, but the artifact has not been
    re-attested since C.
-2. **Unchecked coupling** — invariant prose edited N times over K weeks while
-   its covering test was edited 0 times (change-coupling mismatch).
+2. **Unchecked coupling** — invariant prose edited at least N times over the
+   trailing K weeks while its covering test was edited 0 times (change-coupling
+   mismatch). N and K are a configured input to the pass; absent an override the
+   defaults are **N = 2, K = 4** (two-or-more prose edits in the last four weeks
+   with no test edit). Pin them per-repo if the defaults over- or under-fire;
+   the chosen values are echoed in the report's metadata block so the signal is
+   reproducible.
 3. **Orphan linkage** — the artifact claims to consume an intent/spec/test
    that no longer exists or was retracted.
 4. **Mode violation** — an `add`-mode artifact lacks its Phase 0 attestation
@@ -94,7 +115,24 @@ For each `drifted` artifact the auditor renders a **severity** (low / medium /
 high / critical) and a **proposed remediation** — both grounded in the cited
 signals, both for the human to accept or reject.
 
-## Evidence: deterministic signals detect, the LLM judges (ADR-002)
+> **Metadata precondition (disclosed limitation).** Criteria 1 and 3 key off a
+> `consumes:` frontmatter field, criterion 4 off an `add-mode` tag, and
+> `settled` off a per-artifact attestation timestamp. The current
+> `docs/invariants/*.md` targets carry no frontmatter, so on those artifacts
+> these criteria cannot fire — they pass *vacuously*, not *cleanly*. A `settled`
+> verdict on a metadata-less artifact therefore attests only "no signal was
+> computable," NOT "examined against every criterion and clean." The auditor
+> MUST surface this distinction in the report (it does not silently emit a
+> confident `settled`). Promoting metadata-less artifacts to a dedicated
+> `unaudited` state — rather than reporting a caveated `settled` — is a spec
+> change tracked for ADR follow-up; until then the disclosure above is the
+> guard against the #150 silent-escape class.
+
+## Evidence: deterministic signals detect, the LLM judges (ADR-002, as restated here)
+
+The cited ADR-002/003/005 are pending commit (#217, CLAIM-METHODOLOGY-COMMITTED);
+the operative criteria are restated inline throughout this agent so it is
+self-contained until those ADRs land in-repo.
 
 Every verdict **cites the signal IDs that drove it**. The auditor does not
 free-associate; it converts *"this artifact has signal X"* into a severity
@@ -177,7 +215,14 @@ proposing a fix is not performing it.
 ## What this agent does NOT do
 
 - It does **not** author or edit any spec, invariant, test, code, or commit —
-  read-only outside its report directory (ADR-003).
+  read-only outside its report directory (ADR-003). **This read-only contract is
+  currently PROSE-asserted, not harness-enforced.** The M4-auditor spec (I3 /
+  F4.5) makes a spawn-time `tools:` allowlist load-bearing and rejects
+  convention-only enforcement, but the agent frontmatter format does not yet
+  carry a `tools:` allowlist (no agent in this repo does), so there is no
+  mechanical TOCTOU-safe guard today. Treat the zero-write guarantee as a
+  behavioral contract pending a harness-level allowlist, not as a sandboxed
+  capability. Add a `tools:` allowlist here the moment the format supports one.
 - It does **not** execute remediations or flip `Status` fields — humans do,
   post-adjudication.
 - It does **not** scan everything blind — it renders judgment on artifacts the
@@ -214,5 +259,10 @@ final:
       human review.
 - [ ] The report is written ONLY to `.assurance/audit/`; no artifact under
       audit was modified; no `Status` field flipped.
-- [ ] The report includes a "What this audit does NOT catch" honesty section.
+- [ ] The report includes a "What this audit does NOT catch" honesty section,
+      which states that the auditor's read-only contract is prose-asserted (not
+      harness-enforced) and discloses the metadata precondition below: criteria
+      that key off frontmatter cannot fire on artifacts that carry none, so a
+      `settled` verdict on such an artifact attests only "no signal was
+      computable," not "examined and clean."
 - [ ] Remediations are proposed, not executed; the human adjudicates.
