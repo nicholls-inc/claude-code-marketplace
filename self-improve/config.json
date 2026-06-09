@@ -1,0 +1,8 @@
+{
+  "slack_channel": "#claude-self-improve",
+  "lookback_days": 7,
+  "max_suggestions": 3,
+  "challenge_slots": 1,
+  "min_command_recurrence": 5,
+  "eval_after_days": 7
+}
