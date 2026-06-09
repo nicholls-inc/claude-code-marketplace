@@ -1,5 +1,5 @@
 {
-  "slack_channel": "#claude-self-improve",
+  "slack_channel": "D06UE1F68G4",
   "lookback_days": 7,
   "max_suggestions": 3,
   "challenge_slots": 1,

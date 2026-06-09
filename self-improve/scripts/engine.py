@@ -34,7 +34,7 @@ DB_PATH = Path(os.environ.get("SELF_IMPROVE_DB", ROOT / "state.db"))
 LESSONS = Path(os.environ.get("SELF_IMPROVE_LESSONS", ROOT / "lessons.md"))
 
 DEFAULT_CONFIG = {
-    "slack_channel": "#claude-self-improve",
+    "slack_channel": "D06UE1F68G4",
     "lookback_days": 7,
     "max_suggestions": 3,
     "challenge_slots": 1,        # quarantine for lower-evidence/speculative picks
