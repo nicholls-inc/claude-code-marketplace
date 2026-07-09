@@ -200,6 +200,17 @@ When a change to any protected file is proposed:
 4. Never weaken an invariant to make a failing test pass. Failing tests are
    evidence that either the code is wrong or the invariant is wrong — either
    way, a governance-note is required.
+
+## Deletion-test carve-out
+
+Recovery and backup drills are a legitimate test class: tests MAY delete and
+restore a protected file, provided the deletion targets an isolated copy — a
+temp directory, fixture clone, or scratch worktree — rather than the live
+protected file itself. Such deletion/restoration tests are permitted and fall
+outside the amendment pattern above, because they exercise recovery behaviour
+instead of amending the protected surface. A policy that forbade this test
+class outright would make backup, recovery, and deletion-resilience tests
+impossible to write.
 ```
 
 ### Step 6: Write `docs/invariants/README.md` and Seed Module Docs
@@ -216,7 +227,9 @@ numbered (`I1`, `I2`, …) and paired with property tests that enforce them.
 These documents and their property tests are **protected surfaces** (see
 [`.claude/rules/protected-surfaces.md`](../../.claude/rules/protected-surfaces.md)):
 they must not be modified, deleted, or weakened without an explicit
-human-authored amendment.
+human-authored amendment. (Deletion/restoration tests operating on an
+isolated copy are the one exception — see the deletion-test carve-out
+in `.claude/rules/protected-surfaces.md`.)
 
 ## Seeded modules
 
