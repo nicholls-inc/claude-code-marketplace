@@ -1,208 +1,94 @@
-# Plan: crosscheck: assurance-probe — deterministic test-strength layer (design discussion)
+# Plan: Adopt the AI-native SDLC playbook as Crosscheck's development framework + self-explanatory human gates
 
-## Verification track
-formal
+## Context
 
-**Track interpretation**: "formal" here means **Layer 4 deterministic property testing** (reproducible, bounded, rotation-based), NOT Layer 1 Dafny proofs. The skill orchestrates external test execution and mutation analysis; it has no provable business logic suitable for formal verification.
+The uploaded task brief asks for two work packages in this repo (Crosscheck lives in `crosscheck/`):
 
-## Steps
+- **Package A** — adopt Anthropic's AI-Native SDLC playbook (artefact chain: intent.md → spec.md → plan.md → diff+tests → PR review → incident record; controls: skills=advisory, hooks=deterministic, human approval at defined gates) as the framework for Crosscheck's own development, wired to Crosscheck's assurance skills.
+- **Package B** — inventory every human gate in Crosscheck and give each one (a) a plain-language explainer in `docs/gates/` and (b) a succinct three-sentence message in the exact prescribed format at its point of delivery.
 
-1. **Create skill definition** — `crosscheck/skills/assurance-probe/SKILL.md`
-   - Layer 4 (deterministic strength) skill scaffolding
-   - Mutation probe, vacuity probe, and generator probe instructions (phase-gated)
-   - Issue-only output pattern matching `/spec-adversary`
-   - Bounded output (≤3 findings), rotation-based, kill criterion from day 1
-   - Integration with `.assurance/probe-tracker.csv` tracking
-   - **Zero-finding output**: If no mutations survive, emit success message "No test-strength issues found for module X" with no GitHub issue created
+**Key reality check from exploration** (this shapes the whole plan): the brief cites `docs/assurance/`, repo-root `docs/invariants/` and `.claude/rules/protected-surfaces.md` as existing — **none exist in this repo**. They are what `/assurance-init` scaffolds into *target* repos; Crosscheck has never been dogfooded on itself. So Package A is partly a dogfooding exercise: lay down that governance layout at the repo root for Crosscheck's own development, matching the templates `assurance-init` already defines (`crosscheck/skills/assurance-init/SKILL.md`).
 
-2. **Create mutation framework** — `crosscheck/skills/assurance-probe/lib/mutations.py`
-   - Parse `Failure condition` clause from invariant docs
-   - **Phase 1 grammar**: Simple predicates only — `<var> <op> <literal>` where `<op>` ∈ {`<`, `>`, `<=`, `>=`, `==`, `!=`, `in`, `not in`}. Examples: `x < 0`, `len(arr) > MAX_SIZE`, `key not in cache`. Multi-line or nested conditions → skip with warning "Complex Failure condition in [doc]; Phase 1 supports simple predicates only."
-   - **Empty/unparseable clauses**: Skip invariant with warning "No parseable Failure condition in [doc]; skipping mutation probe." Include skip count in tracker CSV (`proposed=0, skipped=1`).
-   - Generate 1-3 targeted source mutations per invariant
-   - **Mutation soundness constraint**: Each mutation must target an AST node (variable, operator, literal) explicitly referenced in the Failure condition. Parser validates this; if no AST match, skip with warning.
-   - Apply mutation, run covering test, capture killed/survived/errored verdict
-   - **Error handling**: Syntax errors in mutated code → `errored` verdict (not `survived`). Test framework crashes → `errored`. Timeout (>30s per test) → `errored`.
-   - Deterministic, reproducible results (bit-identical on re-run with same environment)
-   - Phase 1: Python-only support
+Also: the user asked me to orchestrate implementation with **Workflow** fan-outs using opus/sonnet/haiku, conserving my own context for orchestration. Constraints from the brief: additive only (no gate weakened, no semantics changed except A's new enforcement), each new doc under two pages, **British spelling**, and this plan itself becomes the committed `plan.md` artefact.
 
-3. **Create vacuity probe** — `crosscheck/skills/assurance-probe/lib/vacuity.py`
-   - **Pre-flight check**: Verify `pytest-cov` installed via `importlib.util.find_spec("pytest_cov")`. If absent, fail-fast with error: "pytest-cov not found; install via 'pip install pytest-cov' to enable vacuity probe."
-   - Delete covering test temporarily, run pytest with `--cov`
-   - Compute branch-coverage delta for protected module
-   - Zero delta = test not load-bearing for that module
-   - Restore test after probe (use Git worktree to avoid working-directory mutation)
-   - Phase 2 (deferred until Phase 1 demonstrates SNR ≥ 1:3)
+Branch: `claude/multi-model-orchestration-w7qhni` (clean, even with main). Note: the existing repo-root `plan.md` is a committed artefact of a *previous* change (assurance-probe design). Per the framework being adopted, `plan.md` reflects the current change; the new plan supersedes it (old one stays in git history). No PR will be created unless asked.
 
-4. **Create generator probe** — `crosscheck/skills/assurance-probe/lib/hypothesis_probe.py`
-   - Static inspection of Hypothesis strategies
-   - Check if strategy can produce inputs in failure-condition region
-   - Report unreachable failure regions
-   - Phase 3 (deferred)
+## Package A — playbook as primary development framework
 
-5. **Create reproducer template** — `crosscheck/skills/assurance-probe/templates/reproducer.py.template`
-   - Standalone script that re-runs probe findings
-   - **Environment capture**: Template validates and captures:
-     - Git commit SHA (via `subprocess.check_output(['git', 'rev-parse', 'HEAD'])`)
-     - Python version (via `sys.version_info[:2]`; error if mismatch with current env)
-     - Top-level dependencies: `pytest`, `hypothesis` versions (via `importlib.metadata.version()`)
-     - OS/platform (via `platform.system()`; informational only)
-   - **Error on mismatch**: If commit SHA differs, emit: "Reproducer recorded on commit {recorded}, currently on {actual}. Findings may not reproduce." Exit code 2.
-   - Committed to adopter repo at `scripts/probe/<module>_<YYYYMMDD>.py`
-   - Ensures bit-identical results on same commit + same Python version + same dependencies
-   - Opt-in flag for in-tree placement vs issue-body-only
+### A1. Artefact chain (docs + templates)
+- `intent/README.md` + `intent/TEMPLATE.md` — template with the playbook's fields: problem statement, proposed outcome, affected users and systems, constraints, open questions.
+- `docs/assurance/DEVELOPMENT-FRAMEWORK.md` — the full flow: which artefact each stage commits (intent.md → spec.md → plan.md → diff+tests → PR+review findings → incident record/eval), which commit triggers the next stage, and where each Crosscheck skill sits (`/informal-spec`, `/draft-invariants`, `/audit-spec-coverage`, `/audit-invariant-consistency`, `/intent-check`, `/assurance-probe`, `/protected-surface-amend`, orchestrator agents). Under two pages.
+- Repo-root `plan.md` — replaced with the approved plan for this change (first dogfooded artefact).
+- `CLAUDE.md` — short addition pointing at the framework doc and the artefact convention.
 
-6. **Create tracker template** — `crosscheck/skills/assurance-probe/templates/probe-tracker.csv.template`
-   - Mirrors `.assurance/spec-adversary-log.csv` shape
-   - Tracks: `date, module, proposed, accepted, rejected, deferred, skipped` (added `skipped` column for unparseable invariants)
-   - SNR calculation for kill-criterion enforcement
-   - **Concurrency safety**: Mutation framework acquires file lock (`fcntl.flock` on Unix, `msvcrt.locking` on Windows) before appending row. Lock released after write. Timeout: 10s; if lock unavailable, emit warning and write to `.assurance/probe-tracker.csv.pending` for manual merge.
-   - **Atomic write**: Write to temp file, then rename (POSIX atomic) to avoid partial writes
+### A2. CI wiring (`.github/workflows/`)
+- `spec-audit.yml` — PR touching `**/spec.md` or `formal-verification/specs/**` → non-interactive `/audit-spec-coverage` + `/audit-invariant-consistency` via `anthropics/claude-code-action@v1`, reusing the skills' existing **orchestrator marker mode** (documented in `crosscheck/docs/orchestrator-coordination.md`) as the non-interactive path — no skill degraded; findings posted as a PR comment in the Package B message format. Requires `ANTHROPIC_API_KEY` secret; the workflow states this and fails with a clear message if absent.
+- `protected-surface-check.yml` — PR touching any protected path → non-interactive `/intent-check`; attestation JSON published as a check run (via `actions/github-script` check-run creation) with a Package-B-format summary.
+- `incident-eval-check.yml` — deterministic script (no model): on merged PRs whose body/commits reference an incident (`Fixes-Incident:` trailer or `incident` label), verify a matching eval exists under `evals/` and a candidate invariant under `docs/invariants/`; open/annotate a failing check otherwise.
+- `tier-gate.yml` — deterministic script implementing A3 below.
 
-7. **Create GitHub issue template** — `crosscheck/skills/assurance-probe/templates/issue.md.template`
-   - At most 3 findings per run
-   - Each finding: mutation diff, test command, observed result (`killed` | `survived` | `errored`)
-   - Accept/reject/defer triage block per finding
-   - Link to reproducer script
-   - **Zero-invariant handling**: If module has no invariant docs, issue not created; rotation summary notes "Module X: 0 invariants found; skipping probe."
+### A3. Tier-to-layer map
+- `docs/assurance/TIER-LAYER-MAP.md` — three tiers:
+  - **Tier 1 (routine)** — docs, tests, non-behavioural code: requires `intent.md` reference only.
+  - **Tier 2 (standard)** — behavioural code, skills' non-gate sections: requires committed `spec.md` (+ intent).
+  - **Tier 3 (critical/protected)** — protected surfaces, gate logic, hooks, CI enforcement, invariants: requires `plan.md`, an intent-check attestation, and a governance-note block where a protected surface changes.
+- `tier-gate.yml` reads the PR's declared tier (a `Tier: N` line in the PR body, or `tier:N` label), infers a floor from the diff (any protected path ⇒ at least Tier 3), and verifies the required artefacts exist on the branch. Failure message uses the Package B format. This document is Crosscheck's definition of the playbook's "regulated and critical code".
 
-8. **Update assurance hierarchy docs** — `crosscheck/docs/assurance-hierarchy.md`
-   - Add `/assurance-probe` to Layer 4 row in skill→layer mapping table
-   - **Experimental label**: Mark as "Layer 4 (Phase 1 – experimental; gates on SNR ≥ 1:3 over 20 runs)"
-   - Update "Getting started" section to mention probe in rotation workflow
-   - Add probe to "When to use what" decision tree
+### A4. Extend `assurance-init`
+Extend `crosscheck/skills/assurance-init/SKILL.md` (not a new sibling skill — its existing pre-flight collision table and ≤3-question flow absorb the additions without becoming unwieldy) to scaffold, in the same pass: `intent/` + template, `CLAUDE.md` additions, `REVIEW.md`, `.claude/settings.json` PreToolUse hook wiring + hook script, `evals/` + CI workflow stubs, and target-repo copies of DEVELOPMENT-FRAMEWORK.md and TIER-LAYER-MAP.md. Behavioural artefact ⇒ `feat(crosscheck)` commit.
 
-9. **Update crosscheck README** — `crosscheck/README.md`
-   - Add `/assurance-probe` to Layer 4 bullet in "What you can run right now"
-   - **Experimental label**: Suffix with "(Phase 1 – experimental)" until SNR ≥ 1:3 demonstrated
-   - Add to Skills overview section under "Assurance hierarchy & governance"
-   - Add worked example to "Worked examples" section
+### A5. Deterministic protected-surface hook
+- `.claude/rules/protected-surfaces.md` — created at repo root using assurance-init's own template, with a machine-readable path list protecting: `crosscheck/skills/*/SKILL.md`, `crosscheck/agents/*.md`, `docs/invariants/**`, `crosscheck/docs/invariants/**`, `docs/assurance/**`, `.claude/rules/**`, `.claude/hooks/**`, `evals/**`.
+- `.claude/hooks/protected-surface-guard.mjs` (Node, matching the repo's toolchain) + `.claude/settings.json` PreToolUse hook on `Edit|Write|NotebookEdit`: reads the tool-input JSON on stdin, matches the target path against the protected list, and blocks (exit 2) unless the working tree contains a `## Protected-Surface Amendment` governance-note block (under `.assurance/protected-surface-amend/` or `.assurance/add-session-*/`, as generated by `/protected-surface-amend`) naming that file. Block message on stderr in the exact Package B format; repo URL derived from `git remote get-url origin` at runtime, linking to the explainer path on the default branch.
 
-10. **Create demo script** — `crosscheck/demo/07_test_strength/SCRIPT.md`
-    - Demonstrate mutation probe on a real invariant
-    - Show killed/survived/errored verdicts
-    - Show reproducer script in action
-    - Timing budget: ~5 minutes
+### A6. `REVIEW.md`
+Repo-root `REVIEW.md`: four passes — bugs/logic, security, compliance against `spec.md` + `plan.md`, and the Crosscheck pass (does the diff touch a protected surface; does the declared tier match the diff). Important vs Nit definitions, "at most five nits per review; summarise the rest as a count", excluded paths (`crosscheck/mcp-server/dist/**`, lockfiles, generated changelogs, `CHANGELOG.md`).
 
-11. **Update byfuglien agent** — `crosscheck/agents/byfuglien.md`
-    - Add `/assurance-probe` to skill registry
-    - Add routing rule for "test strength", "mutation testing", "invariant probe" triggers
-    - **Rotation mechanics**: Probe is rotation-based, not per-PR. Triggered manually via byfuglien query ("run assurance probe on module X") or `/assurance-status` recommendation ("Last probe: 4 weeks ago; consider re-running"). Recommended frequency: every 2-4 weeks per active module (modules with ≥1 invariant doc added/modified in last 90 days).
-    - **Additive-only routing**: New routing rule appends to existing registry; no modification of `/spec-adversary`, `/assurance-init`, etc. routes. If skill is retired, routing rule can be deleted without side effects.
+## Package B — self-explanatory gates
 
-12. **Create reference documentation** — `crosscheck/skills/assurance-probe/references/phase-gating.md`
-    - Phase 1: mutation probe (Python-only)
-    - Phase 2: vacuity probe (gates on Phase 1 SNR ≥ 1:3)
-    - Phase 3: generator probe (gates on Phase 2 success)
-    - Kill criterion: SNR <1:5 over 4 weeks (minimum 20 probe runs) → retire for that module
+### Gate inventory (from exploration; full detail with file:line already gathered)
+`docs/gates/README.md` lists all of these; one explainer file each under `docs/gates/`:
 
-## Tests / properties to add
+| # | Gate (explainer file) | Delivery point to update |
+|---|---|---|
+| 1 | `informal-spec-sign-off.md` | `informal-spec/SKILL.md` sign-off prompt |
+| 2 | `draft-invariants-red-pen.md` | `draft-invariants/SKILL.md` §6 red-pen prompt |
+| 3 | `intent-check-kill-criterion.md` (30% FP trip) | `intent-check/SKILL.md` Step 0 refusal message |
+| 4 | `intent-check-verdict.md` (fail remediation) | `intent-check/SKILL.md` verdict summary |
+| 5 | `protected-surface-amendment.md` (PR-review verdict incl. REQUIRES HUMAN VERIFICATION markers) | `protected-surface-amend/SKILL.md` Step 7 PR-description template |
+| 6 | `protected-surface-roadmap-refusal.md` (no-roadmap-item hard refusal) | `protected-surface-amend/SKILL.md` refusal message |
+| 7 | `assurance-probe-triage.md` (accept/reject/defer) | `assurance-probe/SKILL.md` GitHub-issue template |
+| 8 | `audit-spec-coverage-triage.md` (4-path) | `audit-spec-coverage/SKILL.md` findings-file header |
+| 9 | `audit-invariant-consistency-triage.md` (4-path) | `audit-invariant-consistency/SKILL.md` findings-file header |
+| 10 | `spec-adversary-triage.md` | `spec-adversary/SKILL.md` findings block |
+| 11 | `assurance-init-prompts.md` (collision skip/overwrite/abort + Q1–Q3) | `assurance-init/SKILL.md` prompts |
+| 12 | `lowry-drift-packet.md` | `agents/lowry.md` drift-packet commit/report |
+| 13 | `orchestrator-batch-sign-off.md` | `agents/add-orchestrator.md` steps 4/9 prompts |
+| 14 | `auditor-verdicts.md` | `agents/auditor.md` report template |
+| 15 | `protected-surface-hook.md` (new, A5) | hook stderr message |
+| 16 | `tier-layer-gate.md` (new, A3) | `tier-gate.yml` failure output |
 
-- **Unit test for mutation parser** — `crosscheck/skills/assurance-probe/tests/test_mutations.py`
-  - Parse `Failure condition` clause from invariant doc
-  - **Correctness oracle**: Reference table with 5 examples:
-    ```python
-    [
-      ("x < 0", [("x", ">=", "0"), ("x", "==", "-1")]),  # boundary mutation + example violation
-      ("len(arr) > MAX_SIZE", [("len(arr)", "<=", "MAX_SIZE"), ("len(arr)", "==", "MAX_SIZE")]),
-      ("key not in cache", [("key", "in", "cache")]),
-      ("balance >= 100", [("balance", "<", "100"), ("balance", "==", "99")]),
-      ("state == READY", [("state", "!=", "READY"), ("state", "==", "PENDING")])
-    ]
-    ```
-  - Assert `parse_and_mutate(clause) == expected_mutations` for each entry
-  - Property: mutations are deterministic (same input → same mutations on repeated calls)
+Each explainer (written for a Crosscheck newcomer, < 2 pages, defines terms like oracle independence / protected surface / false-positive tracker on first use): what the gate protects and why, what you're deciding, what each option means and what happens next, typical decision time, who to ask.
 
-- **Unit test for vacuity detector** — `crosscheck/skills/assurance-probe/tests/test_vacuity.py`
-  - Coverage delta computation
-  - Property: deleting test and restoring leaves repo unchanged (Git worktree ensures no dirty state)
+### Message format (verbatim shape, added at every delivery point)
+> **Action needed: [imperative, under ten words]**
+> You are being asked to [decision] because [reason]. Approving means [consequence]; declining means [consequence]. Full explanation: [link].
 
-- **Integration test for reproducer** — `crosscheck/skills/assurance-probe/tests/test_reproducer.py`
-  - **Positive case**: Run reproducer script twice on same commit, assert bit-identical output (exit code, stdout, stderr)
-  - **Negative case**: Mutate source file (introduce mutation), run reproducer, assert output differs (mutation survived → mutation killed, or vice versa). Then revert mutation, assert original output restored.
-  - Property: reproducer is truly deterministic on same commit + environment
+Three sentences plus link; links point to `docs/gates/<file>.md` on the default branch, repo URL derived from the git remote (skills instruct the agent to run `git remote get-url origin`; the hook and CI scripts do it in code). SKILL.md edits change *presentation templates only* — no verification logic, thresholds or kill criteria touched.
 
-- **E2E test for probe workflow** — `crosscheck/skills/assurance-probe/tests/test_e2e.py`
-  - **Real executable code**: Scaffold adopter repo with:
-    - `src/validator.py`: function `validate_input(x: int) -> bool: return x >= 0`
-    - `invariants/validator.md`: Failure condition "`x < 0`"
-    - `tests/test_validator.py`: Hypothesis test with `integers()` strategy
-  - **Real killable mutation**: Mutate `x >= 0` to `x > 0` (off-by-one; test should kill if strategy includes `x=0`)
-  - Run probe, verify issue output (1 finding: mutation survived or killed depending on strategy)
-  - Verify tracker CSV update (1 row appended, columns match schema)
-  - Property: ≤3 findings per run (test with 5 invariants in `invariants/`, assert output has ≤3)
-  - **Zero-invariant fixture**: Add test case with empty `invariants/` directory; assert no issue created, tracker shows `proposed=0, skipped=0`
+### Self-referential governance
+After A5 lands, `SKILL.md`/`agents/*.md` become protected surfaces — so the Package B edits to them follow `/protected-surface-amend`'s own process: generate the governance-note block into `.assurance/protected-surface-amend/` in the same commits (which also keeps the new hook from blocking the work), for later inclusion in any PR description.
 
-## Verification approach
+## Orchestration (per user instruction: Workflow with opus/sonnet/haiku, conserve orchestrator context)
 
-### Formal verification (Layer 1)
-Not applicable for this skill — the skill orchestrates test execution and mutation, not pure business logic.
+- **Stage 1 (Workflow "package-a-core")** — parallel authoring: **opus** agents for the judgment-heavy prose (DEVELOPMENT-FRAMEWORK.md, TIER-LAYER-MAP.md, REVIEW.md, protected-surfaces.md, assurance-init extension); **sonnet** agents for code (hook script + settings.json, four CI workflows, intent template + CLAUDE.md addition). Each agent returns file contents; I write files and run local verification.
+- **Stage 2 (Workflow "package-b-gates")** — pipeline over the 16 gates: **sonnet** writes each explainer from the inventory's file:line detail (haiku is tempting for these but they need careful plain-language accuracy; **haiku** is used for the mechanical link/format/British-spelling lint pass instead), then **sonnet** edits each emitting SKILL.md/agent template (surgical, presentation-only), then a **haiku** format-compliance check per gate (exact message shape, ≤3 sentences, link path valid) and an **opus** adversarial constraint check across the whole diff (no gate weakened, no semantics changed, page limits).
+- **Stage 3** — I verify locally (hook simulation via `echo '<json>' | node .claude/hooks/protected-surface-guard.mjs`, YAML parse of workflows, commitlint dry-run), fix residuals, and commit in conventional-commit slices: `feat(crosscheck)` for behavioural artefacts, `ci:`/`docs:`/`chore:` for the rest; then push with `git push -u origin claude/multi-model-orchestration-w7qhni`.
 
-### Deterministic verification (Layer 4)
-1. **Mutation determinism proof**: Given the same `Failure condition` clause, the mutation generator must produce the same set of mutations every time. Test via property-based tests with Hypothesis:
-   - `∀ clause: parse(clause) == parse(clause)`
-   - `∀ (clause, seed): mutations(clause, seed) == mutations(clause, seed)`
+## Verification
 
-2. **Reproducer bit-identical property**: The reproducer script must produce identical output on the same commit + Python version + dependencies:
-   - Run script twice on commit `C` with Python `P` and deps `D`
-   - Assert `output_1 == output_2` (exit code, stdout, stderr)
-   - Formalized as a pytest parametrized test over 5 real invariant docs
-   - **Environment locked**: Git SHA, Python `major.minor`, pytest version, hypothesis version. OS/platform informational only (not enforced, but logged).
-
-3. **Bounded output enforcement**: The skill must never emit >3 findings per run:
-   - Property test: `∀ (module, invariants): len(probe(module, invariants).findings) ≤ 3`
-   - Test with modules having 5, 10, 20 invariants
-
-4. **Tracker integrity**: Each probe run must append exactly one row to `.assurance/probe-tracker.csv`:
-   - Before: `wc -l tracker.csv` → N
-   - After: `wc -l tracker.csv` → N+1
-   - **Atomic write + backup**: Before write, copy tracker to `.assurance/probe-tracker.csv.backup`. Write to `.assurance/probe-tracker.csv.tmp`, then rename. If rename fails, restore from backup with error message.
-   - Checksum validation: SHA256 of rows 1..N unchanged (backup serves as checksum source)
-
-### Semi-formal verification (Layer 5)
-Use `/reason` to verify the probe's output on a demo invariant from `demo/07_test_strength/`:
-- Does the mutation probe correctly identify a vacuous test?
-- Does the reproducer script accurately capture the mutation?
-- Does the SNR calculation correctly track findings over time?
-
-Produce an evidence log (similar to `/rationale` output) showing:
-- Mutation is derived from `Failure condition` clause (AST node match)
-- Test execution verdict matches expected behavior (killed/survived/errored)
-- Reproducer script matches committed artifact
-
-## Risk register
-
-- **Risk**: Mutation framework generates non-deterministic mutations due to Python's dict iteration order
-  - **Mitigation**: Sort mutations by a canonical key (e.g., line number + mutation type) before returning
-
-- **Risk**: Probe runs take >5 minutes on large modules, blocking rotation workflow
-  - **Mitigation**: Hard timeout at 5 minutes per module; emit partial results with warning; add to kill criteria
-
-- **Risk**: Vacuity probe deletes test but fails to restore, leaving repo in dirty state
-  - **Mitigation**: Use Git worktree or copy; never modify working directory directly. Property test: restore always succeeds.
-
-- **Risk**: Reproducer script committed to repo clutters `scripts/probe/` with stale artifacts
-  - **Mitigation**: Document cleanup policy in skill instructions (e.g., delete reproducers >90 days old). Add `.gitignore` entry for `scripts/probe/` in template.
-
-- **Risk**: SNR <1:5 kill criterion triggers prematurely on new adopters (small sample size)
-  - **Mitigation**: Require minimum 20 probe runs before SNR is enforceable; document in phase-gating.md
-
-- **Risk**: Phase-gating creates confusion (users try to run Phase 2/3 before Phase 1 succeeds)
-  - **Mitigation**: Skill checks `.assurance/probe-tracker.csv` SNR before allowing Phase 2. Emit clear error with SNR value.
-
-- **Risk**: Probe output conflicts with `/spec-adversary` output (both propose changes to same invariant)
-  - **Mitigation**: Probe does NOT propose new invariants; it only tests strength of existing ones. Document clear boundary.
-
-- **Risk**: Mutation parser fails on complex `Failure condition` clauses (nested conditions, multi-line)
-  - **Mitigation**: Phase 1 supports simple conditions only (single predicate). Complex conditions emit "unsupported" warning and skip. Reference table in tests defines supported grammar.
-
-- **Risk**: Generator probe (Phase 3) reports false positives on Hypothesis strategies with complex dependencies
-  - **Mitigation**: Phase 3 deferred until Phase 1/2 demonstrate value. Require human review on all generator findings.
-
-- **Risk (Phase 1 limitation)**: Mutation soundness — generated mutations may not be reachable by the covering test's input generator
-  - **Rationale**: Full reachability analysis requires symbolic execution or constraint solving (out of scope for Phase 1). Phase 1 constraint "mutation targets AST node in Failure condition" ensures syntactic alignment but not semantic reachability.
-  - **Mitigation**: Document as known limitation in `references/phase-gating.md`. Phase 3 generator probe (Hypothesis strategy inspection) will partially mitigate by flagging unreachable failure regions. Accept false negatives (mutations that survive due to generator gaps, not test weaknesses) as inherent to deterministic mutation testing.
-  - **Acceptance criterion**: SNR ≥ 1:3 (signal-to-noise) indicates practical value despite false negatives. If SNR <1:5 over 20 runs, kill criterion triggers.
-
-- **Risk**: Reproducer environment mismatch causes spurious "cannot reproduce" reports
-  - **Mitigation**: Step 5 template validates Git SHA, Python `major.minor`, pytest version, hypothesis version. Emit clear error with actual vs. expected values on mismatch. Document required environment lockdown in `SKILL.md` and demo script.
+- **Hook**: simulate PreToolUse JSON for (a) a protected path without a governance block → exit 2 with correctly-formatted message and working link path; (b) same path with block present → allowed; (c) unprotected path → allowed.
+- **CI**: `node -e` YAML parse of each workflow; run the deterministic tier-gate and incident-eval scripts locally against fixture inputs (missing artefact → fail with Package B message; present → pass).
+- **Messages**: haiku lint pass asserts every gate message matches the exact shape and its link target exists in `docs/gates/`.
+- **Acceptance walkthrough**: trace a hypothetical change intent→PR using only DEVELOPMENT-FRAMEWORK.md; confirm `docs/gates/README.md` covers all 16 gates with explainer + updated delivery point; confirm each doc ≤ 2 pages and British spelling (haiku pass).
+- Existing checks: `npx commitlint` on commit messages; repo tests untouched (no mcp-server code changes) but `npm test` in `crosscheck/mcp-server` run once as a regression guard.

@@ -79,6 +79,16 @@ Conventional commits enforced via commitlint + husky.
 - `refactor(crosscheck): extract shared helper in mcp-server` — non-behavioral structural change outside `SKILL.md`/`agents/*.md`
 - `docs(crosscheck): update README installation steps` — actual documentation (not a behavioral artifact)
 
+## Development framework
+
+Every change to this repository starts as `intent/<slug>.md` — problem statement, proposed outcome, affected users and systems, constraints, open questions. Behavioural changes gain a committed `spec.md`, and anything touching a protected surface gains a `plan.md` too, before implementation begins. Do not open a PR whose stage artefacts do not exist.
+
+- `docs/assurance/DEVELOPMENT-FRAMEWORK.md` — the artefact chain (intent → spec → plan → diff + tests → PR → incident record + eval), which commit or event triggers each stage, and where each Crosscheck skill and agent sits in it.
+- `docs/assurance/TIER-LAYER-MAP.md` — the three change tiers and the artefacts each one requires. PRs declare their tier in the body.
+- `REVIEW.md` — the review passes (bugs and logic, security, compliance with spec and plan) and the Important/Nit severity rules.
+
+Protected surfaces (`SKILL.md`, `agents/*.md`, invariant docs, `docs/assurance/**`, `.claude/rules/**`, `.claude/hooks/**`, `evals/**`) are guarded by a PreToolUse hook in `.claude/hooks/`: it blocks the edit unless a `/crosscheck:protected-surface-amend` governance note naming the file is present in the working tree.
+
 ## Dafny limitations to keep in mind
 
 - No IO/networking verification — requires `{:extern}` trust boundaries
