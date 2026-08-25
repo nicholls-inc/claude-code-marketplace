@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.6.0...crosscheck-v2.7.0) (2026-08-25)
+
+
+### Features
+
+* **crosscheck:** add self-explanatory gate messages and playbook scaffolding to skills and agents ([#246](https://github.com/nicholls-inc/claude-code-marketplace/issues/246)) ([8945d63](https://github.com/nicholls-inc/claude-code-marketplace/commit/8945d63132644e37e3b8f93e78518f243b6ca19e))
+
 ## [2.6.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/crosscheck-v2.5.1...crosscheck-v2.6.0) (2026-06-01)
 
 
