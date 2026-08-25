@@ -55,6 +55,11 @@ Compute the rolling false-positive rate over the last `window` days of entries (
 - If the window has fewer than 3 classified rows, treat the rate as unknown and proceed with a warning.
 - If the FP rate **> `tripped`**, refuse to run. Tell the user:
 
+  First, derive the repository URL by running `git remote get-url origin` and normalising it to `https://github.com/<owner>/<repo>` (handle both `git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)` forms); if no remote is configured, fall back to the bare relative path `docs/gates/intent-check-kill-criterion.md` instead of a full URL. Then open the refusal with the gate message, followed by the existing explanation:
+
+  > **Action needed: Review the intent-check false-positive tracker**
+  > You are being asked to recalibrate or retire the `/intent-check` round-trip pipeline because its rolling false-positive rate has crossed the kill criterion. Approving (recalibrating) means fixing the prompts or model and letting new classified rows bring the rate back down; declining (retiring) means this check stops gating commits until it is replaced. Full explanation: `<repo-url-or-path>/blob/main/docs/gates/intent-check-kill-criterion.md`.
+  >
   > The Layer-5 round-trip pipeline's rolling false-positive rate is `<rate>%` over the last `<window>` days (threshold: `<tripped>%`, default 30%). The kill criterion in the assurance hierarchy says this layer's strategy needs rework before it keeps gating commits. Do not re-enable until (a) the prompt or model is revised, or (b) human review has reclassified enough entries to drop the rate below the threshold. See `references/fp-tracker-schema.md` for the exact computation and the Configuration section above for the threshold env vars.
 
   Stop. Do not proceed to Step 1.
@@ -178,7 +183,10 @@ Report the written draft path. The user reviews and applies via `/protected-surf
 
 ### Step 8: Report
 
-Present a single summary block to the user:
+Present a single summary block to the user. If `phase_verdict` is `fail`, first derive the repository URL by running `git remote get-url origin` and normalising it to `https://github.com/<owner>/<repo>` (handle both `git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)` forms); if no remote is configured, fall back to the bare relative path `docs/gates/intent-check-verdict.md` instead of a full URL. Then open the summary with the gate message before the block:
+
+> **Action needed: Choose a fix for the failed intent check**
+> You are being asked to fix the code, fix the test, or amend the invariant because `/intent-check` found a mismatch between them. Approving a code or test fix means resubmitting for a fresh check; choosing to amend the invariant means routing through `/protected-surface-amend` with a governance note. Full explanation: `<repo-url-or-path>/blob/main/docs/gates/intent-check-verdict.md`.
 
 ```
 ## /intent-check verdict: <pass|fail>

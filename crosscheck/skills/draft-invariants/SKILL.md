@@ -308,8 +308,19 @@ queue."
 
 ### 6. Red-pen loop
 
-Present invariants, gap analysis, and scope section to the user as prose.
-Do NOT generate tests yet. Wait for the user to:
+Before presenting the invariants, gap analysis, and scope section, emit the
+gate message below (derive `<repo-url>` from `git remote get-url origin`,
+handling both `git@github.com:owner/repo.git` and
+`https://github.com/owner/repo(.git)` forms, and build
+`https://github.com/<owner>/<repo>/blob/main/docs/gates/draft-invariants-red-pen.md`;
+if no remote is configured, fall back to the bare path
+`docs/gates/draft-invariants-red-pen.md`):
+
+> **Action needed: Review these invariants before tests are generated**
+> You are being asked to strike, reword, or add invariants, then sign off, because generated property tests will encode whatever is approved here. Approving ("ship it") means property tests are generated from exactly this list; declining or requesting changes means the invariants are revised and re-presented with no tests generated yet. Full explanation: [<repo-url> or the fallback path].
+
+Then present invariants, gap analysis, and scope section to the user as
+prose. Do NOT generate tests yet. Wait for the user to:
 - Strike invariants they disagree with
 - Reword unclear statements
 - Add failure anchors you missed

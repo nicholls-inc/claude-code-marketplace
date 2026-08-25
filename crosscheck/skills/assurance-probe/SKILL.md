@@ -71,8 +71,12 @@ Where `<module>` is a Python module with:
 
 ## Output format
 
-**GitHub issue** (created only if ≥1 finding):
+**GitHub issue** (created only if ≥1 finding). Before rendering the template below, derive the repo URL by running `git remote get-url origin` (handle both `git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)` forms) and build the link as `https://github.com/<owner>/<repo>/blob/main/docs/gates/assurance-probe-triage.md`; if no remote is configured, fall back to the bare path `docs/gates/assurance-probe-triage.md`. Open the issue body with this gate message, then the rest of the template:
+
 ```markdown
+> **Action needed: Triage this test-strength finding**
+> You are being asked to Accept, Reject, or Defer each finding below because an automated mutation/vacuity/generator probe cannot tell a genuine test weakness from a false alarm on its own. Accepting means the test or invariant gets fixed as follow-up work; rejecting or deferring means the finding is recorded as noise (or held for a later probe) with no code change. Full explanation: <derived link>.
+
 # Test strength findings for `<module>`
 
 **Probe run**: <YYYY-MM-DD HH:MM UTC>  
