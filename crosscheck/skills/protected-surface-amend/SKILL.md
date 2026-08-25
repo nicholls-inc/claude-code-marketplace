@@ -110,8 +110,11 @@ Outcomes:
 
 - **Single clear match** — record as the governing item.
 - **Multiple plausible matches** — orchestrator-marker / agent mode: emit `REQUIRES HUMAN VERIFICATION: Multiple roadmap items match. Reviewer must select one.` with the candidates listed. Interactive mode: ask the user.
-- **No match** — stop in all modes. Emit:
-  > No existing roadmap item covers this change. Protected-surface edits are not authorised outside a tracked roadmap item. Options: (a) open a new roadmap item under the appropriate horizon (see `docs/assurance/ROADMAP.md`), then re-run; (b) confirm this is a corrective amendment to an already-landed item and cite that item explicitly; (c) abandon the change.
+- **No match** — stop in all modes. Derive the repo URL by parsing `git remote get-url origin` (handle both `git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)` forms) and emit, with the link built as `https://github.com/<owner>/<repo>/blob/main/docs/gates/protected-surface-roadmap-refusal.md` (fall back to the bare path `docs/gates/protected-surface-roadmap-refusal.md` if no remote is configured):
+  > **Action needed: Supply a governing roadmap item**
+  > You are being asked to resolve a missing roadmap reference because protected-surface edits are not authorised outside a tracked roadmap item. Approving (opening or citing an item) means drafting can continue; declining (abandoning the change) means this edit does not proceed. Full explanation: <derived link>.
+  >
+  > No existing roadmap item covers this change. Options: (a) open a new roadmap item under the appropriate horizon (see `docs/assurance/ROADMAP.md`), then re-run; (b) confirm this is a corrective amendment to an already-landed item and cite that item explicitly; (c) abandon the change.
 
 The "no roadmap item" stop is unconditional: it is not relaxed in agent mode. The whole point of this skill is to refuse synthetic governance.
 
@@ -131,7 +134,12 @@ The authoriser is the human accountable for the amendment — usually the PR aut
 
 Produce the following pasteable markdown block. Every field must be filled from Steps 2–6, with `REQUIRES HUMAN VERIFICATION:` markers where draft confidence is low. Do not leave `<placeholder>` text in the output — if a field genuinely cannot be drafted, that is an error and the skill should have stopped earlier.
 
+Before the block itself, derive the repo URL by parsing `git remote get-url origin` (handle both `git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)` forms) and prepend the gate message below, with the link built as `https://github.com/<owner>/<repo>/blob/main/docs/gates/protected-surface-amendment.md` (fall back to the bare path `docs/gates/protected-surface-amendment.md` if no remote is configured):
+
 ```markdown
+> **Action needed: Resolve markers and checklist before merging**
+> You are being asked to verify this governance-note block as PR reviewer because the edit touches a protected surface. Approving means the protected-surface edit merges as governed and traceable; declining means the author must resolve every `REQUIRES HUMAN VERIFICATION:` marker and Review Checklist item first. Full explanation: <derived link>.
+
 ## Protected-Surface Amendment
 
 **Target file(s):** <primary path> (+ N others, see Diff Plan)

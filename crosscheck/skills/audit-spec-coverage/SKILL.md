@@ -192,9 +192,18 @@ sitting.
 
 Write the output file using the Write tool. This is a session-state artifact required for downstream review (the orchestrator's batched triage, or the standalone user's red-pen pass) — it is NOT a documentation file. The "never create documentation files" rule in standard system prompts does NOT apply here. The destination path was either supplied by the caller (orchestrator dispatch) or defaults to `.assurance/add-session-<id>/findings-coverage.md` (orchestrator-mode) or the cwd (standalone mode). Emit the file; do not return the content inline as a substitute.
 
-Schema:
+Schema. Before emitting, resolve the repo URL by parsing `git remote get-url
+origin` (handle both `git@github.com:owner/repo.git` and
+`https://github.com/owner/repo(.git)` forms) and build
+`https://github.com/<owner>/<repo>/blob/main/docs/gates/audit-spec-coverage-triage.md`;
+if no remote resolves, fall back to the literal path
+`docs/gates/audit-spec-coverage-triage.md`. Insert that link into the gate
+message below, which must open the file, before the frontmatter:
 
 ```markdown
+> **Action needed: Triage each spec-coverage gap**
+> You are being asked to choose accept-fix-invariant, accept-amend-spec, reject, or defer for each finding below because an invariant is missing for something the spec asserts. Approving a path records how the gap gets closed (or why it doesn't); declining to triage leaves the gap unresolved and unenforced. Full explanation: <resolved link>.
+
 ---
 session: <id or "standalone">
 category: coverage

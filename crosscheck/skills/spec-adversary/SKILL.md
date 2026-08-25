@@ -164,6 +164,18 @@ total_proposals: <n>
 ---
 ```
 
+Begin the findings file body (immediately after the frontmatter) with the
+gate message below, in blockquote form. Determine the link by running
+`git remote get-url origin` (handling both `git@github.com:owner/repo.git`
+and `https://github.com/owner/repo(.git)` forms) and appending
+`/blob/main/docs/gates/spec-adversary-triage.md`; if there is no origin
+remote, fall back to the bare path `docs/gates/spec-adversary-triage.md`.
+
+```
+> **Action needed: triage the spec-adversary proposals below**
+> You are being asked to accept, reject, or defer each proposed invariant because it is not yet part of the ratified spec. Accepting queues it for promotion via `/protected-surface-amend` in a separate PR; rejecting or deferring leaves the spec unchanged for now. Full explanation: [link].
+```
+
 For each proposal, produce this exact shape inside the file. The
 radio-button block is load-bearing — humans fill it in during review.
 

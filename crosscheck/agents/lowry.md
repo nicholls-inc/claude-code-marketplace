@@ -179,7 +179,16 @@ or weaken its check), `lowry`:
 2. **Emits a drift packet** — a staged `governance-amendment` commit with
    `amendment-kind: drift` and a justification answering the canonical
    question: *"did we want this behaviour, or did the implementation drift?"* —
-   and routes it to the D4 batch for human decision.
+   and routes it to the D4 batch for human decision. The packet's report and
+   commit body begin with the gate message, derived at emission time by
+   running `git remote get-url origin` (handling both
+   `git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)`
+   forms) to build `https://github.com/<owner>/<repo>/blob/main/docs/gates/lowry-drift-packet.md`,
+   falling back to the bare path `docs/gates/lowry-drift-packet.md` if no
+   remote is configured:
+
+   > **Action needed: resolve the staged drift packet**
+   > You are being asked to accept this governance amendment or send the implementation back because reaching green would otherwise require weakening invariant `I`. Approving means the invariant changes and the loop resumes against the amended contract; declining means the amendment is discarded and the implementation is reworked to satisfy `I` as written. Full explanation: [link].
 3. **Does not stall silently.** Stopping without emitting the drift packet is
    itself a failure. The only legal terminal states are *green-without-weakening*
    or *stopped-with-a-drift-packet*.

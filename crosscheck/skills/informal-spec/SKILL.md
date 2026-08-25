@@ -172,7 +172,12 @@ Do not write any Lean code into this file. Do not write any test code into this 
 
 ### Step 7: Sign-Off Gate (HARD STOP)
 
-Once the file is written, present a summary to the user and **stop**. Do not invoke `/lean-spec`. Do not propose Lean translations. Do not pre-emptively answer ambiguities. The sign-off prompt is verbatim:
+Once the file is written, present a summary to the user and **stop**. Do not invoke `/lean-spec`. Do not propose Lean translations. Do not pre-emptively answer ambiguities. The sign-off prompt begins with the gate message below, then continues verbatim:
+
+Derive the repository URL by running `git remote get-url origin` and normalising it to `https://github.com/<owner>/<repo>` (handle both `git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)` forms); if no remote is configured, fall back to the bare path `docs/gates/informal-spec-sign-off.md`. Build the link as `<repo-url>/blob/main/docs/gates/informal-spec-sign-off.md`.
+
+> **Action needed: sign off this specification**
+> You are being asked to review and sign off the informal spec for `<module>` because everything downstream in the formal-verification pipeline builds on it being correct. Approving means `/lean-spec` runs next and turns this prose into a formal model; declining (`revise` or `abandon`) means the pipeline stops here until you're satisfied or you drop the module. Full explanation: [link].
 
 > The informal spec for `<module>` is written to `formal-verification/specs/<module>_informal.md`. It contains `<n>` preconditions, `<n>` postconditions, `<n>` invariants, `<n>` edge cases, `<n>` worked examples, and `<n>` open ambiguities. Before `/lean-spec` runs, please review the spec end-to-end and confirm: (1) the preconditions/postconditions/invariants are complete and correctly stated, (2) the edge cases enumerate every boundary you care about, (3) every ambiguity in the Ambiguities section has been resolved (either by editing the spec directly or by replying here). Reply `signed off` to release the spec to `/lean-spec`, `revise` with notes for me to incorporate, or `abandon` to drop the module from the pipeline.
 

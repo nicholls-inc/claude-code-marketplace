@@ -7,6 +7,9 @@ description: >-
   directories, .claude/rules/protected-surfaces.md (two-class partition), and
   skeleton docs/invariants/ docs for 1-3 user-chosen modules. Asks dual-track
   enforcement questions (pre-commit framework, CI system, seed modules) as it goes.
+  Also lays down the playbook artefact chain: intent/, REVIEW.md, a CLAUDE.md
+  development-framework section, docs/assurance/DEVELOPMENT-FRAMEWORK.md +
+  TIER-LAYER-MAP.md, evals/, and the PreToolUse protected-surface hook.
   Creates exactly what /assurance-status Phase 1 checks for. Triggers: "assurance
   init", "onboard to assurance hierarchy", "scaffold assurance", "bootstrap
   governance".
@@ -18,6 +21,8 @@ argument-hint: "[optional: comma-separated seed module names]"
 ## Description
 
 Interactive bootstrap for onboarding a repository to the 6-layer assurance hierarchy. Scaffolds a strategic ROADMAP with horizon directories, a protected-surfaces policy partitioning harness config from module invariants, and skeleton invariant docs for 1–3 seed modules. Asks dual-track enforcement questions (pre-commit framework, CI system) and emits hook/CI stubs to match.
+
+The same pass also scaffolds the playbook side of the framework — the artefact chain (`intent/`), the review protocol (`REVIEW.md`), the framework and tier docs under `docs/assurance/`, the eval suite (`evals/`), and the deterministic PreToolUse hook that guards protected surfaces — so a freshly onboarded repo has both the layers it protects and the process that carries a change through them (Steps 6.7 and 7.5).
 
 The artifacts created here are exactly what `/assurance-status` Phase 1 checks for — the two skills are tightly coupled. The real invariant ↔ test coverage gate is installed afterwards by `/invariant-coverage-scaffold`; this skill only prepares the ground.
 
@@ -40,7 +45,22 @@ Before asking anything, orient yourself:
    - `docs/invariants/<module>.md` for each module candidate (from `$ARGUMENTS` if supplied, otherwise deferred until Step 2)
    - `.pre-commit-config.yaml`, `lefthook.yml`, `.husky/pre-commit-assurance-placeholder`
    - `.github/workflows/assurance.yml`, `.gitlab-ci.yml`, `.circleci/config.yml`
-   If the set is non-empty, list the colliding paths to the user and ask: "These files already exist and would be modified or overwritten. Skip (keep existing), overwrite, or abort? (skip/overwrite/abort)". Default to `skip` on ambiguous answers. Record the decision and honour it in every write step below: when the decision is `skip`, leave the existing file untouched and note the skip in the Step 8 summary; when `overwrite`, replace the file; `abort` exits immediately with no writes.
+   - `intent/README.md`, `intent/TEMPLATE.md` (Step 6.7)
+   - `REVIEW.md` (Step 6.7)
+   - `docs/assurance/DEVELOPMENT-FRAMEWORK.md`, `docs/assurance/TIER-LAYER-MAP.md` (Step 6.7)
+   - `evals/README.md` (Step 6.7)
+   - `CLAUDE.md` (Step 6.7 appends a "Development framework" section)
+   - `.claude/settings.json` (Step 7.5 appends a `PreToolUse` hook entry), `.claude/hooks/protected-surface-guard.mjs` (Step 7.5)
+   - `.github/workflows/incident-eval-check.yml`, `scripts/ci/incident-eval-check.mjs` (Step 7.5)
+
+   The two **merge targets** — `CLAUDE.md` and `.claude/settings.json` — count as collisions only when they already contain the section or the hook entry this skill would add; where they exist without it, the write is a pure append and proceeds under the normal rules (existing content is never rewritten). Every other path above behaves exactly like the original list.
+
+   If the set is non-empty, list the colliding paths to the user and present the gate message below. Derive the link by running `git remote get-url origin` (handling both `git@host:owner/repo.git` and `https://host/owner/repo(.git)` forms) and appending `/blob/main/docs/gates/assurance-init-prompts.md`; fall back to the bare path `docs/gates/assurance-init-prompts.md` if no remote is configured.
+
+   > **Action needed: choose how to handle existing files**
+   > You are being asked to decide skip, overwrite, or abort for each colliding path because scaffolding would otherwise modify or overwrite files that already exist. Skipping or aborting keeps every existing file untouched (abort ends the run with no writes at all); overwriting replaces the file with the generated version and discards its current content. Full explanation: [link].
+
+   Then ask: "These files already exist and would be modified or overwritten. Skip (keep existing), overwrite, or abort? (skip/overwrite/abort)". Default to `skip` on ambiguous answers. Record the decision and honour it in every write step below: when the decision is `skip`, leave the existing file untouched and note the skip in the Step 8 summary; when `overwrite`, replace the file; `abort` exits immediately with no writes.
 4. **Consume `/assurance-layer-audit` result if present.** Look for `.assurance/layer-audit-result.json` (see `crosscheck/docs/orchestrator-coordination.md` §2 on findings-as-artifacts). If found and `schema_version == 1`, parse it and bind the following:
    - `tooling.pre_commit_framework` → answers Step 2 Q1.
    - `tooling.ci_system` → answers Step 2 Q2.
@@ -53,6 +73,8 @@ Before asking anything, orient yourself:
    Do **not** gate the skill on running the audit. Skipping is a supported path; the audit is an upstream enrichment, not a prerequisite.
 
 ### Step 2: Gather Dual-Track Enforcement Answers
+
+See `docs/gates/assurance-init-prompts.md` (linked from the repository, per the derivation rule above) for a full explanation of what Q1–Q3 below ask and why.
 
 Three answers are needed: pre-commit framework, CI system, and seed modules. Pre-fill from the layer-audit JSON (Step 1.4) and from Step 1's own detection where possible; ask only for fields that cannot be inferred.
 
@@ -313,6 +335,31 @@ This summary is initial-onboarding metadata. It records the baseline assessment 
 
 **Protected-surface partition declaration.** `docs/invariants/*.md` is Class B per `.claude/rules/protected-surfaces.md`. The standard amendment-via-`/protected-surface-amend` discipline applies to *modifications of existing governance artefacts*. Writes performed in this step are part of *initial onboarding* (the artefact is being created, not amended), so they are exempt from the amendment-block requirement. **Subsequent runs** of `/assurance-init` cannot reach this step — Step 1.2 exits early when `docs/assurance/ROADMAP.md` already exists — so the exemption is naturally bounded to the first-onboarding case. Do not extend this exemption to other write paths or skills; updates to the prereq summary after onboarding are governance amendments and require `/protected-surface-amend`.
 
+### Step 6.7: Lay Down the Playbook Artefact Chain
+
+The layers scaffolded above govern *what* the repo protects. This step scaffolds *how* a change moves through the repo: the artefact chain (intent → spec → plan → diff + tests → PR → incident record + eval), the review protocol, and the tier map. Ask no new questions — every file here is written from the answers already collected, honouring the Step 1.3 skip/overwrite/abort decision per path.
+
+**Canonical sources.** Crosscheck dogfoods all of these files at its own repo root. Where the Crosscheck source checkout is reachable, **copy the canonical file rather than retyping it**, then generalise: strip Crosscheck-specific examples (Dafny/Lean containers, `crosscheck/` paths, named skills the target repo does not have) and substitute the target repo's own equivalents. Where it is not reachable, write the file from the concise contract given below. Canonical paths, relative to the Crosscheck repo root: `intent/README.md`, `intent/TEMPLATE.md`, `REVIEW.md`, `evals/README.md`, `docs/assurance/DEVELOPMENT-FRAMEWORK.md`, `docs/assurance/TIER-LAYER-MAP.md`.
+
+Keep every generated document **under two pages** (~800 words). Stale context costs more than it earns.
+
+**6.7a — `intent/`.** Write `intent/README.md` (what an intent file is; the naming convention `intent/<yyyy-mm-dd>-<slug>.md`; the rule that a change of any size starts as an intent file and gains a `spec.md` then a `plan.md` before implementation; a pointer to `docs/assurance/DEVELOPMENT-FRAMEWORK.md`) and `intent/TEMPLATE.md` with exactly these five headings, each with one line of guidance: **Problem statement**, **Proposed outcome**, **Affected users and systems**, **Constraints**, **Open questions**.
+
+**6.7b — `CLAUDE.md` "Development framework" section.** Append a section (never rewrite the file) stating that every change starts as `intent/<slug>.md`; that behavioural changes gain a committed `spec.md` and protected-surface changes a `plan.md` before implementation; and linking `docs/assurance/DEVELOPMENT-FRAMEWORK.md`, `docs/assurance/TIER-LAYER-MAP.md`, and `REVIEW.md` with one line each. Close with one line naming the protected surfaces and the PreToolUse hook from Step 7.5. If the target repo has no `CLAUDE.md`, create it with this section alone.
+
+**6.7c — `REVIEW.md`.** Four passes, in order, each its own section:
+
+- **(a) bugs and logic** — defects that make the code do the wrong thing; every finding must state a concrete failure scenario (inputs or state in, wrong output or crash out).
+- **(b) security** — authorisation gaps, injection paths, unsafe deserialisation, committed or logged secrets, over-broad access, any weakening of a sandbox.
+- **(c) compliance against `spec.md` and `plan.md`** — does the diff do what the spec says and only that; is the plan's order of work and proof strategy still being followed. Undocumented scope is an Important finding; concerns the spec explicitly flagged as open are not findings.
+- **(d) Crosscheck pass** — two questions answered explicitly: does any changed path match `.claude/rules/protected-surfaces.md` (if so the PR must carry the `## Protected-Surface Amendment` block naming that file, with every `REQUIRES HUMAN VERIFICATION` marker resolved before approval); and does the declared tier match the diff per `docs/assurance/TIER-LAYER-MAP.md` (a tier declared below the forced floor is always Important).
+
+Then: **Important vs Nit** (Important = wrong, unsafe, or undocumented in a way that matters after merge, and blocks approval unless the author records an accepted reason in the PR; Nit = style or preference, never blocking); the **five-nit cap** — report at most five nits per review and summarise the remainder as a count, with a note that the cap is not a licence to promote nits to Important; and **excluded paths** — a fenced list of the target repo's generated and vendored paths (build/`dist` output, lockfiles, tool-generated changelogs, `.assurance/` tracker files), with the rule that a finding on a generated file belongs on its generator. Finish with the escalation line: ask the maintainers via a GitHub issue on this repository. Reference a tier-gate script only if the target repo actually has one; otherwise leave a `TODO` naming the gate that will land later.
+
+**6.7d — `docs/assurance/DEVELOPMENT-FRAMEWORK.md` and `docs/assurance/TIER-LAYER-MAP.md`.** Copy both from the canonical sources and generalise. The framework doc records the artefact chain stage by stage, which commit or event triggers each stage, and where the repo's own skills and agents sit in it — plus the control taxonomy: skills are advisory (they make the policy likely), hooks are deterministic (they make it always), and human approval concentrates at defined gates. The tier map records the three tiers (Tier 1 routine → intent reference; Tier 2 behavioural → committed spec plus intent; Tier 3 critical/protected → plan, intent-check attestation, and a governance-note block for protected-surface edits), how a PR declares its tier (`Tier: N` line in the body or a `tier:N` label), and that any protected path in the diff forces a Tier 3 floor. Do not invent a fourth tier or soften a floor.
+
+**6.7e — `evals/`.** Write `evals/README.md`: each production incident gets an eval that stays in the suite as a regression test; evals also run when `CLAUDE.md`, a skill, or a hook changes; the naming convention (`evals/<incident-or-behaviour>.md`, descriptive rather than a bare ticket number); the CI linkage to Step 7.5's workflow; and the loop back to a fresh intent file at stage 1.
+
 ### Step 7: Emit Pre-commit and CI Stubs (Dual-Track)
 
 Using the answers from Step 2, write **two** stub files that the user will fill in when `/invariant-coverage-scaffold` runs next. Do not attempt to implement the coverage check itself — that's the next skill's job. These stubs exist only to anchor the dual-track shape.
@@ -335,6 +382,55 @@ When appending to an existing YAML file (pre-commit, lefthook, gitlab, circleci)
 
 Annotate each stub with `# TODO(/invariant-coverage-scaffold): replace this placeholder with the real coverage check` so the intent is traceable.
 
+### Step 7.5: Wire the Deterministic Protected-Surface Hook and the Incident-Eval CI Job
+
+Step 7's stubs are placeholders that fail loudly. The two artefacts here are real enforcement, and they land now because a scaffolded policy nobody enforces decays. Both honour the Step 1.3 decision per path; neither asks a new question.
+
+**7.5a — machine-readable path list.** The hook reads its policy from `.claude/rules/protected-surfaces.md`. Append to that file (written in Step 5, or pre-existing and skipped) a final section `## Machine-readable path list` containing a single fenced block of one glob per line — the paths the hook enforces. Seed it with the surfaces this skill has just created, adapted to the target repo's own layout:
+
+```
+docs/invariants/**
+docs/assurance/**
+.claude/rules/**
+.claude/hooks/**
+evals/**
+```
+
+plus any harness-definition globs the repo actually has (agent/skill definition files, workflow YAMLs). The globs support `**` (any depth) and `*` (within one path segment). If Step 1.3 skipped `protected-surfaces.md`, do not append — note in the Step 8 summary that the section must be added by hand or the hook will fail open.
+
+**7.5b — the hook script.** Write `.claude/hooks/protected-surface-guard.mjs`. Copy the canonical script from the Crosscheck repo root (`.claude/hooks/protected-surface-guard.mjs`) where that checkout is reachable — it is the reference implementation and needs no edits. Otherwise implement this contract exactly:
+
+- Reads the `PreToolUse` JSON payload from stdin (`{ tool_name, tool_input: { file_path, ... } }`).
+- Resolves the edited path relative to the repo root and matches it against the globs from 7.5a.
+- On no match: exit `0` (allow).
+- On match: allow only when a `## Protected-Surface Amendment` governance-note block naming that file is already present in the working tree (as produced by `/crosscheck:protected-surface-amend` under `.assurance/protected-surface-amend/`). Otherwise exit `2` and print the block message to stderr.
+- **Fail-open on a missing rules file only.** If `.claude/rules/protected-surfaces.md` is absent, exit `0` — a hook that cannot find its own policy input must not brick every edit in a repo that has not opted in. Every other failure mode stays conservative. Do not extend fail-open to any other condition.
+- The stderr block message uses the standard gate-message shape: an imperative "Action needed" line under ten words, then one sentence each for what is being asked and why, what approving means and what declining means, then `Full explanation:` and a link to `docs/gates/protected-surface-hook.md` on the default branch. Derive the repo URL from `git remote get-url origin` (handle both `git@host:owner/repo.git` and `https://host/owner/repo(.git)`) — never hard-code it.
+
+**7.5c — `.claude/settings.json`.** Merge in the `PreToolUse` entry, preserving any existing hooks and settings — parse the JSON and append to `hooks.PreToolUse` rather than overwriting the file:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/protected-surface-guard.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+If the file exists and Step 1.3 chose `skip`, do not merge — surface the snippet in the summary for the user to paste in manually.
+
+**7.5d — incident-eval CI job.** Only when Q2 resolved to GitHub Actions: write `.github/workflows/incident-eval-check.yml`, triggered on `pull_request: [closed]` and guarded by `if: github.event.pull_request.merged == true`, which checks out with full history, collects the PR's commit messages, and runs the check script. Write the script to `scripts/ci/incident-eval-check.mjs` — copy the canonical one from the Crosscheck repo root where reachable; otherwise implement it to fail when a merged PR references an incident (a `Fixes-Incident:` trailer in any commit message, or an `incident` label) without an accompanying eval under `evals/`, and to emit the failure in the same gate-message shape — naming the eval path that is missing and the exact step that resolves it, with the `Full explanation:` link pointing at the target repo's gate explainer for this job when one exists (`docs/gates/`) and at `evals/README.md` otherwise. For any other CI system, describe the equivalent job in `docs/assurance/ci-stub.md` alongside Step 7's note and ask the user to port it.
+
 ### Step 8: Emit Handoff Artifact and Summarise
 
 Two outputs:
@@ -355,6 +451,20 @@ Two outputs:
     "pre_commit_stub": "<path-or-null>",
     "ci_stub": "<path-or-null>"
   },
+  "playbook_scaffold": {
+    "intent_dir": ["intent/README.md", "intent/TEMPLATE.md"],
+    "claude_md_section": "<CLAUDE.md|null>",
+    "review_protocol": "<REVIEW.md|null>",
+    "development_framework": "<docs/assurance/DEVELOPMENT-FRAMEWORK.md|null>",
+    "tier_layer_map": "<docs/assurance/TIER-LAYER-MAP.md|null>",
+    "evals_index": "<evals/README.md|null>",
+    "protected_surface_hook": "<.claude/hooks/protected-surface-guard.mjs|null>",
+    "hook_settings": "<.claude/settings.json|null>",
+    "machine_readable_path_list": "<appended|skipped>",
+    "incident_eval_workflow": "<.github/workflows/incident-eval-check.yml|null>",
+    "incident_eval_script": "<scripts/ci/incident-eval-check.mjs|null>",
+    "manual_followups": ["<path-or-snippet the user must merge by hand>", ...]
+  },
   "pre_existing_decisions": {"<path>": "skip|overwrite", ...},
   "seed_modules": ["<m1>", "<m2>", "<m3>"],
   "pre_commit_framework": "<pre-commit.com|lefthook|husky|none>",
@@ -365,6 +475,8 @@ Two outputs:
   ]
 }
 ```
+
+Every `playbook_scaffold` field is `null` when the path was skipped per Step 1.3 or not applicable (e.g. the incident-eval job on a non-GitHub CI); the skip itself is already recorded in `pre_existing_decisions`, and anything the user must merge by hand lands in `manual_followups`.
 
 If a downstream orchestrator drives the chain, it reads this artifact and dispatches the recommended skills itself — the user does not retype them.
 
@@ -380,9 +492,23 @@ Wrote:
 - docs/invariants/README.md
 - docs/invariants/<module>.md  (one per seed module, with VGD-prereq summary appended per Step 6.5)
 - docs/invariants/<module>-prereq-summary.md  (only when the module doc was skipped in Step 1.3)
+- intent/README.md, intent/TEMPLATE.md
+- CLAUDE.md  ("Development framework" section appended)
+- REVIEW.md
+- docs/assurance/DEVELOPMENT-FRAMEWORK.md
+- docs/assurance/TIER-LAYER-MAP.md
+- evals/README.md
+- .claude/hooks/protected-surface-guard.mjs  (+ PreToolUse entry merged into .claude/settings.json)
+- .github/workflows/incident-eval-check.yml, scripts/ci/incident-eval-check.mjs  (GitHub Actions only)
 - <pre-commit stub path>  (or noted absence)
 - <CI stub path>
 - .assurance/init-result.json  (handoff artifact for orchestrators / next skill in chain)
+
+Skipped (pre-existing, left untouched): <paths, or "none">
+Merge by hand: <manual follow-ups — e.g. the .claude/settings.json hook snippet, or the
+machine-readable path list section of .claude/rules/protected-surfaces.md — or "none">
+Development framework: intent → spec → plan → diff + tests → PR → incident record + eval
+(see docs/assurance/DEVELOPMENT-FRAMEWORK.md; tiers in docs/assurance/TIER-LAYER-MAP.md)
 
 Pre-commit framework: <resolved from layer-audit JSON or Q1>
 CI system: <resolved from layer-audit JSON or Q2>
@@ -435,6 +561,39 @@ The chat summary is for the human running this skill directly. Orchestrators con
 - [ ] Pre-flight overwrite check (Step 1.3) ran and any pre-existing target
       files were either skipped or overwritten per the user's decision — no
       silent clobbering occurred
+- [ ] `intent/README.md` and `intent/TEMPLATE.md` exist, and the template
+      carries all five fields (problem statement, proposed outcome, affected
+      users and systems, constraints, open questions)
+- [ ] `CLAUDE.md` gained a "Development framework" section by append — no
+      existing content was rewritten
+- [ ] `REVIEW.md` exists with all four passes in order (bugs and logic,
+      security, compliance vs spec and plan, Crosscheck protected-surface and
+      tier pass), Important vs Nit, the five-nit cap, and an excluded-paths
+      list for the repo's generated output
+- [ ] `docs/assurance/DEVELOPMENT-FRAMEWORK.md` and
+      `docs/assurance/TIER-LAYER-MAP.md` exist, generalised to this repo, with
+      the three tiers and the Tier 3 floor forced by any protected path — no
+      tier or floor was softened
+- [ ] `evals/README.md` exists and states that each production incident gets an
+      eval that stays in the suite as a regression test
+- [ ] `.claude/rules/protected-surfaces.md` carries the
+      `## Machine-readable path list` section the hook reads (or its absence is
+      flagged as a manual follow-up)
+- [ ] `.claude/hooks/protected-surface-guard.mjs` exists and its `PreToolUse`
+      entry is merged into `.claude/settings.json` without clobbering existing
+      hooks (or the snippet is surfaced as a manual follow-up)
+- [ ] The hook blocks a protected-path edit that has no governance-note block,
+      fails open only on a missing rules file, and its stderr message follows
+      the gate-message shape with a repo URL derived from the git remote — not
+      hard-coded
+- [ ] Incident-eval workflow and its check script exist on GitHub Actions
+      repos (or the equivalent job is described in `docs/assurance/ci-stub.md`)
+- [ ] Every new path in Steps 6.7 and 7.5 went through the same Step 1.3
+      skip/overwrite/abort decision as the original artefacts
+- [ ] `playbook_scaffold` in `.assurance/init-result.json` is populated, with
+      `null` for skipped or inapplicable paths and `manual_followups` listing
+      anything the user must merge by hand
+- [ ] Each generated document is under two pages (~800 words)
 ```
 
 ## Arguments

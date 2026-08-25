@@ -236,7 +236,18 @@ status: Draft
 
 No additional sections. No prose beyond the table.
 
-Surface the file path to the user: *"I've drafted a module map at
+Before surfacing the module map, emit the gate message below (derive
+`<repo-url>` from `git remote get-url origin`, handling both
+`git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)`
+forms, and build
+`https://github.com/<owner>/<repo>/blob/main/docs/gates/orchestrator-batch-sign-off.md`;
+if no remote is configured, fall back to the bare path
+`docs/gates/orchestrator-batch-sign-off.md`):
+
+> **Action needed: Review the module-partition draft**
+> You are being asked to approve how the spec has been split into modules because invariant-drafting for every module dispatches in parallel right after sign-off. Approving means drafting begins on the module split as written; editing the file first means the orchestrator re-reads it before drafting starts. Full explanation: [<repo-url> or the fallback path].
+
+Then surface the file path to the user: *"I've drafted a module map at
 `.assurance/add-session-<id>/module-map.md`. Red-pen it in your editor —
 merge modules, split rows, fix section refs — then type `proceed`,
 `ship it`, or `looks good` here to continue."*
@@ -379,9 +390,18 @@ recommendation in Step 11 (on the top-N coverage-thinnest modules).
 
 ### Step 8 — Surface findings files for triage
 
-After all audit subagents return successfully, surface the three
+After all audit subagents return successfully, emit the gate message below
+(derive `<repo-url>` from `git remote get-url origin`, handling both
+`git@github.com:owner/repo.git` and `https://github.com/owner/repo(.git)`
+forms, and build
+`https://github.com/<owner>/<repo>/blob/main/docs/gates/orchestrator-batch-sign-off.md`;
+if no remote is configured, fall back to the bare path
+`docs/gates/orchestrator-batch-sign-off.md`), then surface the three
 findings files in chat with one-line summary counts per file:
 
+> **Action needed: Triage the audit findings**
+> You are being asked to mark one outcome for each finding because unmarked findings block their file from being applied. Approving means the triaged fixes, spec-amendment routes, rejections, and deferrals are applied exactly as marked; leaving findings unmarked means nothing in that file changes yet. Full explanation: [<repo-url> or the fallback path].
+>
 > Session `<id>` audit complete.
 >
 > - `findings-coverage.md`: <N> findings (<n> Blocker, <n> High, <n> Medium, <n> Low)

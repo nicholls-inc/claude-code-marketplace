@@ -181,10 +181,23 @@ verdicts the available signals support — it does not invent signals.
 ## Output and hand-off
 
 The auditor writes a single **consolidation report** — itself a repo-resident
-artifact, immutable once written — to `.assurance/audit/<date>-audit.md`
-(per the findings-file convention: frontmatter, a per-artifact verdict table,
-detailed `drifted` sections, a metadata/trend block, and a **"What this audit
-does NOT catch"** honesty section). It writes nowhere else.
+artifact, immutable once written — to `.assurance/audit/<date>-audit.md`. The
+report's header, before the frontmatter, always opens with the gate message
+below (blockquote form), tailored to what this pass found — if the pass
+produced at least one `drifted` verdict, the count and the word "adjudicate";
+if it produced none, note that no remediation is pending and the message is
+informational only. Derive `<owner>/<repo>` from `git remote get-url origin`
+(handle both the `git@github.com:owner/repo.git` and
+`https://github.com/owner/repo(.git)` forms); if no remote resolves, link the
+bare path `docs/gates/auditor-verdicts.md` instead.
+
+> **Action needed: Adjudicate proposed remediations**
+> You are being asked to accept or reject each `drifted` remediation below because the auditor has no write authority beyond this report. Accepting routes it to the named agent for execution; rejecting leaves the artifact as-is and records why. Full explanation: [link].
+
+After that header, the report follows the findings-file convention: a
+per-artifact verdict table, detailed `drifted` sections, a metadata/trend
+block, and a **"What this audit does NOT catch"** honesty section. It writes
+nowhere else.
 
 Humans adjudicate: read the verdicts, accept/reject each proposed remediation,
 and route the accepted ones to `byfuglien` (code-touching fixes), `hellebuyck`
