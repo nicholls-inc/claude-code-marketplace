@@ -1,0 +1,37 @@
+name: Incident Eval Check
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+
+jobs:
+  incident-eval-check:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Collect PR commit messages
+        id: commits
+        run: |
+          {
+            echo "commit_messages<<EOF"
+            git log --format=%B "origin/${{ github.event.pull_request.base.ref }}..${{ github.event.pull_request.head.sha }}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run incident eval check
+        env:
+          COMMIT_MESSAGES: ${{ steps.commits.outputs.commit_messages }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: node scripts/ci/incident-eval-check.mjs

@@ -1,0 +1,37 @@
+name: Tier Gate
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, labeled, unlabeled]
+
+permissions:
+  contents: read
+
+jobs:
+  tier-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Compute changed files vs base
+        id: diff
+        run: |
+          git fetch origin "${{ github.event.pull_request.base.ref }}" --depth=1
+          {
+            echo "changed_files<<EOF"
+            git diff --name-only "origin/${{ github.event.pull_request.base.ref }}...HEAD"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run tier gate
+        env:
+          CHANGED_FILES: ${{ steps.diff.outputs.changed_files }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: node scripts/ci/tier-gate.mjs
