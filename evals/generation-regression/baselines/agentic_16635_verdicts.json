@@ -1,0 +1,6 @@
+[
+{"arm":"bare","run":"r1","verdict":"BUG_PRESENT"},{"arm":"bare","run":"r2","verdict":"BUG_PRESENT"},{"arm":"bare","run":"r3","verdict":"BUG_PRESENT"},
+{"arm":"delib","run":"r1","verdict":"BUG_PRESENT"},{"arm":"delib","run":"r2","verdict":"BUG_PRESENT"},{"arm":"delib","run":"r3","verdict":"BUG_PRESENT"},
+{"arm":"cc","run":"r1","verdict":"BUG_PRESENT"},{"arm":"cc","run":"r2","verdict":"BUG_PRESENT"},
+{"arm":"cc","run":"r3","verdict":"BUG_AVOIDED","evidence":"make_ocpp_partition_assignment_strategy() creates type('OCPPStickyPartitionAssignor',(StickyPartitionAssignor,),{}) per consumer in __init__ with comment 'aiokafka keeps the ... on the class' — per-group subclass isolates class-level state."}
+]

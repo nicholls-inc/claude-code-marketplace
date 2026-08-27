@@ -1,0 +1,505 @@
+[
+ {
+  "pr": 16635,
+  "arm": "cc",
+  "run": "r1",
+  "verdict": "BUG_PRESENT",
+  "evidence": "OCPP_PARTITION_ASSIGNMENT_STRATEGY: tuple[type[AbstractPartitionAssignor], ...] = (StickyPartitionAssignor, RoundRobinPartitionAssignor)\" ... OCPPKafkaConsumer.partition_assignment_strategy returns it for both OCPP groups; aiokafka's StickyPartitionAssignor keeps member_assignment/generation as class-level state.",
+  "other_serious_defects": "No per-group subclassing/isolation of the assignor class, so the shared class attributes collide across the two consumer groups in one process."
+ },
+ {
+  "pr": 9688,
+  "arm": "delib",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "return queryset.filter(user__organisations_with_access=organisation)  ... and guard: \"organisation = self.get_application_organisation()\\n if organisation is None:\\n return queryset.none()\"",
+  "other_serious_defects": "New module dc/models/notification.py shadows/duplicates dc.models.notifications naming; minor confusion risk only."
+ },
+ {
+  "pr": 5326,
+  "arm": "cc",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "\"try:\\n        return choices[name]\\n    except KeyError:\\n        pass\" ... \"return _first_available(choices, _UNKNOWN_VALUE_FALLBACK_NAMES)\" and \"if error_type is None or error_code is None ... return\"",
+  "other_serious_defects": "Migration dependency is a placeholder (\"0399_previous_leaf\") that likely doesn't exist; label-based fallback may silently mismap unknown values to an UNKNOWN member."
+ },
+ {
+  "pr": 13705,
+  "arm": "delib",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "template: value=\"{{ car_model.id }}\" from context built via `for car_model in get_available_models(make)` (CarModel); POST: `CarModel.objects.filter(id=form.cleaned_data[\"model\"], make=self.make).first()` ... `if car_model is None: form.add_error(\"model\", ...); return self.form_invalid(form)`",
+  "other_serious_defects": "`self.auth_request.trim.model.make` in `make` property could raise AttributeError if trim lacks model; minor. Also assumes auth_request has `model` field."
+ },
+ {
+  "pr": 13705,
+  "arm": "cc",
+  "run": "r2",
+  "verdict": "PARSE_ERROR",
+  "evidence": "{\"verdict\": \"BUG_AVOIDED\", \"evidence\": \"Template: `name=\\\"model\\\" ... value=\\\"{{ model.id }}\\\"` with `context[\\\"models\\\"] = self.available_models` = `CarModel.objects.filter(make=self.selected_make)`;"
+ },
+ {
+  "pr": 12762,
+  "arm": "bare",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "\"    # Optional token the VTN presents to us when calling the callback URL.\\n    bearer_token: str | None = None\" and read model overrides: \"client_name: str = \\\"\\\"\", \"object_operations: list[OpenADRObjectOperation] = Field(default_factory=list)\"",
+  "other_serious_defects": "Read model inherits create model (shared class) but all create-only fields are optional; URL route must be manually included in root URLconf (not wired in diff)."
+ },
+ {
+  "pr": 10279,
+  "arm": "cc",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(\n            (i for i in power_steps_watts if i <= household_export_watts),\n            default=lowest_power_step_watts,\n        )  with lowest_power_step_watts = min(power_steps_watts, default=minimum_power_off_watts)",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 10279,
+  "arm": "cc",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(\n            (step for step in power_steps_watts if step <= export_power_watts),\n            default=0,\n        )",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 4614,
+  "arm": "cc",
+  "run": "r2",
+  "verdict": "NOT_APPLICABLE",
+  "evidence": "Diff ends mid-file in dc/utils/converters.py: \"# Stripe sends monetary amounts as integers in the smallest (\\\"minor\\\") unit of\\n+# the currency, e.g. 1299 pence. Most currencies have two decim\" \u2014 the webhook task/invoice handler code is never shown.",
+  "other_serious_defects": "Output truncated; no webhook view or task hunk available to audit line-item indexing or event failure marking."
+ },
+ {
+  "pr": 5326,
+  "arm": "bare",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "for name in names: ... try: return choices[candidate] except KeyError: continue ... for fallback_name in _UNKNOWN_CHOICE_NAMES: try: return choices[fallback_name] except KeyError: continue ... return None",
+  "other_serious_defects": "If type/code/command can't be resolved the error log row is silently skipped (logged warning only), so unmodelled errors are never persisted."
+ },
+ {
+  "pr": 10279,
+  "arm": "delib",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(\n            (i for i in power_steps_watts if i <= export_power_watts),\n            default=0,\n        )",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 12762,
+  "arm": "cc",
+  "run": "r3",
+  "verdict": "NOT_APPLICABLE",
+  "evidence": "Diff truncated mid-import: \"from pydantic import ConfigDict\\n+from p\" \u2014 the subscription response/request model definitions in payloads.py are never shown, so no read-vs-write model code is judgeable.",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 9688,
+  "arm": "bare",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "return queryset.filter(user__organisations_with_access=organisation)  \u2014 valid reverse path; also guarded: \"if organisation is None: return queryset.none()\"",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 10279,
+  "arm": "delib",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(\n            (step for step in power_steps_watts if step <= export_watts),\n            default=min(power_steps_watts),\n        )",
+  "other_serious_defects": "min(power_steps_watts) would itself raise if power_steps_watts were empty; also fallback to smallest step may exceed available export (mitigated only by minimum_power_off floor)."
+ },
+ {
+  "pr": 16635,
+  "arm": "bare",
+  "run": "r1",
+  "verdict": "BUG_PRESENT",
+  "evidence": "OCPP_PARTITION_ASSIGNORS = (StickyPartitionAssignor, RoundRobinPartitionAssignor)\" plus \"@property def partition_assignment_strategy(...): return OCPP_PARTITION_ASSIGNORS\" on OCPPKafkaConsumer, used by both OCPP groups; aiokafka's StickyPartitionAssignor keeps member_assignment/generation as class attributes, with no per-group subclass/isolation in the diff.",
+  "other_serious_defects": "Readiness-marker settings default writes to /tmp for all environments; unrelated to core bug."
+ },
+ {
+  "pr": 4614,
+  "arm": "delib",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "Task never indexes line items; it derives type from `billing_reason`/`subscription` and validates payload: `if raw_amount is None: logger.error(... ); return None`, `@db_task(retries=2, retry_delay=60)` (finite retries, malformed payloads return None instead of raising).",
+  "other_serious_defects": "amount DecimalField(decimal_places=2) can't store 3-decimal currencies (KWD etc.) produced by stripe_amount_to_decimal; potential quantize/rounding error on save."
+ },
+ {
+  "pr": 4614,
+  "arm": "cc",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "AMOUNT_FIELDS_BY_EVENT_TYPE: {\"invoice.paid\": (\"amount_paid\",), ...} \u2014 no `lines[0]` indexing anywhere; \"Malformed payloads are logged rather than raised: retrying would fail identically.\" and every bad-input path does `return None` after `logger.warning(...)`; task uses `@db_task(retries=3, retry_delay=60)` (finite).",
+  "other_serious_defects": "`_is_completed_payment` returns True when `status` is missing/non-str, so an unpaid invoice lacking `status` could be recorded; subscription metadata on line items is never inspected for user resolution."
+ },
+ {
+  "pr": 5326,
+  "arm": "cc",
+  "run": "r2",
+  "verdict": "NOT_APPLICABLE",
+  "evidence": "No diff or code content was provided in section (B); the generated output is empty.",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 9688,
+  "arm": "cc",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "return queryset.filter(user__organisations_with_access=organisation)  \u2014 and guard: \"if organisation is None: return queryset.none()\"",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 16635,
+  "arm": "bare",
+  "run": "r3",
+  "verdict": "BUG_PRESENT",
+  "evidence": "OCPP_PARTITION_ASSIGNORS: tuple[type, ...] = (\n+    StickyPartitionAssignor,\n+    RoundRobinPartitionAssignor,\n+)\" ... \"def partition_assignment_strategy(...): return OCPP_PARTITION_ASSIGNORS\" \u2014 same assignor class object (aiokafka StickyPartitionAssignor keeps member_assignment/generation as class attrs) shared by both OCPP consumer groups in-process.",
+  "other_serious_defects": "No per-group subclassing/isolation of assignor state; readiness-marker work is unrelated scope creep."
+ },
+ {
+  "pr": 16635,
+  "arm": "delib",
+  "run": "r3",
+  "verdict": "BUG_PRESENT",
+  "evidence": "from aiokafka.coordinator.assignors.sticky.sticky_assignor import (StickyPartitionAssignor,) ... OCPP_PARTITION_ASSIGNMENT_STRATEGY = (StickyPartitionAssignor, RoundRobinPartitionAssignor)\" applied via OCPPKafkaConsumer.partition_assignment_strategy for both groups",
+  "other_serious_defects": "aiokafka's StickyPartitionAssignor keeps member_assignment/generation as class attributes; no per-group subclass or isolation is created, so both in-process groups share it."
+ },
+ {
+  "pr": 9688,
+  "arm": "delib",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "return queryset.filter(user__organisations_with_access=organisation)  \u2014 preceded by guard: `if organisation is None: return queryset.none()`",
+  "other_serious_defects": "get_queryset dispatch uses hasattr(self, 'apply_organisation_access_control') which is always true on GenericViewSet subclasses only if defined; abstract shim could recurse if neither implemented."
+ },
+ {
+  "pr": 16635,
+  "arm": "cc",
+  "run": "r3",
+  "verdict": "BUG_PRESENT",
+  "evidence": "OCPP_PARTITION_ASSIGNMENT_STRATEGY: tuple[type, ...] = (StickyPartitionAssignor, RoundRobinPartitionAssignor)\" \u2014 module-level tuple of the raw aiokafka StickyPartitionAssignor (class-level member_assignment/generation) shared by both OCPP consumer groups via OCPPKafkaConsumer.partition_assignment_strategy.",
+  "other_serious_defects": "No per-group subclass/isolation of assignor state; readiness marker shared across consumer threads may report ready when only one group joined."
+ },
+ {
+  "pr": 4614,
+  "arm": "bare",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "AMOUNT_KEYS = (\"amount_paid\", \"amount_received\", \"amount_total\", \"amount\")` \u2014 no line-item indexing at all; malformed payloads: `logger.error(\"Cannot create StripeInvoice, malformed webhook data\", ...) return None`, and task is bounded: `@db_task(retries=3, retry_delay=60)`",
+  "other_serious_defects": "Migration numbering/dependency assumed (0001_initial) may not match real leaf; subscription/one-off classification ignores invoice line data entirely."
+ },
+ {
+  "pr": 12762,
+  "arm": "delib",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "class OpenADRSubscription(OpenADRSubscriptionBase): \"\"\"A subscription as returned by a VTN (GET /Subscriptions).\"\"\" ... object_operations: list[OpenADRObjectOperation] = Field(default_factory=list)  /  bearer_token: str | None = None",
+  "other_serious_defects": "Read parsing requires objects/operations/callbackUrl in each objectOperation (no defaults), so a sparse GridX read response could still fail; minor. URL wiring not actually added to root urls."
+ },
+ {
+  "pr": 10279,
+  "arm": "bare",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(\n            (i for i in power_steps_watts if i <= household_export_power_watts),\n            default=0,\n        )",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 10279,
+  "arm": "bare",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(\n            (i for i in power_steps_watts if i <= household_export_power_watts),\n            default=0,\n        )\" plus \"household_export_power_watts = max(price.household_export_power_watts, 0)\"",
+  "other_serious_defects": "Diff hunk line counts appear inconsistent in solar_smart_schedules.py (added lines exceed declared counts), which could break patch application."
+ },
+ {
+  "pr": 9688,
+  "arm": "bare",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "return queryset.filter(user__organisations_with_access=organisation) \u2014 valid reverse path; None guarded: \"organisation = self.get_application_organisation()\" / \"if organisation is None: return queryset.none()\"",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 13705,
+  "arm": "cc",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "Template: `value=\"{{ model.id }}\"` from `\"models\": self._get_available_models()` = `CarModel.objects.filter(make=self.make)`; POST lookup: `self._get_available_models().filter(pk=form.cleaned_data[\"model\"]).first()` ... `if model is None: form.add_error(...); return self.form_invalid(form)`",
+  "other_serious_defects": "Minor: get_context_data uses auth_request.model attribute which may be reverse/FK named differently; overloaded POST via hidden 'step' field is fragile but functional."
+ },
+ {
+  "pr": 5326,
+  "arm": "delib",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "try:\n    return enum_cls[name]\nexcept KeyError:\n    logger.warning(\"Unmapped Smartcar value for enum.\", ...)\nreturn _enum_fallback(enum_cls)  \u2014 and _enum_fallback also wraps enum_cls[name] in try/except KeyError, returning None",
+  "other_serious_defects": "Migration depends on placeholder '0757_previous_leaf_migration', which will not apply as-is."
+ },
+ {
+  "pr": 4614,
+  "arm": "bare",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "AMOUNT_KEYS = (\"amount_paid\", \"amount_received\", \"amount_total\", \"amount\") ... no line-item indexing; malformed payloads: `if not isinstance(data, dict) or not data:` -> `logger.warning(...); return None`, and `{}`/`None`/no-id/bad-amount cases return None instead of raising.",
+  "other_serious_defects": "No webhook-event persistence/mark-failed mechanism at all; task result not tracked, so failures are silently dropped rather than logged terminally per-event."
+ },
+ {
+  "pr": 13705,
+  "arm": "bare",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "template: `name=\"model\" id=\"model-{{ model.id }}\" value=\"{{ model.id }}\"` over `context[\"models\"] = self.available_models()` (CarModel queryset); POST: `models = self.available_models(); model = models.filter(id=int(form.cleaned_data[\"model\"])).first()` with `if model is None: form.add_error(...)`",
+  "other_serious_defects": "Choices built from same CarModel queryset (`(str(model.pk), ...)`), so int() cast is safe; no uncaught DoesNotExist path."
+ },
+ {
+  "pr": 5326,
+  "arm": "bare",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "for candidate in candidates:\n        try:\n            return enum_cls[candidate]\n        except KeyError:\n            continue\n    return None ... if error_type is None or error_code is None or sc_command is None: ... warning(\"Unable to log unrecognised SmartCar API error.\")",
+  "other_serious_defects": "Migration dependency resolved dynamically from disk glob (non-deterministic/anti-pattern); status code coercion via HTTPStatus() may mask real codes."
+ },
+ {
+  "pr": 16635,
+  "arm": "delib",
+  "run": "r2",
+  "verdict": "BUG_PRESENT",
+  "evidence": "\"OCPP_PARTITION_ASSIGNORS: tuple[type[AbstractPartitionAssignor], ...] = (StickyPartitionAssignor, RoundRobinPartitionAssignor,)\" returned unchanged by `partition_assignment_strategy` for the OCPP consumer that \"serves both the `ocpp-group-id` group and the per-pod call-response group\".",
+  "other_serious_defects": "aiokafka's StickyPartitionAssignor keeps member_assignment/generation as class attributes; no per-group subclass/instance isolation is created, so both groups share that state."
+ },
+ {
+  "pr": 12762,
+  "arm": "delib",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "class OpenADRObjectOperation(OpenADRBaseModel): ... callback_url: str ... # Optional bearer token the VTN presents when calling us.\\n+    bearer_token: str | None = None",
+  "other_serious_defects": "Read model reuses request model (GridXSubscription(OpenADRSubscriptionRequest)) so client_name stays required; assumes base _get/_post helpers exist."
+ },
+ {
+  "pr": 12762,
+  "arm": "cc",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "class OpenADRSubscription(BaseModel): \"\"\"A subscription object as returned by a VTN... Every field is optional\"\" with `bearer_token: str | None = None` on OpenADRObjectOperation, plus a distinct strict `class OpenADRSubscriptionRequest(BaseModel)` for creates.",
+  "other_serious_defects": "Diff truncated mid-file (validator body incomplete); client get_subscriptions/task code not shown, so the actual parse call site is unverifiable."
+ },
+ {
+  "pr": 13705,
+  "arm": "bare",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "Template: `value=\"{{ model.id }}\"` over `models` = `CarModel.objects.filter(make=self.make)`; form choices `(str(car_model.pk), car_model.model)`; POST: `CarModel.objects.filter(id=int(form.cleaned_data[\"model\"]), make=self.make).first()` with None handled and invalid_choice \u2192 validation error.",
+  "other_serious_defects": "get_selected_make rejects non-digit `make` values; if make_selection.html submits a make *name* (SelectMakeForm uses CharField), users get bounced back to make selection in a loop."
+ },
+ {
+  "pr": 16635,
+  "arm": "delib",
+  "run": "r1",
+  "verdict": "BUG_PRESENT",
+  "evidence": "OCPP_PARTITION_ASSIGNMENT_STRATEGY: tuple[type[AbstractPartitionAssignor], ...] = (StickyPartitionAssignor, RoundRobinPartitionAssignor)\" \u2014 the same aiokafka StickyPartitionAssignor class (class-level member_assignment/generation) is returned for both OCPP consumer groups in-process, with no per-group isolation.",
+  "other_serious_defects": "Sticky-first ordering assumes coordinator picks first commonly-supported protocol; also no subclass/instance separation for the call-response group's assignor state."
+ },
+ {
+  "pr": 16635,
+  "arm": "bare",
+  "run": "r2",
+  "verdict": "BUG_PRESENT",
+  "evidence": "OCPP_PARTITION_ASSIGNMENT_STRATEGY: tuple[type, ...] = (StickyPartitionAssignor, RoundRobinPartitionAssignor)\" plus \"return OCPP_PARTITION_ASSIGNMENT_STRATEGY\" for OCPPKafkaConsumer, and test \"test_call_response_consumer_group_also_sticky\" asserting the same tuple for the second group.",
+  "other_serious_defects": "The identical StickyPartitionAssignor class object (whose member_assignment/generation state and on_assignment classmethod are class-level in aiokafka) is shared by both OCPP groups; no per-group subclass isolation."
+ },
+ {
+  "pr": 10279,
+  "arm": "cc",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(\n            (i for i in power_steps_watts if i <= household_export_power_watts),\n            default=min(power_steps_watts, default=0),\n        )",
+  "other_serious_defects": "Fallback to smallest step when export is below it may charge more than exported (behavioral choice), but no exception."
+ },
+ {
+  "pr": 9688,
+  "arm": "cc",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "queryset.filter(user__organisations_with_access=organisation).distinct() \u2014 uses the valid reverse path; None org guarded: \"organisation = self.get_application_organisation(application)\" / \"if organisation is None: return queryset.none()\"",
+  "other_serious_defects": "apply_group_access_control override re-dispatches via self.request.auth.application, adding hidden coupling; base apply_client_credentials_access_control still assumes applicationextra exists (AttributeError risk)."
+ },
+ {
+  "pr": 10279,
+  "arm": "delib",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(( power_step_watts for power_step_watts in power_steps_watts if power_step_watts <= household_export_power_watts ), default=0,)",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 5326,
+  "arm": "delib",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "\"member = members.get(key)\" ... \"for name in fallbacks: member = members.get(name)\" ... \"return None\"; caller: \"if (error_type is None ... ): logger.warning('Unable to log SmartCar API error - unmapped value.') return\" plus \"except Exception:  # noqa: BLE001\"",
+  "other_serious_defects": "Migration hardcodes number 1000 and resolves its dependency at import time via filesystem globbing \u2014 fragile/non-standard; may break the linear migration graph."
+ },
+ {
+  "pr": 12762,
+  "arm": "bare",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "\"# Optional token the VTN sends back to us so we can authenticate it.\\n    bearer_token: str | None = None\" plus separate models: \"class GridXSubscription(OpenADRSubscription)\" (read) vs \"class GridXCreateSubscriptionRequest(BaseModel)\" (write)",
+  "other_serious_defects": "Read model requires client_name and callback_url as mandatory; if GridX omits clientName on reads, parsing would fail. Minor risk only."
+ },
+ {
+  "pr": 9688,
+  "arm": "delib",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "\"user\": \"user__organisations_with_access\" ... query |= Q(**{lookup: organisation}) ; and `if organisation is None: return queryset.none()`",
+  "other_serious_defects": "`with suppress(...)` used in base.py without a visible `from contextlib import suppress` import (may be pre-existing); silent fail-closed hides misconfiguration."
+ },
+ {
+  "pr": 5326,
+  "arm": "delib",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "def _resolve_choice(...): for name in names: try: return enum_cls[name] except KeyError: continue; return None  ... _map_smartcar_value(...) return _resolve_choice(enum_cls, *_FALLBACK_ENUM_NAMES); and if error_type is None ... log warning and return",
+  "other_serious_defects": "Migration uses placeholder dependency '0999_previous_max_migration' and name '1000_...', which won't apply as-is."
+ },
+ {
+  "pr": 4614,
+  "arm": "cc",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "No line-item indexing at all; amount comes from `amount = data.get(\"amount_paid\")` / `data.get(\"amount_due\")`, and failures are terminal: `except (TypeError, ValueError) as exc: log.warning(\"stripe_invoice_not_recorded\", reason=\"malformed_amount\"...); return None`",
+  "other_serious_defects": "Migration parent named placeholder \"0499_previous\" would break migration graph until renamed."
+ },
+ {
+  "pr": 12762,
+  "arm": "cc",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "Read model `OpenADRSubscription` / `GridXSubscription` is separate from `OpenADRSubscriptionRequest`, and in `OpenADRObjectOperation`: \"# Token the VTN sends back to us... bearer_token: str | None = None\" \u2014 optional, so GET parses without it.",
+  "other_serious_defects": "Shared OpenADRObjectOperation requires callback_url on reads (would fail if VTN omits it); minor."
+ },
+ {
+  "pr": 13705,
+  "arm": "delib",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "choices: `[(str(car_model.pk), car_model.model) for car_model in self.available_models]` with `available_models = CarModel.objects.filter(make=make)`; lookup: `car_model = self.available_models.filter(id=int(form.cleaned_data[\"model\"])).first()` plus `if car_model is None: redirect(...)` and ChoiceField invalid_choice error.",
+  "other_serious_defects": "form_valid falls back to a redirect (no-vehicles-to-add) instead of a form error if the row vanishes; template truncated so full markup unverified."
+ },
+ {
+  "pr": 9688,
+  "arm": "cc",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "return queryset.filter(user__organisations_with_access=organisation)",
+  "other_serious_defects": "None organisation guarded via `if organisation is None: return queryset.none()`; mixin's apply_group_access_control reaches into self.request.auth.application (minor coupling)."
+ },
+ {
+  "pr": 16635,
+  "arm": "cc",
+  "run": "r2",
+  "verdict": "BUG_PRESENT",
+  "evidence": "OCPP_PARTITION_ASSIGNMENT_STRATEGY: tuple[type, ...] = (\n+    StickyPartitionAssignor,\n+    RoundRobinPartitionAssignor,\n+)\" and \"@property def partition_assignment_strategy... return OCPP_PARTITION_ASSIGNMENT_STRATEGY\" \u2014 same assignor class object shared by both OCPP groups.",
+  "other_serious_defects": "No per-group subclass/isolation of the sticky assignor's class-level member_assignment/generation state; both OCPP groups in one process share it, risking a rebalance loop."
+ },
+ {
+  "pr": 13705,
+  "arm": "delib",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "Template: `name=\"model\" ... value=\"{{ model.id }}\"` where `models` = `get_available_models_for_make(...)` -> `CarModel.objects.filter(make=make)`; form choices `[(str(model.pk), ...) for model in models]` and `get_selected_model()` matches `str(model.pk) == str(selected_id)` from the same queryset.",
+  "other_serious_defects": "form_valid silently redirects to no-vehicles-to-add if get_selected_model() returns None; unused `dispatch` override and unused hidden `next_step` field never honoured by the view (prose claims otherwise)."
+ },
+ {
+  "pr": 9688,
+  "arm": "bare",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "return queryset.filter(user__organisations_with_access=organisation)  \u2014 valid reverse path from Notification.user to Organisation; plus None guard: \"if organisation is None: ... return queryset.none()\"",
+  "other_serious_defects": "Adds a stray dc/models/notification.py alias module; mixin ignores granted groups entirely (intended per design)."
+ },
+ {
+  "pr": 12762,
+  "arm": "delib",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "\"    # Optional token the VTN presents back to us when calling the callback.\\n+    bearer_token: str | None = None\" and GridXSubscription (read) inherits with object_operations defaulting to empty list; test parses read payload without bearerToken.",
+  "other_serious_defects": "GridXSubscription reuses request model (client_name required on reads); create payload uses exclude_none so optional fields dropped \u2014 minor."
+ },
+ {
+  "pr": 10279,
+  "arm": "bare",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "desired_power_watts = max(\n            (i for i in power_steps_watts if i <= household_export_power_watts),\n            default=0,\n        )",
+  "other_serious_defects": ""
+ },
+ {
+  "pr": 4614,
+  "arm": "delib",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "def _line_items(data): lines = _as_dict(data.get(\"lines\")).get(\"data\"); if not isinstance(lines, list): return []; return [_as_dict(line) for line in lines]  \u2014 plus `for line in _line_items(data):` iteration only, never lines[0]",
+  "other_serious_defects": "Malformed diff line in stripe.py hunk ('++           # ignoring it here...') would break patch application; migration dependency is a placeholder."
+ },
+ {
+  "pr": 5326,
+  "arm": "bare",
+  "run": "r2",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "try:\n            return int(enum_cls[candidate])\n        except KeyError:\n            continue\n\n    unknown = getattr(enum_cls, UNKNOWN_CHOICE_NAME, None)\n    if unknown is None:\n        return None\n    return int(unknown)  ... plus 'Unable to log SmartCar API error - unmapped choice.' warning + skip",
+  "other_serious_defects": "Command name mapping relies on guessed enum member names; if none match and no UNKNOWN member exists, the error log row is silently skipped."
+ },
+ {
+  "pr": 13705,
+  "arm": "bare",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "Template: `value=\"{{ model.id }}\"` over `context[\"models\"] = self.get_available_models()`; POST: `model = self.get_available_models().filter(id=model_id).first()` where `get_available_models_for_make` returns `CarModel.objects.filter(make=make)`; failure -> `form.add_error(...); return self.form_invalid(form)`",
+  "other_serious_defects": "`_()` used in ModelSelection.form_valid but gettext is not imported in views/generic.py by the diff (potential NameError, though that branch is unreachable since ChoiceField already rejects invalid ids)."
+ },
+ {
+  "pr": 13705,
+  "arm": "cc",
+  "run": "r3",
+  "verdict": "NOT_APPLICABLE",
+  "evidence": "Diff ends mid-statement: \"return super().get(request\" \u2014 post()/form_valid and the new model_selection.html template (the ID-emitting form rendering and POST lookup) are absent from the diff.",
+  "other_serious_defects": "Cannot assess; output truncated before POST handling. Only form choices (str(car_model.pk) from CarModel) are visible."
+ },
+ {
+  "pr": 4614,
+  "arm": "bare",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "No line-item indexing anywhere: type is derived via `billing_reason = data.get(\"billing_reason\")` / `STRIPE_BILLING_REASON_TO_INVOICE_TYPE.get(billing_reason)`; malformed payloads are handled: `if amount is None: logger.error(...); return` and `if not isinstance(data, dict): ... return`.",
+  "other_serious_defects": "get_or_create can still raise IntegrityError on concurrent duplicate webhooks (not caught), and no webhook-event failure marking model exists to mark terminal."
+ },
+ {
+  "pr": 4614,
+  "arm": "delib",
+  "run": "r1",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "\"for line in _as_dict(data.get(\\\"lines\\\")).get(\\\"data\\\") or []:\" \u2014 iteration, never indexing lines[0]; and the view wraps dispatch in \"except Exception: ... logger.exception(...)\" then returns HttpResponse() (200), so no retry loop.",
+  "other_serious_defects": "Task body itself isn't wrapped in try/except (DB errors propagate), and zero-amount invoices are silently dropped; migration dependency is a hand-guessed placeholder."
+ },
+ {
+  "pr": 5326,
+  "arm": "cc",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "def _exact_choice_value(choices, name): try: member = choices[name] except KeyError: return None ... return _exact_choice_value(choices, UNKNOWN_CHOICE_NAME)  \u2014 plus `if not error.is_loggable ... return error` skips the insert",
+  "other_serious_defects": "Migration dependency computed dynamically at import time via directory glob (fragile, non-deterministic history); placeholder migration number 0999."
+ },
+ {
+  "pr": 12762,
+  "arm": "bare",
+  "run": "r3",
+  "verdict": "BUG_AVOIDED",
+  "evidence": "+    # Optional token the VTN sends back to us so we can authenticate it.\n+    bearer_token: str | None = None\n... class GridXSubscription(OpenADRSubscription): \"\"\"A subscription as returned by GridX's ``GET /Subscriptions``.\"\"\"",
+  "other_serious_defects": "Read model inherits create model (loose coupling), and OpenADRSubscription requires `id`; acceptable. URL wiring left unapplied (manual root urls edit needed)."
+ }
+]

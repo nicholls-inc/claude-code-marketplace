@@ -1,0 +1,6 @@
+[
+ {"case":9688,"arm":"bare","verdict":"BUG_AVOIDED","other_defects":"No None-org guard in base.py: filter(user__organisations_with_access=None) becomes __isnull=True — silent cross-tenant data leak for org-less client-credentials apps. No .distinct() on M2M traversal."},
+ {"case":9688,"arm":"cc","verdict":"BUG_AVOIDED","other_defects":"None serious; explicit queryset.none() guard for None organisation."},
+ {"case":10279,"arm":"bare","verdict":"BUG_PRESENT","evidence":"Unguarded max(i for i in power_steps_watts if i <= household_export_power_watts) in solar_only_schedules.py; step list has no 0 entry, export clamped to 0 -> empty sequence ValueError — the exact historical CORE-2GAZ bug."},
+ {"case":10279,"arm":"cc","verdict":"BUG_PRESENT","evidence":"Identical unguarded max(); added tests only use step lists containing 0, so the failure mode is untested. Also passes unrounded Decimal to watts_to_milliamps."}
+]
