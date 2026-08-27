@@ -1,0 +1,10 @@
+{"latent": [
+ {"pr":5326,"verdict":"CATCH","matching_finding":"CRITICAL — SmartCarErrorType[exc.type] KeyError escapes the whole error handler; HIGH same KeyError on SmartCarErrorCode[exc.code], no fallback to UNKNOWN","reasoning":"Names both exact subscript lookups, the KeyError, unmodelled Smartcar codes, and downstream consequence."},
+ {"pr":10279,"verdict":"CATCH","matching_finding":"Latent crash: max(i for i in power_steps_watts if i <= price.household_export_watts) — negative export -> empty generator -> ValueError: max() arg is an empty sequence","reasoning":"Precise line, empty-sequence ValueError, correct fix location; correctly notes dormancy condition."},
+ {"pr":4614,"verdict":"PARTIAL","matching_finding":"CRITICAL — event.stripe_id is the event ID not invoice ID; HIGH — payment_intent null -> IntegrityError, task lost","reasoning":"Never names the len(lines)>1 guard / empty line-items IndexError, but repeatedly hits the exact risk class: uncaught exception escaping the fire-and-forget webhook task, rows unpopulated, no alerting."}
+],
+ "controls": [
+ {"pr":15200,"high_critical_definite":2,"findings":[{"quote":"HIGH — N+1 PostGIS query on public read path (100 polygon-containment queries per request)","assessment":"plausible-real"},{"quote":"HIGH — select_related mitigation misses two of three call sites","assessment":"plausible-real"}]},
+ {"pr":15143,"high_critical_definite":1,"findings":[{"quote":"HIGH — provider NOT NULL but no default -> silent \"\" via CSV import/objects.create; vehicle offered with no integration provider","assessment":"plausible-real"}]},
+ {"pr":15201,"high_critical_definite":0,"findings":[]}
+ ]}

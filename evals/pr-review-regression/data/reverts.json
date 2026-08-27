@@ -1,0 +1,1187 @@
+[
+ {
+  "revert_pr": 11038,
+  "original_pr": 11035,
+  "merged_at": "2024-10-21T17:16:22Z",
+  "title": "Revert \"Revert \"Refactor smartcar onboarding account creation (#11023)\" (#11035)\"",
+  "rationale": "Re-lands #11023 by reverting revert #11035; no rationale given in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11038"
+ },
+ {
+  "revert_pr": 11096,
+  "original_pr": null,
+  "merged_at": "2024-10-24T21:24:37Z",
+  "title": "revert charging changes",
+  "rationale": "Reverts commits 072a8e62 and a393bb0f; per follow-up #11144, thought to cause DB memory issues (later found rolled back in error).",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11096"
+ },
+ {
+  "revert_pr": 11144,
+  "original_pr": 11096,
+  "merged_at": "2024-10-29T11:38:20Z",
+  "title": "Revert \"revert charging changes (#11096)\"",
+  "rationale": "\"It was thought this change caused memory issues with the DB, however other changes accounted for this. This change was rolled back in error so now undoing the revert.\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11144"
+ },
+ {
+  "revert_pr": 11302,
+  "original_pr": 11203,
+  "merged_at": "2024-11-12T18:23:02Z",
+  "title": "Revert \"Reinstate battery depreciation logic\"",
+  "rationale": "\"causing a downstream issue that is impacting the target charge level on vehicles causing the target charge level to decrease until it reaches 0\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "Slack C04SNLZ6F1P/p1731410890374689"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/11302"
+ },
+ {
+  "revert_pr": 11361,
+  "original_pr": 11302,
+  "merged_at": "2024-11-19T15:57:10Z",
+  "title": "Revert \"Revert \"Reinstate battery depreciation logic\"\"",
+  "rationale": "\"These have now been fixed, so this code can go back in.\" (re-land after downstream target charge level fix)",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11361"
+ },
+ {
+  "revert_pr": 11403,
+  "original_pr": 11361,
+  "merged_at": "2024-11-21T18:02:17Z",
+  "title": "Revert \"Revert \"Revert \"Reinstate battery depreciation logic\"\"\"",
+  "rationale": "\"reverting because of https://evenergy.atlassian.net/browse/CI-1137\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-1137"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/11403"
+ },
+ {
+  "revert_pr": 11410,
+  "original_pr": 11404,
+  "merged_at": "2024-11-22T12:11:32Z",
+  "title": "Revert \"ChargingSession: finish_reason\"",
+  "rationale": "\"Due to failing migration\" (core_migrate failure, Datadog logs linked)",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "Datadog logs: host:i-0ac0a472b5298fc49 service:core_migrate"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/11410"
+ },
+ {
+  "revert_pr": 11415,
+  "original_pr": 11410,
+  "merged_at": "2024-11-25T15:35:46Z",
+  "title": "Revert \"Revert \"ChargingSession: finish_reason\"\"",
+  "rationale": "\"To be deployed on Monday after manual migration.\" (re-land)",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11415"
+ },
+ {
+  "revert_pr": 11462,
+  "original_pr": 11403,
+  "merged_at": "2024-12-02T08:24:40Z",
+  "title": "Revert \"Revert \"Revert \"Revert \"Reinstate battery depreciation logic\"\"\"\"",
+  "rationale": "\"Reverts ev-energy/core#11403 AGAIN. I have checked this against the original PR (#11203)\" (re-land of battery depreciation logic)",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11462"
+ },
+ {
+  "revert_pr": 11476,
+  "original_pr": 11474,
+  "merged_at": "2024-11-28T14:32:16Z",
+  "title": "Revert \"Upgrade twisted to fix vulnerabilities\"",
+  "rationale": "No rationale in body; reverts twisted dependency upgrade.",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11476"
+ },
+ {
+  "revert_pr": 11693,
+  "original_pr": 11459,
+  "merged_at": "2024-12-18T14:04:08Z",
+  "title": "Revert \"Remove n3rgy models Part 2/2\"",
+  "rationale": "No rationale in body; reverts removal of n3rgy models.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11693"
+ },
+ {
+  "revert_pr": 11799,
+  "original_pr": 11777,
+  "merged_at": "2025-01-09T20:00:08Z",
+  "title": "Revert \"DX-1842 Subscription V2 API - Add UID\"",
+  "rationale": "\"Reverting because of timeouts during migration. Will re-apply tomorrow morning during quiet period.\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "DX-1842"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/11799"
+ },
+ {
+  "revert_pr": 11831,
+  "original_pr": 11823,
+  "merged_at": "2025-01-14T13:04:46Z",
+  "title": "Revert \"DX-1981 Reduce number of sql queries\"",
+  "rationale": "\"the database migration is taking too long and causing problems on core\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "DX-1981"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/11831"
+ },
+ {
+  "revert_pr": 11974,
+  "original_pr": null,
+  "merged_at": "2025-01-27T20:36:43Z",
+  "title": "Revert upgrade",
+  "rationale": "\"Reverts the changes to upgrade Django to 5.0 due to the following issues\" (two Sentry issues linked)",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [
+   "6251581361",
+   "6251581503"
+  ],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11974"
+ },
+ {
+  "revert_pr": 11983,
+  "original_pr": 11982,
+  "merged_at": "2025-01-28T11:27:34Z",
+  "title": "Revert \"Upgrade Sentry SDK\"",
+  "rationale": "No rationale in body; reverts Sentry SDK upgrade.",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/11983"
+ },
+ {
+  "revert_pr": 12051,
+  "original_pr": 11984,
+  "merged_at": "2025-02-03T18:13:58Z",
+  "title": "Revert \"Schedule Plans: add schedule plan model (#11984)\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12051"
+ },
+ {
+  "revert_pr": 12061,
+  "original_pr": 12044,
+  "merged_at": "2025-02-04T14:45:48Z",
+  "title": "Revert \"Add aliases field to EVSE model\"",
+  "rationale": "\"migration is timing out on Stage and will likely fail on Prod also\"",
+  "classification": "staging-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "Slack C055SU7L2R4/p1738678082990119"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12061"
+ },
+ {
+  "revert_pr": 12065,
+  "original_pr": 12061,
+  "merged_at": "2025-02-13T15:25:43Z",
+  "title": "Retry \"Add aliases field to EVSE model\" after recent Revert",
+  "rationale": "Re-land: \"Database timeouts were encountered on staging but ... I just reverted to unblock the pipeline. Retry\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12065"
+ },
+ {
+  "revert_pr": 12127,
+  "original_pr": 12115,
+  "merged_at": "2025-02-12T11:48:25Z",
+  "title": "Revert \"Push Epex API call back to 15.30 daily\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12127"
+ },
+ {
+  "revert_pr": 12221,
+  "original_pr": 12214,
+  "merged_at": "2025-02-22T16:46:24Z",
+  "title": "Revert \"fleet telemetry, use previous firmware version when creating logs\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12221"
+ },
+ {
+  "revert_pr": 12232,
+  "original_pr": 12221,
+  "merged_at": "2025-02-24T18:40:48Z",
+  "title": "Revert \"Revert \"fleet telemetry, use previous firmware version when creating logs\"\"",
+  "rationale": "Re-land of #12214; no rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12232"
+ },
+ {
+  "revert_pr": 12254,
+  "original_pr": 12233,
+  "merged_at": "2025-02-25T17:06:51Z",
+  "title": "Revert \"CI-1478 Bugfix Emporia EVSEs not setting offline without usages\"",
+  "rationale": "\"This is a backup Revert should the Emporia bugfix hit any major issues and stops telemetry.\" (precautionary)",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-1478"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12254"
+ },
+ {
+  "revert_pr": 12290,
+  "original_pr": 12144,
+  "merged_at": "2025-02-27T16:48:55Z",
+  "title": "Revert \"Sl 403 cpa bev phev incentive\"",
+  "rationale": "\"Tests are still flaky in the CI pipeline\"",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [
+   "SL-403"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12290"
+ },
+ {
+  "revert_pr": 12324,
+  "original_pr": 12289,
+  "merged_at": "2025-03-04T14:27:25Z",
+  "title": "Revert Multi EV retrospectively pair if car more likely to be connect\u2026",
+  "rationale": "\"There is no way to get a lock on charging session table like this. Will try to do it manually while deploying.\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12324"
+ },
+ {
+  "revert_pr": 12429,
+  "original_pr": 12423,
+  "merged_at": "2025-03-13T21:27:53Z",
+  "title": "Revert \"deleting tesla fleet api error logs\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12429"
+ },
+ {
+  "revert_pr": 12436,
+  "original_pr": 12426,
+  "merged_at": "2025-03-14T15:44:16Z",
+  "title": "Revert \"Remove Solar Forecast Log App\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12436"
+ },
+ {
+  "revert_pr": 12437,
+  "original_pr": 12431,
+  "merged_at": "2025-03-14T15:52:43Z",
+  "title": "Revert \"Remove inverter logs app\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12437"
+ },
+ {
+  "revert_pr": 12456,
+  "original_pr": 12451,
+  "merged_at": "2025-03-17T20:10:46Z",
+  "title": "Revert \"Remove the inverter_logs app\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12456"
+ },
+ {
+  "revert_pr": 12486,
+  "original_pr": 12476,
+  "merged_at": "2025-03-19T20:11:51Z",
+  "title": "Revert \"increasing the worker count for evse huey workers\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12486"
+ },
+ {
+  "revert_pr": 12502,
+  "original_pr": 12383,
+  "merged_at": "2025-03-20T20:25:52Z",
+  "title": "Revert \"Add Django Partitioner\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12502"
+ },
+ {
+  "revert_pr": 12514,
+  "original_pr": 12477,
+  "merged_at": "2025-03-21T18:28:06Z",
+  "title": "Revert \"added deleted field to car\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12514"
+ },
+ {
+  "revert_pr": 12528,
+  "original_pr": 12506,
+  "merged_at": "2025-03-25T09:43:26Z",
+  "title": "Revert \"updated the tier eligibility to use the same logic to determi\u2026",
+  "rationale": "\"Reverting because of issues (see sentry) which we think may be causing this error in the app.\"",
+  "classification": "production-bug",
+  "sentry_ids": [
+   "6454463384"
+  ],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12528"
+ },
+ {
+  "revert_pr": 12552,
+  "original_pr": null,
+  "merged_at": "2025-03-26T20:17:37Z",
+  "title": "Revert \"CP-902 - Enable the read replica for getting the list of users who have charged in the past month\"",
+  "rationale": "\"This is failing the queries\" (Slack thread linked)",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CP-902",
+   "Slack C05M7LZV1K5/p1743017113501049"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12552"
+ },
+ {
+  "revert_pr": 12581,
+  "original_pr": null,
+  "merged_at": "2025-04-01T08:38:18Z",
+  "title": "CI-1636: Chargepoint onboarding - revert previous behavior",
+  "rationale": "Reverts Chargepoint onboarding to previous behavior per CI-1636; no further detail in body.",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-1636"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12581"
+ },
+ {
+  "revert_pr": 12616,
+  "original_pr": null,
+  "merged_at": "2025-04-03T08:35:24Z",
+  "title": "CI-1537: reverted \"last_updated\" field for Enode logs",
+  "rationale": "Reverts last_updated field for Enode logs per CI-1537; no further detail in body.",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-1537"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12616"
+ },
+ {
+  "revert_pr": 12630,
+  "original_pr": null,
+  "merged_at": "2025-04-04T12:12:36Z",
+  "title": "CI-1634: EVSE onboarding - reverted to use `modified_at_externally()`",
+  "rationale": "Reverted EVSE onboarding to use modified_at_externally() per CI-1634; no further detail in body.",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-1634"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12630"
+ },
+ {
+  "revert_pr": 12686,
+  "original_pr": 12627,
+  "merged_at": "2025-04-15T09:29:34Z",
+  "title": "Revert \"Drop vehicle data logs when charge level drops while moving\"",
+  "rationale": "\"per my analysis I don't see a good way to handle this without a bigger architectural change\" (CP-838)",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CP-838"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12686"
+ },
+ {
+  "revert_pr": 12720,
+  "original_pr": 12485,
+  "merged_at": "2025-04-14T21:13:35Z",
+  "title": "Revert \"Ensure lower username/email in auth_user\"",
+  "rationale": "\"Unfortunately I found some dup users in prod so need to revert this.\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12720"
+ },
+ {
+  "revert_pr": 12794,
+  "original_pr": 12779,
+  "merged_at": "2025-04-25T11:43:47Z",
+  "title": "Revert \"Fixes SolarForecastNew creation\"",
+  "rationale": "\"The UID in the new solar forecast model and the old solar forecast model have to match. This PR breaks that so I am undoing it\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12794"
+ },
+ {
+  "revert_pr": 12833,
+  "original_pr": null,
+  "merged_at": "2025-05-02T17:47:00Z",
+  "title": "revert change to RebateEvidenceSupportingDataSerializer and add test",
+  "rationale": "\"regression in the user_rebate GET call ... serializer GET call returning data from other user_rebate records because they were no longer being filtered correctly\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12833"
+ },
+ {
+  "revert_pr": 12886,
+  "original_pr": 12878,
+  "merged_at": "2025-05-09T15:53:37Z",
+  "title": "Revert \"E4D-2286 - Remove AppsFlyer Staging API key (#12878)\"",
+  "rationale": "\"this change doesn't have the desired effect, and ... another recent change to the Avo set up is causing Sentry errors\"",
+  "classification": "production-bug",
+  "sentry_ids": [
+   "6595757005"
+  ],
+  "incident_refs": [
+   "E4D-2286",
+   "Slack C01BESQJWDP/p1746660150436469"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12886"
+ },
+ {
+  "revert_pr": 12897,
+  "original_pr": 12894,
+  "merged_at": "2025-05-12T12:34:14Z",
+  "title": "Revert \"CI-1790: removed unexpected fields from Chargepoint OCPP payl\u2026",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-1790"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/12897"
+ },
+ {
+  "revert_pr": 12905,
+  "original_pr": 12813,
+  "merged_at": "2025-05-12T18:09:08Z",
+  "title": "revert RebatesUpdateEvidenceDataSerializer as the value field needs to take in non-decimal data as well as decimals",
+  "rationale": "\"did not take into account that charger serial number data is also passed-in here and is causing 400 Bad Request errors\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12905"
+ },
+ {
+  "revert_pr": 12953,
+  "original_pr": 12082,
+  "merged_at": "2025-05-15T22:36:10Z",
+  "title": "Revert \"VirtualEV Onboarding Development\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12953"
+ },
+ {
+  "revert_pr": 12954,
+  "original_pr": 12953,
+  "merged_at": "2025-05-16T17:56:02Z",
+  "title": "Revert \"Revert \"VirtualEV Onboarding Development\"\"",
+  "rationale": "Re-land of #12082; no rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/12954"
+ },
+ {
+  "revert_pr": 13059,
+  "original_pr": 12982,
+  "merged_at": "2025-05-28T13:37:05Z",
+  "title": "Revert \"NRG-20 Cap charging session energy usage when overdelivery detected (pt. 1 - soft cap)\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "NRG-20"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/13059"
+ },
+ {
+  "revert_pr": 13163,
+  "original_pr": 13037,
+  "merged_at": "2025-06-18T13:19:45Z",
+  "title": "Revert \"chore: upgrade ddtrace to 3.8.0\"",
+  "rationale": "\"We've noticed a big increase in datadog span ingestion which seemed to coincide with your upgrade of the ddtrace lib\"",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13163"
+ },
+ {
+  "revert_pr": 13164,
+  "original_pr": 13045,
+  "merged_at": "2025-06-18T13:01:46Z",
+  "title": "Revert \"Configure DD Test Optimisation during tests\"",
+  "rationale": "\"Required for https://github.com/ev-energy/core/pull/13163\" (companion to ddtrace downgrade)",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13164"
+ },
+ {
+  "revert_pr": 13184,
+  "original_pr": null,
+  "merged_at": "2025-06-27T14:36:40Z",
+  "title": "Revert the temp fix and implement Karl's suggestion",
+  "rationale": "Replaces a temporary fix with an alternative implementation; no detail in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13184"
+ },
+ {
+  "revert_pr": 13214,
+  "original_pr": 13161,
+  "merged_at": "2025-06-25T08:26:05Z",
+  "title": "Revert \"Use charge rate from Emporia API as the EVSE.max_possible_current_milliamps\"",
+  "rationale": "\"This change didn't fix the problem; the charge_rate_amps field from the Emporia is the charge rate the user has chosen in the app, but it's also the change rate we have most recently set via a start or stop command\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13214"
+ },
+ {
+  "revert_pr": 13219,
+  "original_pr": 13209,
+  "merged_at": "2025-06-25T12:42:15Z",
+  "title": "Revert \"E4D-2306 - Remove dc_crmsubscriptiongroupupdate table\"",
+  "rationale": "\"This is blocking prod deployments.\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "E4D-2306"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/13219"
+ },
+ {
+  "revert_pr": 13339,
+  "original_pr": 13295,
+  "merged_at": "2025-07-10T11:18:00Z",
+  "title": "Revert \"Simulate energy usage refactor (#13295)\"",
+  "rationale": "\"I need to address this issue\" (Slack thread linked)",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "Slack CGE0J54AY/p1752145632448509"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/13339"
+ },
+ {
+  "revert_pr": 13413,
+  "original_pr": 13382,
+  "merged_at": "2025-07-16T12:55:35Z",
+  "title": "Revert \"E4D-2369 Bill Credits API - When no payout config on a program then hide payouts data\"",
+  "rationale": "\"I think this is causing the FE to crash because the FE assumes the payment timeline will always be available\"",
+  "classification": "production-bug",
+  "sentry_ids": [
+   "6748440101"
+  ],
+  "incident_refs": [
+   "E4D-2369"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/13413"
+ },
+ {
+  "revert_pr": 13457,
+  "original_pr": 13276,
+  "merged_at": "2025-07-22T16:56:19Z",
+  "title": "Revert \"Investigate why the MCE low carbon bill credit transactions are not being created automatically\"",
+  "rationale": "No rationale in body.",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13457"
+ },
+ {
+  "revert_pr": 13480,
+  "original_pr": 13437,
+  "merged_at": "2025-07-24T18:23:15Z",
+  "title": "Revert \"Drip 2466 re implement sftp user verification methods (#13437)\"",
+  "rationale": "\"Revert this PR merge to unblock deploys.\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "DRIP-2466"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/13480"
+ },
+ {
+  "revert_pr": 13577,
+  "original_pr": 13543,
+  "merged_at": "2025-08-04T07:54:57Z",
+  "title": "Revert \"OCPP CTP tests investigation (#13543)\"",
+  "rationale": "No rationale given; reverts commit c70e378 (OCPP CTP tests investigation)",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13577"
+ },
+ {
+  "revert_pr": 13581,
+  "original_pr": 13543,
+  "merged_at": "2025-08-04T15:14:07Z",
+  "title": "removed OCPP CTP tests reverted",
+  "rationale": "No body; follow-up removal of reverted OCPP CTP tests",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13581"
+ },
+ {
+  "revert_pr": 13621,
+  "original_pr": 13614,
+  "merged_at": "2025-08-06T17:21:24Z",
+  "title": "Revert \"Charging Session: add interpolation method field\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#13614\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13621"
+ },
+ {
+  "revert_pr": 13623,
+  "original_pr": 13621,
+  "merged_at": "2025-08-07T10:45:31Z",
+  "title": "Revert \"Revert \"Charging Session: add interpolation method field\"\"",
+  "rationale": "Re-applies #13614 by reverting revert #13621; no rationale given",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13623"
+ },
+ {
+  "revert_pr": 13638,
+  "original_pr": 13623,
+  "merged_at": "2025-08-07T14:03:22Z",
+  "title": "Revert \"Revert \"Revert \"Charging Session: add interpolation method field\"\"\"",
+  "rationale": "Re-reverts the interpolation method field change; no rationale given",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13638"
+ },
+ {
+  "revert_pr": 13788,
+  "original_pr": null,
+  "merged_at": "2025-08-21T10:20:14Z",
+  "title": "Quality Metrics - Duration - Revert RAG rating adjustments",
+  "rationale": "\"Giulia requested that the RAG rating only be used for problems arising from our system\" \u2014 product decision, adds independent user-caused-problem logic",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13788"
+ },
+ {
+  "revert_pr": 13832,
+  "original_pr": 13705,
+  "merged_at": "2025-08-27T15:34:02Z",
+  "title": "Revert \"CI-1952: vehicle onboarding - model selection view (#13705)\"",
+  "rationale": "\"There's an error in the PR that has broken web vehicle onboarding for all makes\" (Slack thread linked)",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-1952"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/13832"
+ },
+ {
+  "revert_pr": 13839,
+  "original_pr": 13765,
+  "merged_at": "2025-08-28T13:22:57Z",
+  "title": "Revert \"NRG-34 - Python 3.12\"",
+  "rationale": "\"Creating this... just in case we need it\" \u2014 precautionary revert of Python 3.12 upgrade",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [],
+  "incident_refs": [
+   "NRG-34"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/13839"
+ },
+ {
+  "revert_pr": 13900,
+  "original_pr": 13886,
+  "merged_at": "2025-09-03T13:26:52Z",
+  "title": "Revert \"Update Vehicle Data Manager arg and doc string\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#13886\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/13900"
+ },
+ {
+  "revert_pr": 13948,
+  "original_pr": 13618,
+  "merged_at": "2025-09-23T08:01:21Z",
+  "title": "Revert \"Skip ocpp tests\"",
+  "rationale": "\"re-enabling ocpp tests to see what is going wrong\"",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-2110"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/13948"
+ },
+ {
+  "revert_pr": 14004,
+  "original_pr": 13969,
+  "merged_at": "2025-09-10T16:06:15Z",
+  "title": "Revert \"CP-1196 Add flag to override EVSE schedule refresh\"",
+  "rationale": "\"The flag is redundant; removing an EVSE's SUPPORT_OFFLINE_SCHEDULES capability is effectively the same\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CP-1196"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/14004"
+ },
+ {
+  "revert_pr": 14018,
+  "original_pr": null,
+  "merged_at": "2025-09-11T10:05:17Z",
+  "title": "E4D-2422 Revert tesla uptime calculator to standard calculation method",
+  "rationale": "\"Not accounting for any dynamic polling as we no longer do this, instead we expect a regular half hour polling\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "E4D-2422"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/14018"
+ },
+ {
+  "revert_pr": 14219,
+  "original_pr": 14205,
+  "merged_at": "2025-09-30T13:50:09Z",
+  "title": "Revert \"Fix WDSL version for commercial chargepoint polling (#14205)\"",
+  "rationale": "\"Caused: [Sentry issue 6912654632] Which has prevented all data for commercial ChargePoint chargers\" \u2014 CP API 5.1 not backwards compatible with 5.0",
+  "classification": "production-bug",
+  "sentry_ids": [
+   "6912654632"
+  ],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14219"
+ },
+ {
+  "revert_pr": 14237,
+  "original_pr": 14174,
+  "merged_at": "2025-10-02T16:21:41Z",
+  "title": "Revert \"Update logs DB settings\"",
+  "rationale": "No rationale in body; reverted while investigating CI test timeouts (see #14242)",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14237"
+ },
+ {
+  "revert_pr": 14239,
+  "original_pr": 14231,
+  "merged_at": "2025-10-02T15:31:05Z",
+  "title": "Revert \"Increase OCPP Test Timeout\"",
+  "rationale": "No rationale given; reverts OCPP test timeout increase",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14239"
+ },
+ {
+  "revert_pr": 14242,
+  "original_pr": 14237,
+  "merged_at": "2025-10-03T10:16:58Z",
+  "title": "Revert \"Revert \"Update logs DB settings\"\"",
+  "rationale": "\"Re-instating because this does not seem to be causing the timeouts\"",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14242"
+ },
+ {
+  "revert_pr": 14246,
+  "original_pr": null,
+  "merged_at": "2025-10-02T18:48:29Z",
+  "title": "revert to commit before tests started timing out",
+  "rationale": "Rolls back to commit before CI tests started timing out",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14246"
+ },
+ {
+  "revert_pr": 14287,
+  "original_pr": 14264,
+  "merged_at": "2025-10-09T17:09:42Z",
+  "title": "Revert \"CI-2217: Chargepoint metrics expanded\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#14264\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CI-2217"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/14287"
+ },
+ {
+  "revert_pr": 14353,
+  "original_pr": 14352,
+  "merged_at": "2025-10-17T11:31:14Z",
+  "title": "Revert \"Add tasks to __init__\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#14352\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14353"
+ },
+ {
+  "revert_pr": 14368,
+  "original_pr": 14218,
+  "merged_at": "2025-10-20T16:55:36Z",
+  "title": "Revert \"E4B-167 poll completed charging sessions to get exact final e\u2026",
+  "rationale": "No rationale given; reverts commit 0bd3f7b (#14218)",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "E4B-167"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/14368"
+ },
+ {
+  "revert_pr": 14556,
+  "original_pr": 14540,
+  "merged_at": "2025-11-06T19:25:32Z",
+  "title": "Revert \"Signup Incentive - fix n charging months\"",
+  "rationale": "\"I spoke with Elise and the previous behavior was correct for rewarding the 3 month bonus incentive, so we should revert this PR\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14556"
+ },
+ {
+  "revert_pr": 14646,
+  "original_pr": 14637,
+  "merged_at": "2025-11-20T15:15:46Z",
+  "title": "Revert \"adding ocpp supress errors to adapter subclasses\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#14637\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14646"
+ },
+ {
+  "revert_pr": 14653,
+  "original_pr": 14639,
+  "merged_at": "2025-11-20T23:02:05Z",
+  "title": "Revert \"Add service tag to enable better issue grouping in Sentry\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#14639\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14653"
+ },
+ {
+  "revert_pr": 14748,
+  "original_pr": 12766,
+  "merged_at": "2025-12-04T13:05:04Z",
+  "title": "Revert Reapply backwards compatibility #12766",
+  "rationale": "No rationale in body; ticket CP-1264 only",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CP-1264"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/14748"
+ },
+ {
+  "revert_pr": 14822,
+  "original_pr": 14736,
+  "merged_at": "2025-12-12T10:55:19Z",
+  "title": "Revert \"feat[cp-1286]: update session location timestamp with 1st log after session start\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#14736\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "CP-1286"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/14822"
+ },
+ {
+  "revert_pr": 14875,
+  "original_pr": 14825,
+  "merged_at": "2025-12-18T09:53:50Z",
+  "title": "Revert \"Update VehicleTelemetryLog to use UID\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#14825\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14875"
+ },
+ {
+  "revert_pr": 14876,
+  "original_pr": 14834,
+  "merged_at": "2025-12-18T10:03:57Z",
+  "title": "Revert \"Update EVSETelemetryLog to use UID\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#14834\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/14876"
+ },
+ {
+  "revert_pr": 15044,
+  "original_pr": 14989,
+  "merged_at": "2026-01-22T23:20:38Z",
+  "title": "Revert \"Upgrade ddtrace APM tracer from 2.17.2 to 3.19.0\"",
+  "rationale": "\"This may be causing excess traces\" (Datadog screenshot attached)",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15044"
+ },
+ {
+  "revert_pr": 15175,
+  "original_pr": 15174,
+  "merged_at": "2026-02-04T22:27:55Z",
+  "title": "Revert \"DEVOPS-1096: Monitor rollout post-gitops\"",
+  "rationale": "\"Improper role usage\" \u2014 removes rollout monitoring step from deploy workflows",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [
+   "DEVOPS-1096"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/15175"
+ },
+ {
+  "revert_pr": 15191,
+  "original_pr": 15188,
+  "merged_at": "2026-02-05T23:17:25Z",
+  "title": "Revert \"Add PostgresTraceSamplingFilter to reduce APM postgres span ingestion\"",
+  "rationale": "\"Pipeline is breaking and I don't want this causing issues, will re-merge tomorrow\"",
+  "classification": "test/ci-infra",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15191"
+ },
+ {
+  "revert_pr": 15405,
+  "original_pr": 15347,
+  "merged_at": "2026-03-06T15:00:06Z",
+  "title": "Revert \"Remove usages of old VehicleDataLogs\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#15347\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15405"
+ },
+ {
+  "revert_pr": 15472,
+  "original_pr": 15464,
+  "merged_at": "2026-03-12T09:24:40Z",
+  "title": "DEVOPS-1028: Revert ddtrace 3.x upgrade \u2014 restore 2.17.2",
+  "rationale": "\"ddtrace 3.x upgrade caused a significant increase in datadog.estimated_usage.apm.ingested_spans for postgres... breaking our PostgresTraceSamplingFilter\" (also reverts #15470, #15471)",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [],
+  "incident_refs": [
+   "DEVOPS-1028"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/15472"
+ },
+ {
+  "revert_pr": 15482,
+  "original_pr": 15327,
+  "merged_at": "2026-03-12T19:19:50Z",
+  "title": "Revert \"add query param seriliazer to statistics API\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#15327\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15482"
+ },
+ {
+  "revert_pr": 15506,
+  "original_pr": 15457,
+  "merged_at": "2026-03-13T23:29:36Z",
+  "title": "Revert \"Ue 3880 create new multiple bill credits scheme\"",
+  "rationale": "\"it looks like the migration never ran on the data base and now there are errors when you try to query bill credits schemes. Reverting migration prior to the weekend\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "UE-3880"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/15506"
+ },
+ {
+  "revert_pr": 15634,
+  "original_pr": 15625,
+  "merged_at": "2026-03-30T18:01:52Z",
+  "title": "Revert \"Add battery_size_watt_hours field to v1 GET /vehicles/models/ endpoint\"",
+  "rationale": "No rationale given; clean revert of #15625",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15634"
+ },
+ {
+  "revert_pr": 15690,
+  "original_pr": null,
+  "merged_at": "2026-04-02T17:08:35Z",
+  "title": "DEVOPS-1320: Revert wrapt 2.1.2 \u2192 1.16.0 \u2014 web startup regression",
+  "rationale": "\"wrapt 2.x rewrote the C extension used by ddtrace for monkey-patching, causing post-fork instrumentation to take ~3 extra minutes\" (startup <120s \u2192 >295s)",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [],
+  "incident_refs": [
+   "DEVOPS-1320"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/15690"
+ },
+ {
+  "revert_pr": 15762,
+  "original_pr": 15747,
+  "merged_at": "2026-04-09T15:19:00Z",
+  "title": "Revert \"Fix vehicle EVSE switch causing IntegrityError (CORE-2FCJ) (#\u2026",
+  "rationale": "No rationale given; reverts commit d93c0d8 (#15747, IntegrityError fix)",
+  "classification": "process/other",
+  "sentry_ids": [
+   "CORE-2FCJ"
+  ],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15762"
+ },
+ {
+  "revert_pr": 15763,
+  "original_pr": 15755,
+  "merged_at": "2026-04-09T16:57:15Z",
+  "title": "Revert \"Replace trim with model in get_reconnect_url AccountAuthorizationRequest\"",
+  "rationale": "No rationale given; restores trim=car.trim behaviour in get_reconnect_url",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15763"
+ },
+ {
+  "revert_pr": 15835,
+  "original_pr": 15713,
+  "merged_at": "2026-04-14T09:03:03Z",
+  "title": "Revert \"fix: handle DoesNotExist in charging_session_set_charge (Sentry CORE-2DQ1)\"",
+  "rationale": "\"We no longer delete sessions, but disconnect them, so this should not be needed... such try/except could hide a real issue\"",
+  "classification": "process/other",
+  "sentry_ids": [
+   "CORE-2DQ1"
+  ],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15835"
+ },
+ {
+  "revert_pr": 15904,
+  "original_pr": 15794,
+  "merged_at": "2026-04-16T15:13:31Z",
+  "title": "Revert \"Upgrade wrapt from 1.16.0 to 2.1.2\"",
+  "rationale": "\"This version is likely incompatible with our old ddtrace version (ddtrace 2.17.2) and is causing the web app to not start\"",
+  "classification": "dependency-upgrade",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/15904"
+ },
+ {
+  "revert_pr": 16032,
+  "original_pr": 16023,
+  "merged_at": "2026-05-04T06:24:59Z",
+  "title": "Revert container-queries fix and tweak compatibility-table breakpoint",
+  "rationale": "\"The container-queries approach from #16023 didn't end up rendering correctly inside the marketing iframe... the Type column was still being hidden\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/16032"
+ },
+ {
+  "revert_pr": 16096,
+  "original_pr": 16056,
+  "merged_at": "2026-05-08T00:16:10Z",
+  "title": "Revert \"Add post-enrollment verification models and enums for SCNY\"",
+  "rationale": "No rationale given; \"Reverts ev-energy/core#16056\"",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/16096"
+ },
+ {
+  "revert_pr": 16370,
+  "original_pr": 16283,
+  "merged_at": "2026-06-04T17:09:11Z",
+  "title": "Revert \"Drop rewards_billcreditsevent table (phase 2 zero-downtime)\"",
+  "rationale": "No rationale given; reverses phase-2 DROP TABLE of rewards_billcreditsevent",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/16370"
+ },
+ {
+  "revert_pr": 16516,
+  "original_pr": 16506,
+  "merged_at": "2026-07-02T11:29:59Z",
+  "title": "Revert \"Track SearchAddress method limit in ECOES refresh throttling\"",
+  "rationale": "No rationale given; restores SearchUtilityAddress as tracked ECOES throttle method",
+  "classification": "process/other",
+  "sentry_ids": [],
+  "incident_refs": [],
+  "url": "https://github.com/ev-energy/core/pull/16516"
+ },
+ {
+  "revert_pr": 16639,
+  "original_pr": 16635,
+  "merged_at": "2026-07-22T20:34:31Z",
+  "title": "DEVOPS-1551: revert OCPP consumer sticky partition assignment (production rebalance loop)",
+  "rationale": "\"production incident 2026-07-22 20:08\u201320:30 UTC... shared class state made the two groups' partition claims collide, driving a continuous rebalance loop... EVSE online counts dropped to zero\"",
+  "classification": "production-bug",
+  "sentry_ids": [],
+  "incident_refs": [
+   "DEVOPS-1551"
+  ],
+  "url": "https://github.com/ev-energy/core/pull/16639"
+ }
+]

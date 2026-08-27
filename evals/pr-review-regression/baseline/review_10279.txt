@@ -1,0 +1,31 @@
+Reviewed the full diff plus base/head versions of every helper it touches (`calculate_power_produced_watts`, `convert_queryset_to_price_data_list`, `PriceData`, `SmartPrice`, `SolarForecastLog`, `ChargingSession.solar`, `watts_to_*`, `get_power_steps_watts`). No comments posted, nothing modified.
+
+**Verdict: the PR is behaviour-preserving today** (`forecasted_household_load_at_time` returns 0, and `SolarForecastLog.forecast_efficiency` is DB-constrained to 0..1, so export ≥ 0). No rolling-deploy break — `SmartPrice` never crosses a queue/cache boundary. But it installs two real traps for the follow-up PR it exists to enable.
+
+## Act on these
+
+1. **Latent crash in solar-only scheduling once household load is non-zero — MEDIUM (HIGH after follow-up PR).**
+   `dc/scheduler/solar_only_schedules.py:96` — `max(i for i in power_steps_watts if i <= price.household_export_watts)`. `power_steps_watts` is all ≥ 0; the old `calculate_power_produced_watts` could never return negative (efficiency ≥ 0). Now the value is `generation - household_load`, and this PR adds no clamp.
+   *Failure:* household load 3 kW, generation 1 kW → `household_export_watts = -2000` → empty generator → `ValueError: max() arg is an empty sequence` → solar-only scheduling raises for every affected user on every cloudy evening. Fix: clamp to 0 in `get_household_export_prices`, not at each consumer.
+
+2. **`get_household_export_prices` silently returns `[]` instead of failing — MEDIUM.**
+   `dc/scheduler/schedule_queries.py:670` — the new `or solar is None` early return. The signature still advertises `solar_forecast_id`-only use (`charging_session=None` default), and `fill_percentage_import` now re-derives solar from `energy_usages[0].charging_session` rather than the `solar` object `fill_energy_usage` already validated.
+   *Failure:* any caller passing only `solar_forecast_id` (or a session whose `solar_enabled()` flipped off between the caller's guard and this call) gets zero forecast data → `percentage_import = 1` for every period → 100% of that session's energy billed and carbon-attributed as grid import, with no exception and no log line. Fix: thread the already-validated `solar` down as a parameter.
+
+3. **`SmartPrice.household_export_watts: int` holds three different runtime types, none of them `int` — MEDIUM.**
+   `dc/scheduler/schedule_queries.py:414` — `Decimal(0) if np.isnan(solar_mean) else round(solar_mean, 5)` yields `Decimal` on the nan branch and `np.float64` otherwise; `get_household_export_prices` produces `Decimal`. The removed `Decimal(...)` wrap (present for every sibling field) is what lost this. Dataclasses don't validate, so mypy won't catch it.
+   *Failure:* an `== 0`/`isinstance` check or a numpy-scalar JSON/log serialisation breaks depending on which branch produced the slot. Secondary behaviour change: the value is no longer int-rounded, so export 5289.6 W no longer selects the 5290 W power step it used to (`int(round(...))` → 5290).
+
+4. **The semantic core of the PR is untested — MEDIUM (violates CLAUDE.md "ALL new code must have tests").**
+   `get_household_export_prices` has no direct test before or after — the new watts conversion (`forecast_efficiency * capacity_watts`) and the new `solar is None` return path are covered only incidentally. `Solar.forecasted_household_load_at_time` replaced `household_load_watts` and its test (`test_household_load`) was **deleted, not ported**.
+   *Failure:* someone drops `* solar.capacity_watts` in a refactor; the only signal is whichever scheduler test happens to be magnitude-sensitive.
+
+## Minor
+
+5. **Dead code inviting a 10,000× error — LOW.** `calculate_power_produced_watts` (`schedule_queries.py:430`) now has zero callers but keeps its "solar_mean × capacity" docstring, and `get_solar_only_schedules(solar_capacity_watts=...)` is a now-unused parameter still passed from line 72 and logged by `@log_debug_info`. *Failure:* a later contributor "restores" `calculate_power_produced_watts(price.household_export_watts, capacity)` and multiplies by capacity twice.
+
+6. **Stale docs/naming now inverted against the code, in energy-accounting paths — LOW.** `fill_percentage_import` calls the value `household_load_watts` when it holds household **export** watts (`percentage_import.py:66`); `get_combined_prices`' docstring still says `1 - (array size * solar forecast)/charge_rate`; `_sort_solar_smart_prices`' comment still says "highest 'solar price'"; `CombinedPriceData.household_export_watts: list[PriceData]` breaks its siblings' `*_prices` convention. *Failure:* someone trusts the variable name and subtracts household load a second time.
+
+Non-findings I checked and cleared: no extra queries from `energy_usages[0].charging_session` (Django's related manager populates `_known_related_objects`, and `.solar` is an already-warm `cached_property`); `round(np.float64)` returns `int`, so `watts_to_milliamps` still returns `int`; `-sampled_at` ordering preserves the most-recent-wins fill; the `usage=0.5 → 5` test change exactly offsets `create_solar`'s 10 kW default vs the removed explicit 1 kW, so expectations stay equivalent-strength; removing `_excess_solar_generation_milliamps`' `assert capacity_watts is not None` actually removes a reachable AssertionError.
+
+Next: decide on finding 1 — add `max(0, ...)` to `get_household_export_prices` before the household-load PR lands, since that's the single line that turns a design gap into an exception.

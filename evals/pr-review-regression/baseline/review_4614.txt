@@ -1,0 +1,29 @@
+Review of PR #4614 (`Add StripeInvoice and create when data recieved on Stripe webhook`). Fetched diff, read merged code plus follow-up commits for confirmation.
+
+## Blockers
+
+1. **CRITICAL — `event.stripe_id` is the *event* ID, not the invoice/session ID.** `dc/views/rest/stripe.py`: `handle_invoice_payment_succeeded(invoice_id=event.stripe_id)`. `stripe.Webhook.construct_event` returns an `Event`, whose `id` is `evt_...`; the invoice/session lives at `event.data.object`. Failure: real webhook fires, task calls `stripe.Invoice.retrieve("evt_1Lxx...")`, Stripe returns `InvalidRequestError: No such invoice`, task dies, and every StripeInvoice row stays NULL amount/user/subscription_type forever. Tests do not catch this because the fixtures (`INVOICE_PAYMENT_SUCCESSFUL_DATA`) are flat objects, not real Event envelopes — the code even has a `data.object` fallback for `payment_intent` but none for the id. Confirmed by follow-up #4925, which switched to `stripe_event.event["data"]["object"]`.
+
+2. **HIGH — the pre-create writes phantom invoice rows for non-payment events.** The `get_or_create(payment_intent_id=...)` block runs for *any* livemode event carrying a `payment_intent`. Failure: `payment_intent.payment_failed` or `charge.refunded` arrives, a `StripeInvoice` row is created with NULL amount, and the metrics this PR exists to feed count a failed/refunded payment as an invoice. Follow-up #4925 added an explicit `payment_types` allowlist.
+
+3. **HIGH — bare `raise` on a fire-and-forget Huey task silently drops revenue data.** `NewPriceIDException`, `NonGBPCurrencyException`, `TooMuchDataException` abort the task with no alerting/monitor (Monitors & Alerts section of the PR body is empty). Failure: ops adds a new price in the Stripe dashboard; every subsequent purchase raises `NewPriceIDException` and records nothing until a backend deploy — nobody finds out. Same for the first non-GBP customer (later had to be fixed in #4957).
+
+4. **HIGH — `checkout.session.completed` in subscription mode has `payment_intent: null`.** The comment claims this event only fires for lifetime purchases; it fires for subscription checkouts too. Failure: subscription checkout completes, view skips the pre-create (falsy id), task reaches `update_or_create(payment_intent_id=None)` and hits `NOT NULL` on a `unique` TextField → `IntegrityError`, task lost.
+
+5. **MEDIUM-HIGH — amount is read from `price.unit_amount`, not what was actually paid.** Failure: coupon, proration, tax, quantity > 1, or partial payment → recorded `amount` diverges from money actually received, and this is the field feeding revenue metrics. #4925 replaced it with `amount_received` / `amount_paid`.
+
+## Lower severity
+
+6. **MEDIUM — `User.objects.get(email=user_email)`**: `auth_user.email` is not unique in this repo (Django default). Two users share an email → `MultipleObjectsReturned` (uncaught, only `DoesNotExist` is handled) → task dies. Also case-sensitive, so `Will@example.com` from Stripe silently fails to link.
+
+7. **MEDIUM — naive timestamp conversion.** `dt.datetime.fromtimestamp(created).astimezone(utc)` interprets the epoch in the *server's* local timezone. Failure: worker container with non-UTC TZ records `created_at` offset by hours. Should be `fromtimestamp(created, tz=dt.timezone.utc)`. The test only passes because CI runs UTC.
+
+8. **LOW — `pence_to_pounds` does float division before `Decimal`.** `Decimal(pence / 100)` yields binary artifacts (`Decimal('3.750000000000000177...')`). Harmless at `decimal_places=4`, but it's a money path — `Decimal(pence) / 100` is the correct form.
+
+9. **LOW — CheckConstraint inlines the enum values into SQL.** Adding a `SubscriptionType` member without a matching `AlterConstraint` migration produces a production `IntegrityError`; tests would catch it, but it's a silent coupling worth a comment on the enum.
+
+10. **LOW — test hygiene.** `StripeInvoice.objects.get()` / `.exists()` are unscoped (fragile under `-p randomly`/xdist per CLAUDE.md), and `test_livemode_true_does_create_a_stripe_invoice` mocks nothing — it only avoids a real Stripe call because `TestCase` suppresses `on_commit`.
+
+Nothing posted, nothing modified.
+
+Next: if you want, I can pull #4925 and #4957 and confirm which of findings 1–5 stayed broken in production and for how long.

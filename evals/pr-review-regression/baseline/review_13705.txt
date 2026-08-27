@@ -1,0 +1,32 @@
+Reviewed. Found real bugs — one critical.
+
+## Must fix
+
+**1. CRITICAL — ID-space confusion: template emits `VehicleCompatibility.id`, view looks it up as `CarModel.id`**
+`model_selection.html:52` renders `value="{{ model.id }}"` from a `VehicleCompatibility` queryset (`generic.py:236`), but `form_valid` does `CarModel.objects.get(id=model_id)` (`generic.py:224`). Unrelated PK sequences.
+*Failure:* driver picks "Audi e-tron" (compat row id 8412), view saves `auth_request.model = CarModel(id=8412)` = some unrelated model of a different make → `get_url_for_specified_make` resolves the wrong provider or dead-ends "not supported"; if no CarModel with that id, uncaught `DoesNotExist` → 500. Not caught by tests because `test_pick_model_post` POSTs `model.pk` directly, never through the rendered page.
+
+**2. HIGH — make filter is exact where the rest of the codebase uses `unaccent__iexact`**
+`generic.py:236`: `VehicleCompatibility.objects.filter(make=self.auth_request.make)`. `VehicleCompatibility.make` is a `TextField`; the canonical lookups all use `make__unaccent__iexact` with the comment *"unaccent is necessary to deal with, for example, Skoda and Škoda"*. `get_active_makes` accent-strips compat makes to match `CarMake`.
+*Failure:* Škoda driver — make page lists "Skoda" (normalized), model page filters `make="Skoda"` exactly, compat rows say "Škoda" → zero models, Next button permanently disabled, hard dead-end mid-onboarding.
+
+**3. HIGH — application allowlist widened from models to makes**
+`generic.py:244-247`: `models.filter(make__in=[model.make.make for model in supported_vehicle_models])`. `supported_vehicle_models` is M2M to `CarModel`; the filter discards the model and keys on make.
+*Failure:* an app restricted to `Audi e-tron` shows every Audi model in region and lets the driver onboard `Audi A3` — the restriction the field exists to enforce is silently ignored. No test asserts the filtered list.
+
+**4. HIGH — no server-side check the submitted model is in the offered set**
+`SelectModelForm.model_id` is a bare `CharField`; `form_valid` trusts it and assigns straight to `auth_request.model`. Filtering by region/active/allowlist happens only when building the page.
+*Failure:* POST `model_id=<any CarModel pk>` to `/model-selection/<uid>` (uid is the only auth, no login check) and get a model that's region-inactive or outside the application's allowlist onto the auth request. Use `ModelChoiceField(queryset=...)` built from the same queryset.
+
+**5. MEDIUM — unguarded `int()` / `.get()`; fallback branch is dead**
+`generic.py:223-228`. `int(form.cleaned_data["model_id"])` → `ValueError` on non-numeric; `.get()` → `DoesNotExist`; and `if model := ...get(...)` can never be falsy, so the `no-vehicles-to-add` redirect below it is unreachable.
+*Failure:* any malformed or stale `model_id` → 500 instead of the intended graceful redirect.
+
+## Later
+
+6. **MEDIUM — re-entry/back-button regression.** `ManufacturerSelection.form_valid` now saves `make` and redirects to model-selection, but `Start.get` and `ManufacturerSelection.get` still redirect via `get_url_for_specified_make` whenever `make` is set. Driver hits back or re-opens the onboarding link → skips model selection → `ModelRequired`/`NotImplementedError` uncaught → 500. Previously `make` was only persisted at the point the provider was already resolvable.
+7. **MEDIUM — duplicate and blank list entries.** No `.distinct()`; compat rows are per trim/year/type, and `model` is nullable. Driver sees the same model repeated N times plus blank-labelled selectable rows.
+8. **LOW — `get_context_data` returns a bare dict** (no `super()`), so `form` and `title` are absent (`header.html` include gets empty title); `record_screen_viewed` sits inside it, so it fires again on every `form_invalid` re-render, inflating the Avo screen-view count.
+9. **LOW — test coverage gaps.** No test renders the page (would have caught #1); `test_pick_model_avo_event` calls `view.dispatch(request=MagicMock(), ...)`, which falls through to `http_method_not_allowed`, then calls `get_context_data()` by hand — it exercises no request path. `create_vehicle_compatibility(model=model)` passes a `CarModel` into a `str` param, coerced by the ORM to the name, which masks exactly the type confusion in #1.
+
+Next: read `vehicle_onboarding/views/generic.py:216-252` — findings 1–5 all live in those 36 lines.

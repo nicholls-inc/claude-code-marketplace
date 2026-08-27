@@ -1,0 +1,22 @@
+5 findings. Top one: new `virtual_key_paired` gate silently drops a cohort of paired Teslas out of the last-known-location path.
+
+1. **MEDIUM-HIGH — `and self.virtual_key_paired` gate keys off a denormalized nullable mirror that never self-heals** (`dc/models/car.py:1097`)
+`virtual_key_paired` is `BooleanField(null=True, default=None)`, written only by `Tesla.save()` (`dc/models/tesla.py:111`); migration `1711_add_virtual_key_apaired_to_car.py` has no backfill (PR #12504 body says "before merging I will backfill" — manual, unverified), and the hourly recheck task only revisits rows where `has_virtual_key` is `False`/`None` (`hardware/tasks/vehicles/tesla/tesla_fleet_checks.py:30`), so a row with `has_virtual_key=True` + `virtual_key_paired=NULL` is never repaired.
+Failure: telemetry Tesla, `virtual_key_paired=NULL`, parked >4h so no fresh `VehicleLocationLogNew` → `get_latest_location()` returns `None` where it previously returned the last-known cached location → `current_charging_location()` / `get_closest_smart_charge_location_for_car()` return `None` → session never matched to the home smart charge location. NULL and `False` collapse to the same branch and nothing is logged, so the cohort is invisible in prod.
+
+2. **MEDIUM — fallback feeds an up-to-4h-old location into persistent ChargeLocation creation** (`dc/logic/charging_session/connect_disconnect.py:559`)
+enode/smartcar/Tesla previously returned `None` here; now they return a log location up to 4h stale, which goes straight to `get_or_create_charge_location()` → `ChargeLocation.objects.create()` + Open Charge Map enqueue (`dc/models/chargelocation.py:300`).
+Failure: driver travels 2h, plugs in at destination, latest location log is still the origin → new bogus ChargeLocation at wrong coordinates, session `type`/`charge_location` mis-attributed.
+
+3. **MEDIUM — the one behavior-changing production condition has zero test coverage**
+`virtual_key_paired` appears exactly once in the test file (`hardware/tests/model/vehicle/test_car.py:1671`), pinned to `True`. No test asserts an unpaired/`NULL` Tesla now skips the cached-location branch. Worse, the fixture state (`virtual_key_paired=True` with `has_virtual_key` unset) is unreachable in prod because `Tesla.save()` overwrites `virtual_key_paired` from `has_virtual_key` — tests green against a state the DB can't hold.
+
+4. **LOW-MEDIUM — precedence is by source, not by recency**
+`Car.location` only advances when `location_data_age` is non-None and newer (`dc/models/car.py:1382`), while `log_vehicle_data` writes a location log whenever `location` is present (`vehicle_data_manager.py:320`). Failure: provider intermittently omits `location_data_age` → `Car.location` frozen days old while logs are minutes old → branch 1 returns the stale cached value and ignores the fresher log (warning only). The PR fixed the `location is None` case but not this one.
+
+5. **LOW — extra cross-DB log query per call for every car with no cached location**
+Includes the per-car loop in `dc/models/chargelocation.py:510` and every session-monitor tick. Cheap in practice (composite PK `(vehicle, sampled_at)`, daily partitions pruned by the 4h filter) — volume note, not a hot spot.
+
+No concurrency issues: the path is read-only. No migration or API-shape break beyond #1.
+
+Next: decide whether #1 warrants a data check — `SELECT count(*) FROM dc_car c JOIN dc_tesla t ON … WHERE t.has_virtual_key AND c.virtual_key_paired IS NULL` sizes the affected cohort in one query.

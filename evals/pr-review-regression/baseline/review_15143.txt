@@ -1,0 +1,22 @@
+Read finding 1 first — it defeats the PR's own goal.
+
+**5 findings. Nothing posted, nothing modified.**
+
+1. **HIGH — `provider` NOT NULL but no default → silent `""` instead of an error.** `vehicles/models/vehicle_compatibility_new.py:38` is `models.TextField(choices=...)` with no `default` and no validating `save()` (that `save()`/`clean()` came in a *later* commit; at merge b7aa064 there was none). Django's implicit default for a non-null `TextField` is `""`, which satisfies `SET NOT NULL`. Meanwhile `vehicles/models/carmodel.py:128` dropped `provider__isnull=False`, so nothing filters the sentinel out.
+ *Failure:* admin CSV import (`ImportExportModelAdmin`, `clean_model_instances` defaults False) or any `objects.create()` omitting `provider` writes `provider=""`; `get_supported_models(country="US", exclude_unintegrated=True)` returns that model as integrated; user is offered a vehicle with no integration provider. Fix: `CheckConstraint(~Q(provider=""))`.
+
+2. **MEDIUM — migration guard blocks deploy, offers no remediation.** `0048_make_provider_required.py:14` raises `ValueError` on any NULL row. No backfill, no pre-flight query in the PR, and the message says "update these rows before running this migration" — too late, `migrate` is already running.
+ *Failure:* one stale NULL-provider row in prod → `migrate` aborts after earlier migrations in the same run already committed → release stuck until someone runs manual SQL.
+
+3. **MEDIUM — test theatre: `exclude_unintegrated` is now unfalsifiable.** The deleted fixture (`test_car_model.py`, old lines 94-103) was the *only* row with `active=False`. Post-PR every VCN fixture has `active=True`, so `test_auto_include_mode_with_exclude_unintegrated` only distinguishes "has a VCN row" from "has none".
+ *Failure:* delete `filters["vehiclecompatibilitynew__active"] = True` entirely and the suite still passes green; inactive compatibilities get served to users. Fix: give `model_us_unintegrated` a VCN row with a provider and `active=False` instead of deleting it.
+
+4. **MEDIUM — the new invariant has zero tests.** No test asserts `VehicleCompatibilityNew` cannot be saved without a provider, and none asserts `""` is rejected. The PR's whole point is untested; CLAUDE.md requires tests for all new code.
+ *Failure:* a later migration or `blank=True` revert re-opens null/empty providers and CI does not notice.
+
+5. **LOW — admin Add button skips the permission check.** `lists.html:61-67` renders the link unconditionally; Django's stock change_list gates on `has_add_permission`.
+ *Failure:* view-only staff sees "Add Vehicle Compatibility", clicks, gets 403. (Also hard-coded inline styles/`#469847` rather than the admin's own button classes.)
+
+Notes, not findings: `AlterField` importing live `IntegrationProvider.choices` leaves migration state non-frozen, but choices aren't DB-enforced in Postgres so it's cosmetic (and matches repo convention — see `0055`). `SET NOT NULL` takes `ACCESS EXCLUSIVE` + a full scan, fine here since `hardware_vehiclecompatibility` is a small catalogue table.
+
+Next: run `git show b7aa064 -- vehicles/tests/models/test_car_model.py` and check whether the deleted `active=False` fixture was ever restored downstream.

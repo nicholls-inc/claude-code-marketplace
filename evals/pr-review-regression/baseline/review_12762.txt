@@ -1,0 +1,41 @@
+Diff reviewed (PR #12762, merged 2025-05-02). 8 findings. Confirmed several against current `main`, where they were later fixed — that's independent evidence they were real.
+
+---
+
+**1. CRITICAL — POST body serialized in snake_case; subscription creation cannot work**
+`create_new_webhook_subscription` sends `subscription.model_dump(mode="json")` with no `by_alias=True`. `GridXSubscription`/`OpenADRObjectOperation` only set `alias_generator`; pydantic dumps by *field name* by default.
+Failure: task POSTs `{"object_type": ..., "client_name": ..., "program_id": ..., "object_operations": [{"callback_url": ..., "bearer_token": ...}]}` instead of `objectType/clientName/programID/objectOperations/callbackUrl/bearerToken`. GridX 400s (or silently creates a broken subscription), so we are never subscribed and every dispatch/price webhook is missed. `main` now has `by_alias=True`.
+Root cause of it shipping: `test_happy_path_no_subscription` asserts only method + URL on `request_history[2]`, never `.json()`. The test cannot fail on this.
+
+**2. HIGH — `return` instead of `continue`: second program never gets a subscription**
+`gridx_subscription_monitor.py`, inside `for program in programs`, the `subscription is not None` branch does `return`.
+Failure: `GRIDX_PROGRAMS_TO_FILTER = ["EV2A", "EELEC"]`. Once EV2A has a subscription, the task returns on every hourly run and EELEC is never checked or subscribed — permanently, silently. `main` now uses `continue`. No test covers two programs where the first is subscribed.
+
+**3. HIGH — auth bypass when `GRIDX_WEBHOOK_TOKEN` is unset/empty**
+`GridXDispatchWebhookAPI.authenticate_request` rejects only a *missing* header. Setting defaults to `os.getenv("GridXWebhookToken", "")`.
+Failure: env var not configured in an environment → an empty `Authorization` header yields `token == "" == GRIDX_WEBHOOK_TOKEN` and the request authenticates. `PublicAPIView` also sets `throttle_classes = []`, so the endpoint is unauthenticated and unthrottled. Needs an explicit empty-token guard, a scheme check (`*_, token` accepts any prefix), and `secrets.compare_digest` for the comparison.
+
+**4. HIGH — existing subscription is never validated against our callback URL/token**
+`get_subscription` returns any subscription for the program; the monitor treats non-`None` as healthy.
+Failure: a stale subscription pointing at an old domain, a rotated bearer token, or another tenant's callback keeps the monitor reporting "Found active subscription" forever while zero events reach us. The monitor's entire purpose fails closed-eyed. `main` now filters `objectOperations[].callbackUrl == absolute_webhook_receiver_url`.
+
+**5. HIGH — `GridXSubscription(**data)` assumes a dict; GET /subscriptions returns a list**
+`data = resp.json(); if not data: return None; return GridXSubscription(**data)`.
+Failure: real API returns `[{...}]` → `**list` raises `TypeError` → swallowed by the bare `except Exception` in the task → logged and retried hourly forever, never subscribing. Tests mock `json={}` / a bare dict, encoding the wrong contract. `main` now indexes `data[0]` after list filtering — confirming the response is a list.
+
+**6. MEDIUM — `urljoin` drops the API path prefix, and the two call sites disagree**
+`get_subscription` uses `urljoin(self._base_url, '/subscriptions')` (leading slash → resets to host root); `create_new_webhook_subscription` uses `urljoin(self._base_url, "subscriptions")` (relative).
+Failure: with `GRIDX_VTN_API_URL="https://api.gridx.com/v1/"`, GET hits `/subscriptions` (404) while POST hits `/v1/subscriptions` — inconsistent behaviour from one config value. `main` now builds both from an explicit `self._url_prefix = "/v1"`.
+
+**7. MEDIUM — settings imported at module scope, bypassing environment overrides**
+`from inventev.settings.base import GRIDX_WEBHOOK_TOKEN` in `dc/views/rest/external/vpp/gridx.py`.
+Failure: any per-environment settings module or `override_settings` that sets `GRIDX_WEBHOOK_TOKEN` is ignored — the view compares against the base-module value captured at import. Token rotation via a non-base settings module silently doesn't take effect on the receiver while the subscription payload (which uses `settings.GRIDX_WEBHOOK_TOKEN`) does. `main` now reads `settings.GRIDX_WEBHOOK_TOKEN`.
+
+**8. MEDIUM — new public endpoint has no tests, and the task swallows everything**
+The webhook view is added with zero test coverage (diff touches only the monitor and client test files) — violates the repo's "ALL new code must have tests". Separately, `except Exception: logger.exception(...)` in the task means every failure mode above degrades to a log line with no alert, no retry, and no metric; the task reports success to Huey.
+
+---
+
+Also worth noting, lower confidence: no locking around check-then-create, so two concurrent runs (manual trigger overlapping the hourly schedule) can both observe "no subscription" and POST twice, producing duplicate subscriptions and duplicate event deliveries — which is precisely the condition `main`'s `raise Exception("Multiple subscriptions returned for a single program")` now trips on.
+
+Next: findings 1 and 2 are the two that made the feature non-functional in production — worth checking whether the fixes in `main` were prompted by an incident.

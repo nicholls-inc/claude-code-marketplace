@@ -1,0 +1,266 @@
+[
+ {
+  "fix_pr": 16432,
+  "sentry_id": "CORE-2GGV",
+  "bug_summary": "GET /v2/notifications 500 (ValueError: Must be 'User' instance) for org-scoped client-credentials apps: filter used invalid relation path user__organisations__in.",
+  "culprit_pr": 9688,
+  "culprit_confidence": "high",
+  "evidence": "git show 04e0736ed4 (PR #9688 'organisation access control') adds the exact bad line `queryset.filter(user__organisations__in=[organisation])` to api_v2/views/notifications/notifications.py; git log -S shows only #9688 and the fix touched it.",
+  "url": "https://github.com/ev-energy/core/pull/16432",
+  "sentry": {
+   "first_seen": "2026-06-22T14:21:18.292Z",
+   "last_seen": "2026-06-22T14:21:18.000Z",
+   "occurrences": 1,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "bf23fdbf17b4a6549392a059184d9b23c809034e"
+  }
+ },
+ {
+  "fix_pr": 16392,
+  "sentry_id": "CORE-2G87",
+  "bug_summary": "GridX get_subscription deserialized reads with GridXSubscription requiring bearer_token, which GridX never echoes back, so every subscription read failed pydantic validation (~2920 events).",
+  "culprit_pr": 12762,
+  "culprit_confidence": "high",
+  "evidence": "Commit 22d44eebf3 (PR #12762 'gridx webhook monitor receiver') introduced gridx_subscription_monitor.py and the get_subscription read path using the create-payload model; git log -S 'def get_subscription' shows only #12762 before the fix.",
+  "url": "https://github.com/ev-energy/core/pull/16392",
+  "sentry": {
+   "first_seen": "2026-04-13T15:01:01.827Z",
+   "last_seen": "2026-06-10T11:00:20.000Z",
+   "occurrences": 2962,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "1023ad4a7999910c81f0c043db3b475a0cba71f9"
+  }
+ },
+ {
+  "fix_pr": 16326,
+  "sentry_id": "CORE-2EVX",
+  "bug_summary": "driver_account_created Avo event passed UPPER_CASE verification status straight through; Avo schema validator only accepts title-case, raising ValueError in strict (staging) mode.",
+  "culprit_pr": 14987,
+  "culprit_confidence": "high",
+  "evidence": "Commit 0e6a6b2ac1 (PR #14987 'Client tracking from the web app triggering driver_account_created events') added the send path passing driver_program_verification_status without .title(), unlike the sibling updated-event which title-cases.",
+  "url": "https://github.com/ev-energy/core/pull/16326",
+  "sentry": {
+   "first_seen": "2025-09-16T04:40:27.575Z",
+   "last_seen": "2026-06-19T06:20:46.000Z",
+   "occurrences": 1085,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "706d24730afe3742d23ada99902c1c6a61ed5c49"
+  }
+ },
+ {
+  "fix_pr": 15602,
+  "sentry_id": "CORE-2FVY",
+  "bug_summary": "CarbonFeed admin change page crashed with AttributeError: 'CarbonFeed' object has no attribute 'carbonintensity_set' after the old CarbonIntensity model was removed but admin still referenced its reverse relation.",
+  "culprit_pr": 14650,
+  "culprit_confidence": "high",
+  "evidence": "Commit 1603dc6281 'Remove old carbon intensity model (#14650)' deleted the CarbonIntensity model while carbon/admin.py and the change_form template kept referencing carbonintensity_set (fixed in #15602).",
+  "url": "https://github.com/ev-energy/core/pull/15602",
+  "sentry": {
+   "error": "404 not found"
+  }
+ },
+ {
+  "fix_pr": 16347,
+  "sentry_id": "CORE-2GAZ",
+  "bug_summary": "Solar-only scheduler crashed with ValueError: max() arg is an empty sequence when household export dropped below the lowest power step and the step list lacked a 0 entry.",
+  "culprit_pr": 10279,
+  "culprit_confidence": "medium",
+  "evidence": "git log -S 'if i <= price.household_export_watts' -> commit 55280f0b6e 'Update solar schedulers to use household exports (watts) (#10279)' introduced the unguarded max() comprehension; latent until production step lists lacked 0.",
+  "url": "https://github.com/ev-energy/core/pull/16347",
+  "sentry": {
+   "first_seen": "2026-04-30T22:01:38.093Z",
+   "last_seen": "2026-06-19T08:31:09.000Z",
+   "occurrences": 929,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "77d6fa0324368343dec796518abbd6ad07305976"
+  }
+ },
+ {
+  "fix_pr": 16479,
+  "sentry_id": "CORE-2GGX",
+  "bug_summary": "log_smartcar_error crashed with KeyError('PLATFORM_NOT_CAPABLE'): direct enum subscript lookups SmartCarErrorType[exc.type]/SmartCarErrorCode[exc.code] raise on unmodelled Smartcar codes.",
+  "culprit_pr": 5326,
+  "culprit_confidence": "high",
+  "evidence": "git log -S 'SmartCarErrorCode[' -> commit b4dd9c7aa9 'Plat 125 incorporate error model for smart car (#5326)' introduced the brittle subscripts. Note: PR #15812 (fix for CORE-2G7X) claimed to harden them but never applied the smartcar.py change, per #16479's body.",
+  "url": "https://github.com/ev-energy/core/pull/16479",
+  "sentry": {
+   "first_seen": "2026-06-22T16:44:30.705Z",
+   "last_seen": "2026-06-22T16:44:30.000Z",
+   "occurrences": 1,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "356d1b024e1ffaeace6b58352669e701de098d2f"
+  }
+ },
+ {
+  "fix_pr": 15812,
+  "sentry_id": "CORE-2G7X",
+  "bug_summary": "KeyError crash in log_smartcar_error when Smartcar returned new error code OEM_BUSINESS_RULE_NOT_MET not present in SmartCarErrorCode enum.",
+  "culprit_pr": 5326,
+  "culprit_confidence": "high",
+  "evidence": "Same origin as CORE-2GGX: commit b4dd9c7aa9 (#5326) introduced SmartCarErrorCode[exc.code] direct subscript lookup in hardware/controllers/vehicles/smartcar.py.",
+  "url": "https://github.com/ev-energy/core/pull/15812",
+  "sentry": {
+   "error": "404 not found"
+  }
+ },
+ {
+  "fix_pr": 16414,
+  "sentry_id": "CORE-2GEP",
+  "bug_summary": "Admin tariff 'Duplicate' 500: duplicate() dereferenced tariff.schema.tariffschemaversion_set unconditionally although schema is nullable (SET_NULL); also leaked orphan TariffSchema rows on failure.",
+  "culprit_pr": 4639,
+  "culprit_confidence": "medium",
+  "evidence": "git log -S 'tariffschemaversion_set.all' -> commit 2972ab323b 'Admin button to duplicate tariff (#4639)' introduced the unguarded dereference (file later moved by #13564).",
+  "url": "https://github.com/ev-energy/core/pull/16414",
+  "sentry": {
+   "first_seen": "2026-05-22T16:47:57.575Z",
+   "last_seen": "2026-06-17T12:23:24.000Z",
+   "occurrences": 6,
+   "users_impacted": 2,
+   "status": "resolved",
+   "release": "19027381128f641d343166efb6191663383d32f9"
+  }
+ },
+ {
+  "fix_pr": 16345,
+  "sentry_id": "CORE-2FWK",
+  "bug_summary": "Stripe invoice handler guarded only len(lines)>1; empty line-items list raised uncaught IndexError, so the event was never marked failed and re-failed every 5 minutes (~57k events).",
+  "culprit_pr": 4614,
+  "culprit_confidence": "medium",
+  "evidence": "git log -S TooMuchDataException -> earliest commit 8ace4ec492 'Add StripeInvoice and create when data recieved on Stripe webhook (#4614)' introduced the >1-only guard and [0] index; retry-loop amplification via DLQ from #13151.",
+  "url": "https://github.com/ev-energy/core/pull/16345",
+  "sentry": {
+   "first_seen": "2026-02-06T10:15:25.861Z",
+   "last_seen": "2026-06-19T08:40:26.000Z",
+   "occurrences": 63673,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "77d6fa0324368343dec796518abbd6ad07305976"
+  }
+ },
+ {
+  "fix_pr": 15747,
+  "sentry_id": "CORE-2FCJ",
+  "bug_summary": "IntegrityError from dc_chargingsession_one_open_per_evse exclusion constraint when a vehicle switched EVSEs: connect() unconditionally reassigned charging_session.chargepoint without closing the old session.",
+  "culprit_pr": 4060,
+  "culprit_confidence": "low",
+  "evidence": "git log -S one_open_per_evse -> commit 4eb1c4131e 'Only allow EVSEs to be in one open charging session at a time (#4060)' added the exclusion constraint that the pre-existing unconditional reassign in connect_disconnect.py then violated; fix later reverted (#15762) and superseded by #15891.",
+  "url": "https://github.com/ev-energy/core/pull/15747",
+  "sentry": {
+   "first_seen": "2025-11-27T12:25:09.843Z",
+   "last_seen": "2026-08-26T11:06:55.000Z",
+   "occurrences": 30523,
+   "users_impacted": 0,
+   "status": "unresolved (ongoing)",
+   "release": "dd661b97d1fbf1386984d7900409c4959d49e327"
+  }
+ },
+ {
+  "fix_pr": 16491,
+  "sentry_id": "CORE-2GHD",
+  "bug_summary": "caiso_flex_alerts_check TypeError: MIDAS v2.0 API started wrapping the RIN list in {\"Rates\": [...]} instead of a bare list; _get_rin_list iterated dict keys.",
+  "culprit_pr": null,
+  "culprit_confidence": "low",
+  "evidence": "External upstream API format change (MIDAS v2.0), not a repo regression per PR body.",
+  "url": "https://github.com/ev-energy/core/pull/16491",
+  "sentry": {
+   "first_seen": "2026-06-29T12:25:05.551Z",
+   "last_seen": "2026-06-29T13:25:08.000Z",
+   "occurrences": 4,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "2b2128308d4da48e6d68ff16a19faee587f291e2"
+  }
+ },
+ {
+  "fix_pr": 16413,
+  "sentry_id": "CORE-2GFT",
+  "bug_summary": "~48.6k errors/5 days: solar array timezone resolution failed permanently after junk charge-location coordinates were persisted to _location, because fallback paths skipped is_valid_location().",
+  "culprit_pr": null,
+  "culprit_confidence": "low",
+  "evidence": "PR body states 'Not a code regression (the log line dates to 2024) - a data condition exposed two compounding defects'.",
+  "url": "https://github.com/ev-energy/core/pull/16413",
+  "sentry": {
+   "first_seen": "2026-06-10T20:30:30.298Z",
+   "last_seen": "2026-06-19T08:32:26.000Z",
+   "occurrences": 137993,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "77d6fa0324368343dec796518abbd6ad07305976"
+  }
+ },
+ {
+  "fix_pr": 16541,
+  "sentry_id": "CORE-2GJ6",
+  "bug_summary": "Admin car charts 500: equal start/end query params passed the '>' entry validation in ChartsBuilder.__init__ then hit set_date_range's stricter '<=' check, raising unhandled ValueError.",
+  "culprit_pr": null,
+  "culprit_confidence": "low",
+  "evidence": "git log -S on the validation message found no introducing commit on current paths; long-standing off-by-one between two validators, no single culprit identified.",
+  "url": "https://github.com/ev-energy/core/pull/16541",
+  "sentry": {
+   "first_seen": "2026-07-07T13:52:53.113Z",
+   "last_seen": "2026-07-07T13:52:53.000Z",
+   "occurrences": 1,
+   "users_impacted": 1,
+   "status": "resolved",
+   "release": "d8c1ff6deecd11b4066be87ef2bc55d7d067ad47"
+  }
+ },
+ {
+  "fix_pr": 16329,
+  "sentry_id": "CORE-2E0N",
+  "bug_summary": "Legacy web onboarding 500: Start.get had no boundary handling for NotImplementedError raised when no vehicle provider resolves for the user's make/country; V2 endpoint already treats this as expected 422.",
+  "culprit_pr": null,
+  "culprit_confidence": "low",
+  "evidence": "Long-standing missing boundary handling in vehicle_onboarding/views/generic.py; no introducing commit traced.",
+  "url": "https://github.com/ev-energy/core/pull/16329",
+  "sentry": {
+   "error": "404 not found"
+  }
+ },
+ {
+  "fix_pr": 16331,
+  "sentry_id": "CORE-2GEX",
+  "bug_summary": "logger.exception in Huey clerk tasks crashed with KeyError on structlog_request_id contextvar due to ddtrace context activation race in merge_contextvars, masking real ClerkErrors.",
+  "culprit_pr": null,
+  "culprit_confidence": "low",
+  "evidence": "Interaction between structlog contextvars and ddtrace context provider; no single introducing PR identified.",
+  "url": "https://github.com/ev-energy/core/pull/16331",
+  "sentry": {
+   "error": "404 not found"
+  }
+ },
+ {
+  "fix_pr": 15714,
+  "sentry_id": "CORE-2G00",
+  "bug_summary": "TypeError comparing None > datetime in get_vehicle_state_choice when current_state_timestamp was never recorded (86 events).",
+  "culprit_pr": null,
+  "culprit_confidence": "low",
+  "evidence": "Nullable-timestamp comparison in dc/models/vehicle_state.py; introducing commit not traced.",
+  "url": "https://github.com/ev-energy/core/pull/15714",
+  "sentry": {
+   "error": "404 not found"
+  }
+ },
+ {
+  "fix_pr": 15708,
+  "sentry_id": "CORE-2DE9",
+  "bug_summary": "88k+ events: OCPP meter-values future-timestamp tolerance of 30s was too strict for real charger clock drift (~15 min), rejecting legitimate timestamps.",
+  "culprit_pr": null,
+  "culprit_confidence": "low",
+  "evidence": "Tolerance tuning issue, not a regression; environmental clock drift.",
+  "url": "https://github.com/ev-energy/core/pull/15708",
+  "sentry": {
+   "first_seen": "2025-03-24T17:15:44.931Z",
+   "last_seen": "2026-08-03T15:39:58.000Z",
+   "occurrences": 91153,
+   "users_impacted": 0,
+   "status": "resolved",
+   "release": "unknown"
+  }
+ }
+]

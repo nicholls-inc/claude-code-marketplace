@@ -1,0 +1,32 @@
+Reviewed. Found real problems — one already proved out in production.
+
+## Critical / high
+
+**1. CRITICAL — sticky assignor's bookkeeping is class-level, shared by two consumer groups in one process → continuous rebalance loop.**
+`aiokafka 0.13.0` `StickyPartitionAssignor` mutates `cls.member_assignment` / `cls.generation` in `on_assignment` / `on_generation_assignment` (verified in installed package). `start_consumers()` (`ocpp_kafka/ocpp_kafka_consumer.py:226,235`) builds **two** `OCPPKafkaConsumer` instances in the same process — main `ocpp-group-id` plus per-pod `ocpp-call-response-<uuid>` — both using this assignor class. Each group's assignment overwrites the other's class state, so the metadata advertised to each coordinator is wrong.
+Failure scenario: pod joins → call-response group's assignment clobbers the main group's `cls.member_assignment` → main group's next JoinGroup advertises bogus prior assignment → coordinator rebalances again → loop; every round fires `mark_all_connections_unverified()` on all 100 pods, so `AioKafkaMessageBroker.handle` raises `UnverifiedOCPPAdapterException` for every outbound message and EVSE online counts go to zero.
+Confirmed: reverted 2 days later by `0efafd45ef` ("revert OCPP consumer sticky partition assignment (production rebalance loop)"), with the incident date 2026-07-22 recorded in the `NOTE(DEVOPS-1551)` comment now at `ocpp_kafka/ocpp_kafka_consumer.py:125`.
+
+**2. HIGH — unbounded `await` inside the semaphore can permanently wedge all config syncs on a pod.**
+`configure_charge_point` (legacy `ocpp_adaptor/ocpp16_charge_point.py:2224`) starts with `await self._evse_was_created.wait()`, and that event is only set inside `if self._status is not None:` (`:938`, `:984`). The new code holds a semaphore slot across that wait (`configuration_sync.py`, `async with _get_semaphore()`).
+Failure scenario: after a rebalance, 5 chargers deliver BootNotification before any StatusNotification (`_status is None`) → 5 coroutines block forever on `_evse_was_created` while holding all `OCPP_CONFIG_SYNC_MAX_CONCURRENCY=5` slots → no charger on that pod is ever configured again until restart. Pre-PR each hang was an isolated task. Legacy class is the prod path for most integrations (`ocpp_handler.py:44-57`).
+
+**3. HIGH — cap of 5 concurrent syncs × 60s OCPP timeouts = hours-long config backlog, worst on the first rebalance after deploy.**
+Worst-case drain rate is 5 syncs / 60s. The TTL skip that is meant to keep the queue short is Redis-backed, so it is cold immediately after this deploy — exactly when the fleet-wide rebuild happens.
+Failure scenario: pod owns ~3,000 chargers, cache cold, half offline and timing out → queue drains at ≈5/min → chargers wait hours for configuration, and `_purge_old_connections` (30 min, `ocpp_handler.py:125`) `cleanup()`s ChargePoints whose sync is still queued, so those syncs are wasted and never marked.
+
+**4. MEDIUM-HIGH — readiness marker is cleared on every rebalance on every pod, because the assignors are eager, not cooperative.**
+Both `RoundRobinPartitionAssignor` and aiokafka's sticky assignor revoke the *whole* assignment before rejoin, so `on_partitions_revoked` → `clear_consumer_ready()` fires on all 100 pods at once, every rebalance (54 eviction events/day per the PR description).
+Failure scenario: once the companion gitops readinessProbe lands, a rebalance slower than `failureThreshold × periodSeconds` takes all 100 pods NotReady simultaneously → PDB shows zero available, Service endpoints drop, rollouts and Karpenter drains stall fleet-wide. The PR only argues the probe timing "absorbs the brief gap" — nothing in this diff bounds that gap.
+
+## Lower
+
+**5. MEDIUM — `message.endswith("exception was never retrieved")` downgrades *all* unretrieved background-task exceptions to warning, process-wide.** Failure scenario: an `IntegrityError` or `KeyError` in `apply_default_profile_if_exists` / `do_ct_clamp_check` silently becomes a warning instead of reaching Sentry — a new class of bug ships invisibly.
+
+**6. MEDIUM — `boot_was_triggered_by_us` misattributes a real reboot as ours.** Any BootNotification within 630s of our last TriggerMessage counts as ours. Failure scenario: charger genuinely power-cycles and reverts config ~2 min after we triggered a rebuild → attributed to us → sync skipped for the full 6h TTL → charger runs 6h with wrong `MeterValueSampleInterval`/heartbeat and no override applied.
+
+**7. LOW — `TOTAL_OCPP_KAFKA_CONSUMER_THREADS > 1` breaks the single readiness file.** Default is `"1"` (`base.py:2421`), so only a latent footgun: with 2 threads, one thread's revoke clears the file while the other holds a live assignment → spurious NotReady.
+
+**8. LOW — OCTT waffle short-circuit marks a sync that never happened.** `universal/ocpp16_charge_point.py:1600-1606` returns `([], False)` when the skip switch is on, which `run_configuration_sync` treats as success and writes the 6h TTL marker. Test chargers only.
+
+Next: read `ocpp_kafka/ocpp_kafka_consumer.py:125-131` — the in-repo `NOTE(DEVOPS-1551)` comment is the post-mortem for finding 1 and names the per-instance-assignor fix (`c109454b02`) that followed.

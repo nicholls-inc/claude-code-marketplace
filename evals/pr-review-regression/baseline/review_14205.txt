@@ -1,0 +1,28 @@
+**Verdict: this PR shipped a real production regression.** Ground truth: it was narrowed 2 days later by #14227 ("Only use ChargePoint 5.1 for polling sessions — *It broke other requests in the polling*", Sentry 6912654632).
+
+## Findings
+
+1. **CRITICAL — blast radius: one-line change upgrades *every* commercial poll call to WSDL 5.1, not just `getChargingSessionData`.**
+   `do_poll` builds a single `ChargePointIncAPI` and reuses it for `get_load()`, `get_station_statuses()` and `get_charging_session_data()` (`commercial_chargepoint_inc_poll.py:81`). Adding `wsdl_url=WSDL_URL_5_1` re-versions all of them. The PR body only justifies 5.1 for `activeSessionsOnly`.
+   *Failure:* commercial poll runs, `getLoad`/`getStationStatus` hit the 5.1 schema, raise, EVSE load + status updates stop for CPMS chargers. Confirmed — fixed by `32ad91f2b1`.
+   *Fix at review time:* second client instance (exactly what #14227 did), or a `wsdl_url` override on `get_client()` scoped to the one operation.
+
+2. **HIGH — no kill switch; rollback needs a deploy.**
+   Every other risky behaviour in this handler is waffle-gated (`COMMERCIAL_CP_INC_GET_LOAD_POLL_OFF`, `COMMERCIAL_CP_INC_GET_CHARGING_SESSION_DATA_POLL_ON`). A third-party-API version bump is at least as risky and got none.
+   *Failure:* 5.1 misbehaves in prod; only remedy is a revert PR + deploy — which is what happened, over ~2 days.
+
+3. **HIGH — zero tests, and the existing suite is structurally incapable of catching this.**
+   `dc/tests/task_handlers/test_commercial_chargepoint_inc_poll.py` mocks `ChargePointIncAPI.get_load` / `.get_station_statuses` / `.get_charging_session_data` wholesale, so `wsdl_url` is never constructed or asserted. Diff is +2/-0.
+   *Failure:* full green CI on a change that broke prod. Minimum bar: assert which WSDL each operation is constructed with.
+
+4. **MEDIUM — WSDL-fetch failure is unhandled and aborts the whole poll task.**
+   `get_client()` constructs a fresh `zeep.Client(wsdl=self.wsdl_url, ...)` on every call, so the 5.1 WSDL is fetched/parsed on the hot path. In the `get_load` loop only `ChargePointIncAPIException` is caught; `get_station_statuses` catches only `TransportError`. The shared `SqliteCache` at a fixed tempdir path (`ZEEP_CACHE_PATH`) is cold for the new URL on first deploy, across every Huey worker at once.
+   *Failure:* new URL 404s / ChargePoint is slow at deploy time → uncaught exception out of `do_poll`, poll task dies before any status updates, plus a simultaneous cold-cache fetch + sqlite write storm from all workers.
+
+5. **MEDIUM — silent-wrong-data path, not just an error path.**
+   `session["Energy"]` and `port["portLoad"]` from these responses feed `ChargerDetails.meter_reading` / `charge_rate_kilowatts` → `evse.update_evse(...)`. A 5.0→5.1 field-semantics difference (units, cumulative vs delta, nullability) produces no exception.
+   *Failure:* 5.1 returns energy on a different basis; wrong meter readings land in charging sessions and downstream billing/incentive calculations with no alert. Nothing in the PR verifies response-shape equivalence for the reused operations.
+
+**Minor:** `ChargePointIncAPI`'s docstring still links the 5.0 programmer's guide, and the PR added no code comment explaining why this call site diverges — the explanatory comment only arrived with the follow-up fix.
+
+Next: read Sentry 6912654632 to confirm *which* operation broke under 5.1 — that determines whether item 5 is hypothetical or actually fired.

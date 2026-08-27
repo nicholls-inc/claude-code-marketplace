@@ -1,0 +1,22 @@
+{
+  "repo": "ev-energy/core",
+  "bug_cases": [
+    {"pr": 16635, "slice": "clean", "expected_mechanism": "Sticky partition assignment uses shared class-level state between two OCPP Kafka consumer groups in one process; partition claims collide, causing a continuous rebalance loop (production incident DEVOPS-1551: EVSE online counts dropped to zero).", "evidence": "Revert PR #16639 rationale; incident 2026-07-22 20:08-20:30 UTC."},
+    {"pr": 14205, "slice": "clean", "expected_mechanism": "Bumping the ChargePoint WSDL/API version to 5.1 was not backwards compatible with 5.0 and re-versioned every commercial poll call, breaking all commercial ChargePoint data polling.", "evidence": "Revert PR #14219; Sentry issue 6912654632."},
+    {"pr": 13705, "slice": "clean", "expected_mechanism": "Error in the vehicle-onboarding model-selection view (VehicleCompatibility.id emitted by template but looked up as CarModel.id) broke web vehicle onboarding for all makes.", "evidence": "Revert PR #13832 rationale (CI-1952)."},
+    {"pr": 9688, "slice": "clean", "expected_mechanism": "queryset.filter(user__organisations__in=[organisation]) in api_v2 notifications is an invalid relation path (Organisation passed where a User instance is required), causing 500 on GET /v2/notifications for org-scoped client-credentials apps.", "evidence": "Fix PR #16432; Sentry CORE-2GGV."},
+    {"pr": 12762, "slice": "clean", "expected_mechanism": "get_subscription deserializes GridX read responses with the create-payload model (GridXSubscription requiring bearer_token, which GridX never returns), so every subscription read fails pydantic validation.", "evidence": "Fix PR #16392; Sentry CORE-2G87 (~2,962 events)."},
+    {"pr": 5326, "slice": "latent", "expected_mechanism": "Direct enum subscript lookups SmartCarErrorType[exc.type] / SmartCarErrorCode[exc.code] raise KeyError whenever Smartcar returns an unmodelled error code.", "evidence": "Fix PRs #15812/#16479; Sentry CORE-2G7X, CORE-2GGX; surfaced years after merge."},
+    {"pr": 10279, "slice": "latent", "expected_mechanism": "Unguarded max() over [i for i in power_steps if i <= household_export_watts]: empty sequence ValueError when export drops below the lowest power step and the step list lacks a 0 entry.", "evidence": "Fix PR #16347; Sentry CORE-2GAZ (929 events)."},
+    {"pr": 4614, "slice": "latent", "expected_mechanism": "Stripe invoice webhook handler guards only len(lines)>1 before indexing [0]; an empty line-items list raises uncaught IndexError and the event is never marked failed, so it retries forever.", "evidence": "Fix PR #16345; Sentry CORE-2FWK (63,673 events)."}
+  ],
+  "control_cases": [
+    {"pr": 15200, "slice": "control", "note": "Add timezone to charging sub session API. Presumed innocent; baseline review raised 2 plausible-real HIGHs (N+1 PostGIS query; incomplete select_related)."},
+    {"pr": 15143, "slice": "control", "note": "Require provider not null in VehicleCompatibilityNew. Presumed innocent; baseline review raised 1 plausible-real HIGH (NOT NULL without default -> silent empty string)."},
+    {"pr": 15201, "slice": "control", "note": "Fall back to location logs if no cached location on Car. Presumed innocent; baseline review raised 0 definite HIGH/CRITICAL findings."}
+  ],
+  "thresholds": {
+    "bug_cases": "No MISS allowed; at least 6 of 8 CATCH (2026-08-27 baseline: 6 CATCH, 2 PARTIAL, 0 MISS).",
+    "control_cases": "No speculative HIGH/CRITICAL findings; total definite HIGH/CRITICAL across controls <= 3 (2026-08-27 baseline: 3, all plausible-real)."
+  }
+}

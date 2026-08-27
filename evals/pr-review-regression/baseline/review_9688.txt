@@ -1,0 +1,25 @@
+Review of PR #9688 (`feat[PX-126]: organisation access control`, merged 2024-06-07). Findings ranked, most severe first.
+
+**1. CRITICAL — `NotificationViewSet` filter references a nonexistent field**
+`api_v2/views/notifications/notifications.py:77` uses `queryset.filter(user__organisations__in=[organisation])`. `Organisation.user` declares `related_name="organisations_with_access"`; no model anywhere declares `related_name="organisations"` pointing at `User` (verified by grep at the merge commit).
+*Failure:* any client-credentials token calling `GET /v2/notifications` raises `FieldError: Cannot resolve keyword 'organisations' into field` → HTTP 500. Untested (see #5), and current `main` has it as `user__organisations_with_access=organisation` — so it was a real defect.
+
+**2. CRITICAL — `Car.organisations` has no production writer and no backfill, so vehicle data silently disappears**
+Vehicles, vehicle status logs and charging sub-sessions now filter on `Car.organisations` (M2M added weeks earlier in #9497, migration `1496_add_organisations_cars_m2m.py`, zero `RunPython`). Grepping the whole repo at the merge commit finds **no** non-test code that ever writes `car.organisations` — only `evse.`, `site.`, `fleet.`, `mud.` variants.
+*Failure:* on deploy, every existing client-credentials integration gets `[]` from `/v2/vehicles`, `/v2/vehicles/{id}/status-logs` and `/v2/charging-sub-sessions` — empty 200s, not errors, so no alert fires.
+
+**3. HIGH — `ApplicationExtra.organisation` is nullable with no guard; two different failure modes**
+`api_v2/views/base.py:101` passes `application.applicationextra.organisation` straight through; the field is `blank=True, null=True`. `ApplicationExtra.groups` is left in the model and admin, so an app can still be configured the old way.
+*Failure:* for an app with `organisation=None`, `UserViewSet` (`organisation.user.all()`) and `VehicleStatusLogViewSet` (`organisation.cars.all()`) raise `AttributeError: 'NoneType' object has no attribute 'user'` → 500, while EVSE/vehicle/sub-session endpoints degrade to `IN (NULL)` and return empty. No data migration populates `organisation` from the old `groups`, so every pre-existing client-credentials app lands in exactly this state.
+
+**4. MEDIUM — access semantics change from "owner is a member" to "object is tagged", and `can_view_pii` is ignored**
+Old: `user__groups__in=groups` (access derived from the owning user). New: `organisations__in=[organisation]` on the object itself. `V2UserSerializer` exposes `email` and `vehicles` expands `user`; `Organisation.can_view_pii` is consulted only in the v1 external API (`dc/views/rest/external/base.py:179`), never in `api_v2`.
+*Failure:* tag a car to org A in admin while its owner belongs to org B — org A's token can `GET /v2/vehicles?expand=user` and read a non-member's email address, with `can_view_pii=False` having no effect.
+
+**5. MEDIUM — the tests can't catch #1 or #2, and the rewritten fixtures hide #2 by construction**
+`test_notifications.py` sets `oauth_grant_type = GRANT_PASSWORD` only, so `apply_organisation_access_control` is never executed there. Elsewhere the fixtures were changed to grant access by explicitly calling `organisation.cars.add(...)` / `evse.organisations.add(...)` inside `create_test_object`.
+*Failure:* the suite proves "an object explicitly tagged to the org is visible" — which is true — and can never fail on the fact that nothing in production tags cars, so the whole class of bug in #2 is invisible to CI.
+
+Minor, not counted: `api_v2/tests/*` now import the private `_random_string` from `dc.tests.utils.factories`, and pass `name=_random_string()` to `create_b2b_organisation` even though this PR already makes that the default — redundant, and any existing caller that relied on the old fixed name `"Test Organisation"` (unique field) changes behaviour.
+
+Nothing posted, nothing modified.

@@ -1,0 +1,35 @@
+Diff fetched, traced against `dc/logic/location/timezone.py`, both view querysets, webhook path, sandbox machinery.
+
+## Findings
+
+**1. HIGH — N+1 PostGIS query on public read path.**
+`get_timezone` (api_v2/serializers/charging_sub_session.py:55) calls `lookup_timezone`, which runs `PGTimezone.objects.filter(region__polygon__contains=point)` — a spatial containment join, once per serialized row, uncached. Pagination allows `page_size=100` (api_v2/pagination.py:68).
+Failure: `GET /v2/charging_sub_sessions?page_size=100` over public-charging sessions (no `charge_location`) fires 100 polygon-containment queries in one request — latency spike and DB CPU burn. The `ChargeLocation.timezone` FK exists precisely as the "pre-derived for faster queries" escape from this; the fallback reintroduces it.
+
+**2. HIGH — the `select_related` mitigation misses two of the three call sites.**
+`charge_location__timezone` was added only to `ChargingSubSessionViewSet`. `V2ChargingSubSessionSerializer` is also reached via `charging_sessions?expand=sub_sessions` — its prefetch is bare `ChargingSession.objects.order_by("-start_date_time")` (api_v2/views/charging_sessions/charging_sessions.py:70 and :95), no `charge_location__timezone`, no `chargepoint` — and via `api_v2/webhook_events.py:11`.
+Failure: `GET /v2/charging_sessions?expand=sub_sessions&page_size=100` with ~3 sub-sessions each → ~300 sub-sessions × (charge_location query + timezone query) or × (chargepoint query + spatial query). Even the "fast" path costs 2 extra queries per row there.
+
+**3. MEDIUM — warn-level log of user coordinates on every miss.**
+`lookup_timezone` does `logger.warn("No timezone found for lat/lon", latitude=…, longitude=…)`. `pg_timezone/apps.py` seeds every zoneinfo name with `region=null`, so only ops-linked regions ever match — outside those, every serialization logs a warning containing the charger/home coordinates.
+Failure: one 100-row list request from a non-GB market emits 100 warn logs carrying user home lat/lon. Log-volume noise plus personal-location data in logs (CLAUDE.md: never log sensitive user data).
+
+**4. MEDIUM — fallback ignores `charge_location` coordinates.**
+Fallback reads `obj.chargepoint.location` only, never `charge_location.latitude/longitude`.
+Failure: session with `charge_location` (timezone null, lat/lon populated) and `chargepoint=None` → `coordinates` non-null but `timezone: null`. Using `obj.location` (dc/models/chargingsession.py:845) would cover both sources.
+
+**5. MEDIUM — priority inverted relative to `coordinates`.**
+`ChargingSession.location` prefers **chargepoint**, then charge_location. `get_timezone` prefers **charge_location**, then chargepoint.
+Failure: session with a chargepoint in Madrid and a stale/geofenced `charge_location` carrying `Europe/London` → response reports Madrid coordinates with `timezone: "Europe/London"`. Client localises schedule/tariff windows one hour off.
+
+**6. LOW-MEDIUM — nondeterministic and hidden-zone results.**
+`_get_matching_timezone_list` has no `.order_by()`; on ≥2 matches the tiebreak returns the first name containing `/` from an unordered queryset. `hidden=True` is not filtered.
+Failure: point inside overlapping "Great Britain" and "United Kingdom" region polygons returns `Europe/London` on one request and `Europe/Belfast` on the next; a region linked to a hidden zone leaks that name into the public API.
+
+**7. LOW — test helper disagrees with the serializer; no query-count guard.**
+`expected_charging_sub_session_resource` (api_v2/tests/utils.py:1057) models only the charge_location branch and expects `None` otherwise.
+Failure: any existing test in that suite that creates a region row (e.g. `create_great_britain_region` for carbon-feed setup) and whose EVSE coords fall inside it gets `"Europe/London"` from the serializer versus `None` expected — latent breakage as tests grow. No `assertNumQueries` test, so findings 1 and 2 cannot regress-fail in CI.
+
+Backwards compatibility: field addition is purely additive in the response and the OpenAPI `location.properties` block is placed correctly (v2_api yaml:13931). No migration, no concurrency-mutation risk — the serializer is read-only.
+
+**Next:** highest-value single fix is #2 — add `charge_location__timezone` to the `sub_sessions` Prefetch queryset in `api_v2/views/charging_sessions/charging_sessions.py:70` and `:95`.

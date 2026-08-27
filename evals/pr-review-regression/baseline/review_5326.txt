@@ -1,0 +1,40 @@
+Reviewed at PR head `0b883eb` (merged 2023-02-01), with SDK source at `.venv/.../smartcar/exception.py`. Found serious problems. Blockers first.
+
+## Blockers
+
+1. **CRITICAL — `SmartCarErrorType[exc.type]` KeyError escapes the whole error handler.** `dc/controllers/vehicles/smartcar.py:317`. `log_smartcar_error` is called *before* the classification branches. SmartCar returns types outside `SmartCarErrorType`'s 12 names — the SDK's v1.0 path sets `type=response.get("error")` (lowercase strings like `vehicle_state_error`), the OAuth path sets `type=response.get("error")` (`invalid_grant`), and the unparseable path sets `type="SDK_ERROR"`. None are enum members.
+   *Failure:* SmartCar returns a v1.0-format 401 during a charge command → `KeyError('invalid_grant')` instead of `VehicleAPIUnauthorized` → `Car.charge()`'s `except (…VehicleAPIUnauthorized…)` tuple at `dc/models/car.py:339` does not catch it → unhandled exception in the charging control path, and `api_account.invalidate()` never runs so the user is never prompted to re-auth.
+
+2. **CRITICAL — the `SDK_ERROR` bail-out that was supposed to prevent #1 is dead code.** `smartcar.py:275`: `if exc.message == "SDK_ERROR"`. The SDK sets `type="SDK_ERROR"` and `message=body` (raw response body) — `message` is never the literal `"SDK_ERROR"`. Pre-existing bug, but this PR newly depends on that guard to keep unparseable errors out of `log_smartcar_error`.
+   *Failure:* SmartCar returns a non-JSON 503 → guard misses → `SmartCarErrorType["SDK_ERROR"]` → KeyError, per #1.
+
+3. **HIGH — same KeyError on `SmartCarErrorCode[exc.code]`.** `smartcar.py:322`. v1.0 responses put a free-form `code` field through; SmartCar also adds new v2.0 codes over time, and the enum's `UNKNOWN_ISSUE`/`UNKNOWN`/`NONE` members are local placeholders, not SmartCar codes.
+   *Failure:* SmartCar ships a new `code` value (they do, without notice) → every error carrying it becomes a KeyError with the consequences in #1. No fallback to `SmartCarErrorCode.UNKNOWN`.
+
+4. **HIGH — unguarded attribute access on exceptions that lack those attributes.** `SmartcarException.__init__` only sets keys it was passed. The non-JSON path passes only `status_code` + `message`; the OAuth path passes only `status_code`, `type`, `message`. So `exc.description`, `exc.code`, `exc.request_id` may not exist. Note line 262 already guards with `hasattr(exc, "code")` — the new code drops that discipline (`exc.code is None`).
+   *Failure:* OAuth token error → `AttributeError: 'SmartcarException' object has no attribute 'request_id'` (or `description`) from the error handler, escaping as in #1.
+
+5. **HIGH — `status_code=None` / `request_id=None` violate DB constraints, failing the INSERT inside the error handler.** The SDK does `self.__dict__[key] = kwargs[key] or None`, and the v2.0 branch reads `status_code` from the *body* (`response.get("statusCode")`), not the HTTP status. Model has `status_code = models.IntegerField()` (non-null) plus `CheckConstraint(status_code__in=[m.value for m in HTTPStatus])`, and `request_id = models.TextField()` (non-null).
+   *Failure:* SmartCar 502 with a JSON body omitting `statusCode` → `NotNullViolation` on `status_code` → error handler raises `IntegrityError`, again bypassing classification; if the caller is inside an `atomic()` block the transaction is now poisoned and unrelated writes in it roll back.
+
+## Lower severity
+
+6. **MEDIUM — silent observability break.** `SmartCarCommand` is `models.IntegerChoices`, and Django's `Choices.__str__` returns `str(self.value)`. Swapping the string `command` for the enum changes statsd metric names from `api.smartcar.batch.NOT_OK` → `api.smartcar.2.NOT_OK` (and `api.smartcar.{make}.batch.NOT_OK` likewise), the log message to `"SmartCar 2 failed."`, and structlog `command=` to an int. The matching `.OK` metrics (`smartcar.py:48`, `:81`) were left as strings, so error-rate ratios can no longer be computed. The untouched success logs at `:120`, `:170`, `:209` were also converted to enums.
+   *Failure:* any Datadog monitor or dashboard keyed on `api.smartcar.batch.NOT_OK` or `command:batch.charge` silently reports zero after deploy — no alert fires, and the SmartCar failure signal disappears.
+
+7. **MEDIUM — migration SQL diverges from Django state.** `1024_...py` adds `error_detail text DEFAULT ''` with no `NOT NULL`; Django's own `AddField(default="")` would emit `NOT NULL` and then drop the DB default. Result: column is nullable in the DB while the model declares it non-null, and a permanent DB-level default remains.
+   *Failure:* combined with #4, `error_detail=exc.description` where `description` is `None` stores SQL NULL; readers get `None` from a field typed `str`, and any later `AlterField` behaves unexpectedly against the leftover default.
+
+8. **MEDIUM — migration takes `AccessExclusiveLock` on a busy log table with no `lock_timeout`.** `DROP VIEW` + `ALTER TABLE ADD COLUMN` + `CREATE VIEW` in one transaction on `dc_smartcarapierrorlog`, which CLAUDE.md classifies as a busy log table. The `ADD COLUMN` itself is fast (non-volatile default), but the view drop/recreate serialises all writers.
+   *Failure:* one long-running analytics `SELECT` holds a lock → the migration blocks → every SmartCar error-log insert queues behind it → lock pileup during deploy. Also `reverse_sql` uses `DROP COLUMN "error_detail" CASCADE`, which would silently drop any other dependent object on rollback.
+
+9. **MEDIUM — synchronous DB write added to the hot path of every SmartCar failure.** Each error now costs one INSERT through a view, with an FK lookup to `ScheduleableDevice` and four check constraints. The `<html>` early-return does correctly exclude ELB 502/504s, which limits this.
+   *Failure:* a fleet-wide SmartCar 500 or rate-limit event → one insert per vehicle poll per error → write amplification on a log table during the exact incident when the platform is already degraded.
+
+10. **LOW — the tests only exercise error types that are already in the enum** (`CONNECTED_SERVICES_ACCOUNT`, `AUTHENTICATION`, `RATE_LIMIT`), which is why #1–#5 got through. No case for an unmapped `type`/`code`, a missing `request_id`/`description`, a `SDK_ERROR`, or a v1.0-format response. Separately: `_assert_error_log` asserts an unscoped `objects.count() == 1` (CLAUDE.md flags this pattern under xdist random ordering), and `smartcar.py:26` leaves a commented-out `# from dc.enums.enums import SmartCarCommand`.
+
+## Bottom line
+
+The core design flaw is one line of ordering: `log_smartcar_error` sits **before** the classification branches, so every possible logging failure — KeyError, AttributeError, IntegrityError — converts a handled vehicle error into an unhandled exception and skips account invalidation. Fixes worth making: move the log call into a `try/except Exception` (or after classification), map unknown types/codes to the existing `UNKNOWN` members instead of `[]` lookup, use `getattr(exc, …, None)`, and keep the statsd/log `command` as `command.name`/`command.label` rather than the enum.
+
+Next: `grep -n "api.smartcar" -r` across your Datadog monitor definitions to see which alerts finding #6 silenced.
