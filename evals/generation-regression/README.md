@@ -17,6 +17,7 @@ Two protocols:
 - `baselines/oneshot_batch_verdicts.json` — 7 cases × 3 arms × k=3 (63 runs): every case BUG_AVOIDED in one-shot mode **except #16635 (9/9 BUG_PRESENT)**. No arm separation in one-shot mode.
 - `baselines/agentic_pilot_verdicts.json` — 2 cases × 2 arms agentic pilot: #10279 reproduced in BOTH arms agentically (though avoided 9/9 one-shot — protocol changes outcomes); on #9688 the bare arm introduced a cross-tenant data leak the cc arm guarded.
 - `baselines/agentic_16635_verdicts.json` — gold case, agentic, k=3: bare 0/3 avoided, delib 0/3, cc 1/3 (the one avoidance subclassed aiokafka's `StickyPartitionAssignor` per consumer, citing its class-level state).
+- `baselines/agentic_16635_plugin_verdicts.json` — real-plugin arm (Agent SDK, actual `crosscheck:draft-invariants` skill loaded, verified in transcripts): 1/3 avoided — same rate as the prompt-approximated cc arm; the avoidance run built a per-consumer `IsolatedStickyPartitionAssignor` subclass and asserted instance isolation in tests. Combined cc-style arms: 2/9 avoided vs 0/6 bare+delib.
 
 ## Key findings
 

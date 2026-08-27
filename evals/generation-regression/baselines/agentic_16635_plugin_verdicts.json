@@ -1,0 +1,5 @@
+[
+{"arm":"plugin","run":"r1","verdict":"BUG_AVOIDED","evidence":"build_ocpp_partition_assignment_strategy() defines a fresh class IsolatedStickyPartitionAssignor(StickyPartitionAssignor) per call, built per consumer instance in __init__; test asserts assertIsNot(sticky_a, sticky_b) and state isolation."},
+{"arm":"plugin","run":"r2","verdict":"BUG_PRESENT","evidence":"Module-level OCPP_PARTITION_ASSIGNMENT_STRATEGY = (StickyPartitionAssignor, RoundRobin) returned by OCPPKafkaConsumer.partition_assignment_strategy; test asserts both call/response groups get the same stock sticky class."},
+{"arm":"plugin","run":"r3","verdict":"BUG_PRESENT","evidence":"Shared OCPP_PARTITION_ASSIGNMENT_STRATEGY tuple returned unmodified, used by both OCPP consumer groups; no subclassing/instance state."}
+]
