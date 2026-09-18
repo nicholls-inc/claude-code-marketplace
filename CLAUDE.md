@@ -30,6 +30,14 @@ Field report plugin. Generates structured performance reports on plugins, skills
 
 - **Skills** (`field-report/skills/`): `/field-report`
 
+### pr-swarm (`pr-swarm/`)
+
+Multi-agent PR review swarm and review-triage plugin for automated, multi-lens code reviews and feedback triage.
+
+- **Skills** (`pr-swarm/skills/`):
+  - `/pr-swarm`: Router-first PR review swarm coordinating specialized lenses (`security`, `test-theatre`, `xp`, `crosscheck/byfuglien`, `crosscheck/hellebuyck`), cross-lens deduplication, structured inline comments, and sticky summary upsert.
+  - `/review-triage`: Automated feedback triage acting on review comments within strict autonomy boundaries, human-participation gating, automated commit application with loop-prevention trailers, and auto-merge preconditioning.
+
 ## Tools
 
 ### claude-github-app (`tools/claude-github-app/`)
