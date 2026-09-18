@@ -55,11 +55,17 @@ May receive routed work from `add-orchestrator` after the ADD spec-driven fast p
 
 Classify the user's request to determine which skill to invoke.
 
+**The three "Full verification" rows below are gated.** They route to
+the Dafny pipeline only after the Complexity gate (below the table)
+passes with case 3. Trivial code and boundary-crossing (ORM / database
+/ Decimal / IO) code take `/lightweight-verify` even when the trigger
+signals match — and even when the user's words are "formally verify".
+
 | Category | Trigger Signals | Path |
 |----------|----------------|------|
-| Algorithms with subtle invariants | Sorting, searching, graph traversal, DP, data structures | Full verification: `/spec-iterate` → `/generate-verified` → `/extract-code` |
-| Safety-critical logic | Access control, financial calculations, crypto, state machines | Full verification: `/spec-iterate` → `/generate-verified` → `/extract-code` |
-| Quantified properties | "For all elements...", "there exists...", "is a permutation of..." | Full verification: `/spec-iterate` → `/generate-verified` → `/extract-code` |
+| Algorithms with subtle invariants | Sorting, searching, graph traversal, DP, data structures | Full verification (Complexity gate case 3 only): `/spec-iterate` → `/generate-verified` → `/extract-code` |
+| Safety-critical logic | Access control, financial calculations, crypto, state machines | Full verification (Complexity gate case 3 only): `/spec-iterate` → `/generate-verified` → `/extract-code` |
+| Quantified properties | "For all elements...", "there exists...", "is a permutation of..." | Full verification (Complexity gate case 3 only): `/spec-iterate` → `/generate-verified` → `/extract-code` — a quantified-*looking* docstring on a trivial identity is still gate case 1 |
 | Simple transformations | Map/filter/reduce, string formatting, type conversions | `/lightweight-verify` |
 | CRUD / IO-heavy | Database queries, HTTP handlers, file processing | `/lightweight-verify` (IO cannot be formally verified) |
 | Concurrency | Thread pools, async coordinators, message passing | `/lightweight-verify` (Dafny cannot model concurrency) |
@@ -78,6 +84,59 @@ Classify the user's request to determine which skill to invoke.
 
 When a request spans multiple categories (e.g., "verify this algorithm and trace how it's called"), address the primary intent first, then offer the secondary skill.
 
+### Complexity gate (mandatory — runs before any Dafny/Lean tool call)
+
+"Formally verify X" in the user's request describes the *task*, not the
+*route*. It does not override the classification table, and it is not
+permission to fire `dafny_verify`. Before invoking any `dafny_*` or
+`lean_*` tool, assess the actual code against this gate:
+
+1. **Trivial code** — arithmetic identities, tautologies, one-line pure
+   functions whose correctness is obvious by inspection (e.g.
+   `a + (total - a) == total`). A Dafny proof here adds cost, not
+   confidence — if the proof would pass first try with no iteration,
+   the problem was too simple to need it. Do NOT fire a Dafny/Lean
+   tool. Route to `/lightweight-verify` (assertion contracts +
+   property-based tests) and say why full formal verification is not
+   worth it here.
+2. **Boundary-crossing code** — code whose real behaviour depends on an
+   ORM, database, web framework, Decimal quantization context, or other
+   IO/library semantics. Dafny can only model the pure fragment; the
+   layer where the real bugs live (ORM query semantics, Decimal
+   precision and rounding, fixture/type mismatches, storage-level
+   rounding) cannot be formally verified at the Dafny level. Do NOT
+   fire a Dafny/Lean tool on such code, and never claim the end-to-end
+   path is verified. Route to `/lightweight-verify` and name the layer
+   mismatch explicitly in the response: state which behaviours are
+   ORM-, database-, or Decimal-bound and therefore out of
+   formal-verification reach.
+3. **Genuinely hard, pure, sequential code** — subtle invariants,
+   quantified properties, safety-critical pure logic. Only this case
+   proceeds to the full verification pipeline.
+
+Running the Dafny proof anyway "because it's quick" or "to have the
+artifact on record" is the failure mode this gate exists to stop, not
+extra diligence: for cases 1 and 2 the correct deliverable is the
+lightweight artifact (assertion contracts, property-based tests, a
+named layer-mismatch statement) and zero `dafny_*`/`lean_*` calls.
+
+Default when uncertain: `/lightweight-verify`. Escalate to the full
+pipeline only when case 3 clearly applies.
+
+**The initial request can never satisfy the override.** A request
+phrased "formally verify X" / "prove X correct" is just the task
+arriving — it is NOT the user insisting on Dafny. The only legitimate
+override is a *follow-up* turn in which, after you have already stated
+the gate verdict and recommended the lightweight route, the user
+replies demanding Dafny anyway. Until that follow-up exists, cases 1
+and 2 mean zero `dafny_*`/`lean_*` calls, full stop.
+
+**Announce the gate verdict first.** For any formal-verification
+request, the first sentence of your response states which gate case
+(1, 2, or 3) the code falls into and the route that implies. If you
+find yourself about to call a Dafny/Lean tool without having announced
+case 3, stop — that is the mis-targeting failure this gate guards.
+
 ## Workflow
 
 ### Phase 1: Classify and Announce
@@ -86,10 +145,11 @@ When a request spans multiple categories (e.g., "verify this algorithm and trace
 2. Classify using the Task Classification table
 3. State your classification and the skill you will use, so the user can redirect if needed
 
-For formal verification tasks, also assess fitness:
-- **HIGH value**: Proceed with full verification pipeline
-- **LOW value**: Recommend `/lightweight-verify`, explain what it provides, respect user's choice if they override
-- **UNSUITABLE**: Explain the limitation, recommend `/lightweight-verify`
+For formal verification tasks, run the **Complexity gate** (above) as
+part of classification — it is binding, not advisory:
+- **HIGH value** (gate case 3): Proceed with full verification pipeline
+- **LOW value** (gate case 1, trivial): Route to `/lightweight-verify`; no Dafny/Lean tool fires. Explain what the lightweight route provides; respect an explicit user override only after the explanation
+- **UNSUITABLE** (gate case 2, boundary-crossing): Route to `/lightweight-verify`; no Dafny/Lean tool fires. Name the layer mismatch explicitly (which behaviours are ORM/database/Decimal-bound and cannot be formally verified at the Dafny level)
 
 ### Phase 2: Gather Context
 

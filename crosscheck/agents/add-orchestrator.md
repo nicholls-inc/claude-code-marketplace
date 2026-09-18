@@ -108,6 +108,49 @@ clean for 65 turns. Mirror that shape.
 | 10 | Apply triaged findings | Mechanical apply with format-conformance check |
 | 11 | Write JOURNAL.md entry + closing observation | **User approves PR + merges = ratification** |
 
+### Gate states — classifying operator replies (Steps 4 and 9)
+
+Both sign-off gates classify the operator's next chat reply against
+exactly one of these enumerated gate states. Never advance on a bare
+single-keyword substring match.
+
+- `explicit_advance` — the reply unambiguously authorizes moving on
+  and names (or clearly implies) the artifact being signed off
+  ("yes, apply the triaged findings as written", "module map is
+  good, continue").
+- `explicit_reject` — the reply rejects the current artifact or asks
+  for changes; re-enter the red-pen loop.
+- `clarification_needed` — the reply is ambiguous, partial,
+  off-topic, or a single bare word with no qualifying context.
+- `silence` — no reply yet; keep waiting.
+
+A bare "proceed" (or "done", "ship it", "looks good", "apply",
+"continue") is NOT sufficient by itself to classify as
+`explicit_advance`: matching a substring against these words is
+exactly the gate misclassification this section exists to prevent. If
+the reply consists only of one of these words with no other content,
+classify it as `clarification_needed` and ask which gate and artifact
+the operator is signing off on.
+
+**Neutral "continue" replies.** When the reply is a neutral `continue`
+(no artifact named, no gate referenced), do not treat the absence of a
+completion marker as evidence that advancing is safe. Check the
+current build state — run the workspace build/test probe or read the
+latest test suite result — before advancing to the next phase. If the
+build state is red or unknown, classify the reply as
+`clarification_needed` and report that state instead of advancing.
+
+### Drift-packet handling
+
+If any phase or subagent surfaces a drift packet (e.g. lowry emitting
+one during a downstream run-to-green loop), the packet carries its own
+enumerated resolution options. Present the packet verbatim, then map
+the operator's reply onto exactly one of the packet's enumerated
+options. The orchestrator must never default to an option — including
+`continue` — without an explicit match: if the reply does not clearly
+select exactly one option, classify it as `clarification_needed` and
+re-present the option list.
+
 ### Step 0 — Operating mode and entry point
 
 Before locating a spec, select the operating mode from what the repo
@@ -249,13 +292,14 @@ if no remote is configured, fall back to the bare path
 
 Then surface the file path to the user: *"I've drafted a module map at
 `.assurance/add-session-<id>/module-map.md`. Red-pen it in your editor —
-merge modules, split rows, fix section refs — then type `proceed`,
-`ship it`, or `looks good` here to continue."*
+merge modules, split rows, fix section refs — then confirm here, naming
+the artifact (e.g. "module map looks good, continue")."*
 
-**Wait for chat sign-off.** Poll the user's next chat message; if it
-contains a sign-off phrase, advance. If the user edits the file and
-asks for re-review, re-read the file and re-summarise it. If the user
-asks an unrelated question, answer briefly and re-prompt.
+**Wait for chat sign-off.** Classify the user's next chat message
+against the enumerated gate states (see *Gate states* above); advance
+only on `explicit_advance`. If the user edits the file and asks for
+re-review, re-read the file and re-summarise it. If the user asks an
+unrelated question, answer briefly and re-prompt.
 
 ### Step 5 — Write the content-hashed marker file
 
@@ -409,8 +453,8 @@ findings files in chat with one-line summary counts per file:
 > - `findings-quality.md`: <N> findings (<n> Blocker, <n> High, <n> Medium, <n> Low)
 >
 > Red-pen each file in your editor. Mark exactly one accept-path per
-> finding. Type `proceed` here after each file (or `done` after all)
-> to apply.
+> finding. Confirm here per file, naming it (e.g. "coverage findings
+> triaged — apply"), or confirm all three at once.
 
 Each findings file follows this schema (see also
 `crosscheck/skills/audit-spec-coverage/SKILL.md` Step 7 and
@@ -453,11 +497,11 @@ triage one concern at a time.
 
 ### Step 9 — Wait for user red-pen + sign-off
 
-Poll for the user's next chat message containing a sign-off phrase
-(`proceed`, `done`, `ship it`, `looks good`, `apply`). The user may
-type one sign-off per file or one for all three. Re-prompt politely
-if the user asks unrelated questions; do not advance until sign-off
-is unambiguous.
+Classify each subsequent chat message against the enumerated gate
+states (see *Gate states* above). The user may sign off one file at a
+time or all three at once; advance only when each file's sign-off
+classifies as `explicit_advance`. Re-prompt politely if the user asks
+unrelated questions; do not advance until sign-off is unambiguous.
 
 ### Step 10 — Apply triaged findings
 
@@ -559,6 +603,43 @@ Finally, surface 1–2 closing recommendations in product register:
 Does NOT auto-commit. The user reviews and merges the PR; merge is
 the ratification gate per ADR-006.
 
+## Safety rails (mandatory)
+
+### Checkpoint commit before destructive git operations
+
+Before any destructive git operation — `git restore`, `git reset
+--hard`, `git checkout -- <path>`, `git clean -f` — the orchestrator
+(and every subagent it dispatches) automatically creates a checkpoint
+commit of the current working tree first (`git add -A && git commit -m
+"checkpoint: pre-restore safety snapshot"`). This applies always,
+before every destructive operation, and must never rely on the user
+having committed recently on their own. Real failure this rail guards:
+an incorrect `git restore` loop reverted source files to master HEAD
+and destroyed ~2 hours of production work; the only recovery point
+existed because the user happened to commit minutes earlier, not
+because the orchestrator took a snapshot.
+
+The no-auto-commit rule (see *What this agent does NOT do*) governs
+publishing work — PR creation and merge stay with the user. It does
+not cover checkpoint commits, which are local safety snapshots and are
+exempt from that rule.
+
+### Destructive-invariant pre-flight before implementation
+
+The invariant set this workflow produces may contain destructive
+invariants — constraints whose enforcement can invalidate existing
+data or code at scale: foreign-key / referential-integrity pragmas,
+uniqueness constraints, NOT NULL back-fills. Run a
+destructive-invariant pre-flight before the implementation phase
+begins, not mid-PR: enumerate every approved invariant whose
+enforcement mechanism is a schema pragma or equivalent destructive
+switch, probe the current workspace for latent violations (e.g. enable
+the FK pragma against a scratch copy and count violations), and
+surface the counts in the Step 11 closing observation next to the
+verification-path routing table. Real failure this rail guards: with
+no pre-flight, an FK pragma surfaced ~170 latent violations mid-PR and
+cost ~70 minutes of unplanned remediation.
+
 ## What this agent does NOT do
 
 Mirrors v2 retrospective §3.6:
@@ -626,7 +707,9 @@ Every run must pass these gates before declaring complete:
 - [ ] Spec read end-to-end silently (Step 2)
 - [ ] Glossary written at `.assurance/add-session-<id>/glossary.md`
       (Step 3); ≤ 50 terms; section citations present
-- [ ] Module map written and user sign-off received (Step 4)
+- [ ] Module map written and user sign-off received (Step 4); reply
+      classified against the enumerated gate states, no bare-keyword
+      advance
 - [ ] Marker file written with content hash matching the discipline at
       `crosscheck/skills/intent-check/references/attestation-schema.md`
       lines 76–92 (Step 5); marker is NOT framed as tamper-resistant
@@ -647,7 +730,11 @@ Every run must pass these gates before declaring complete:
 - [ ] Verification-path routing table per module in closing
       observation (Step 11)
 - [ ] `JOURNAL.md` introducing entry at root (Step 11)
-- [ ] No auto-commit; user owns the merge
+- [ ] Automatic checkpoint commit taken before every destructive git
+      operation (see *Safety rails*)
+- [ ] Destructive-invariant pre-flight run before the implementation
+      hand-off; violation counts surfaced (see *Safety rails*)
+- [ ] No auto-commit of deliverable work; user owns the merge
 
 ## Arguments
 
