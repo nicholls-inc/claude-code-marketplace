@@ -28,6 +28,18 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "pr-swarm": {
+      "release-type": "simple",
+      "package-name": "pr-swarm",
+      "component": "pr-swarm",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }

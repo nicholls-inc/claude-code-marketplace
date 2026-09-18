@@ -27,6 +27,11 @@
       "name": "xylem",
       "source": "./xylem",
       "description": "Autonomous agent scheduling for GitHub issues — scans, queues, and launches Claude Code sessions to fix bugs, implement features, and refine issue descriptions."
+    },
+    {
+      "name": "pr-swarm",
+      "source": "./pr-swarm",
+      "description": "Multi-agent PR review swarm and review-triage skills for automated, multi-lens code reviews."
     }
   ]
 }

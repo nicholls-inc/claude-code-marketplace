@@ -20,6 +20,10 @@ Generate structured performance reports on plugins, skills, and agents by analys
 
 Autonomous agent scheduling for GitHub issues — scans, queues, and launches Claude Code sessions to fix bugs, implement features, and refine issue descriptions.
 
+### [pr-swarm](./pr-swarm/README.md)
+
+Multi-agent pull request review swarm and automated review triage system for automated, multi-lens code reviews.
+
 ## Tools
 
 ### [claude-github-app](./tools/claude-github-app/README.md)
@@ -38,6 +42,7 @@ claude plugin marketplace add nicholls-inc/claude-code-marketplace
 claude plugin install crosscheck@nicholls
 claude plugin install awesome-copilot@nicholls
 claude plugin install xylem@nicholls
+claude plugin install pr-swarm@nicholls
 ```
 
 See each plugin's README for prerequisites and setup details.
