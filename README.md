@@ -4,7 +4,7 @@ A collection of Claude Code plugins. Each plugin is a self-contained directory w
 
 ## Plugins
 
-### [crosscheck](./crosscheck/README.md)
+### [crosscheck](https://github.com/nicholls-inc/crosscheck/tree/main/crosscheck)
 
 Crosschecks Claude's code claims using [Dafny](https://dafny.org/) formal verification for provably correct Python/Go code, plus semi-formal reasoning for structured code analysis.
 
