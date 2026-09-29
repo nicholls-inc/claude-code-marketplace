@@ -18,7 +18,7 @@ name = "claude-sonnet-4-6"
 # The path is supplied via CROSSCHECK_MCP_PATH so the workflow is portable
 # across machines / forks. Set it before running, e.g.:
 #
-#   export CROSSCHECK_MCP_PATH=/opt/claude-code-marketplace/crosscheck/mcp-server/dist/index.js
+#   export CROSSCHECK_MCP_PATH=/opt/crosscheck/crosscheck/mcp-server/dist/index.js
 #
 [run.agent.mcps.crosscheck-dafny]
 type            = "stdio"

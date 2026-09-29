@@ -1,21 +1,12 @@
 # Claude Code Plugin Marketplace
 
-A collection of Claude Code plugins. Each plugin is a self-contained directory with its own skills, agents, and optional MCP server.
+A collection of Claude Code plugins. Each plugin is a self-contained directory with its own skills, agents, and optional MCP server. Some plugins live in their own repositories, and `.claude-plugin/marketplace.json` points at them.
 
 ## Plugins
 
-### crosscheck (`crosscheck/`)
+### crosscheck (`nicholls-inc/crosscheck`)
 
-Crosscheck plugin. Crosschecks Claude's code claims using Dafny formal verification for provably correct Python/Go code, plus semi-formal reasoning for structured code analysis.
-
-- **MCP server** (`crosscheck/mcp-server/`): TypeScript server exposing six tools across two engines — Dafny (`dafny_verify`, `dafny_compile`, `dafny_cleanup`) and Lean (`lean_check` for the `/lean-spec`, `/lean-impl`, `/correspondence-review`, and `/drt-oracle` build gates; `lean_run` for `/lean-impl` smoke checks and `/drt-oracle`'s per-def Lean runner; `lean_test` as a compile-time `#guard` path for fixture sanity checks)
-- **Docker isolation**: Dafny 4.11.0 in a sandboxed container (no network, 512MB memory, 120s timeout); Lean 4 + Mathlib in a sister container with Mathlib oleans pre-warmed (no network, 2GB memory, 240s timeout)
-- **Formal verification skills** (`crosscheck/skills/`): `/spec-iterate`, `/generate-verified`, `/extract-code`, `/lightweight-verify`
-- **Lean executable-model + DRT-oracle pipeline** (`crosscheck/skills/`): `/informal-spec`, `/lean-spec`, `/lean-impl`, `/correspondence-review`, `/drt-oracle`
-- **Spec management & adequacy skills** (`crosscheck/skills/`): `/check-regressions`, `/suggest-specs`, `/rationale`, `/audit-spec-coverage`, `/audit-invariant-consistency`
-- **Semi-formal reasoning skills** (`crosscheck/skills/`): `/reason`, `/compare-patches`, `/locate-fault`, `/trace-execution`
-- **Repository context skill** (`crosscheck/skills/`): `/journal-context` (deterministic walk of every `JOURNAL.md` from a path up to the repo root; load the narrative record before non-trivial design work)
-- **Orchestrator agents** (`crosscheck/agents/`): `byfuglien` (implementation chain, sequential router), `hellebuyck` (specification chain, sequential router), `add-orchestrator` (ADD methodology workflow runner; parallel subagent dispatch + batched audit triage; drives spec → approved invariants ready for implementation)
+Crosschecks Claude's code claims using Dafny formal verification for provably correct Python/Go code, plus semi-formal reasoning for structured code analysis. The plugin lives in `crosscheck/` of [nicholls-inc/crosscheck](https://github.com/nicholls-inc/crosscheck), and the marketplace installs it from there with a `git-subdir` source. Develop and file issues there.
 
 ### awesome-copilot (`awesome-copilot/`)
 
@@ -50,27 +41,6 @@ Optional `gh` + `git` PATH shims (`make install-shims`) solve mid-session token 
 - Install: `make install` (claude + claude-github-app) or `make install-all` (also installs gh + git shims)
 - Test: `make test` (pure Go, no Docker)
 
-## Development — crosscheck
-
-```bash
-cd crosscheck/mcp-server
-npm install
-npm run build            # Type-check + esbuild bundle → dist/index.js
-npm test                 # Unit, integration, property, MCP tests (vitest)
-npm run test:e2e         # End-to-end tests (requires Docker)
-../scripts/build-docker.sh       # Build Dafny Docker image
-../scripts/build-lean-docker.sh  # Build Lean+Mathlib Docker image (slow first time)
-../scripts/test-mcp.sh           # Smoke tests
-```
-
-## Key conventions
-
-- ES modules (type: "module" in package.json)
-- Strict TypeScript (ES2022 target, Node16 module resolution)
-- Zod for runtime validation of tool inputs
-- Tests use vitest with fast-check for property-based testing
-- Docker images configured via `DAFNY_DOCKER_IMAGE` (default `crosscheck-dafny:latest`) and `LEAN_DOCKER_IMAGE` (default `crosscheck-lean:latest`); Lean memory/cpu via `LEAN_DOCKER_MEMORY` / `LEAN_DOCKER_CPUS`
-
 ## Commit conventions
 
 Conventional commits enforced via commitlint + husky.
@@ -80,26 +50,8 @@ Conventional commits enforced via commitlint + husky.
 - `feat(<plugin>):` — new or expanded behavior (minor bump)
 - `fix(<plugin>):` — corrective behavior change (patch bump)
 
-`docs:` and `refactor:` are **both blocked** on behavioral artifacts (enforced by `.husky/commit-msg`). release-please treats `refactor:` as non-user-facing, so behavior changes filed as `refactor:` will silently stall the release pipeline — that is the failure mode behind the 2.4.0 → 2.5.0 backlog. If a change to `SKILL.md` or `agents/*.md` is genuinely non-behavioral (rare — usually internal renames or comment-only edits), split it into a separate commit that does not touch a behavioral artifact.
+`docs:` and `refactor:` are **both blocked** on behavioral artifacts (enforced by `.husky/commit-msg`). release-please treats `refactor:` as non-user-facing, so behavior changes filed as `refactor:` will silently stall the release pipeline. If a change to `SKILL.md` or `agents/*.md` is genuinely non-behavioral (rare — usually internal renames or comment-only edits), split it into a separate commit that does not touch a behavioral artifact.
 
 - `feat(field-report): add new analysis dimension` — new skill behavior
-- `fix(crosscheck): correct abort threshold in /reason` — bug fix in skill logic
-- `refactor(crosscheck): extract shared helper in mcp-server` — non-behavioral structural change outside `SKILL.md`/`agents/*.md`
-- `docs(crosscheck): update README installation steps` — actual documentation (not a behavioral artifact)
-
-## Development framework
-
-Every change to this repository starts as `intent/<slug>.md` — problem statement, proposed outcome, affected users and systems, constraints, open questions. Behavioural changes gain a committed `spec.md`, and anything touching a protected surface gains a `plan.md` too, before implementation begins. Do not open a PR whose stage artefacts do not exist.
-
-- `docs/assurance/DEVELOPMENT-FRAMEWORK.md` — the artefact chain (intent → spec → plan → diff + tests → PR → incident record + eval), which commit or event triggers each stage, and where each Crosscheck skill and agent sits in it.
-- `docs/assurance/TIER-LAYER-MAP.md` — the three change tiers and the artefacts each one requires. PRs declare their tier in the body.
-- `REVIEW.md` — the review passes (bugs and logic, security, compliance with spec and plan) and the Important/Nit severity rules.
-
-Protected surfaces (`SKILL.md`, `agents/*.md`, invariant docs, `docs/assurance/**`, `.claude/rules/**`, `.claude/hooks/**`, `evals/**`) are guarded by a PreToolUse hook in `.claude/hooks/`: it blocks the edit unless a `/crosscheck:protected-surface-amend` governance note naming the file is present in the working tree.
-
-## Dafny limitations to keep in mind
-
-- No IO/networking verification — requires `{:extern}` trust boundaries
-- No concurrency modeling — sequential correctness only
-- Go output uses type erasure to `interface{}` — may need type assertions
-- `real` type compiles to `_dafny.BigRational`, not native floats
+- `fix(pr-swarm): correct lens routing threshold` — bug fix in skill logic
+- `docs(pr-swarm): update README installation steps` — actual documentation (not a behavioral artifact)

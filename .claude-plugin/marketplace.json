@@ -10,7 +10,11 @@
   "plugins": [
     {
       "name": "crosscheck",
-      "source": "./crosscheck",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/nicholls-inc/crosscheck.git",
+        "path": "crosscheck"
+      },
       "description": "Crosschecks Claude's code claims using Dafny formal verification for provably correct Python/Go code, plus semi-formal reasoning for structured code analysis."
     },
     {
