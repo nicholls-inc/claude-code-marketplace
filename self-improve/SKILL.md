@@ -45,8 +45,16 @@ baseline) and `engine.py commit --id N --message "<what>"` for the audit trail.
 `state.suppressed_categories` are **hard limits**. Never propose anything a lesson
 rules out. Lessons are hand-editable by the user and outrank your judgement.
 
-**4 — Generate suggestions (≤ `max_suggestions`).** Every *grounded* suggestion
-MUST carry all of:
+**4 — Generate suggestions (≤ `max_suggestions`).** Every suggestion — grounded
+*or* challenge — MUST carry a `benefit`. Every *grounded* suggestion additionally
+carries the evidence/falsifier/metric trio:
+- `benefit` — what the user gains by accepting, stated concretely enough to decide
+  on: the payoff and its rough size (time saved, approvals removed, redirections
+  avoided, friction cut). This is the line that lets the human say yes or no — so
+  write it for the decision, not as a restatement of the change. It is distinct
+  from `evidence` (the past observation that motivates the proposal) and `falsifier`
+  (next week's test). "Allowlisting this removes ~6 approval prompts/week" — not
+  "this is a good idea." If you can't name what improves for the user, don't propose it.
 - `evidence` — a specific quantified observation copied from the digest (a count
   from `actionable_commands`, a named `correction_snippet`, a `skills_never_invoked`
   entry). Not "this seems useful." If you can't point to a number, don't propose it.
@@ -63,8 +71,9 @@ command that appears in `actionable_commands` (already filtered to
 `min_command_recurrence`+). Only act on a redirection pattern if the snippets show
 it **recurring**, not a one-off. One observation is an anecdote, not a constraint.
 
-The engine **drops** any grounded suggestion missing evidence/falsifier — but
-build them right regardless; the gate is a backstop, not a crutch.
+The engine **drops** any suggestion missing a `benefit`, and any grounded
+suggestion missing evidence/falsifier — but build them right regardless; the gate
+is a backstop, not a crutch.
 
 **5 — Post to Slack** in the format below; capture the `ts`.
 **6 — Record:** pipe the suggestions as a JSON array to
@@ -96,8 +105,10 @@ When in doubt, stage. Never widen permissions or add a command-running hook your
 1. **Measure before you propose; the metric, not acceptance, is ground truth.**
    Do not optimise for what gets accepted — that is the Goodhart trap. Optimise for
    what the follow-up metric shows actually helped.
-2. **No evidence + falsifier ⇒ not a grounded suggestion.** Concrete and testable
-   only: name the file, the count, the command. Honest critique over validation.
+2. **No benefit ⇒ not a suggestion; no evidence + falsifier ⇒ not a grounded
+   suggestion.** Every proposal must say what the user gains by accepting it.
+   Concrete and testable only: name the file, the count, the command, the payoff.
+   Honest critique over validation.
 3. **Self-modification is human-gated.** You may propose edits to `SKILL.md` /
    `engine.py` as `meta_self` items, but only apply them when accepted. No
    unattended self-rewrites.
@@ -112,11 +123,13 @@ When in doubt, stage. Never widen permissions or add a command-running hook your
 🌱 self-improve — <date>
 
 1. [permissions] Allowlist `go test ./...`
+   benefit: kills ~6 approval prompts/week — no more breaking flow to click "allow"
    evidence: approved 6× this week (actionable_commands)
    change: add to settings.json allow-list
    check (next week): manual approvals of go test → ~0
 
 2. [challenge] <speculative pick, clearly flagged>
+   benefit: <what you'd gain if it pans out>
 
 Reply in-thread: "do 1, skip 2" / "all" / "none" / "1 later".
 ```
