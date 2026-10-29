@@ -5,18 +5,23 @@ METRIC:              cost per useful output across all automations (runs x model
 SCOPE:               lever workflows in this repository: .github/workflows/lever-*.yml, with prompts under .github/lever/automations/ (and any listed in WATCH_ALSO)
 WATCH_ALSO:          none                   # other owner/repo whose lever-* workflows to include; the token must be able to read them
 MODE:                act                    # dry_run = compute and record, write nothing (the workflow input `mode` overrides this)
+RUNNER:              gha                 # gha (claude-code-action) | routine (Claude Code cloud routine); the deterministic steps are plain Actions either way
 WINDOW:              7 days
 MAX_PROPOSALS:       1
 REPEAT_THRESHOLD:    3 identical failures in 24 hours
 NOOP_ALERT:          0.90 over 2 windows    # sweeps and heartbeats are judged by what they caught instead
 MODEL_MULTIPLIERS:   sonnet=1, opus=<price ratio vs sonnet from your price sheet; several times standard>, haiku=<price ratio>
 API_BUDGET:          75 REST calls per merged PR, all automations combined
+HEALTH_JSON:         (set by the workflow) # output of health_check.py: inventory, run counts, sampled outcomes, mechanical lint flags, state. Absent in a routine: do rules 0-4 yourself.
 REPORT_ISSUE:        <number of a pinned "Automation health" issue; its body holds the state>
 USEFUL_OUTPUT:       per automation, as stated in its own OUTCOME/METRIC lines; if absent, "a write a human did not undo"
 OUTCOME_SOURCE:      per worker: its RECORD_SINK (a ledger issue or its state issue), else the run log (`gh run view <id> --log`), which carries the final ACTED/NOOP/BLOCKED line and JSON record. Job summaries themselves are not exposed by the API.
 RECORD_SINK:         run_summary            # the job summary
 
 ## CONTRACT  (stable; changed only by a human-applied revision)
+Rules 0-4 are deterministic. In the gha runner `health_check.py` already did them (and, on a worker failure, the
+rule 1 counting and state write); read HEALTH_JSON, verify what you rely on, and spend your effort on rules 4 (the
+judgement half of the lint), 5-8. As a routine, do rules 0-4 yourself.
 0. State. Read the fenced JSON under "## lever state" in REPORT_ISSUE's body:
    {"failures":[{"automation","reason","at"}], "last_metric", "last_proposal", "last_prediction",
     "filed":{"<automation>:<reason>":"<issue number>"}}. Missing or unparseable: start empty and say so.

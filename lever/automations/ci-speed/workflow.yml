@@ -55,11 +55,12 @@ jobs:
     # (a second wake on an owned goal is NOOP(owned)), (2) LANE_RUNS_PER_DAY in the prompt (start at 2), (3) the concurrency group.
     needs: [watch]
     if: >-
-      always() && vars.LEVER_CI_SPEED_LIVE != '' && (
-        (needs.watch.result == 'success' && needs.watch.outputs.goal_issue != '') ||
-        (github.event_name == 'issues' && github.event.label.name == 'ci-goal' &&
-         github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]') ||
-        (github.event_name == 'workflow_dispatch' && inputs.role == 'lane'))
+      always() && (
+        (github.event_name == 'workflow_dispatch' && inputs.role == 'lane') ||
+        (vars.LEVER_CI_SPEED_LIVE == 'true' && (
+          (needs.watch.result == 'success' && needs.watch.outputs.goal_issue != '') ||
+          (github.event_name == 'issues' && github.event.label.name == 'ci-goal' &&
+           github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]'))))
     runs-on: ubuntu-latest
     timeout-minutes: 360         # hosted-runner maximum; progress is written to the goal issue, so a timed-out run can be resumed by dispatch
     concurrency:

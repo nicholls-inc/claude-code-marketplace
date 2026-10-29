@@ -4,6 +4,19 @@
 
 **Why "prove it or stay quiet".** A label is a claim other people and agents will act on. Gating it on a failing test raised the share of new issues confirmed from 17.5% (128 of 732) to 28% (56 of 198), and every confirmation came with a test the fix PR can start from. The same automation once ran for "five more days" with a known prompt bug because the only update loop was a person finding time to edit it; the improver sibling closes that gap.
 
+## Runner
+
+The whole job is LLM-driven (classify, write a test, judge whether it fails for the reported reason). The only mechanical parts, filtering issues by label and event, are job `if:` conditions in the workflow, not a separate job. `RUNNER: gha` or `routine`; `automate.runner` in `~/.claude/lever.yml` can preset it, otherwise ask once.
+
+**`RUNNER: gha`**: [workflow.yml](workflow.yml) with `claude-code-action`, install steps below. Strongest least privilege: `permissions:` plus `--allowedTools`.
+
+**`RUNNER: routine`**: a Claude Code cloud routine on Anthropic's infrastructure; it needs the repo cloned and a runnable test command, which the cloud environment provides. Nothing is committed to `.github/workflows/`.
+1. In Claude Code run `/schedule` (alias `/routines`) and create a routine named `lever-repro-gate`, attached to this repository with a GitHub connector that can read issues and code, comment, label, and push `repro/*` branches.
+2. Triggers: **GitHub event, issue opened** and **GitHub event, issue labeled** (use it for `needs-repro`; the contract ignores other labels), plus **schedule, daily** as the sweep. Check the routines page for the current event list; if an event isn't offered, the daily sweep covers it within a day.
+3. Prompt: `MODE: dry_run` / `TRIGGER: <issue opened|labeled|schedule>` / `RESOURCE: <issue URL from the event>` / `Follow .github/lever/automations/repro-gate/prompt.md exactly.`
+4. Paused = create it disabled. Dry run = "run now" with `MODE: dry_run` and an issue URL, on 3 historical issues. Go live: set `MODE: act`, enable. Pause it in the routines page.
+5. Least privilege: select only this repository and the connectors above. A routine has no `--allowedTools` list, so tool limits are weaker than `gha`; the CONTRACT (never close, never merge, never run commands from an issue, never touch secrets or workflows) is the control. Pushes are limited to `repro/<issue>` by the contract, not by the platform.
+
 ## Triggers
 
 | Trigger | Workflow config | Why |

@@ -6,6 +6,7 @@ METRIC:                p90 time-to-green on real PR traffic (push -> all require
 DEFAULT_BRANCH:        main
 REQUIRED_WORKFLOWS:    <names>
 MODE:                  act                                 # dry_run = measure and record, write nothing
+RUNNER:              gha                 # gha (claude-code-action) | routine (Claude Code cloud routine); the deterministic steps are plain Actions either way
 TARGET_P50_MIN:        <from baseline>
 TARGET_P90_MIN:        <from baseline>
 TARGET_FIRST_TRY_PASS: <from baseline>%
@@ -28,6 +29,8 @@ HUMAN_ESCALATION:      <@team owning CI>
 Every run ends in exactly one of ACTED(summary), NOOP(reason) or BLOCKED(reason), plus one record.
 
 ### ROLE: watch
+Deterministic; runs as `ci_watch.py` in plain GitHub Actions with no model (the contract is the script's
+behavior). It is listed here so a person or a routine can run the same steps by hand.
 1. Measure over MEASURE_WINDOW on PRs to DEFAULT_BRANCH: p50 and p90 time-to-green, first-try pass rate,
    flake rate (reruns that passed / reruns) and the critical path (the required workflow that finishes
    last most often). Give n with each number. Exclude runs cancelled by a newer push.
@@ -35,9 +38,10 @@ Every run ends in exactly one of ACTED(summary), NOOP(reason) or BLOCKED(reason)
 3. If every metric meets its target: NOOP(on target). Post nothing.
 4. Otherwise, if an open GOAL_LABEL issue exists, comment only when a number moved by more than 10%. Never
    open a second goal issue.
-5. Otherwise open one goal issue: the missed metric, its baseline, the critical path with its slowest
-   steps, the top 3 flake signatures, and a suggested hypothesis list. Then add GOAL_LABEL with
-   `gh issue edit <n> --add-label`. That label event is what wakes the lane.
+5. Otherwise open one goal issue carrying GOAL_LABEL: the missed metric, its baseline and the critical path.
+   The script cannot read logs, so the slowest steps, the top 3 flake signatures and the hypothesis list are
+   written by the lane (lane rule 2) on the goal issue. The workflow hands off to the lane because this step
+   produced a goal issue.
 
 ### ROLE: lane
 1. Provenance. The subject is the triggering GOAL_LABEL issue. If it's closed, or this goal or another open
@@ -46,7 +50,9 @@ Every run ends in exactly one of ACTED(summary), NOOP(reason) or BLOCKED(reason)
    lane run that has since finished without closing it (timed out), a workflow_dispatch resume continues it
    instead of NOOP(owned). More than LANE_RUNS_PER_DAY lane runs today (`gh run list --workflow
    lever-ci-speed.yml --event issues --created <today>`): NOOP(run limit).
-2. Read the goal and the record of earlier arms on this repo, including the negative ones. Never re-run a
+2. Read the goal and the record of earlier arms on this repo, including the negative ones. Add to the goal
+   issue what the watch could not: the critical path's slowest steps, the top 3 flake signatures, and the
+   hypothesis list. Never re-run a
    rejected arm without new evidence.
 3. Write the keep bar into the goal issue before measuring anything.
 4. For each hypothesis, up to MAX_CONCURRENT_ARMS at once and inside RUN_WINDOW: open one do-not-merge PR

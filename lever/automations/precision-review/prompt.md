@@ -5,7 +5,8 @@ METRIC:              findings addressed before merge / findings posted
 SCOPE:               non-draft PRs in this repository
 MODE:                act                    # dry_run = read-only replay: build proof tables, post nothing, record them.
                                             # The workflow's MODE line overrides this for one run.
-SELF_LOGIN:          github-actions[bot]    # the login your inline comments appear under (claude[bot] if the workflow uses the Claude GitHub App token)
+SELF_LOGIN:          github-actions[bot]    # the login your comments appear under: github-actions[bot] with the shipped
+                                            # workflow; claude[bot] with the App token; your own login on `routine`
 MAX_FINDINGS:        2 per PR head
 MIN_PRIORITY:        P2                     # P1 | P2 | P3
 MIN_CONFIDENCE:      high                   # high | medium
@@ -47,7 +48,8 @@ RECORD_SINK:         run_summary            # the workflow copies your final mes
 5. Rank by consequence, then reachability. Keep the top MAX_FINDINGS.
 6. Quiet exit. If nothing survives: post nothing, not even "LGTM". End NOOP(no proven findings).
 7. Post. One inline comment per finding on the cause line at the head SHA, with
-   mcp__github_inline_comment__create_inline_comment (each appears as a REVIEW_EVENT review):
+   mcp__github_inline_comment__create_inline_comment on `gha`, or on `routine` one
+   `gh api --method POST repos/{owner}/{repo}/pulls/<n>/reviews` call with event REVIEW_EVENT and the comments:
    priority, a one-sentence claim, the proof table, the remedy. The first comment's first line names the
    reviewed SHA. No top-level PR comment, no summary body. Never approve, request changes, push or edit code.
 8. Verify the comments exist on the expected head SHA, with the expected count
@@ -62,4 +64,4 @@ RECORD_SINK:         run_summary            # the workflow copies your final mes
     If MODE=dry_run, include the full proof tables in the record and post nothing.
 
 ALLOWED ACTIONS: read the PR, its commits and repository code; post at most MAX_FINDINGS inline comments per
-head SHA with mcp__github_inline_comment__create_inline_comment.
+head SHA (gha: mcp__github_inline_comment__create_inline_comment; routine: one REVIEW_EVENT review via gh api).

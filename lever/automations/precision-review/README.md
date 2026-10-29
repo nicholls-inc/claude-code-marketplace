@@ -45,7 +45,14 @@ No push, no approve, no request-changes, no merge, no issue writes. The contract
 - **Also:** runs that posted anything / runs (expect it to be low; that's the point), runs per PR. **Review latency vs merge**: the share of reviews that finished after the PR merged ("retrospective"). Above 10% means the trigger fires too late or the queue is too long. Fix the trigger or concurrency, not the prompt. Also track **runs per PR** (`gh run list --workflow lever-precision-review.yml`), with an alert above 5. One PR drew 24 review sessions in 3 days.
 - **Guardrail:** bugs later traced to a reviewed PR that the reviewer missed (sample them; don't chase zero).
 
-## Install
+## Runner
+
+Every step is LLM-driven (reading a diff and proving a defect is judgement), so there is no deterministic half. Pick `gha` or `routine` (`automate.runner` in `~/.claude/lever.yml`, or answer when `automate-it` asks).
+
+- **`gha` (recommended).** The shipped [workflow.yml](workflow.yml). The tool list and `contents: read` are what keep approve, push and merge out, and the draft filter in `if:` means drafts cost nothing.
+- **`routine`.** A Claude Code cloud routine with a GitHub-event trigger on this repo's pull requests. No workflow file and no API key in repo secrets; runs on your account's usage. Weaker enforcement: there is no `--allowedTools`, so "COMMENT only, never approve or request changes" rests on CONTRACT rule 7 and ALLOWED ACTIONS rather than on a missing tool, and comments post under the routine's GitHub identity. Set `SELF_LOGIN` to that login.
+
+### Install: `gha`
 
 1. Preflight: `gh auth status` shows the `workflow` scope (`gh auth refresh -s workflow` if not); `gh secret list` shows `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN` (run `/install-github-app` in Claude Code if neither); `gh workflow list` for existing reviewers. If one exists, revise it instead of adding a second voice on every PR. Note the identity it posts as (`github-actions[bot]` with the shipped workflow); you need it for `SELF_LOGIN` and the improver's `REVIEWER_LOGIN`.
 2. Fill PARAMETERS in [prompt.md](prompt.md). Leave `MODE: act` in the file; dispatch runs pass `mode` explicitly.
@@ -76,6 +83,25 @@ Follow .github/lever/automations/precision-review/prompt.md exactly." --model op
 7. Create the improver from [improver-prompt.md](improver-prompt.md) and [improver-workflow.yml](improver-workflow.yml) the same way (prompt to `.github/lever/automations/precision-review/improver-prompt.md`, workflow to `.github/workflows/lever-precision-review-improver.yml`, push, `gh workflow disable`), plus `gh label create lever-proposal`. Enable it (`gh workflow enable`, then `gh variable set LEVER_PRECISION_REVIEW_IMPROVER_LIVE --body true`) after the reviewer has about 20 PRs of output.
 
 Pause either one with `gh workflow disable <file>`.
+
+### Install: `routine`
+
+1. Preflight: no existing reviewer on the routines page or in `gh workflow list`; note the login the routine will post as.
+2. Fill PARAMETERS in [prompt.md](prompt.md), commit it to `.github/lever/automations/precision-review/prompt.md` and push.
+3. Create it paused. In Claude Code:
+
+```text
+/schedule Create a routine named lever-precision-review on <owner>/<repo>, triggered by GitHub pull_request events ready_for_review, opened and synchronize, skipping draft PRs and PRs whose latest push came from a bot. Prompt:
+MODE: act
+RESOURCE: the triggering pull request
+Follow .github/lever/automations/precision-review/prompt.md exactly. MODE above overrides the file's MODE for this run.
+Give it access to <owner>/<repo> only and no other connectors. Create it paused.
+```
+
+4. Verify on claude.ai/code/routines: paused, one repo, no extra connectors, the three event types, the draft filter (if the trigger can't filter drafts, CONTRACT rule 1 ends drafts `NOOP(not reviewable)`, but each one still costs a run).
+5. Dry run: edit the prompt to `MODE: dry_run` and `RESOURCE: <merged PR url>`, then **Run now**, once for each of the same 3 PRs as the `gha` path. Read the transcripts' records.
+6. Enable on approval: restore `MODE: act` and `RESOURCE: the triggering pull request`, then resume it.
+7. The improver: `/schedule` a weekly routine `lever-precision-review-improver` whose prompt is `Follow .github/lever/automations/precision-review/improver-prompt.md exactly.`, paused, same single repo. Run it once with **Run now** after about 20 PRs of output, then resume it.
 
 ## Improver
 

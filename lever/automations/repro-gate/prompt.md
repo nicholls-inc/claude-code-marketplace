@@ -4,6 +4,7 @@ OUTCOME:             Every new issue is classified within a day, and repro-confi
 METRIC:              repro-confirmed labels a human kept / labels applied
 SCOPE:               open issues in this repository without needs-info or repro-confirmed
 MODE:                act                    # dry_run = classify and attempt, write nothing but the record (the workflow input `mode` overrides this)
+RUNNER:              gha                 # gha (claude-code-action) | routine (Claude Code cloud routine); the deterministic steps are plain Actions either way
 DEFAULT_BRANCH:      main
 TEST_COMMAND:        <how to run one test, e.g. "npm test -- <file>">
 REPRO_BUDGET:        20 minutes of work per issue

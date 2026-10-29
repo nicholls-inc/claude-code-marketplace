@@ -1,8 +1,10 @@
-# lever-stall-watchdog: hourly run-health-review. Silent when delivery is healthy; one report comment otherwise.
-# Model: sonnet (standard) because it reads counts and timestamps; no premium reason.
+# lever-stall-watchdog: hourly stall check, hybrid.
+# `check` is DETERMINISTIC (plain GitHub Actions: gh + jq, no model, no API key): time since last merge, lever run states, short-run (no-op) share, rate-limit headroom.
+# `diagnose` is LLM-driven (RUNNER: gha, claude-code-action) and runs ONLY when `check` raises a signal; healthy hours cost nothing and post nothing.
+# For RUNNER: routine, delete `diagnose` and see README "Runner".
+# Model: diagnose = sonnet (standard) because it classifies from counts and timestamps; no premium reason.
 # Install: copy to .github/workflows/lever-stall-watchdog.yml and prompt.md to .github/lever/automations/stall-watchdog/prompt.md.
-# The prompt follows the run-health-review skill: commit a copy to .claude/skills/run-health-review/ (from the lever plugin's skills/) or load the plugin in the action.
-# Alternative with no workflow file: a Claude Code cloud scheduled task (/schedule, hourly minimum), see README.
+# The prompt follows the run-health-review skill: commit a copy of the lever plugin's skills/run-health-review/ to .claude/skills/run-health-review/.
 name: lever-stall-watchdog
 on:
   schedule:
@@ -10,13 +12,61 @@ on:
   workflow_dispatch:
     inputs:
       mode: { type: choice, options: [dry_run, act], default: dry_run }
+      force_signal: { type: boolean, default: false, description: "Hand off to the LLM job even if healthy (dry runs)" }
 concurrency:
   group: lever-stall-watchdog
   cancel-in-progress: false
 jobs:
-  run:
+  check:
     # Created paused: the schedule runs only once LEVER_STALL_WATCHDOG_LIVE=true; dispatch always runs.
     if: github.event_name == 'workflow_dispatch' || vars.LEVER_STALL_WATCHDOG_LIVE == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
+    outputs:
+      signal: ${{ steps.check.outputs.signal }}
+      facts: ${{ steps.check.outputs.facts }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      STALL_THRESHOLD_MIN: "120"   # STALL_THRESHOLD: 2h without a merge during active hours
+      IDLE_AFTER_MIN: "30"         # IDLE_AFTER: a lever run still in progress with no update for this long
+      NOOP_STORM: "0.50"           # share of short successful runs (a no-op proxy) above which the LLM looks
+      ACTIVE_HOURS_UTC: "8-20"     # weekdays
+    steps:
+      - id: check
+        run: |
+          set -euo pipefail
+          now=$(date -u +%s); hour=$(date -u +%-H); dow=$(date -u +%u)
+          base=$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)
+          merged=$(gh pr list --state merged --base "$base" --limit 1 --json mergedAt -q '.[0].mergedAt // empty')
+          age=-1; [ -n "$merged" ] && age=$(( (now - $(date -u -d "$merged" +%s)) / 60 ))
+          lo=${ACTIVE_HOURS_UTC%-*}; hi=${ACTIVE_HOURS_UTC#*-}
+          active=false; { [ "$dow" -le 5 ] && [ "$hour" -ge "$lo" ] && [ "$hour" -lt "$hi" ]; } && active=true
+          since=$(date -u -d '24 hours ago' +%Y-%m-%dT%H:%M:%SZ)
+          runs=$(gh run list --created ">=$since" --limit 300 --json workflowName,status,conclusion,startedAt,updatedAt | jq '[.[] | select(.workflowName | startswith("lever-"))]')
+          total=$(jq length <<<"$runs")
+          failed=$(jq '[.[] | select(.conclusion=="failure" or .conclusion=="timed_out")] | length' <<<"$runs")
+          idle=$(jq --argjson now "$now" --argjson m "$IDLE_AFTER_MIN" '[.[] | select(.status=="in_progress" and ($now - (.updatedAt|fromdateiso8601)) > ($m*60))] | length' <<<"$runs")
+          short=$(jq '[.[] | select(.conclusion=="success" and ((.updatedAt|fromdateiso8601) - (.startedAt|fromdateiso8601)) < 90)] | length' <<<"$runs")
+          core=$(gh api rate_limit -q '.resources.core | "\(.remaining) \(.limit)"')
+          rem=${core% *}; lim=${core#* }
+          sig=false; why=()
+          [ "$active" = true ] && { [ "$age" -lt 0 ] || [ "$age" -gt "$STALL_THRESHOLD_MIN" ]; } && sig=true && why+=("stall: ${age}m since last merge")
+          [ "$failed" -gt 0 ] && sig=true && why+=("$failed failed/timed-out lever runs in 24h")
+          [ "$idle" -gt 0 ] && sig=true && why+=("$idle lever runs in progress with no update > ${IDLE_AFTER_MIN}m")
+          [ "$total" -ge 10 ] && awk -v s="$short" -v t="$total" -v n="$NOOP_STORM" 'BEGIN{exit !(s/t>n)}' && sig=true && why+=("short-run share $short/$total")
+          [ "$rem" -lt $(( lim / 5 )) ] && sig=true && why+=("API quota $rem/$lim")
+          [ "${{ inputs.force_signal || 'false' }}" = true ] && sig=true && why+=("forced")
+          facts=$(jq -nc --arg age "$age" --arg total "$total" --arg failed "$failed" --arg idle "$idle" --arg short "$short" --arg rem "$rem/$lim" --argjson why "$(printf '%s\n' "${why[@]:-}" | jq -R . | jq -sc 'map(select(length>0))')" '{minutes_since_last_merge:$age,lever_runs_24h:$total,failed:$failed,idle_in_progress:$idle,short_successes:$short,api_quota:$rem,signals:$why}')
+          echo "signal=$sig" >> "$GITHUB_OUTPUT"
+          echo "facts=$facts" >> "$GITHUB_OUTPUT"
+          echo "NOOP(healthy) unless signal. $facts" | tee -a "$GITHUB_STEP_SUMMARY"
+  diagnose:
+    needs: [check]
+    if: needs.check.outputs.signal == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -33,7 +83,8 @@ jobs:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             MODE: ${{ inputs.mode || 'act' }}
-            TRIGGER: ${{ github.event_name }}
+            TRIGGER: signal from the deterministic check job
+            CHECK_FACTS: ${{ needs.check.outputs.facts }}
             Follow .github/lever/automations/stall-watchdog/prompt.md exactly.
           claude_args: |
             --model claude-sonnet-5-5

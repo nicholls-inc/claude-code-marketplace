@@ -3,6 +3,7 @@ JOB_NAME:          stall-watchdog
 OUTCOME:           Unattended delivery never stalls unnoticed; no human has to rekick a session.
 METRIC:            human rekicks per week (target 0); busy-but-idle minutes per day
 MODE:              act                    # dry_run = classify and record, post nothing (the workflow input `mode` overrides this)
+RUNNER:              gha                 # gha (claude-code-action) | routine (Claude Code cloud routine); the deterministic steps are plain Actions either way
 WINDOW:            last 24 h vs prior 7-day daily average
 STALL_THRESHOLD:   2h without a merge during active hours
 IDLE_AFTER:        30m with no new turn or tool call
@@ -11,6 +12,7 @@ NOOP_STORM:        0.50 no-op wakes
 TAKEOVER:          propose                # propose | continue | continue_and_close
 REPORT_ISSUE:      <number of a pinned "Stall watchdog" issue>
 RECORD_SINK:       run_summary            # the job summary
+CHECK_FACTS:       (set by the workflow) # JSON from the deterministic check job: minutes since last merge, run counts, signals. Absent in a routine: compute rule 1 yourself.
 
 ## CONTRACT  (stable; changed only by a human-applied revision)
 Every run ends in exactly one of ACTED(summary), NOOP(reason) or BLOCKED(reason), plus one record.
@@ -21,7 +23,7 @@ Every run ends in exactly one of ACTED(summary), NOOP(reason) or BLOCKED(reason)
    live session's last turn or tool timestamp. In Actions the live "sessions" are in-progress lever workflow
    runs: use the timestamp of the last log line or step. Claude Code sessions elsewhere (`claude --remote`,
    `/loop`) are not visible from here; say so instead of guessing.
-2. Healthy: time since last merge under STALL_THRESHOLD and no class below fires. NOOP(healthy). Post nothing.
+2. Healthy (in the gha runner the deterministic check job already screened this and only wakes you on a signal; read CHECK_FACTS, then verify): time since last merge under STALL_THRESHOLD and no class below fires. NOOP(healthy). Post nothing.
 3. Classify each stall, with evidence, using the run-health-review taxonomy. Check these first:
    - busy-but-idle: shows busy, no new turn or tool call for longer than IDLE_AFTER. Judge by the last
      tool timestamp, not a status flag;

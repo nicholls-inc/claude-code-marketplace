@@ -23,9 +23,18 @@ Cron can do weekdays-only, so Saturday and Sunday cost nothing; the contract sti
 
 No labels, no closes, no code. A brief that changes things isn't a brief. If you want it to triage too, pair it with [repro-gate](../repro-gate/README.md) instead of widening this one.
 
-## Alternative: a Claude Code cloud scheduled task
+## Runner
 
-This recipe only reads and posts one comment, so it fits a cloud scheduled task as well as a workflow. In Claude Code run `/schedule`, paste the contents of [prompt.md](prompt.md) with PARAMETERS filled in, choose a weekday daily cadence at your wake hour, and attach the repository and a GitHub connector that can comment on issues. Tasks are managed at claude.ai/code/routines; the minimum interval is hourly, which is no limit for a daily brief. Trade-offs: no workflow file, `permissions:` block or `--allowedTools` list to review (the connector's scopes are the boundary), no `LEVER_MORNING_BRIEF_LIVE` switch (pause the task in the routines page instead), and the run record lives in the task's run output rather than a job summary. The workflow is the better choice when you want the least-privilege lint in [automation-health](../automation-health/README.md) to cover it.
+The brief is LLM-driven (ranking issues, choosing focus items, writing it up). Gathering is read-only, so there is no separate deterministic step worth a job. `RUNNER: gha` or `routine`; `automate.runner` in `~/.claude/lever.yml` can preset it, otherwise ask once. This is the safest recipe to learn either path on.
+
+**`RUNNER: gha`**: [workflow.yml](workflow.yml) with `claude-code-action`; install steps below.
+
+**`RUNNER: routine`**: a cloud routine on Anthropic's infrastructure under your account. Nothing is committed to `.github/workflows/`.
+1. In Claude Code run `/schedule` (alias `/routines`; managed at claude.ai/code/routines) and create a routine named `lever-morning-brief`, attached to this repository with a GitHub connector that can read issues, PRs and Actions and comment on issues.
+2. Trigger: **schedule, daily**, weekdays, at your wake hour (hourly is the minimum interval, so daily is fine). The routine runs in your account's timezone settings; set `TIMEZONE` in PARAMETERS to match.
+3. Prompt: `MODE: dry_run` / `TRIGGER: schedule` / `Follow .github/lever/automations/morning-brief/prompt.md exactly.` (PARAMETERS, including `DIGEST_ISSUE`, live in that file.)
+4. Paused = create it disabled. Dry run three times with "run now" and `MODE: dry_run`, then compare its ranking with your own. Go live: set `MODE: act` and enable.
+5. Least privilege: select only this repository and a connector scoped to read plus comment. A routine has no `permissions:` block or `--allowedTools` list, so tool limits are weaker than `gha`; the CONTRACT (read, then post one comment on the digest issue, change nothing) is the control. The `gha` path is the better choice when you want the least-privilege lint in [automation-health](../automation-health/README.md) to cover it.
 
 ## Dials
 

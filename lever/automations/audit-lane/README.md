@@ -2,7 +2,7 @@
 
 **Purpose.** A standing loop that finds problems on its own. A read-only auditor wakes on a schedule. If its inputs moved, it audits one bounded slice against an explicit baseline and files a few reproducible issues with evidence. A separate fix chain (implementer → review → merge → release) does the fixing. Auditors never change code.
 
-This is [loop mode](../../docs/modes.md) running in the cloud. The audit is the instrument, the issues are the signal, and closed issues are the memory.
+This is [loop mode](../../docs/modes.md) running in the cloud (a scheduled workflow or a cloud routine). The audit is the instrument, the issues are the signal, and closed issues are the memory.
 
 ## Two variants
 
@@ -12,7 +12,7 @@ This is [loop mode](../../docs/modes.md) running in the cloud. The audit is the 
 | Baseline | Reference behavior: states, accessibility, responsive layout, loading and error | A trailing window (for example 72 h) vs the latest window (for example 6 h), per stage, outcome and role |
 | Slice per run | One of ~10 rotating surfaces, plus any surface changed since the watermark | One window |
 | Evidence | `file:line` on both sides | The query, the window, and baseline vs current numbers |
-| Cadence | Hourly, but only when either side's default-branch SHA moved | Every few hours |
+| Cadence | Hourly (`cron`), but only when either side's default-branch SHA moved | Every few hours |
 
 ## What's possible
 
@@ -34,7 +34,7 @@ The difference is the signal. A source diff with `file:line` on both sides is cl
 
 | Dial | Default | Options |
 |---|---|---|
-| `CADENCE` | Hourly (parity), 6-hourly (logs) | Any; prefer an event when one exists |
+| `CADENCE` | Hourly (parity), 6-hourly (logs) | Any `cron`; prefer an event when one exists |
 | `MAX_NEW_ISSUES` | 3 | 1–5 |
 | `MAX_COMMENTS` | 4 | 0–10 |
 | `SURFACES` | ~10 rotating | Your list |
@@ -58,10 +58,40 @@ The difference is the signal. A source diff with `file:line` on both sides is cl
 - The audit environment lacked a CLI it assumed, so sign-in needed a fallback. Preflight the tools.
 - Rules against secrets and raw logs had to be written down, not assumed.
 
-## Install via GitHub MCP
+## Runner
 
-1. Run [`automate-it`](../../skills/automate-it/SKILL.md). Fill PARAMETERS in [prompt.md](prompt.md) with `MODE: dry_run`.
-2. Create the pinned state issue with an empty `## lever state` section and set `STATE_ISSUE`. Create the automation paused, with an `interval` trigger (`write_scope: repository`, since there's no triggering resource) and read tools plus `github/create_issue`, `github/add_issue_comment` and `github/update_issue_body` (for the state section and existing audit issues only). Give it no write tools for code.
-3. Dry-run 3 slices. Check every finding by hand against the evidence.
-4. Enable on approval. Make sure the fix chain picks up the audit label: [`keep-the-pool-full`](../../skills/keep-the-pool-full/), an implementer lane, or `autonomous-delivery`.
+| Part | Kind | Runs as |
+|---|---|---|
+| Watermark check: read the `## lever state` block, compare the stored source and reference SHAs with the current default-branch SHAs, end silently if neither moved (parity variant) | Deterministic | Plain GitHub Actions job `gate` (`gh` + `jq`). No `claude-code-action`, no model, no API key. The logs variant has no SHA to compare: set the repo variable `LEVER_AUDIT_LANE_GATE=off`. |
+| Pick the slice, audit against the baseline, keep reproducible findings, dedup, file at most `MAX_NEW_ISSUES`, rewrite state | LLM-driven | `RUNNER: gha` (job `audit`, only when `gate` says something moved) or `RUNNER: routine`. `automate.runner` in `~/.claude/lever.yml` can preset it; otherwise ask once. |
+
+**`RUNNER: gha`**: install steps below. A silent hour costs one cheap job. Reading a private `REFERENCE_REPO` needs a token that can read it (the default `GITHUB_TOKEN` is scoped to this repository): use a read-only PAT secret for the `gate` call and the sparse clone.
+
+**`RUNNER: routine`**: an hourly cloud routine does both parts; it reads the watermark first and ends `NOOP(no change)` quietly. Nothing is committed to `.github/workflows/`.
+1. In Claude Code run `/schedule` (alias `/routines`) and create a routine named `lever-audit-lane`, attached to this repository (and the reference repository for the parity variant) with a GitHub connector that can read code and issues and file and comment on issues. Give it nothing that writes code.
+2. Trigger: **schedule, hourly** (the minimum interval; use 6-hourly for the logs variant).
+3. Prompt: `MODE: dry_run` / `TRIGGER: schedule` / `Follow .github/lever/automations/audit-lane/prompt.md exactly. Read the reference with a sparse git clone, not the REST API.`
+4. Paused = create it disabled. Dry run = "run now" with `MODE: dry_run` on 3 slices; check every finding by hand against the evidence. Go live: set `MODE: act` and enable.
+5. Least privilege: select only the repositories and connectors above. A routine has no `--allowedTools` list, so the CONTRACT (never change code, open PRs, close issues or touch credentials) is the control, plus a read-only identity.
+
+## Triggers and permissions
+
+| Trigger | Workflow config | Why |
+|---|---|---|
+| `schedule` | `cron: "29 * * * *"` (parity), `"29 */6 * * *"` (logs) | The loop. `schedule` is best-effort and can start late. |
+| `workflow_dispatch` | input `mode` | Dry runs. |
+
+| Job | `permissions:` | `--allowedTools` |
+|---|---|---|
+| `gate` | `contents: read`, `issues: read` | n/a: plain job, no model |
+| `audit` | `contents: read`, `pull-requests: read`, `issues: write` (file issues, comment, the state block and existing audit issues only) | `Read`, `Grep`, `Glob`, `Bash(git clone --filter=blob:none --sparse:*)`, `Bash(git sparse-checkout:*)`, `Bash(git -C:*)`, `Bash(git log:*)`, `Bash(git diff:*)`, `Bash(gh issue list/view/create/comment/edit:*)`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)`; logs variant: + the read-only aggregate query tool |
+
+No code writes, no PRs, no closes.
+
+## Install
+
+1. Run [`automate-it`](../../skills/automate-it/SKILL.md). Copy [prompt.md](prompt.md) to `.github/lever/automations/audit-lane/prompt.md` and fill PARAMETERS with `MODE: dry_run`.
+2. Create the pinned state issue with an empty `## lever state` section (a fenced `json` block holding `{}`) and set `STATE_ISSUE` in PARAMETERS and in the workflow's `env:`. Set `REFERENCE_REPO` and `REFERENCE_BRANCH` (parity). Copy [workflow.yml](workflow.yml) to `.github/workflows/lever-audit-lane.yml`, commit and push, then create it paused: `gh workflow disable lever-audit-lane.yml`.
+3. Verify with `gh workflow view lever-audit-lane.yml` and read the YAML back: `contents: read` only, no code-write tool, no `gh workflow enable|disable`. Dry-run 3 slices: `gh workflow enable lever-audit-lane.yml` (the schedule stays skipped while `LEVER_AUDIT_LANE_LIVE` is unset), then `gh workflow run lever-audit-lane.yml -f mode=dry_run`. Check every finding by hand against the evidence.
+4. Go live on approval with `MODE: act`: `gh variable set LEVER_AUDIT_LANE_LIVE --body true`. Make sure the fix chain picks up the audit label: [`keep-the-pool-full`](../../skills/keep-the-pool-full/), an implementer lane, or `autonomous-delivery`.
 5. Pair it with an [improver](../improver/README.md): `GOOD_OUTCOME: issue fixed`, `BAD_OUTCOME: closed not planned`.

@@ -5,6 +5,7 @@ METRIC:              focus items acted on by AUDIENCE within 24h / focus items p
 AUDIENCE:            @<your-login>
 SCOPE:               this repository                 # or a search qualifier like "org:<org> label:<area>"
 MODE:                act                             # dry_run = build the brief, post nothing, record it (the workflow input `mode` overrides this)
+RUNNER:              gha                 # gha (claude-code-action) | routine (Claude Code cloud routine); the deterministic steps are plain Actions either way
 DIGEST_ISSUE:        <number of a pinned issue>
 TIMEZONE:            <IANA timezone, e.g. America/Los_Angeles>
 WINDOW:              24 hours                        # since the previous brief if one exists

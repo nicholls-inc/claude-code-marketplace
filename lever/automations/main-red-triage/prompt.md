@@ -6,11 +6,12 @@ SCOPE:               failed runs of WATCHED_WORKFLOWS on DEFAULT_BRANCH in this 
 DEFAULT_BRANCH:      main
 WATCHED_WORKFLOWS:   <CI workflow name(s)>
 MODE:                act                     # dry_run = classify and record, write nothing (the workflow input `mode` overrides this)
+RUNNER:              gha                 # gha (claude-code-action) | routine (Claude Code cloud routine); the deterministic steps are plain Actions either way
 ACTION:              notify+rerun            # notify | notify+rerun | fix_pr
 AUTONOMY:            L1                      # fix PRs are opened, never merged, unless GRANT says otherwise
 GRANT:               none                    # e.g. "test-only-main-fix, granted by @owner <date>, expires <date>"
 QUARANTINE:          propose                 # propose | pr
-MAX_RERUNS:          1 per failed run
+MAX_RERUNS:          1 per failed run        # gha: done by the deterministic `rerun` job before you run (RERUN_DONE); routine: you do it
 MAX_LOGS_READ:       5
 ISSUE_LABELS:        main-red; flaky-test (for flakes)
 HUMAN_ESCALATION:    <@user or @team>
@@ -24,7 +25,8 @@ RECORD_SINK:         run_summary             # run_summary (job summary) | ledge
      are green and no open main-red issue is waiting on a result: NOOP(green). Otherwise follow up on
      open main-red issues (rule 7).
 2. Drop stale work. If a newer run of the same workflow on DEFAULT_BRANCH already passed: NOOP(recovered),
-   and comment the green run on the matching open issue if one exists. If an earlier run already
+   and comment the green run on the matching open issue if one exists. A pass that is a rerun (attempt > 1)
+   of the same commit is not recovery: it is flake evidence, so classify it (rule 4). If an earlier run already
    classified this run: NOOP(owned).
 3. Read the failure. List failed jobs; read at most MAX_LOGS_READ job logs. Extract per failure the job,
    the step, the first failing test or error line, and a normalized signature (test id or error class plus
@@ -39,7 +41,8 @@ RECORD_SINK:         run_summary             # run_summary (job summary) | ledge
    - unknown: none of the above with evidence. Say what evidence is missing.
    "Unrelated to the last change" requires proof: the same failure on an earlier commit, or a passing rerun.
 5. Act per ACTION, once per signature:
-   - flake: if ACTION includes rerun and MAX_RERUNS allows, `gh run rerun <run-id> --failed` (failed jobs only). Find the
+   - flake: if ACTION includes rerun, MAX_RERUNS allows and RERUN_DONE is not yes, `gh run rerun <run-id> --failed` (failed jobs only);
+     otherwise use the rerun's result already on the run. Find the
      open flaky-test issue for this test (search by test id); comment the run link and count, or create one
      issue per test with the signature, links and the QUARANTINE proposal (the exact skip/quarantine diff
      and how to un-skip). Never skip, delete or loosen a test without a linked issue.

@@ -1,7 +1,11 @@
-# lever-automation-health: weekly review of every lever-* workflow: no-op %, failures, cost per useful output, least-privilege lint. One proposal or none.
-# Model: sonnet (standard) because it counts and compares; no premium reason.
-# Install: copy to .github/workflows/lever-automation-health.yml and prompt.md to .github/lever/automations/automation-health/prompt.md.
-# Alternative with no workflow file: a Claude Code cloud scheduled task (/schedule), see README. The workflow_run failure path needs the workflow.
+# lever-automation-health: weekly review of every lever-* workflow. Hybrid.
+# `measure` is DETERMINISTIC (plain GitHub Actions: python3 + gh, no model, no API key): inventory, `gh run list --workflow lever-*` counts,
+# outcomes from run logs, the mechanical least-privilege lint of `permissions:` and `--allowedTools`, and the failure-repeat counter.
+# `review` is LLM-driven (RUNNER: gha, claude-code-action): judges permissions against each contract, picks ONE proposal or none, writes the report.
+# On a worker failure `review` runs only when the repeat threshold is reached.
+# Model: review = sonnet (standard) because it counts and compares; no premium reason.
+# For RUNNER: routine, delete `review` and see README "Runner". Install: copy to .github/workflows/lever-automation-health.yml,
+# health_check.py and prompt.md to .github/lever/automations/automation-health/.
 name: lever-automation-health
 on:
   schedule:
@@ -16,8 +20,10 @@ on:
 concurrency:
   group: lever-automation-health
   cancel-in-progress: false
+env:
+  STATE_ISSUE: "0"               # number of the pinned "Automation health" issue (REPORT_ISSUE)
 jobs:
-  run:
+  measure:
     # Created paused: schedule and failure events run only once LEVER_AUTOMATION_HEALTH_LIVE=true; dispatch always runs.
     # Failure path: crashed or timed out only; a NOOP is a success and never wakes this job.
     if: >-
@@ -28,23 +34,51 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
-      contents: read            # reads .github/workflows/lever-*.yml for the least-privilege lint; never writes
-      actions: read             # gh run list --workflow lever-*
-      issues: write             # report comment, failure issues, the ## lever state section
+      contents: read            # reads .github/workflows/lever-*.yml for the lint; never writes
+      actions: read             # gh run list --workflow lever-*, run logs
+      issues: write             # rewrite only the ## lever state block of the report issue
+    outputs:
+      escalate: ${{ steps.measure.outputs.escalate }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install pyyaml
+      - id: measure
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 .github/lever/automations/automation-health/health_check.py \
+            --mode "${{ github.event_name == 'workflow_run' && 'failure' || 'weekly' }}" \
+            --state-issue "$STATE_ISSUE" --out health.json \
+            --failed-workflow "${{ github.event.workflow_run.name }}" \
+            --failed-conclusion "${{ github.event.workflow_run.conclusion }}" \
+            --failed-run "${{ github.event.workflow_run.html_url }}" \
+            ${{ (github.event_name == 'workflow_dispatch' && inputs.mode == 'dry_run') && '--dry-run' || '' }}
+      - uses: actions/upload-artifact@v4
+        with: { name: health, path: health.json }
+  review:
+    needs: [measure]
+    if: github.event_name != 'workflow_run' || needs.measure.outputs.escalate == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
       pull-requests: read
+      issues: write             # report comment, failure issues, proposal issue, the ## lever state section
       id-token: write
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
+      - uses: actions/download-artifact@v4
+        with: { name: health }
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: |
             MODE: ${{ inputs.mode || 'act' }}
             TRIGGER: ${{ github.event_name }}
+            HEALTH_JSON: health.json   (deterministic output of the measure job: rules 0-4 are already computed)
             FAILED_RUN: ${{ github.event.workflow_run.html_url || 'none' }}
-            FAILED_WORKFLOW: ${{ github.event.workflow_run.name || 'none' }}
-            FAILED_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'none' }}
             Follow .github/lever/automations/automation-health/prompt.md exactly.
           claude_args: |
             --model claude-sonnet-5-5
