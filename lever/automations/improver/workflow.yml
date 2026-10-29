@@ -43,6 +43,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
       - id: claude
         uses: anthropics/claude-code-action@v1
         with:
@@ -55,10 +56,12 @@ jobs:
             REPOSITORY: ${{ github.repository }}
             Follow .github/lever/automations/<worker>/improver-prompt.md exactly.
             MODE above overrides the file's MODE for this run; in dry_run, write the proposal to your final message only.
+          # Reads that need the API go through lever-read.sh (fixed GET/GraphQL reads). Never Bash(gh api --method GET:*):
+          # gh honours the last --method, so a second --method turns it into a write.
           claude_args: |
             --model claude-sonnet-5-5
             --max-turns 40
-            --allowedTools "Read,Grep,Glob,Bash(git log:*),Bash(git show:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh search prs:*),Bash(gh api --method GET:*),Bash(gh run list:*),Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*)"
+            --allowedTools "Read,Grep,Glob,Bash(git log:*),Bash(git show:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh search prs:*),Bash(.github/lever/automations/bin/lever-read.sh:*),Bash(gh run list:*),Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*)"
       - name: Run record to job summary
         if: always() && steps.claude.outputs.execution_file != ''
         env:

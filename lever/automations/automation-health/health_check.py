@@ -154,6 +154,14 @@ for f in files:
                         flags.append(f"job {jn}: merge tool {t}: needs L3/L4 or a standing grant")
                     if t == "Bash(git push:*)":
                         flags.append(f"job {jn}: unqualified {t}: restrict the remote and branch pattern")
+                    elif re.match(r"Bash\(git push\b.*\*", t):
+                        flags.append(f"job {jn}: unanchored push refspec {t}: a wildcard matches `<ref>:main`; push via a wrapper or a deterministic job")
+                    if re.match(r"Bash\(gh api (--method|-X)\b", t):
+                        flags.append(f"job {jn}: method-prefixed {t}: gh honours the last --method, so this isn't read-only")
+                    elif re.match(r"Bash\(gh api graphql", t):
+                        flags.append(f"job {jn}: {t} allows any mutation; use a fixed-query wrapper")
+                    elif re.match(r"Bash\(gh api \S*\*", t):
+                        flags.append(f"job {jn}: wildcard endpoint {t}: the * can match another endpoint plus -X; use a fixed-read wrapper")
                     if re.search(r"\.github/workflows", t):
                         flags.append(f"job {jn}: FORBIDDEN tool touching .github/workflows: {t}")
                 if "opus" in models[jn] and "because" not in top_comment.lower():

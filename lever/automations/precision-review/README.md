@@ -23,9 +23,11 @@ The `if:` also skips runs whose actor is `claude[bot]` or `github-actions[bot]`,
 
 Job `permissions:` `contents: read`, `pull-requests: write`. The workflow passes `github_token: ${{ github.token }}` to the action, so that block is the ceiling and comments post as `github-actions[bot]`. (Without it, the action exchanges an OIDC token for the Claude GitHub App's token, whose installation permissions apply instead.)
 
-`--allowedTools`: `Read`, `Grep`, `Glob`, `Bash(gh pr view:*)`, `Bash(gh pr diff:*)`, `Bash(gh api --method GET:*)`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(git diff:*)`, `Bash(git fetch origin:*)`, `mcp__github_inline_comment__create_inline_comment`.
+`--allowedTools`: `Read`, `Grep`, `Glob`, `Bash(gh pr view:*)`, `Bash(gh pr diff:*)`, `Bash(<RUNNER_TEMP>/lever-bin/lever-read.sh:*)`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(git diff:*)`, `Bash(git fetch origin:*)`, `mcp__github_inline_comment__create_inline_comment`.
 
-No push, no approve, no request-changes, no merge, no issue writes. The contract asks for COMMENT-only inline comments; leaving out every other write tool makes that hard to get wrong. `contents: read` means the token can't merge or push even if a command slipped through. `pull-requests: write` would let a raw API call approve, which is why `gh api` is listed only with `--method GET` and `gh pr review` isn't listed at all.
+[`lever-read.sh`](../bin/lever-read.sh) is a fixed read-only wrapper (`pr-review-comments <pr>`: one GET endpoint, validated number, no pass-through flags). The workflow copies it from the default branch to `$RUNNER_TEMP/lever-bin/` (the checkout is the PR head, which may predate the install) and the allowlist names that copy as `Bash(${{ runner.temp }}/lever-bin/lever-read.sh:*)`.
+
+No push, no approve, no request-changes, no merge, no issue writes. The contract asks for COMMENT-only inline comments; leaving out every other write tool makes that hard to get wrong. `contents: read` means the token can't merge or push even if a command slipped through. `pull-requests: write` would let a raw API call approve, which is why there is no `gh api` entry at all (not even `Bash(gh api --method GET:*)`: gh honours the last `--method`, so `--method GET --method POST …/reviews` would post a review) and `gh pr review` isn't listed.
 
 ## Dials
 
@@ -59,10 +61,11 @@ Every step is LLM-driven (reading a diff and proving a defect is judgement), so 
 3. Create paused:
 
 ```sh
-mkdir -p .github/lever/automations/precision-review
+mkdir -p .github/lever/automations/precision-review .github/lever/automations/bin
 cp prompt.md .github/lever/automations/precision-review/prompt.md
+cp ../bin/lever-read.sh .github/lever/automations/bin/lever-read.sh   # shared with the improvers
 cp workflow.yml .github/workflows/lever-precision-review.yml
-git add .github/lever/automations/precision-review .github/workflows/lever-precision-review.yml
+git add .github/lever/automations/precision-review .github/lever/automations/bin .github/workflows/lever-precision-review.yml
 git commit -m "ci: add lever-precision-review (paused)"
 git push
 gh workflow disable lever-precision-review.yml
@@ -109,7 +112,7 @@ Give it access to <owner>/<repo> only and no other connectors. Create it paused.
 |---|---|
 | Triggers | `schedule` weekly (`cron: '17 15 * * 1'`, pick your own); `workflow_run` of `lever-precision-review` with `if: conclusion == 'failure'` |
 | Permissions | `contents: read`, `issues: write`, `pull-requests: read`, `actions: read` |
-| Tools | `Read`, `Grep`, `Glob`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)`, `Bash(gh search prs:*)`, `Bash(gh api --method GET:*)`, `Bash(gh run list:*)`, `Bash(gh issue list:*)`, `Bash(gh issue create:*)`, `Bash(gh issue comment:*)` |
+| Tools | `Read`, `Grep`, `Glob`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)`, `Bash(gh search prs:*)`, `Bash(.github/lever/automations/bin/lever-read.sh:*)` (`pr-review-threads`, `pr-review-comments`; read-only, in place of `gh api`), `Bash(gh run list:*)`, `Bash(gh issue list:*)`, `Bash(gh issue create:*)`, `Bash(gh issue comment:*)` |
 | Output | At most one proposal issue per week (label `lever-proposal`), for example "raise the floor for P3 style findings: 7 of 9 were dismissed", with the prompt diff. A human applies it by PR to `.github/lever/automations/precision-review/prompt.md` or closes it with a reason. |
 | Metric | The reviewer's addressed-before-merge rate, per revision (per commit to the prompt file) |
 

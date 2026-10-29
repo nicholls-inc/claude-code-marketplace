@@ -30,7 +30,7 @@ jobs:
       actions: read
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with: { fetch-depth: 0, persist-credentials: false }
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -39,7 +39,8 @@ jobs:
             MODE: ${{ inputs.mode || 'act' }}
             TRIGGER: ${{ github.event_name }}
             Follow .github/lever/automations/repro-gate/improver-prompt.md exactly.
+          # Timeline reads go through lever-read.sh: `Bash(gh api repos/*/issues/*/timeline:*)` let `*` swallow another endpoint and -X DELETE.
           claude_args: |
             --model claude-sonnet-5-5
             --max-turns 30
-            --allowedTools "Read,Grep,Glob,Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(gh run list:*),Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh api repos/*/issues/*/timeline:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh pr list:*),Bash(gh pr view:*)"
+            --allowedTools "Read,Grep,Glob,Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(gh run list:*),Bash(gh issue view:*),Bash(gh issue list:*),Bash(.github/lever/automations/bin/lever-read.sh:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh pr list:*),Bash(gh pr view:*)"

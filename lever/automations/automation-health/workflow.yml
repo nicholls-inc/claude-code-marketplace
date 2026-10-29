@@ -41,18 +41,26 @@ jobs:
       escalate: ${{ steps.measure.outputs.escalate }}
     steps:
       - uses: actions/checkout@v4
+        with: { persist-credentials: false }
       - run: python3 -c 'import yaml' 2>/dev/null || python3 -m pip install --user --break-system-packages pyyaml
       - id: measure
+        # Event data goes through env:, never ${{ }} inside run: (a workflow name is attacker-influenced text).
         env:
           GH_TOKEN: ${{ github.token }}
+          HEALTH_MODE: ${{ github.event_name == 'workflow_run' && 'failure' || 'weekly' }}
+          FAILED_WORKFLOW: ${{ github.event.workflow_run.name }}
+          FAILED_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          FAILED_RUN: ${{ github.event.workflow_run.html_url }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'dry_run' }}
         run: |
+          dry=(); [ "$DRY_RUN" = true ] && dry=(--dry-run)
           python3 .github/lever/automations/automation-health/health_check.py \
-            --mode "${{ github.event_name == 'workflow_run' && 'failure' || 'weekly' }}" \
+            --mode "$HEALTH_MODE" \
             --state-issue "$STATE_ISSUE" --out health.json \
-            --failed-workflow "${{ github.event.workflow_run.name }}" \
-            --failed-conclusion "${{ github.event.workflow_run.conclusion }}" \
-            --failed-run "${{ github.event.workflow_run.html_url }}" \
-            ${{ (github.event_name == 'workflow_dispatch' && inputs.mode == 'dry_run') && '--dry-run' || '' }}
+            --failed-workflow "$FAILED_WORKFLOW" \
+            --failed-conclusion "$FAILED_CONCLUSION" \
+            --failed-run "$FAILED_RUN" \
+            "${dry[@]}"
       - uses: actions/upload-artifact@v4
         with: { name: health, path: health.json }
   review:
@@ -67,7 +75,7 @@ jobs:
       issues: write             # report comment, failure issues, proposal issue, the ## lever state section
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with: { fetch-depth: 0, persist-credentials: false }
       - uses: actions/download-artifact@v4
         with: { name: health }
       - uses: anthropics/claude-code-action@v1

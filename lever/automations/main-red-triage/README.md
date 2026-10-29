@@ -24,7 +24,7 @@ In `gha`, the `rerun` job reruns the failed jobs, waits for them with `gh run wa
 
 | Trigger | Workflow config | Why |
 |---|---|---|
-| `workflow_run` | `workflows: ["<CI workflow>"]`, `types: [completed]`; both jobs run on `conclusion == 'failure'` and `run_attempt == 1`; `triage` waits for `rerun` via `needs:` | The event. Both jobs filter on `head_branch == default_branch`; the prompt re-checks, so a missing filter costs runs, not correctness. |
+| `workflow_run` | `workflows: ["<CI workflow>"]`, `types: [completed]`; both jobs run on `conclusion == 'failure'` and `run_attempt == 1`; `triage` waits for `rerun` via `needs:` | The event. Both jobs filter on `event == 'push'`, `head_repository.full_name == github.repository` and `head_branch == default_branch`. The branch check alone also matches a fork PR whose branch is called `main`; the other two make it this repository's own default-branch push. The prompt re-checks. |
 | `schedule` | `cron: "17 * * * *"` (hourly) | Sweep: catches missed events and closes the loop on earlier actions (did the rerun pass, did the fix PR land). |
 | `workflow_dispatch` | inputs `mode: dry_run\|act`, `resource_url` | Dry runs on historical failed runs. |
 
@@ -39,7 +39,7 @@ Two layers, both required: the job's `permissions:` block and `claude_args: --al
 | `rerun` | `actions: write` | n/a: plain job, no model |
 | `triage`: read | `contents: read`, `actions: read`, `pull-requests: read` | `Read`, `Grep`, `Glob`, `Bash(gh run list:*)`, `Bash(gh run view:*)`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(git diff:*)`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)`, `Bash(gh issue list:*)`, `Bash(gh issue view:*)` |
 | `triage`: notify | `issues: write` | `Bash(gh issue create:*)`, `Bash(gh issue comment:*)` |
-| `ACTION: fix_pr` | `contents: write`, `pull-requests: write` | + `Edit`, `Write`, `Bash(git checkout:*)`, `Bash(git add:*)`, `Bash(git commit:*)`, `Bash(git push:*)`, `Bash(gh pr create:*)` |
+| `ACTION: fix_pr` | `contents: write`, `pull-requests: write` | + `Edit`, `Write`, `Bash(git checkout -b lever-fix/*)`, `Bash(git add:*)`, `Bash(git commit:*)`, `Bash(gh pr create:*)`, and a push wrapper that only pushes `HEAD:refs/heads/lever-fix/<name>` (adapt [ci-speed/push-arm.sh](../ci-speed/push-arm.sh)). Never `Bash(git push:*)` or a wildcard refspec: `lever-fix/*` also matches `lever-fix/x:main`. |
 | Granted test-only fixes on main (L3) | `pull-requests: write` | + `Bash(gh pr merge:*)` |
 
 No `Bash(gh workflow enable:*)` or `disable`, and no write to `.github/workflows/`. The default `GITHUB_TOKEN` can't push workflow-file changes, which is the right floor for a triage worker.

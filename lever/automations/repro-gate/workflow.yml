@@ -1,13 +1,18 @@
 # lever-repro-gate: classify new issues; label repro-confirmed only with a failing test the run wrote itself.
 # Model: sonnet (standard) because repros are small; move to opus only if repros routinely need deep code reading, and record why here.
 # Install: copy to .github/workflows/lever-repro-gate.yml and prompt.md to .github/lever/automations/repro-gate/prompt.md.
-# Outside reporters: the action refuses runs triggered by actors without write access, so their new issues are picked up by the daily sweep (a schedule run), not the `opened` event.
+# Trust: issue text is untrusted, and the agent writes and runs tests. So the agent job has no contents write and its
+# subprocesses get a scrubbed environment; it commits repro/<issue> locally and a separate deterministic `publish` job
+# (fresh runner, no model, no issue text) validates and pushes refs/heads/repro/<issue>.
+# Who gets processed: `opened` by OWNER/MEMBER/COLLABORATOR authors (the action also refuses actors without write access);
+# the daily sweep, pre-filtered to those authors by the deterministic `select` job; and any issue a maintainer labels
+# needs-repro (the opt-in for outside reporters).
 name: lever-repro-gate
 on:
   issues:
     types: [opened, labeled]     # labeled: only `needs-repro` passes the job `if:`
   schedule:
-    - cron: "23 6 * * *"         # daily sweep: open issues from the last 7 days with none of the gate's labels
+    - cron: "23 6 * * *"         # daily sweep: trusted-author issues from the last 7 days with none of the gate's labels
   workflow_dispatch:
     inputs:
       mode: { type: choice, options: [dry_run, act], default: dry_run }
@@ -16,41 +21,126 @@ concurrency:
   group: lever-repro-gate-${{ github.event.issue.number || github.run_id }}
   cancel-in-progress: false
 jobs:
+  select:
+    # Deterministic sweep filter: no model, read-only. Outside reporters reach the gate only through a maintainer's needs-repro label.
+    if: github.event_name == 'schedule' && vars.LEVER_REPRO_GATE_LIVE == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: read
+    outputs:
+      issues: ${{ steps.select.outputs.issues }}
+    steps:
+      - id: select
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SWEEP_DAYS: "7"                # SWEEP_WINDOW
+          MAX_ISSUES: "5"                # MAX_ISSUES_PER_SWEEP
+        run: |
+          set -euo pipefail
+          since=$(date -u -d "$SWEEP_DAYS days ago" +%Y-%m-%d)
+          q="repo:$GITHUB_REPOSITORY is:issue is:open created:>=$since -label:repro-confirmed -label:needs-info -label:needs-repro"
+          urls=$(gh api -X GET search/issues -f q="$q" -f sort=created -f order=asc -f per_page=100 \
+            --jq '[.items[] | select(.author_association == "OWNER" or .author_association == "MEMBER" or .author_association == "COLLABORATOR") | .html_url]' \
+            | jq -r --argjson max "$MAX_ISSUES" '.[:$max] | join(" ")')
+          echo "issues=$urls" >> "$GITHUB_OUTPUT"
+          echo "sweep candidates (trusted authors only): ${urls:-none}" >> "$GITHUB_STEP_SUMMARY"
   run:
+    needs: [select]
     # Created paused: events and sweep run only once LEVER_REPRO_GATE_LIVE=true; dispatch always runs.
-    # Filter at the trigger: opened issues without the gate's labels, or the needs-repro label event.
+    # Filter at the trigger: trusted-author opened issues without the gate's labels, the needs-repro label event, or a non-empty sweep.
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (vars.LEVER_REPRO_GATE_LIVE == 'true' &&
-       github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]' &&
-       (github.event_name == 'schedule' ||
-        (github.event.action == 'opened' &&
-         !contains(github.event.issue.labels.*.name, 'needs-info') &&
-         !contains(github.event.issue.labels.*.name, 'repro-confirmed')) ||
-        (github.event.action == 'labeled' && github.event.label.name == 'needs-repro')))
+      always() && (
+        github.event_name == 'workflow_dispatch' ||
+        (vars.LEVER_REPRO_GATE_LIVE == 'true' &&
+         github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]' &&
+         ((github.event_name == 'schedule' && needs.select.outputs.issues != '') ||
+          (github.event.action == 'opened' &&
+           contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) &&
+           !contains(github.event.issue.labels.*.name, 'needs-info') &&
+           !contains(github.event.issue.labels.*.name, 'repro-confirmed')) ||
+          (github.event.action == 'labeled' && github.event.label.name == 'needs-repro'))))
     runs-on: ubuntu-latest
     timeout-minutes: 30         # REPRO_BUDGET is 20 minutes of work per issue; the rest is checkout and test setup
     permissions:
-      contents: write           # push the repro/<issue> branch only; never merged by this automation
+      contents: read            # the agent never pushes; `publish` does
       issues: write             # comment + labels
-      pull-requests: read       # OPEN_DRAFT_FIX_PR: on needs pull-requests: write
+      pull-requests: read
+    env:
+      CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"   # tests run with the API key, OIDC and runner tokens stripped
+    outputs:
+      bundle: ${{ steps.bundle.outputs.bundle }}
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with: { fetch-depth: 0, persist-credentials: false }
       # Set up the repo's toolchain here (node, python, go...) so TEST_COMMAND runs.
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling: read-only contents
           prompt: |
             MODE: ${{ inputs.mode || 'act' }}
             TRIGGER: ${{ github.event_name }}/${{ github.event.action }}
             RESOURCE: ${{ inputs.resource_url || github.event.issue.html_url || 'sweep' }}
+            SWEEP_ISSUES: ${{ needs.select.outputs.issues || 'n/a' }}
+            PUSH: the workflow's publish job pushes your local repro/<issue> commits after this run; do not push.
             Follow .github/lever/automations/repro-gate/prompt.md exactly.
           claude_args: |
             --model claude-sonnet-5-5
             --max-turns 40
-            --allowedTools "Read,Write,Edit,Grep,Glob,Bash(npm test:*),Bash(git checkout -b repro/*),Bash(git add:*),Bash(git commit:*),Bash(git push origin repro/*),Bash(git log:*),Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh pr list:*),Bash(gh pr view:*)"
+            --allowedTools "Read,Write,Edit,Grep,Glob,Bash(npm test:*),Bash(git checkout -b repro/*),Bash(git add:*),Bash(git commit:*),Bash(git log:*),Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh pr list:*),Bash(gh pr view:*)"
           # Replace Bash(npm test:*) with the repo's TEST_COMMAND pattern.
-          # OPEN_DRAFT_FIX_PR: on adds Bash(gh pr create --draft:*) and pull-requests: write.
+          # No git push: the agent's token is read-only for contents. `publish` pushes refs/heads/repro/<n> only.
+          # OPEN_DRAFT_FIX_PR: on is done by `publish` (see the step there), not by the agent.
           # No issue-close, no merge, no review tools, no secrets.
+      - name: Bundle the agent's repro/<issue> commits
+        id: bundle
+        if: inputs.mode != 'dry_run'
+        run: |
+          set -euo pipefail
+          if [ -n "$(git rev-list --branches='repro/*' --not --remotes=origin)" ]; then
+            git bundle create "$RUNNER_TEMP/repro.bundle" --branches='repro/*' --not --remotes=origin
+            echo "bundle=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.bundle.outputs.bundle == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with: { name: repro-bundle, path: "${{ runner.temp }}/repro.bundle", retention-days: 3 }
+  publish:
+    # Deterministic: no model and no test execution. It treats the bundle as untrusted and pushes only refs/heads/repro/<number>,
+    # never force, never a change under .github/. GITHUB_TOKEN pushes start no workflows.
+    needs: [run]
+    if: needs.run.result == 'success' && needs.run.outputs.bundle == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write           # create repro/<issue> branches only
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with: { fetch-depth: 0, persist-credentials: false }
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with: { name: repro-bundle, path: "${{ runner.temp }}/repro" }
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          MAX_BRANCHES: "5"             # MAX_ISSUES_PER_SWEEP
+        run: |
+          set -euo pipefail
+          DEFAULT_BRANCH=$(gh repo view "$GITHUB_REPOSITORY" --json defaultBranchRef -q .defaultBranchRef.name)
+          b="$RUNNER_TEMP/repro/repro.bundle"
+          git bundle verify -q "$b"
+          git fetch -q --no-tags "$b" '+refs/heads/repro/*:refs/lever-bundle/repro/*'
+          auth="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          n=0
+          for ref in $(git for-each-ref --format='%(refname)' refs/lever-bundle/repro/); do
+            branch=${ref#refs/lever-bundle/}
+            if ! [[ $branch =~ ^repro/[1-9][0-9]{0,9}$ ]]; then echo "skip $branch: not repro/<issue number>"; continue; fi
+            n=$((n + 1)); [ "$n" -le "$MAX_BRANCHES" ] || { echo "skip $branch: over MAX_BRANCHES"; continue; }
+            git merge-base "$ref" "origin/$DEFAULT_BRANCH" > /dev/null \
+              || { echo "skip $branch: shares no history with $DEFAULT_BRANCH"; continue; }
+            if git diff --name-only "origin/$DEFAULT_BRANCH...$ref" | grep -q '^\.github/'; then
+              echo "skip $branch: changes .github/"; continue
+            fi
+            git -c "http.$GITHUB_SERVER_URL/.extraheader=$auth" push origin "$ref:refs/heads/$branch"
+            echo "pushed $branch" >> "$GITHUB_STEP_SUMMARY"
+            # OPEN_DRAFT_FIX_PR: on → give this job pull-requests: write and uncomment:
+            # gh pr create --draft --head "$branch" --base "$DEFAULT_BRANCH" --title "repro: #${branch#repro/}" --body "Failing test for #${branch#repro/}. Do not merge as-is."
+          done

@@ -26,7 +26,8 @@ You improve the precision-review automation by proposing changes. You never chan
 1. Provenance. Record the trigger. Read the worker's WORKER_PROMPT and .github/workflows/WORKER_WORKFLOW,
    and its revisions with `git log --format='%h %ad %s' --date=short -- <both paths>`; note the current
    revision (latest commit) and date. Only count findings posted after that date.
-2. Gather. From OUTPUT_QUERY, read each PR's review threads authored by REVIEWER_LOGIN. For each finding,
+2. Gather. From OUTPUT_QUERY, read each PR's review threads authored by REVIEWER_LOGIN
+   (`.github/lever/automations/bin/lever-read.sh pr-review-threads <pr>`). For each finding,
    record priority, confidence, path, claim and outcome: GOOD, BAD or no signal yet (PR still open).
    Also count PRs reviewed with zero findings, and runs per PR if you can derive them
    (`gh run list --workflow WORKER_WORKFLOW`).

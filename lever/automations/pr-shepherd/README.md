@@ -4,7 +4,7 @@
 
 It's the loop people hand-type as "monitor CI and push fixes until green, then merge" and the 20-minute self-wakes that poll for it.
 
-Files: [prompt.md](prompt.md), [workflow.yml](workflow.yml).
+Files: [prompt.md](prompt.md), [workflow.yml](workflow.yml), [shepherd.sh](shepherd.sh), [pr-state.graphql](pr-state.graphql).
 
 ## Triggers
 
@@ -26,14 +26,34 @@ If you change `SHEPHERD_LABEL`, change the two `'shepherd'` strings in the workf
 
 Job `permissions:` `contents: write`, `pull-requests: write`, `issues: write`, `actions: write` (rerun), `checks: read`, `id-token: write`. The workflow uses the Claude GitHub App token (no `github_token` input) because a fix pushed with `GITHUB_TOKEN` would not start CI, and the shepherd needs CI on its own pushes. That makes the App installation's permissions, not this block, the agent's ceiling; the tool list does the rest.
 
+Every GitHub write that `gh` has no narrow subcommand for goes through [shepherd.sh](shepherd.sh). The workflow copies it and [pr-state.graphql](pr-state.graphql) to a read-only directory under `$RUNNER_TEMP` before the agent starts and allowlists only that copy, so an `Edit` can't change what it runs. Each subcommand takes fixed, validated arguments:
+
+| `shepherd.sh` subcommand | Replaces | What it refuses |
+|---|---|---|
+| `state <pr>` | `gh api graphql` with the batched read | Anything but the fixed `pr-state.graphql` query |
+| `resolve-thread <thread id>` | `gh api graphql` (`resolveReviewThread`) | Threads outside this repo, or on a PR that is closed, from a fork or not labeled `SHEPHERD_LABEL` |
+| `reply <pr> <comment id> <body file>` | `gh api --method POST repos/*/pulls/*/comments/*/replies` | Non-numeric ids, PRs that aren't open, opted-in, same-repo |
+| `push <pr>` | `git push origin HEAD:*` | Any ref but that PR's own head branch; the default branch; protected branches; fork PRs; commits that change `.github/`; `--force` |
+
 | Level | `--allowedTools` entries |
 |---|---|
-| Read (all levels) | `Read`, `Grep`, `Glob`, `Bash(gh pr view:*)`, `Bash(gh pr list:*)`, `Bash(gh pr diff:*)`, `Bash(gh pr checks:*)`, `Bash(gh run view:*)`, `Bash(gh run list:*)`, `Bash(gh api --method GET:*)`, `Bash(gh issue list:*)`, `Bash(gh search issues:*)`, `Bash(git status:*)`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(git diff:*)`, `Bash(git fetch:*)` |
-| L1 (fix and push) | + `Edit`, `Write`, `Bash(git checkout:*)`, `Bash(git merge:*)`, `Bash(git add:*)`, `Bash(git commit:*)`, `Bash(git push origin HEAD:*)`, `Bash(<TEST_COMMAND>:*)`, `Bash(gh run rerun:*)`, `Bash(gh api --method POST repos/*/pulls/*/comments/*/replies *)`, `Bash(gh pr comment:*)`, `Bash(gh issue create:*)`, `Bash(gh issue comment:*)` (one flake issue per test) |
-| L2 (default) | + `Bash(gh api graphql:*)` (resolve threads), `Bash(gh pr ready:*)` |
+| Read (all levels) | `Read`, `Grep`, `Glob`, `Bash(gh pr view:*)`, `Bash(gh pr list:*)`, `Bash(gh pr diff:*)`, `Bash(gh pr checks:*)`, `Bash(gh run view:*)`, `Bash(gh run list:*)`, `Bash(<RUNNER_TEMP>/lever-bin/shepherd.sh:*)` (`state`), `Bash(gh issue list:*)`, `Bash(gh search issues:*)`, `Bash(git status:*)`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(git diff:*)`, `Bash(git fetch:*)` |
+| L1 (fix and push) | + `Edit`, `Write`, `Bash(git checkout:*)`, `Bash(git merge:*)`, `Bash(git add:*)`, `Bash(git commit:*)`, `Bash(<TEST_COMMAND>:*)`, `Bash(gh run rerun:*)`, `shepherd.sh push` and `reply`, `Bash(gh pr comment:*)`, `Bash(gh issue create:*)`, `Bash(gh issue comment:*)` (one flake issue per test) |
+| L2 (default) | + `shepherd.sh resolve-thread`, `Bash(gh pr ready:*)` |
 | L3 / L4 | + `Bash(gh pr merge:*)`, always with `--match-head-commit <sha>` |
 
-Add `gh pr merge` only when you set `AUTONOMY` to L3 or L4. Without it, no prompt text can merge through `gh pr merge`. One honest gap: `gh api graphql` can't be narrowed to the `resolveReviewThread` mutation, and a raw `mergePullRequest` mutation would pass the same pattern. Below L3, back the tool list with a branch ruleset that requires a human approving review; or set `RESOLVE_POLICY: reviewer_resolves` and drop the graphql entry. Never add `Bash(gh workflow:*)` even though `actions: write` would allow it.
+The shipped workflow lists `shepherd.sh` once, as `Bash(${{ runner.temp }}/lever-bin/shepherd.sh:*)`. Below L2, delete the `resolve-thread` case from your copy of the script rather than adding a second pattern. Never add `Bash(gh api:*)`, `Bash(gh api --method GET:*)` (gh honours the last `--method`, so `--method GET --method DELETE` sends DELETE), `Bash(gh api graphql:*)` (any mutation, including `mergePullRequest`), or a `git push` pattern: a wildcard in `HEAD:*` matches `HEAD:main`. Add `gh pr merge` only when you set `AUTONOMY` to L3 or L4. Never add `Bash(gh workflow:*)` even though `actions: write` would allow it.
+
+Fork PRs are skipped: the job `if:` requires the PR's head repository to be this repository, and `shepherd.sh` refuses cross-repository PRs on the sweep.
+
+### What the tool list does not contain
+
+The allowlist stops a misled agent from calling a write it wasn't given. It does not contain code the agent runs. `TEST_COMMAND` executes the PR's code, and `Edit` lets the agent change that code (and git hooks) first, so treat everything `TEST_COMMAND` runs as having the agent's token:
+
+- `claude-code-action` puts the App installation token in the agent's `GH_TOKEN` and in the `origin` remote URL in `.git/config`. Code run by `TEST_COMMAND` can read both and use the App's full installation permissions until the token expires (about an hour).
+- What the workflow does remove: `persist-credentials: false` keeps the job's own `GITHUB_TOKEN` out of `.git/config`, and `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"` strips the Anthropic API key, the OIDC request token (with it, code could mint fresh App tokens) and the runner's tokens from every subprocess the agent starts.
+- So the real ceiling is the App installation plus your rulesets. Before going live: a ruleset on the default branch (and release branches) that requires a pull request with an approving human review and blocks force pushes, with no bypass for the Claude App; and label `shepherd` only on PRs whose code you'd run with the App's write access. Install the App on this repository only.
+- If that ceiling is too high, run below L1: drop `Edit`, `Write` and `TEST_COMMAND` from the list, and the shepherd reruns, replies and hands off without executing PR code.
 
 ## Dials
 
@@ -66,12 +86,13 @@ LLM-driven: classifying a red check, writing a root-cause fix and dispositioning
 ### Install: `gha`
 
 1. Preflight: `gh auth status` shows the `workflow` scope (`gh auth refresh -s workflow` if not); `gh secret list` shows `ANTHROPIC_API_KEY` or `CLAUDE_CODE_OAUTH_TOKEN` and the Claude GitHub App is installed (`/install-github-app` sets up both); `gh workflow list` shows no existing shepherd. Create the label if missing: `gh label create shepherd`.
-2. Fill PARAMETERS in [prompt.md](prompt.md). Start at `AUTONOMY: L2`. Set `workflows:` in the workflow to your CI and replace `Bash(make test:*)` with your `TEST_COMMAND`.
+2. Fill PARAMETERS in [prompt.md](prompt.md). Start at `AUTONOMY: L2`. Set `workflows:` in the workflow to your CI and replace `Bash(make test:*)` with your `TEST_COMMAND`. Add the default-branch ruleset described under "What the tool list does not contain" if you don't have one.
 3. Create paused:
 
 ```sh
 mkdir -p .github/lever/automations/pr-shepherd
-cp prompt.md .github/lever/automations/pr-shepherd/prompt.md
+cp prompt.md shepherd.sh pr-state.graphql .github/lever/automations/pr-shepherd/
+chmod +x .github/lever/automations/pr-shepherd/shepherd.sh
 cp workflow.yml .github/workflows/lever-pr-shepherd.yml
 git add .github/lever/automations/pr-shepherd .github/workflows/lever-pr-shepherd.yml
 git commit -m "ci: add lever-pr-shepherd (paused)"
@@ -79,7 +100,7 @@ git push
 gh workflow disable lever-pr-shepherd.yml
 ```
 
-4. Verify: `gh workflow view lever-pr-shepherd.yml` shows it disabled; read the committed YAML back: four event triggers plus dispatch, the label and actor conditions in `if:`, no `gh pr merge` in `--allowedTools` at L2, `--model`. `gh variable list` must not show `LEVER_PR_SHEPHERD_LIVE`.
+4. Verify: `gh workflow view lever-pr-shepherd.yml` shows it disabled; read the committed YAML back: four event triggers plus dispatch, the label and actor conditions in `if:`, no `gh pr merge` in `--allowedTools` at L2, no `gh api` or `git push` entry (only `shepherd.sh`), `persist-credentials: false`, `CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"`, `--model`. `gh variable list` must not show `LEVER_PR_SHEPHERD_LIVE`.
 5. Dry run on 3 historical PRs: one red from a real bug, one red from a flake, one green with open threads. `gh workflow enable lever-pr-shepherd.yml` (events stay skipped while the variable is unset), then for each:
 
 ```sh
@@ -88,7 +109,8 @@ gh workflow run lever-pr-shepherd.yml -f mode=dry_run -f resource_url=https://gi
 
    Read the three records in the job summaries. For a strict local parity run instead: `claude -p "MODE: dry_run
 RESOURCE: <PR url>
-Follow .github/lever/automations/pr-shepherd/prompt.md exactly." --allowedTools "<the Read row above>"`.
+SHEPHERD_SH: .github/lever/automations/pr-shepherd/shepherd.sh
+Follow .github/lever/automations/pr-shepherd/prompt.md exactly." --allowedTools "<the Read row above, with that path for shepherd.sh>"`.
 6. Enable on approval: `gh variable set LEVER_PR_SHEPHERD_LIVE --body true`. Create the [improver](../improver/README.md) paused, with `OUTPUT_QUERY: is:pr label:shepherd updated:>={window_start}`, `GOOD_OUTCOME: merged without a human push or revert`, `BAD_OUTCOME: human reverted, re-opened a thread, or pushed a fix the shepherd missed`.
 7. To raise to L3/L4 later: append `,Bash(gh pr merge:*)` to `--allowedTools` and change `AUTONOMY` in the same commit.
 

@@ -4,7 +4,8 @@
 # For RUNNER: routine, delete `diagnose` and see README "Runner".
 # Model: diagnose = sonnet (standard) because it classifies from counts and timestamps; no premium reason.
 # Install: copy to .github/workflows/lever-stall-watchdog.yml and prompt.md to .github/lever/automations/stall-watchdog/prompt.md.
-# The prompt follows the run-health-review skill, loaded from the lever plugin (plugin_marketplaces + plugins below).
+# The prompt follows the run-health-review skill, loaded from the lever plugin checked out at a release tag (a local
+# plugin_marketplaces path, because the action accepts marketplace URLs only when they end in .git, so a URL can't carry a ref).
 name: lever-stall-watchdog
 on:
   schedule:
@@ -35,6 +36,7 @@ jobs:
       IDLE_AFTER_MIN: "30"         # IDLE_AFTER: a lever run still in progress with no update for this long
       NOOP_STORM: "0.50"           # share of short successful runs (a no-op proxy) above which the LLM looks
       ACTIVE_HOURS_UTC: "8-20"     # weekdays
+      FORCE_SIGNAL: ${{ inputs.force_signal || 'false' }}
     steps:
       - id: check
         run: |
@@ -59,7 +61,7 @@ jobs:
           [ "$idle" -gt 0 ] && sig=true && why+=("$idle lever runs in progress with no update > ${IDLE_AFTER_MIN}m")
           [ "$total" -ge 10 ] && awk -v s="$short" -v t="$total" -v n="$NOOP_STORM" 'BEGIN{exit !(s/t>n)}' && sig=true && why+=("short-run share $short/$total")
           [ "$rem" -lt $(( lim / 5 )) ] && sig=true && why+=("API quota $rem/$lim")
-          [ "${{ inputs.force_signal || 'false' }}" = true ] && sig=true && why+=("forced")
+          [ "$FORCE_SIGNAL" = true ] && sig=true && why+=("forced")
           facts=$(jq -nc --arg age "$age" --arg total "$total" --arg failed "$failed" --arg idle "$idle" --arg short "$short" --arg rem "$rem/$lim" --argjson why "$(printf '%s\n' "${why[@]:-}" | jq -R . | jq -sc 'map(select(length>0))')" '{minutes_since_last_merge:$age,lever_runs_24h:$total,failed:$failed,idle_in_progress:$idle,short_successes:$short,api_quota:$rem,signals:$why}')
           echo "signal=$sig" >> "$GITHUB_OUTPUT"
           echo "facts=$facts" >> "$GITHUB_OUTPUT"
@@ -76,12 +78,21 @@ jobs:
       issues: write             # one comment on REPORT_ISSUE
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with: { fetch-depth: 0, persist-credentials: false }
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1   # the lever plugin at a release tag, loaded as a local marketplace
+        with:
+          repository: nicholls-inc/claude-code-marketplace
+          ref: lever-v0.2.0           # never main; bump deliberately after reading the CHANGELOG
+          path: .lever-plugin
+          persist-credentials: false
+          sparse-checkout: |
+            .claude-plugin
+            lever
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ github.token }}   # `permissions:` above is the ceiling
-          plugin_marketplaces: https://github.com/nicholls-inc/claude-code-marketplace.git
+          plugin_marketplaces: ${{ github.workspace }}/.lever-plugin
           plugins: lever@nicholls
           prompt: |
             MODE: ${{ inputs.mode || 'act' }}

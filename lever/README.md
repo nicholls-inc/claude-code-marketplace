@@ -101,12 +101,23 @@ Work lever starts is tracked as an issue assigned to you with the [`lever` label
 **Per repo:** use the plugin. The skills reference `${CLAUDE_PLUGIN_ROOT}` for docs, templates, config and scripts, so copying `skills/` alone into `.claude/skills/` breaks those paths; if you copy anyway, you have to replace that variable with your own path. In GitHub Actions, load the plugin into [`claude-code-action`](https://github.com/anthropics/claude-code-action) with its `plugin_marketplaces` and `plugins` inputs instead:
 
 ```yaml
+- uses: actions/checkout@v4   # pin the plugin to a release tag, not main
+  with:
+    repository: nicholls-inc/claude-code-marketplace
+    ref: lever-v0.2.0
+    path: .lever-plugin
+    persist-credentials: false
+    sparse-checkout: |
+      .claude-plugin
+      lever
 - uses: anthropics/claude-code-action@v1
   with:
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-    plugin_marketplaces: https://github.com/nicholls-inc/claude-code-marketplace.git
+    plugin_marketplaces: ${{ github.workspace }}/.lever-plugin
     plugins: lever@nicholls
 ```
+
+The action accepts marketplace URLs only when they end in `.git`, so `https://github.com/nicholls-inc/claude-code-marketplace.git` would always load the default branch; the local checkout is what pins the version.
 
 **Hacking on lever:** clone it and run `claude --plugin-dir ./lever`. It loads straight from your checkout, so `/reload-plugins` picks up edits.
 

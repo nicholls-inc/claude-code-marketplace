@@ -343,6 +343,13 @@ def main():
     save()
     if PREFIX is None:
         PREFIX = f"lever/arm-{TAG}-{s['run_id']}-"
+    # An unattended caller (the ci-speed lane) pins the push namespace in the environment, which the agent that
+    # writes the config and state files can't change: no config or forged ownership record can aim a push elsewhere.
+    pinned = os.environ.get("LEVER_ARM_BRANCH_PREFIX")
+    if pinned:
+        bad = [branch(a) for a in C["arms"] if not branch(a).startswith(pinned) or ".." in branch(a)]
+        if bad or BASE.startswith(pinned):
+            sys.exit(f"refusing: arm branches must start with LEVER_ARM_BRANCH_PREFIX={pinned!r}: {bad or BASE}")
 
     while s["round"] <= C.get("rounds", 3) and not os.path.exists(STOP):
         n = s["round"]
