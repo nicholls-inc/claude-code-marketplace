@@ -1,15 +1,16 @@
-# lever-ci-speed: one workflow, two jobs. `watch` (cheap, daily) measures time-to-green and files ONE goal issue when a target is missed.
-# `lane` (premium, capped) wakes on the ci-goal label, runs paired experiment arms on real CI, hands owners a measured PR stack.
-# Models: watch = sonnet (standard) because it measures and files one issue. lane = opus (premium) because judging paired-run evidence and
-# writing reviewable changes is the whole job; the lane is gated by the watch, the label, one-goal-at-a-time and a daily run limit.
-# Install: copy to .github/workflows/lever-ci-speed.yml and prompt.md to .github/lever/automations/ci-speed/prompt.md.
-# The prompt follows the experiment-arms skill: commit a copy of the lever plugin's skills/experiment-arms/ to .claude/skills/experiment-arms/ in this repo.
+# lever-ci-speed: one workflow, two jobs.
+# `watch` is DETERMINISTIC (plain GitHub Actions, python3 + gh, no model, no API key): it measures time-to-green on real PRs and opens ONE goal issue when a target is missed.
+# `lane` is LLM-driven (RUNNER: gha, anthropics/claude-code-action@v1) and runs only on signal: the watch opened a goal, a human labeled an issue ci-goal, or a dispatch.
+# For RUNNER: routine, delete the `lane` job and see README "Runner".
+# Model: lane = opus (premium) because judging paired-run evidence and writing reviewable changes is the whole job; the cheap watch, the label, one goal at a time and a daily run limit gate it.
+# Install: copy to .github/workflows/lever-ci-speed.yml, ci_watch.py to .github/lever/automations/ci-speed/ci_watch.py, prompt.md next to it.
+# The lane follows the experiment-arms skill: commit a copy of the lever plugin's skills/experiment-arms/ to .claude/skills/experiment-arms/ in this repo.
 name: lever-ci-speed
 on:
   schedule:
     - cron: "47 4 * * *"         # daily, off-peak (UTC). The watch runs here.
   issues:
-    types: [labeled]             # the lane wakes here; the job `if:` passes only the ci-goal label
+    types: [labeled]             # a human-applied ci-goal label also wakes the lane; the job `if:` passes only that label
   workflow_dispatch:
     inputs:
       role: { type: choice, options: [watch, lane], default: watch }
@@ -30,30 +31,35 @@ jobs:
       contents: read
       actions: read
       pull-requests: read
-      issues: write             # open/update ONE goal issue, add the ci-goal label
-      id-token: write
+      issues: write             # open/update ONE goal issue
+    outputs:
+      goal_issue: ${{ steps.watch.outputs.goal_issue }}
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: anthropics/claude-code-action@v1
-        with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          prompt: |
-            ROLE: watch
-            MODE: ${{ inputs.mode || 'act' }}
-            Follow .github/lever/automations/ci-speed/prompt.md exactly (ROLE: watch section).
-          claude_args: |
-            --model claude-sonnet-5-5
-            --max-turns 30
-            --allowedTools "Read,Grep,Glob,Bash(python3 .claude/skills/experiment-arms/scripts/ci_arm_metrics.py:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*)"
+      - id: watch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Set from your baseline (README step 1):
+          REQUIRED_WORKFLOWS: "CI"
+          TARGET_P50_MIN: "12"
+          TARGET_P90_MIN: "25"
+          TARGET_FIRST_TRY_PASS: "80"
+        run: |
+          python3 .github/lever/automations/ci-speed/ci_watch.py \
+            --workflows "$REQUIRED_WORKFLOWS" --p50 "$TARGET_P50_MIN" --p90 "$TARGET_P90_MIN" \
+            --first-try "$TARGET_FIRST_TRY_PASS" --hours 9-17 \
+            ${{ (github.event_name == 'workflow_dispatch' && inputs.mode == 'dry_run') && '--dry-run' || '' }}
   lane:
-    # The watch's label (applied with the Claude GitHub App token) wakes this job, so the usual claude[bot] actor guard is deliberately
-    # NOT applied here and `allowed_bots` is set below: this is the one place bot-caused events are allowed. Loops are stopped by
-    # (1) one open goal at a time (a second label event on an owned goal is NOOP(owned)), (2) the daily run limit in the prompt
-    # (LANE_RUNS_PER_DAY, start at 2), (3) the concurrency group below.
+    # Hybrid hand-off: runs only on signal. Chained with `needs`, so the watch's issue (created with the default token, which
+    # starts no workflow) still wakes the lane without any bot-actor exception. Loops are stopped by (1) one open goal at a time
+    # (a second wake on an owned goal is NOOP(owned)), (2) LANE_RUNS_PER_DAY in the prompt (start at 2), (3) the concurrency group.
+    needs: [watch]
     if: >-
-      (github.event_name == 'workflow_dispatch' && inputs.role == 'lane') ||
-      (github.event_name == 'issues' && vars.LEVER_CI_SPEED_LIVE == 'true' && github.event.label.name == 'ci-goal')
+      always() && vars.LEVER_CI_SPEED_LIVE != '' && (
+        (needs.watch.result == 'success' && needs.watch.outputs.goal_issue != '') ||
+        (github.event_name == 'issues' && github.event.label.name == 'ci-goal' &&
+         github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]') ||
+        (github.event_name == 'workflow_dispatch' && inputs.role == 'lane'))
     runs-on: ubuntu-latest
     timeout-minutes: 360         # hosted-runner maximum; progress is written to the goal issue, so a timed-out run can be resumed by dispatch
     concurrency:
@@ -71,11 +77,10 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_bots: "claude"
           prompt: |
             ROLE: lane
             MODE: ${{ inputs.mode || 'act' }}
-            RESOURCE: ${{ inputs.resource_url || github.event.issue.html_url }}
+            RESOURCE: ${{ inputs.resource_url || (needs.watch.outputs.goal_issue && format('{0}/{1}/issues/{2}', github.server_url, github.repository, needs.watch.outputs.goal_issue)) || github.event.issue.html_url }}
             Follow .github/lever/automations/ci-speed/prompt.md exactly (ROLE: lane section).
           claude_args: |
             --model claude-opus-5-5
