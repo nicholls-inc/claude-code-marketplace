@@ -35,9 +35,10 @@ jobs:
       - id: gate
         env:
           GH_TOKEN: ${{ github.token }}   # reading a private REFERENCE_REPO needs a token that can read it: use a read-only PAT secret instead
+          GATE: ${{ vars.LEVER_AUDIT_LANE_GATE }}
         run: |
           set -euo pipefail
-          if [ "${{ vars.LEVER_AUDIT_LANE_GATE }}" = off ]; then echo "moved=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "$GATE" = off ]; then echo "moved=true" >> "$GITHUB_OUTPUT"; exit 0; fi
           body=$(gh issue view "$STATE_ISSUE" --repo "$GITHUB_REPOSITORY" --json body -q .body)
           state=$(printf '%s\n' "$body" | awk '/^## lever state/{f=1;next} f&&/^```json/{g=1;next} g&&/^```/{exit} g')
           src=$(gh api "repos/$GITHUB_REPOSITORY/commits/$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)" -q .sha)
@@ -59,7 +60,7 @@ jobs:
       pull-requests: read       # dedup: skip a finding when an open PR already touches its files
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with: { fetch-depth: 0, persist-credentials: false }
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}

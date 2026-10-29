@@ -4,7 +4,11 @@
 # For RUNNER: routine, delete the `lane` job and see README "Runner".
 # Model: lane = opus (premium) because judging paired-run evidence and writing reviewable changes is the whole job; the cheap watch, the label, one goal at a time and a daily run limit gate it.
 # Install: copy to .github/workflows/lever-ci-speed.yml, ci_watch.py to .github/lever/automations/ci-speed/ci_watch.py, prompt.md next to it.
-# The lane follows the experiment-arms skill: the action loads the lever plugin, and a sparse checkout of the plugin at .lever-plugin/ gives the scripts a fixed path.
+# The lane follows the experiment-arms skill: a checkout of the lever plugin pinned to a release tag at .lever-plugin/ is both the plugin
+# the action loads (as a local marketplace) and the fixed path the scripts run from. Also copy push-arm.sh next to ci_watch.py,
+# and ../bin/lever-read.sh to .github/lever/automations/bin/.
+# Token: the lane has no github_token input, so it uses the Claude GitHub App token (id-token: write): arm pushes must start CI,
+# and GITHUB_TOKEN pushes would not. The App installation's permissions are then the lane's ceiling; see README "Permissions".
 name: lever-ci-speed
 on:
   schedule:
@@ -36,6 +40,7 @@ jobs:
       goal_issue: ${{ steps.watch.outputs.goal_issue }}
     steps:
       - uses: actions/checkout@v4
+        with: { persist-credentials: false }
       - id: watch
         env:
           GH_TOKEN: ${{ github.token }}
@@ -44,11 +49,12 @@ jobs:
           TARGET_P50_MIN: "12"
           TARGET_P90_MIN: "25"
           TARGET_FIRST_TRY_PASS: "80"
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'dry_run' }}
         run: |
+          dry=(); [ "$DRY_RUN" = true ] && dry=(--dry-run)
           python3 .github/lever/automations/ci-speed/ci_watch.py \
             --workflows "$REQUIRED_WORKFLOWS" --p50 "$TARGET_P50_MIN" --p90 "$TARGET_P90_MIN" \
-            --first-try "$TARGET_FIRST_TRY_PASS" --hours 9-17 \
-            ${{ (github.event_name == 'workflow_dispatch' && inputs.mode == 'dry_run') && '--dry-run' || '' }}
+            --first-try "$TARGET_FIRST_TRY_PASS" --hours 9-17 "${dry[@]}"
   lane:
     # Hybrid hand-off: runs only on signal. Chained with `needs`, so the watch's issue (created with the default token, which
     # starts no workflow) still wakes the lane without any bot-actor exception. Loops are stopped by (1) one open goal at a time
@@ -60,6 +66,7 @@ jobs:
         (vars.LEVER_CI_SPEED_LIVE == 'true' && (
           (needs.watch.result == 'success' && needs.watch.outputs.goal_issue != '') ||
           (github.event_name == 'issues' && github.event.label.name == 'ci-goal' &&
+           contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association) &&
            github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]'))))
     runs-on: ubuntu-latest
     timeout-minutes: 360         # hosted-runner maximum; progress is written to the goal issue, so a timed-out run can be resumed by dispatch
@@ -72,28 +79,48 @@ jobs:
       issues: write
       actions: write            # rerun failed arm jobs
       id-token: write
+    env:
+      CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"   # strip API key, OIDC request token and runner tokens from the agent's subprocesses
+      LEVER_ARM_BRANCH_PREFIX: lever/arm-      # ci_arm_driver.py refuses other push targets (lever releases after v0.2.0)
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: actions/checkout@v4   # lever's experiment-arms scripts, at a path --allowedTools can name
+        with: { fetch-depth: 0, persist-credentials: false }
+      - uses: actions/checkout@v4   # the lever plugin, pinned: loaded as a local marketplace, and the scripts' fixed path
         with:
           repository: nicholls-inc/claude-code-marketplace
+          ref: lever-v0.2.0           # a release tag, never main; bump deliberately after reading the CHANGELOG
           path: .lever-plugin
-          sparse-checkout: lever/skills/experiment-arms
+          persist-credentials: false
+          sparse-checkout: |
+            .claude-plugin
+            lever
+      - name: Freeze the plugin and the push wrapper (the agent can Edit the workspace)
+        run: |
+          set -euo pipefail
+          echo '.lever-plugin/' >> .git/info/exclude
+          chmod -R a-w .lever-plugin
+          d="$RUNNER_TEMP/lever-bin"; install -d "$d"
+          install -m 0555 .github/lever/automations/ci-speed/push-arm.sh "$d/push-arm.sh"
+          install -m 0555 .github/lever/automations/bin/lever-read.sh "$d/lever-read.sh"
+          chmod 0555 "$d"
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          plugin_marketplaces: https://github.com/nicholls-inc/claude-code-marketplace.git
+          # A local path, because the action only accepts marketplace URLs ending in .git (no #ref), so a URL can't be pinned.
+          plugin_marketplaces: ${{ github.workspace }}/.lever-plugin
           plugins: lever@nicholls
           prompt: |
             ROLE: lane
             ARMS_SCRIPTS: .lever-plugin/lever/skills/experiment-arms/scripts
+            PUSH_ARM: ${{ runner.temp }}/lever-bin/push-arm.sh
+            LEVER_READ: ${{ runner.temp }}/lever-bin/lever-read.sh
             MODE: ${{ inputs.mode || 'act' }}
             RESOURCE: ${{ inputs.resource_url || (needs.watch.outputs.goal_issue && format('{0}/{1}/issues/{2}', github.server_url, github.repository, needs.watch.outputs.goal_issue)) || github.event.issue.html_url }}
             Follow .github/lever/automations/ci-speed/prompt.md exactly (ROLE: lane section).
           claude_args: |
             --model claude-opus-5-5
             --max-turns 200
-            --allowedTools "Skill,Read,Write,Edit,Grep,Glob,Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/ci_arm_metrics.py:*),Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/ci_arm_driver.py:*),Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/arm_stats.py:*),Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push origin ci-arm/*),Bash(git log:*),Bash(git diff:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh run rerun:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr ready:*),Bash(gh pr close:*),Bash(gh pr comment:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue close:*)"
+            --allowedTools "Skill,Read,Write,Edit,Grep,Glob,Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/ci_arm_metrics.py:*),Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/ci_arm_driver.py:*),Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/arm_stats.py:*),Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(${{ runner.temp }}/lever-bin/push-arm.sh:*),Bash(${{ runner.temp }}/lever-bin/lever-read.sh:*),Bash(git log:*),Bash(git diff:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh run rerun:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr ready:*),Bash(gh pr close:*),Bash(gh pr comment:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue close:*)"
           # No `gh run cancel`: the lane never relies on cancelling a run; it pushes a new commit or waits.
+          # No `git push` pattern: `ci-arm/*` also matched `ci-arm/x:main`. push-arm.sh pushes HEAD to refs/heads/ci-arm/<name> only.
           # `gh pr merge` only with a standing grant. Never gh workflow enable|disable.

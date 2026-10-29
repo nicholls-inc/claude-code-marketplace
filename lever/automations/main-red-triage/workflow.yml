@@ -25,11 +25,14 @@ concurrency:
 jobs:
   rerun:
     # Created paused: runs only once LEVER_MAIN_RED_TRIAGE_LIVE=true. First failure of a default-branch run only.
+    # `head_branch == default_branch` alone also matches a fork PR whose branch is named main: require a push in this repository.
     if: >-
       vars.LEVER_MAIN_RED_TRIAGE_LIVE == 'true' && vars.LEVER_MAIN_RED_TRIAGE_RERUN != 'false' &&
       github.event_name == 'workflow_run' &&
       github.event.workflow_run.conclusion == 'failure' &&
       github.event.workflow_run.run_attempt == 1 &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
       github.event.workflow_run.head_branch == github.event.repository.default_branch
     runs-on: ubuntu-latest
     timeout-minutes: 60         # bounded by your CI's duration: this job waits for the rerun (cheap runner minutes, no model)
@@ -58,6 +61,8 @@ jobs:
          github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]' &&
          (github.event_name == 'schedule' ||
           (github.event_name == 'workflow_run' &&
+           github.event.workflow_run.event == 'push' &&
+           github.event.workflow_run.head_repository.full_name == github.repository &&
            github.event.workflow_run.head_branch == github.event.repository.default_branch &&
            github.event.workflow_run.conclusion == 'failure' &&
            github.event.workflow_run.run_attempt == 1))))
@@ -70,7 +75,7 @@ jobs:
       pull-requests: read
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with: { fetch-depth: 0, persist-credentials: false }
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -85,5 +90,7 @@ jobs:
             --model claude-sonnet-5-5
             --max-turns 25
             --allowedTools "Read,Grep,Glob,Bash(gh run list:*),Bash(gh run view:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*)"
-          # ACTION: fix_pr adds: Edit,Write,Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*)
+          # ACTION: fix_pr adds: Edit,Write,Bash(git checkout -b lever-fix/*),Bash(git add:*),Bash(git commit:*),Bash(gh pr create:*), plus a push
+          # that can't name another ref: a wrapper like ../ci-speed/push-arm.sh with the prefix lever-fix/. Never Bash(git push:*)
+          # or a wildcard refspec (`lever-fix/*` matches `lever-fix/x:main`).
           # L3 test-only-main-fix grant adds: Bash(gh pr merge:*)   (never otherwise)

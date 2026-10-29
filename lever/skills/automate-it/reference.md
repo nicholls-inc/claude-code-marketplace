@@ -40,12 +40,13 @@ Start from the allowed actions in the CONTRACT. Each write must trace to one of 
 
 | Allowed action | `permissions:` | `--allowedTools` entries |
 |---|---|---|
-| Read (always allowed; take only what the job reads) | `contents: read`, plus `pull-requests: read` / `issues: read` / `actions: read` as needed | `Read`, `Grep`, `Glob`, `Bash(gh pr view:*)`, `Bash(gh pr diff:*)`, `Bash(gh pr list:*)`, `Bash(gh pr checks:*)`, `Bash(gh issue view:*)`, `Bash(gh issue list:*)`, `Bash(gh search issues:*)`, `Bash(gh search prs:*)`, `Bash(gh run list:*)`, `Bash(gh run view:*)`, `Bash(gh api --method GET:*)`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(git diff:*)` |
+| Read (always allowed; take only what the job reads) | `contents: read`, plus `pull-requests: read` / `issues: read` / `actions: read` as needed | `Read`, `Grep`, `Glob`, `Bash(gh pr view:*)`, `Bash(gh pr diff:*)`, `Bash(gh pr list:*)`, `Bash(gh pr checks:*)`, `Bash(gh issue view:*)`, `Bash(gh issue list:*)`, `Bash(gh search issues:*)`, `Bash(gh search prs:*)`, `Bash(gh run list:*)`, `Bash(gh run view:*)`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(git diff:*)`; for review comments, threads or timelines, `Bash(.github/lever/automations/bin/lever-read.sh:*)` (fixed read-only calls; see below) |
 | Comment on a PR or issue | `pull-requests: write` / `issues: write` | `Bash(gh pr comment:*)`, `Bash(gh issue comment:*)` |
-| Reply in a review thread | `pull-requests: write` | `Bash(gh api --method POST repos/*/pulls/*/comments/*/replies *)` |
+| Reply in a review thread | `pull-requests: write` | A wrapper subcommand with validated ids, e.g. `shepherd.sh reply <pr> <comment id> <body file>` from [pr-shepherd](${CLAUDE_PLUGIN_ROOT}/automations/pr-shepherd/shepherd.sh) |
 | Post inline review comments (comment-only) | `pull-requests: write` | `mcp__github_inline_comment__create_inline_comment` |
-| Resolve threads | `pull-requests: write` | `Bash(gh api graphql:*)` (can't be narrowed to one mutation; back it with a ruleset) |
-| Push a fix to the PR branch | `contents: write` (App token if CI must run on the push) | `Edit`, `Write`, `Bash(git add:*)`, `Bash(git commit:*)`, `Bash(git push origin HEAD:*)`, plus the repo's test command |
+| Resolve threads | `pull-requests: write` | A wrapper with the fixed `resolveReviewThread` mutation, e.g. `shepherd.sh resolve-thread <thread id>` |
+| Push a fix to the PR branch | `contents: write` (App token if CI must run on the push) | `Edit`, `Write`, `Bash(git add:*)`, `Bash(git commit:*)`, a push wrapper that resolves the PR's own head ref and refuses the default and protected branches (`shepherd.sh push <pr>`), plus the repo's test command. Checkout with `persist-credentials: false`, job `env: CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"` |
+| Push a new branch | none for the agent: it commits locally | A deterministic job after the agent pushes `refs/heads/<prefix>/<id>` from a git bundle artifact (repro-gate `publish`), or, when CI must run on it, a wrapper that pushes `HEAD:refs/heads/<prefix>/<validated name>` only (ci-speed `push-arm.sh`) |
 | Open a PR (draft) | `contents: write`, `pull-requests: write` | + `Bash(gh pr create:*)` (with `--draft`) |
 | Rerun failed jobs | `actions: write` | `Bash(gh run rerun:*)` (with `--failed`) |
 | Label | `issues: write` / `pull-requests: write` | `Bash(gh issue edit:*)` / `Bash(gh pr edit:*)` (plus `Bash(gh label list:*)` to check the label exists) |
@@ -53,8 +54,16 @@ Start from the allowed actions in the CONTRACT. Each write must trace to one of 
 | Merge (L3/L4 only) | `contents: write`, `pull-requests: write` | `Bash(gh pr merge:*)`, always with `--match-head-commit <sha>` |
 | Open a tracking issue | `issues: write` | `Bash(gh issue create:*)` (with `Bash(gh search issues:*)` for the duplicate check) |
 | Rewrite the `## lever state` block | `issues: write` | `Bash(gh issue edit:*)` on the one pinned issue the job owns (or do it in a deterministic step) |
-| Post to a discussion | `discussions: write` | `Bash(gh api graphql:*)` (addDiscussionComment) |
+| Post to a discussion | `discussions: write` | A wrapper with the fixed `addDiscussionComment` mutation and a validated discussion id; never `Bash(gh api graphql:*)` |
 | Audit or improve an automation | `contents: read`, `actions: read`, `issues: write` | read rows above, `Bash(gh workflow list:*)`, `Bash(gh workflow view:*)`, `Bash(gh issue create:*)`, `Bash(gh issue comment:*)` |
+
+Never allow these patterns. Claude Code's `*` matches any text, spaces included, so a wildcard in the middle of a `gh api` or `git push` entry can swallow a different endpoint or a second refspec:
+
+- `gh api` with a method prefix (`Bash(gh api --method GET:*)`, `Bash(gh api -X GET:*)`): gh honours the **last** `--method`/`-X`, so `gh api --method GET --method DELETE …` sends DELETE. The same goes for endpoint globs like `Bash(gh api repos/*/pulls/*/comments)`, which match `gh api repos/o/r/git/refs/heads/main -X DELETE -f a=/pulls/1/comments`.
+- `Bash(gh api graphql:*)`: any mutation, including `mergePullRequest` and `deleteRef`.
+- An unanchored push refspec (`Bash(git push origin HEAD:*)`, `Bash(git push origin repro/*)`, `Bash(git push:*)`): `HEAD:*` matches `HEAD:main`, and `repro/*` matches `repro/x:main` and `repro/x HEAD:main`.
+
+Use instead: named `gh` subcommands (`gh pr view`, `gh pr diff`, `gh issue view`), [`lever-read.sh`](${CLAUDE_PLUGIN_ROOT}/automations/bin/lever-read.sh) for fixed reads, a small wrapper script per write that takes validated positional arguments and builds the call itself, and pushes by a deterministic job or a wrapper that pushes one resolved `refs/heads/...` ref. If the agent has `Edit`, a step copies the wrappers to a read-only directory under `$RUNNER_TEMP` before the agent starts and the allowlist names that copy (`Bash(${{ runner.temp }}/lever-bin/<script>:*)`). And remember that a test command after `Edit` runs code the agent wrote, with its `GH_TOKEN` in reach: the allowlist doesn't contain that code; the token's permissions and your rulesets do.
 
 Never grant to a worker or an improver: `Bash(gh workflow enable:*)`, `Bash(gh workflow disable:*)`, `Bash(gh workflow:*)`, write access to `.github/workflows/` or `.github/lever/`, `Bash(gh issue close:*)` (unless closing is the job), `Bash(gh issue edit:*)` on items the job doesn't own, or a bare `Bash` / `Bash(gh api:*)`. Bare entries defeat least privilege the way whole toolsets do.
 
@@ -153,7 +162,7 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with: { fetch-depth: 0, persist-credentials: false }
       - id: claude
         uses: anthropics/claude-code-action@v1
         with:
@@ -174,7 +183,7 @@ jobs:
         run: jq -r '[.[] | select(.type == "result")] | last | .result // "no result"' "$EXEC_FILE" >> "$GITHUB_STEP_SUMMARY"
 ```
 
-If the prompt uses lever skills, add `plugin_marketplaces: https://github.com/nicholls-inc/claude-code-marketplace.git` and `plugins: lever@nicholls` to the action's `with:` rather than copying skills into `.claude/skills/`.
+If the prompt uses lever skills, check out `nicholls-inc/claude-code-marketplace` at a release tag (`ref: lever-v<version>`, `path: .lever-plugin`, `persist-credentials: false`, sparse `.claude-plugin` and `lever`) and add `plugin_marketplaces: ${{ github.workspace }}/.lever-plugin` and `plugins: lever@nicholls` to the action's `with:`, rather than copying skills into `.claude/skills/`. Don't pass the marketplace URL: the action only accepts URLs ending in `.git`, so it can't carry a ref and always loads the default branch.
 
 Deterministic jobs use the same `on:`, `if:`, `concurrency:` and `permissions:` with `run:` steps (`gh`, `actions/github-script`, `python3 script.py`) instead of the action, and no secret. A hybrid adds the LLM job with `needs: watch` and `if: needs.watch.outputs.signal == 'true'`.
 

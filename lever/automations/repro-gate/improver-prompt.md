@@ -25,7 +25,8 @@ You improve the repro-gate automation by proposing changes. You never change it 
 1. Provenance. Record the trigger. Read the worker's workflow and prompt from the repository and its
    revisions with `git log -- .github/workflows/lever-repro-gate.yml .github/lever/automations/repro-gate/`;
    note the current revision (commit SHA) and date. Only count issues the gate handled after that date.
-2. Gather labeled data. For each issue from OUTPUT_QUERY, read its timeline once. Record the gate's
+2. Gather labeled data. For each issue from OUTPUT_QUERY, read its timeline once
+   (`.github/lever/automations/bin/lever-read.sh issue-timeline <n>`). Record the gate's
    class (bug / not-bug / unclear), its label, whether a test was committed, and every later human label
    change, close reason and fix PR. Each human correction is one labeled example; record who made it
    only as "maintainer" or "reporter".

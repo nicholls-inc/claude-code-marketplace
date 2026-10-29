@@ -34,15 +34,22 @@ func RenderGitConfig(opts GitConfigOpts) (string, error) {
 	}
 	// Clear any inherited credential helper so git doesn't reach for the keychain.
 	fmt.Fprintf(&b, "[credential]\n\thelper =\n")
-	// First extraHeader empty value clears any inherited header chain (defensive
-	// — git concatenates extraHeader multivar values, so resetting first prevents
-	// any system-level header from being appended alongside ours). Second sets
-	// our auth: Basic base64("x-access-token:<token>"). Bearer is rejected by
-	// git's smart-HTTP transport with 401 — see GitConfigOpts.Token doc.
+	// The header is scoped to GitHubHTTPScope so the installation token is only
+	// ever sent to GitHub: an unscoped [http] extraHeader would go to every HTTP
+	// remote, submodule and LFS host git talks to. First extraHeader empty value
+	// clears any inherited header chain for that URL (defensive — git
+	// concatenates extraHeader multivar values, so resetting first prevents any
+	// system-level header from being appended alongside ours). Second sets our
+	// auth: Basic base64("x-access-token:<token>"). Bearer is rejected by git's
+	// smart-HTTP transport with 401 — see GitConfigOpts.Token doc.
 	creds := base64.StdEncoding.EncodeToString([]byte("x-access-token:" + opts.Token))
-	fmt.Fprintf(&b, "[http]\n\textraHeader =\n\textraHeader = Authorization: Basic %s\n", creds)
+	fmt.Fprintf(&b, "[http %q]\n\textraHeader =\n\textraHeader = Authorization: Basic %s\n", GitHubHTTPScope, creds)
 	return b.String(), nil
 }
+
+// GitHubHTTPScope is the URL prefix the auth header is limited to. The config
+// has no GitHub Enterprise host setting, so this is github.com only.
+const GitHubHTTPScope = "https://github.com/"
 
 // WriteGitConfigAtomic writes the rendered config to dst at mode 0600 via a
 // same-directory temp file + rename, so concurrent readers (e.g. git fork

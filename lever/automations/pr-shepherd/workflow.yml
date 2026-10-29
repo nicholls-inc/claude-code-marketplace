@@ -3,6 +3,10 @@
 # Install as .github/workflows/lever-pr-shepherd.yml; prompt at .github/lever/automations/pr-shepherd/prompt.md.
 # Token: no github_token input, so the action uses the Claude GitHub App token (id-token: write). Its pushes start CI;
 # GITHUB_TOKEN pushes would not. The App installation's permissions, not the block below, are then the agent's ceiling.
+# Also copy shepherd.sh and pr-state.graphql to .github/lever/automations/pr-shepherd/: the agent's GitHub writes
+# (thread replies, resolve, push to the PR's own head branch) go only through that script, never raw `gh api` or `git push`.
+# TEST_COMMAND runs PR code with that App token in reach (claude-code-action puts it in GH_TOKEN and the origin URL):
+# see README "What the tool list does not contain". Fork PRs are skipped.
 name: lever-pr-shepherd
 on:
   pull_request:
@@ -36,11 +40,14 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (vars.LEVER_PR_SHEPHERD_LIVE == 'true' && (
         github.event_name == 'schedule' ||
-        (github.event_name == 'pull_request' && github.event.label.name == 'shepherd') ||
+        (github.event_name == 'pull_request' && github.event.label.name == 'shepherd' &&
+         github.event.pull_request.head.repo.full_name == github.repository) ||
         (github.event_name == 'workflow_run' &&
          github.event.workflow_run.conclusion == 'failure' &&
-         github.event.workflow_run.event == 'pull_request') ||
+         github.event.workflow_run.event == 'pull_request' &&
+         github.event.workflow_run.head_repository.full_name == github.repository) ||
         (github.event_name == 'pull_request_review' &&
+         github.event.pull_request.head.repo.full_name == github.repository &&
          contains(github.event.pull_request.labels.*.name, 'shepherd') &&
          (github.event.review.state == 'changes_requested' || github.event.review.state == 'commented') &&
          github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]')))
@@ -53,10 +60,26 @@ jobs:
       actions: write          # gh run rerun; gh workflow enable/disable is NOT in the tool list
       checks: read
       id-token: write         # Claude GitHub App token exchange
+    env:
+      CLAUDE_CODE_SUBPROCESS_ENV_SCRUB: "1"   # strip API key, OIDC request token and runner tokens from the agent's subprocesses
+      SHEPHERD_LABEL: shepherd                 # keep equal to SHEPHERD_LABEL in prompt.md; shepherd.sh refuses unlabeled PRs
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false          # the job GITHUB_TOKEN never sits in .git/config
+      - name: Install fixed tools from the default branch, outside the workspace, read-only
+        # The agent can Edit files in the workspace, so it runs these copies, not the checked-out ones.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          DEFAULT_BRANCH=$(gh repo view "$GITHUB_REPOSITORY" --json defaultBranchRef -q .defaultBranchRef.name)
+          d="$RUNNER_TEMP/lever-bin"; src="origin/$DEFAULT_BRANCH:.github/lever/automations/pr-shepherd"
+          install -d "$d"
+          git show "$src/shepherd.sh" > "$d/shepherd.sh"
+          git show "$src/pr-state.graphql" > "$d/pr-state.graphql"
+          chmod 0555 "$d/shepherd.sh"; chmod 0444 "$d/pr-state.graphql"; chmod 0555 "$d"
       - id: claude
         uses: anthropics/claude-code-action@v1
         with:
@@ -67,14 +90,16 @@ jobs:
             TRIGGER: ${{ github.event_name }}/${{ github.event.action || 'manual' }}
             HEAD_SHA_AT_TRIGGER: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || 'n/a' }}
             REPOSITORY: ${{ github.repository }}
+            SHEPHERD_SH: ${{ runner.temp }}/lever-bin/shepherd.sh
             Follow .github/lever/automations/pr-shepherd/prompt.md exactly.
             MODE above overrides the file's MODE for this run.
           # L2 tool list. Replace Bash(make test:*) with your TEST_COMMAND.
           # L3/L4 only: append ,Bash(gh pr merge:*) and change AUTONOMY in the same commit.
+          # Never add Bash(gh api ...), Bash(gh api graphql:*) or Bash(git push ...): shepherd.sh is the only write path.
           claude_args: |
             --model claude-sonnet-5-5
             --max-turns 60
-            --allowedTools "Read,Grep,Glob,Edit,Write,Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr diff:*),Bash(gh pr checks:*),Bash(gh run view:*),Bash(gh run list:*),Bash(gh run rerun:*),Bash(gh api --method GET:*),Bash(gh api graphql:*),Bash(gh api --method POST repos/*/pulls/*/comments/*/replies *),Bash(gh pr comment:*),Bash(gh pr ready:*),Bash(gh issue list:*),Bash(gh search issues:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(git status:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(git fetch:*),Bash(git checkout:*),Bash(git merge:*),Bash(git add:*),Bash(git commit:*),Bash(git push origin HEAD:*),Bash(make test:*)"
+            --allowedTools "Read,Grep,Glob,Edit,Write,Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr diff:*),Bash(gh pr checks:*),Bash(gh run view:*),Bash(gh run list:*),Bash(gh run rerun:*),Bash(${{ runner.temp }}/lever-bin/shepherd.sh:*),Bash(gh pr comment:*),Bash(gh pr ready:*),Bash(gh issue list:*),Bash(gh search issues:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(git status:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(git fetch:*),Bash(git checkout:*),Bash(git merge:*),Bash(git add:*),Bash(git commit:*),Bash(make test:*)"
       - name: Run record to job summary
         if: always() && steps.claude.outputs.execution_file != ''
         env:

@@ -93,7 +93,7 @@ The mechanical half runs in `health_check.py`; the judgement half (is this scope
 
 - a `permissions:` scope above what an allowed action needs, or no job-level `permissions:` at all;
 - a tool no allowed action needs, a bare `Bash`, or no `--allowedTools` list (the default grants more than the contract);
-- always flagged: `Bash(gh workflow enable:*)`, `Bash(gh workflow disable:*)`, writes to `.github/workflows/`, `Bash(gh pr merge:*)` below L3 or without a standing grant, `pull_request_target`, literal secrets.
+- always flagged: `Bash(gh workflow enable:*)`, `Bash(gh workflow disable:*)`, writes to `.github/workflows/`, `Bash(gh pr merge:*)` below L3 or without a standing grant, `pull_request_target`, literal secrets, `gh api` with a method prefix or an endpoint wildcard (gh honours the last `--method`), `Bash(gh api graphql:*)` (any mutation), and `git push` entries with a wildcard refspec (`HEAD:*` matches `HEAD:main`).
 
 It proposes narrowing changes only, as an issue with the diff.
 

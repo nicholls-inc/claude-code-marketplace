@@ -19,7 +19,9 @@ Files: [prompt.md](prompt.md), [workflow.yml](workflow.yml). Installed as `.gith
 
 Job `permissions:` `contents: read`, `issues: write`, `pull-requests: read`, `actions: read`; `github_token: ${{ github.token }}` so that block is the ceiling.
 
-`--allowedTools`: `Read`, `Grep`, `Glob`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)`, `Bash(gh search prs:*)`, `Bash(gh api --method GET:*)`, `Bash(gh run list:*)`, `Bash(gh issue list:*)`, `Bash(gh issue create:*)`, `Bash(gh issue comment:*)`. Add `Bash(gh search issues:*)` and `Bash(gh issue view:*)` for workers whose outputs are issues.
+`--allowedTools`: `Read`, `Grep`, `Glob`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)`, `Bash(gh search prs:*)`, `Bash(.github/lever/automations/bin/lever-read.sh:*)`, `Bash(gh run list:*)`, `Bash(gh issue list:*)`, `Bash(gh issue create:*)`, `Bash(gh issue comment:*)`. Add `Bash(gh search issues:*)` and `Bash(gh issue view:*)` for workers whose outputs are issues.
+
+[`lever-read.sh`](../bin/lever-read.sh) stands in for raw API reads: `pr-review-comments`, `pr-review-threads`, `issue-timeline`, `issue-comments`, each one fixed GET or GraphQL read on a validated number. Never `Bash(gh api --method GET:*)` (gh honours the last `--method`, so `--method GET --method DELETE` deletes) or a mid-pattern wildcard such as `Bash(gh api repos/*/issues/*/timeline:*)` (the `*` can swallow a different endpoint and `-X DELETE`).
 
 `gh issue comment` also covers the optional weekly summary on a tracking issue (`SUMMARY_TARGET`).
 
@@ -55,8 +57,9 @@ LLM-driven: deciding which single change the evidence supports is judgement. The
 
 ```sh
 cp prompt.md .github/lever/automations/<worker>/improver-prompt.md
+mkdir -p .github/lever/automations/bin && cp ../bin/lever-read.sh .github/lever/automations/bin/   # if not installed yet
 cp workflow.yml .github/workflows/lever-<worker>-improver.yml
-git add .github/lever/automations/<worker>/improver-prompt.md .github/workflows/lever-<worker>-improver.yml
+git add .github/lever/automations/<worker>/improver-prompt.md .github/lever/automations/bin .github/workflows/lever-<worker>-improver.yml
 git commit -m "ci: add lever-<worker>-improver (paused)"
 git push
 gh workflow disable lever-<worker>-improver.yml

@@ -3,6 +3,7 @@ package launcher
 import (
 	"encoding/base64"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -365,5 +366,42 @@ func TestTempGHConfigDir_ModeAndCleanup(t *testing.T) {
 	cleanup()
 	if _, err := os.Stat(dir); !os.IsNotExist(err) {
 		t.Errorf("cleanup did not remove dir: %v", err)
+	}
+}
+
+// TestRenderGitConfig_HeaderScopedToGitHub guards against the token being sent
+// to non-GitHub remotes: the header must live in [http "https://github.com/"],
+// never in a bare [http] section.
+func TestRenderGitConfig_HeaderScopedToGitHub(t *testing.T) {
+	s, err := RenderGitConfig(GitConfigOpts{Token: "ghs_scope"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(s, "[http \"https://github.com/\"]\n") {
+		t.Errorf("expected [http \"https://github.com/\"] section, got:\n%s", s)
+	}
+	if strings.Contains(s, "[http]") {
+		t.Errorf("unscoped [http] section would send the token to every host:\n%s", s)
+	}
+
+	git, err := exec.LookPath("git")
+	if err != nil {
+		t.Skip("git not on PATH; skipping urlmatch check")
+	}
+	cfg := filepath.Join(t.TempDir(), "gitconfig")
+	if err := os.WriteFile(cfg, []byte(s), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	get := func(url string) string {
+		out, _ := exec.Command(git, "config", "--file", cfg, "--get-urlmatch", "http.extraheader", url).Output()
+		return strings.TrimSpace(string(out))
+	}
+	if got := get("https://github.com/owner/repo.git"); got != wantBasicHeader("ghs_scope") {
+		t.Errorf("github.com header = %q, want %q", got, wantBasicHeader("ghs_scope"))
+	}
+	for _, url := range []string{"https://gitlab.com/owner/repo.git", "https://github.com.evil.example/x.git", "http://github.com/owner/repo.git"} {
+		if got := get(url); got != "" {
+			t.Errorf("header leaked to %s: %q", url, got)
+		}
 	}
 }
