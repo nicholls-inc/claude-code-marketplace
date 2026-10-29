@@ -9,7 +9,7 @@
 | Rerun the failed jobs once (`MAX_RERUNS`, first failure of a default-branch run) | Deterministic | Plain GitHub Actions job `rerun` (`gh run rerun --failed`). No `claude-code-action`, no model, no API key. |
 | Read logs, classify flake / infra / regression / unknown, attribute the commit range, keep one issue per cause, optional fix PR | LLM-driven | `RUNNER: gha` (job `triage`) or `RUNNER: routine`. `automate.runner` in `~/.claude/lever.yml` can preset it; otherwise ask once. |
 
-In `gha`, `triage` runs on the rerun's own completion (`run_attempt > 1`), so it sees whether the same signature passed on the same commit, and on the hourly sweep. Set the repo variable `LEVER_MAIN_RED_TRIAGE_RERUN=false` for `ACTION: notify` (no rerun); `triage` then runs on the first failure.
+In `gha`, the `rerun` job reruns the failed jobs, waits for them with `gh run watch`, and hands the conclusion to `triage` through `needs:`, so triage sees whether the same signature passed on the same commit. It doesn't wait for a second `workflow_run` event, because a rerun requested with `GITHUB_TOKEN` may not emit one. Triage also runs on the hourly sweep. Set the repo variable `LEVER_MAIN_RED_TRIAGE_RERUN=false` for `ACTION: notify` (no rerun); `triage` then runs on the first failure.
 
 **`RUNNER: gha`**: install steps below.
 
@@ -24,7 +24,7 @@ In `gha`, `triage` runs on the rerun's own completion (`run_attempt > 1`), so it
 
 | Trigger | Workflow config | Why |
 |---|---|---|
-| `workflow_run` | `workflows: ["<CI workflow>"]`, `types: [completed]`; `rerun` runs on `conclusion == 'failure'` and `run_attempt == 1`; `triage` on `run_attempt > 1` | The event. Both jobs filter on `head_branch == default_branch`; the prompt re-checks, so a missing filter costs runs, not correctness. |
+| `workflow_run` | `workflows: ["<CI workflow>"]`, `types: [completed]`; both jobs run on `conclusion == 'failure'` and `run_attempt == 1`; `triage` waits for `rerun` via `needs:` | The event. Both jobs filter on `head_branch == default_branch`; the prompt re-checks, so a missing filter costs runs, not correctness. |
 | `schedule` | `cron: "17 * * * *"` (hourly) | Sweep: catches missed events and closes the loop on earlier actions (did the rerun pass, did the fix PR land). |
 | `workflow_dispatch` | inputs `mode: dry_run\|act`, `resource_url` | Dry runs on historical failed runs. |
 

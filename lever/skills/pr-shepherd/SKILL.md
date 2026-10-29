@@ -8,7 +8,7 @@ description: Drives an open pull request to landed through an event-driven loop.
 
 Most of the work between "PR opened" and "change shipped" is babysitting: watching CI, rerunning a flaky job, answering review threads, rebasing, and merging once everything is green. This skill turns that work into an event-driven loop with three exit gates. **Green on the exact head. Every thread dispositioned. Landed at the level the dial allows.** Each wake reads state once, takes the next useful action, writes a record and stops. The next event (a push, a finished check, a review, a conflict) wakes it again. It never sleeps inside a turn or polls in a loop, and it never weakens a check to get to green.
 
-You can run it locally (a session paced with `/loop`, self-paced when you give no interval, or woken by events) or in the cloud as a GitHub Actions workflow running `anthropics/claude-code-action@v1`. The cloud recipe is in [`automations/pr-shepherd/`](${CLAUDE_PLUGIN_ROOT}/automations/pr-shepherd/). Both use the same contract, so a manual run and an automated run behave identically.
+You can run it locally (a session paced with `/loop`, self-paced when you give no interval, or woken by events) or in the cloud as an automation: a GitHub Actions workflow running `anthropics/claude-code-action@v1` (`gha`) or a Claude Code cloud routine (`routine`), per `automate.runner`. The cloud recipe is in [`automations/pr-shepherd/`](${CLAUDE_PLUGIN_ROOT}/automations/pr-shepherd/). Both use the same contract, so a manual run and an automated run behave identically.
 
 ## When to use
 

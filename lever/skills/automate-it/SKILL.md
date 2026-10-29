@@ -65,6 +65,7 @@ Repeatable work belongs in the cloud, on an event, with nobody babysitting it. T
 | Model tier | `sonnet` (standard) | `haiku` (cheap), `opus` (premium; several times standard per call). Record why in the workflow's top comment; let the improver re-test the choice |
 | Token | `github_token: ${{ github.token }}` (job `permissions:` is the ceiling) | Claude GitHub App token via `id-token: write`, when pushes must start CI |
 | Autonomy level (`AUTONOMY`) | The level the recipe states, never above the repo default; L0 if the recipe doesn't say | Up to L5 per [docs/autonomy.md](${CLAUDE_PLUGIN_ROOT}/docs/autonomy.md), capped by repo rules; the tool list enforces it |
+| Write scope | The resource that fired (a CONTRACT rule: GitHub token scopes are repo-wide, there is no per-resource scope) | Repository (digests, tracking issues, ledgers) |
 | Writes per run | 1 | Integer; plus open-automation-PR cap (5) |
 | Evidence budget | 3 items assessed, 10 logs read, 20 records scanned | Integers |
 | API budget | 75 REST calls per useful output, shared across automations | Integer; see `run-health-review` |

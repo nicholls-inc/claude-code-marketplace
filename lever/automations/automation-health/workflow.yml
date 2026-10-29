@@ -41,7 +41,7 @@ jobs:
       escalate: ${{ steps.measure.outputs.escalate }}
     steps:
       - uses: actions/checkout@v4
-      - run: pip install pyyaml
+      - run: python3 -c 'import yaml' 2>/dev/null || python3 -m pip install --user --break-system-packages pyyaml
       - id: measure
         env:
           GH_TOKEN: ${{ github.token }}

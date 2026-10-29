@@ -73,7 +73,7 @@ LOOP    make something measurably better
   review [pr|plan]               several models, blind; only agreed findings
 
 RUN     make it happen without you
-  automate <task>                turn a chore into a paused GitHub Actions workflow
+  automate <task>                turn a chore into a paused automation (Actions or routine)
   health                         why did it stall? one fix, or "no change"
 
 YOU     tune lever to how you work
@@ -110,7 +110,7 @@ Work lever starts is tracked as an issue assigned to you with the [`lever` label
 
 **Hacking on lever:** clone it and run `claude --plugin-dir ./lever`. It loads straight from your checkout, so `/reload-plugins` picks up edits.
 
-**Automations:** the recipes in [`automations/`](automations/) become GitHub Actions workflows running `claude-code-action`, installed with `/lever automate`. Each one starts paused (workflow disabled), dry-runs on past events, and only then gets turned on. You need `gh` authenticated with the `workflow` scope, and either `/install-github-app` or an `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`) repo secret.
+**Automations:** the recipes in [`automations/`](automations/) are installed with `/lever automate`. Deterministic steps (reruns, metrics, lint, bookkeeping) become plain GitHub Actions with no model. LLM-driven steps run on the runner you pick (`automate.runner`): a GitHub Actions workflow running `claude-code-action`, or a Claude Code cloud routine (`/schedule`). Each one starts paused (workflow disabled, events gated by a `LEVER_<JOB>_LIVE` repo variable; or the routine paused), dry-runs on past events, and only then gets turned on. You need `gh` authenticated with the `workflow` scope, and either `/install-github-app` or an `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`) repo secret.
 
 ## Make it yours
 
@@ -120,7 +120,7 @@ These skills fit how we work. Yours will be different. `/lever mirror` reads you
 
 This is a Claude Code port of [github/lever](https://github.com/github/lever) (MIT, LICENSE kept), which was originally built for GitHub Copilot. Credit to GitHub for the skills, techniques and rules. What changed:
 
-- Automations became GitHub Actions workflows running `claude-code-action`. The paused-first, dry-run, least-privilege and ACTED/NOOP/BLOCKED rules carry over.
+- Automations became plain GitHub Actions for deterministic steps, and a `claude-code-action` workflow or a Claude Code cloud routine for LLM-driven ones. The paused-first, dry-run, least-privilege and ACTED/NOOP/BLOCKED rules carry over.
 - Session mining (`/lever mirror`) reads Claude Code transcripts under `~/.claude/projects/`.
 - Cross-model review uses a Claude model panel (`opus`, `sonnet`, `haiku` subagents, plus the `lever:blind-reviewer` agent) and optional `codex` / `gemini` CLIs when installed. Same-provider panels are weaker evidence, and lever says so.
 - `/every` became `/loop`.

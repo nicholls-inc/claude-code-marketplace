@@ -10,7 +10,7 @@ The goal is a review people keep reading, which means one with few, correct find
 
 The skill has two modes:
 - **Panel** runs locally, with 2–3 models, each a `lever:blind-reviewer` subagent or an external CLI. Use it for PRs, diffs, plans and skills, whenever someone asks for a review.
-- **Precision** runs as one automated reviewer (a GitHub Actions workflow) on every ready PR. It allows at most 2 findings, is comment-only, and stays silent by default.
+- **Precision** runs as one automated reviewer (an automation: `gha` or `routine`) on every ready PR. It allows at most 2 findings, is comment-only, and stays silent by default.
 
 ## When to use / not use
 
@@ -61,7 +61,7 @@ Don't use it:
 
 4. Post **at most 2** findings (P1–P3) as inline comments. Never approve, never request changes, never nitpick, never speculate.
 5. **If nothing survives, post nothing.** Silence is the expected outcome on most runs.
-6. End every run with a record: `ACTED` (n findings), `NOOP` (nothing survived), or `BLOCKED` (reason). Use [automate-it](${CLAUDE_PLUGIN_ROOT}/skills/automate-it/SKILL.md) to create the automation from the recipe in `${CLAUDE_PLUGIN_ROOT}/automations/precision-review/`: a GitHub Actions workflow (`.github/workflows/lever-precision-review.yml`) running `anthropics/claude-code-action@v1`. Start it paused (`gh workflow disable`), give it the minimal tool set (`permissions:` with `contents: read`, `pull-requests: write`; `--allowedTools` limited to reading the PR, reading files and posting review comments), and pair it with an improver that proposes prompt revisions in an issue for a human to apply.
+6. End every run with a record: `ACTED` (n findings), `NOOP` (nothing survived), or `BLOCKED` (reason). Use [automate-it](${CLAUDE_PLUGIN_ROOT}/skills/automate-it/SKILL.md) to create the automation from the recipe in `${CLAUDE_PLUGIN_ROOT}/automations/precision-review/`. It is LLM-driven, so the runner follows `automate.runner`: `gha` is a workflow (`.github/workflows/lever-precision-review.yml`) running `anthropics/claude-code-action@v1`, `routine` is a Claude Code cloud routine on the PR events. Start it paused (`gha`: `gh workflow disable`, events gated by the `LEVER_PRECISION_REVIEW_LIVE` repo variable; `routine`: created paused), give it the minimal tool set (`permissions:` with `contents: read`, `pull-requests: write`; `--allowedTools` limited to reading the PR, reading files and posting review comments), and pair it with an improver that proposes prompt revisions in an issue for a human to apply.
 
 ## Dials
 

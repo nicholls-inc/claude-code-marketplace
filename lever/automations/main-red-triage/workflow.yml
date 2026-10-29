@@ -1,7 +1,8 @@
 # lever-main-red-triage: classify default-branch CI failures (flake/regression/infra), act once, keep one issue per cause. Hybrid.
 # `rerun` is DETERMINISTIC (plain GitHub Actions, gh only, no model, no API key): rerun the failed jobs once (MAX_RERUNS: 1).
-# `triage` is LLM-driven (RUNNER: gha, claude-code-action): classifies from logs and the rerun's result, keeps one issue per cause. It runs on the
-# rerun's own completion (run_attempt > 1), so it sees whether the same signature passed on the same commit. Set the repo variable
+# `triage` is LLM-driven (RUNNER: gha, claude-code-action): classifies from logs and the rerun's result, keeps one issue per cause. It runs after
+# `rerun` has watched the rerun to completion and passes its conclusion in, so it sees whether the same signature passed on the same commit.
+# It does not wait for a second workflow_run event: a rerun requested with GITHUB_TOKEN may not emit one. Set the repo variable
 # LEVER_MAIN_RED_TRIAGE_RERUN=false for ACTION: notify (no rerun): then triage runs on the first failure.
 # For RUNNER: routine, delete `triage` and see README "Runner".
 # Model: triage = sonnet (standard) because classification is log reading plus a small decision; use opus only if log reading is the bottleneck, and record why here.
@@ -31,17 +32,25 @@ jobs:
       github.event.workflow_run.run_attempt == 1 &&
       github.event.workflow_run.head_branch == github.event.repository.default_branch
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 60         # bounded by your CI's duration: this job waits for the rerun (cheap runner minutes, no model)
     permissions:
       actions: write            # rerun failed jobs; nothing else
+    outputs:
+      conclusion: ${{ steps.watch.outputs.conclusion }}
     steps:
-      - env:
+      - id: watch
+        env:
           GH_TOKEN: ${{ github.token }}
-        run: gh run rerun ${{ github.event.workflow_run.id }} --failed --repo ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          gh run rerun "$RUN_ID" --failed --repo "$GITHUB_REPOSITORY"
+          sleep 15
+          gh run watch "$RUN_ID" --repo "$GITHUB_REPOSITORY" --interval 60 > /dev/null || true
+          echo "conclusion=$(gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion -q .conclusion)" >> "$GITHUB_OUTPUT"
   triage:
     needs: [rerun]
     # Created paused: event and schedule paths run only once LEVER_MAIN_RED_TRIAGE_LIVE=true; dispatch always runs.
-    # Filter at the trigger: default-branch runs on their rerun (attempt > 1) or first failure when reruns are off; never our own echoes.
+    # Filter at the trigger: first failure of a default-branch run, after `rerun` finished (or straight away when reruns are off); never our own echoes.
     if: >-
       always() && (
         github.event_name == 'workflow_dispatch' ||
@@ -50,8 +59,8 @@ jobs:
          (github.event_name == 'schedule' ||
           (github.event_name == 'workflow_run' &&
            github.event.workflow_run.head_branch == github.event.repository.default_branch &&
-           ((github.event.workflow_run.run_attempt > 1) ||
-            (github.event.workflow_run.conclusion == 'failure' && vars.LEVER_MAIN_RED_TRIAGE_RERUN == 'false'))))))
+           github.event.workflow_run.conclusion == 'failure' &&
+           github.event.workflow_run.run_attempt == 1))))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -69,7 +78,7 @@ jobs:
           prompt: |
             MODE: ${{ inputs.mode || 'act' }}
             TRIGGER: ${{ github.event_name }}
-            RERUN_DONE: ${{ vars.LEVER_MAIN_RED_TRIAGE_RERUN != 'false' && 'yes (deterministic rerun job)' || 'no (reruns off)' }}
+            RERUN_DONE: ${{ needs.rerun.result == 'success' && format('yes (deterministic rerun job; rerun conclusion: {0})', needs.rerun.outputs.conclusion) || 'no' }}
             RESOURCE: ${{ inputs.resource_url || github.event.workflow_run.html_url || 'sweep' }}
             Follow .github/lever/automations/main-red-triage/prompt.md exactly.
           claude_args: |

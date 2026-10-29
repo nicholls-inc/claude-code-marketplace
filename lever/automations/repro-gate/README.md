@@ -45,7 +45,7 @@ No issue-close, no merge, no review tools. The default `GITHUB_TOKEN` cannot pus
 |---|---|---|
 | `REPRO_BUDGET` | 20 minutes of work per issue | Over budget: comment what was tried, add `needs-info` |
 | `OPEN_DRAFT_FIX_PR` | off | When on, opens a draft PR containing the failing test, plus a fix only if it is small and obvious |
-| `NOT_BUG_ACTION` | `noop` | Or `label:<question/feature label>` (adds `github/update_issue_labels` usage only) |
+| `NOT_BUG_ACTION` | `noop` | Or `label:<question/feature label>` (adds `gh issue edit --add-label` usage only) |
 | `LABELS` | `repro-confirmed`, `needs-info`, `needs-repro` | Create them before enabling |
 | Model tier | Standard (`sonnet`) | Premium (`opus`) if repros routinely need deep code reading; record why in the workflow's top comment |
 

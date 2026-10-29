@@ -198,7 +198,7 @@ At meaningful points (after a batch lands, after a stall, at each digest), ask w
 
 ### 12. Move lanes to the cloud, one at a time
 
-The long-term direction is for repeatable lanes (review, CI repair, issue repro, status, next-work pickup) to run as GitHub Actions workflows driven by `anthropics/claude-code-action@v1` (or, for interval jobs, a Claude Code cloud scheduled task), while the local coordinator moves toward supervision and exceptions. You don't need a hierarchy or cross-session messaging first. Start with independent jobs that read durable inputs (issues, PRs, artifacts) and write durable outputs (reviews, labels, PRs). Use [`automate-it`](${CLAUDE_PLUGIN_ROOT}/skills/automate-it/SKILL.md) for each one.
+The long-term direction is for repeatable lanes (review, CI repair, issue repro, status, next-work pickup) to run as automations (plain GitHub Actions for deterministic steps such as reruns and bookkeeping; for LLM-driven steps, a workflow running `anthropics/claude-code-action@v1` or a Claude Code cloud routine, per `automate.runner`), while the local coordinator moves toward supervision and exceptions. You don't need a hierarchy or cross-session messaging first. Start with independent jobs that read durable inputs (issues, PRs, artifacts) and write durable outputs (reviews, labels, PRs). Use [`automate-it`](${CLAUDE_PLUGIN_ROOT}/skills/automate-it/SKILL.md) for each one.
 
 Move **one bounded lane at a time**, under explicit ownership:
 1. Establish what the hosted run can actually do: tools, permissions, trigger, durable checkpoint, acceptance evidence, and the escalation path.

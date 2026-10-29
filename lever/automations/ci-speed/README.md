@@ -85,7 +85,7 @@ In one run of this method on two busy repos (100–250 PRs a day each), p50 time
 
 There's no `gh run cancel`, so the lane never relies on cancelling a run; it pushes a new commit or waits. A lane run is bounded by `timeout-minutes: 360` (the hosted-runner maximum) and `--max-turns`; it writes progress to the goal issue, and `gh workflow run lever-ci-speed.yml -f role=lane -f resource_url=<goal>` resumes a goal whose lane run timed out.
 
-The prompt follows [`experiment-arms`](../../skills/experiment-arms/SKILL.md): copy the lever plugin's `skills/experiment-arms/` to `.claude/skills/experiment-arms/` in the repository (the workflow's script paths assume it), or load the plugin in the action.
+The prompt follows [`experiment-arms`](../../skills/experiment-arms/SKILL.md): the workflow loads the lever plugin with the action's `plugin_marketplaces` and `plugins: lever@nicholls` inputs, and sparse-checks out the plugin's `skills/experiment-arms/` at `.lever-plugin/` so the scripts have a fixed path for `--allowedTools` (`ARMS_SCRIPTS` in the prompt). Don't copy skills into `.claude/skills/`. Add `.lever-plugin/` to `.gitignore` so the lane never commits it.
 
 ## Install
 

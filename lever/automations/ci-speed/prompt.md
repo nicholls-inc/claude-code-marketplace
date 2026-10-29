@@ -55,7 +55,9 @@ behavior). It is listed here so a person or a routine can run the same steps by 
    hypothesis list. Never re-run a
    rejected arm without new evidence.
 3. Write the keep bar into the goal issue before measuring anything.
-4. For each hypothesis, up to MAX_CONCURRENT_ARMS at once and inside RUN_WINDOW: open one do-not-merge PR
+4. Follow the `lever:experiment-arms` skill (load it with the Skill tool) and drive arms with its scripts in
+   ARMS_SCRIPTS (`ci_arm_driver.py`, `ci_arm_metrics.py`, `arm_stats.py`; see its `ci-adapter.md`).
+   For each hypothesis, up to MAX_CONCURRENT_ARMS at once and inside RUN_WINDOW: open one do-not-merge PR
    with one change. Run RUNS_PER_ARM paired runs against a control on the same SHA, interleaved. Check
    that test counts and verdicts match the control. A failed or missing treatment run counts against the
    arm. Under 6 complete pairs the arm is INCONCLUSIVE, not kept. Pause when the API quota drops below API_RATE_FLOOR.

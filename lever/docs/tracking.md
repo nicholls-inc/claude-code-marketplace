@@ -42,8 +42,8 @@ lever creates both labels the first time it files an issue in a repo. If you can
 
 | Runner | What happens | What keeps it going |
 |---|---|---|
-| **here** (default) | This session becomes the coordinator and runs `/lever deliver #142` now. Lanes run as child sessions (app) or background agents (CLI). | **CLI:** `/goal <done-when>` plus `/every 30m /lever deliver #142`. **App:** `/goal` plus a session automation that runs `/lever deliver #142` every 30 min. Each tick is a deliver sweep: rekick, land, refill. Close the laptop and it pauses; the issue says where. |
-| **cloud** | Each lane sub-issue is handed to Claude in the cloud (an `@claude` mention or label picked up by `claude-code-action`, or a Claude Code on the web session), which opens a PR per lane on a `claude/` branch. | `/lever automate` offers a GitHub Actions workflow on the repo that shepherds PRs linked to `lever` issues at your autonomy level. It starts paused. |
+| **here** (default) | This session becomes the coordinator and runs `/lever deliver #142` now. Lanes run as background subagents or separate `claude` sessions. | `/loop 30m /lever deliver #142`, with the done-when restated in the loop prompt (there is no `/goal`). `/loop` is session-scoped and expires after 7 days. Each tick is a deliver sweep: rekick, land, refill. Close the laptop and it pauses; the issue says where. |
+| **cloud** | Each lane sub-issue is handed to Claude in the cloud (an `@claude` mention or label picked up by `claude-code-action`, or a Claude Code on the web session), which opens a PR per lane on a `claude/` branch. | `/lever automate` offers an automation (a GitHub Actions workflow or a Claude Code cloud routine) that shepherds PRs linked to `lever` issues at your autonomy level. It starts paused. |
 | **later** | Files the issue and stops. | Nothing yet. `/lever deliver #142` from any session, any time. |
 
 ## Two sessions, one issue
