@@ -29,6 +29,15 @@ Multi-agent PR review swarm and review-triage plugin for automated, multi-lens c
   - `/pr-swarm`: Router-first PR review swarm coordinating specialized lenses (`security`, `test-theatre`, `xp`, `crosscheck/byfuglien`, `crosscheck/hellebuyck`), cross-lens deduplication, structured inline comments, and sticky summary upsert.
   - `/review-triage`: Automated feedback triage acting on review comments within strict autonomy boundaries, human-participation gating, automated commit application with loop-prevention trailers, and auto-merge preconditioning.
 
+### lever (`lever/`)
+
+Feedback loops for coding agents, ported from [github/lever](https://github.com/github/lever) (MIT, originally a GitHub Copilot plugin).
+
+- **Skills** (`lever/skills/`): `/lever <verb>` is the only `/` entry (`/lever:lever`); the 18 verb skills (`find-the-loop`, `experiment-arms`, `cross-model-review`, `pr-shepherd`, `automate-it`, `prompt-mirror`, `steer-once`, `autonomy-dial`, …) are `user-invocable: false` and loaded by the router or by an explicit ask.
+- **Agent** (`lever/agents/blind-reviewer.md`): read-only panel seat for `cross-model-review` (`lever:blind-reviewer`).
+- **Automations** (`lever/automations/`): recipes as `prompt.md` + GitHub Actions `workflow.yml` running `anthropics/claude-code-action@v1`, installed paused.
+- **Scripts**: stdlib Python under `skills/*/scripts/`; skills reference plugin files via `${CLAUDE_PLUGIN_ROOT}`, never `../../`.
+
 ## Tools
 
 ### claude-github-app (`tools/claude-github-app/`)

@@ -1,0 +1,30 @@
+# Copy to .github/lever.yml in your repo. Everything is optional.
+# This is the team's layer. Each person's own dial lives in
+# ~/.claude/lever.yml (see personal.example.yml) and is capped by this file.
+# The effective level can never exceed the ceiling GitHub enforces
+# (rulesets, required approvals, CODEOWNERS, merge queue).
+autonomy:
+  default: L2               # used when the person has no dial for this repo. L0 propose · L1 draft · L2 ready/human lands · L3 grant · L4 gated self-merge · L5 release
+  max: L4                   # nobody's personal dial goes above this here
+  paths:                    # lower the level for sensitive paths
+    ".github/workflows/**": L2
+    "**/migrations/**": L2
+  classes:                  # standing grants for classes of change (L3)
+    test-only-main-fix: L3
+  freeze: false             # true caps everything at L2
+  raise_allowed_by:         # who may raise the level live (GitHub logins)
+    - your-github-login
+
+spend:
+  tier: high                # for people with no personal tier. standard | high | max (see docs/spend.md)
+  premium_for: [diagnosis, planning, risky_review]
+  daily_cap_usd: null       # hard stop when set. null = no cap, so unattended runs need budgets: below
+
+budgets:                    # caps every personal spend tier in this repo
+  github_api_calls_per_merged_pr: 75
+  max_parallel_arms: 10
+  min_poll_interval_minutes: 4
+
+status:
+  timezone: America/Los_Angeles
+  quiet_when_unchanged: true

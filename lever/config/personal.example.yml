@@ -1,0 +1,29 @@
+# ~/.claude/lever.yml: your dials. They follow you across repos.
+# /lever setup writes this, /lever autonomy and /lever spend change it.
+# Hand-editing is fine too. Your dial never exceeds the repo's
+# .github/lever.yml cap or what GitHub enforces.
+autonomy:
+  default: L2               # L0 propose · L1 draft · L2 ready/human lands · L3 grant · L4 gated self-merge · L5 release
+  repos:
+    you/side-project: L4    # yours, CI you trust: land it when green
+    acme/payments:
+      default: L2
+      paths:
+        "docs/**": L4       # docs PRs land themselves, nothing else does
+
+spend:
+  tier: high                # standard | high | max (see docs/spend.md)
+  repos:
+    you/side-project: max
+
+brief:
+  runner: here              # here · cloud · later. Unset: /lever brief asks each time
+
+# Every change, in your own words. /lever autonomy appends here.
+history:
+  - at: 2026-10-01
+    said: "first run: I land my work, agents land my side project"
+    set: { autonomy.default: L2, autonomy.repos.you/side-project: L4 }
+  - at: 2026-10-14
+    said: "agents can merge docs PRs in this repo, nothing else"
+    set: { "autonomy.repos.acme/payments.paths.docs/**": L4 }

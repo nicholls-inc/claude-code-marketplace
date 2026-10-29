@@ -24,6 +24,10 @@ Autonomous agent scheduling for GitHub issues — scans, queues, and launches Cl
 
 Multi-agent pull request review swarm and automated review triage system for automated, multi-lens code reviews.
 
+### [lever](./lever/README.md)
+
+Feedback loops for coding agents, ported from [github/lever](https://github.com/github/lever). `/lever <verb>` finds the metric (Loop Cards), runs experiment arms against a control, does blind cross-model review, shepherds PRs to landed, and turns chores into paused GitHub Actions automations, all behind autonomy and spend dials you control.
+
 ## Tools
 
 ### [claude-github-app](./tools/claude-github-app/README.md)
@@ -43,6 +47,7 @@ claude plugin install crosscheck@nicholls
 claude plugin install awesome-copilot@nicholls
 claude plugin install xylem@nicholls
 claude plugin install pr-swarm@nicholls
+claude plugin install lever@nicholls
 ```
 
 See each plugin's README for prerequisites and setup details.
