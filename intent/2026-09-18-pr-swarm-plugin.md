@@ -10,7 +10,7 @@ The `pr-swarm` plugin is ported from upstream into this marketplace as a project
    - `/pr-swarm`: Orchestrates a router-first review pipeline dispatching specialized lenses (`security`, `test-theatre`, `xp`, `crosscheck/byfuglien`, `crosscheck/hellebuyck`), cross-lens deduplication, non-approving inline comments (`event=COMMENT`), and idempotent sticky summaries.
    - `/review-triage`: Automates the resolution of review feedback within an autonomy ladder, enforces human-participation boundaries (INV-3), attaches loop-prevention git trailers (`PR-Swarm-Automated: true`), and validates auto-merge safety preconditions.
 3. The plugin is registered in `.claude-plugin/marketplace.json`, automated releases are managed via `release-please-config.json` and `.release-please-manifest.json` starting at baseline version `0.2.0`, and documented in repository guides (`README.md` and `CLAUDE.md`).
-4. All organizational specifics (`ev.energy`, `ev-energy`, internal PR fixtures) are scrubbed in favor of clean project-agnostic defaults.
+4. All organizational specifics (company names, internal PR fixtures) are scrubbed in favor of clean project-agnostic defaults.
 
 ## Affected users and systems
 - **Plugin Users & Developers**: Can run automated multi-lens PR reviews and triage workflows across GitHub repositories using `/pr-swarm` and `/review-triage`.
@@ -19,7 +19,7 @@ The `pr-swarm` plugin is ported from upstream into this marketplace as a project
 - **Crosscheck Interoperability**: `pr-swarm` leverages the marketplace's `crosscheck` plugin for `crosscheck/byfuglien` and `crosscheck/hellebuyck` formal verification and specification lenses.
 
 ## Constraints
-- **Zero Company Leaks**: No internal or organization-specific strings (`ev.energy`, `ev-energy`, internal repo references, or specific company PR IDs).
+- **Zero Company Leaks**: No internal or organization-specific strings (company names, internal repo references, or specific company PR IDs).
 - **Core Review & Triage Invariants**:
   - Never Approve: Automated reviews must never submit `event=APPROVE`. Human approvals remain the sovereign gate.
   - Human Participation Gate (INV-3): Review threads with human participation must never be resolved or answered by automated triage without explicit human direction.
