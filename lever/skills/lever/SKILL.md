@@ -26,7 +26,7 @@ LOOP    make something measurably better
   review [pr|plan]               several models, blind; only agreed findings
 
 RUN     make it happen without you
-  automate <task>                turn a chore into a paused GitHub Actions automation
+  automate <task>                turn a chore into a paused automation (Actions or routine)
   health                         why did it stall? one fix, or "no change"
 
 YOU     tune lever to how you work
@@ -108,6 +108,8 @@ Class grants in `.github/lever.yml` go through the same min. They never raise yo
 **`/lever spend <tier>`** works the same way for `spend.tier`, per repo or default.
 
 **`brief.runner`** (`here`, `cloud` or `later`) skips the runner question at the end of `/lever brief`. Unset means ask.
+
+**`automate.runner`** (`gha`, `routine` or `ask`) picks where LLM-driven automations run: a GitHub Actions workflow with `claude-code-action`, or a Claude Code cloud routine (`/schedule`). Deterministic automations are always plain GitHub Actions and ignore this dial. Unset means ask.
 
 ## Where your work lives
 

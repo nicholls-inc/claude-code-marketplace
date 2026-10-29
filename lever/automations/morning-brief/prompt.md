@@ -4,7 +4,7 @@ OUTCOME:             AUDIENCE starts the day knowing the three things that matte
 METRIC:              focus items acted on by AUDIENCE within 24h / focus items posted
 AUDIENCE:            @<your-login>
 SCOPE:               this repository                 # or a search qualifier like "org:<org> label:<area>"
-MODE:                act                             # dry_run = build the brief, post nothing, record it
+MODE:                act                             # dry_run = build the brief, post nothing, record it (the workflow input `mode` overrides this)
 DIGEST_ISSUE:        <number of a pinned issue>
 TIMEZONE:            <IANA timezone, e.g. America/Los_Angeles>
 WINDOW:              24 hours                        # since the previous brief if one exists
@@ -12,9 +12,9 @@ TOP_ISSUES:          10
 FOCUS_ITEMS:         3
 DEFAULT_BRANCH:      main
 CI_WORKFLOWS:        <required CI workflow name(s)>
-INCLUDE_AUTOMATIONS: true                            # include automation counts if list_automations is available
+INCLUDE_AUTOMATIONS: true                            # include lever workflow status (gh workflow list, gh run list --workflow lever-*)
 QUIET_WHEN_UNCHANGED: true
-RECORD_SINK:         run_summary
+RECORD_SINK:         run_summary                     # the job summary (or the task's output for a cloud scheduled task)
 
 ## CONTRACT  (stable; changed only by a human-applied revision)
 1. Provenance. Record the trigger and the current time in TIMEZONE. Saturday or Sunday there:
@@ -29,7 +29,8 @@ RECORD_SINK:         run_summary
       unanswered review threads, and AUDIENCE's PRs approved but not merged. Oldest first.
    c. Main CI: latest runs of CI_WORKFLOWS on DEFAULT_BRANCH; red or green, minutes red in WINDOW,
       failing tests that appeared more than once (likely flakes).
-   d. If INCLUDE_AUTOMATIONS: enabled automations in this repository and any that are failing, by name.
+   d. If INCLUDE_AUTOMATIONS: enabled lever workflows in this repository (`gh workflow list`, names starting
+      `lever-`) and any whose latest run failed (`gh run list --workflow <file> --limit 5`), by name.
       If you can't read their run status, say "unavailable"; do not guess.
 4. Choose FOCUS_ITEMS: the items from 3a–3d where AUDIENCE's action unblocks the most other work today.
    Each one gets a link and one verb: review, decide, reply, fix, merge, unblock.
@@ -54,4 +55,4 @@ RECORD_SINK:         run_summary
      "focus":[<links>],"status","reason"}
     If MODE=dry_run, include the full brief in the final message and post nothing.
 
-ALLOWED ACTIONS: read issues, PRs, Actions runs and automation listings; post one comment on DIGEST_ISSUE.
+ALLOWED ACTIONS: read issues, PRs, Actions runs and workflow listings; post one comment on DIGEST_ISSUE.

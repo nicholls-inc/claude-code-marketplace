@@ -1,24 +1,24 @@
 ---
 name: prompt-mirror
 user-invocable: false
-description: Mine your own local Copilot session history and return a scorecard of how you direct agents, plus three suggestions illustrated with your own before/after messages. It reads your private history, so it runs only on `/lever mirror` or an explicit ask ("how am I prompting?", "coach me", "mine my sessions", "what do I keep repeating?", a weekly self-retro).
+description: Mine your own local Claude Code session history and return a scorecard of how you direct agents, plus three suggestions illustrated with your own before/after messages. It reads your private history, so it runs only on `/lever mirror` or an explicit ask ("how am I prompting?", "coach me", "mine my sessions", "what do I keep repeating?", a weekly self-retro).
 ---
 
 # prompt-mirror
 
-A coach that reads only your own session history. The extraction runs on your machine. It separates what you typed from the far larger volume of agent, autopilot and scheduled traffic, scores how you direct agents (length, steering, polling, repeated corrections, missing done-when and stop conditions, stuck loops, fan-out), and returns three concrete suggestions using your own messages as the before. It may draft instruction or skill changes; it never applies them. Applying is [`steer-once`](../steer-once/SKILL.md)'s job.
+A coach that reads only your own session history. The extraction runs on your machine. It separates what you typed from the far larger volume of subagent, cross-session, headless and scheduled traffic, scores how you direct agents (length, steering, polling, repeated corrections, missing done-when and stop conditions, stuck loops, fan-out), and returns three concrete suggestions using your own messages as the before. It may draft instruction or skill changes; it never applies them. Applying is [`steer-once`](${CLAUDE_PLUGIN_ROOT}/skills/steer-once/SKILL.md)'s job.
 
 ## When to use
 
 - On demand: "how am I prompting", "coach me", "what do I keep correcting", "self-retro".
-- Weekly, as a **local** session automation on your own machine.
+- Weekly, run locally on your own machine: on demand when a weekly reminder fires, or from a local cron job running `claude -p`. A `/loop 7d` is too long: `/loop` tasks expire after 7 days.
 - After a run where you typed "still broken", "status?" or "why did you stop" more than twice.
 
-Do not use it to evaluate someone else, to rank teammates, or from a cloud automation. Cloud runners cannot and should not read local session state.
+Do not use it to evaluate someone else, to rank teammates, or from a cloud scheduled task (`/schedule`), Claude Code on the web or a GitHub Actions run. Cloud runners cannot and should not read local session history.
 
 ## Privacy rules (non-negotiable defaults; each is also a dial)
 
-1. **Extraction is local. Analysis goes through your model.** The script reads `~/.copilot` (or `$COPILOT_HOME`) and writes to `~/.copilot/prompt-mirror/<date>/` with `0700`/`0600` permissions, and nothing it writes is uploaded. But any redacted sample Copilot reads to score you goes to your configured model service, same as anything else in chat. So before reading message text, ask once: "Read redacted samples (they go to your model service), or numbers only?" Numbers only means `--no-text`: build the scorecard from counts, and skip the sample reads in steps 3 and 5 and the before/after quotes. Never paste history into an issue, PR, gist, cloud agent or automation.
+1. **Extraction is local. Analysis goes through your model.** The script reads `~/.claude` (or `$CLAUDE_CONFIG_DIR`) and writes to `~/.claude/lever/prompt-mirror/<date>/` with `0700`/`0600` permissions, and nothing it writes is uploaded. But any redacted sample Claude reads to score you goes to the Anthropic API (or your configured model provider: Bedrock, Vertex, Foundry), same as anything else in the conversation. So before reading message text, ask once: "Read redacted samples (they go to your model service), or numbers only?" Numbers only means `--no-text`: build the scorecard from counts, and skip the sample reads in steps 3 and 5 and the before/after quotes. Never paste history into an issue, PR, gist, cloud session, scheduled task or workflow.
 2. **Quote sparingly.** At most one quote per suggestion, at most 25 words, redacted, and only from the "before" side.
 3. **Never quote** messages flagged `heated` or `sensitive` (profanity, HR, performance reviews, compensation, health, legal). Use aggregate counts only.
 4. **Redact before display:** secrets and tokens, emails, URLs, home paths, `@handles`, UUIDs and long hex, plus every term in the user's `--redact-terms` file (people, codenames, internal hosts). Never show session IDs beyond an 8-character prefix, and never in anything shared.
@@ -26,34 +26,42 @@ Do not use it to evaluate someone else, to rank teammates, or from a cloud autom
 
 ## Where the data lives
 
+`<home>` is `$CLAUDE_CONFIG_DIR` if set, else `~/.claude`. The format is internal to Claude Code and drifts between releases; Claude Code deletes transcripts older than `cleanupPeriodDays` (default 30).
+
 | Source | Format | Use |
 |---|---|---|
-| `~/.copilot/session-state/<id>/events.jsonl` | One JSON event per line: `{type, id, parentId, timestamp, data, agentId?}` | High confidence. Has source tags and delivery mode. |
-| `~/.copilot/session-store.db` | SQLite. `sessions(id, cwd, repository, branch, ...)`, `turns(session_id, turn_index, user_message, assistant_response, timestamp)` | Medium confidence. Backfills sessions whose `events.jsonl` is gone. No source tag. |
+| `<home>/projects/<encoded-cwd>/<session-id>.jsonl` | One JSON line per entry: `{type, uuid, parentUuid, sessionId, timestamp, cwd, gitBranch, isSidechain, userType, entrypoint, message: {role, content}, ...}`. `type` is `user`, `assistant`, `attachment`, `queue-operation`, `system` and others. The directory name is the cwd with non-alphanumerics replaced by `-` | High confidence. Has turn origin and delivery. |
+| `<home>/projects/<encoded-cwd>/<session-id>/subagents/agent-*.jsonl` | Same line format, `isSidechain: true`, `agentId` set | Machine traffic only. Counted, never typed. |
+| `<home>/history.jsonl` | One line per prompt typed at the prompt box: `{display, pastedContents, timestamp (epoch ms), project (cwd), sessionId?}`. May not exist (cloud and SDK sessions do not write it) | Medium confidence. Backfills sessions whose transcript was cleaned up. No source tag. |
 
-How to tell your words from machine traffic in `events.jsonl` (`type == "user.message"`):
+How to tell your words from machine traffic in a transcript:
 
 | Signal | Meaning |
 |---|---|
-| `data.source` absent (older builds: `"user"`) | Candidate typed message |
-| `data.source == "agent-<id>"` | Cross-session message from another agent |
-| `data.source == "autopilot"` or `data.isAutopilotContinuation` | Autopilot continuation |
-| `data.source == "system"` | Scheduled wake or automation prompt |
-| top-level `agentId` present | Prompt to a subagent |
-| no source, but `data.transformedContent` contains `<cross_session_message` | Kickoff brief written by a coordinator for a child session |
-| `data.content` is `[ALL CAPS REQUEST] ...`, or "Continue from where you left off." | App-generated template or resume |
-| `data.delivery` = `idle` / `steering` / `queued` | Sent while the agent was idle, mid-turn, or queued |
+| `type == "user"`, `turnOrigin == "human"` or `origin.kind == "human"` | Typed message |
+| `type == "user"`, neither field present (older builds), text content, none of the signals below | Candidate typed message |
+| `toolUseResult` present, or `message.content` blocks of type `tool_result` | Tool result, not a message |
+| `isMeta: true` (skill bodies starting "Base directory for this skill:", "Stop hook feedback:", `<system-reminder>` injections) | Harness-injected context |
+| `<command-name>`, `<command-message>`, `<local-command-stdout>`, `<bash-input>` in content | Slash command, `!` bash mode or its output: counted as `command`, not scored |
+| `isCompactSummary: true` ("This session is being continued from a previous conversation…") | Compaction summary |
+| text starts `[Request interrupted by user` | Esc abort (`aborts_user_initiated`), not a message |
+| `turnOrigin` other than `human` (for example `sdk`), or `origin.kind` other than `human` | Headless, scheduled or harness turn |
+| content contains `<agent-message`, `<task-notification>`, `<child-session-event`, `<webhook-payload` | Cross-session message, subagent hand-back, background-task notice or webhook |
+| content contains `<wake` or `<scheduled-task` | Scheduled or `/loop` wake |
+| `isSidechain: true` or `agentId` present, or any line in `subagents/agent-*.jsonl` | Subagent traffic |
+| `type == "attachment"`, `attachment.type == "queued_command"`, human origin | Typed mid-turn: delivery `steering` |
+| `type == "queue-operation"`, `operation == "enqueue"` well before the matching user turn | Typed while a turn ran, delivered after it: delivery `queued`; otherwise `idle` |
 
-Also: `abort` events with `data.reason == "user_initiated"`; `session.start` → `data.context.cwd` / `repository`. Use `data.content` (what was typed), not `transformedContent` (adds injected context). Store rows need heuristics: strip injected `<system_*>`, `<skill-context>` and similar blocks, drop envelopes and templates, and drop long third-person briefs ("User request verbatim: ..."). Drop sessions whose cwd is under `/tmp` or `/var/folders`. A 60+ character prompt whose opening recurs in 4+ sessions is usually an eval harness or pasted fan-out, so drop it when the source is uncertain. If it's clearly you typing it (the same morning prompt every day), keep it: that's an automation candidate, not noise. If the format has drifted, inspect key names on a few events (never print content) and update the filters before scoring.
+Use the typed text in `message.content`; strip `<system-reminder>` and similar injected blocks. History rows need heuristics: drop `/` and `!` commands, envelopes and templates, and long third-person briefs ("User request verbatim: ..."); skip rows from a session whose transcript is still present. Drop sessions whose cwd is under `/tmp` or `/var/folders`. A 60+ character prompt whose opening recurs in 4+ sessions is usually an eval harness or pasted fan-out, so drop it when the source is uncertain. If it's clearly you typing it (the same morning prompt every day), keep it: that's an automation candidate, not noise. If the format has drifted, run the script with `--debug-keys` (key and value histograms, never content) and update the filters before scoring.
 
 ## Steps
 
 1. **Set the dials** (table below) in one line back to the user: window, scope, tone, output. Ask only if the user named a scope you cannot infer.
 2. **Extract.** Run the bundled stdlib script:
    ```bash
-   python3 <this-skill-dir>/scripts/mine_sessions.py --since 30d [--repo owner/name] [--redact-terms ~/.config/prompt-mirror/terms.txt]
+   python3 "${CLAUDE_PLUGIN_ROOT}/skills/prompt-mirror/scripts/mine_sessions.py" --since 30d [--repo owner/name] [--redact-terms ~/.config/prompt-mirror/terms.txt]
    ```
-   It writes `stats.json`, `messages.jsonl` and `messages.csv` (redacted text, flags, correction classes). Use `--no-text` for numbers only: no message text and no text-derived phrase stats. If an agent tool can query the session store directly, apply the same filters.
+   It writes `stats.json`, `messages.jsonl` and `messages.csv` (redacted text, flags, correction classes). Use `--no-text` for numbers only: no message text and no text-derived phrase stats. If you read transcripts any other way, apply the same filters.
 3. **Sanity-check the extraction before scoring.** Typed count and sessions plausible? `machine_per_typed` usually ≫ 1 for heavy agent users. If the user allowed samples, read 20 random redacted messages: if any read like an agent brief or report, tighten filters and re-run. Never score unfiltered history; you would be measuring your agents.
 4. **Build the scorecard** from `stats.json`, compared with the previous run if one exists:
 
@@ -76,7 +84,7 @@ Also: `abort` events with `data.reason == "user_initiated"`; `session.start` →
    - the signal and its number (for example `status asks: 14% of typed messages, 212 in 9 sessions`);
    - **before:** one of your own messages (rules above);
    - **after:** a rewrite, or the brief field or skill that removes the need for the message;
-   - the lever piece that fixes it, for example status polling → [`progress-contract`](../progress-contract/SKILL.md); no done-when/stop → [`brief`](../brief/SKILL.md); stuck ×2 with no measurement → [`find-the-loop`](../find-the-loop/SKILL.md); same correction in ≥3 sessions → [`steer-once`](../steer-once/SKILL.md); same prompt typed daily → [`automate-it`](../automate-it/SKILL.md);
+   - the lever piece that fixes it, for example status polling → [`progress-contract`](${CLAUDE_PLUGIN_ROOT}/skills/progress-contract/SKILL.md); no done-when/stop → [`brief`](${CLAUDE_PLUGIN_ROOT}/skills/brief/SKILL.md); stuck ×2 with no measurement → [`find-the-loop`](${CLAUDE_PLUGIN_ROOT}/skills/find-the-loop/SKILL.md); same correction in ≥3 sessions → [`steer-once`](${CLAUDE_PLUGIN_ROOT}/skills/steer-once/SKILL.md); same prompt typed daily → [`automate-it`](${CLAUDE_PLUGIN_ROOT}/skills/automate-it/SKILL.md);
    - the metric that should move next run.
 7. **Optionally draft** instruction or skill text for the top repeated correction, as a diff in the report. Do not write to any instruction, skill or config file. Offer `steer-once` to land it.
 8. **Save** `report.md` and `suggestions.json` (suggestion, metric, baseline, date) next to the extraction. Show the report in chat.
@@ -94,12 +102,12 @@ Also: `abort` events with `data.reason == "user_initiated"`; `session.start` →
 | Tone | direct, specific, no scolding | gentle; blunt |
 | Output | report + drafted diffs | report only |
 | Comparison | your own trend only | none; opt-in anonymous team aggregate (counts only, never text) |
-| Cadence | on demand | weekly local session automation |
-| Retention | keep last 8 runs | delete after report (`rm -rf ~/.copilot/prompt-mirror`) |
+| Cadence | on demand | weekly, run locally (reminder or local cron with `claude -p`); never a cloud scheduled task |
+| Retention | keep last 8 runs | delete after report (`rm -rf ~/.claude/lever/prompt-mirror`) |
 
 ## Outputs
 
-- `~/.copilot/prompt-mirror/<date>/stats.json`, `messages.jsonl`, `messages.csv`: local, redacted, private.
+- `~/.claude/lever/prompt-mirror/<date>/stats.json`, `messages.jsonl`, `messages.csv`: local, redacted, private.
 - `report.md`: scorecard table, three suggestions with before/after, drafted diffs, trend versus last run.
 - `suggestions.json`: what was suggested and which metric should move.
 

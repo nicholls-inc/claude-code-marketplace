@@ -26,16 +26,16 @@ Not for one-off preferences, a single bad turn, or anything already handled by a
 
 ## Sources
 
-1. **Your typed messages** via [`prompt-mirror`](../prompt-mirror/SKILL.md)'s extractor (local, redacted, source-filtered):
-   `python3 <skills-dir>/prompt-mirror/scripts/mine_sessions.py --since 21d [--repo owner/name]`.
+1. **Your typed messages** via [`prompt-mirror`](${CLAUDE_PLUGIN_ROOT}/skills/prompt-mirror/SKILL.md)'s extractor (local, redacted, source-filtered):
+   `python3 "${CLAUDE_PLUGIN_ROOT}/skills/prompt-mirror/scripts/mine_sessions.py" --since 21d [--repo owner/name]`.
    Use `correction_classes`, `repeated_correction_phrases`, and each message's `classes`/`flags`. Read `messages.jsonl` for the instances.
 2. **The agent message before each correction** (the cause) and **after** (the response). Count concession openers ("You're right", "Agreed", "Good catch") on the same class; a concession followed by a repeat is the strongest signal that a rule is missing or not loaded.
-3. **Team variant:** `changes_requested` reviews and review comments on agent-authored PRs (for example `gh pr list --author app/copilot-swe-agent --state all`, then `gh api repos/{owner}/{repo}/pulls/{n}/reviews`). Same pipeline, no local history needed.
+3. **Team variant:** `changes_requested` reviews and review comments on Claude-authored PRs (for example `gh pr list --search "author:app/claude" --state all`, or PRs whose head branch starts with `claude/` from Claude Code on the web or `claude-code-action`; then `gh api repos/{owner}/{repo}/pulls/{n}/reviews` and `gh api repos/{owner}/{repo}/pulls/{n}/comments`). Same pipeline, no local history needed.
 
 ## Steps
 
-1. **Read the dials** (table below) and [`docs/autonomy.md`](../../docs/autonomy.md). State the scope and autonomy level in one line.
-2. **Collect** corrections for the window. Exclude agent, autopilot, system and template traffic (the extractor does this). Keep delivery mode: a mid-turn steer is a stronger correction than an idle follow-up.
+1. **Read the dials** (table below) and [`docs/autonomy.md`](${CLAUDE_PLUGIN_ROOT}/docs/autonomy.md). State the scope and autonomy level in one line.
+2. **Collect** corrections for the window. Exclude subagent, cross-session, headless, scheduled, command and template traffic (the extractor does this). Keep delivery mode: a mid-turn steer is a stronger correction than an idle follow-up.
 3. **Classify** each correction. Start from the extractor's classes, then confirm by reading:
 
    | Class | The agent… | Typical correction |
@@ -54,28 +54,29 @@ Not for one-off preferences, a single bad turn, or anything already handled by a
    | runtime_gap | hit something no prompt can fix | "rekick the stalled sessions", quota, leaked processes |
 
 4. **Find recurrences:** same class and same underlying expectation, ≥N hits across ≥2 sessions in the window (default N=3). Merge near-duplicates; one rule per expectation.
-5. **Check for an existing rule.** Search `.github/copilot-instructions.md`, `.github/instructions/*.instructions.md` (`applyTo` scope), `AGENTS.md`, `.github/skills/*/SKILL.md`, `.github/lever.yml`, and personal `~/.copilot/copilot-instructions.md`. If a rule exists and the class still recurs, the finding is **"rule exists but is weak, misplaced or not loaded"**. Fix placement or wording, or escalate a layer, before adding more prose.
+5. **Check for an existing rule.** Search `CLAUDE.md` and `.claude/CLAUDE.md` (and nested `CLAUDE.md` in subdirectories), `CLAUDE.local.md`, `.claude/rules/*.md` (`paths:` scope), `AGENTS.md`, `.claude/skills/*/SKILL.md`, hooks in `.claude/settings.json`, `.github/lever.yml`, and personal `~/.claude/CLAUDE.md` and `~/.claude/rules/`. Run `/memory` to see which files actually loaded in a session. If a rule exists and the class still recurs, the finding is **"rule exists but is weak, misplaced or not loaded"**. Fix placement or wording, or escalate a layer, before adding more prose.
 6. **Pick the cheapest durable layer** that would have prevented these specific instances:
 
    | The expectation is… | Layer | Example |
    |---|---|---|
-   | A personal posture (tone, verbosity, how you like updates) | Personal instructions | "Report as `x → y (Δz%)`; no preamble" |
-   | A repo-wide default posture | `.github/copilot-instructions.md` (one line, with the why) | "Pre-launch service: ship and monitor; don't add approval gates" |
+   | A personal posture (tone, verbosity, how you like updates) | Personal instructions (`~/.claude/CLAUDE.md` or `~/.claude/rules/*.md`) | "Report as `x → y (Δz%)`; no preamble" |
+   | A repo-wide default posture | `CLAUDE.md` (one line, with the why) | "Pre-launch service: ship and monitor; don't add approval gates" |
    | Authority or autonomy | A dial in `.github/lever.yml`, not prose | `autonomy: L3` with the grant recorded |
-   | A task-specific procedure | Scoped instruction or skill rule | expand → migrate → contract for breaking changes |
+   | A task-specific procedure | Scoped rule (`.claude/rules/*.md` with `paths:`, or a nested `CLAUDE.md`) or a skill rule (`.claude/skills/*/SKILL.md`) | expand → migrate → contract for breaking changes |
    | Mechanically detectable | Lint or CI check | no new `eslint-disable` without a linked issue |
    | Behavioural | A test that fails today | the service recovers from a stuck lease by itself |
-   | Timing or liveness | Hook or automation (see [`automate-it`](../automate-it/SKILL.md)) | resume idle child sessions on wake |
+   | Must happen on every tool call, prompt or stop, regardless of what the model remembers | Hook in `.claude/settings.json` (`PreToolUse`, `PostToolUse`, `Stop`, `SessionStart`, `UserPromptSubmit`) | `Stop` hook blocks ending the turn while `gh pr checks` is red |
+| Timing or liveness | Automation (see [`automate-it`](${CLAUDE_PLUGIN_ROOT}/skills/automate-it/SKILL.md)) | resume stalled lanes on a schedule |
    | Outside the agent's control | Product or infra bug report | sessions don't auto-resume after sleep |
 
    Corrections that cluster on one dial (merge authority, stop policy, status cadence, validation depth) become a dial change, not a new rule.
-7. **Write the rule.** Positive, concrete, with the why and the scope, at most 3 lines. Name the dial it sets. No ALL CAPS, no "NEVER" walls, and never add a gate to prevent gates. Example: "Autopilot runs never idle: when the current item lands, take the next ready item. Why: 'why did you stop' recurred in 4 sessions."
+7. **Write the rule.** Positive, concrete, with the why and the scope, at most 3 lines. Name the dial it sets. No ALL CAPS, no "NEVER" walls, and never add a gate to prevent gates. Example: "Unattended runs never idle: when the current item lands, take the next ready item. Why: 'why did you stop' recurred in 4 sessions."
 8. **Open the PR** (or file the issue, for bugs) with the evidence block below. For personal instructions there is no PR: show the diff and apply only when the user says so, or under a recorded grant. Show the user the exact evidence text before it is published to any shared repo.
 9. **Land per the autonomy dial.** Default L2: a ready PR the human lands. Instruction-only PRs are a common L3 grant class ("docs and instructions PRs may self-merge when green"). Record which level applied.
 10. **Record** in the ledger: class, rule, layer, PR, baseline rate, re-measure date.
 11. **Re-measure after K days** (and at least M typed messages in scope). Re-run the extractor for the same scope. Compare the class rate per 100 typed messages with the baseline, and with the week-to-week spread of that class over the previous 4 weeks.
     - Fell beyond noise → **keep**; comment the result on the PR.
-    - Didn't fall → **escalate one layer** (instruction → skill rule → check/test → automation → bug report) and link the new PR to the old one.
+    - Didn't fall → **escalate one layer** (instruction → skill rule → hook or check/test → automation → bug report) and link the new PR to the old one.
     - A neighbour class rose (for example over_ask fell but premature_stop rose) → **propose a revert** or rewording, with numbers.
 
 ## Evidence block (PR body)
@@ -100,7 +101,7 @@ Not for one-off preferences, a single bad turn, or anything already handled by a
 | Dial | Default | Options |
 |---|---|---|
 | Detection threshold | N=3 hits across ≥2 sessions in 21 days | any N / window |
-| Mode | open PR (L2, human lands) | propose in chat; draft PR (L1); self-merge per [`docs/autonomy.md`](../../docs/autonomy.md) grant |
+| Mode | open PR (L2, human lands) | propose in chat; draft PR (L1); self-merge per [`docs/autonomy.md`](${CLAUDE_PLUGIN_ROOT}/docs/autonomy.md) grant |
 | Destination | repo for shared expectations, personal for posture | repo only; personal only |
 | Evidence | redacted quotes + counts, shown to user before publishing | counts only; paraphrase |
 | Re-measure | K=7 days and ≥150 typed messages in scope | any K / M |
@@ -111,7 +112,7 @@ Not for one-off preferences, a single bad turn, or anything already handled by a
 ## Outputs
 
 - One small PR or issue per recurring expectation, labelled `steer-once`, with the evidence block. The label is the team ledger.
-- A personal ledger entry (default `~/.copilot/lever/steer-once.ledger.md`, format per [`templates/ledger.md`](../../templates/ledger.md)): keep, escalate or revert, with before/after rates.
+- A personal ledger entry (default `~/.claude/lever/steer-once.ledger.md`, format per [`templates/ledger.md`](${CLAUDE_PLUGIN_ROOT}/templates/ledger.md)): keep, escalate or revert, with before/after rates.
 - A re-measure comment on the original PR.
 
 ## This skill's own feedback loop

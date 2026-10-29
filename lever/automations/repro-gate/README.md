@@ -6,24 +6,25 @@
 
 ## Triggers
 
-| Trigger | Config | `write_scope` | Why |
-|---|---|---|---|
-| `issues` | `types: [opened]`, `query: is:issue -label:needs-info -label:repro-confirmed` | `trigger` | New intake. |
-| `issue_labeled` | `labels: [needs-repro]` | `trigger` | Re-run on demand, for example after the reporter adds details. |
-| `interval` | `daily` | `repository` | Sweep: open issues from the last 7 days with none of the gate's labels. |
+| Trigger | Workflow config | Why |
+|---|---|---|
+| `issues` | `types: [opened]`; job `if:` skips issues already labeled `needs-info` or `repro-confirmed` | New intake. |
+| `issues` | `types: [labeled]`; job `if:` passes only `github.event.label.name == 'needs-repro'` | Re-run on demand, for example after the reporter adds details. (`issues: labeled` has no label filter in `on:`, so the filter is the `if:`; a skipped job costs no model call.) |
+| `schedule` | `cron: "23 6 * * *"` (daily) | Sweep: open issues from the last 7 days with none of the gate's labels. |
+| `workflow_dispatch` | inputs `mode`, `resource_url` | Dry runs on historical issues. |
 
-`require_actor_write_permission`: leave it off on a repo where outside users file issues, or the gate never sees their reports. Compensate in the contract: issue text is untrusted, the tool list has no secrets access, no merge and no close, and the repro branch is never merged by this automation.
+Outside reporters: `anthropics/claude-code-action` refuses runs triggered by actors without write access by default, so their `opened` events are skipped. The daily sweep (a `schedule` run, not triggered by the reporter) picks those issues up within a day. Check the action's current docs before relaxing that with `allowed_non_write_users`; if you do, compensate in the contract: issue text is untrusted, the tool list has no secrets access, no merge and no close, and the repro branch is never merged by this automation.
 
-## Tools (least privilege)
+## Permissions and tools (least privilege)
 
-| Need | Tools |
-|---|---|
-| Read | `github/issue_read`, `github/search_issues`, `github/get_file_contents`, `github/search_code`, `github/list_commits`, `github/search_pull_requests` |
-| Write a repro test | `report_progress` (commits the test to a `repro/<issue>` branch) |
-| Report | `github/add_issue_comment`, `github/update_issue_labels` |
-| `OPEN_DRAFT_FIX_PR: on` | + `create_pull_request` (draft only) |
+| Need | `permissions:` | `--allowedTools` |
+|---|---|---|
+| Read | `contents: read`, `pull-requests: read` | `Read`, `Grep`, `Glob`, `Bash(git log:*)`, `Bash(gh issue view:*)`, `Bash(gh issue list:*)`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)` |
+| Write and run a repro test | `contents: write` (push to `repro/<issue>` only) | + `Write`, `Edit`, the repo's test command (for example `Bash(npm test:*)`), `Bash(git checkout -b repro/*)`, `Bash(git add:*)`, `Bash(git commit:*)`, `Bash(git push origin repro/*)` |
+| Report | `issues: write` | `Bash(gh issue comment:*)`, `Bash(gh issue edit:*)` (labels) |
+| `OPEN_DRAFT_FIX_PR: on` | `pull-requests: write` | + `Bash(gh pr create --draft:*)` |
 
-No issue-close tool, no merge tool, no review tools.
+No issue-close, no merge, no review tools. The default `GITHUB_TOKEN` cannot push workflow-file changes.
 
 ## Dials
 
@@ -33,7 +34,7 @@ No issue-close tool, no merge tool, no review tools.
 | `OPEN_DRAFT_FIX_PR` | off | When on, opens a draft PR containing the failing test, plus a fix only if it is small and obvious |
 | `NOT_BUG_ACTION` | `noop` | Or `label:<question/feature label>` (adds `github/update_issue_labels` usage only) |
 | `LABELS` | `repro-confirmed`, `needs-info`, `needs-repro` | Create them before enabling |
-| Model tier | Standard | Premium if repros routinely need deep code reading; record why |
+| Model tier | Standard (`sonnet`) | Premium (`opus`) if repros routinely need deep code reading; record why in the workflow's top comment |
 
 ## Outcome metric
 
@@ -41,41 +42,21 @@ No issue-close tool, no merge tool, no review tools.
 - **Also:** share of new bug issues triaged within 1 day; confirmed share of new issues; median time from confirmation to fix PR.
 - **Guardrail:** confirmed issues later closed as "not a bug" (target zero; each one is an improver data point).
 
-## Install via GitHub MCP
+## Install
 
-1. Preflight: `get_automations_configuration_for_repository`; `list_automations` (no other triage worker labeling the same issues); create the labels; confirm the test command for the repo and put it in PARAMETERS.
-2. Fill PARAMETERS in [prompt.md](prompt.md) with `MODE: dry_run`.
-3. Create paused:
-
-```json
-{
-  "owner": "<owner>", "repo": "<repo>",
-  "name": "repro-gate",
-  "description": "Classify new issues; label repro-confirmed only with a failing test it wrote. Standard tier.",
-  "prompt": "<prompt.md>",
-  "disabled": true,
-  "ownership": "repository",
-  "triggers": {
-    "issues": {"types": ["opened"], "query": "is:issue -label:needs-info -label:repro-confirmed", "write_scope": "trigger"},
-    "issue_labeled": {"types": ["labeled"], "labels": ["needs-repro"], "write_scope": "trigger"},
-    "interval": {"types": ["daily"], "write_scope": "repository"}
-  },
-  "tools": ["github/issue_read", "github/search_issues", "github/get_file_contents", "github/search_code",
-            "github/list_commits", "github/search_pull_requests", "report_progress",
-            "github/add_issue_comment", "github/update_issue_labels"]
-}
-```
-
-4. Verify with `get_automation`: no close or merge tool, `disabled: true`.
-5. Dry run on 3 historical issues (`event: issues`, `type: opened`, `resource_url: <issue>`): one real bug that was later fixed, one feature request, one bug report too vague to act on. Expect `repro-confirmed` (with a failing test), `NOOP(not a bug)` and `needs-info` respectively.
-6. Enable on approval with `MODE: act`.
-7. Create the improver from [improver-prompt.md](improver-prompt.md), paused, and enable it once the gate has labeled about 20 issues.
+1. Preflight: `gh auth status` has `workflow` scope; the repo has an `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`) secret (`/install-github-app`); no other triage workflow labels the same issues (`gh workflow list`); create the labels `repro-confirmed`, `needs-info`, `needs-repro`; confirm the repo's test command and put it in PARAMETERS and in the workflow's `--allowedTools`.
+2. Copy [prompt.md](prompt.md) to `.github/lever/automations/repro-gate/prompt.md` and fill PARAMETERS with `MODE: dry_run`.
+3. Copy [workflow.yml](workflow.yml) to `.github/workflows/lever-repro-gate.yml`, add the toolchain setup step, commit and push, then create it paused: `gh workflow disable lever-repro-gate.yml`.
+4. Verify with `gh workflow view lever-repro-gate.yml` and read the committed YAML back: no close or merge entry, `contents: write` is the only write beyond issues.
+5. Dry run on 3 historical issues: `gh workflow enable lever-repro-gate.yml` (events stay skipped while `LEVER_REPRO_GATE_LIVE` is unset), then `gh workflow run lever-repro-gate.yml -f mode=dry_run -f resource_url=<issue URL>` for each: one real bug that was later fixed, one feature request, one bug report too vague to act on. Expect `repro-confirmed` (with a failing test), `NOOP(not a bug)` and `needs-info` respectively.
+6. Go live on approval with `MODE: act` in PARAMETERS: `gh variable set LEVER_REPRO_GATE_LIVE --body true`.
+7. Create the improver from [improver-workflow.yml](improver-workflow.yml) (`.github/workflows/lever-repro-gate-improver.yml`) and [improver-prompt.md](improver-prompt.md) (`.github/lever/automations/repro-gate/improver-prompt.md`), paused the same way, and set `LEVER_REPRO_GATE_IMPROVER_LIVE` once the gate has labeled about 20 issues.
 
 ## Improver
 
 | | |
 |---|---|
-| Triggers | `interval` weekly; `automation_failed` for the gate's id. Optional: `issue_labeled` with `labels: [repro-confirmed, needs-info]` and a query restricted to human actors, if your label volume is low enough that one improver run per correction is cheap. |
-| Tools | `github/get_automation`, `github/list_automation_revisions`, `github/get_automation_revision`, `github/search_issues`, `github/issue_read`, `github/search_pull_requests`, `propose_automation_update` |
+| Triggers | `schedule` weekly; `workflow_run` of `lever-repro-gate` with `if:` conclusion `failure`. Optional: an `issues: [labeled, unlabeled]` trigger with a job `if:` on `repro-confirmed` / `needs-info` and a non-bot actor, if your label volume is low enough that one improver run per correction is cheap. |
+| Permissions and tools | `contents: read`, `issues: write`, `pull-requests: read`, `actions: read`. Read-only `git log`, `gh issue view/list`, `gh api repos/*/issues/*/timeline`, `gh pr list/view`, `gh run list`; `gh issue create/comment` for the proposal. Never `.github/` write, never `gh workflow enable/disable`. |
 | Evidence | Every human label correction is a labeled data point: a human removed `repro-confirmed`, added it after the gate said `needs-info`, or closed a confirmed issue as not a bug. |
-| Output | At most one classification-rule proposal per week. A human applies it. |
+| Output | At most one classification-rule proposal per week, as an issue containing the prompt diff. A human applies it by PR. |

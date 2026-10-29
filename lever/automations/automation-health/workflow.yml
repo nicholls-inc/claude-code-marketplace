@@ -1,0 +1,53 @@
+# lever-automation-health: weekly review of every lever-* workflow: no-op %, failures, cost per useful output, least-privilege lint. One proposal or none.
+# Model: sonnet (standard) because it counts and compares; no premium reason.
+# Install: copy to .github/workflows/lever-automation-health.yml and prompt.md to .github/lever/automations/automation-health/prompt.md.
+# Alternative with no workflow file: a Claude Code cloud scheduled task (/schedule), see README. The workflow_run failure path needs the workflow.
+name: lever-automation-health
+on:
+  schedule:
+    - cron: "37 16 * * 1"        # weekly, Monday
+  workflow_run:
+    # List every lever worker by its `name:`. Add each new worker here when you create it.
+    workflows: [lever-main-red-triage, lever-repro-gate, lever-precision-review, lever-pr-shepherd, lever-morning-brief, lever-stall-watchdog, lever-ci-speed, lever-audit-lane]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+concurrency:
+  group: lever-automation-health
+  cancel-in-progress: false
+jobs:
+  run:
+    # Created paused: schedule and failure events run only once LEVER_AUTOMATION_HEALTH_LIVE=true; dispatch always runs.
+    # Failure path: crashed or timed out only; a NOOP is a success and never wakes this job.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (vars.LEVER_AUTOMATION_HEALTH_LIVE == 'true' &&
+       (github.event_name == 'schedule' ||
+        contains(fromJSON('["failure","timed_out"]'), github.event.workflow_run.conclusion)))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read            # reads .github/workflows/lever-*.yml for the least-privilege lint; never writes
+      actions: read             # gh run list --workflow lever-*
+      issues: write             # report comment, failure issues, the ## lever state section
+      pull-requests: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}
+            FAILED_RUN: ${{ github.event.workflow_run.html_url || 'none' }}
+            FAILED_WORKFLOW: ${{ github.event.workflow_run.name || 'none' }}
+            FAILED_CONCLUSION: ${{ github.event.workflow_run.conclusion || 'none' }}
+            Follow .github/lever/automations/automation-health/prompt.md exactly.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 40
+            --allowedTools "Read,Grep,Glob,Bash(gh workflow list:*),Bash(gh workflow view:*),Bash(gh run list:*),Bash(gh run view:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh pr list:*),Bash(gh pr view:*)"
+          # Never: gh workflow enable|disable, any write to .github/, git push. The proposal is an issue with a prompt diff; a human applies it by PR.

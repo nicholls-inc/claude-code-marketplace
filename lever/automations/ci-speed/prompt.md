@@ -1,6 +1,6 @@
 ## PARAMETERS  (the only section that changes between repos and revisions)
-JOB_NAME:              ci-speed-watch | ci-speed-lane     # one prompt, two automations; ROLE picks the section
-ROLE:                  watch                               # watch | lane
+JOB_NAME:              ci-speed-watch | ci-speed-lane     # one prompt, two jobs in lever-ci-speed.yml; ROLE picks the section
+ROLE:                  watch                               # watch | lane (the workflow passes ROLE and MODE; they override this file)
 OUTCOME:               Pushes come back green fast and trustworthy, continuously.
 METRIC:                p90 time-to-green on real PR traffic (push -> all required checks green)
 DEFAULT_BRANCH:        main
@@ -20,6 +20,8 @@ RUN_WINDOW:            off-peak
 AUTONOMY:              L1
 GRANT:                 none
 GOAL_LABEL:            ci-goal
+LANE_RUNS_PER_DAY:     2                                   # daily run limit for the lane; start at 2
+RECORD_SINK:           run_summary                         # the job summary
 HUMAN_ESCALATION:      <@team owning CI>
 
 ## CONTRACT  (stable; changed only by a human-applied revision)
@@ -35,12 +37,15 @@ Every run ends in exactly one of ACTED(summary), NOOP(reason) or BLOCKED(reason)
    open a second goal issue.
 5. Otherwise open one goal issue: the missed metric, its baseline, the critical path with its slowest
    steps, the top 3 flake signatures, and a suggested hypothesis list. Then add GOAL_LABEL with
-   github/update_issue_labels. That label event is what wakes the lane.
+   `gh issue edit <n> --add-label`. That label event is what wakes the lane.
 
 ### ROLE: lane
 1. Provenance. The subject is the triggering GOAL_LABEL issue. If it's closed, or this goal or another open
    goal already has a lane run recorded in its body: NOOP(owned). Otherwise write "lane: <run link>" into
-   the goal body with github/update_issue_body before doing anything else.
+   the goal body with `gh issue edit <n> --body-file` before doing anything else. If this goal was recorded by a
+   lane run that has since finished without closing it (timed out), a workflow_dispatch resume continues it
+   instead of NOOP(owned). More than LANE_RUNS_PER_DAY lane runs today (`gh run list --workflow
+   lever-ci-speed.yml --event issues --created <today>`): NOOP(run limit).
 2. Read the goal and the record of earlier arms on this repo, including the negative ones. Never re-run a
    rejected arm without new evidence.
 3. Write the keep bar into the goal issue before measuring anything.
@@ -53,11 +58,14 @@ Every run ends in exactly one of ACTED(summary), NOOP(reason) or BLOCKED(reason)
    goal issue. Close rejected arms with a "[negative result]" comment.
 6. Turn kept arms into a stack of reviewable PRs, at most MAX_OPEN_PRS open. Put the paired evidence in
    each description. Route them to code owners. Land at AUTONOMY: L1 hands them to owners; higher levels
-   follow docs/autonomy.md and GRANT.
+   follow the autonomy dial (the lever plugin's docs/autonomy.md; here AUTONOMY and GRANT) and the repo's
+   `.github/lever.yml`. Without `Bash(gh pr merge:*)` in the workflow's `--allowedTools`, the lane cannot merge.
 7. Flakes: file one issue per signature for the owning team, with a repro. Never add a retry.
 8. After the stack merges, measure again on real traffic over one MEASURE_WINDOW. Post before and after.
    Close the goal if the target is met. Otherwise file the next bottleneck as a new goal.
 9. Close every measurement PR. Report Actions minutes spent per minute of p50 saved.
 
 Never: skip or delete tests, add blanket retries, lower coverage, widen `permissions:`, add
-`pull_request_target`, touch secrets, or use an admin merge.
+`pull_request_target`, touch secrets, or use an admin merge. Never edit this workflow. Changes to other files
+under `.github/workflows/` need an L4 standing grant in GRANT and a token allowed to push them; without both,
+deliver the CI-config arm as a patch in the goal issue for the owners.

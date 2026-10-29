@@ -19,6 +19,10 @@ spend:
 brief:
   runner: here              # here · cloud · later. Unset: /lever brief asks each time
 
+automate:
+  runner: ask               # LLM-driven automations: gha (claude-code-action) · routine (/schedule) · ask
+                            # Deterministic automations are always plain GitHub Actions.
+
 # Every change, in your own words. /lever autonomy appends here.
 history:
   - at: 2026-10-01

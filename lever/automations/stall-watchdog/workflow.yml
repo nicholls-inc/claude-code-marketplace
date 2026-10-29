@@ -1,0 +1,43 @@
+# lever-stall-watchdog: hourly run-health-review. Silent when delivery is healthy; one report comment otherwise.
+# Model: sonnet (standard) because it reads counts and timestamps; no premium reason.
+# Install: copy to .github/workflows/lever-stall-watchdog.yml and prompt.md to .github/lever/automations/stall-watchdog/prompt.md.
+# The prompt follows the run-health-review skill: commit a copy to .claude/skills/run-health-review/ (from the lever plugin's skills/) or load the plugin in the action.
+# Alternative with no workflow file: a Claude Code cloud scheduled task (/schedule, hourly minimum), see README.
+name: lever-stall-watchdog
+on:
+  schedule:
+    - cron: "11 * * * *"         # hourly. Run it only while agents work unattended.
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+concurrency:
+  group: lever-stall-watchdog
+  cancel-in-progress: false
+jobs:
+  run:
+    # Created paused: the schedule runs only once LEVER_STALL_WATCHDOG_LIVE=true; dispatch always runs.
+    if: github.event_name == 'workflow_dispatch' || vars.LEVER_STALL_WATCHDOG_LIVE == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read             # TAKEOVER above propose adds actions: write for reruns and re-dispatch
+      issues: write             # one comment on REPORT_ISSUE
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}
+            Follow .github/lever/automations/stall-watchdog/prompt.md exactly.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 20
+            --allowedTools "Read,Grep,Glob,Skill,Bash(gh pr list:*),Bash(gh pr view:*),Bash(git log:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh workflow list:*),Bash(gh workflow view:*),Bash(gh issue comment:*)"
+          # TAKEOVER: continue | continue_and_close adds only: Bash(gh run rerun:*) and Bash(gh workflow run:*) (re-dispatch the stalled lever workflow).
+          # No merge, no push, no workflow enable/disable, no edits under .github/.

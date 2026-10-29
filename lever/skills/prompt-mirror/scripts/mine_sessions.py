@@ -31,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import os
 import re
@@ -196,8 +197,14 @@ def redact(text: str, extra: list, max_chars: int) -> str:
 # ------------------------------------------------------------------ helpers
 
 def parse_ts(value):
-    if not value:
+    if value is None or value == "":
         return None
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        # history.jsonl uses epoch milliseconds.
+        try:
+            return datetime.fromtimestamp(value / 1000 if value > 1e11 else value, timezone.utc)
+        except (OverflowError, OSError, ValueError):
+            return None
     try:
         v = str(value).strip().replace("Z", "+00:00")
         if " " in v and "T" not in v:
@@ -229,7 +236,7 @@ def is_machine_text(text: str) -> bool:
 
 
 def looks_like_agent_report(text: str) -> bool:
-    # Store rows have no source tag; long multi-heading markdown is almost
+    # History rows have no source tag; long multi-heading markdown is almost
     # always an agent-written brief or report rather than something typed.
     words = len(text.split())
     if len(AGENT_REPORT.findall(text)) >= 3 and words > 300:
@@ -271,160 +278,426 @@ def norm_for_template(text: str) -> str:
 
 
 # ------------------------------------------------------------------ readers
+#
+# Claude Code transcript lines (verified 2026-10; internal, drifts):
+#   {type: "user"|"assistant"|"attachment"|"queue-operation"|"system"|...,
+#    uuid, parentUuid, sessionId, timestamp, cwd, gitBranch, isSidechain,
+#    userType, entrypoint, version, message: {role, content}, ...}
+# A user line is typed by a person when turnOrigin == "human" or
+# origin.kind == "human". Older builds carry neither; then a user line with
+# text content, no toolUseResult, not isMeta / isCompactSummary and no
+# injected markers is a candidate. Mid-turn messages arrive as an
+# attachment {type: "queued_command", origin, prompt, commandMode}; a
+# queue-operation "enqueue" long before the user turn means "queued".
 
-def scan_events(state_dir: Path, since, until, repo_filter, read_assistant, stats):
-    """Return (sessions covered by events.jsonl, candidate typed messages)."""
-    covered, out = set(), []
-    if not state_dir.is_dir():
-        return covered, out
-    since_epoch = since.timestamp()
-    for entry in os.scandir(state_dir):
-        path = Path(entry.path) / "events.jsonl"
-        try:
-            if path.stat().st_mtime < since_epoch:
-                continue
-            fh = open(path, "r", encoding="utf-8", errors="replace")
-        except OSError:
-            continue
-        sid = entry.name
-        covered.add(sid)
-        cwd = repo = ""
-        first_user_seen = False
-        session_rows = []
-        with fh:
-            for line in fh:
-                if '"user.message"' in line:
-                    pass
-                elif '"session.start"' in line or '"abort"' in line:
-                    pass
-                elif read_assistant and '"assistant.message"' in line:
-                    pass
-                else:
-                    continue
-                try:
-                    ev = json.loads(line)
-                except json.JSONDecodeError:
-                    stats["bad_lines"] += 1
-                    continue
-                etype = ev.get("type")
-                data = ev.get("data") or {}
-                if etype == "session.start":
-                    ctx = data.get("context") or {}
-                    if isinstance(ctx, dict):
-                        cwd = ctx.get("cwd") or cwd
-                        repo = ctx.get("repository") or repo
-                    continue
-                ts = parse_ts(ev.get("timestamp"))
-                in_window = ts is not None and since <= ts <= until
-                if etype == "user.message":
-                    is_first = not first_user_seen
-                    first_user_seen = True
-                if not in_window:
-                    continue
-                if etype == "abort":
-                    if data.get("reason") == "user_initiated":
-                        stats["aborts_user"] += 1
-                    continue
-                if etype == "assistant.message":
-                    content = (data.get("content") or "").strip()
-                    if content and not ev.get("agentId"):
-                        stats["assistant_msgs"] += 1
-                        if CONCESSION.match(content):
-                            stats["assistant_concessions"] += 1
-                    continue
-                if etype != "user.message":
-                    continue
-                source = data.get("source")
-                if ev.get("agentId"):
-                    stats["machine.subagent"] += 1
-                    continue
-                if data.get("isAutopilotContinuation") or source == "autopilot":
-                    stats["machine.autopilot"] += 1
-                    continue
-                if isinstance(source, str) and source.startswith("agent-"):
-                    stats["machine.agent"] += 1
-                    continue
-                if source == "system":
-                    stats["machine.system"] += 1
-                    continue
-                if source not in (None, "user"):
-                    stats["machine.other"] += 1
-                    continue
-                text = clean_text(data.get("content") or "")
-                if is_machine_text(text):
-                    stats["machine.template"] += 1
-                    continue
-                # A coordinator's kickoff brief to a child session has no source
-                # tag; its envelope survives only in transformedContent.
-                if MACHINE_MARKERS.search(data.get("transformedContent") or ""):
-                    stats["machine.agent_kickoff"] += 1
-                    continue
-                images = sum(
-                    1 for a in (data.get("attachments") or [])
-                    if isinstance(a, dict) and str(a.get("mimeType", "")).startswith("image/")
-                )
-                session_rows.append({
-                    "session": sid, "ts": ts, "text": text,
-                    "delivery": data.get("delivery"), "mode": data.get("agentMode"),
-                    "kickoff": is_first, "images": images, "confidence": "high",
-                })
-        if not session_rows:
-            continue
-        if cwd and SCRATCH_CWD.match(cwd):
-            stats["dropped.scratch_cwd"] += len(session_rows)
-            continue
-        if repo_filter and repo_filter not in f"{cwd} {repo}".lower():
-            continue
-        for r in session_rows:
-            r["repo"] = repo or ""
-        out.extend(session_rows)
-    return covered, out
+QUEUED_GAP_S = 2.0
+ORIGIN_BUCKETS = (
+    ("human", None), ("peer", "agent"), ("agent", "agent"), ("coordinator", "agent_kickoff"),
+    ("parent", "agent_kickoff"), ("task", "system"), ("notification", "system"),
+    ("hook", "meta"), ("sched", "scheduled"), ("cron", "scheduled"), ("loop", "scheduled"),
+    ("wake", "scheduled"), ("trigger", "scheduled"), ("webhook", "agent"),
+)
 
 
-def open_store(db_path: Path):
-    for uri in (f"file:{db_path}?mode=ro", f"file:{db_path}?immutable=1"):
-        try:
-            con = sqlite3.connect(uri, uri=True, timeout=5)
-            con.execute("select 1 from turns limit 1")
-            return con
-        except sqlite3.Error:
-            continue
+def origin_bucket(value):
+    """Map a non-human turnOrigin / origin.kind to a machine bucket."""
+    v = str(value).lower()
+    for needle, bucket in ORIGIN_BUCKETS[1:]:
+        if needle in v:
+            return bucket
+    return "automated"
+
+
+def entry_origin(ev):
+    """Return (origin_value or None). 'human' means typed by a person."""
+    to = ev.get("turnOrigin")
+    if isinstance(to, str) and to:
+        return to
+    o = ev.get("origin")
+    if isinstance(o, dict) and o.get("kind"):
+        return str(o["kind"])
     return None
 
 
-def scan_store(db_path: Path, covered, since, until, repo_filter, stats):
-    con = open_store(db_path) if db_path.exists() else None
-    if con is None:
-        return []
-    cols = {r[1] for r in con.execute("pragma table_info(sessions)")}
-    repo_col = "s.repository" if "repository" in cols else "''"
-    cwd_col = "s.cwd" if "cwd" in cols else "''"
-    q = (f"select t.session_id, t.turn_index, t.user_message, t.timestamp, "
-         f"{cwd_col}, {repo_col} from turns t left join sessions s on s.id = t.session_id "
-         f"where t.user_message is not null and t.timestamp >= ?")
-    out = []
-    for sid, idx, msg, ts_raw, cwd, repo in con.execute(q, (since.strftime("%Y-%m-%d"),)):
-        if sid in covered:
+def content_parts(message):
+    """Return (text, n_images, has_tool_result) from a message.content."""
+    if not isinstance(message, dict):
+        return "", 0, False
+    c = message.get("content")
+    if isinstance(c, str):
+        return c, 0, False
+    text, images, tool = [], 0, False
+    if isinstance(c, list):
+        for b in c:
+            if not isinstance(b, dict):
+                continue
+            bt = b.get("type")
+            if bt == "text" and isinstance(b.get("text"), str):
+                text.append(b["text"])
+            elif bt == "image":
+                images += 1
+            elif bt == "tool_result":
+                tool = True
+    return "\n".join(text), images, tool
+
+
+_REPO_CACHE = {}
+_REMOTE = re.compile(r"url\s*=\s*\S*?[:/]([\w.\-]+/[\w.\-]+?)(\.git)?\s*$", re.M)
+
+
+def repo_for_cwd(cwd):
+    """owner/name from <cwd>/.git/config if it is still on disk (read-only)."""
+    if not cwd:
+        return ""
+    if cwd not in _REPO_CACHE:
+        repo = ""
+        try:
+            cfg = Path(cwd, ".git", "config").read_text(errors="replace")
+            m = _REMOTE.search(cfg)
+            repo = m.group(1) if m else ""
+        except OSError:
+            pass
+        _REPO_CACHE[cwd] = repo
+    return _REPO_CACHE[cwd]
+
+
+def iter_jsonl(path: Path, stats):
+    try:
+        fh = open(path, "r", encoding="utf-8", errors="replace")
+    except OSError:
+        return
+    with fh:
+        for line in fh:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                ev = json.loads(line)
+            except json.JSONDecodeError:
+                stats["bad_lines"] += 1
+                continue
+            if isinstance(ev, dict):
+                yield ev
+
+
+def classify_text(raw):
+    """Return (bucket, cleaned_text). bucket None means candidate typed text."""
+    if INTERRUPT.match(raw or ""):
+        return "interrupt", ""
+    if COMMAND_MARKERS.search(raw or ""):
+        return "command", ""
+    text = clean_text(raw)
+    if not text:
+        return "meta", ""
+    if META_TEXT.match(text):
+        return "meta", ""
+    if SCHEDULED_MARKERS.search(text):
+        return "scheduled", ""
+    if MACHINE_MARKERS.search(text):
+        return "agent", ""
+    if is_machine_text(text):
+        return "template", ""
+    return None, text
+
+
+def count_subagents(session_dir: Path, since, until, stats):
+    """Prompts inside subagent transcripts: machine traffic, never typed."""
+    sub = session_dir / "subagents"
+    if not sub.is_dir():
+        return
+    for f in sub.glob("agent-*.jsonl"):
+        for ev in iter_jsonl(f, stats):
+            if ev.get("type") != "user" or ev.get("toolUseResult") is not None:
+                continue
+            ts = parse_ts(ev.get("timestamp"))
+            if ts is None or not (since <= ts <= until):
+                continue
+            _, _, tool = content_parts(ev.get("message"))
+            if not tool and not ev.get("isMeta"):
+                stats["machine.subagent"] += 1
+
+
+def scan_transcripts(projects: Path, since, until, repo_filter, read_assistant, stats):
+    """Return (covered session ids, spans by cwd, typed texts by cwd, rows)."""
+    covered, spans, seen_text, out = set(), defaultdict(list), defaultdict(set), []
+    if not projects.is_dir():
+        return covered, spans, seen_text, out
+    since_epoch = since.timestamp()
+    for proj in os.scandir(projects):
+        if not proj.is_dir():
             continue
-        ts = parse_ts(ts_raw)
+        for entry in os.scandir(proj.path):
+            if not entry.name.endswith(".jsonl") or not entry.is_file():
+                continue
+            path = Path(entry.path)
+            try:
+                if path.stat().st_mtime < since_epoch:
+                    continue
+            except OSError:
+                continue
+            sid = entry.name[:-6]
+            covered.add(sid)
+            scan_one(path, sid, since, until, repo_filter, read_assistant, stats,
+                     spans, seen_text, out, covered)
+    return covered, spans, seen_text, out
+
+
+def scan_one(path, sid, since, until, repo_filter, read_assistant, stats,
+             spans, seen_text, out, covered):
+    cwd = ""
+    first_prompt_seen = False
+    session_rows, session_machine = [], Counter()
+    enqueued = []          # (ts, text prefix) of queue-operation enqueues
+    qc_seen = set()        # queued_command prompts already counted
+    absorbed = []          # (ts, text) from queue-operation remove/absorbed_mid_turn
+    concession_ids = set()
+    first_ts = last_ts = None
+    for ev in iter_jsonl(path, stats):
+        etype = ev.get("type")
+        if ev.get("sessionId"):
+            covered.add(str(ev["sessionId"]))
+        if isinstance(ev.get("cwd"), str) and ev["cwd"]:
+            cwd = cwd or ev["cwd"]
+        ts = parse_ts(ev.get("timestamp"))
+        if ts is not None:
+            first_ts = ts if first_ts is None or ts < first_ts else first_ts
+            last_ts = ts if last_ts is None or ts > last_ts else last_ts
+        in_window = ts is not None and since <= ts <= until
+        if ev.get("isSidechain") or ev.get("agentId"):
+            # Older builds kept subagent traffic in the main file.
+            if (etype == "user" and in_window and not ev.get("isMeta")
+                    and ev.get("toolUseResult") is None
+                    and not content_parts(ev.get("message"))[2]):
+                session_machine["subagent"] += 1
+            continue
+
+        if etype == "queue-operation":
+            op, content = ev.get("operation"), ev.get("content")
+            if op == "enqueue" and isinstance(content, str) and ts is not None:
+                enqueued.append((ts, content.strip()[:200]))
+            elif (op == "remove" and isinstance(content, str) and in_window
+                  and "mid_turn" in str(ev.get("reason") or "")):
+                absorbed.append((ts, content))
+            continue
+
+        if etype == "attachment":
+            att = ev.get("attachment")
+            if not isinstance(att, dict) or att.get("type") != "queued_command" or not in_window:
+                continue
+            prompt = att.get("prompt")
+            if not isinstance(prompt, str):
+                continue
+            qc_seen.add(prompt.strip()[:200])
+            origin = (att.get("origin") or {}).get("kind") if isinstance(att.get("origin"), dict) else None
+            mode = att.get("commandMode")
+            if origin and origin != "human":
+                session_machine[origin_bucket(origin)] += 1
+                continue
+            if mode not in (None, "prompt") or (att.get("isMeta") and origin != "human"):
+                session_machine["system" if mode == "task-notification" else "meta"] += 1
+                continue
+            bucket, text = classify_text(prompt)
+            if bucket:
+                session_machine[bucket] += 1
+                continue
+            session_rows.append({"session": sid, "ts": ts, "text": text, "delivery": "steering",
+                                 "mode": None, "kickoff": False, "images": 0, "confidence": "high"})
+            continue
+
+        if etype == "assistant":
+            if not (read_assistant and in_window):
+                continue
+            msg = ev.get("message") or {}
+            if not isinstance(msg, dict) or msg.get("model") == "<synthetic>":
+                continue
+            text, _, _ = content_parts(msg)
+            mid = msg.get("id") or ev.get("uuid")
+            if not text.strip() or mid in concession_ids:
+                continue
+            concession_ids.add(mid)
+            stats["assistant_msgs"] += 1
+            if CONCESSION.match(text.strip()):
+                stats["assistant_concessions"] += 1
+            continue
+
+        if etype != "user":
+            continue
+        raw, images, tool = content_parts(ev.get("message"))
+        if ev.get("toolUseResult") is not None or tool:
+            continue                      # tool_result turn
+        is_first = not first_prompt_seen
+        if not ev.get("isMeta"):
+            first_prompt_seen = True
+        if not in_window:
+            continue
+        if INTERRUPT.match(raw or ""):
+            stats["aborts_user"] += 1
+            continue
+        if ev.get("isCompactSummary"):
+            session_machine["compact"] += 1
+            continue
+        if ev.get("isMeta"):
+            session_machine["meta"] += 1
+            continue
+        origin = entry_origin(ev)
+        if origin and origin != "human":
+            session_machine[origin_bucket(origin)] += 1
+            continue
+        bucket, text = classify_text(raw)
+        if bucket == "agent" and is_first:
+            bucket = "agent_kickoff"      # a coordinator's brief to this child session
+        if bucket:
+            session_machine[bucket] += 1
+            continue
+        delivery = "idle"
+        key = (raw or "").strip()[:200]
+        for ets, etext in reversed(enqueued):
+            if etext == key and ets <= ts:
+                if (ts - ets).total_seconds() > QUEUED_GAP_S:
+                    delivery = "queued"
+                break
+        session_rows.append({
+            "session": sid, "ts": ts, "text": text, "delivery": delivery,
+            "mode": ev.get("permissionMode"), "kickoff": is_first, "images": images,
+            "confidence": "high",
+        })
+
+    # Builds that log mid-turn absorption without a queued_command attachment.
+    for ats, content in absorbed:
+        if content.strip()[:200] in qc_seen:
+            continue
+        bucket, text = classify_text(content)
+        if bucket:
+            session_machine[bucket] += 1
+            continue
+        session_rows.append({"session": sid, "ts": ats, "text": text, "delivery": "steering",
+                             "mode": None, "kickoff": False, "images": 0, "confidence": "high"})
+
+    count_subagents(path.with_suffix(""), since, until, stats)
+    if cwd and first_ts:
+        spans[cwd].append((first_ts, last_ts))
+    if cwd and SCRATCH_CWD.match(cwd):
+        stats["dropped.scratch_cwd"] += len(session_rows)
+        return
+    repo = repo_for_cwd(cwd)
+    if repo_filter and repo_filter not in f"{cwd} {repo}".lower():
+        return
+    for k, v in session_machine.items():
+        stats[f"machine.{k}"] += v
+    for r in session_rows:
+        r["repo"] = repo
+        seen_text[cwd].add(r["text"].strip())
+    out.extend(session_rows)
+
+
+def scan_history(path: Path, covered, spans, seen_text, since, until, repo_filter, stats):
+    """Backfill from the typed-prompt log for sessions with no transcript left."""
+    if not path.is_file():
+        return []
+    out, last_by_project = [], {}
+    for ev in iter_jsonl(path, stats):
+        text_raw = ev.get("display")
+        if not isinstance(text_raw, str):
+            continue
+        ts = parse_ts(ev.get("timestamp"))
         if ts is None or ts < since or ts > until:
             continue
-        cwd = cwd or ""
+        cwd = str(ev.get("project") or "")
+        sid = str(ev.get("sessionId") or "")
+        if sid and sid in covered:
+            continue
+        if any(a <= ts <= b for a, b in spans.get(cwd, ())):
+            continue                      # transcript exists and already decided
+        if text_raw.strip() in seen_text.get(cwd, ()):
+            continue
         if SCRATCH_CWD.match(cwd):
             stats["dropped.scratch_cwd"] += 1
             continue
-        if repo_filter and repo_filter not in f"{cwd} {repo or ''}".lower():
+        repo = repo_for_cwd(cwd)
+        if repo_filter and repo_filter not in f"{cwd} {repo}".lower():
             continue
-        text = clean_text(msg)
-        if is_machine_text(text) or looks_like_agent_report(text):
-            stats["machine.store_heuristic"] += 1
+        stripped = text_raw.strip()
+        if stripped.startswith("/") or stripped.startswith("!"):
+            stats["machine.command"] += 1
             continue
-        out.append({
-            "session": sid, "ts": ts, "text": text, "delivery": None, "mode": None,
-            "kickoff": idx == 0, "images": 0, "confidence": "medium", "repo": repo or "",
-        })
-    con.close()
+        bucket, text = classify_text(text_raw)
+        if bucket or looks_like_agent_report(text):
+            stats["machine.history_heuristic"] += 1
+            continue
+        if not sid:
+            # No session id: a new pseudo-session after a 30-minute gap per project.
+            prev = last_by_project.get(cwd)
+            if prev is None or (ts - prev[0]).total_seconds() > 1800:
+                prev = (ts, "h" + hashlib.sha1(f"{cwd}|{ts.isoformat()}".encode()).hexdigest()[:11])
+            last_by_project[cwd] = (ts, prev[1])
+            sid = prev[1]
+        out.append({"session": sid, "ts": ts, "text": text, "delivery": None, "mode": None,
+                    "kickoff": False, "images": 0, "confidence": "medium", "repo": repo})
+    first = {}
+    for r in sorted(out, key=lambda r: r["ts"]):
+        first.setdefault(r["session"], r)
+    for r in first.values():
+        r["kickoff"] = True
     return out
+
+
+def debug_keys(home: Path, since):
+    """Print key and value histograms of the sources. Never prints message text."""
+    stats = Counter()
+    keys, values, blocks, atts, hist = Counter(), Counter(), Counter(), Counter(), Counter()
+    files = Counter()
+    short = ("type", "turnOrigin", "promptSource", "isMeta", "isSidechain", "userType",
+             "entrypoint", "operation", "reason", "isCompactSummary", "permissionMode", "subtype")
+    projects = home / "projects"
+    since_epoch = since.timestamp()
+    for path in (projects.glob("*/*.jsonl") if projects.is_dir() else ()):
+        kinds = [("main", path)] + [("subagent", p) for p in path.with_suffix("").glob("subagents/agent-*.jsonl")]
+        for kind, p in kinds:
+            try:
+                if p.stat().st_mtime < since_epoch:
+                    continue
+            except OSError:
+                continue
+            files[kind] += 1
+            for ev in iter_jsonl(p, stats):
+                t = ev.get("type")
+                for k in ev:
+                    keys[(kind, t, k)] += 1
+                for k in short:
+                    if k in ev and not isinstance(ev[k], (dict, list)):
+                        values[(kind, t, k, str(ev[k])[:40])] += 1
+                if isinstance(ev.get("origin"), dict):
+                    values[(kind, t, "origin.kind", str(ev["origin"].get("kind"))[:40])] += 1
+                msg = ev.get("message")
+                if isinstance(msg, dict):
+                    c = msg.get("content")
+                    if isinstance(c, str):
+                        blocks[(kind, t, "str")] += 1
+                    elif isinstance(c, list):
+                        for b in c:
+                            if isinstance(b, dict):
+                                blocks[(kind, t, str(b.get("type")))] += 1
+                att = ev.get("attachment")
+                if isinstance(att, dict):
+                    o = att.get("origin")
+                    atts[(kind, str(att.get("type")), str(att.get("commandMode")),
+                          str(o.get("kind")) if isinstance(o, dict) else "-")] += 1
+    for ev in iter_jsonl(home / "history.jsonl", stats):
+        for k in ev:
+            hist[k] += 1
+
+    def dump(title, counter):
+        print(f"## {title}")
+        for k, v in sorted(counter.items(), key=lambda kv: (str(kv[0]))):
+            print(f"  {v:6d}  {' | '.join(map(str, k)) if isinstance(k, tuple) else k}")
+
+    print(f"home: {home}  since: {since.date()}  bad_lines: {stats['bad_lines']}")
+    dump("files", files)
+    dump("keys (file, type, key)", keys)
+    dump("short values (file, type, key, value)", values)
+    dump("message.content blocks (file, type, block)", blocks)
+    dump("attachments (file, type, commandMode, origin.kind)", atts)
+    dump("history.jsonl keys", hist)
 
 
 # ---------------------------------------------------------------- analysis
@@ -487,8 +760,7 @@ def build_stats(rows, stats, args):
     delivery = Counter(r["delivery"] for r in rows if r["delivery"])
     dn = sum(delivery.values())
     machine = {k.split(".", 1)[1]: v for k, v in stats.items() if k.startswith("machine.")}
-    machine_total = sum(machine.get(k, 0) for k in
-                        ("agent", "agent_kickoff", "autopilot", "system", "subagent"))
+    machine_total = sum(machine.get(k, 0) for k in MACHINE_WORK)
     kick = [r for r in rows if r["kickoff"]]
 
     by_session = defaultdict(list)
@@ -619,8 +891,15 @@ def build_stats(rows, stats, args):
         "weekly": trend,
         "notes": [
             "Regex classifiers are approximate; read samples before trusting a rate.",
-            "Delivery (steering/queued/idle) exists only on newer events; store rows lack it.",
-            "Medium-confidence rows come from the session store, which has no source tag.",
+            "Delivery: steering = absorbed mid-turn (queued_command), queued = enqueued "
+            "while a turn ran and delivered after it, idle = otherwise; history rows lack it.",
+            "Medium-confidence rows come from ~/.claude/history.jsonl, which has no source tag.",
+            "machine_per_typed counts subagent prompts, peer/cross-session messages, "
+            "scheduled wakes, task notifications and non-human turn origins; slash "
+            "commands, skill/hook injections and compaction summaries are counted "
+            "separately and excluded.",
+            "The transcript format is internal to Claude Code; rerun with --debug-keys "
+            "if counts look wrong.",
             "Phrases and candidate text are redacted like messages and skip withheld rows; "
             "--no-text leaves numbers only.",
         ],
@@ -631,13 +910,16 @@ def build_stats(rows, stats, args):
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--home", default=os.environ.get("COPILOT_HOME", str(Path.home() / ".copilot")),
-                    help="Copilot home directory (default: $COPILOT_HOME or ~/.copilot)")
+    ap.add_argument("--home", default=os.environ.get("CLAUDE_CONFIG_DIR") or str(Path.home() / ".claude"),
+                    help="Claude Code config directory (default: $CLAUDE_CONFIG_DIR or ~/.claude)")
     ap.add_argument("--since", default="30d", help="30d or YYYY-MM-DD (default 30d)")
     ap.add_argument("--until", default=None, help="YYYY-MM-DD (default now)")
-    ap.add_argument("--source", choices=("both", "events", "store"), default="both")
+    ap.add_argument("--source", choices=("both", "transcripts", "history", "events", "store"),
+                    default="both",
+                    help="transcripts (projects/*.jsonl), history (history.jsonl) or both; "
+                         "events/store are accepted aliases")
     ap.add_argument("--repo", default="", help="only sessions whose cwd/repository contains this")
-    ap.add_argument("--out", default=None, help="output dir (default <home>/prompt-mirror/<YYYY-MM-DD>)")
+    ap.add_argument("--out", default=None, help="output dir (default <home>/lever/prompt-mirror/<YYYY-MM-DD>)")
     ap.add_argument("--no-text", action="store_true", help="write stats and flags only, no message text")
     ap.add_argument("--keep-sensitive", action="store_true",
                     help="keep text of messages that look personal/HR (default withheld)")
@@ -651,7 +933,10 @@ def main() -> int:
     ap.add_argument("--skip-assistant", action="store_true",
                     help="skip assistant messages (faster; disables concession counts)")
     ap.add_argument("--format", choices=("json", "csv", "both"), default="both")
+    ap.add_argument("--debug-keys", action="store_true",
+                    help="print key/value histograms of the sources (no message text) and exit")
     args = ap.parse_args()
+    args.source = {"events": "transcripts", "store": "history"}.get(args.source, args.source)
 
     home = Path(os.path.expanduser(args.home))
     args.since_dt = parse_since(args.since)
@@ -664,14 +949,19 @@ def main() -> int:
             if term and not term.startswith("#"):
                 extra.append(re.compile(re.escape(term), re.I))
 
+    if args.debug_keys:
+        debug_keys(home, args.since_dt)
+        return 0
+
     stats = Counter()
-    covered, rows = set(), []
-    if args.source in ("both", "events"):
-        covered, rows = scan_events(home / "session-state", args.since_dt, args.until_dt,
-                                    args.repo.lower(), not args.skip_assistant, stats)
-    if args.source in ("both", "store"):
-        rows += scan_store(home / "session-store.db", covered, args.since_dt, args.until_dt,
-                           args.repo.lower(), stats)
+    covered, spans, seen_text, rows = set(), {}, {}, []
+    if args.source in ("both", "transcripts"):
+        covered, spans, seen_text, rows = scan_transcripts(
+            home / "projects", args.since_dt, args.until_dt, args.repo.lower(),
+            not args.skip_assistant, stats)
+    if args.source in ("both", "history"):
+        rows += scan_history(home / "history.jsonl", covered, spans, seen_text,
+                             args.since_dt, args.until_dt, args.repo.lower(), stats)
     if not rows:
         print("No typed messages found. Check --home, --since and --source.", file=sys.stderr)
 
@@ -679,7 +969,7 @@ def main() -> int:
     summary = build_stats(rows, stats, args)
 
     out = (Path(os.path.expanduser(args.out)) if args.out
-           else home / "prompt-mirror" / datetime.now().strftime("%Y-%m-%d"))
+           else home / "lever" / "prompt-mirror" / datetime.now().strftime("%Y-%m-%d"))
     out.mkdir(parents=True, exist_ok=True)
     os.chmod(out, 0o700)
 
