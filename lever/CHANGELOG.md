@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/nicholls-inc/claude-code-marketplace/compare/lever-v0.2.0...lever-v0.2.1) (2026-10-29)
+
+
+### Bug Fixes
+
+* **lever:** harden automation templates and token handling ([#254](https://github.com/nicholls-inc/claude-code-marketplace/issues/254)) ([8915a2f](https://github.com/nicholls-inc/claude-code-marketplace/commit/8915a2f3b7365b404375fe62cdad2ef0914dbf63))
+
 ## [0.2.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/lever-v0.1.0...lever-v0.2.0) (2026-10-29)
 
 
