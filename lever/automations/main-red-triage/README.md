@@ -4,22 +4,27 @@
 
 ## Triggers
 
-| Trigger | Config | `write_scope` | Why |
-|---|---|---|---|
-| `workflow_run` | `types: [completed]`, `conclusions: [failure]`, `workflows: [<CI workflow>]`, `query: branch:<default branch>` | `repository` | The event. The prompt re-checks the branch, so a missing or unsupported query filter costs runs, not correctness. |
-| `interval` | `hourly` | `repository` | Sweep: catches missed events and closes the loop on earlier actions (did the rerun pass, did the fix PR land). |
+| Trigger | Workflow config | Why |
+|---|---|---|
+| `workflow_run` | `workflows: ["<CI workflow>"]`, `types: [completed]`, job `if:` on `conclusion == 'failure'` and `head_branch == default_branch` | The event. The prompt re-checks the branch, so a missing filter costs runs, not correctness. |
+| `schedule` | `cron: "17 * * * *"` (hourly) | Sweep: catches missed events and closes the loop on earlier actions (did the rerun pass, did the fix PR land). |
+| `workflow_dispatch` | inputs `mode: dry_run\|act`, `resource_url` | Dry runs on historical failed runs. |
 
-Do not add `automation_completed` for this worker. It would double its runs without adding signal.
+Do not add a `workflow_run` on the lever workflows themselves for this worker. It would double its runs without adding signal.
 
-## Tools (least privilege)
+## Permissions and tools (least privilege)
 
-| Need | Tools |
-|---|---|
-| Read | `github/actions_list`, `github/actions_get`, `github/get_job_logs`, `github/list_commits`, `github/get_commit`, `github/pull_request_read`, `github/search_pull_requests`, `github/search_issues`, `github/get_file_contents`, `github/search_code` |
-| Notify | `github/create_issue`, `github/add_issue_comment` |
-| `ACTION: notify+rerun` (default) | + `retry_workflow_run` |
-| `ACTION: fix_pr` | + `report_progress`, `create_pull_request` |
-| Granted test-only fixes on main (L3) | + `github/merge_pull_request` |
+Two layers, both required: the job's `permissions:` block and `claude_args: --allowedTools`.
+
+| Need | `permissions:` | `--allowedTools` |
+|---|---|---|
+| Read | `contents: read`, `pull-requests: read` | `Read`, `Grep`, `Glob`, `Bash(gh run list:*)`, `Bash(gh run view:*)`, `Bash(git log:*)`, `Bash(git show:*)`, `Bash(git diff:*)`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)`, `Bash(gh issue list:*)`, `Bash(gh issue view:*)` |
+| Notify | `issues: write` | `Bash(gh issue create:*)`, `Bash(gh issue comment:*)` |
+| `ACTION: notify+rerun` (default) | `actions: write` | + `Bash(gh run rerun:*)` |
+| `ACTION: fix_pr` | `contents: write`, `pull-requests: write` | + `Edit`, `Write`, `Bash(git checkout:*)`, `Bash(git add:*)`, `Bash(git commit:*)`, `Bash(git push:*)`, `Bash(gh pr create:*)` |
+| Granted test-only fixes on main (L3) | `pull-requests: write` | + `Bash(gh pr merge:*)` |
+
+No `Bash(gh workflow enable:*)` or `disable`, and no write to `.github/workflows/`. The default `GITHUB_TOKEN` can't push workflow-file changes, which is the right floor for a triage worker.
 
 ## Dials
 
@@ -30,7 +35,7 @@ Do not add `automation_completed` for this worker. It would double its runs with
 | `QUARANTINE` | `propose` (the issue includes the exact skip/quarantine diff) | `pr` (open the quarantine PR) |
 | `MAX_RERUNS` | 1 per failed run | 0–2 |
 | `ATTRIBUTION_WINDOW` | Commits since the last green run on the default branch | Integer commit cap |
-| Model tier | Standard | Premium if log reading is the bottleneck; record why |
+| Model tier | Standard (`sonnet`) | Premium (`opus`) if log reading is the bottleneck; record why in the comment at the top of the workflow |
 
 ## Outcome metric
 
@@ -38,32 +43,11 @@ Do not add `automation_completed` for this worker. It would double its runs with
 - **Also:** time to first classification, flake rate (reruns that passed / reruns), share of regressions attributed to the right commit (a human confirms or corrects the issue).
 - **Guardrail:** zero tests skipped or deleted without a linked issue.
 
-## Install via GitHub MCP
+## Install
 
-1. Preflight: `get_automations_configuration_for_repository`; `list_automations` (no existing CI-triage worker); confirm the CI workflow name with `actions_list`; create labels `main-red` and `flaky-test` if missing.
-2. Fill PARAMETERS in [prompt.md](prompt.md) with `MODE: dry_run`.
-3. Create paused:
-
-```json
-{
-  "owner": "<owner>", "repo": "<repo>",
-  "name": "main-red-triage",
-  "description": "Classify default-branch CI failures (flake/regression/infra), act once, keep one issue per cause. Standard tier.",
-  "prompt": "<prompt.md>",
-  "disabled": true,
-  "ownership": "repository",
-  "triggers": {
-    "workflow_run": {"types": ["completed"], "conclusions": ["failure"], "workflows": ["<CI workflow>"],
-                     "query": "branch:<default branch>", "write_scope": "repository"},
-    "interval": {"types": ["hourly"], "write_scope": "repository"}
-  },
-  "tools": ["github/actions_list", "github/actions_get", "github/get_job_logs", "github/list_commits",
-            "github/get_commit", "github/pull_request_read", "github/search_pull_requests",
-            "github/search_issues", "github/get_file_contents", "github/search_code",
-            "github/create_issue", "github/add_issue_comment", "retry_workflow_run"]
-}
-```
-
-4. Verify with `get_automation`. Confirm the `query` was accepted; if not, remove it and rely on the prompt's branch check.
-5. Dry run on 3 historical failed runs on the default branch (`event: workflow_run`, `type: completed`, `resource_url: <run URL>`): one known flake, one real regression, one infrastructure failure. Compare each classification with what actually happened.
-6. Enable on approval with `MODE: act`. Pair with an [improver](../improver/README.md): `GOOD_OUTCOME: classification matched the eventual fix`, `BAD_OUTCOME: a human relabeled the issue or the blamed commit was wrong`.
+1. Preflight: `gh auth status` has `workflow` scope; the repo has an `ANTHROPIC_API_KEY` (or `CLAUDE_CODE_OAUTH_TOKEN`) secret (`/install-github-app` sets this up); no existing CI-triage workflow (`gh workflow list`); confirm the CI workflow's `name:` with `gh run list`; create labels `main-red` and `flaky-test` if missing.
+2. Copy [prompt.md](prompt.md) to `.github/lever/automations/main-red-triage/prompt.md` and fill PARAMETERS with `MODE: dry_run`.
+3. Copy [workflow.yml](workflow.yml) to `.github/workflows/lever-main-red-triage.yml` and set `workflows: ["<CI workflow>"]`. Commit and push, then create it paused: `gh workflow disable lever-main-red-triage.yml`.
+4. Verify with `gh workflow view lever-main-red-triage.yml` and read the committed YAML back: `on:`, `if:`, `permissions:`, `--allowedTools` and `--model` match this README, and no `gh workflow enable|disable` or `gh pr merge` entry is present.
+5. Dry run on 3 historical failed runs on the default branch: `gh workflow enable lever-main-red-triage.yml` (events stay skipped while `LEVER_MAIN_RED_TRIAGE_LIVE` is unset), then `gh workflow run lever-main-red-triage.yml -f mode=dry_run -f resource_url=<run URL>` for each: one known flake, one real regression, one infrastructure failure. Compare each classification with what actually happened.
+6. Go live on approval with `MODE: act` in PARAMETERS: `gh variable set LEVER_MAIN_RED_TRIAGE_LIVE --body true`. Pair with an [improver](../improver/README.md): `GOOD_OUTCOME: classification matched the eventual fix`, `BAD_OUTCOME: a human relabeled the issue or the blamed commit was wrong`.

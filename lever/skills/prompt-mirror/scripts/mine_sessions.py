@@ -1,20 +1,30 @@
 #!/usr/bin/env python3
-"""Extract your own typed messages from local Copilot session history.
+"""Extract your own typed messages from local Claude Code session history.
 
 Stdlib only. Read-only on the inputs. Writes a local, redacted dataset plus
 aggregate stats for prompt-mirror and steer-once. Nothing leaves the machine.
 
-Sources (both optional, merged, de-duplicated by session):
-  ~/.copilot/session-state/<session-id>/events.jsonl   high confidence
-  ~/.copilot/session-store.db  (table `turns`)          medium confidence,
-                                                        used only for sessions
-                                                        with no events.jsonl
+Sources (all optional, merged, de-duplicated by session). <home> is
+$CLAUDE_CONFIG_DIR, else ~/.claude:
+  <home>/projects/<encoded-cwd>/<session-id>.jsonl      high confidence
+  <home>/projects/<encoded-cwd>/<session-id>/subagents/agent-*.jsonl
+                                                        subagent traffic, counted
+                                                        as machine messages only
+  <home>/history.jsonl                                  medium confidence typed-
+                                                        prompt log, used only to
+                                                        backfill sessions whose
+                                                        transcript was cleaned up
+
+The transcript format is internal to Claude Code and drifts between releases.
+Readers skip lines they do not understand. Run with --debug-keys to print key
+and value histograms (never message text) when the counts look wrong.
 
 Usage:
   python3 mine_sessions.py                     # last 30 days, redacted text
   python3 mine_sessions.py --since 90d --no-text
   python3 mine_sessions.py --since 2026-01-01 --repo my-org/my-repo
   python3 mine_sessions.py --redact-terms ~/.config/prompt-mirror/terms.txt
+  python3 mine_sessions.py --debug-keys        # format check, no content
 """
 
 from __future__ import annotations
@@ -24,7 +34,6 @@ import csv
 import json
 import os
 import re
-import sqlite3
 import statistics
 import sys
 from collections import Counter, defaultdict
@@ -33,25 +42,42 @@ from pathlib import Path
 
 # ---------------------------------------------------------------- filtering
 
-SCRATCH_CWD = re.compile(r"^(/private)?/(tmp|var/folders)/")
+SCRATCH_CWD = re.compile(r"^(/private)?/(tmp|var/folders)(/|$)")
 RESUME_TEXT = re.compile(r"^\s*continue from where you left off\.?\s*$", re.I)
 # App/agent-generated templates such as "[INLINE CODE REVIEW REQUEST] ...".
 BRACKET_TEMPLATE = re.compile(r"^\s*\[\[?[A-Z][A-Z0-9 _:/\-]{3,}\]")
+# "[Request interrupted by user]" / "... for tool use]": an Esc abort, not typed text.
+INTERRUPT = re.compile(r"^\s*\[Request interrupted by user\b")
 # Injected context blocks that wrap or precede typed text.
 INJECTED_TAGS = (
-    "current_datetime", "system_reminder", "system_notification",
-    "system_notifications", "skill-context", "canvas-context",
-    "agent_merge_state", "sql_tables", "reply_instruction",
-    "cross_session_messaging", "pasted_content",
+    "system-reminder", "system_reminder", "user-prompt-submit-hook",
+    "local-command-caveat", "ide_selection", "ide_opened_file",
+    "session-start-hook", "pasted_content",
 )
 INJECTED_BLOCK = re.compile(
     r"<(%s)\b[^>]*>.*?</\1>" % "|".join(re.escape(t) for t in INJECTED_TAGS),
     re.S,
 )
-# If any of these survive stripping, the message was machine-authored.
-MACHINE_MARKERS = re.compile(
-    r"<(cross_session_message|system_notification|session_automation)\b"
+# Slash commands, ! bash mode and local command output written into the
+# transcript as user turns. Typed, but not prompts: counted, not scored.
+COMMAND_MARKERS = re.compile(
+    r"<(command-name|command-message|command-args|local-command-stdout|"
+    r"local-command-stderr|bash-input|bash-stdout|bash-stderr)>"
 )
+# Skill bodies, hook feedback and compaction summaries injected as user turns.
+META_TEXT = re.compile(
+    r"^\s*(Base directory for this skill:|Stop hook feedback:|"
+    r"\S+ hook (feedback|error)|Caveat: The messages below were generated|"
+    r"This session is being continued from a previous conversation)", re.I)
+# If any of these survive stripping, the message was machine-authored:
+# peer/cross-session messages, wakes, child-session events, webhooks.
+MACHINE_MARKERS = re.compile(
+    r"<(agent-message|wake|child-session-event|webhook-payload|task-notification|"
+    r"scheduled-task|cross_session_message|teammate-message|channel)\b"
+)
+SCHEDULED_MARKERS = re.compile(r"<(wake|scheduled-task)\b")
+# Machine buckets that count as "work following each typed message".
+MACHINE_WORK = ("agent", "agent_kickoff", "automated", "scheduled", "system", "subagent")
 AGENT_REPORT = re.compile(r"^\s*#{1,3} ", re.M)
 # Third-person briefs ("User request verbatim: ...") written by a coordinator.
 AGENT_BRIEF = re.compile(r"\b(user'?s? (request|direction|asks|said|wants)|verbatim|the user)\b", re.I)

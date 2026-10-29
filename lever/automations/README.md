@@ -30,7 +30,13 @@ The `lever-<job>` / `lever-<job>-improver` naming is the grouping; there is no s
 
 ## Conventions shared by every recipe
 
-- **Created paused.** Every install commits the workflow, then runs `gh workflow disable lever-<job>.yml` straight after the push, then verifies with `gh workflow view lever-<job>.yml` and a read-back of the YAML, then dry-runs on three historical items (`gh workflow run lever-<job>.yml -f mode=dry_run -f resource_url=<item>`), then `gh workflow enable` on approval. New automations start at the level the recipe states, never above the repo default on the [autonomy dial](../docs/autonomy.md), and are raised on purpose. (`workflow_dispatch` still works on a disabled workflow? No: a disabled workflow can't be dispatched either. Dry-run before disabling, or enable briefly with only `workflow_dispatch` in `on:`; each recipe's install steps say which.)
+- **Created paused.** Every workflow's event path is gated by a repository variable, `LEVER_<JOB>_LIVE` (job name upper-cased, `-` → `_`), in the job's `if:`; `workflow_dispatch` runs regardless. Every install:
+  1. commits the prompt and workflow, then runs `gh workflow disable lever-<job>.yml` straight after the push, so nothing runs at all;
+  2. verifies with `gh workflow view lever-<job>.yml` and a read-back of the committed YAML (`on:`, `if:`, `permissions:`, `--allowedTools`, `--model`);
+  3. dry-runs on three historical items: `gh workflow enable lever-<job>.yml` (events are still skipped, because the variable is unset; GitHub refuses to dispatch a disabled workflow), then `gh workflow run lever-<job>.yml -f mode=dry_run -f resource_url=<item>` for each;
+  4. goes live on approval: `gh variable set LEVER_<JOB>_LIVE --body true`.
+
+  Pause with `gh workflow disable lever-<job>.yml` (stops everything) or `gh variable delete LEVER_<JOB>_LIVE` (stops events, keeps dispatch). New automations start at the level the recipe states, never above the repo default on the [autonomy dial](../docs/autonomy.md), and are raised on purpose.
 - **PARAMETERS + CONTRACT.** The prompt has two parts. PARAMETERS holds everything that changes between repos and revisions: scope, caps, labels, the autonomy level. CONTRACT holds the rules and changes only through a human-applied revision. Improvers propose changes to one or the other, one line or one rule at a time. The workflow passes `MODE` and `RESOURCE` to the run; they override the file's PARAMETERS for that run only.
 - **Revisions are commits.** The prompt file and workflow live in git, so every revision diffs like code and the commit message is the dated reason. `git log -- .github/lever/automations/<job>/` is the revision history.
 - **Three outcomes.** Every run ends with exactly one of `ACTED(...)`, `NOOP(<reason>)` or `BLOCKED(<reason>)`, followed by a JSON run record written to the job summary (`$GITHUB_STEP_SUMMARY`). NOOP is success: the job exits 0. A run reports failure only when it crashed, timed out or hit a broken tool, so failure counts mean something.
@@ -74,4 +80,6 @@ These come up often enough to be worth building with `automate-it`:
 - **Review-state and label filters live in `if:`.** `pull_request_review` has no `states:` filter and `issues: labeled` has no label filter in `on:`; check `github.event.review.state` or `github.event.label.name` in the job's `if:`. A run skipped by `if:` still shows in the Actions list but costs no model call.
 - **`workflow_run` only sees the default branch's workflow file**, and it fires for the named workflows' runs on any branch. Filter on `github.event.workflow_run.head_branch` and `conclusion` in `if:`.
 
-`gh workflow run ... -f mode=dry_run` starts a real run. The dry run is enforced by the prompt reading `MODE: dry_run` and writing nothing; for a strict dry run, also dispatch a copy of the workflow with read-only `permissions:` and a read-only `--allowedTools` list.
+- **A disabled workflow can't be dispatched.** That's why the pause for dry runs is the `LEVER_<JOB>_LIVE` variable, not `gh workflow disable` alone.
+
+`gh workflow run ... -f mode=dry_run` starts a real run with the job's real permissions. The dry run is enforced by the prompt reading `MODE: dry_run` and writing nothing; for a strict dry run, run the prompt locally instead (`claude -p` with the same `--allowedTools` minus the write entries; see the recipe's install steps).
