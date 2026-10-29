@@ -87,7 +87,7 @@ def db():
         """CREATE TABLE IF NOT EXISTS suggestions(
             id INTEGER PRIMARY KEY,
             created_at TEXT, category TEXT, target TEXT, title TEXT,
-            rationale TEXT, proposed_change TEXT,
+            rationale TEXT, proposed_change TEXT, benefit TEXT,
             evidence TEXT, falsifier TEXT,
             metric_kind TEXT DEFAULT 'none', metric_key TEXT DEFAULT '',
             is_challenge INTEGER DEFAULT 0, is_self_edit INTEGER DEFAULT 0,
@@ -97,6 +97,10 @@ def db():
             eval_verdict TEXT, eval_at TEXT,
             resolved_at TEXT, outcome_note TEXT)"""
     )
+    # additive migration: benefit added after the first release; older DBs lack it
+    cols = {r[1] for r in con.execute("PRAGMA table_info(suggestions)")}
+    if "benefit" not in cols:
+        con.execute("ALTER TABLE suggestions ADD COLUMN benefit TEXT DEFAULT ''")
     return con
 
 
@@ -244,11 +248,12 @@ def state_snapshot(cfg):
     con = db()
     pending = [
         dict(zip(
-            ["id", "category", "title", "slack_channel", "slack_ts", "created_at",
-             "is_self_edit"],
-            [r[0], r[1], r[2], r[3], r[4], r[5], bool(r[6])]))
+            ["id", "category", "title", "benefit", "slack_channel", "slack_ts",
+             "created_at", "is_self_edit"],
+            [r[0], r[1], r[2], r[3], r[4], r[5], r[6], bool(r[7])]))
         for r in con.execute(
-            """SELECT id,category,title,slack_channel,slack_ts,created_at,is_self_edit
+            """SELECT id,category,title,benefit,slack_channel,slack_ts,created_at,
+                      is_self_edit
                FROM suggestions WHERE status='pending' ORDER BY id""")
     ]
     # closed-loop: applied changes old enough to judge, not yet judged
@@ -337,6 +342,9 @@ def cmd_record(args):
         items = [items]
     grounded, challenge, dropped = [], [], []
     for it in items:
+        if not (it.get("benefit") or "").strip():
+            dropped.append({"title": it.get("title"), "why": "no benefit (what does the user gain?)"})
+            continue
         ch = int(it.get("is_challenge", 0))
         if not ch:
             if not (it.get("evidence") or "").strip():
@@ -359,12 +367,13 @@ def cmd_record(args):
     for it in keep:
         cur = con.execute(
             """INSERT INTO suggestions(created_at,category,target,title,rationale,
-               proposed_change,evidence,falsifier,metric_kind,metric_key,
+               proposed_change,benefit,evidence,falsifier,metric_kind,metric_key,
                is_challenge,is_self_edit,status,slack_channel,slack_ts)
-               VALUES(?,?,?,?,?,?,?,?,?,?,?,?, 'pending', ?, ?)""",
+               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?, 'pending', ?, ?)""",
             (now_iso(), it.get("category", ""), it.get("target", ""),
              it.get("title", ""), it.get("rationale", ""),
-             it.get("proposed_change", ""), it.get("evidence", ""),
+             it.get("proposed_change", ""), it.get("benefit", ""),
+             it.get("evidence", ""),
              it.get("falsifier", ""), it.get("metric_kind", "none"),
              it.get("metric_key", ""), int(it.get("is_challenge", 0)),
              int(it.get("is_self_edit", 0)), args.slack_channel, args.slack_ts))
