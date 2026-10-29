@@ -65,7 +65,6 @@ jobs:
       actions: read
       pull-requests: read
       issues: write             # report comment, failure issues, proposal issue, the ## lever state section
-      id-token: write
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
@@ -74,6 +73,7 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
           prompt: |
             MODE: ${{ inputs.mode || 'act' }}
             TRIGGER: ${{ github.event_name }}

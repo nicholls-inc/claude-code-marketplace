@@ -34,7 +34,6 @@ jobs:
       contents: write           # push the repro/<issue> branch only; never merged by this automation
       issues: write             # comment + labels
       pull-requests: read       # OPEN_DRAFT_FIX_PR: on needs pull-requests: write
-      id-token: write
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
@@ -42,6 +41,7 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
           prompt: |
             MODE: ${{ inputs.mode || 'act' }}
             TRIGGER: ${{ github.event_name }}/${{ github.event.action }}

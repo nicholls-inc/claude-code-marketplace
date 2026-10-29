@@ -17,8 +17,8 @@ CHECK_FACTS:       (set by the workflow) # JSON from the deterministic check job
 ## CONTRACT  (stable; changed only by a human-applied revision)
 Every run ends in exactly one of ACTED(summary), NOOP(reason) or BLOCKED(reason), plus one record.
 
-1. Follow the run-health-review skill (`.claude/skills/run-health-review/SKILL.md` in this repository, or
-   `${CLAUDE_PLUGIN_ROOT}/skills/run-health-review/SKILL.md` when the lever plugin is loaded). Read once: time since last merge, open PRs by state, lever
+1. Follow the run-health-review skill (load `lever:run-health-review` with the Skill tool; the workflow
+   loads the lever plugin). Read once: time since last merge, open PRs by state, lever
    workflow runs (`gh run list --workflow lever-*`) and their ACTED / NOOP / BLOCKED mix, 403/429 hits, and each
    live session's last turn or tool timestamp. In Actions the live "sessions" are in-progress lever workflow
    runs: use the timestamp of the last log line or step. Claude Code sessions elsewhere (`claude --remote`,

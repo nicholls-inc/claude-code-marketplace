@@ -37,7 +37,7 @@ A healthy hour costs one cheap job and posts nothing. The gate is deliberately s
 | `diagnose` | `contents: read`, `pull-requests: read`, `actions: read`, `issues: write` | `Read`, `Grep`, `Glob`, `Skill`, `Bash(gh pr list:*)`, `Bash(gh pr view:*)`, `Bash(git log:*)`, `Bash(gh run list:*)`, `Bash(gh run view:*)`, `Bash(gh workflow list:*)`, `Bash(gh workflow view:*)`, `Bash(gh issue comment:*)` (one comment on `REPORT_ISSUE`) |
 | Rekick (optional) | `actions: write` | + `Bash(gh run rerun:*)`, `Bash(gh workflow run:*)`. Add them only when you raise `TAKEOVER` above `propose` |
 
-In Actions the live "sessions" are in-progress lever workflow runs, read with `gh run view`. Claude Code sessions elsewhere (`claude --remote`, `/loop`) are not visible from a workflow. No merge, push, `gh workflow enable|disable` or edit tools. The prompt follows the [`run-health-review`](../../skills/run-health-review/SKILL.md) skill: copy it to `.claude/skills/run-health-review/` in the repository, or load the lever plugin in the action (check the action's current docs for its plugin inputs).
+In Actions the live "sessions" are in-progress lever workflow runs, read with `gh run view`. Claude Code sessions elsewhere (`claude --remote`, `/loop`) are not visible from a workflow. No merge, push, `gh workflow enable|disable` or edit tools. The prompt follows the [`run-health-review`](../../skills/run-health-review/SKILL.md) skill: the workflow loads the lever plugin with the action's `plugin_marketplaces: https://github.com/nicholls-inc/claude-code-marketplace.git` and `plugins: lever@nicholls` inputs, and the prompt loads `lever:run-health-review` with the `Skill` tool. Don't copy the skill into `.claude/skills/`.
 
 ## Dials
 

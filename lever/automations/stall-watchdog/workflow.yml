@@ -4,7 +4,7 @@
 # For RUNNER: routine, delete `diagnose` and see README "Runner".
 # Model: diagnose = sonnet (standard) because it classifies from counts and timestamps; no premium reason.
 # Install: copy to .github/workflows/lever-stall-watchdog.yml and prompt.md to .github/lever/automations/stall-watchdog/prompt.md.
-# The prompt follows the run-health-review skill: commit a copy of the lever plugin's skills/run-health-review/ to .claude/skills/run-health-review/.
+# The prompt follows the run-health-review skill, loaded from the lever plugin (plugin_marketplaces + plugins below).
 name: lever-stall-watchdog
 on:
   schedule:
@@ -74,13 +74,15 @@ jobs:
       pull-requests: read
       actions: read             # TAKEOVER above propose adds actions: write for reruns and re-dispatch
       issues: write             # one comment on REPORT_ISSUE
-      id-token: write
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          plugin_marketplaces: https://github.com/nicholls-inc/claude-code-marketplace.git
+          plugins: lever@nicholls
           prompt: |
             MODE: ${{ inputs.mode || 'act' }}
             TRIGGER: signal from the deterministic check job
