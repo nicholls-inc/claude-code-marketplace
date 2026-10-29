@@ -174,6 +174,8 @@ jobs:
         run: jq -r '[.[] | select(.type == "result")] | last | .result // "no result"' "$EXEC_FILE" >> "$GITHUB_STEP_SUMMARY"
 ```
 
+If the prompt uses lever skills, add `plugin_marketplaces: https://github.com/nicholls-inc/claude-code-marketplace.git` and `plugins: lever@nicholls` to the action's `with:` rather than copying skills into `.claude/skills/`.
+
 Deterministic jobs use the same `on:`, `if:`, `concurrency:` and `permissions:` with `run:` steps (`gh`, `actions/github-script`, `python3 script.py`) instead of the action, and no secret. A hybrid adds the LLM job with `needs: watch` and `if: needs.watch.outputs.signal == 'true'`.
 
 ## Routine (`routine`, LLM-driven)
