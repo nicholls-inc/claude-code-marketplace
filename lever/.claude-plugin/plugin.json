@@ -1,7 +1,7 @@
 {
   "name": "lever",
   "displayName": "lever",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Feedback loops for coding agents. Find the metric, let agents iterate against it, and move repeatable work into GitHub Actions automations, with an autonomy dial you control. Ported from github/lever.",
   "author": {
     "name": "nicholls-inc",
@@ -10,5 +10,11 @@
   "homepage": "https://github.com/nicholls-inc/claude-code-marketplace/tree/main/lever",
   "repository": "https://github.com/nicholls-inc/claude-code-marketplace",
   "license": "MIT",
-  "keywords": ["skills", "feedback-loops", "ci", "automations", "autonomy"]
+  "keywords": [
+    "skills",
+    "feedback-loops",
+    "ci",
+    "automations",
+    "autonomy"
+  ]
 }
