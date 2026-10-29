@@ -1,0 +1,83 @@
+# lever-pr-shepherd: green on the exact head, threads dispositioned, landed at AUTONOMY (default L2: mark ready, a human lands).
+# Model: sonnet (standard) because most runs are reads and small fixes; premium only where fixes are subtle (record why here).
+# Install as .github/workflows/lever-pr-shepherd.yml; prompt at .github/lever/automations/pr-shepherd/prompt.md.
+# Token: no github_token input, so the action uses the Claude GitHub App token (id-token: write). Its pushes start CI;
+# GITHUB_TOKEN pushes would not. The App installation's permissions, not the block below, are then the agent's ceiling.
+name: lever-pr-shepherd
+on:
+  pull_request:
+    types: [labeled]          # opt-in; synchronize left out on purpose (CI reporting is what matters)
+  workflow_run:
+    workflows: [CI]           # REQUIRED_WORKFLOWS: replace with your required CI workflow name(s)
+    types: [completed]
+  pull_request_review:
+    types: [submitted]
+  schedule:
+    - cron: '23 * * * *'      # hourly sweep: lands PRs that went green, catches conflicts and missed events
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [dry_run, act]
+        default: dry_run
+      resource_url:
+        description: PR URL to shepherd
+        type: string
+        required: false
+concurrency:
+  # One run per PR; never cancel a run that may be mid-push.
+  group: lever-pr-shepherd-${{ github.event.pull_request.number || github.event.workflow_run.pull_requests[0].number || 'sweep' }}
+  cancel-in-progress: false
+jobs:
+  run:
+    # Paused until `gh variable set LEVER_PR_SHEPHERD_LIVE --body true`; dispatch always runs.
+    # workflow_run keeps the shepherd's own pushes on purpose (its fix can fail); MAX_FIX_PUSHES caps that loop.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (vars.LEVER_PR_SHEPHERD_LIVE == 'true' && (
+        github.event_name == 'schedule' ||
+        (github.event_name == 'pull_request' && github.event.label.name == 'shepherd') ||
+        (github.event_name == 'workflow_run' &&
+         github.event.workflow_run.conclusion == 'failure' &&
+         github.event.workflow_run.event == 'pull_request') ||
+        (github.event_name == 'pull_request_review' &&
+         contains(github.event.pull_request.labels.*.name, 'shepherd') &&
+         (github.event.review.state == 'changes_requested' || github.event.review.state == 'commented') &&
+         github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write         # push fixes to the PR branch
+      pull-requests: write    # replies, resolve, mark ready
+      issues: write           # one flake issue per test
+      actions: write          # gh run rerun; gh workflow enable/disable is NOT in the tool list
+      checks: read
+      id-token: write         # Claude GitHub App token exchange
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            RESOURCE: ${{ inputs.resource_url || github.event.pull_request.html_url || github.event.workflow_run.html_url || 'sweep' }}
+            TRIGGER: ${{ github.event_name }}/${{ github.event.action || 'manual' }}
+            HEAD_SHA_AT_TRIGGER: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha || 'n/a' }}
+            REPOSITORY: ${{ github.repository }}
+            Follow .github/lever/automations/pr-shepherd/prompt.md exactly.
+            MODE above overrides the file's MODE for this run.
+          # L2 tool list. Replace Bash(make test:*) with your TEST_COMMAND.
+          # L3/L4 only: append ,Bash(gh pr merge:*) and change AUTONOMY in the same commit.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 60
+            --allowedTools "Read,Grep,Glob,Edit,Write,Bash(gh pr view:*),Bash(gh pr list:*),Bash(gh pr diff:*),Bash(gh pr checks:*),Bash(gh run view:*),Bash(gh run list:*),Bash(gh run rerun:*),Bash(gh api --method GET:*),Bash(gh api graphql:*),Bash(gh api --method POST repos/*/pulls/*/comments/*/replies *),Bash(gh pr comment:*),Bash(gh pr ready:*),Bash(gh issue list:*),Bash(gh search issues:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(git status:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(git fetch:*),Bash(git checkout:*),Bash(git merge:*),Bash(git add:*),Bash(git commit:*),Bash(git push origin HEAD:*),Bash(make test:*)"
+      - name: Run record to job summary
+        if: always() && steps.claude.outputs.execution_file != ''
+        env:
+          EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
+        run: |
+          jq -r '[.[] | select(.type == "result")] | last | .result // "no result"' "$EXEC_FILE" >> "$GITHUB_STEP_SUMMARY"

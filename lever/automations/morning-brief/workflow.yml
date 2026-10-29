@@ -1,0 +1,41 @@
+# lever-morning-brief: daily focus brief posted as one comment on a pinned digest issue. Reads, then posts in one place.
+# Model: sonnet (standard) because ranking ten issues does not need premium.
+# Install: copy to .github/workflows/lever-morning-brief.yml and prompt.md to .github/lever/automations/morning-brief/prompt.md.
+# Alternative with no workflow file: a Claude Code cloud scheduled task (/schedule), see README.
+name: lever-morning-brief
+on:
+  schedule:
+    - cron: "13 15 * * 1-5"      # weekdays, UTC. Set to your wake hour; cron has no timezone, so DST shifts it an hour.
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+concurrency:
+  group: lever-morning-brief
+  cancel-in-progress: false
+jobs:
+  run:
+    # Created paused: the schedule runs only once LEVER_MORNING_BRIEF_LIVE=true; dispatch always runs.
+    if: github.event_name == 'workflow_dispatch' || vars.LEVER_MORNING_BRIEF_LIVE == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write             # one comment on DIGEST_ISSUE
+      pull-requests: read
+      actions: read             # main CI and lever workflow run status
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}
+            Follow .github/lever/automations/morning-brief/prompt.md exactly.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 20
+            --allowedTools "Read,Grep,Glob,Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh run list:*),Bash(gh workflow list:*),Bash(git log:*),Bash(gh issue comment:*)"
+          # No labels, no closes, no code: a brief that changes things isn't a brief.

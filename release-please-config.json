@@ -23,6 +23,18 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "lever": {
+      "release-type": "simple",
+      "package-name": "lever",
+      "component": "lever",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,56 @@
+# lever-repro-gate: classify new issues; label repro-confirmed only with a failing test the run wrote itself.
+# Model: sonnet (standard) because repros are small; move to opus only if repros routinely need deep code reading, and record why here.
+# Install: copy to .github/workflows/lever-repro-gate.yml and prompt.md to .github/lever/automations/repro-gate/prompt.md.
+# Outside reporters: the action refuses runs triggered by actors without write access, so their new issues are picked up by the daily sweep (a schedule run), not the `opened` event.
+name: lever-repro-gate
+on:
+  issues:
+    types: [opened, labeled]     # labeled: only `needs-repro` passes the job `if:`
+  schedule:
+    - cron: "23 6 * * *"         # daily sweep: open issues from the last 7 days with none of the gate's labels
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+      resource_url: { type: string, required: false, description: "Issue URL" }
+concurrency:
+  group: lever-repro-gate-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+jobs:
+  run:
+    # Created paused: events and sweep run only once LEVER_REPRO_GATE_LIVE=true; dispatch always runs.
+    # Filter at the trigger: opened issues without the gate's labels, or the needs-repro label event.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (vars.LEVER_REPRO_GATE_LIVE == 'true' &&
+       github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]' &&
+       (github.event_name == 'schedule' ||
+        (github.event.action == 'opened' &&
+         !contains(github.event.issue.labels.*.name, 'needs-info') &&
+         !contains(github.event.issue.labels.*.name, 'repro-confirmed')) ||
+        (github.event.action == 'labeled' && github.event.label.name == 'needs-repro')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30         # REPRO_BUDGET is 20 minutes of work per issue; the rest is checkout and test setup
+    permissions:
+      contents: write           # push the repro/<issue> branch only; never merged by this automation
+      issues: write             # comment + labels
+      pull-requests: read       # OPEN_DRAFT_FIX_PR: on needs pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      # Set up the repo's toolchain here (node, python, go...) so TEST_COMMAND runs.
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}/${{ github.event.action }}
+            RESOURCE: ${{ inputs.resource_url || github.event.issue.html_url || 'sweep' }}
+            Follow .github/lever/automations/repro-gate/prompt.md exactly.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 40
+            --allowedTools "Read,Write,Edit,Grep,Glob,Bash(npm test:*),Bash(git checkout -b repro/*),Bash(git add:*),Bash(git commit:*),Bash(git push origin repro/*),Bash(git log:*),Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh pr list:*),Bash(gh pr view:*)"
+          # Replace Bash(npm test:*) with the repo's TEST_COMMAND pattern.
+          # OPEN_DRAFT_FIX_PR: on adds Bash(gh pr create --draft:*) and pull-requests: write.
+          # No issue-close, no merge, no review tools, no secrets.

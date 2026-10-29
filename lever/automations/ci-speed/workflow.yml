@@ -1,0 +1,99 @@
+# lever-ci-speed: one workflow, two jobs.
+# `watch` is DETERMINISTIC (plain GitHub Actions, python3 + gh, no model, no API key): it measures time-to-green on real PRs and opens ONE goal issue when a target is missed.
+# `lane` is LLM-driven (RUNNER: gha, anthropics/claude-code-action@v1) and runs only on signal: the watch opened a goal, a human labeled an issue ci-goal, or a dispatch.
+# For RUNNER: routine, delete the `lane` job and see README "Runner".
+# Model: lane = opus (premium) because judging paired-run evidence and writing reviewable changes is the whole job; the cheap watch, the label, one goal at a time and a daily run limit gate it.
+# Install: copy to .github/workflows/lever-ci-speed.yml, ci_watch.py to .github/lever/automations/ci-speed/ci_watch.py, prompt.md next to it.
+# The lane follows the experiment-arms skill: the action loads the lever plugin, and a sparse checkout of the plugin at .lever-plugin/ gives the scripts a fixed path.
+name: lever-ci-speed
+on:
+  schedule:
+    - cron: "47 4 * * *"         # daily, off-peak (UTC). The watch runs here.
+  issues:
+    types: [labeled]             # a human-applied ci-goal label also wakes the lane; the job `if:` passes only that label
+  workflow_dispatch:
+    inputs:
+      role: { type: choice, options: [watch, lane], default: watch }
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+      resource_url: { type: string, required: false, description: "Goal issue URL (lane)" }
+jobs:
+  watch:
+    # Created paused: the schedule runs only once LEVER_CI_SPEED_LIVE=true; dispatch always runs.
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.role == 'watch') ||
+      (github.event_name == 'schedule' && vars.LEVER_CI_SPEED_LIVE == 'true')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: lever-ci-speed-watch
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+      issues: write             # open/update ONE goal issue
+    outputs:
+      goal_issue: ${{ steps.watch.outputs.goal_issue }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: watch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Set from your baseline (README step 1):
+          REQUIRED_WORKFLOWS: "CI"
+          TARGET_P50_MIN: "12"
+          TARGET_P90_MIN: "25"
+          TARGET_FIRST_TRY_PASS: "80"
+        run: |
+          python3 .github/lever/automations/ci-speed/ci_watch.py \
+            --workflows "$REQUIRED_WORKFLOWS" --p50 "$TARGET_P50_MIN" --p90 "$TARGET_P90_MIN" \
+            --first-try "$TARGET_FIRST_TRY_PASS" --hours 9-17 \
+            ${{ (github.event_name == 'workflow_dispatch' && inputs.mode == 'dry_run') && '--dry-run' || '' }}
+  lane:
+    # Hybrid hand-off: runs only on signal. Chained with `needs`, so the watch's issue (created with the default token, which
+    # starts no workflow) still wakes the lane without any bot-actor exception. Loops are stopped by (1) one open goal at a time
+    # (a second wake on an owned goal is NOOP(owned)), (2) LANE_RUNS_PER_DAY in the prompt (start at 2), (3) the concurrency group.
+    needs: [watch]
+    if: >-
+      always() && (
+        (github.event_name == 'workflow_dispatch' && inputs.role == 'lane') ||
+        (vars.LEVER_CI_SPEED_LIVE == 'true' && (
+          (needs.watch.result == 'success' && needs.watch.outputs.goal_issue != '') ||
+          (github.event_name == 'issues' && github.event.label.name == 'ci-goal' &&
+           github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]'))))
+    runs-on: ubuntu-latest
+    timeout-minutes: 360         # hosted-runner maximum; progress is written to the goal issue, so a timed-out run can be resumed by dispatch
+    concurrency:
+      group: lever-ci-speed-lane
+      cancel-in-progress: false
+    permissions:
+      contents: write           # push do-not-merge arm branches. The default token cannot push .github/workflows/ changes; keep it that way.
+      pull-requests: write
+      issues: write
+      actions: write            # rerun failed arm jobs
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/checkout@v4   # lever's experiment-arms scripts, at a path --allowedTools can name
+        with:
+          repository: nicholls-inc/claude-code-marketplace
+          path: .lever-plugin
+          sparse-checkout: lever/skills/experiment-arms
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          plugin_marketplaces: https://github.com/nicholls-inc/claude-code-marketplace.git
+          plugins: lever@nicholls
+          prompt: |
+            ROLE: lane
+            ARMS_SCRIPTS: .lever-plugin/lever/skills/experiment-arms/scripts
+            MODE: ${{ inputs.mode || 'act' }}
+            RESOURCE: ${{ inputs.resource_url || (needs.watch.outputs.goal_issue && format('{0}/{1}/issues/{2}', github.server_url, github.repository, needs.watch.outputs.goal_issue)) || github.event.issue.html_url }}
+            Follow .github/lever/automations/ci-speed/prompt.md exactly (ROLE: lane section).
+          claude_args: |
+            --model claude-opus-5-5
+            --max-turns 200
+            --allowedTools "Skill,Read,Write,Edit,Grep,Glob,Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/ci_arm_metrics.py:*),Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/ci_arm_driver.py:*),Bash(python3 .lever-plugin/lever/skills/experiment-arms/scripts/arm_stats.py:*),Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push origin ci-arm/*),Bash(git log:*),Bash(git diff:*),Bash(gh run list:*),Bash(gh run view:*),Bash(gh run rerun:*),Bash(gh pr create:*),Bash(gh pr edit:*),Bash(gh pr ready:*),Bash(gh pr close:*),Bash(gh pr comment:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh issue close:*)"
+          # No `gh run cancel`: the lane never relies on cancelling a run; it pushes a new commit or waits.
+          # `gh pr merge` only with a standing grant. Never gh workflow enable|disable.

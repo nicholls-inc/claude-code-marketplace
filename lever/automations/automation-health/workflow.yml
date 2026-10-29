@@ -1,0 +1,87 @@
+# lever-automation-health: weekly review of every lever-* workflow. Hybrid.
+# `measure` is DETERMINISTIC (plain GitHub Actions: python3 + gh, no model, no API key): inventory, `gh run list --workflow lever-*` counts,
+# outcomes from run logs, the mechanical least-privilege lint of `permissions:` and `--allowedTools`, and the failure-repeat counter.
+# `review` is LLM-driven (RUNNER: gha, claude-code-action): judges permissions against each contract, picks ONE proposal or none, writes the report.
+# On a worker failure `review` runs only when the repeat threshold is reached.
+# Model: review = sonnet (standard) because it counts and compares; no premium reason.
+# For RUNNER: routine, delete `review` and see README "Runner". Install: copy to .github/workflows/lever-automation-health.yml,
+# health_check.py and prompt.md to .github/lever/automations/automation-health/.
+name: lever-automation-health
+on:
+  schedule:
+    - cron: "37 16 * * 1"        # weekly, Monday
+  workflow_run:
+    # List every lever worker by its `name:`. Add each new worker here when you create it.
+    workflows: [lever-main-red-triage, lever-repro-gate, lever-precision-review, lever-pr-shepherd, lever-morning-brief, lever-stall-watchdog, lever-ci-speed, lever-audit-lane]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+concurrency:
+  group: lever-automation-health
+  cancel-in-progress: false
+env:
+  STATE_ISSUE: "0"               # number of the pinned "Automation health" issue (REPORT_ISSUE)
+jobs:
+  measure:
+    # Created paused: schedule and failure events run only once LEVER_AUTOMATION_HEALTH_LIVE=true; dispatch always runs.
+    # Failure path: crashed or timed out only; a NOOP is a success and never wakes this job.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (vars.LEVER_AUTOMATION_HEALTH_LIVE == 'true' &&
+       (github.event_name == 'schedule' ||
+        contains(fromJSON('["failure","timed_out"]'), github.event.workflow_run.conclusion)))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read            # reads .github/workflows/lever-*.yml for the lint; never writes
+      actions: read             # gh run list --workflow lever-*, run logs
+      issues: write             # rewrite only the ## lever state block of the report issue
+    outputs:
+      escalate: ${{ steps.measure.outputs.escalate }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -c 'import yaml' 2>/dev/null || python3 -m pip install --user --break-system-packages pyyaml
+      - id: measure
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 .github/lever/automations/automation-health/health_check.py \
+            --mode "${{ github.event_name == 'workflow_run' && 'failure' || 'weekly' }}" \
+            --state-issue "$STATE_ISSUE" --out health.json \
+            --failed-workflow "${{ github.event.workflow_run.name }}" \
+            --failed-conclusion "${{ github.event.workflow_run.conclusion }}" \
+            --failed-run "${{ github.event.workflow_run.html_url }}" \
+            ${{ (github.event_name == 'workflow_dispatch' && inputs.mode == 'dry_run') && '--dry-run' || '' }}
+      - uses: actions/upload-artifact@v4
+        with: { name: health, path: health.json }
+  review:
+    needs: [measure]
+    if: github.event_name != 'workflow_run' || needs.measure.outputs.escalate == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+      issues: write             # report comment, failure issues, proposal issue, the ## lever state section
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/download-artifact@v4
+        with: { name: health }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}
+            HEALTH_JSON: health.json   (deterministic output of the measure job: rules 0-4 are already computed)
+            FAILED_RUN: ${{ github.event.workflow_run.html_url || 'none' }}
+            Follow .github/lever/automations/automation-health/prompt.md exactly.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 40
+            --allowedTools "Read,Grep,Glob,Bash(gh workflow list:*),Bash(gh workflow view:*),Bash(gh run list:*),Bash(gh run view:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh pr list:*),Bash(gh pr view:*)"
+          # Never: gh workflow enable|disable, any write to .github/, git push. The proposal is an issue with a prompt diff; a human applies it by PR.

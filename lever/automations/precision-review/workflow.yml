@@ -1,0 +1,65 @@
+# lever-precision-review: <=2 proven findings per PR, inline COMMENT only, silent by default.
+# Model: opus (premium) because proof quality is the product; the draft filter and per-PR concurrency carry the cost.
+# Install as .github/workflows/lever-precision-review.yml; prompt at .github/lever/automations/precision-review/prompt.md.
+name: lever-precision-review
+on:
+  pull_request:
+    types: [ready_for_review, opened, synchronize]
+    # paths-ignore: ['**/*.lock', 'vendor/**', '**/__snapshots__/**']   # SKIP_PATHS at the trigger
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [dry_run, act]
+        default: dry_run
+      resource_url:
+        description: PR URL to review (dry_run accepts merged PRs)
+        type: string
+        required: false
+concurrency:
+  group: lever-precision-review-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  run:
+    # Paused until `gh variable set LEVER_PRECISION_REVIEW_LIVE --body true`; dispatch always runs.
+    # Drafts skipped at the trigger; own and bot pushes don't wake it.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (vars.LEVER_PRECISION_REVIEW_LIVE == 'true' &&
+       github.event.pull_request.draft == false &&
+       github.actor != 'claude[bot]' &&
+       github.actor != 'github-actions[bot]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || '' }}
+      - id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Use the job token so `permissions:` above is the ceiling; comments post as github-actions[bot].
+          github_token: ${{ github.token }}
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            RESOURCE: ${{ inputs.resource_url || github.event.pull_request.html_url }}
+            TRIGGER: ${{ github.event_name }}/${{ github.event.action || 'manual' }}
+            HEAD_SHA_AT_TRIGGER: ${{ github.event.pull_request.head.sha || 'n/a' }}
+            REPOSITORY: ${{ github.repository }}
+            Follow .github/lever/automations/precision-review/prompt.md exactly.
+            MODE above overrides the file's MODE for this run.
+          claude_args: |
+            --model claude-opus-5-5
+            --max-turns 30
+            --allowedTools "Read,Grep,Glob,Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh api --method GET:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(git fetch origin:*),mcp__github_inline_comment__create_inline_comment"
+      - name: Run record to job summary
+        if: always() && steps.claude.outputs.execution_file != ''
+        env:
+          EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
+        run: |
+          jq -r '[.[] | select(.type == "result")] | last | .result // "no result"' "$EXEC_FILE" >> "$GITHUB_STEP_SUMMARY"

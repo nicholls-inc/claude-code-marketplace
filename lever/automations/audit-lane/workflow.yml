@@ -1,0 +1,77 @@
+# lever-audit-lane: read-only auditor on a schedule. Hybrid.
+# `gate` is DETERMINISTIC (plain GitHub Actions: gh + jq, no model, no API key): reads the watermark from the "## lever state" block of the state issue and
+# compares it with the current source and reference SHAs. If nothing moved it ends the run silently; the model is never called.
+# `audit` is LLM-driven (RUNNER: gha, claude-code-action): picks one slice, audits it against the baseline, files at most MAX_NEW_ISSUES issues, rewrites state.
+# VARIANT: logs has no SHA to compare: set the repo variable LEVER_AUDIT_LANE_GATE=off and the audit job runs on every tick.
+# For RUNNER: routine, delete `audit` (keep or drop `gate`) and see README "Runner".
+# Model: audit = opus (premium) because judgment is the whole job (about one session per non-silent run); lower the tier for a sharp, rule-based signal. This is the reason to keep here.
+# Install: copy to .github/workflows/lever-audit-lane.yml and prompt.md to .github/lever/automations/audit-lane/prompt.md.
+name: lever-audit-lane
+on:
+  schedule:
+    - cron: "29 * * * *"         # hourly (parity); use "29 */6 * * *" for the logs variant
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+concurrency:
+  group: lever-audit-lane
+  cancel-in-progress: false
+env:
+  STATE_ISSUE: "0"               # number of the pinned "audit-lane state" issue
+  REFERENCE_REPO: ""             # parity: owner/repo of the reference implementation
+  REFERENCE_BRANCH: "main"
+jobs:
+  gate:
+    # Created paused: the schedule runs only once LEVER_AUDIT_LANE_LIVE=true; dispatch always runs.
+    if: github.event_name == 'workflow_dispatch' || vars.LEVER_AUDIT_LANE_LIVE == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: read
+    outputs:
+      moved: ${{ steps.gate.outputs.moved }}
+    steps:
+      - id: gate
+        env:
+          GH_TOKEN: ${{ github.token }}   # reading a private REFERENCE_REPO needs a token that can read it: use a read-only PAT secret instead
+        run: |
+          set -euo pipefail
+          if [ "${{ vars.LEVER_AUDIT_LANE_GATE }}" = off ]; then echo "moved=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          body=$(gh issue view "$STATE_ISSUE" --repo "$GITHUB_REPOSITORY" --json body -q .body)
+          state=$(printf '%s\n' "$body" | awk '/^## lever state/{f=1;next} f&&/^```json/{g=1;next} g&&/^```/{exit} g')
+          src=$(gh api "repos/$GITHUB_REPOSITORY/commits/$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)" -q .sha)
+          ref=""; [ -n "$REFERENCE_REPO" ] && ref=$(gh api "repos/$REFERENCE_REPO/commits/$REFERENCE_BRANCH" -q .sha)
+          [ -n "$state" ] || state='{}'
+          old_src=$(jq -r '.source_sha // ""' <<<"$state" 2>/dev/null || echo "")
+          old_ref=$(jq -r '.reference_sha // ""' <<<"$state" 2>/dev/null || echo "")
+          moved=true; [ -n "$old_src" ] && [ "$old_src" = "$src" ] && [ "$old_ref" = "$ref" ] && moved=false
+          echo "moved=$moved" >> "$GITHUB_OUTPUT"
+          echo "NOOP(no change) if moved=false. moved=$moved source=$src reference=$ref" | tee -a "$GITHUB_STEP_SUMMARY"
+  audit:
+    needs: [gate]
+    if: needs.gate.outputs.moved == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read            # read-only identity; the auditor never changes code
+      issues: write             # file issues, comment, rewrite the ## lever state block
+      pull-requests: read       # dedup: skip a finding when an open PR already touches its files
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}
+            Follow .github/lever/automations/audit-lane/prompt.md exactly.
+          claude_args: |
+            --model claude-opus-5-5
+            --max-turns 60
+            --allowedTools "Read,Grep,Glob,Bash(git clone --filter=blob:none --sparse:*),Bash(git sparse-checkout:*),Bash(git -C:*),Bash(git log:*),Bash(git diff:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh issue edit:*),Bash(gh pr list:*),Bash(gh pr view:*)"
+          # Read the reference with git (sparse clone), not the REST API: it drained a shared rate-limit budget.
+          # Logs variant: add the read-only, aggregate-only query tool for your log store; no raw log lines or secrets in issues.
+          # No code writes, no PRs, no closes.

@@ -1,0 +1,89 @@
+# lever-main-red-triage: classify default-branch CI failures (flake/regression/infra), act once, keep one issue per cause. Hybrid.
+# `rerun` is DETERMINISTIC (plain GitHub Actions, gh only, no model, no API key): rerun the failed jobs once (MAX_RERUNS: 1).
+# `triage` is LLM-driven (RUNNER: gha, claude-code-action): classifies from logs and the rerun's result, keeps one issue per cause. It runs after
+# `rerun` has watched the rerun to completion and passes its conclusion in, so it sees whether the same signature passed on the same commit.
+# It does not wait for a second workflow_run event: a rerun requested with GITHUB_TOKEN may not emit one. Set the repo variable
+# LEVER_MAIN_RED_TRIAGE_RERUN=false for ACTION: notify (no rerun): then triage runs on the first failure.
+# For RUNNER: routine, delete `triage` and see README "Runner".
+# Model: triage = sonnet (standard) because classification is log reading plus a small decision; use opus only if log reading is the bottleneck, and record why here.
+# Install: copy to .github/workflows/lever-main-red-triage.yml and prompt.md to .github/lever/automations/main-red-triage/prompt.md.
+# For ACTION: fix_pr, change `contents` and `pull-requests` on triage to write and add the git/gh pr tools shown at the bottom.
+name: lever-main-red-triage
+on:
+  workflow_run:
+    workflows: ["CI"]            # WATCHED_WORKFLOWS: the exact `name:` of your CI workflow(s)
+    types: [completed]
+  schedule:
+    - cron: "17 * * * *"         # hourly sweep: missed events, and did the rerun pass / the fix PR land
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+      resource_url: { type: string, required: false, description: "Failed run URL to classify" }
+concurrency:
+  group: lever-main-red-triage-${{ github.event.workflow_run.id || github.run_id }}
+  cancel-in-progress: false
+jobs:
+  rerun:
+    # Created paused: runs only once LEVER_MAIN_RED_TRIAGE_LIVE=true. First failure of a default-branch run only.
+    if: >-
+      vars.LEVER_MAIN_RED_TRIAGE_LIVE == 'true' && vars.LEVER_MAIN_RED_TRIAGE_RERUN != 'false' &&
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.run_attempt == 1 &&
+      github.event.workflow_run.head_branch == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 60         # bounded by your CI's duration: this job waits for the rerun (cheap runner minutes, no model)
+    permissions:
+      actions: write            # rerun failed jobs; nothing else
+    outputs:
+      conclusion: ${{ steps.watch.outputs.conclusion }}
+    steps:
+      - id: watch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          gh run rerun "$RUN_ID" --failed --repo "$GITHUB_REPOSITORY"
+          sleep 15
+          gh run watch "$RUN_ID" --repo "$GITHUB_REPOSITORY" --interval 60 > /dev/null || true
+          echo "conclusion=$(gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion -q .conclusion)" >> "$GITHUB_OUTPUT"
+  triage:
+    needs: [rerun]
+    # Created paused: event and schedule paths run only once LEVER_MAIN_RED_TRIAGE_LIVE=true; dispatch always runs.
+    # Filter at the trigger: first failure of a default-branch run, after `rerun` finished (or straight away when reruns are off); never our own echoes.
+    if: >-
+      always() && (
+        github.event_name == 'workflow_dispatch' ||
+        (vars.LEVER_MAIN_RED_TRIAGE_LIVE == 'true' &&
+         github.actor != 'claude[bot]' && github.actor != 'github-actions[bot]' &&
+         (github.event_name == 'schedule' ||
+          (github.event_name == 'workflow_run' &&
+           github.event.workflow_run.head_branch == github.event.repository.default_branch &&
+           github.event.workflow_run.conclusion == 'failure' &&
+           github.event.workflow_run.run_attempt == 1))))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read
+      issues: write             # one issue per cause
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}
+            RERUN_DONE: ${{ needs.rerun.result == 'success' && format('yes (deterministic rerun job; rerun conclusion: {0})', needs.rerun.outputs.conclusion) || 'no' }}
+            RESOURCE: ${{ inputs.resource_url || github.event.workflow_run.html_url || 'sweep' }}
+            Follow .github/lever/automations/main-red-triage/prompt.md exactly.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 25
+            --allowedTools "Read,Grep,Glob,Bash(gh run list:*),Bash(gh run view:*),Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh issue list:*),Bash(gh issue view:*),Bash(gh issue create:*),Bash(gh issue comment:*)"
+          # ACTION: fix_pr adds: Edit,Write,Bash(git checkout:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(gh pr create:*)
+          # L3 test-only-main-fix grant adds: Bash(gh pr merge:*)   (never otherwise)

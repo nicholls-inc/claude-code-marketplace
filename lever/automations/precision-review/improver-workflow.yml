@@ -1,0 +1,66 @@
+# lever-precision-review-improver: proposes one revision a week for lever-precision-review, as an issue. Propose-only.
+# Model: sonnet (standard) because it counts outcomes and drafts one diff; premium only if proposals get rejected for poor reasoning.
+# Install as .github/workflows/lever-precision-review-improver.yml; prompt at
+# .github/lever/automations/precision-review/improver-prompt.md.
+name: lever-precision-review-improver
+on:
+  schedule:
+    - cron: '17 15 * * 1'   # weekly, Monday 15:17 UTC; best-effort timing
+  workflow_run:
+    workflows: [lever-precision-review]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      mode:
+        type: choice
+        options: [dry_run, act]
+        default: dry_run
+      resource_url:
+        description: unused; the improver reads its own window
+        type: string
+        required: false
+concurrency:
+  group: lever-precision-review-improver
+  cancel-in-progress: false
+jobs:
+  run:
+    # Paused until `gh variable set LEVER_PRECISION_REVIEW_IMPROVER_LIVE --body true`.
+    # workflow_run fires on every worker run; only real failures wake the improver.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (vars.LEVER_PRECISION_REVIEW_IMPROVER_LIVE == 'true' &&
+       (github.event_name == 'schedule' ||
+        (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}
+            FAILED_RUN: ${{ github.event.workflow_run.html_url || 'n/a' }}
+            REPOSITORY: ${{ github.repository }}
+            Follow .github/lever/automations/precision-review/improver-prompt.md exactly.
+            MODE above overrides the file's MODE for this run; in dry_run, write the proposal to your final message only.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 40
+            --allowedTools "Read,Grep,Glob,Bash(git log:*),Bash(git show:*),Bash(gh pr list:*),Bash(gh pr view:*),Bash(gh search prs:*),Bash(gh api --method GET:*),Bash(gh run list:*),Bash(gh issue list:*),Bash(gh issue create:*),Bash(gh issue comment:*)"
+      - name: Run record to job summary
+        if: always() && steps.claude.outputs.execution_file != ''
+        env:
+          EXEC_FILE: ${{ steps.claude.outputs.execution_file }}
+        run: |
+          jq -r '[.[] | select(.type == "result")] | last | .result // "no result"' "$EXEC_FILE" >> "$GITHUB_STEP_SUMMARY"

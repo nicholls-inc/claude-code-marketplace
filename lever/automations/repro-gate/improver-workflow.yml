@@ -1,0 +1,45 @@
+# lever-repro-gate-improver: reads what humans did with the gate's labels and proposes ONE prompt change as an issue. Never applies it.
+# Model: sonnet (standard) because it counts and compares; no premium reason.
+# Install: copy to .github/workflows/lever-repro-gate-improver.yml and improver-prompt.md to .github/lever/automations/repro-gate/improver-prompt.md.
+# Least privilege: contents: read, issues: write. No push, no .github/ write, no workflow enable/disable. A human applies the proposal by PR.
+name: lever-repro-gate-improver
+on:
+  schedule:
+    - cron: "41 7 * * 1"         # weekly
+  workflow_run:
+    workflows: [lever-repro-gate]
+    types: [completed]           # job `if:` keeps failures only
+  workflow_dispatch:
+    inputs:
+      mode: { type: choice, options: [dry_run, act], default: dry_run }
+concurrency:
+  group: lever-repro-gate-improver
+  cancel-in-progress: false
+jobs:
+  run:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (vars.LEVER_REPRO_GATE_IMPROVER_LIVE == 'true' &&
+       (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'failure'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ github.token }}   # `permissions:` above is the ceiling
+          prompt: |
+            MODE: ${{ inputs.mode || 'act' }}
+            TRIGGER: ${{ github.event_name }}
+            Follow .github/lever/automations/repro-gate/improver-prompt.md exactly.
+          claude_args: |
+            --model claude-sonnet-5-5
+            --max-turns 30
+            --allowedTools "Read,Grep,Glob,Bash(git log:*),Bash(git show:*),Bash(git diff:*),Bash(gh run list:*),Bash(gh issue view:*),Bash(gh issue list:*),Bash(gh api repos/*/issues/*/timeline:*),Bash(gh issue create:*),Bash(gh issue comment:*),Bash(gh pr list:*),Bash(gh pr view:*)"
