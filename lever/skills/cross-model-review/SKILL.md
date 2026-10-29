@@ -109,7 +109,7 @@ Don't use it:
 
 ## Why this exists
 
-- About 25 times over several months, the same PR was sent to three models from different vendors (opus, codex and gemini) with "post findings to the PR". The instruction that stuck was "only feed me issues where the models are in agreeance". The habit later became a built-in review command.
+- About 25 times over several months, the same PR was sent to three models from different vendors with "post findings to the PR". The instruction that stuck was "only feed me issues where the models are in agreeance". The habit later became a built-in review command.
 - In one set of review automations on teammates' repos, about 2,200 runs a day read a PR. 37% posted a review and 9.5% left an inline finding. Defaulting to silence is what keeps teammates from muting the bot.
 - Bot review comments were judged roughly 50% noise, while human comments were usually right. Hence the source-weighted triage.
 - Rubber-ducking plans and skills with a second model became a standing habit, and it caught skills that were over-constrained before they shipped.
