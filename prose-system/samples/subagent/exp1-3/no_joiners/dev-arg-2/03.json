@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a3172b77e14a1d143",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72479,
+    "output_tokens": 1031,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:40:22.814Z",
+  "valid": true,
+  "text": "Stop Estimating, Start Shipping\n\nSoftware teams should stop estimating how long work will take. I say this as someone who has sat through hundreds of planning sessions, and I have never once seen the numbers produced there survive contact with reality.\n\nStart with the evidence everyone already has. Look at your last ten projects and compare the estimate to the actual. If your team is typical, the misses are large and they run in one direction. The work takes longer. We know this, and yet we keep asking for the number again next quarter, as if the problem were a lack of effort rather than a lack of information.\n\nThe information really is missing. Software work is mostly discovery. The part you can size, such as writing the endpoint or adding the column, is the small part. The part that sinks you is the surprise in the legacy module, the vendor API that behaves differently from its docs, the requirement that turns out to be two requirements. By definition, you cannot estimate what you have not yet discovered. An estimate is a guess about the unknown dressed up as a fact about the future.\n\nThen the dressing does the damage. Once a number exists, it hardens. A rough guess in a meeting becomes a commitment in a roadmap, and a commitment becomes a deadline someone is judged against. Engineers respond rationally. They pad the estimate, cut corners on tests to hit the date, or quietly stop mentioning the risks that would invite a revision. Managers respond rationally too. They discount whatever they are told, so engineers pad more. Everyone loses trust, and all of it traces back to a number nobody could have known.\n\nEstimation also eats real time. Teams burn hours on pointing sessions, debating whether something is a five or an eight, and the debate itself produces no working software. Those hours are a tax paid for a forecast that is wrong anyway.\n\nThe objection is predictable. Businesses need dates. Sales needs to promise customers something. Finance needs to plan hiring. That is true, and it is a good reason to forecast, but forecasting is not the same as estimating. You can answer the date question without asking engineers to predict their own tasks.\n\nHere is what works instead. Slice work into small pieces that each ship in a day or two. Count how many pieces your team actually finishes per week. Use that throughput, which is measured rather than imagined, to say roughly how much fits in a quarter. When scope changes, the forecast changes with it, and nobody has to relitigate a stale number. Pair this with a habit of shipping the riskiest piece first, so surprises arrive early when they are cheap.\n\nThis approach is honest about uncertainty. It gives managers a range grounded in history, and it gives engineers room to say what they learned without it sounding like an excuse.\n\nSome teams will keep estimating, and for small, well understood, repetitive work it can be fine. But as a default practice for building real software, it is ritual masquerading as rigor.\n\nStop asking how long it will take. Ask what is the smallest useful thing we can finish this week, and then finish it. The dates will take care of themselves, and they will be more truthful than the ones we have been inventing."
+}

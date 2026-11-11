@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8dba5bb2ff1a590c",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72479,
+    "output_tokens": 2197,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:43:04.456Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Slicing.\n\nEvery engineer has lived this scene. A manager asks how long a feature will take. You say three weeks, because you have to say something. Everyone writes it down. Six weeks later the number is still on a slide, and the real work looks nothing like the thing you estimated. I believe teams should stop producing estimates of how long work will take, and I think they will be better off for it.\n\nStart with the evidence. Estimates are wrong in a predictable way. The tasks we understand well are the ones we finish quickly, so the long tail of surprises always lands on the work we understood least. Decades of project data say the same thing. Averages hold up while individual forecasts collapse. A number that is wrong most of the time is not information. It is a guess wearing a suit.\n\nWorse, the estimate does not stay a guess. The moment it is spoken it becomes a commitment. Managers repeat it upward, other teams plan around it, and the engineer who said three weeks now owns three weeks. People respond rationally. They pad the number, they cut corners to hit it, or they quietly stop telling anyone when the scope grew. Estimation sessions teach a team to protect itself instead of to find the truth.\n\nThere is also the plain cost. Hours spent in planning poker are hours not spent building. Teams debate whether a story is a five or an eight, a question with no answer, and the debate produces a figure that will be ignored the instant reality disagrees.\n\nNow the fair objection. Businesses need dates. Sales promises things, launches need marketing, and money runs out on a calendar. That is true, and it is exactly why we should stop pretending small guesses add up to a trustworthy date.\n\nThe alternative is simpler and more honest. Break work into pieces small enough that nobody needs to argue about size, ideally a day or two each. Then count how many pieces finish per week. That throughput is measured rather than imagined, and it improves as you learn. When a manager asks about timing, you point to the backlog, the observed rate, and a range. Something like, most likely six to ten weeks, and here is what would change that. This forecast comes from what the team actually did, not what it hoped.\n\nThen fix the other half of the problem, which is scope. When time is fixed and the date is uncertain, the lever is what you cut. Ship the thinnest useful version first, then grow it. A team that delivers something real every week gives a manager far better visibility than any estimate ever did.\n\nSome will say this just hides the guess. It does not. Slicing and measuring replaces an opinion with a record. And the conversation changes from who is to blame for the slipped date to what should we drop.\n\nStopping estimates is not stopping planning. It is refusing a ritual that produces false confidence. Try it for a quarter. Cut the sizing meetings, slice the work thin, and report the rate. I expect you will not miss the numbers, and your managers will trust you more."
+}

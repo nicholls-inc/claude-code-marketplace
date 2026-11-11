@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae28d8ea04b411ed5",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28210,
+    "cache_read_input_tokens": 44269,
+    "output_tokens": 995,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:39:30.453Z",
+  "valid": true,
+  "text": "Stop Estimating, Start Shipping\n\nSoftware teams should stop estimating how long work will take. I say this as someone who has sat through hundreds of planning sessions, and I have come to believe that most of them produce theater rather than information.\n\nStart with the evidence. Study after study of software projects finds the same pattern. Estimates run low, often by a wide margin, and the error grows with the size and novelty of the work. This is not because engineers are bad at their jobs. It is because the interesting parts of software are the parts nobody has done before. If we already knew exactly how to build the thing, we would copy it. The unknowns are the work, and you cannot size an unknown.\n\nThen look at what happens to an estimate once it exists. It stops being a guess and becomes a promise. A manager repeats it upward, a customer hears it, and a date lands on a roadmap. When reality drifts, the team has two choices, and both are bad. They cut corners on quality to hit the number, or they spend energy explaining a miss. Either way the estimate has made the work worse. We have all watched a team skip tests to save a sprint that was never realistic in the first place.\n\nEstimation also eats time. Hours of refinement meetings, point debates and re-estimation add up to real money. Those hours buy a number that is wrong in the ways that matter most. Anyone who has argued whether a ticket is a three or a five knows how little that argument tells you about the work.\n\nThe usual defense is that managers need dates to coordinate with sales, marketing and finance. That is a fair concern, but estimates are a poor answer to it. A better answer is to work in small slices, ship them continuously and show real progress. A team that delivers something usable every few days gives you far better forecasting data than any planning poker. You can count how many items finish per week and project from that. It costs almost nothing, it uses actual history, and it gets more accurate as you go.\n\nStopping estimates also changes the conversation. Instead of asking how long something will take, you ask what the smallest useful version is and what you could cut. Scope becomes the lever, which is where the real control always lived. Deadlines that matter can be met by trimming what ships, not by pretending we can predict the unpredictable.\n\nSome will say this is reckless, that a business cannot run on vibes. But dropping estimates does not mean dropping discipline. It means replacing a ritual of false precision with measurement of what actually happens. Track cycle time. Keep work small. Be honest about uncertainty and talk about ranges when someone needs a horizon.\n\nManagers, you will feel a loss of comfort at first. A date on a slide feels like control. But you already know how often those dates hold. Trade the comfort for the real thing, which is a steady flow of finished work and a team that spends its time building instead of guessing.\n\nEngineers, you can push for this too. Next time you are asked for a number, offer a smaller slice instead. Ask what could ship by Friday. You may find the question was never about time at all."
+}

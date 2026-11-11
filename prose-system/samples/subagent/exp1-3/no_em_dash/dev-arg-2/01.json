@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2dc3bf66677df4b0",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28198,
+    "cache_read_input_tokens": 44269,
+    "output_tokens": 990,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:39:19.931Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Forecasting.\n\nEvery engineering team knows the ritual. Someone asks how long a feature will take. Engineers hedge, then give a number. The number becomes a date, the date becomes a promise, and the promise becomes a measure of whether the team can be trusted. Six weeks later the work is half done, and everyone is having the same uncomfortable meeting.\n\nTeams should stop estimating how long individual pieces of work will take. Not because engineers are lazy or because planning is pointless, but because the practice fails at the one job it exists to do.\n\nStart with the evidence. Software work is mostly discovery. The parts that blow up a schedule are the parts nobody could see in advance: the undocumented dependency, the migration that touches forty services, the requirement that turns out to contradict another one. If you could list those surprises up front, you would have already done most of the work. An estimate is a guess about the unknown, delivered with the confidence of a fact.\n\nThen look at what the guess costs. Teams burn hours in planning sessions debating whether a ticket is a three or a five. Those hours produce numbers that studies and lived experience both show are barely better than a coin weighted toward optimism. Meanwhile the estimate quietly changes behavior. Engineers cut corners to hit it. Managers anchor on it and treat any overrun as a failure of discipline rather than a fact about the problem. People learn to pad, and then managers learn to discount the padding, and the whole exchange becomes theater.\n\nThe strongest objection is that the business needs dates. Customers have launches, finance has budgets, and sales has commitments. That is true, and it is why I am not arguing for abandoning prediction. I am arguing for a better method.\n\nMeasure instead of guess. Track how long work actually takes to flow from started to done. After a few dozen items you have a distribution, not an opinion. Slice work small enough that items are roughly comparable, count them, and forecast from your own history. Ask what range of outcomes your past throughput supports, and say so plainly: \"Given our record, 85 percent of the time this lands within eight weeks.\" That statement is honest about uncertainty, and it is built from data that already exists in your tracker.\n\nThis approach also changes the conversation for the better. Instead of defending a number, the team talks about scope. If the forecast is too late, the lever is cutting or splitting work, not pressuring people to go faster. Risk gets surfaced early because the question shifts from \"how long\" to \"what could make this larger than it looks.\"\n\nSome will say that is still estimating under another name. In a narrow sense, yes. But the difference matters. Asking people to predict is unreliable. Asking a system to report what it has done is not.\n\nIf you run a team, try it for one quarter. Drop the point values, keep the history, and forecast in ranges. You will spend less time in meetings, and your dates will be more believable. Honest uncertainty beats false precision every time."
+}

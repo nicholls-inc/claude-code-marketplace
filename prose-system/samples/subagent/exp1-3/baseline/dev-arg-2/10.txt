@@ -1,0 +1,23 @@
+Stop Estimating (Mostly): The Case for Dropping the Date Game
+
+Every engineering team knows the ritual. A manager asks how long something will take. An engineer, who has never seen the code path in question, produces a number. The number becomes a commitment. Three weeks later, the number is wrong, and everyone acts surprised. Teams should stop producing these estimates.
+
+Start with the evidence. Software estimates are bad, and they are bad in a predictable way. Fred Brooks wrote about this in 1975, and Kahneman gave the pattern a name: the planning fallacy. People forecast from the best case, not from the distribution of what has actually happened. Decades of project data show overruns are the norm, with a fat tail. The tail is what hurts. A task estimated at three days that takes thirty is not an error of degree. It is a different kind of event, and no amount of planning poker prevents it.
+
+The problem is not that engineers are bad at math. The work is novel by construction. If we had done the exact thing before, we would reuse it. Estimating novel work means predicting what you will discover, which is a contradiction.
+
+Worse, estimates do damage after they are made. They harden into deadlines. They teach engineers to pad, which teaches managers to cut, which teaches engineers to pad more. They tempt teams to skip the tests and refactoring that would have kept the next estimate honest. And they consume real time: the hours spent in refinement meetings arguing over whether a story is a five or an eight are hours not spent building.
+
+The objection is obvious. The business needs to plan. Sales promises dates, finance budgets headcount, and other teams depend on ours. Fair. But look at what planning actually requires. It requires knowing roughly how much the team ships and in what order the work matters. It does not require a per-task prediction.
+
+So replace estimates with three cheaper practices.
+
+First, slice work small. If every item is a day or two of effort, you no longer need to guess its size, because you can count items. Throughput, meaning how many items finish per week, is measured, not guessed. A team's last twelve weeks of throughput forecast the next twelve far better than any sum of story points.
+
+Second, forecast with ranges from real data. Monte Carlo simulation over your own cycle times takes minutes and yields statements like "85 percent chance we finish by the end of March." That is more honest than a single date, and managers can actually plan around it.
+
+Third, put the hard conversation where it belongs: scope. When a date is fixed, the lever is what ships, not how long it takes. Order the work by value, ship continuously, and let stakeholders watch real progress instead of trusting a prediction.
+
+Estimating small, well-understood tasks is fine; a quick "that's an afternoon" costs nothing. The target is the large, ritualized, number-for-a-commitment kind of estimate, because that is the kind that fails and the kind that costs the most.
+
+Teams that drop it report the same thing: fewer meetings, fewer arguments about blame, and plans that survive contact with reality. Stop asking engineers to predict the unpredictable. Measure what you ship, and plan from that.

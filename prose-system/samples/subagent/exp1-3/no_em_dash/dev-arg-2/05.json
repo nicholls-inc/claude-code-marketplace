@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2d427e9762ad3c5b",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 1066,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:41:05.926Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Forecasting.**\n\nAsk any engineer what happens to an estimate once it leaves their mouth. It becomes a promise. \"Probably two weeks\" turns into \"two weeks\" in the planning doc, \"the deadline\" in the roadmap, and \"you said\" in the retro. We call these numbers estimates, but the organization treats them as commitments. That gap is the whole problem, and it is why teams should stop estimating how long work will take.\n\nStart with the evidence. Software work is dominated by discovery. The hard parts are the ones you cannot see until you are inside the code: the undocumented dependency, the migration that touches a table nobody owns, the bug that only appears under load. Your estimate is most confident exactly when you know least. Decades of project data show the same pattern: the error is not random noise around the truth, it is a consistent underestimate with a fat tail. A task that runs 50 percent over is ordinary. A task that runs 300 percent over is not rare enough to ignore, and it is the one that wrecks the quarter.\n\nThen count the cost. Teams spend real hours in planning poker, sizing sessions, and re-estimation meetings to produce numbers that are wrong by an unknowable amount. Worse, the numbers distort behavior. Engineers pad. Managers cut the padding. Engineers pad harder. Work expands to fill the slot, and when it cannot, quality is what gives. Nobody is lying; the system just rewards defending a number over learning what the work actually is.\n\nHere is the objection you are already forming: the business needs dates. True, and that is a reason to drop estimates, not keep them. What the business needs is a credible answer to \"when will this be done?\" A sum of individual guesses is a poor way to get one. Throughput is a better way. Count how many items your team finishes per week, look at the spread over the last several months, and you can say something honest: \"Based on our history, there is an 85 percent chance this batch lands within seven to ten weeks.\" That is a forecast built from what happened, not what anyone hoped. It costs almost no meeting time, it carries its own uncertainty, and it improves automatically as you collect more data.\n\nThis works only if you do the unglamorous part: keep work items small. Slice stories until each can be finished in a few days, and the size differences stop mattering. A pile of small, similar things is countable. A pile of big, unique things is a guessing contest.\n\nYou will still need rough judgment sometimes. \"Is this a week, a quarter, or a year?\" is a useful question, because the answer changes whether you start at all. Order-of-magnitude thinking is cheap and decent. Precise-looking numbers are expensive and fake.\n\nSo here is a practical test for managers. Next time you request an estimate, ask what decision it will change. If you would proceed regardless, you do not need the number. If it would change the decision, ask for a range and a confidence level, and then check your own history to see whether the team's past ranges held.\n\nStop treating guesses as contracts. Measure what ships, keep the work small, and give people a forecast they can trust because it is built on evidence. Everyone will argue less, and the dates will be more honest."
+}

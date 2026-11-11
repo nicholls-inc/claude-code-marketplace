@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a01d2fa2c574d00fe",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72454,
+    "output_tokens": 1083,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:41:28.911Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Slicing.\n\nEvery engineering team knows the ritual. Someone reads a ticket, the room guesses \"three points\" or \"two weeks,\" and everyone pretends the number means something. Then reality arrives: the migration hides a dependency, the API behaves differently than documented, a key person gets pulled onto an incident. The estimate was wrong, as it nearly always is, and the team spends the next sprint explaining the gap.\n\nI think teams should stop estimating how long work will take. Not because estimation is lazy to refuse, but because it is the wrong tool for the job it is asked to do.\n\nStart with the evidence. Decades of research on planning, from Kahneman's work on the planning fallacy to studies of large IT projects, find the same pattern: people underestimate, and the error grows with the size and novelty of the task. Software is almost entirely novelty. If we had done this exact work before, we would have reused it. So we are asked to predict the unknown, with confidence, in public, and then we are held to the answer.\n\nWorse, the number changes behavior. Once a date exists, it becomes a commitment, and commitments distort decisions. Engineers pad. Managers shave the padding back off. Scope gets cut quietly or quality does, because the date is fixed and the truth is not. Teams spend hours in planning meetings producing figures that are discarded or defended, rather than building anything.\n\nThe usual defense is that the business needs predictability. It does. But notice that predictability and estimation are different things. A forecast built from data beats a guess built from opinion. If your team ships roughly five small items a week, you can say a backlog of thirty items lands in about six weeks, with a range, and you can say it without anyone debating story points. Throughput and cycle time are measured, not imagined. They absorb the unknowns that individual estimates miss, because they include the incidents, the reviews, and the meetings that actually happened.\n\nThat leads to the practical alternative: slice the work small. Break every item down until it is a day or two of effort, a size where \"is this roughly the same as the others?\" is an easy question. Then count items, not hours. Arguing about whether a task is a five or an eight stops being necessary, because nobody is relying on the label. When a slice turns out bigger than expected, you learn that in days, not at the end of a quarter.\n\nSlicing also forces the conversation that estimation avoids. To cut a big feature into small pieces, you have to understand it, find the risky part, and decide what ships first. That discussion is where the real value of planning lives, and it is the part we keep skipping in favor of numbers.\n\nThere are fair objections. Some work, like regulatory deadlines or a contractual launch, comes with a fixed date, and you must work backward. Fine, but notice that this is a scope negotiation, not an estimate: decide what must be in, and cut the rest as the date nears. And a team new to a codebase has no throughput history to forecast from. Start measuring, and use rough sizing only until the data exists.\n\nSo the proposal is modest. Stop asking \"how long will this take?\" Ask \"what is the smallest useful piece, and what did we ship last month?\" You will be wrong less often, argue less, and spend the saved hours on the software."
+}

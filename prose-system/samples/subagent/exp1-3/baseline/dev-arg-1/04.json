@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a4c4c7ebcc2db65d0",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72446,
+    "output_tokens": 1547,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:34:53.854Z",
+  "valid": true,
+  "text": "**Scrap the Parking Mandate**\n\nEvery city has a rule that most residents have never read and almost everyone pays for: the minimum parking requirement. It says that before you can build an apartment, a restaurant or a dental office, you must also build a set number of parking spaces. Cities should repeal it. Not tweak it, not reduce it by a quarter, but remove it from the planning code and let builders, lenders and customers decide how much parking a building needs.\n\nStart with what the rule actually is. Parking minimums are not a measurement of demand. They are a guess, usually borrowed from a manual that surveyed suburban sites with free parking and almost no transit. Planners then turned those averages into law. A restaurant gets one space per 100 square feet of dining area. An apartment gets two spaces per unit. Nobody checked whether the tenant owns two cars, or one, or none. The result is lots sized for the busiest hour of the busiest day of the year, which sit mostly empty the rest of the time.\n\nThe cost of that guess lands on housing. A surface space takes roughly 300 square feet once you count the aisles and ramps. A structured space can cost tens of thousands of dollars to build, and an underground one costs more. That money does not vanish. It is folded into rents and sale prices, so a household with no car still pays for a space it never uses. Researchers who study the issue, Donald Shoup most famously, have long argued that this bundling is a hidden subsidy for driving, paid by everyone, including people who walk, cycle or ride the bus.\n\nMinimums also kill projects before they start. On a small downtown lot, the required spaces can eat the entire buildable area. A developer who would have put up eight apartments is told to build four, or nothing at all. Old main streets are full of corner buildings that could never be built today because the lot cannot fit the parking the code demands. The rule favors big sites, big developers and big setbacks, and it punishes the small, incremental building that made older neighborhoods walkable in the first place.\n\nThe usual objection is that without minimums, new buildings will leave everyone circling for street spots. This gets the incentives backwards. Developers and lenders want parking where tenants and customers need it. A suburban apartment complex with no spaces would struggle to find renters, so it will build spaces. Buffalo, New York, repealed its citywide minimums in 2017, and the sky did not fall. Developers kept providing parking where the market wanted it and skipped it where it did not. Other cities, including Minneapolis, Anchorage, and a growing list across the United States, have since followed with full or partial repeals. Removing a mandate is not the same as banning parking. It simply returns the decision to the people paying for it.\n\nIf curb crowding is the real worry, there is a better tool than forcing every building to supply spaces: price the curb. Charge a fair rate for street parking, use the revenue for neighborhood improvements, and give residents permits where spillover is a genuine problem. A priced curb always has an open space or two, which is what drivers actually want. A free curb is always full, no matter how many off-street spaces the code requires.\n\nThere is also a fairness argument that deserves more attention. Parking minimums are regressive. Lower-income households own fewer cars, yet they pay the same bundled cost in rent. Meanwhile the rule makes new housing more expensive in exactly the places where cities say they want more of it. Any council that complains about its housing shortage while keeping a parking mandate is working against itself.\n\nClimate and public finance point the same direction. Land covered in asphalt pays little property tax per acre compared with a mixed-use building on the same footprint, so cities with vast parking lots tend to have thinner tax bases and higher infrastructure bills per resident. Abundant mandated parking also makes driving the easy default, which makes transit less useful and streets more dangerous.\n\nSome will say repeal is too blunt, and that cities should merely lower the ratios or exempt areas near transit. Those are reasonable first steps, but they leave the core flaw intact: a bureaucrat is still guessing how much parking each building needs. The guess will be wrong, in both directions, and the people who bear the cost of error are tenants and small builders.\n\nNothing here requires believing that cars are bad. People will keep driving, and many buildings will keep including plenty of parking, because their customers want it. The question is only who decides. Today the answer is a formula written decades ago. It should be the owner, the lender and the market, who can see the demand that planners can only estimate.\n\nRepeal the mandate. If a space is worth building, someone will build it. If it is not, we should stop making the rest of us pay for it."
+}

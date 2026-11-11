@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2dbc55adae7193e1",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 963,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:42:31.897Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this meeting. Someone asks how long the migration will take. You say \"six weeks, maybe.\" It becomes a date on a slide. Three weeks in, you discover the billing service has a hidden dependency, and the date is now a promise you are breaking in public.\n\nI think software teams should stop estimating how long work will take. Not stop planning, not stop thinking about size, but stop producing time forecasts for individual pieces of work and treating them as commitments.\n\nThe core problem is that estimates are asked to do two jobs, and they do both badly. As a thinking tool, they are fine: arguing about whether a task is a day or a month surfaces unknowns. As a prediction tool, they fail, because the work that matters most is the work nobody has done before. If you knew exactly how to build it, you would have bought it or copied it. The uncertainty is the job.\n\nThe evidence is not kind either. Studies of software projects keep finding overruns that are routine, not exceptional. Daniel Kahneman called the underlying habit the planning fallacy: we picture the happy path and forget that reality has a vote. Adding story points or t-shirt sizes does not cure it. It just disguises the guess in numbers that look scientific.\n\nWorse is what estimates do to behavior. Once a number exists, it becomes a target. Engineers pad. Managers shave the padding. Everyone learns to sandbag, cut quality at the end to hit the date, or hide bad news until it cannot be hidden. The estimate stops describing the work and starts governing it.\n\nAnd the cost is real. Teams burn hours in planning poker sessions whose output is wrong more often than right. Those hours buy a false sense of control.\n\nSo what instead? Slice work until each piece is small enough that sizing it is pointless, a day or two at most. Then watch throughput: how many pieces finish per week. That number is measured, not guessed, and it holds up far better than anyone's gut. A manager who wants a forecast can run it forward and give a range, with honest error bars. \"Probably March, possibly April\" is a better answer than \"March 14th.\"\n\nPair that with ruthless scope control. If a date truly matters, a regulatory deadline or a conference launch, fix the date and flex the scope. Ask what the most valuable thing is that fits, and cut from the bottom of the list as you go. That is a decision, not a prediction, and decisions are things a team can actually keep.\n\nThe objection is that the business needs dates. It does need to make commitments. But it gets them from measured flow and negotiated scope, not from a developer's hopeful guess on a Tuesday.\n\nManagers: stop asking for numbers you know will be wrong. Engineers: stop supplying them. Spend the saved hours cutting the work down to size, and ship something small this week."
+}

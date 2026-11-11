@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0775d3853f5c64fb",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72479,
+    "output_tokens": 2198,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:41:39.757Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Slicing.\n\nEvery team I know has lived this scene. A manager asks how long a feature will take. An engineer, who has not yet seen the messy part of the codebase, says three weeks. That number gets written down, repeated in a planning meeting, and promoted into a deadline. Six weeks later everyone is unhappy, and the retro concludes that next time we should estimate better.\n\nWe have been saying that for sixty years. It is time to accept that the problem is not effort. It is the premise. Software work is mostly discovery. If we knew exactly what to build and how, we would already have built it, or copied it. The uncertainty is not a flaw in our process. It is the job. Asking for a precise number up front is asking people to predict what they will learn.\n\nSo yes, teams should stop estimating how long work will take.\n\nNotice what I am not saying. I am not saying managers should stop caring about when things ship. Dates matter. Customers, sales, and finance all plan around them, and an engineer who shrugs at that is not doing the job. My claim is narrower. Estimates are a bad tool for answering the question, and they carry costs we rarely count.\n\nFirst, estimates turn into promises. Nobody remembers the confidence interval. They remember the number. Once it exists, it anchors every conversation, and engineers learn to protect themselves by padding. Managers learn to discount the padding. Both sides spend energy on a game that produces fiction.\n\nSecond, estimating takes real time. Hours of planning poker and story pointing buy a number no better than a coin flip with extra steps. Studies of project overruns keep finding the same thing. Big tasks run over far more often than small ones, and no amount of ceremony fixes that.\n\nThird, estimates distort the work. Teams cut corners to hit the number, skip the refactor, and quietly ship the thing they know is fragile.\n\nWhat works better is boring and observable. Break work into slices small enough that each one ships in a day or two. Keep them roughly the same size. Then count what actually finishes each week. That throughput is real data from your own team, not a guess about the future. When a manager asks about a date, you can answer from history. Forty slices remain, we finish about eight a week, so look at about five weeks, and here is what would change that.\n\nThis approach also forces the right argument. When a slice will not shrink, that is the signal of real unknowns, and the honest response is to run a spike, cut scope, or say plainly that nobody knows yet. That is more useful to a manager than a fake three weeks.\n\nTeams that try this report calmer planning and fewer surprise slips. They also find that the conversation shifts from defending numbers to deciding what to build next, which is where managers want to spend their attention anyway.\n\nSo drop the story points. Slice the work thin, ship constantly, and forecast from evidence. Your predictions will be better, and your Fridays will be quieter."
+}

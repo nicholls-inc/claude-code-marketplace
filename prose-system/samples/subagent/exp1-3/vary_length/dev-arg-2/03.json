@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a95ae3ae8961ef42e",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 974,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:40:23.568Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this moment. A manager asks how long the feature will take. You say three weeks, because three feels defensible. Six weeks later, the number is still on a slide, and everyone is pretending it means something.\n\nSoftware teams should stop estimating how long work will take. Not estimating badly. Not estimating more carefully. Stopping.\n\nThe case starts with what an estimate actually is. It is a prediction about the unknown, made at the moment you know the least. Software work is mostly discovery. The part you can size in advance is the part you have already done before, and that part is usually automated or copied. What remains is the novel, tangled, surprising work, and that is exactly the work no one can size. Decades of overruns, from small startups to government systems, are not a failure of discipline. They are the expected result of asking a question that has no reliable answer.\n\nThen comes the cost, which people rarely count. Estimation meetings eat hours. Planning poker, refinement sessions, re-estimation after scope shifts: add it up across a quarter and a team loses real weeks to forecasting work instead of doing it. Worse, estimates harden into promises. The moment a number leaves your mouth, it becomes a commitment in someone else's head. Teams respond rationally. They pad. They cut corners to hit the date. They hide the bad news until it cannot be hidden. The estimate does not predict the outcome. It distorts it.\n\nThe usual defense is that managers need dates to coordinate sales, launches, and budgets. That is a real need. But an estimate is a poor way to meet it.\n\nHere is the alternative. Slice work into pieces small enough that each one takes a day or two. Do not estimate them; just make them small. Then measure how many pieces actually finish each week. That throughput number comes from what the team really did, not what it hoped to do. Forecast from it. If the backlog holds forty slices and the team finishes eight a week, you have a five-week answer, and it improves with every sample. No meeting required.\n\nBetter still, small slices reveal truth early. If a thin vertical cut of the feature is not working after a week, you know now, not in month three. Managers get something more valuable than a date: a steady stream of working software and an honest signal when plans need to change.\n\nSome will object that without estimates, teams drift. The opposite is true. A fixed deadline with a flexible scope forces the hard conversation about what matters most. You ship the most valuable slices first and cut from the bottom when time runs out. That is prioritization, which is what estimation was always pretending to be.\n\nThere are narrow exceptions. A contract with a fixed price may demand a number. Fine; give a range and treat it as a negotiation, not a measurement.\n\nBut for most teams, the ritual does more harm than good. Stop guessing. Make the work small, count what finishes, and let reality do the forecasting."
+}

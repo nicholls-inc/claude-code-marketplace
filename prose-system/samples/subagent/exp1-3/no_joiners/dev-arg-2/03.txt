@@ -1,0 +1,21 @@
+Stop Estimating, Start Shipping
+
+Software teams should stop estimating how long work will take. I say this as someone who has sat through hundreds of planning sessions, and I have never once seen the numbers produced there survive contact with reality.
+
+Start with the evidence everyone already has. Look at your last ten projects and compare the estimate to the actual. If your team is typical, the misses are large and they run in one direction. The work takes longer. We know this, and yet we keep asking for the number again next quarter, as if the problem were a lack of effort rather than a lack of information.
+
+The information really is missing. Software work is mostly discovery. The part you can size, such as writing the endpoint or adding the column, is the small part. The part that sinks you is the surprise in the legacy module, the vendor API that behaves differently from its docs, the requirement that turns out to be two requirements. By definition, you cannot estimate what you have not yet discovered. An estimate is a guess about the unknown dressed up as a fact about the future.
+
+Then the dressing does the damage. Once a number exists, it hardens. A rough guess in a meeting becomes a commitment in a roadmap, and a commitment becomes a deadline someone is judged against. Engineers respond rationally. They pad the estimate, cut corners on tests to hit the date, or quietly stop mentioning the risks that would invite a revision. Managers respond rationally too. They discount whatever they are told, so engineers pad more. Everyone loses trust, and all of it traces back to a number nobody could have known.
+
+Estimation also eats real time. Teams burn hours on pointing sessions, debating whether something is a five or an eight, and the debate itself produces no working software. Those hours are a tax paid for a forecast that is wrong anyway.
+
+The objection is predictable. Businesses need dates. Sales needs to promise customers something. Finance needs to plan hiring. That is true, and it is a good reason to forecast, but forecasting is not the same as estimating. You can answer the date question without asking engineers to predict their own tasks.
+
+Here is what works instead. Slice work into small pieces that each ship in a day or two. Count how many pieces your team actually finishes per week. Use that throughput, which is measured rather than imagined, to say roughly how much fits in a quarter. When scope changes, the forecast changes with it, and nobody has to relitigate a stale number. Pair this with a habit of shipping the riskiest piece first, so surprises arrive early when they are cheap.
+
+This approach is honest about uncertainty. It gives managers a range grounded in history, and it gives engineers room to say what they learned without it sounding like an excuse.
+
+Some teams will keep estimating, and for small, well understood, repetitive work it can be fine. But as a default practice for building real software, it is ritual masquerading as rigor.
+
+Stop asking how long it will take. Ask what is the smallest useful thing we can finish this week, and then finish it. The dates will take care of themselves, and they will be more truthful than the ones we have been inventing.

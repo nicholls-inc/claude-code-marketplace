@@ -1,0 +1,23 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this meeting. Someone asks how long the feature will take. You say three weeks, because two sounds reckless and six sounds lazy. Everyone writes "three weeks" down. Nobody believes it, least of all you.
+
+Software teams should stop estimating how long work will take. Not stop planning. Stop the ritual of attaching a number to work nobody understands yet.
+
+The core problem is that estimates are asked for at exactly the moment we know the least. Before you open the code, before you hit the undocumented API, before the customer changes their mind, you must commit to a date. Then reality arrives, as it always does. The Standish-style surveys and decades of project post-mortems tell the same story: overruns are the norm, not the exception. When an instrument is wrong most of the time, the sensible response is to stop trusting it.
+
+Worse, estimates do not stay estimates. They harden into promises. A "rough guess" in a planning meeting becomes a commitment on a roadmap, then a deadline in a manager's quarterly review. Engineers learn the lesson fast. They pad. They cut corners to hit the number. They hide the surprising discovery that would force a conversation. The estimate stops measuring the work and starts shaping behavior, usually for the worse.
+
+And the hours spent producing them are real. Planning poker, story point debates, re-estimation after scope shifts: add it up across a team and a year. That is weeks of capacity spent generating figures that are routinely ignored.
+
+Managers will object, reasonably. The business needs to know when things will be done. Sales makes promises. Launches have dependencies. I agree. But the answer is not a better guess about individual tasks. It is a different kind of evidence.
+
+Slice work into small pieces, each shippable in a day or two. Then count them. Track how many pieces your team actually finishes per week. That throughput is a measurement, not an opinion, and it improves as you gather more data. Want a forecast? Take the backlog, divide by the observed rate, and give a range. It will be wrong sometimes, but it will be wrong honestly, and it updates every week without a meeting.
+
+Notice what this changes. The conversation moves from "why did you say two weeks?" to "what is the smallest thing we can ship next, and what are we learning?" Scope becomes the lever, not the deadline. When time is fixed, you cut features. You do not cut quality or sleep.
+
+Some work does need a ceiling: a regulatory date, a conference demo. Fine. Set the date, then decide together what fits inside it. That is a budget, not an estimate, and it is far more honest about who controls what.
+
+The objection I hear most is that without estimates, teams drift. I have seen the opposite. When people stop defending a number, they start talking about the work. Blockers surface sooner. Small wins accumulate where everyone can see them.
+
+Estimating feels like discipline. Mostly it is theater with a spreadsheet. Replace it with small batches, measured flow, and honest ranges, and you will know more about when things ship than you ever did by guessing.

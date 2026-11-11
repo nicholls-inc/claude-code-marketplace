@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a248d2093659990ec",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72454,
+    "output_tokens": 1033,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:40:11.078Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this meeting. Someone asks how long the feature will take. You say \"three weeks, maybe four.\" It gets written down as three. Six weeks later, everyone is stressed, and the postmortem concludes that next time we need better estimates.\n\nWe never get better estimates. After decades of trying, the evidence is clear that software work resists prediction. The tasks that matter most are the ones with the most unknowns: the legacy module nobody understands, the vendor API that behaves differently from its docs, the requirement that changes when the customer sees a demo. Estimating work you haven't done yet means guessing at the very things you don't know. Teams that pad their numbers get padded work. Teams that don't get blown deadlines.\n\nThe deeper problem is what estimates become. An estimate starts as a rough guess and hardens into a promise within a day. Managers plan roadmaps around it. Other teams schedule dependencies against it. When reality diverges, the engineer carries the blame for a number they offered under pressure, about a task they hadn't yet understood. So people learn to game the system: sandbag the number, split tickets to look productive, or quietly cut quality to hit the date. Estimation rewards defensive behavior, not good engineering.\n\nThen there's the cost. Planning poker, story point debates, and sprint-sizing ceremonies consume hours every week. Those are hours not spent building. And the output is a number with a margin of error larger than the thing being measured.\n\nThe objection is predictable: \"But the business needs to know when things will be done.\" Of course it does. The answer is not to abandon forecasting but to stop pretending that task-level guesses produce it.\n\nHere is what works better. First, slice work small, so small that most items take a day or two. When everything is roughly the same size, counting items beats estimating them. Second, measure what actually happens: track cycle time and throughput, then use that history to forecast. \"We finish about eight items a week, and there are forty left\" is a more honest answer than any sum of story points, and it updates itself as reality changes. Third, give ranges and confidence levels instead of dates. \"Likely done in five to eight weeks\" is true. \"Done March 14th\" is a story.\n\nFourth, and most important, manage scope instead of the schedule. If the deadline matters, cut features until the remaining work fits. Ship the valuable core first and learn from real users. That conversation, about what to build and what to drop, is the one managers should be having anyway.\n\nSome will say this only works for mature teams with steady flow. But small slices and honest history are things any team can start this month. The first week feels uncomfortable because you lose the false comfort of a number. By the third week you notice something: the arguments about why the estimate was wrong have stopped, and the conversations are about the work itself.\n\nManagers, you give up an illusion and get real data in return. Engineers, you get out from under a number nobody should have asked you for. Retire the estimation meeting. Cut the work down, ship it, and let the record of what you shipped tell you what comes next."
+}

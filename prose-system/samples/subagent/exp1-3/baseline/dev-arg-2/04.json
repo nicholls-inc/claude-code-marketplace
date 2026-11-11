@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a93db72451d2f6364",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72454,
+    "output_tokens": 1033,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:40:34.204Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Slices.**\n\nEvery software team knows the ritual. Someone puts a ticket on the screen, the room goes quiet, and a dozen smart people guess a number. Three points. Two weeks. \"Call it a month.\" Then reality arrives, and the number turns out to have been fiction.\n\nI think teams should stop doing this. Not because estimating is hard, but because the estimates cost more than they return.\n\nStart with the evidence. Studies of software projects keep finding the same pattern: overruns are common, and they are not small. The cause is structural. Software work is mostly discovery. You don't know how long it will take because you don't yet know what it is. The unknowns show up halfway through, in the legacy module nobody mentioned or the API that doesn't behave as documented. An estimate made before the work begins is a guess made at the moment of maximum ignorance.\n\nWorse, the number doesn't stay a guess. It hardens into a commitment. A manager repeats it upward, a date lands on a roadmap, and an engineer's rough hunch becomes a promise with their name on it. When the work runs long, the conversation is about who failed, not what was learned. Engineers respond rationally: they pad, they sandbag, they cut corners on quality to hit the date. The estimate distorts the very thing it claims to measure.\n\nThen there is the plain cost. Add up the hours in refinement meetings, planning poker, and re-estimation after scope shifts. That time buys you a number nobody trusts. It could have bought you working software.\n\nThe usual objection is that the business needs predictability. It does. But estimates are a poor way to get it. A better way is to make work small and measure what actually happens. Break work into slices that take a day or two. Count how many finish each week. That throughput is real data from your own team, and it forecasts better than any poker round because it includes the interruptions, the review delays, and the bad weeks that estimates always leave out. When someone asks \"when will this be done?\", you answer with a range based on history, not a number pulled from optimism.\n\nThere is a second benefit. Slicing forces the useful conversation. Arguing over whether a task is five points or eight is empty. Asking \"what is the smallest thing we could ship that teaches us something?\" is not. Teams that slice well discover scope problems early, cut features that turn out not to matter, and deliver value while the argument over the total is still going.\n\nTwo caveats. Some contexts need real commitments: a fixed regulatory deadline, a hardware launch, a contract with penalties. There, do the hard thinking about scope and risk, and cut scope to meet the date, rather than pretending to know a duration. And forecasting is not abolished. Rough sizing to decide whether something is worth starting at all is fine. What should go is the false precision.\n\nManagers, this one is for you. You are not giving up control. You are swapping a ritual that produces confident-looking fiction for one that produces honest ranges and faster feedback.\n\nStop asking how long it will take. Ask what you can ship this week, and what you learned by shipping it."
+}

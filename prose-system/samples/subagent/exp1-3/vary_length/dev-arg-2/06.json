@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aad2e7eb4aca6a53a",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 1054,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:41:41.244Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this meeting. Someone asks how long the feature will take. You say three weeks, because two sounds reckless and six sounds lazy. Everyone writes \"three weeks\" down. Nobody believes it, least of all you.\n\nSoftware teams should stop estimating how long work will take. Not stop planning. Stop the ritual of attaching a number to work nobody understands yet.\n\nThe core problem is that estimates are asked for at exactly the moment we know the least. Before you open the code, before you hit the undocumented API, before the customer changes their mind, you must commit to a date. Then reality arrives, as it always does. The Standish-style surveys and decades of project post-mortems tell the same story: overruns are the norm, not the exception. When an instrument is wrong most of the time, the sensible response is to stop trusting it.\n\nWorse, estimates do not stay estimates. They harden into promises. A \"rough guess\" in a planning meeting becomes a commitment on a roadmap, then a deadline in a manager's quarterly review. Engineers learn the lesson fast. They pad. They cut corners to hit the number. They hide the surprising discovery that would force a conversation. The estimate stops measuring the work and starts shaping behavior, usually for the worse.\n\nAnd the hours spent producing them are real. Planning poker, story point debates, re-estimation after scope shifts: add it up across a team and a year. That is weeks of capacity spent generating figures that are routinely ignored.\n\nManagers will object, reasonably. The business needs to know when things will be done. Sales makes promises. Launches have dependencies. I agree. But the answer is not a better guess about individual tasks. It is a different kind of evidence.\n\nSlice work into small pieces, each shippable in a day or two. Then count them. Track how many pieces your team actually finishes per week. That throughput is a measurement, not an opinion, and it improves as you gather more data. Want a forecast? Take the backlog, divide by the observed rate, and give a range. It will be wrong sometimes, but it will be wrong honestly, and it updates every week without a meeting.\n\nNotice what this changes. The conversation moves from \"why did you say two weeks?\" to \"what is the smallest thing we can ship next, and what are we learning?\" Scope becomes the lever, not the deadline. When time is fixed, you cut features. You do not cut quality or sleep.\n\nSome work does need a ceiling: a regulatory date, a conference demo. Fine. Set the date, then decide together what fits inside it. That is a budget, not an estimate, and it is far more honest about who controls what.\n\nThe objection I hear most is that without estimates, teams drift. I have seen the opposite. When people stop defending a number, they start talking about the work. Blockers surface sooner. Small wins accumulate where everyone can see them.\n\nEstimating feels like discipline. Mostly it is theater with a spreadsheet. Replace it with small batches, measured flow, and honest ranges, and you will know more about when things ship than you ever did by guessing."
+}

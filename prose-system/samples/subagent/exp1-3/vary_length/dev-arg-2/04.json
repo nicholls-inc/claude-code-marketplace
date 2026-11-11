@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a67fef2c5587dc2fd",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 997,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:40:45.546Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this scene. A manager asks how long the new billing integration will take. You squint, think about the three systems you have never touched, and say \"about six weeks.\" That number gets written on a slide. Eight weeks later, the slide is still there, and so is the integration, half done.\n\nThe number was never a prediction. It was a guess wearing a suit. And teams should stop producing it.\n\nStart with the evidence. Software work is dominated by unknowns: the legacy module that turns out to have no tests, the vendor API that behaves differently from its docs, the requirement that changes once a customer sees a prototype. Estimates are made at the moment we know the least. Decades of project data, from the famous Standish reports to the daily experience of any team you have worked on, tell the same story. Estimates are wrong, and they are wrong in one direction. Work expands. It almost never shrinks.\n\nWorse, the estimate does damage even when it is merely wrong. It becomes a commitment the moment it leaves your mouth. Engineers then spend the back half of a project defending a date rather than examining the problem. Corners get cut. Tests get skipped. Someone says \"we'll fix it after launch,\" and nobody ever does. The estimate did not predict the outcome. It shaped it, for the worse.\n\nDefenders will say planning needs numbers. Marketing has a launch. Finance has a budget. Fair. But notice what those needs actually are. They are not a need for precise forecasts of individual tasks. They are a need to know whether the work is worth doing, and whether it is on track. Both can be answered without estimating.\n\nHere is the alternative, and it is boring. Break work into pieces small enough that nobody argues about their size, ideally a day or two each. Ship them continuously behind flags. Track how many of those pieces your team actually finishes per week. That throughput is a measurement, not an opinion, and it is far more reliable than any planning-poker session. When someone asks \"when will it be done,\" you count the remaining pieces and divide. When the count grows, you say so, early, while there is still time to cut scope.\n\nNotice what changed. The conversation moved from \"why did you miss your date?\" to \"what should we cut to hit ours?\" That is a conversation about product, not blame.\n\nManagers worry this means flying blind. It is the opposite. A team that shows working software every week gives you more visibility than a Gantt chart ever did. You see real progress, not a percentage someone invented.\n\nWill some stakeholders still demand a date? Yes. Give them a range based on measured throughput, and be honest about its width. That is not estimating the old way. That is forecasting from data.\n\nThe hours we burn on sizing meetings, story-point debates, and padding buffers are hours not spent building. We keep doing it because it feels responsible. It is theatre.\n\nStop guessing. Slice the work thin, measure what lands, and let the evidence do the talking."
+}

@@ -1,0 +1,19 @@
+**Stop Estimating. Start Slicing.**
+
+Every engineer has lived this scene. A manager asks how long a feature will take. You think for ten seconds, say three weeks, and watch the number get written on a slide. Six weeks later the number is a promise, then a commitment, and eventually a grievance. Nobody in the room believed the estimate when it was made, yet everyone treated it as fact once it was spoken.
+
+I think teams should stop estimating how long work will take. I do not mean they should stop planning. I mean they should stop guessing durations for work nobody has done yet.
+
+The first problem is that the guesses are bad, and not by accident. Software work is mostly discovery. The hard part of a task is the part you cannot see until you are inside it. Decades of project data say the same thing. Estimates miss, they miss in one direction, and the misses have fat tails, so the one task that blows up outweighs all the others combined. More rounds of planning poker do not fix this. They add confident looking noise.
+
+The second problem is what estimates do to behavior. Once a number exists, the work bends around it. Engineers pad. Managers shave the padding. Everyone negotiates the figure instead of the scope. When the deadline nears, quality is the only thing left to flex, so tests get skipped and shortcuts become next quarter's outage. The estimate was meant to describe reality, and instead it manufactured pressure.
+
+The third problem is cost. Add up the hours of grooming, pointing, re estimating and explaining why the sprint missed. That time buys a prediction less reliable than a simple look at recent history. It is a lot of ceremony for very little information.
+
+So what replaces it? Slice work until each piece is small enough that duration stops mattering. A change that fits in a day or two needs no estimate, because the argument over its size would take longer than the work. Then measure what actually happens. Track how many slices your team finishes per week. That throughput is boring, honest and hard to game. If you need a forecast, run it forward. Forty slices remain, the team finishes about eight a week, so expect around five weeks, with a range. That forecast is built from evidence and not from a mood.
+
+Managers will object that the business needs dates. It does, and this approach gives better ones. Near term dates come from observed throughput. Far term dates should be treated as what they are, which is bets. The honest conversation is about scope and priority. What is the most valuable thing we can ship by the date that matters, and what are we willing to drop? That question respects both sides. The estimate question only asks engineers to be oracles.
+
+Some work, like a regulatory deadline or a hardware launch, really does have a fixed date. Even then, the date should drive the scope. It should never be used to squeeze the schedule while the scope stays frozen.
+
+Try it for one quarter. Drop the points, cut the slices and count what ships. You will lose a ritual and gain trust. Most teams will not miss the ritual.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ace161c4f7087a1eb",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72479,
+    "output_tokens": 2002,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:43:32.985Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Slicing.\n\nSoftware teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because they are wrong in a predictable way, and the ritual built around them costs more than it returns.\n\nEvery engineer has lived the pattern. A task is sized at three days in planning. Nobody knows about the legacy module, the flaky test environment, or the colleague who will be out sick. It takes nine days. The estimate was not a measurement. It was a guess made at the moment of maximum ignorance, and then it was treated as a promise.\n\nThe research backs the experience. Large projects overrun their plans so consistently that psychologists gave the tendency a name, the planning fallacy. Teams do not get better at it with practice, because software work is new by definition. If it were repeatable, we would have automated it already.\n\nThe damage goes beyond inaccuracy. Estimates become commitments the moment a manager repeats one to a stakeholder. Engineers learn to pad. Managers learn to discount the padding. Everyone negotiates a number that reflects politics rather than effort. Hours vanish into planning poker, and the people in the room who know least about a task vote on it anyway. Worse, a team rushing to hit a number will quietly cut tests and skip cleanup, which means the estimate gets paid for in quality.\n\nManagers will object that they need predictability. They do, but estimates are a poor way to get it. A better source is flow. Slice work into pieces small enough that each takes a day or two, then count how many finish per week. That throughput number is based on what actually happened, not what anyone hoped. Forecast from it and you get a range with real history behind it. It takes minutes to maintain rather than meetings to produce.\n\nSlicing is the real skill. Making a task small forces the team to understand it, expose its risks, and cut scope. Much of the value people attribute to estimating is really the conversation about what the work involves. Keep that conversation. Drop the number.\n\nSome work does need a date, such as a regulatory deadline or a launch tied to an event. Fine. Then fix the date, vary the scope, and cut features as the deadline approaches. That is honest. Pretending a guess made in January can predict a delivery in June is not.\n\nTry it for a quarter. Stop asking for story points. Ask instead for small slices, track what finishes, and watch what happens to the arguments in your planning meetings. Most teams find the meetings get shorter, the forecasts get better, and trust between engineers and managers improves, because nobody is being held to a number they never believed in."
+}

@@ -1,0 +1,21 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this meeting. Someone asks how long the feature will take. You say "about three weeks," knowing the number is a guess dressed up as a plan. By week two, that guess has become a commitment. By week four, it has become a failure.
+
+I think teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because the practice is systematically wrong in ways that do real damage.
+
+Start with the evidence. Software work is novel by nature. If we had done the exact task before, we would have reused the result. So estimates are forecasts about unknowns: the library that misbehaves, the requirement that shifts, the legacy module nobody understood until Tuesday. Decades of studies on project overruns say the same thing. We are bad at this, and we do not get better with practice.
+
+Worse, the number does not stay an estimate. It hardens. Managers pass it up the chain, other teams schedule around it, and a rough guess becomes a promise with a name attached. Then people behave rationally. They pad. They cut corners to hit the date. They hide the discovery that the work is bigger than thought, because bad news at week four feels worse than at week one. The estimate does not predict the outcome. It distorts it.
+
+And the cost of producing the number is not zero. Planning poker, story-point debates, and re-estimation after every surprise eat hours that nobody gets back. We spend real time on fake precision.
+
+The usual defense is that the business needs dates. It does need to know what is coming. But that is a different question from "how long will this take?" The better question is "what is the smallest useful slice we can ship, and what have we learned from shipping the last one?"
+
+So here is the alternative. Slice work until each piece is small enough that it takes days, not weeks. Do not estimate those pieces; just do them, in priority order. Then measure what actually happens: how many slices finish per week, how long they sit in progress. That throughput is a real number drawn from your own history, not anyone's optimism. If leadership needs a forecast, you can give a range grounded in data, and update it weekly as reality arrives.
+
+Notice what this changes. Conversations move from "why are you late?" to "what should we cut or reorder?" Scope becomes the lever, which is where it belonged all along. Teams stop defending numbers and start protecting outcomes.
+
+Some objections deserve a straight answer. Won't this leave managers blind? No. It gives them better visibility, because shipped work and observed flow are facts, while estimates are opinions. What about fixed-date commitments, like a regulatory deadline? Then work backward from the date, fix the scope you can deliver, and cut the rest early. That is not estimating. It is negotiating with reality.
+
+Engineers: stop giving numbers you do not believe. Managers: stop asking for them, and ask what the team has shipped and what it will ship next. The meeting will be shorter. The truth will arrive sooner.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0dd919df9892bb52",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 1009,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:43:06.674Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this meeting. Someone asks how long the feature will take. You say three weeks, because two sounds reckless and four sounds lazy. Everyone nods. That number now exists, and it will outlive every fact that made it plausible.\n\nSoftware teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because the practice is structurally broken, and the effort we pour into it buys almost nothing.\n\nStart with the evidence. Decades of project data show the same pattern: estimates for novel work miss by wide margins, and the misses are not random noise you can average away. They are skewed. Tasks run long far more often than they run short, because the unknowns in software are discovered only by doing the work. You cannot estimate the bug you have not met, the API that lies about its behavior, or the requirement that changes in week two. The estimate is a guess about the part of the job you understand least, made at the moment you understand it least.\n\nThen comes the damage. An estimate quietly turns into a commitment. Managers repeat it upward, where it hardens into a date. Engineers, now defending a number, start trading quality for schedule: skipped tests, deferred cleanup, scope cut in the dark. The team that was supposed to be learning is instead managing a promise. Nobody planned for that outcome. It happens anyway.\n\nThe cost is also real before any code exists. Planning poker, story-point calibration, reestimation after the reestimation: teams spend hours a sprint producing figures that no one can later verify. That time is not free. It comes straight out of building the thing.\n\nThe usual objection is that the business needs dates. It does. But a business needs dates to make decisions, and there are better inputs for those decisions than a guess.\n\nCut work into small slices, each shippable in a day or two. Then measure what actually happens. Throughput, the count of slices finished per week, is a fact, not a forecast. A team that finishes eight slices a week on average can tell you, with honest error bars, when forty remaining slices will land. That forecast improves as data arrives. A story point never does.\n\nBetter still, make the decision about scope rather than time. Fix the deadline, or fix the budget, and ask what is the most valuable thing we can ship inside it. Order the work by value, ship continuously, and let the stakeholder stop when the remaining items are no longer worth the cost. This replaces a promise that will break with a conversation that can adapt.\n\nWill this feel uncomfortable at first? Yes. Executives accustomed to a Gantt chart will ask where it went. Answer them with something better: working software every week, and a forecast built from history instead of hope.\n\nEstimating feels like diligence. It is closer to theater. The honest thing to say about a hard, unfamiliar piece of work is: we do not know yet, but we will show you something real by Friday. Teams that can say that, and mean it, build better software and keep their trust. Stop guessing. Start measuring."
+}

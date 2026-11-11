@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7a4e48b728d02aeb",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72454,
+    "output_tokens": 1145,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:42:53.568Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineering team has lived this scene. A manager asks how long the feature will take. The engineers, who have seen the code and know how little they know, say \"about six weeks.\" Six weeks becomes a date on a slide. Eight weeks in, the date is a source of shame, and everyone is quietly renegotiating scope, cutting tests, or both. We call this planning. It is closer to ritual.\n\nMy argument is simple: teams should stop estimating how long work will take, at least in the sense of producing forecasts that people are then held to.\n\nStart with the evidence. Software estimates are bad, and not by a little. Studies going back decades, from the Standish reports to Bent Flyvbjerg's work on project overruns, keep finding that projects run long, and that the error grows with the size and novelty of the work. This is not a skill problem that better training will fix. Estimating new software means predicting what you will discover, and you cannot schedule a discovery. The most expensive surprises, like the library that doesn't do what the docs claim or the requirement nobody mentioned, are precisely the ones absent from the estimate.\n\nThe cost goes beyond inaccuracy. An estimate, once spoken, becomes a commitment in the listener's mind, whatever caveats the speaker attached. Then behavior bends around it. Engineers pad. Managers, knowing about the padding, trim. Work expands to fit the number, or gets rushed to meet it. Hours that could go to building go to planning poker, re-estimation, and explaining variance. I have rarely seen a team's output improve because its estimates improved.\n\nThe usual defense is that the business needs dates. It does need to make decisions, and that is a different thing. Decisions about what to build, in what order, and when to stop don't require a forecast of the whole project. They require three cheaper things.\n\nFirst, break work into small pieces, a few days at most. Small pieces are easy to understand, and when one runs long, the damage is a day, not a quarter.\n\nSecond, track throughput. Count how many pieces the team actually finishes per week. That number comes from what happened, not what anyone hoped, and it supports a perfectly good forecast: \"at our recent pace, these twenty items land in about five weeks, give or take.\" Nobody had to sit in a room guessing.\n\nThird, make the tradeoff explicit. Instead of asking \"how long will this take,\" ask \"how much is this worth, and when should we reassess?\" Fix the time you're willing to spend and shrink scope to fit. That turns a date you will miss into a budget you will keep.\n\nSome objections deserve a straight answer. Fixed-price contracts and hard external deadlines exist, and there you do need a rough forecast. Fine: do a coarse one, state the uncertainty as a range, and revisit it as data arrives. That is not a ban on thinking about time. It is a refusal to pretend a guess is a promise.\n\nManagers may fear losing control. In practice, you gain it. A team shipping small increments every few days gives you something better than a prediction: working software you can look at, and a cheap moment to change course.\n\nSo try it for a quarter. Cancel the estimation meetings, slice the work thinner, and publish throughput instead. If your dates get worse, you can go back. I suspect you'll find that the thing you were missing was never a better number. It was smaller work and an honest conversation about tradeoffs."
+}

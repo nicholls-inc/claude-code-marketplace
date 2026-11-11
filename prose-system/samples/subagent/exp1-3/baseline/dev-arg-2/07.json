@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a410738b66e8206b6",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72454,
+    "output_tokens": 990,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:41:57.129Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping Small.\n\nAsk any engineer what an estimate is and you will hear some version of the same answer: a guess that someone later treats as a promise. After two decades of watching teams negotiate, pad, defend and apologize for those guesses, I think most software teams should stop producing them.\n\nStart with the evidence. Projects overrun, and they do so consistently. Fred Brooks wrote about it in 1975, and every generation of tooling since has failed to fix it. The reason is not laziness or poor technique. Software work is mostly discovery. You do not know how long a task takes until you have found out what is wrong with the code you are about to change, and finding that out is most of the work. An estimate asks you to price a thing before you have seen it.\n\nThe cost of the guess is not the error itself. It is everything built around it. Teams spend hours in planning sessions debating whether a ticket is a three or a five, a debate that produces no working software. Once a number exists, it hardens. Managers quote it upward, dates get attached, and when reality diverges the conversation turns to who slipped rather than what was learned. Engineers learn to pad, managers learn to discount the padding, and everyone loses trust in the number, including the people who wrote it.\n\nWorse, estimates quietly distort the work. A team committed to a date cuts corners on tests and review to hit it. They avoid the risky, valuable task in favor of the predictable one. The number becomes the goal, and the product becomes the thing that gets squeezed.\n\nThe usual defense is that managers need predictability to plan. That is true, and it is the strongest argument for the other side. But notice what planning actually requires: not a forecast for each task, but a sense of how much the team finishes in a given period. You can get that without estimating anything. Slice work into pieces small enough that each takes a day or two, count the pieces that finish each week, and forecast from that throughput. Teams that do this find the counts are far more stable than their estimates ever were, because the variation in individual task size averages out. It takes minutes to maintain rather than hours of meetings.\n\nThe second defense is that stakeholders want dates. Sometimes they do, and there are real constraints: a regulatory deadline, a launch tied to a conference. But a fixed date is an input to the plan, not an output. The honest response is to ask what can be delivered by then and to cut scope to fit, which is a conversation about priorities, not a negotiation over a guess.\n\nI am not arguing for chaos. Stopping estimates means committing to something harder: break work down, ship in thin slices, show working software every few days, and let the actual pace tell you where you stand. That discipline is what estimation theatre lets teams avoid.\n\nSo try it for a quarter. Drop story points, keep a simple count of finished items, and talk about scope rather than dates. If the forecasts get worse, go back. I expect they will get better, and you will have your planning hours back for building the thing."
+}

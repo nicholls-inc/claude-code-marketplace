@@ -1,0 +1,21 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this moment. A manager asks how long the feature will take. You say three weeks, because three feels defensible. Six weeks later, the number is still on a slide, and everyone is pretending it means something.
+
+Software teams should stop estimating how long work will take. Not estimating badly. Not estimating more carefully. Stopping.
+
+The case starts with what an estimate actually is. It is a prediction about the unknown, made at the moment you know the least. Software work is mostly discovery. The part you can size in advance is the part you have already done before, and that part is usually automated or copied. What remains is the novel, tangled, surprising work, and that is exactly the work no one can size. Decades of overruns, from small startups to government systems, are not a failure of discipline. They are the expected result of asking a question that has no reliable answer.
+
+Then comes the cost, which people rarely count. Estimation meetings eat hours. Planning poker, refinement sessions, re-estimation after scope shifts: add it up across a quarter and a team loses real weeks to forecasting work instead of doing it. Worse, estimates harden into promises. The moment a number leaves your mouth, it becomes a commitment in someone else's head. Teams respond rationally. They pad. They cut corners to hit the date. They hide the bad news until it cannot be hidden. The estimate does not predict the outcome. It distorts it.
+
+The usual defense is that managers need dates to coordinate sales, launches, and budgets. That is a real need. But an estimate is a poor way to meet it.
+
+Here is the alternative. Slice work into pieces small enough that each one takes a day or two. Do not estimate them; just make them small. Then measure how many pieces actually finish each week. That throughput number comes from what the team really did, not what it hoped to do. Forecast from it. If the backlog holds forty slices and the team finishes eight a week, you have a five-week answer, and it improves with every sample. No meeting required.
+
+Better still, small slices reveal truth early. If a thin vertical cut of the feature is not working after a week, you know now, not in month three. Managers get something more valuable than a date: a steady stream of working software and an honest signal when plans need to change.
+
+Some will object that without estimates, teams drift. The opposite is true. A fixed deadline with a flexible scope forces the hard conversation about what matters most. You ship the most valuable slices first and cut from the bottom when time runs out. That is prioritization, which is what estimation was always pretending to be.
+
+There are narrow exceptions. A contract with a fixed price may demand a number. Fine; give a range and treat it as a negotiation, not a measurement.
+
+But for most teams, the ritual does more harm than good. Stop guessing. Make the work small, count what finishes, and let reality do the forecasting.

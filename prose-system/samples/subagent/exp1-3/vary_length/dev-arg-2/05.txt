@@ -1,0 +1,21 @@
+**Stop Estimating. Start Forecasting.**
+
+Ask any engineer what an estimate is, and you will hear a polite word for a guess that someone will later hold against them. We have spent decades trying to make the guess better. It is time to admit the guess is the problem.
+
+Consider what we know. Software work is mostly discovery. The part you can see, the feature on the ticket, is rarely the part that hurts. The hurt lives in the legacy module nobody has opened since 2019, the API that behaves differently in production, the colleague who gets sick in week two. Estimates cannot capture what nobody knows yet, and what nobody knows yet is where most of the time goes.
+
+The research agrees. Studies of project overruns keep finding the same thing: people are optimistic, and the optimism does not shrink with experience. Planning fallacy is not a character flaw you can train away. It is how brains work.
+
+So teams respond with ritual. Story points, planning poker, t-shirt sizes, a two-hour meeting to decide whether something is a five or an eight. I have watched a room of smart people argue for twenty minutes over a number that changed nothing. Twenty minutes, for a number. Multiply that across a year and a team, and you have paid real salaries to produce fiction.
+
+Worse, the fiction becomes a promise. A manager hears "about three weeks" and tells a customer "end of the month." The engineer meant a rough guess; the manager heard a commitment. When reality arrives, trust erodes on both sides. Engineers start padding, managers start discounting the padding, and everyone learns to play a game that makes the numbers meaningless. Padding, then discounting the padding: a loop with no exit.
+
+Here is the alternative, and it is not chaos. Break work into small pieces, ideally a few days each. Do not estimate them. Just count how many you finish per week. After a month or two, you have a throughput number, and it is far more reliable than any poker round, because it measures what happened rather than what anyone hoped. Want to know when fifty items will be done? Divide. Run a simple simulation on your past data and you get a range with probabilities: eighty-five percent likely by mid-March, ninety-five by April. That is honest. It admits uncertainty instead of hiding it.
+
+Notice what changes. Engineers stop defending numbers and start slicing work smaller, which is the one habit that reliably improves delivery. Managers get forecasts grounded in evidence. Conversations shift from "why did you miss?" to "what is slowing us down?"
+
+The objection is predictable: the business needs dates. Of course it does. But a date built on a guess is worse than a range built on data. Give people the second and they will plan better.
+
+Some will say small, well-understood tasks still deserve a quick estimate. Fine. If your team sizes things in thirty seconds and moves on, you are already close to what I am proposing. My target is the heavy machinery, the points, the debates, the commitments carved from sand.
+
+Stop asking how long it will take. Start measuring how long it has taken. The past, at least, is not a guess.

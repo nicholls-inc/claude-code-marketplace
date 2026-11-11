@@ -1,0 +1,23 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this meeting. A manager asks how long the feature will take. You say three weeks, knowing it could be one or it could be ten. The number goes on a slide. Six weeks later, the slide is a weapon.
+
+Software teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because they are wrong in a systematic way that no amount of discipline fixes, and because the effort of producing them buys almost nothing.
+
+Start with the nature of the work. Building software is mostly discovering what you did not know. The tasks we can predict, we automate or copy from a library. What remains is novel by definition, which makes it hard to size in advance. The unknowns are the whole job. Asking an engineer to price them before opening the code is asking for a guess dressed up as a commitment.
+
+The research agrees. Projects overrun their forecasts again and again, and the overruns are not random noise that averages out. Optimism is baked in. Estimates are also anchored by whoever speaks first, and nudged by whatever the boss seems to hope for. Planning poker adds ceremony, not accuracy.
+
+Then comes the cost nobody counts. Hours go into refinement sessions, story pointing, and re-estimating after scope shifts. Worse, the number changes behavior. Once a date exists, people protect it. They cut tests, skip the refactor, and hide bad news until it is undeniable. The estimate stops predicting the work and starts distorting it.
+
+Managers will object that they need dates. Customers need dates. Finance needs dates. Fair. But look at what they actually need: confidence about when something will land, and early warning when it will not. An estimate delivers neither. It is a single stale number, made at the moment of greatest ignorance.
+
+There is a better source of truth, and it is your own history. Slice work into small pieces, a day or two each. Count how many finish per week. That throughput is measured, not imagined, and it tells you far more than any pointing session. If the team ships about eight items a week and the backlog holds forty, you have a forecast with a range. Update it every Friday. It will be wrong in small ways early and corrected quickly, which beats being wrong in large ways late.
+
+This approach also changes the conversation. Instead of "why did you say three weeks," the question becomes "what is the smallest thing we can ship, and what should we cut to get it out?" That is a conversation about value and scope, which is where managers can actually help.
+
+None of this means flying blind. Deadlines that are real, like a regulatory date or a conference launch, should drive scope, not the other way around. Fix the date, then negotiate what fits.
+
+Will some teams still need rough sizing for budgeting? Perhaps. A coarse "days, weeks, or quarters" is cheap and honest. What you should drop is the false precision: the points, the hours, the commitments.
+
+Try it for a quarter. Break work small, track throughput, forecast from data. You will lose the ritual. You will keep the delivery. And you may find the awkward meeting quietly disappears.

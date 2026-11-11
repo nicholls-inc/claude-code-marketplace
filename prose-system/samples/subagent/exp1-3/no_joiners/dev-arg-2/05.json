@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9d96b4fb542a02ea",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72479,
+    "output_tokens": 1025,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:41:17.046Z",
+  "valid": true,
+  "text": "Stop Estimating, Start Shipping\n\nSoftware teams should stop estimating how long work will take. I do not say this because estimates are hard, though they are. I say it because the estimate has become a ritual that costs more than it returns, and the people who pay are the engineers who get blamed when reality refuses to cooperate.\n\nConsider what an estimate actually is. It is a guess about the future made at the moment you know the least. You have not opened the unfamiliar module yet. You have not met the flaky integration or the undocumented edge case. Then that guess gets written down, repeated in a planning meeting, and quietly promoted into a commitment. By the time the work starts, the number is no longer a prediction. It is a promise with your name on it.\n\nResearch on the planning fallacy shows people underestimate their own tasks even when they know similar tasks ran long before. Experience does not fix this. Senior engineers are only slightly better, and the errors are not random noise that averages out. They skew in one direction, because the surprises that hurt us are always additions, never subtractions. Nobody discovers that a task is secretly half as complicated as it looked.\n\nThe damage goes beyond bad numbers. Teams spend hours in estimation sessions arguing over whether something is a five or an eight. That time produces no software. Worse, the estimate changes behavior. Engineers pad. Managers shave the padding back. Everyone learns that the honest answer is to say it depends, and that this answer is unwelcome. Over time the process teaches people to manage perceptions instead of the product.\n\nEstimates also push quality down. When a deadline is anchored to a guess, the cheapest way to hit it is to cut tests, skip refactoring, and defer the cleanup that never comes. The estimate was wrong, but the codebase absorbs the cost.\n\nHere is what I would do instead. Break work into small slices that can ship in a day or two. Slice until the size question stops mattering, because a small enough task is not worth debating. Then measure what actually happens. Track how many slices finish each week and use that throughput to forecast. A team that ships around six slices a week can tell you with far better accuracy than any planning poker session that a body of forty slices lands in roughly seven weeks. This is a measurement of the past used to project forward, not a guess about the unknown.\n\nManagers will object that they need dates. They do, but they need honest ranges and early warning more than they need false precision. A throughput forecast gives both. When the rate slows, you see it within days, not at the deadline. You can then cut scope, add people, or move the date while options remain open.\n\nSome will say that dropping estimates invites drift. The opposite is true. Small slices, visible progress and a shared forecast create more accountability than a number nobody believed in the first place.\n\nIf a task is truly large and uncertain, spend a short time building a thin prototype and learn something. That buys more than any estimate could.\n\nStop asking engineers to predict the unpredictable. Ask them to ship small, ship often, and show the evidence. The dates will follow, and the trust will be real."
+}

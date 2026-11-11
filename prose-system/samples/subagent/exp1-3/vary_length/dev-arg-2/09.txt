@@ -1,0 +1,21 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this meeting. Someone asks how long the feature will take. You say three weeks, because two sounds reckless and four sounds lazy. Everyone nods. That number now exists, and it will outlive every fact that made it plausible.
+
+Software teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because the practice is structurally broken, and the effort we pour into it buys almost nothing.
+
+Start with the evidence. Decades of project data show the same pattern: estimates for novel work miss by wide margins, and the misses are not random noise you can average away. They are skewed. Tasks run long far more often than they run short, because the unknowns in software are discovered only by doing the work. You cannot estimate the bug you have not met, the API that lies about its behavior, or the requirement that changes in week two. The estimate is a guess about the part of the job you understand least, made at the moment you understand it least.
+
+Then comes the damage. An estimate quietly turns into a commitment. Managers repeat it upward, where it hardens into a date. Engineers, now defending a number, start trading quality for schedule: skipped tests, deferred cleanup, scope cut in the dark. The team that was supposed to be learning is instead managing a promise. Nobody planned for that outcome. It happens anyway.
+
+The cost is also real before any code exists. Planning poker, story-point calibration, reestimation after the reestimation: teams spend hours a sprint producing figures that no one can later verify. That time is not free. It comes straight out of building the thing.
+
+The usual objection is that the business needs dates. It does. But a business needs dates to make decisions, and there are better inputs for those decisions than a guess.
+
+Cut work into small slices, each shippable in a day or two. Then measure what actually happens. Throughput, the count of slices finished per week, is a fact, not a forecast. A team that finishes eight slices a week on average can tell you, with honest error bars, when forty remaining slices will land. That forecast improves as data arrives. A story point never does.
+
+Better still, make the decision about scope rather than time. Fix the deadline, or fix the budget, and ask what is the most valuable thing we can ship inside it. Order the work by value, ship continuously, and let the stakeholder stop when the remaining items are no longer worth the cost. This replaces a promise that will break with a conversation that can adapt.
+
+Will this feel uncomfortable at first? Yes. Executives accustomed to a Gantt chart will ask where it went. Answer them with something better: working software every week, and a forecast built from history instead of hope.
+
+Estimating feels like diligence. It is closer to theater. The honest thing to say about a hard, unfamiliar piece of work is: we do not know yet, but we will show you something real by Friday. Teams that can say that, and mean it, build better software and keep their trust. Stop guessing. Start measuring.
