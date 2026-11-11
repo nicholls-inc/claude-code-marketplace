@@ -1,0 +1,13 @@
+A leap second is a one second adjustment added to the world's official clocks every so often, so that they stay in step with the turning of the Earth.
+
+The need for it comes from two ways of keeping time. For most of history we measured time by the sky. A day was one full spin of the planet. Since the 1950s we have also had atomic clocks, which count the vibrations of atoms and are astonishingly steady. They would lose less than a second over many millions of years. The Earth is a far poorer timekeeper. Tides, the churning of its molten core and even shifting weather and ice nudge its spin, so days drift slightly longer or shorter.
+
+Civil time, known as Coordinated Universal Time, was designed in 1972 to follow the atomic clocks while staying close to the Earth's rotation. When the two threatened to slip apart by more than 0.9 of a second, a leap second was inserted, usually on the last day of June or December. Clocks would read 23:59:59, then 23:59:60, then roll over to midnight. This has happened 27 times. The last was at the end of 2016.
+
+The trouble is that computers hate it. Most software assumes that a minute has exactly 60 seconds. A sudden 61st second can confuse systems that log events, trade shares, route phone calls or steer aircraft. Leap seconds have been blamed for crashes and outages at major websites, and engineers at large tech firms have invented workarounds such as stretching the extra second across a whole day. Because leap seconds arrive at irregular intervals, announced only months ahead, nobody can program for them in advance.
+
+In 2022 the international body that sets standards for measurement, the General Conference on Weights and Measures, voted to stop the practice. From 2035 at the latest, the gap between atomic time and the Earth's spin will be allowed to grow well beyond one second. Officials have said it could reach a minute or more before anyone has to act, and they have yet to settle exactly how a future correction would work.
+
+The Earth has complicated the story. In recent years it has been spinning slightly faster, which could in theory require a negative leap second, removing a second rather than adding one. That has never been tried, and many experts fear it would be even riskier for software.
+
+For ordinary people, nothing will change. Noon will still be close to the sun's highest point for many decades. The difference is that the correction will become a problem for our great grandchildren to solve.

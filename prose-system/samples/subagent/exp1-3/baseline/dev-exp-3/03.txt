@@ -1,0 +1,72 @@
+# How two strangers can agree on a secret in public
+
+## The problem
+
+Suppose Alice and Bob have never met. They want to share a secret number, for example to use as the key to a lock that scrambles their messages. The only way they can talk is a line that anyone can listen to. Everything they say, Eve hears too.
+
+This sounds impossible. If the secret is spoken, Eve hears it. Yet it can be done, and the method protects almost everything you do online. It rests on one idea: some mathematical jobs are easy to do forwards and extremely hard to undo.
+
+## Easy forwards, hard backwards
+
+Multiplying is easy. Take two primes, such as 7919 and 7927, and multiply them. A calculator gives 62,773,913 at once. Now go backwards. Someone hands you 62,773,913 and asks which two primes multiplied to give it. You would have to try dividing by 2, 3, 5, 7 and so on, one candidate after another. With numbers this small it is tedious but possible. With numbers hundreds of digits long, all the computers on Earth working for longer than the age of the universe would not finish.
+
+Public-key cryptography is built from jobs like this. Forwards is a short calculation. Backwards is hopeless unless you know a secret shortcut.
+
+## The paint analogy
+
+Here is the idea with paint instead of numbers.
+
+1. Alice and Bob publicly agree on a common colour, say yellow. Eve knows this.
+2. Alice secretly picks a private colour, red. Bob secretly picks blue.
+3. Alice mixes her red into the yellow and sends the orange result to Bob. Bob mixes his blue into the yellow and sends the green result to Alice. Eve sees both mixtures.
+4. Alice adds her private red to the green she received. Bob adds his private blue to the orange he received. Both now hold yellow, red and blue mixed together: the same brown.
+
+Eve holds yellow, orange and green. To get the brown she would need to add red or blue, and she has neither. Mixing paint is easy, but separating a mixture back into its ingredients is not. Eve cannot unmix the orange to recover Alice's red.
+
+The real method follows the same pattern, with numbers in place of paint.
+
+## Clock arithmetic
+
+We need a kind of number-mixing that is easy to do and impossible to unmix. School maths gives us one: remainders.
+
+You already use remainders when reading a clock. Seven hours after 9 o'clock is 4 o'clock, because 9 + 7 = 16, and 16 leaves remainder 4 after you remove 12. Mathematicians call this working "modulo 12". We will work modulo 23, a clock with 23 positions numbered 0 to 22. After any calculation, divide by 23 and keep only the remainder.
+
+Powers are the next ingredient. "5 to the power 6" means 5 × 5 × 5 × 5 × 5 × 5, which is 15,625. On our 23-hour clock, 15,625 divided by 23 is 679 with remainder 8. So 5^6 lands on 8.
+
+Now notice the asymmetry. Given the power 6, finding the result 8 takes a few multiplications. Given only the result 8, finding which power produced it means trying powers one at a time: 5^1, 5^2, 5^3 and so on, until you hit 8. The results jump around the clock with no pattern you can exploit. With a tiny clock of 23 this is quick. With a clock of several hundred digits it is hopeless. This is our unmixing problem.
+
+## The exchange, step by step
+
+**Public agreement.** Alice and Bob announce two numbers: the clock size 23, and a base number 5. Eve knows both. This is the yellow paint.
+
+**Private choices.** Alice picks a secret number, 6, and tells nobody. Bob picks a secret number, 15, and tells nobody. These are the red and the blue.
+
+**Mixing.** Alice computes 5^6 on the clock, which we found is 8. She announces 8. Bob computes 5^15 on the clock and gets 19. He announces 19. These are the orange and the green, and Eve hears both.
+
+**The secret.** Alice takes Bob's public 19 and raises it to her private power 6, which gives 2 on the clock. Bob takes Alice's public 8 and raises it to his private power 15, which also gives 2. The shared secret is 2.
+
+Why do they agree? Raising a power to a power multiplies the exponents. Alice effectively computed 5^(15 × 6). Bob effectively computed 5^(6 × 15). Multiplication does not care about order, so 15 × 6 equals 6 × 15, and both arrive at the same place. (If you check on a calculator, reduce by 23 as you go, otherwise the numbers become enormous.)
+
+Eve knows 23, 5, 8 and 19. To find the secret she needs either 6 or 15. Finding 6 means solving "5 to what power gives 8 on this clock?", the unmixing problem. With a clock this small she could simply try every power. That is why real systems use a clock whose size has hundreds of digits, where trying powers is out of the question.
+
+## Why this is safe, and what safe means
+
+Notice what never crossed the line: 6 and 15. Each person's private number stayed at home. What crossed the line were results of one-way calculations. The shared secret was never sent. Each side built it independently, and only the holders of a private number can do that.
+
+The safety is not an absolute proof. It is a bet that nobody has found a fast way to unmix the clock calculation. Mathematicians have studied this problem for decades without finding one for properly chosen numbers. That long, unsuccessful search is the foundation of the security.
+
+## Public keys and padlocks
+
+The same idea gives its name to the whole field. Another way to picture it is a padlock. Bob manufactures a thousand identical open padlocks and gives them out to anyone. Only he holds the key that opens them. Alice snaps a padlock onto a box containing her message and posts it. Anyone can lock a box, so Eve can too, but only Bob can open it.
+
+In the numbers version, Bob's announced 19 plays the part of the padlock: it is his public key, safe to broadcast. His private 15 is the key that opens it. A well-known scheme called RSA works on the padlock principle using the multiplying-primes problem from earlier. The public key is the big product, and the private key depends on knowing its two prime factors.
+
+## The one weakness
+
+Everything above defends against an eavesdropper, someone who only listens. It does not defend against someone who can interfere. Suppose Eve cuts the line, pretends to be Bob when talking to Alice, and pretends to be Alice when talking to Bob. She runs a separate exchange with each and relays messages between them, reading everything. Neither victim notices.
+
+To stop this, you need to be sure that the number you received really came from the person you think. That is the job of digital certificates and signatures, which use the same one-way mathematics to prove identity. It is why your browser checks a certificate before showing the padlock symbol.
+
+## Summary
+
+Two strangers can agree a secret in public because some calculations run easily forwards and not backwards. Each person mixes a private number into a shared public one, and they swap the results. Each then adds their own private number to what they received. Both reach the same answer, while an eavesdropper, who holds only the mixtures, would have to unmix them to find it, and that is the step nobody knows how to do quickly.

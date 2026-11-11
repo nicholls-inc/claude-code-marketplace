@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2a94781bf59037f6",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28309,
+    "cache_read_input_tokens": 44269,
+    "output_tokens": 884,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:18:47.158Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment added to official world time every so often, to keep our clocks in step with the turning of the Earth.\n\nTwo clocks are at work here. The first is astronomical. It measures time by the planet's rotation, so a day is the time it takes the Earth to spin once relative to the sun. The second is atomic. It counts the vibrations of atoms, which tick with extraordinary steadiness. Since 1967, the official definition of a second has come from this atomic count, not from the sky.\n\nThe trouble is that the Earth is not a perfect timekeeper. Tides, the movement of molten rock in its core, and shifting ice and ocean all nudge its spin. Over the long run the rotation has tended to slow, so the astronomical day drifts away from the atomic one. Left alone, the gap would grow, and eventually noon on the clock would not match noon in the sky.\n\nIn 1972 the world adopted a fix. Coordinated Universal Time, the standard that civil clocks follow, would be kept within a second of the Earth's rotation. Whenever the gap threatened to exceed that, an extra second would be inserted at the end of a June or December day, so that the clock read 23:59:60 before rolling over to midnight. Between 1972 and 2016 this was done 27 times.\n\nFor most people the extra second was invisible. For computers it was a recurring headache. Software generally assumes every minute has 60 seconds, and a minute with 61 can confuse systems that log events, trade shares, run telecommunications networks or coordinate satellites. Leap seconds have been blamed for crashes and outages at major internet companies. Engineers have devised workarounds, such as spreading the extra second across several hours, but these differ from one system to the next, which creates its own inconsistencies.\n\nThere is also a newer wrinkle. In recent years the Earth has been spinning slightly faster than expected, which raises the possibility of a negative leap second, where a second is removed. That has never been tried, and the risk of software failing is considered greater still.\n\nIn 2022 the General Conference on Weights and Measures, the international body that oversees the definition of units, voted to retire the leap second by 2035. After that date, the gap between atomic time and the Earth's rotation will be allowed to grow well beyond one second, and may eventually be corrected by some less disruptive method, perhaps decades or even a century from now.\n\nThe reasoning is practical. The mismatch is far too small for anyone to notice in daily life, while the cost to the digital systems we depend on is real. The decision accepts that the sky and the clock will slowly part ways."
+}

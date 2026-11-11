@@ -1,0 +1,81 @@
+**Sharing a Secret in Public**
+
+Imagine you want to agree on a secret with someone you have never met. You can only talk in a crowded room, and everyone can hear every word. It sounds impossible. If the secret is spoken aloud, it is no longer secret.
+
+Yet this is what your phone does every time it connects to your bank. It agrees a secret key with a computer it has never spoken to, across wires that strangers can tap. The trick behind it is called public-key cryptography. It needs nothing beyond school maths and one clever idea.
+
+**The idea: easy one way, hard the other**
+
+Some jobs are easy to do and nearly impossible to undo. Mixing paint is the classic example. Stirring yellow into blue takes seconds. Looking at the green result and working out exactly which blue and which yellow went in is another matter.
+
+Maths has jobs like this too. Multiplying two huge prime numbers is quick. Taking the answer and finding the two primes is brutally slow. The method below uses a different one-way job, but the spirit is the same.
+
+**The paint version**
+
+Alice and Bob want to share a secret colour. First they publicly agree on a common starting colour, say yellow. The eavesdropper, Eve, hears this. That is fine.
+
+Each person then picks a private colour and tells nobody. Alice picks red, Bob picks blue. Alice mixes her red into the yellow and sends the result to Bob. Bob mixes his blue into the yellow and sends his result to Alice. Eve sees both mixtures travel past.
+
+Now each adds their own private colour to what they received. Alice takes Bob's yellow-and-blue mix and adds her red. Bob takes Alice's yellow-and-red mix and adds his blue. Both end up with yellow, red and blue, in a single pot. The final shade is identical, because the order of mixing does not matter.
+
+Eve has the yellow, the yellow-red mix and the yellow-blue mix. She cannot unmix them to find the red or the blue. Without a private colour she cannot make the final shade. Alice and Bob can, and they never sent it.
+
+**Swapping paint for numbers**
+
+Computers cannot mix paint, so we need maths that behaves the same way. The tool is clock arithmetic, which you already know. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. You wrap around at 12. Mathematicians call this "mod", so 15 mod 12 = 3.
+
+We can wrap around at any number, not just 12. Let us use 23 for a small example. Real systems use numbers hundreds of digits long.
+
+Alice and Bob agree publicly on two numbers: the wrap-around number 23, and a starting number 5. Eve hears both.
+
+Next, each picks a private number. Alice picks 6. Bob picks 15. Nobody else ever sees these.
+
+Now comes the mixing step, which is raising the starting number to your private power and wrapping around.
+
+Alice works out 5 multiplied by itself 6 times, then wraps around at 23. The big number is 15,625. Dividing by 23 leaves a remainder of 8. So Alice sends 8.
+
+Bob works out 5 multiplied by itself 15 times, wrapped at 23. The answer is 19. Bob sends 19.
+
+Eve sees 8 and 19 pass by. She also knows 23 and 5. What she does not know is 6 or 15.
+
+**The matching step**
+
+Alice takes Bob's 19 and raises it to her private power, 6, wrapping at 23. That gives 2.
+
+Bob takes Alice's 8 and raises it to his private power, 15, wrapping at 23. That also gives 2.
+
+Both land on 2. This is no coincidence. Each of them has effectively computed 5 raised to the power 6 times 15, which is 90. The order in which you apply the two powers does not change the result, just as the order of paint mixing did not.
+
+The shared secret is 2. It never travelled anywhere. Only the mixtures, 8 and 19, were sent.
+
+**Why Eve is stuck**
+
+You may be thinking that Eve could simply try private numbers until one matches. With a wrap-around number of 23, she could do exactly that in seconds. There are only 22 possibilities to check.
+
+The strength comes from scale. Real systems use wrap-around numbers with more than 600 digits. The number of possible private powers is then so large that even every computer on Earth, working for longer than the age of the universe, would not get through them. Going forward, raising a number to a power, takes a computer a fraction of a second. Going backward, finding the power from the result, has no known shortcut. That is the one-way job, doing the work of the paint.
+
+This puzzle is called the discrete logarithm problem. It has resisted decades of attack by very clever people. It is the lock on the door.
+
+**The padlock version**
+
+There is a second way to picture public-key cryptography, and it is the more famous one.
+
+Suppose Bob makes a huge number of identical open padlocks and posts them to anyone who asks. Only Bob holds the key that closes the lock's opposite, the opening. If Alice wants to send Bob a secret, she puts her message in a box, snaps one of Bob's padlocks shut on it, and sends it. Anyone can snap a padlock shut. Only Bob can open it.
+
+In real systems the padlock is a "public key", which anyone may have. The matching private key stays with its owner. A well-known scheme called RSA does this using the prime-multiplication problem mentioned earlier. The public key is built from the product of two huge primes. The private key needs the primes themselves. Everyone sees the product, but nobody can easily pull it apart.
+
+Both methods rest on the same bargain. A message locked with the public key is safe from everyone but the key's owner.
+
+**What actually happens online**
+
+In practice, the two methods are used together. Public-key maths is slow, so it is used only for the opening handshake, to agree a shared secret. That secret then becomes the key for a much faster scrambling method, and the rest of your conversation is encrypted with it.
+
+There is one weakness worth knowing about. Everything above assumes that Alice really is talking to Bob. What if Eve sits in the middle, pretending to be Bob to Alice and Alice to Bob? She could agree one secret with each of them and quietly read everything passing through.
+
+To prevent this, websites carry certificates. A certificate is a statement, signed using the same kind of maths, saying "this public key belongs to this website". It is vouched for by an organisation your device already trusts. The signature is the reverse of the padlock: made with a private key, checkable by anyone with the public one. Forging it would require the very thing Eve cannot do.
+
+**The big picture**
+
+Before this idea arrived in the 1970s, sharing a secret meant meeting first. Armies and banks sent couriers carrying code books. Public-key cryptography removed the courier.
+
+The trick, in the end, is not hiding the maths. Everything except the two private numbers is spoken aloud. The security rests on a gap in difficulty: easy to mix, hopeless to unmix. Two strangers shout half-finished mixtures across a crowded room, then each quietly finishes the job alone. When they are done, they share a secret that nobody else in the room can make.

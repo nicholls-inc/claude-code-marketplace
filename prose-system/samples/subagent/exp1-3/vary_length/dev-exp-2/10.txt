@@ -1,0 +1,17 @@
+A leap second is a one-second adjustment added to the world's official clocks, and it exists because the Earth is a poor timekeeper.
+
+For most of history, we defined the second by the planet's spin: a day was one turn, and a second was a tiny fraction of it. Then, in 1967, scientists redefined the second using atomic clocks, which count the vibrations of caesium atoms. These clocks are staggeringly steady. They would lose or gain less than a second over hundreds of millions of years.
+
+The Earth is not so reliable. Tides drag on its rotation, slowly lengthening the day. Earthquakes, shifting ice and the churn of the molten core nudge it further, in ways nobody can fully predict. So two clocks drifted apart: the atomic one, which ticks without fault, and the astronomical one, which wobbles.
+
+The leap second was the compromise. Starting in 1972, whenever the gap between the two approached 0.9 of a second, officials added one extra second to the end of a June or December day. The clocks read 23:59:60 before rolling over to midnight. Twenty-seven have been added, most recently on 31 December 2016.
+
+It sounds harmless. For computers, it is anything but.
+
+Most software assumes a minute has 60 seconds, and a sudden 61st confuses it. Over the years, leap seconds have been blamed for crashed servers, frozen airline check-in systems and tangled databases. In 2012, a leap second knocked out parts of several big websites. Because countries and companies handle the extra second differently, some systems pause, some repeat a second, and some smear the change across a whole day. Every workaround is another chance for error. Financial markets, which timestamp trades to the microsecond, and satellite navigation systems are especially exposed.
+
+There is also a newer wrinkle. In recent years the Earth has begun spinning slightly faster, which could one day require a negative leap second: removing a second rather than adding one. Nobody has ever tried that, and engineers worry it would break software in ways that have never been tested.
+
+That tipped the argument. In 2022, the General Conference on Weights and Measures, the international body that oversees the second, voted to abandon leap seconds by 2035. Rather than fix the clocks to the sky every few years, they will let the difference grow, to be corrected, if at all, by a far larger adjustment in the distant future. The gap is expected to reach about a minute only after a century or so.
+
+For ordinary people, nothing will change. Noon will still be noon. The decision simply trades a rare, awkward patch for a calmer system.

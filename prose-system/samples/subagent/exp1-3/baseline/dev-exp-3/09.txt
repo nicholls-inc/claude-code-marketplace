@@ -1,0 +1,81 @@
+# How Two Strangers Can Agree on a Secret in Public
+
+## The puzzle
+
+Imagine Alice and Bob have never met. They have no shared password and no secret handshake. They can only talk across a crowded room where everyone can hear every word, including a nosy listener called Eve. Alice and Bob want to end up knowing a number that Eve does not know.
+
+This sounds impossible. If everything said is overheard, how can anything stay hidden? Until the 1970s, most people believed it was impossible. Secrets had to be shared in advance, for instance by handing over a codebook in person. Then a few mathematicians showed there is a way. The idea rests on one observation: some things are easy to do but very hard to undo.
+
+## Easy one way, hard the other
+
+Think of mixing paint. Mix yellow and blue and you get green in seconds. Now hand someone the green and ask them to separate it back into the exact yellow and blue you used. That is far harder, and in practice it cannot be done.
+
+Maths has its own versions of this. Multiplying two large prime numbers is quick. Take the answer and ask which two primes made it, and you face a huge search. Another example, which we will use here, involves powers and remainders.
+
+## A quick tour of clock arithmetic
+
+You already know how a clock works. Four hours after 10 o'clock is 2 o'clock, not 14. We wrap around after 12. Mathematicians call this "arithmetic modulo 12", and write "14 mod 12 = 2". It just means: divide, and keep the remainder.
+
+We can wrap around at any number, not only 12. We will use 23. So 30 mod 23 = 7, because 30 is one lot of 23 with 7 left over.
+
+Now take powers. 5 squared is 25, and 25 mod 23 = 2. Working forward is easy: raise a number to a power, then take the remainder. Working backward is the hard direction. Suppose I tell you that 5 raised to some unknown power, mod 23, equals 8. Which power was it? With a wrap-around of 23 you could just try them all. But if the wrap-around is a number with hundreds of digits, trying them all would take longer than the age of the universe, even on every computer on Earth.
+
+That gap between easy forwards and hopeless backwards is the engine of the whole trick.
+
+## The exchange, step by step
+
+Here is the method, called Diffie-Hellman after two of its inventors. It uses a tiny example so you can check the numbers yourself.
+
+**Step 1: agree on public numbers.** Alice and Bob openly choose two numbers. Eve hears them, and that is fine. We will use a wrap-around of 23 and a base of 5.
+
+**Step 2: each picks a private number.** Alice secretly chooses 6. Bob secretly chooses 15. They never say these out loud.
+
+**Step 3: each computes a public number.** Each raises the base 5 to their private power, mod 23.
+
+- Alice computes 5 to the power 6, which is 15,625. Divide by 23 and the remainder is 8. So Alice announces **8**.
+- Bob computes 5 to the power 15, mod 23, which comes to 19. Bob announces **19**.
+
+Eve hears both 8 and 19. She now knows the base 5, the wrap-around 23, and both announcements.
+
+**Step 4: each combines the other's announcement with their own secret.**
+
+- Alice takes Bob's 19 and raises it to her private power 6: 19 to the power 6, mod 23, gives **2**.
+- Bob takes Alice's 8 and raises it to his private power 15: 8 to the power 15, mod 23, also gives **2**.
+
+They both arrive at 2. That is their shared secret. Neither of them ever said it aloud.
+
+## Why they both get the same answer
+
+This is not a coincidence. It comes from an ordinary rule of powers you may remember from school: raising a power to a power means multiplying the exponents.
+
+Alice's announcement is 5 to the power 6. When she raises Bob's announcement (5 to the power 15) to the power 6, she gets 5 to the power (15 times 6), which is 5 to the power 90.
+
+Bob raises Alice's announcement (5 to the power 6) to the power 15. That gives 5 to the power (6 times 15), which is also 5 to the power 90.
+
+Since 6 times 15 equals 15 times 6, both end up at exactly the same place. The wrap-around mod 23 is applied along the way, but it does not disturb this, because remainders behave consistently under multiplication. Each person effectively mixes in their own private ingredient last, and the order of mixing does not matter.
+
+## Why Eve is stuck
+
+Eve knows 5, 23, 8 and 19. To build the secret she needs either Alice's private number or Bob's. Those are hidden inside the announcements. To dig one out she has to answer: "5 to what power, mod 23, gives 8?" With these tiny numbers she could simply try every power and find 6 within moments. That is why real systems use enormous wrap-around numbers, hundreds of digits long. With those, the forward calculation still takes a computer a fraction of a second, but reversing it is out of reach. Nobody has found a fast general method for it.
+
+Notice also that Eve cannot simply multiply or combine the two announcements to get the answer. Multiplying 8 and 19 gives the power of 5 that is 6 plus 15, that is 5 to the power 21, which is not 90. Her calculation lands on a different number.
+
+## The paint version
+
+If the numbers feel slippery, here is the same story with paint.
+
+Alice and Bob publicly agree on a starting colour, say yellow. Each secretly picks a private colour: Alice picks red, Bob picks blue. Each mixes their private colour into the yellow and sends the mixture across the room. Eve sees an orange pot and a green pot.
+
+Alice now adds her own red to Bob's green pot. Bob adds his own blue to Alice's orange pot. Both pots end up as the same muddy mix of yellow, red and blue, because the order of mixing does not matter. Eve holds orange and green. She cannot un-mix them to get red and blue, and if she adds anything else she gets the wrong shade.
+
+## What the secret is for
+
+The shared number is not the message. It is a key, which Alice and Bob feed into a fast ordinary scrambling method so they can exchange real messages that Eve cannot read. This happens whenever you open a secure website. Your browser and the site run a version of this exchange in a fraction of a second, so that nobody sitting between you can read what you send.
+
+## A related idea: public and private keys
+
+A second family of methods, such as RSA, uses the same easy-forwards, hard-backwards principle but with a different tool. Each person makes a pair of linked numbers: a public one, shared freely, and a private one, kept secret. Anyone can use your public number to lock a message, but only your private number can unlock it. The hard problem underneath is that of splitting a huge number back into the two primes that were multiplied together. This is where the name "public-key cryptography" comes from.
+
+## What to take away
+
+Two strangers can agree on a secret in public because they never need to send the secret itself. They send only ingredients that cannot be un-mixed, and the maths guarantees that mixing in either order gives the same result. The security is not that the method is hidden. Everyone knows the method. The security is that one step of it is easy to do and, as far as anyone knows, practically impossible to reverse.

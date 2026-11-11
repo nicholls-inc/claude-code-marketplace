@@ -1,0 +1,33 @@
+How a Heat Pump Heats Your House When It Is Colder Outside
+
+The idea that a heat pump can warm a house from cold outdoor air sounds like a trick, but it rests on a simple point: heat is not the same thing as temperature. Even air at 0 degrees Celsius holds a lot of thermal energy. A heat pump does not create heat by burning anything. It moves heat from outside to inside, and it uses a little electricity to do the moving.
+
+Think of your fridge. It pulls heat out of the food compartment and dumps it into your kitchen through the coils on the back. A heat pump is the same machine, except the "inside of the fridge" is the outdoors and the "kitchen" is your home.
+
+The cycle works like this. A sealed loop carries a refrigerant, a fluid that boils at a very low temperature, far below freezing. Outside, a fan blows air across a coil containing cold refrigerant. Because the refrigerant is colder than the air, it absorbs heat from it and boils into a gas. This happens even on a frosty day.
+
+Next, a compressor squeezes that gas. Compressing a gas makes it much hotter, in the same way a bicycle pump warms up as you use it. The refrigerant now sits well above room temperature, perhaps 50 to 70 degrees Celsius. This hot gas flows through a coil inside your home, where it releases its heat into your radiators, underfloor heating, or a hot water cylinder. As it gives up heat, it condenses back into a liquid.
+
+Finally, the liquid passes through an expansion valve, which drops its pressure and temperature sharply. It becomes very cold again, ready to return outside and absorb more heat. The loop repeats continuously.
+
+The compressor is what makes the temperature difference possible. It lifts heat "uphill" from a cold place to a warm one, and that takes work, which is the electricity you pay for.
+
+Why this beats a gas boiler on efficiency
+
+A modern gas boiler converts around 90 to 95 percent of its fuel into heat. That is good, but it can never exceed 100 percent. A heat pump delivers more heat than the electricity it consumes, because most of the energy is simply collected from the air. This ratio is called the coefficient of performance, or COP. A typical COP of 3 means that each unit of electricity produces three units of heat. In practice, a well-installed system often averages between 2.5 and 4 over a winter.
+
+The catch in very cold weather
+
+Efficiency falls as outdoor temperatures drop, because the compressor must lift heat across a bigger gap. At minus 10 degrees Celsius a COP might be closer to 2. Modern cold-climate models keep working at minus 20 or lower, though with reduced output. Most homes in mild or temperate regions will see few problems.
+
+What this means for your decision
+
+Several factors decide whether a switch makes sense for you:
+
+- Insulation. A well-insulated house needs lower water temperatures, which is where heat pumps are most efficient. Poor insulation means higher running costs.
+- Radiators. Heat pumps run cooler than boilers, so older radiators may need upsizing, or you may want underfloor heating.
+- Electricity versus gas prices. Running costs depend on the ratio between the two. A COP of 3 only saves money if electricity costs less than three times the price of gas per unit.
+- Upfront cost. Installation is usually more expensive than a new boiler, though grants and subsidies often close much of the gap.
+- Space. You need room outside for the unit and usually a hot water cylinder inside.
+
+Ask installers for a heat loss survey of your home before you commit. It will tell you the right size of unit and give a realistic estimate of running costs. If your house is reasonably insulated and your boiler is near the end of its life, a heat pump is often a strong choice.

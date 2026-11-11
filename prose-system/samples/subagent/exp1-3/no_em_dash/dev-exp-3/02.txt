@@ -1,0 +1,81 @@
+Here is the explanation (about 1,200 words, no em dashes):
+
+**How two strangers can agree on a secret in public**
+
+**The puzzle**
+
+Suppose Alice and Bob have never met. They want to share a secret number, perhaps to use as a key for scrambling their later messages. The only way they can talk is a line that anyone can listen to. An eavesdropper, Eve, hears every word they say.
+
+This sounds impossible. If Eve hears everything, how can anything stay secret? For most of history, people assumed it was impossible. Secrets had to be shared in advance, in person, by a trusted courier or a codebook. In the 1970s, researchers showed there is a way round the problem. The trick is to use maths where one direction is easy and the opposite direction is painfully hard.
+
+**Easy one way, hard the other**
+
+You already know some things like this. Multiplying 101 by 103 takes a moment: it is 10,403. But if I hand you 10,403 and ask which two prime numbers multiply to give it, you must hunt by trial and error. With small numbers that is fine. With numbers a few hundred digits long, even the fastest computers would need longer than the age of the universe.
+
+Mixing paint is a friendlier picture. Mixing two colours is easy, but un-mixing them to find the original ingredients is practically impossible. Here is the paint version of the secret handshake.
+
+1. Alice and Bob publicly agree on a common starting colour, say yellow. Eve sees this.
+2. Alice secretly picks a private colour, red, and mixes it with the yellow. She sends the orange result to Bob.
+3. Bob secretly picks his own private colour, blue, and mixes it with the yellow. He sends the green result to Alice.
+4. Alice adds her private red to Bob's green. Bob adds his private blue to Alice's orange.
+
+Both end up with yellow, red and blue mixed together: the same muddy brown. Eve saw yellow, orange and green. To make the brown she would need red or blue, and she cannot un-mix them from the orange and green. Alice and Bob now share a secret that never travelled down the line.
+
+Real systems replace paint with arithmetic. Here is how.
+
+**Clock arithmetic**
+
+Everyone has used a clock. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, because the clock wraps round after 12. Mathematicians call this "modular arithmetic". We write "mod 12" for the wrap. Here we will use a clock with 23 positions instead of 12, so we write "mod 23". The rule is simple: do the ordinary calculation, divide by 23, and keep only the remainder.
+
+For example, 5 times 5 is 25. Divide by 23 and the remainder is 2, so 5 × 5 is 2 on this clock.
+
+We also need powers. "5 to the power 6" means 5 multiplied by itself six times. Write it as 5^6. On our clock, 5^6 works out to 8, because 15,625 divided by 23 leaves a remainder of 8. You can check that on a calculator.
+
+The key fact is this: given the starting number (5), the clock size (23) and the result (8), it is hard to work out how many times 5 was multiplied. With a tiny clock like ours you could just try every power. With a clock of several hundred digits, trying them all is hopeless. This is the "easy one way, hard the other" idea in numerical form. Going forward (computing the power) is quick. Going backward (finding the power from the result) is not.
+
+**The handshake with numbers**
+
+Alice and Bob openly agree on two numbers: the clock size, 23, and a starting number, 5. Eve hears both.
+
+Now each picks a private number and never says it aloud.
+
+- Alice picks 6.
+- Bob picks 15.
+
+Next, each computes the starting number raised to their private number, on the clock.
+
+- Alice computes 5^6, which gives 8.
+- Bob computes 5^15, which gives 19.
+
+They swap these results in public. Alice sends 8. Bob sends 19. Eve hears both.
+
+Now each takes the other's public result and raises it to their own private number.
+
+- Alice computes 19^6 on the clock. The answer is 2.
+- Bob computes 8^15 on the clock. The answer is also 2.
+
+They have both arrived at 2. Why do the answers agree? Alice's calculation amounts to 5 raised to the power (15 × 6). Bob's amounts to 5 raised to the power (6 × 15). Since 6 × 15 equals 15 × 6, both land on the same value. Multiplication does not care about order, and that small fact carries the whole scheme.
+
+Eve knows 23, 5, 8 and 19. She does not know 6 or 15. To find the secret she would have to work out Alice's private number from 8, or Bob's from 19. With such a small clock she could manage it by trial. With a clock of 600 digits and private numbers just as long, there is no known quick way. This is the strength of the method: the arithmetic is cheap for Alice and Bob and enormous for Eve.
+
+The shared secret, 2, was never transmitted. Each of them built it independently.
+
+**Why "public key"?**
+
+This scheme is the famous Diffie-Hellman key exchange, published in 1976. The name "public key cryptography" comes from the idea that each person has two parts. Alice's public part (8 in our example) can be shouted to the world. Her private part (6) stays with her. The two are linked by the one-way maths, so publishing the first gives nothing away about the second.
+
+A close cousin of this idea, called RSA, uses the multiplication example from earlier. Someone publishes a big number formed by multiplying two secret primes. Anyone can use that public number to lock a message, but only the holder of the primes can unlock it, because only they can reverse the multiplication. This is why a website can show you a padlock in your browser: your computer and the site agree a secret using methods like these, in front of everyone, and then use that secret to scramble the rest of the conversation.
+
+**An honest caveat**
+
+The hardness of these problems is believed rather than proven. No one has found a fast way to un-mix the paint, and many clever people have tried for decades, but nobody has proved it cannot be done. Also, the method as described protects against listening, not against impersonation. If Eve can cut the line and pretend to be Bob to Alice, and Alice to Bob, she can run two handshakes and sit in the middle. Real systems therefore add a way to check identity, such as certificates that vouch for who owns a public number.
+
+**The big picture**
+
+The idea can be summed up in three lines.
+
+1. Choose a calculation that is quick to do and practically impossible to undo.
+2. Each person mixes a private number into a shared public starting point and sends the result.
+3. Each then mixes their private number into the other's result, and the order of mixing does not matter, so both reach the same answer.
+
+Two strangers, a public line and a spy hearing every word, and still a shared secret appears. It is one of the most surprising results in modern mathematics, and every time you buy something online it is quietly at work.

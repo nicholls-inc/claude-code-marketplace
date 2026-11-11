@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "adeeb88a3c2b1db06",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72593,
+    "output_tokens": 2454,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:16:53.285Z",
+  "valid": true,
+  "text": "A heat pump does not make heat in the way a boiler does. It moves heat that already exists. That idea sounds odd when the air outside feels freezing, but it rests on a simple fact. Cold is only a relative term. Air at minus five degrees Celsius still holds a great deal of thermal energy, because the real zero point for heat is far lower, at around minus 273 degrees. A heat pump pulls some of that energy out of the outdoor air and delivers it indoors.\n\nThe trick is a sealed loop containing a refrigerant, a fluid that boils at a very low temperature. The loop has four main parts. In the outdoor unit, the refrigerant is kept at a pressure where it boils even at minus ten degrees. Cold outdoor air blows across a coil, and the refrigerant, being colder still, absorbs heat from that air and turns to gas. Next, a compressor squeezes the gas. Squeezing raises its temperature sharply, in the same way a bicycle pump warms up as you use it. The gas may now reach 50 or 60 degrees Celsius, which is hotter than your radiators need to be. This hot gas flows through a coil inside the house, where it hands over its heat to your heating water or indoor air, and condenses back into a liquid. Finally an expansion valve drops the pressure, the liquid becomes very cold, and the cycle begins again.\n\nSo the compressor is what lets heat travel from a cold place to a warm one, which would never happen unprompted. It needs electricity to do this, but far less energy than the heat it moves. That is the source of the efficiency. Engineers describe it with a figure called the coefficient of performance. A good modern heat pump might achieve a figure of three or four. For every unit of electricity, you receive three or four units of heat. A gas boiler, even a condensing model, cannot exceed about 90 to 95 percent efficiency, meaning it delivers less than one unit of heat for each unit of fuel burned.\n\nPerformance does fall as the weather gets colder. When the outdoor air is at minus 10, the pump must lift heat across a larger temperature gap, so it works harder and the figure may drop to two or a little above. Even then it beats direct electric heating by a wide margin. Modern cold climate models keep running at minus 20 or below, and homes in Scandinavia and Canada rely on them every winter.\n\nFor a homeowner weighing up a replacement, several practical points matter. Insulation comes first. A heat pump works best at lower water temperatures, so a draughty house with poor loft insulation will need larger radiators or underfloor heating to stay comfortable. A heat loss survey by an installer will tell you whether your radiators can cope. Upfront cost is higher than for a boiler, though grants in many countries reduce the gap. Running costs depend on the relative price of electricity and gas where you live. A good efficiency figure helps, and a time of use electricity tariff helps more. You also need space for an outdoor unit and usually a hot water cylinder indoors.\n\nThe sensible next step is to ask two or three accredited installers for quotes that include a proper heat loss calculation. If your home is reasonably well insulated and your boiler is near the end of its life, a heat pump is often a strong choice. If the house is badly insulated, improve that first and the case gets much stronger."
+}

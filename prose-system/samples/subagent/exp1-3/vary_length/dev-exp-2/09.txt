@@ -1,0 +1,15 @@
+A leap second is a one-second adjustment added to the world's official clock time every so often, so that the clocks we use stay in step with the planet itself.
+
+The trouble begins with the fact that there are two ways to measure time. One is astronomical: a day is the time the Earth takes to spin once, and the length of that spin is judged against the Sun and the stars. The other is atomic. Since the 1950s, clocks that count the vibrations of caesium atoms have kept time with extraordinary steadiness. They would lose less than a second in hundreds of millions of years.
+
+The Earth is not nearly so reliable. Tides drag at its rotation and slow it by a sliver. Earthquakes, shifting ice, and the churning of the molten core nudge it this way and that. Over months and years, the planet's day wanders a few thousandths of a second away from the atomic day. Those slivers add up.
+
+So in 1972 the world adopted a compromise. Coordinated Universal Time, the standard that runs everything from airline schedules to stock exchanges, would follow the atomic clocks but be kept within 0.9 seconds of the Earth's rotation. Whenever the gap threatened to grow too large, timekeepers inserted an extra second, usually at the end of June or December. The clock would read 23:59:59, then 23:59:60, then midnight. There have been 27 such seconds, the last at the end of 2016.
+
+For a while, this seemed harmless. Then computers took over. A leap second cannot be predicted far ahead, because it depends on the unruly Earth, so software has to be told about it at short notice. Many systems handle the extra second badly. Some repeat a second, some freeze, and some simply crash. A leap second in 2012 knocked out websites, and engineers at large technology firms have long complained that the practice causes outages that are rare, costly, and hard to test for.
+
+In 2022, the international body that sets the world's measurement standards voted to abandon leap seconds by 2035. The plan is not to stop the Earth from mattering. Rather, the gap between atomic and astronomical time will be allowed to grow, to perhaps a minute, before anyone corrects it, and that correction may be left for a century or more.
+
+Interestingly, the Earth itself helped. In recent years its spin has sped up slightly, and at times a negative leap second, removing a second, looked possible. That would be riskier still, since no software has ever faced one.
+
+For most people, nothing will change. Your phone will not notice. The Sun will not drift noticeably out of step with the clock in your lifetime. Only the engineers will sleep better.

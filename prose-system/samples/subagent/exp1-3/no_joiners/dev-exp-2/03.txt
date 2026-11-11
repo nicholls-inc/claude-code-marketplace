@@ -1,0 +1,13 @@
+A leap second is a one second adjustment added to our clocks now and then so that they stay in step with the turning of the Earth.
+
+The trouble starts with two different ways of measuring time. For centuries people judged time by the sky, with a day being one full spin of the planet. Since the 1950s scientists have also relied on atomic clocks, which count the vibrations of atoms and tick with astonishing steadiness. Those clocks lose less than a second over many millions of years. The Earth is far less dependable. Tides, earthquakes, melting ice and the slow churning of the planet's molten core all nudge its rotation, so the length of a day wobbles by tiny amounts.
+
+Over time the two measures drift apart. In 1972 the world adopted a compromise known as Coordinated Universal Time. It runs on atomic clocks but is kept within a second of the Earth's rotation. Whenever the gap grew too wide, officials told the world to insert an extra second, usually at the end of June or December. On those occasions a clock would read 23:59:60 before rolling into the new day. Twenty-seven of these seconds have been added since 1972, the most recent at the end of 2016.
+
+For most people this was invisible. For computers it was a headache. Software expects every minute to have sixty seconds, so an extra one can confuse systems that time stamp transactions, coordinate networks or run financial markets. Past leap seconds have knocked websites offline and crashed servers. Big technology firms went as far as inventing their own workarounds, spreading the extra second across several hours instead of adding it at once. Different fixes made different machines disagree about the exact time, which is a risk of its own.
+
+There is another twist. In recent years the Earth has been spinning slightly faster than expected, which raises the odd prospect of a negative leap second, where a second is removed. Nobody has ever tried that, and engineers fear it would cause even more trouble than an added one.
+
+So in 2022 the international body that sets the measures of weight and time, the General Conference on Weights and Measures, voted to retire the leap second by 2035. After that the gap between atomic time and the Earth's rotation will be allowed to grow much larger before anyone intervenes, perhaps a minute or more, and a fix would be considered only in the distant future.
+
+The cost is modest. Noon on the clock may eventually drift a little away from the moment the sun stands highest, but nobody would notice in daily life. The gain is simpler, steadier timekeeping for the machines we depend on.

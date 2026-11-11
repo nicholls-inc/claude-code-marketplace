@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a265190deade75512",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72581,
+    "output_tokens": 1403,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:18:22.159Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists outdoors into your home, and that works even when the air outside feels cold to you.\n\n**Cold is not the absence of heat**\n\nHeat only disappears at absolute zero, about minus 273 degrees Celsius. A winter day at 0 degrees still holds a great deal of thermal energy in the air, the ground and the water. A heat pump is a device for collecting that energy and concentrating it indoors.\n\n**The cycle, step by step**\n\nA heat pump is the same machine as your fridge, run in the opposite direction. It contains a sealed loop of refrigerant, a fluid that boils at a very low temperature, around minus 40 degrees or lower.\n\n1. Outside, the refrigerant flows through a coil with a fan blowing air across it. Because the refrigerant is colder than the outdoor air, heat flows into it. That heat makes it boil into a gas.\n2. A compressor squeezes the gas. Compressing a gas raises its temperature sharply, so the refrigerant leaves the compressor at perhaps 50 to 70 degrees, much hotter than your living room.\n3. Indoors, this hot gas passes through another coil that connects to your radiators, underfloor heating or a hot water cylinder. Heat flows from the hot refrigerant into your heating water. The refrigerant cools and turns back into a liquid.\n4. An expansion valve drops the pressure. The liquid becomes very cold again, and the loop restarts.\n\nHeat always flows from hot to cold. The trick is that the compressor makes the refrigerant colder than the outside air in one place and hotter than your radiators in another.\n\n**Why it is efficient**\n\nThe electricity powers the compressor and fans. It does not create the heat, it carries it. A typical modern air-source unit delivers roughly three units of heat for every one unit of electricity over a winter. This ratio is called the coefficient of performance, or COP, and the seasonal version is the SCOP. A gas boiler cannot exceed about 90 to 95 percent efficiency, meaning it always delivers less heat than the energy in the gas.\n\n**What happens when it gets really cold**\n\nEfficiency falls as the gap between outdoor and indoor temperature widens. At 7 degrees outside, a COP of 3.5 to 4 is common. At minus 10 it may drop to around 2 to 2.5. Modern cold-climate models keep working below minus 20, and units are rated at several outdoor temperatures, so check the figures for your region. Even at the lower figure, you still get about twice as much heat as the electricity you pay for. Units also run short defrost cycles in damp, near-freezing weather, when frost builds up on the outdoor coil.\n\n**What this means for your boiler decision**\n\n- **Running cost.** Gas is usually cheaper per unit than electricity, but a COP of 3 can offset that. Whether you save money depends on your local gas and electricity prices, so compare the figures for your own tariff. Time-of-use tariffs and solar panels improve the case.\n- **Your house matters most.** Heat pumps deliver water at lower temperatures than boilers, so they work best with good insulation, larger radiators or underfloor heating. A survey from an accredited installer will tell you whether your radiators need upsizing.\n- **Upfront cost.** Installation typically costs more than a new boiler, though grants or subsidies may cover part of it. Ask installers about local schemes.\n- **Space and noise.** You need an outdoor spot for the unit, which hums at roughly the level of a quiet conversation, and usually a hot water cylinder indoors.\n- **Carbon.** Because the electricity does less work, emissions are typically much lower than a gas boiler's, and fall further as the grid decarbonises.\n\n**Practical next step**\n\nGet at least two quotes from certified installers, ask each for a heat loss calculation for your home, and request the expected SCOP and annual running cost compared with your current boiler. If your boiler is near the end of its life, that is the natural moment to switch. If it is relatively new, improving insulation first may be the wiser sequence."
+}

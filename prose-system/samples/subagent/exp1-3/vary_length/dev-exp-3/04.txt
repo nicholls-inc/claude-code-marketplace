@@ -1,0 +1,83 @@
+**Secrets in Public: How Strangers Agree on a Key**
+
+Suppose you want to whisper a secret to someone across a crowded room, but the only way to talk is by shouting. Everyone hears everything. It sounds impossible. Yet every time your phone connects to a bank, two parties who have never met do exactly this, and the eavesdroppers learn nothing useful. Here is how.
+
+**The problem**
+
+Secret messages are normally protected by a shared key. Think of a key as a number both sides know, which scrambles a message before it travels and unscrambles it on arrival. Anyone without the number sees gibberish.
+
+The trouble is getting the number to both sides in the first place. If you send it over the open line, the listener copies it. If you meet in person to hand it over, you have defeated the point of the exercise. For centuries this was the great weakness of secret codes: to talk privately, you first needed to have already talked privately.
+
+The breakthrough, made public in the 1970s, was to show that the two people can build the shared number together, in the open, in a way that leaves the listener stuck.
+
+**A padlock story**
+
+Start with a picture. Alice wants to send Bob a valuable item through a postal system full of thieves. Anything in an unlocked box gets stolen.
+
+Here is a fix. Alice puts the item in a box and snaps on her own padlock. Only she has the key. She posts it to Bob. He cannot open it, but he adds his own padlock beside hers and posts it back. Alice removes her padlock and sends the box once more. Now only Bob's padlock remains, and only Bob can open it. At no point did a key travel anywhere.
+
+Real cryptography cannot use physical padlocks, but it copies the idea: each person keeps something private, shares something public, and the combination does the work.
+
+**The key ingredient: easy one way, hard the other**
+
+The trick needs a mathematical operation that is quick to do but practically impossible to undo. Such operations exist, and you already know the starting point.
+
+Take clock arithmetic. On a 12-hour clock, 10 o'clock plus 5 hours is 3 o'clock, because you wrap around after 12. Mathematicians call this "working modulo 12", and write the leftover after wrapping as "mod". So 15 mod 12 = 3. For our purposes we use a prime number instead of 12, since primes behave more unpredictably. We will use 23.
+
+Now take powers. 5 to the power 3 means 5 × 5 × 5 = 125. Divide 125 by 23: it goes in 5 times (115) with 10 left over. So 5³ mod 23 = 10.
+
+Going forward is easy. Pick the exponent, get the answer. But go backwards. If I tell you that 5 raised to some secret power, mod 23, gives 8, can you find the power? With a modulus of 23 you can just try them all. With a modulus hundreds of digits long, trying them all would take longer than the age of the universe. No shortcut is known. This is called the discrete logarithm problem, and the whole scheme rests on its difficulty.
+
+**The paint-mixing version**
+
+Before the numbers, an analogy built on one fact: mixing paint is easy, unmixing it is not.
+
+Alice and Bob publicly agree on a starting colour, say yellow. Everyone, including the eavesdropper Eve, knows this. Alice secretly picks a colour, say red, and mixes it into the yellow. Bob secretly picks blue and does the same. They swap the mixtures in public. Eve sees both, but cannot separate the orange from the green-ish blend to recover the hidden colours.
+
+Now Alice adds her secret red to Bob's mixture, and Bob adds his secret blue to Alice's mixture. Both end up with yellow plus red plus blue. Same ingredients, same result. Eve holds the starting yellow and two blends, but lacks either secret colour, so she cannot make the final one.
+
+**The same thing with numbers**
+
+This is the Diffie-Hellman method, named after the two researchers who published it. Watch it with small numbers.
+
+Alice and Bob publicly agree on two numbers: the modulus, 23, and a base, 5. Eve hears both.
+
+Alice privately picks 6. Bob privately picks 15. These are their secret colours.
+
+Alice computes 5⁶ mod 23. Now 5⁶ is 15,625, and dividing by 23 leaves 8. She sends 8 to Bob.
+
+Bob computes 5¹⁵ mod 23, which comes to 19. He sends 19 to Alice.
+
+These two numbers, 8 and 19, are the mixed paints. They travel in the open. Eve sees them.
+
+Now each person applies their own secret to what they received. Alice takes Bob's 19 and raises it to her secret power: 19⁶ mod 23 = 2. Bob takes Alice's 8 and raises it to his: 8¹⁵ mod 23 = 2.
+
+Both reach 2. That is the shared secret. It never crossed the line.
+
+Why do they agree? Because the maths guarantees it. Alice's final number is the base raised to (Bob's secret × her secret). Bob's is the base raised to (her secret × his secret). Multiplication does not care about order, so the two match. In ordinary algebra: (5⁶)¹⁵ and (5¹⁵)⁶ are both 5⁹⁰.
+
+**What Eve is stuck with**
+
+Eve knows 23, 5, 8 and 19. To find 2 she needs one of the secret exponents, 6 or 15. To get one, she must reverse the one-way operation: find the power that turns 5 into 8, mod 23. With such tiny numbers she can brute-force it in seconds. That is why this example is a toy.
+
+In real use, the modulus has hundreds of digits and the secret exponents are similarly huge. Alice and Bob can still compute their half quickly, using clever shortcuts such as repeated squaring. Eve cannot reverse it. The gap between easy for the legitimate users and infeasible for the attacker is the entire source of security.
+
+**Public keys and private keys**
+
+The padlock story and the colour story share a pattern, and it generalises into what is normally called public-key cryptography. Each person holds a pair of linked numbers. The private key is kept secret and never leaves their device. The public key can be printed on a billboard.
+
+The two are mathematically tied, so that something locked with the public key can only be unlocked with the private one. Anyone can send you a locked message. Only you can read it. A well-known scheme called RSA does this using a different hard problem: multiplying two huge prime numbers together is easy, but taking the result and finding the two primes is hopeless once they are big enough.
+
+In practice, computers combine the ideas. They use public-key tricks briefly, at the start of a conversation, to agree on a shared secret key. Then they switch to faster scrambling that uses that key for the bulk of the data. When your browser shows a padlock icon, this is the handshake that happened in the first fraction of a second.
+
+**Caveats worth knowing**
+
+The scheme has one real weakness, and it is not the maths. Suppose Eve does not merely listen but sits in the middle, pretending to be Bob to Alice and Alice to Bob. She would run one exchange with each and relay messages between them, reading everything. Agreeing a key with a stranger does not prove the stranger is who they claim to be.
+
+To defend against this, systems add identity checks: certificates, which are digital signatures vouching that a public key belongs to a named organisation, issued by trusted authorities. Signatures use the same key-pair idea in reverse, with the private key producing a mark that anyone can check using the public key.
+
+Also, the security rests on "nobody has found a shortcut", not on a proof that none exists. Researchers have worked on these problems for decades without cracking them, and that track record is the reassurance. A future machine of a very different kind, a large quantum computer, could break both schemes described here, which is why new methods are already being introduced.
+
+**The idea in one sentence**
+
+Two people can each combine a private number with public ones, swap the results openly, combine again, and land on the same secret, because the maths lets the order of mixing not matter while making the unmixing impossible for anyone watching.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae40d651f8497d267",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72578,
+    "output_tokens": 876,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:22:11.335Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment added to the world's official clocks, and it exists because the Earth is a poor timekeeper.\n\nFor most of history, we defined the second by the planet's spin: a day was one turn, and a second was a tiny fraction of it. Then, in 1967, scientists redefined the second using atomic clocks, which count the vibrations of caesium atoms. These clocks are staggeringly steady. They would lose or gain less than a second over hundreds of millions of years.\n\nThe Earth is not so reliable. Tides drag on its rotation, slowly lengthening the day. Earthquakes, shifting ice and the churn of the molten core nudge it further, in ways nobody can fully predict. So two clocks drifted apart: the atomic one, which ticks without fault, and the astronomical one, which wobbles.\n\nThe leap second was the compromise. Starting in 1972, whenever the gap between the two approached 0.9 of a second, officials added one extra second to the end of a June or December day. The clocks read 23:59:60 before rolling over to midnight. Twenty-seven have been added, most recently on 31 December 2016.\n\nIt sounds harmless. For computers, it is anything but.\n\nMost software assumes a minute has 60 seconds, and a sudden 61st confuses it. Over the years, leap seconds have been blamed for crashed servers, frozen airline check-in systems and tangled databases. In 2012, a leap second knocked out parts of several big websites. Because countries and companies handle the extra second differently, some systems pause, some repeat a second, and some smear the change across a whole day. Every workaround is another chance for error. Financial markets, which timestamp trades to the microsecond, and satellite navigation systems are especially exposed.\n\nThere is also a newer wrinkle. In recent years the Earth has begun spinning slightly faster, which could one day require a negative leap second: removing a second rather than adding one. Nobody has ever tried that, and engineers worry it would break software in ways that have never been tested.\n\nThat tipped the argument. In 2022, the General Conference on Weights and Measures, the international body that oversees the second, voted to abandon leap seconds by 2035. Rather than fix the clocks to the sky every few years, they will let the difference grow, to be corrected, if at all, by a far larger adjustment in the distant future. The gap is expected to reach about a minute only after a century or so.\n\nFor ordinary people, nothing will change. Noon will still be noon. The decision simply trades a rare, awkward patch for a calmer system."
+}

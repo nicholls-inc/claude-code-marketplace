@@ -1,0 +1,15 @@
+A leap second is a one-second adjustment added to official world time every so often. It keeps our clocks in step with the planet we live on.
+
+For most of history, time was defined by the Earth itself. A day was the time it took the planet to spin once, and a second was a tiny slice of that day. In the 1960s, scientists built atomic clocks that count the vibrations of atoms, and these keepers of time are astonishingly steady. They would lose less than a second over many millions of years.
+
+The trouble is that the Earth is not nearly so reliable. Its spin wobbles and, on average, slows a little because of tides, shifting oceans and movements deep inside the planet. A day is now slightly longer than the 86,400 seconds that atomic clocks count out. Left alone, the two ways of telling time would drift apart.
+
+So in 1972, the world adopted a compromise. Official time, known as Coordinated Universal Time, would run on atomic clocks, but whenever it strayed close to a second away from the Earth's rotation, a leap second would be added. Clocks would go from 23:59:59 to 23:59:60 before ticking over to midnight. Twenty-seven have been added since 1972, the most recent at the end of 2016.
+
+Why stop? The main reason is that the extra second causes more trouble than it solves. Modern life runs on computers that expect every minute to have exactly 60 seconds. A minute with 61 seconds can confuse software. Leap seconds have been linked to crashes and outages at major websites and in systems that handle financial trades, telecommunications and navigation. Because they cannot be predicted far ahead, and are announced only months in advance, engineers must patch them in by hand each time.
+
+There is also a twist. In recent years the Earth has been spinning slightly faster than expected, which raises the prospect of a first-ever negative leap second, in which a second is removed. Almost nobody has tested software for that, and many experts worry it could cause even bigger problems.
+
+In 2022, the international body that sets measurement standards, the General Conference on Weights and Measures, voted to phase out leap seconds by 2035. Time will then be allowed to drift away from the Earth's spin by a larger margin, perhaps a full minute, before any correction is made, and that decision is left to the future.
+
+For ordinary people, nothing will change. The sun will still rise when it should, and the gap between clock time and sky time will stay too small for anyone to notice.

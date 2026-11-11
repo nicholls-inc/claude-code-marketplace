@@ -1,0 +1,13 @@
+A leap second is a single extra tick added to the world's clocks now and then, so that official time stays in step with the planet. When one is added, the final minute of the day lasts 61 seconds instead of 60. Most people never notice.
+
+The reason for the adjustment is that there are two ways to measure time, and they disagree. For centuries the second was defined as a fraction of the day, based on how long Earth takes to spin once. Since the 1960s, though, the most precise clocks have been atomic ones. They count the vibrations of atoms and stay accurate to within a second over many millions of years. Earth is a far less reliable timekeeper. Tides, the sloshing of its molten core, melting ice and even large earthquakes all nudge its rotation. Over the long run the Moon's pull has also been slowing the planet down.
+
+So the two kinds of time drift apart. Since 1972 international authorities have kept them within a second of each other by inserting leap seconds. There have been 27, and the most recent came at the end of 2016.
+
+The trouble is that modern life runs on computers. Most software assumes every minute has exactly 60 seconds. An extra one can make a system see the same moment twice, run time backwards or freeze. Leap seconds have been blamed for outages at popular websites and airline booking systems. Banks, mobile networks, satellite navigation and power grids all depend on precise timestamps, and a single mistake can scramble the order of events. Engineers have built workarounds, such as Google's habit of stretching the extra second across a whole day. Yet different companies do it differently, which creates fresh mismatches of its own.
+
+In 2022 the General Conference on Weights and Measures, a body of national governments that oversees the metric system, voted to stop adding leap seconds by 2035. Under the plan, the gap between atomic time and Earth time will be allowed to grow well beyond a second before anyone corrects it. A minute has been suggested, though the exact limit and the eventual fix are still being worked out.
+
+A surprising twist helped the argument. In recent years Earth has been spinning slightly faster than expected, and that could one day require a negative leap second, where a second is removed instead of added. Nobody has ever tried that, and many engineers fear it would cause even bigger problems than the extra second ever did.
+
+For ordinary people the change will be invisible. The gap between clock time and the sun would still be smaller than the difference between neighbouring time zones. Astronomers will keep tracking Earth's wobbles, but the clocks on our phones will be left to simply keep counting.

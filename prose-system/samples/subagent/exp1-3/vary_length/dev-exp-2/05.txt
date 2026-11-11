@@ -1,0 +1,15 @@
+A leap second is a one-second adjustment added to the world's official clock time, and it exists because the Earth is an imperfect timekeeper.
+
+For most of history, we defined the second by the planet's rotation. One turn of the Earth was a day; divide it up, and you had your seconds. Then, in 1967, scientists redefined the second using atomic clocks, which count the vibrations of caesium atoms with astonishing regularity. These clocks lose less than a second over hundreds of millions of years. The Earth does not manage anything like that.
+
+The trouble is that our planet's spin wobbles and, over the long run, slows. Tides drag on it. Earthquakes nudge it. Even the movement of molten rock deep inside shifts it slightly. So atomic time and "Earth time" slowly drift apart. To keep them within a second of each other, international timekeepers began inserting a leap second into Coordinated Universal Time, the global standard, in 1972. Usually the extra second was added at the end of June or December, so that the clock read 23:59:60 before ticking over to midnight. There have been 27 so far, the most recent at the end of 2016.
+
+For decades this was a tidy arrangement. Then computers took over.
+
+Modern life runs on networks of machines that must agree on the time to the millisecond: banks, power grids, mobile networks, satellite navigation. A minute with 61 seconds is a nasty surprise for software that assumes every minute has 60. Leap seconds have caused outages and crashes at major internet companies, and engineers have long complained that handling them is error-prone because the event is so rare that code written for it is seldom tested. Different systems also handle it differently. Some repeat a second, some stall, and some smear the extra second across a whole day. Each approach is a chance for disagreement.
+
+In 2022, the international body that sets measurement standards, the General Conference on Weights and Measures, voted to phase out leap seconds by 2035. The reasoning was practical: the benefit of keeping atomic time aligned with the sun is tiny, while the cost of the occasional glitch is real. For ordinary people, a gap of a minute or so between clock time and the sun's position would go unnoticed for a century or more.
+
+There is a wrinkle. In recent years the Earth has actually been spinning slightly faster, which could one day call for a "negative" leap second, removing a second rather than adding one. That has never been tried, and many engineers fear it would be even riskier.
+
+So the leap second is being retired, not because it failed, but because the machines we built around time cannot cope with its surprises. Time will keep ticking; the sky may just drift a little out of step.

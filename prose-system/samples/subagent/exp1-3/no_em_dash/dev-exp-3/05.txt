@@ -1,0 +1,77 @@
+Two People, One Secret, a Crowded Room
+
+**The problem**
+
+Imagine you want to agree a secret number with a friend you have never met, but the only way to talk is by shouting across a crowded square. Everyone can hear everything you say. Can you end up sharing a secret that nobody else in the square knows?
+
+It sounds impossible. If every word is overheard, surely the eavesdropper knows as much as you do. Yet this is exactly what happens millions of times a second on the internet, whenever your phone connects to a shop or a bank. The trick is called public-key cryptography, and it rests on a simple idea: some calculations are easy to do and almost impossible to undo.
+
+**Easy one way, hard the other way**
+
+Here are two jobs. First: multiply 37 by 41. With pencil and paper you get 1,517 in under a minute. Second: someone tells you 1,517 and asks which two prime numbers were multiplied to make it. You would have to try dividing by 2, 3, 5, 7 and so on until something fits. For small numbers that is tolerable. For numbers with hundreds of digits, even the fastest computers would need longer than the age of the universe.
+
+Jobs like this are called one-way functions. Going forward is quick, going backward is hopeless. Public-key cryptography builds on them. The version we will walk through uses a different one-way job, based on clock arithmetic, because it shows the "shared secret" idea most clearly.
+
+**Clock arithmetic**
+
+You already know clock arithmetic. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. We wrap around after 12. Mathematicians write this as "mod": 15 mod 12 = 3, because 3 is what is left after taking away as many whole 12s as possible.
+
+We can use any wrap-around size, not just 12. Let us use 23. So 30 mod 23 = 7, and 50 mod 23 = 4, because 50 minus 46 is 4.
+
+Now take a number such as 5 and raise it to a power, which means multiplying it by itself that many times. Then wrap around at 23. For example, 5 to the power 2 is 25, and 25 mod 23 = 2.
+
+Going forward is easy: pick the power, get the answer. Going backward is the hard part. If I tell you "5 to some power, wrapped at 23, gives 8," can you find the power? With these small numbers you could try them all. But when the wrap-around number has hundreds of digits, the wrapped results jump around so unpredictably that there is no shortcut. You can only guess and check, and there are too many guesses.
+
+**The shouting-across-the-square method**
+
+Call our two people Alice and Bob. The eavesdropper, listening to everything, is Eve.
+
+*Step 1: agree on public numbers.* Alice and Bob shout two numbers across the square for all to hear: the wrap-around size, 23, and a base number, 5. There is nothing secret here. Eve hears them too.
+
+*Step 2: each picks a private number.* Alice quietly chooses 6 and tells no one. Bob quietly chooses 15 and tells no one. These are their private keys.
+
+*Step 3: each computes a public number.* Alice calculates 5 to the power 6, wrapped at 23. That is 15,625, and after removing as many 23s as possible, the remainder is 8. Bob calculates 5 to the power 15, wrapped at 23, and gets 19.
+
+*Step 4: swap the public numbers.* Alice shouts "8!" and Bob shouts "19!" Everyone hears them, including Eve. These are the public keys.
+
+*Step 5: each combines the other's public number with their own private one.* Alice takes Bob's 19, raises it to her private power 6, and wraps at 23. The answer is 2. Bob takes Alice's 8, raises it to his private power 15, and wraps at 23. The answer is also 2.
+
+They have both arrived at 2, and neither ever said 2 out loud. That is their shared secret. They can use it as a password to scramble all their later messages.
+
+**Why do both get the same answer?**
+
+This is the clever part, and it only needs a rule about powers you may remember from school: raising a power to a power multiplies the exponents. So (5 to the 6) to the 15 equals 5 to the 90, and (5 to the 15) to the 6 also equals 5 to the 90.
+
+Alice effectively computed 5 to the power (6 times 15). Bob effectively computed 5 to the power (15 times 6). Multiplication does not care about order, so they land on the same number. The wrap-around at 23 does not break this, because wrapping after each step gives the same result as wrapping once at the end.
+
+**Why can Eve not do the same?**
+
+Eve heard four things: 23, 5, 8 and 19. To build the secret she would need either Alice's private 6 or Bob's private 15. Those never crossed the square.
+
+Could she work backward? She would need to ask: "5 to what power, wrapped at 23, gives 8?" That is the hard backward job from earlier. With numbers this small, she can try powers one by one and find 6 in a moment. That is why real systems do not use 23. They use wrap-around numbers with 600 or more digits. Alice and Bob can still do the forward calculations quickly, because computers handle big-number arithmetic easily. But Eve faces a search so large that all the computers on Earth, running for centuries, would not finish.
+
+The security does not come from hiding the method. The method is published in textbooks. It comes from the gap in difficulty between the easy forward direction, which Alice and Bob use, and the brutal backward direction, which Eve would need.
+
+**The paint analogy**
+
+If the numbers feel abstract, here is a picture. Alice and Bob publicly agree on a common colour, say yellow. Each secretly picks a private colour: Alice picks red, Bob picks blue. Each mixes their private colour into the yellow and sends the resulting mixture across the square. Eve sees both mixtures but cannot "un-mix" paint to recover the private colours.
+
+Alice now adds her private red to Bob's mixture. Bob adds his private blue to Alice's mixture. Both end up with the same final blend: yellow, red and blue. Eve only has the two partial mixtures and cannot reach the final blend without a private colour.
+
+Mixing is easy, un-mixing is nearly impossible, and the order of mixing does not change the final colour. That is the whole idea, with powers and clock arithmetic playing the part of paint.
+
+**Where the "public" and "private" keys come in**
+
+The name "public-key cryptography" comes from this split. Each person has a pair of numbers: a private key that never leaves their possession, and a public key that can be shouted to the world. The two are linked by a one-way calculation, so the public key is safe to reveal.
+
+Related systems use the same pairing for other jobs. In one, anyone can lock a message using your public key, but only your private key can unlock it, like a postbox with a slot that anyone can drop letters into but only you can open. In another, you can sign something with your private key, and anyone can check the signature with your public key, proving it came from you.
+
+**Caveats worth knowing**
+
+The method above protects against someone who only listens. It does not by itself prove who you are talking to. If Eve could grab and replace the shouted numbers, pretending to be Bob to Alice and Alice to Bob, she could sit in the middle. Real systems add certificates and signatures, which are a way of vouching for identity, to prevent this.
+
+Also, nobody has proved that the backward job is truly impossible, only that no one has found a fast method despite decades of trying. Security rests on that shared experience of failure, plus the sheer size of the numbers.
+
+**The takeaway**
+
+Two strangers can build a shared secret in public because they each combine something private with something public, in a way that comes out the same for both, while an onlooker would have to undo a calculation that is easy to do and practically impossible to reverse. Every time a padlock icon appears in your browser, a version of this exchange has just happened.

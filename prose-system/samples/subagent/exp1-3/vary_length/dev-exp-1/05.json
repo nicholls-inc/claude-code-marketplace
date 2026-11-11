@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aca565aca14572839",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72581,
+    "output_tokens": 1221,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:15:57.011Z",
+  "valid": true,
+  "text": "A heat pump does not make heat. It moves heat that already exists, and that is why it can warm your house when the air outside is colder than the air inside.\n\nStart with a misunderstanding. \"Cold\" is not the absence of heat. Even on a frosty morning, outdoor air holds a great deal of thermal energy. At -5°C it is still about 268 degrees above absolute zero. A heat pump extracts some of that energy and carries it indoors.\n\nThe mechanism is the same as in your fridge, run in the opposite direction. A sealed loop contains a refrigerant, a fluid chosen because it boils at a very low temperature, far below freezing. Four components do the work.\n\nFirst, the outdoor unit. Refrigerant flows through a coil there, and a fan blows outside air across it. Because the refrigerant is colder than the air, even when the air is chilly, heat flows into it and it evaporates into a gas.\n\nSecond, the compressor. It squeezes that gas, and squeezing a gas heats it up sharply. This is the key trick. The refrigerant leaves the compressor much hotter than your radiators or indoor air need to be, perhaps 50 to 60°C for a typical central-heating system.\n\nThird, the indoor coil, or condenser. The hot gas gives up its heat to your home's heating water or air, and as it cools it turns back into a liquid.\n\nFourth, an expansion valve. The liquid is let through a narrow opening, its pressure drops, it becomes very cold, and the cycle begins again.\n\nSo the compressor creates the temperature difference that nature does not provide. Heat does not flow uphill by itself, but a pump with an energy input can push it there. The same principle lets a water pump lift water up a hill.\n\nWhy does this matter for your wallet? Efficiency. A gas boiler turns each unit of fuel into at most about 0.9 to 0.95 units of heat. A heat pump uses electricity to move heat rather than to create it, so it delivers roughly three units of heat for each unit of electricity on a mild day, and often 2.5 or more in cold weather. This ratio is called the coefficient of performance, or COP. The colder it gets, the harder the compressor works and the lower the COP falls, but modern units keep working well below freezing. Many models are rated down to -15°C or lower.\n\nFor a homeowner, the practical points are these.\n\nYour house matters. Heat pumps work best delivering water at lower temperatures, so they suit well-insulated homes and larger radiators or underfloor heating. If your radiators are small and your walls leak heat, you may need upgrades, and those costs belong in your budget.\n\nRunning costs depend on prices. Electricity usually costs more per unit than gas. A heat pump's roughly threefold efficiency can offset that, but the gap between your local electricity and gas rates decides the outcome. Check both before you decide.\n\nExpect differences in feel. Heat pumps run for long periods at a gentle output, rather than blasting on and off. The house stays steadily warm, but radiators feel merely warm to the touch, not hot.\n\nInstallation is a bigger job than swapping a boiler. You need space for an outdoor unit, usually a hot water cylinder, and possibly electrical work. Many regions offer grants or subsidies that reduce the upfront price.\n\nFinally, there is the question of your boiler's age. If it is near the end of its life, replacement is the natural moment to switch. If it is relatively new and your home is poorly insulated, improving insulation first may pay off more.\n\nGet quotes from at least two installers, and ask each for a heat-loss calculation for your specific house."
+}

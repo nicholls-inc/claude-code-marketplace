@@ -1,0 +1,13 @@
+**What a leap second is, and why it is being retired**
+
+Every clock you have ever used rests on a quiet assumption: that a day lasts exactly 86,400 seconds. The Earth does not quite agree. Its spin is slightly irregular, nudged by tides, shifting ice, ocean currents and movements in its molten core. Over the long run the planet is gradually slowing, so the true length of a day creeps upward by a fraction of a millisecond per century.
+
+Two kinds of time keeping have therefore drifted apart. Atomic clocks, which count the vibrations of caesium atoms, tick with extraordinary steadiness. The Earth, measured against the stars and the Sun, is a less reliable timekeeper. Since 1972, international standards have tried to keep the two within a second of each other. Whenever the gap threatened to exceed 0.9 seconds, a leap second was added, usually at the end of June or December. On those occasions the final minute of the day ran to 61 seconds, and clocks read 23:59:60 before rolling over to midnight. Twenty-seven have been added, the most recent at the end of 2016.
+
+That seems harmless, but computers have found it anything but. Leap seconds arrive irregularly, announced only months ahead, because nobody can predict the Earth's wobbles far in advance. Software assumes that a minute has 60 seconds, and a repeated or invented second can confuse it. Systems have crashed, and in 2012 a leap second helped knock out several well-known websites. Financial markets, power grids, satellite navigation and telecommunications all depend on precisely synchronised clocks, and engineers have spent years devising workarounds, with some companies "smearing" the extra second across a whole day.
+
+So in 2022 the General Conference on Weights and Measures, the body that governs the international system of units, voted to stop. Leap seconds are to be abandoned by 2035. After that, the gap between atomic time and Earth time will be allowed to grow, with a new, larger tolerance still to be agreed, and officials have suggested the difference might eventually be corrected in a far bigger step, perhaps a minute or more, in a century or so.
+
+There is a curious twist. In recent years the Earth has been spinning slightly faster, not slower, and measurements suggest we might one day need a negative leap second, removing a second rather than adding one. That has never been tried, and many engineers fear it would cause more trouble still.
+
+For ordinary readers, nothing will change. Your sunrise will not shift in any way you could notice, and the technology will simply stop having to cope with a rare and awkward extra tick.
