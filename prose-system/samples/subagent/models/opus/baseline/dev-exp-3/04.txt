@@ -1,0 +1,72 @@
+How Two Strangers Can Share a Secret in Public
+
+Picture this. Alice and Bob have never met. They want to exchange private messages, and to do that they need a shared secret: a number only the two of them know, which they can use as the key to scramble and unscramble what they send. The trouble is that the only way they can talk is a line that anyone can listen to, like a crowded room or a telephone that a stranger can tap. Call the eavesdropper Eve. Eve hears every word Alice and Bob say to each other.
+
+At first this looks impossible. If Alice says the secret out loud, Eve hears it. If Alice tries to hide the secret using another secret, she has to send that second secret somehow, and she is back where she started. For most of history people assumed you had to meet first, or trust a courier, to set up a shared key. In 1976 two researchers, Whitfield Diffie and Martin Hellman, published a way round this. It is now known as the Diffie–Hellman key exchange. It is the root idea of what we call public-key cryptography, and a version of it runs every time a padlock icon appears in your web browser.
+
+**The paint-mixing picture**
+
+Before any numbers, here is an analogy that captures the trick.
+
+Suppose mixing two pots of paint is easy, but taking a mixed colour apart again, so that you can say exactly which colours went into it, is practically impossible.
+
+1. Alice and Bob agree in public on a starting colour, say yellow. Eve hears this, and that does not matter.
+2. Alice picks a secret colour, say red, and tells nobody. Bob picks his own secret colour, say blue.
+3. Alice mixes her red into a pot of yellow and sends that pot to Bob. Bob mixes his blue into a pot of yellow and sends that pot to Alice. Eve sees both pots go past: yellow-plus-red and yellow-plus-blue.
+4. Alice takes the pot she received from Bob (yellow-plus-blue) and adds her own secret red. Bob takes the pot from Alice (yellow-plus-red) and adds his own secret blue.
+
+Now both of them hold yellow-plus-red-plus-blue. It is the same colour, because the order of mixing does not matter. Eve has yellow, yellow-plus-red and yellow-plus-blue. To make the final colour she would need the red or the blue on its own, and she cannot pull either one back out of a mixture. If she mixes her two pots together she gets a colour with two lots of yellow in it, which is the wrong colour.
+
+So the whole scheme depends on an operation that is easy to do and very hard to undo. Paint is only a picture. Real systems need something in mathematics that behaves the same way.
+
+**Clock arithmetic**
+
+The mathematical version uses what is sometimes called clock arithmetic. On an ordinary clock, 9 o'clock plus 5 hours is 2 o'clock, not 14. Once you pass 12 you go back round. In maths we describe this by dividing by 12 and keeping only the remainder: 14 divided by 12 leaves 2.
+
+The clock does not have to have 12 hours. Let us use a clock with 23 positions, numbered 0 to 22. Any number can be brought onto this clock by dividing by 23 and keeping the remainder. For example, 25 becomes 2, because 25 is one lot of 23 with 2 left over. And 640 becomes 19, because 23 × 27 = 621 and 640 − 621 = 19.
+
+The operation we need is repeated multiplication on this clock. Pick a starting number, say 5, and multiply it by itself again and again, taking the remainder after each step:
+
+- 5 → 5
+- 5 × 5 = 25 → 2
+- 2 × 5 = 10 → 10
+- 10 × 5 = 50 → 4
+- 4 × 5 = 20 → 20
+- 20 × 5 = 100 → 8
+
+So "5 multiplied by itself 6 times" lands on 8. Mathematicians write this as 5⁶, read "5 to the power 6".
+
+Going forwards is easy: you just keep multiplying and taking remainders. Going backwards is hard. If I tell you "I started at 5, multiplied by 5 some number of times on the 23-clock, and landed on 8", how many times did I multiply? With only 23 positions you can try every possibility. But the landing spots jump around with no visible pattern, so there is no shortcut. You simply have to try. Now replace 23 with a number that has hundreds of digits. Going forwards stays quick, because there are tricks for taking big powers fast. Going backwards would take every computer on Earth longer than the age of the universe. This is the "easy to mix, impossible to unmix" behaviour we wanted.
+
+**The exchange, with real numbers**
+
+Here is the full exchange with our small numbers. You can check every step with a pencil.
+
+*In public:* Alice and Bob agree on the clock size, 23, and the starting number, 5. Eve hears both.
+
+*In private:* Alice chooses a secret number, 6. Bob chooses a secret number, 15. Neither ever says these out loud.
+
+*Step 1.* Alice works out 5 multiplied by itself 6 times on the 23-clock, which we found is 8. She sends 8 to Bob. Bob works out 5 multiplied by itself 15 times on the 23-clock, which comes to 19. He sends 19 to Alice. Eve hears both 8 and 19.
+
+*Step 2.* Alice takes Bob's 19 and multiplies it by itself 6 times (her secret) on the 23-clock:
+19 × 19 = 361 → 16; then 16 × 16 = 256 → 3 (that is 19 to the power 4); then 3 × 16 = 48 → 2.
+Alice gets **2**.
+
+Bob takes Alice's 8 and multiplies it by itself 15 times (his secret) on the 23-clock. Working it through gives 1152, and 1152 divided by 23 is 50 with 2 left over.
+Bob gets **2**.
+
+They have the same number, and neither of them ever sent it. Why does this work? Alice computed "5, powered by Bob's 15, then powered by her 6". Bob computed "5, powered by Alice's 6, then powered by his 15". Both of these come to 5 multiplied by itself 6 × 15 = 90 times, and since multiplication does not care about order, both land on the same spot on the clock. This is exactly the paint-mixing step: the two secret colours are added in different orders but give the same result.
+
+*What Eve has:* 23, 5, 8 and 19. To get the shared secret she needs either Alice's 6 or Bob's 15, which means answering "how many times was 5 multiplied to reach 8?" With 23 positions she could work it out by trial. With the enormous numbers used in practice, she cannot.
+
+**Why "public key"?**
+
+In this scheme, Alice's 8 and Bob's 19 are their *public keys*. They are safe to shout across the room. The 6 and the 15 are their *private keys*, and they never leave their owners' hands. This split is the defining feature of public-key cryptography: each person has one part they publish and one part they keep, and the maths links the two in a way that only works in one direction.
+
+Once Alice and Bob share the secret (in real life a very long number, not 2), they use it as the key for an ordinary, fast scrambling method to encrypt the rest of their conversation.
+
+**One important catch**
+
+Diffie–Hellman protects against someone who only listens. It does not, on its own, stop someone who can *intercept and replace* messages. If Eve can catch Alice's 8 before it arrives, send Bob her own number instead, and do the same thing in the other direction, she ends up sharing one secret with Alice and another with Bob. She can then sit in the middle reading and passing on everything, and neither of them notices. This is called a "man-in-the-middle" attack.
+
+The fix is a way of proving who sent a public key. It works like an official stamp on an identity card, and on the internet these stamps are called certificates. Your browser checks one before trusting a website's public key. Put together, these pieces let two strangers on a line full of listeners agree on a secret that none of the listeners can work out, with no need to have met beforehand.

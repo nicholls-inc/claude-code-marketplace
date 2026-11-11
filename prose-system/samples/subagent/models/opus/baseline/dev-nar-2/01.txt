@@ -1,0 +1,45 @@
+**Apollo 13: The Successful Failure**
+
+By April 1970, flying to the Moon had started to look routine. Two crews had already walked on its surface, and the television networks were losing interest. When Apollo 13 lifted off from Kennedy Space Center on April 11, many Americans hardly noticed. The crew was commander Jim Lovell, a veteran of three earlier flights, lunar module pilot Fred Haise, and command module pilot Jack Swigert. Swigert had joined the crew only three days before launch. The original pilot, Ken Mattingly, had been exposed to German measles, and doctors would not risk him falling ill in space.
+
+The plan was to land in the Fra Mauro highlands, a hilly region thought to hold material blasted out by an ancient impact. The spacecraft came in two parts that would separate at the Moon. The command and service modules, named *Odyssey*, would stay in lunar orbit. The service module carried the main engine, the oxygen tanks and the fuel cells that made electricity and water. The lunar module, *Aquarius*, would take Lovell and Haise down to the surface.
+
+The launch had one scare. An engine on the rocket's second stage shut down early, and the remaining engines burned longer to make up for it. After that, the first two days went smoothly. Mission Control even joked about being bored.
+
+**"Houston, we've had a problem"**
+
+On the evening of April 13, nearly 56 hours into the flight and more than 300,000 kilometres from Earth, the crew finished a television broadcast that no network carried live. A few minutes later, Mission Control asked Swigert to do a routine chore: switch on small fans that stirred the super-cold oxygen in the service module's tanks so the gauges would read correctly.
+
+Seconds after he flipped the switch, the crew heard a loud bang and felt the spacecraft shudder. Warning lights came on. Swigert radioed, "Okay, Houston, we've had a problem here." When the ground asked him to repeat, Lovell answered: "Houston, we've had a problem."
+
+The readings made no sense at first. One oxygen tank showed empty. The second was losing pressure. Two of the three fuel cells had stopped producing power. Engineers on the ground wondered whether the instruments themselves had failed, because nothing in their training covered so many failures at once. Then Lovell looked out a window and saw a cloud of gas streaming away from the spacecraft into space. "It looks to me," he said, "that we are venting something." The thing they were losing was oxygen, and it was the supply that ran the fuel cells and filled the cabin.
+
+The investigation afterwards found the cause. Years earlier, oxygen tank number two had been dropped about five centimetres at the factory. During a ground test before launch, the tank would not empty properly, so technicians ran its internal heaters for hours to boil off the oxygen. A protective switch inside the tank was built for the spacecraft's 28-volt power, but the ground equipment supplied 65 volts. The switch fused shut, the heaters stayed on, and temperatures inside the tank climbed far past safe levels, burning the insulation off the wiring. Nobody saw the damage. When Swigert turned on the fans in flight, the bare wires sparked, the insulation caught fire in the pure oxygen, and the tank burst. The blast tore away an outer panel of the service module.
+
+**The Lifeboat**
+
+Within an hour, it was clear that *Odyssey* was dying. Flight director Gene Kranz and his team in Houston made the key decision: the crew would move into *Aquarius* and use the lunar module as a lifeboat. They had to shut down *Odyssey* almost completely. Its re-entry batteries were the only power left for the final plunge through Earth's atmosphere, and those batteries had to be saved.
+
+*Aquarius* had been built to keep two men alive for about two days on the Moon. Now it had to keep three men alive for about four days. Every amp of electricity, every litre of water and every breath of oxygen had to be counted. Controllers drew up plans to power down nearly every system on board, including heaters, computers and most of the instruments.
+
+The landing was off. The only question was how to get home. Turning around directly would have needed the service module's big engine, and no one knew what the explosion had done to it. So mission planners chose the long way: the spacecraft would swing around the far side of the Moon and use lunar gravity to sling itself back toward Earth. The crew fired the lunar module's descent engine, which was meant for landing, to put the ship on a path that would bring it home. As they passed behind the Moon on April 14, the three men set a record that still stands: the farthest any humans have travelled from Earth, about 400,000 kilometres. Lovell had already seen the far side on Apollo 8. Haise and Swigert took photographs. About two hours later, the crew fired the descent engine again to speed up the return and bring the splashdown into the Pacific, where recovery ships were waiting.
+
+**Cold, Thirst and Bad Air**
+
+The trip home was miserable. With the heaters off, the cabin grew bitterly cold, close to freezing. Moisture condensed on the walls and windows. The crew slept poorly, if at all. To save water for cooling the electronics, they drank very little, and Haise developed a kidney infection and a fever.
+
+A more serious threat came from the air itself. Each breath the astronauts let out added carbon dioxide to the cabin. The lunar module removed it with canisters of lithium hydroxide, but it had only enough for two men for two days. *Odyssey* carried plenty of spare canisters, but they were square, and the lunar module's holder took round ones. As carbon dioxide levels climbed, engineers in Houston worked out a fix using only things the crew had on board: plastic bags, cardboard from the flight plan covers, hoses from the spacesuits, and a lot of duct tape. They read the instructions up step by step, and the crew built the improvised adapter, nicknamed "the mailbox." The carbon dioxide levels began to fall.
+
+The path home still needed adjusting. With the navigation computer switched off to save power, the crew made one course correction by hand. Lovell kept the edge of Earth lined up in a window marking while Haise and Swigert watched for drift and handled the controls. The burn lasted only about 14 seconds and it worked.
+
+**Coming Home**
+
+The hardest job on the ground was bringing *Odyssey* back to life. It had never been shut down and restarted in flight, and there was barely enough battery power to do it. Ken Mattingly, the astronaut who had been grounded over measles and never caught them, spent long hours in a simulator with engineers working out a power-up sequence that fit within that thin margin.
+
+On April 17, about four and a half hours before re-entry, the crew released the crippled service module. As it drifted away, they saw the damage for the first time. A whole side panel was gone, and wiring and debris hung from the opening. "There's one whole side of that spacecraft missing," Lovell reported. They powered up *Odyssey* and climbed back in. About an hour before re-entry, they let go of *Aquarius*. Mission Control thanked the little lifeboat as it fell away.
+
+Every returning capsule lost radio contact for a few minutes while superheated air surrounded it during re-entry. On Apollo 13 the silence went on longer than expected, past four minutes, and the room in Houston went still. Then Swigert's voice came through. Minutes later, three parachutes opened over the South Pacific, and *Odyssey* splashed down near Samoa. The crew was taken aboard the recovery ship USS *Iwo Jima*. They were tired, cold, dehydrated and noticeably thinner, but they were alive.
+
+**A Successful Failure**
+
+Apollo 13 never reached the Moon's surface, and Lovell never got another chance. Even so, NASA came to call it a "successful failure." A review board traced the explosion to its cause, and the service module was redesigned with a third oxygen tank, an extra battery and safer wiring. The mission is remembered less for what went wrong than for how people handled it. A crew and thousands of engineers on the ground solved one problem after another under deadline pressure, with whatever was on hand, and brought three men home from more than 300,000 kilometres away.

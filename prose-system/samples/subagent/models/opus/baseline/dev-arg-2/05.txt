@@ -1,0 +1,23 @@
+Stop Guessing Dates. Start Counting.
+
+Every planning meeting runs the same way. Someone reads a ticket aloud, five engineers hold up cards, and the team settles on a number that everyone suspects is wrong. Two weeks later it turns out to be wrong. Nobody is surprised, and nothing changes.
+
+Teams should stop estimating how long individual pieces of work will take. Predictability matters. Estimates are just a poor way to get it.
+
+Start with accuracy. Most software work lies in the parts you haven't seen yet: the undocumented API, the migration that locks a table, the test suite that only fails on Tuesdays. An estimate is a guess about those unknowns, made at the point where you know least. Barry Boehm's research, later popularized by Steve McConnell as the "cone of uncertainty," found that early estimates routinely miss by a factor of two or more in either direction. Planning poker doesn't fix that. It averages the guesses.
+
+Then there's the cost. Six engineers spending ninety minutes per sprint on estimation adds up to more than a week of engineering time per quarter, all of it spent producing numbers. Then come the follow-ups: re-estimating, explaining the variance, and padding the next estimate. Padding is the real tax. Once a number becomes a commitment, engineers learn to inflate it, managers learn to discount it, and the number stops carrying any information. Parkinson's law takes care of the rest.
+
+The worst damage is cultural. When estimates become targets, the conversation moves from "what's the right thing to build?" to "why are you late?" Engineers cut tests to hit a date they never believed in, and managers lose the honest signal they needed.
+
+What should teams do instead? Two things.
+
+First, slice the work small. If every ticket is a day or two of work, you don't need to estimate tickets. You can count them. Breaking work down is where the real thinking happens anyway. It's the useful half of estimation, and you keep it.
+
+Second, forecast from history. Over the last quarter your team finished a known number of items each week. That throughput, with its variance, gives you a range: "We'll likely finish these 40 items in six to nine weeks, with 85% confidence." A simple Monte Carlo simulation in a spreadsheet will produce it. The forecast updates itself every week from real data rather than from a meeting.
+
+Managers sometimes hear this as engineers dodging accountability. It's the opposite. A throughput forecast is harder to game than a story-point total, and it shows you sooner when a project is drifting. "When will it be done?" deserves an answer, and a better one than a show of hands.
+
+There are exceptions. A fixed-bid contract or a regulatory deadline may need a rough order of magnitude before work starts. Give one in weeks or months, as a range, and don't pretend it's more precise than it is.
+
+For most teams' day-to-day work, though, estimation costs time, distorts behavior and predicts poorly. Slice the work, count what you finish, and let the data set the date.

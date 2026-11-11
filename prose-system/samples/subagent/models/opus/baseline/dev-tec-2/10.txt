@@ -1,0 +1,102 @@
+From Address Bar to First Byte: What Happens on an HTTPS Request
+
+When you type https://shop.example.com/products into a browser and press Enter, a lot happens before your server sees the request. Browser developer tools group most of it under a single "Waiting (TTFB)" bar. This walkthrough covers each step in order, so you know where the time goes and which parts you can control.
+
+1. Parsing the URL and checking for shortcuts
+
+First the browser parses the string into its parts: the scheme (https), the host (shop.example.com), the port (443 when none is given, as it is for HTTPS) and the path (/products). If the input isn't a valid URL, the browser treats it as a search query.
+
+Next the browser looks for ways to skip network work:
+
+- HSTS. If the site has sent a Strict-Transport-Security header before, or appears on the browser's built-in preload list, the browser always uses HTTPS for it. A plain http:// link gets rewritten internally before any packet leaves the machine.
+- Service worker. If the origin has a registered service worker, the request goes to its fetch handler first. The worker may answer from its own cache and never touch the network.
+- HTTP cache. If a fresh response for this URL is already cached (according to Cache-Control or Expires), the browser uses it, and the rest of this walkthrough doesn't happen. If the cached copy is stale but has an ETag or Last-Modified value, the browser still makes the request, but as a conditional one that may get a short 304 Not Modified back.
+
+2. Resolving the name with DNS
+
+Computers connect to IP addresses, not names, so the browser needs the address of shop.example.com. It checks these places in order:
+
+1. The browser's own DNS cache.
+2. The operating system's resolver cache, plus the hosts file.
+3. A recursive resolver, usually run by your ISP, your company or a public service such as 1.1.1.1 or 8.8.8.8. Modern browsers can send this query over an encrypted channel using DNS-over-HTTPS.
+
+If the recursive resolver doesn't have the answer cached, it walks the DNS hierarchy. A root server points it to the servers for .com, those point it to the authoritative name servers for example.com, and those return the actual record. Every answer carries a TTL (time to live) that says how long it may be cached.
+
+The browser usually asks for both an A record (IPv4) and an AAAA record (IPv6). It may also ask for an HTTPS record, which can say up front that the server supports HTTP/3. A cold DNS lookup can take tens to hundreds of milliseconds. A cached one is nearly instant.
+
+3. Reusing a connection, or opening a new one
+
+Browsers keep connection pools. If there's already an open, authenticated connection to this origin (for example, from loading an earlier page on the site), the browser reuses it and skips straight to step 5. That's why repeat requests are so much faster than the first one.
+
+Otherwise it opens a new connection. With HTTP/1.1 and HTTP/2, that means TCP:
+
+- The client sends SYN.
+- The server replies SYN-ACK.
+- The client sends ACK.
+
+This costs one round trip (RTT). If the server is 80 ms away, that's 80 ms before any useful data can move. When a host has both IPv4 and IPv6 addresses, browsers use "Happy Eyeballs": they try both, slightly staggered, and keep whichever connects first.
+
+With HTTP/3, the transport is QUIC, which runs over UDP. QUIC combines the transport handshake and the TLS handshake into one round trip, so the TCP step is gone.
+
+4. The TLS handshake
+
+HTTPS means HTTP sent inside TLS, which provides encryption, integrity and server authentication. With TLS 1.3, the current standard, the handshake looks like this:
+
+1. ClientHello. The browser lists the cipher suites it supports and sends a key share, which is its half of a Diffie-Hellman key exchange. Two extensions in this message matter to web developers:
+   - SNI (Server Name Indication) carries the hostname, so a server hosting many sites knows which certificate to present.
+   - ALPN (Application-Layer Protocol Negotiation) lists the protocols the browser speaks, such as h2 and http/1.1.
+2. ServerHello and the rest of the server's reply. The server picks a cipher and sends its own key share. Both sides can now derive the same session keys, and everything after this point is encrypted. The server also sends:
+   - its certificate chain,
+   - a CertificateVerify message, a signature proving it holds the certificate's private key,
+   - a Finished message,
+   - and its ALPN choice, typically h2.
+3. Client Finished. The browser checks the certificate and sends its own Finished message. It can send the HTTP request right behind it, in the same flight.
+
+To check the certificate, the browser confirms three things:
+
+- the chain leads to a root certificate authority it trusts,
+- the certificate hasn't expired,
+- the hostname matches the certificate's Subject Alternative Name list.
+
+The browser may also check revocation status, often using an OCSP response the server "stapled" to the handshake. If any check fails, you get the full-page certificate warning, and the request isn't sent.
+
+TLS 1.3 needs one round trip. Older TLS 1.2 needed two. When the client is resuming a recent session, TLS 1.3 can even send the request in the first flight ("0-RTT"), though only for requests that are safe to replay.
+
+5. Sending the request
+
+The connection is now ready, so the browser builds the request. The fields include:
+
+- the method and path (GET /products),
+- the Host header (in HTTP/2 and HTTP/3, the :authority pseudo-header),
+- User-Agent, Accept and Accept-Encoding (for example gzip and br),
+- Accept-Language,
+- any cookies for this domain,
+- and conditional headers such as If-None-Match when revalidating a cached copy.
+
+In HTTP/2 and HTTP/3, headers are compressed (HPACK and QPACK) and sent as frames on a numbered stream. Many requests can share one connection at the same time.
+
+6. The server side
+
+The request often reaches a CDN or load balancer before your application. Many deployments terminate TLS there, meaning the edge server performed the handshake in step 4, not your origin. The edge may answer straight from its own cache. If not, it forwards the request to an origin server over a connection it usually keeps open already. Your application then routes the request, runs middleware, queries databases or other services, and starts writing the response.
+
+7. The first byte arrives
+
+The server sends the status line and headers (for example HTTP/2 200 with content-type and cache-control), encrypted in a TLS record or QUIC packet. The moment the first byte of that response reaches the browser, the time to first byte (TTFB) is over. Streaming the body, parsing HTML and rendering all come after that.
+
+Putting it together
+
+For a cold first visit over TCP and TLS 1.3, the minimum is roughly:
+
+DNS lookup + 1 RTT (TCP) + 1 RTT (TLS) + 1 RTT (request and response) + server processing time
+
+On a mobile network with a 100 ms RTT, that's at least 300 ms of pure network waiting before your code's speed even matters.
+
+This is why some common optimizations exist:
+
+- CDNs put the handshake endpoint physically closer to the user, which shortens every round trip.
+- HTTP/3 removes a round trip by merging the transport and TLS handshakes.
+- Connection reuse skips DNS, TCP and TLS entirely.
+- <link rel="preconnect"> lets the browser do DNS, TCP and TLS for a third-party origin early, before it's needed.
+- Good Cache-Control headers mean the network may never be involved at all.
+
+In Chrome DevTools, the Network panel's Timing tab breaks each request into DNS Lookup, Initial Connection, SSL and Waiting (TTFB). Open it on your own site and you'll see the steps above measured in milliseconds.

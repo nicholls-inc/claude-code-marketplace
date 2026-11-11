@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a29dcfcc4939ee67c",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 1612,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:26:17.843Z",
+  "valid": true,
+  "text": "**How a Lithium-Ion Cell Is Charged, and Why the Last 20% Is Slow**\n\nA lithium-ion cell stores energy by moving lithium ions between two host materials. On charge, an external source pulls electrons out of the positive electrode, which is typically a layered metal oxide such as NMC or a phosphate such as LFP. At the same moment, lithium ions leave that oxide, cross a liquid electrolyte, and slot in between the carbon layers of the graphite negative electrode. Discharge reverses the process. The cell's open-circuit voltage (OCV) is set by the difference in lithium's chemical potential between the two electrodes, and it rises as the graphite fills and the cathode empties. For NMC/graphite the range is roughly 3.0 V to 4.2 V.\n\nChargers use a two-stage profile called constant-current/constant-voltage (CC-CV).\n\n1. **Constant current.** The charger pushes a fixed current, for example 1C, which would fill the cell in about an hour. The terminal voltage climbs as charge accumulates. Most of the capacity, often 70-80%, goes in during this phase.\n2. **Constant voltage.** When the terminal voltage reaches the upper limit, typically 4.2 V, the charger holds it there. The current then decays on its own. Charging stops when the current falls below a cutoff, commonly C/20.\n\nThe reason for the taper is that terminal voltage is not the same as OCV. Under current, the terminal voltage is:\n\nV_terminal = OCV + I·R_ohmic + η_kinetic + η_diffusion\n\nEach overpotential term grows with current:\n- **Ohmic loss** comes from the electrolyte, the current collectors and contact resistance.\n- **Kinetic overpotential** is the cost of driving the reaction at each electrode surface.\n- **Diffusion overpotential** comes from concentration gradients. Lithium enters each electrode particle at its surface and must diffuse inward through the solid, which is slow. Near the end of charge, the particle surfaces are close to saturated while their cores lag behind.\n\nEarly in the charge the OCV is low, so there is plenty of room under the 4.2 V ceiling for these losses, and a high current is possible. As the OCV approaches the ceiling, that room shrinks. With the terminal voltage held fixed, the current must fall until the overpotentials fit in the remaining gap. The CV phase is in effect a wait for the concentration gradients to relax so that the particle interiors catch up with their surfaces. The current tapers in a roughly exponential way, much like an RC circuit, but the effective time constant grows as the cell fills.\n\nThe voltage ceiling is hard for two reasons:\n- **Cathode side.** Above the limit, the electrolyte oxidizes, the cathode becomes structurally unstable as too much lithium is removed, and the cell produces gas and heat.\n- **Anode side.** At high current or low temperature, the graphite's potential can fall below 0 V against lithium metal. Lithium then plates onto the surface as metal instead of entering the graphite. Plating permanently removes usable lithium and can grow dendrites that short the cell.\n\nFast-charge protocols therefore shape the current to keep the anode potential above the plating threshold. They also derate the current in the cold, and a battery management system monitors temperature and per-cell voltage throughout. The practical result is that charging from 10% to 80% can take 20 minutes, while 80% to 100% often takes about as long again."
+}

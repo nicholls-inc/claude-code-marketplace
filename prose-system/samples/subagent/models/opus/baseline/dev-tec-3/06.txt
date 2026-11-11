@@ -1,0 +1,19 @@
+**How a Lithium-Ion Cell Is Charged, and Why It Slows Near Full**
+
+A lithium-ion cell stores energy by moving lithium between two host materials. During charging, an external source pulls electrons out of the positive electrode, usually a metal oxide such as NMC or a phosphate such as LFP. It pushes them through the external circuit into the negative electrode, usually graphite. To keep each electrode electrically neutral, lithium ions leave the cathode lattice, cross the liquid electrolyte and the porous separator, and slot into the layers of the graphite. This insertion is called intercalation. Neither electrode is consumed. Lithium is moved from a host where its energy is low to one where its energy is high.
+
+Almost all chargers use a two-stage profile called constant-current/constant-voltage (CC-CV). In the CC stage, the charger regulates current to a fixed value, often 0.5C to 1C, where 1C is the current that would fill the cell in one hour. The terminal voltage rises as charge accumulates. Once it reaches a fixed limit, typically 4.2 V for NMC chemistries or 3.65 V for LFP, the charger switches to CV. It holds that voltage and lets the current fall. Charging ends when the current drops to a small threshold, commonly C/20.
+
+The taper follows from how the terminal voltage is made up. Under load, it equals the cell's open-circuit voltage (OCV), which depends on state of charge, plus overpotentials that grow with current:
+
+- **Ohmic losses** in the electrolyte, the current collectors and the contacts.
+- **Charge-transfer losses** at each electrode surface.
+- **Concentration losses** from lithium gradients in the electrolyte and inside the electrode particles.
+
+Near full, the OCV is already close to the voltage limit, so little headroom remains for overpotential. The only way to keep the terminal voltage under the limit is to cut the current. An electrical analogy is a capacitor charged through a series resistance to a fixed supply voltage, with its exponential current tail. The real cell is less ideal, because its "resistance" includes slow diffusion processes.
+
+Diffusion is the deeper reason the last 20 percent is slow. Lithium enters each electrode particle at its surface and has to diffuse inward through the solid, which is slow. At high current, the particle surfaces saturate while the cores are still lithium-poor. The surface concentration sets the local potential, so the cell looks full before it is. Lowering the current in the CV stage gives the interiors time to catch up.
+
+The voltage limit protects against real damage. Above it, the cathode becomes unstable and the electrolyte oxidizes. On the graphite side, forcing current into saturated surfaces can push the local potential below that of lithium metal. Lithium then plates as metal instead of intercalating. Plating permanently removes usable lithium and can grow dendrites that short the cell. Plating risk rises at low temperature and high rate.
+
+The practical result is that a cell can often go from 10 to 80 percent quickly, but the final fraction takes about as long again.

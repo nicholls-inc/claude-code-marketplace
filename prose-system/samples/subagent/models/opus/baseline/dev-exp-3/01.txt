@@ -1,0 +1,85 @@
+How two strangers can share a secret in public
+
+Imagine you want to send a private message to someone you have never met. You can only reach them through a channel that anyone can listen to: a radio broadcast, a shouted conversation across a crowded room, or the internet, where your words pass through dozens of machines owned by people you don't know. Every word you send, an eavesdropper hears too.
+
+The usual way to keep a message private is to scramble it with a secret key that only you and the other person know. That works well, but it leaves a problem. If you have never met, you have no shared key. You can't send one over the open line, because the eavesdropper would copy it. For most of history this problem had no answer: governments and armies sent keys by trusted couriers carrying locked briefcases.
+
+In 1976, Whitfield Diffie and Martin Hellman published a way round it. Two people can agree on a secret number while every message between them is overheard, and the listener still cannot work out the number. This sounds impossible. Here is how it works.
+
+The paint-mixing picture
+
+Start with an analogy that uses paint instead of numbers.
+
+Alice and Bob agree, in public, on a starting colour, say yellow. The eavesdropper, whom we'll call Eve, hears this. That's fine.
+
+Each of them then picks a secret colour and tells no one. Alice picks red. Bob picks blue.
+
+Alice mixes her red into a pot of the shared yellow and gets orange. Bob mixes his blue into yellow and gets green. They swap these mixtures in public, and Eve sees both the orange and the green.
+
+Now Alice takes Bob's green and adds her own secret red. Bob takes Alice's orange and adds his own secret blue. Each of them now holds a pot containing yellow, red and blue, the same three ingredients, so they have the same muddy brown. That brown is their shared secret.
+
+Eve has seen yellow, orange and green. To make the brown she would need red or blue on its own, and she has neither. She can't easily un-mix orange to find out which red Alice used, because mixing paint is easy and separating it again is, in practice, impossible.
+
+That one-way quality carries the whole idea. The method needs an operation that is easy to do and very hard to undo.
+
+Replacing paint with arithmetic
+
+Paint is a picture, not a security system. Real systems use numbers, and the one-way operation they use is built from two pieces of school maths: powers and remainders.
+
+Powers are repeated multiplication. Five to the power of three, written 5³, means 5 × 5 × 5 = 125.
+
+Remainders are what is left over after division. Think of a clock. If it is 9 o'clock and you wait 5 hours, it is 2 o'clock, not 14 o'clock, because the clock wraps round after 12. Mathematicians call this "clock arithmetic". We'll use a clock with 23 positions instead of 12. To find where any number lands on that clock, divide it by 23 and keep the remainder. For example, 50 divided by 23 is 2 with 4 left over, so 50 lands at position 4.
+
+Now combine the two. Take 5, raise it to some power, then find where the answer lands on the 23-position clock. Going forward is just multiplying and dividing. Going backward is far harder: someone tells you only where the answer landed, and you have to work out which power was used. The wrapping round the clock scrambles the trail.
+
+The exchange, with real numbers
+
+Alice and Bob agree in public on two numbers: the clock size, 23, and the starting number, 5. Eve hears both.
+
+Alice secretly picks 6. Bob secretly picks 15. They keep these to themselves.
+
+Alice works out 5⁶, which is 15,625, and finds where it lands on the 23-clock. 15,625 divided by 23 leaves a remainder of 8. She sends Bob the number 8.
+
+Bob works out 5¹⁵ and finds where it lands on the 23-clock. The answer is 19. He sends Alice the number 19.
+
+Eve now knows 23, 5, 8 and 19.
+
+Next, Alice takes Bob's 19, raises it to her secret power 6, and finds where that lands on the clock. She gets 2.
+
+Bob takes Alice's 8, raises it to his secret power 15, and finds where that lands. He also gets 2.
+
+They agree. Their shared secret is 2, and that number never travelled over the line.
+
+Why do they match? Alice calculated (5¹⁵)⁶ and Bob calculated (5⁶)¹⁵. Both are 5 multiplied by itself 90 times, just grouped differently, and the clock wrapping doesn't change that. It is the paint mixture again: the same ingredients added in a different order give the same result.
+
+Why Eve is stuck
+
+To get the secret, Eve needs either Alice's 6 or Bob's 15. She knows that 5 raised to some power lands at 8 on the 23-clock. Can she find the power?
+
+With a clock this small, yes. She can try 5¹, 5², 5³ and so on until one lands on 8, and she'll find 6 within a minute. That is why real systems don't use 23. They use a clock whose size is a number hundreds of digits long, and secret powers just as long.
+
+At that size the two directions behave very differently. Going forward stays quick, because there are shortcuts: you can square a number, square the result, and keep going, so the power doubles at every step. A computer can work out a huge power on a huge clock in a fraction of a second. Going backward has no known shortcut of that kind. Trying every possibility would take longer than the age of the universe even if every computer on Earth worked on it together. Mathematicians have studied this problem for decades and found nothing close to fast enough.
+
+So Alice and Bob each do a few quick calculations, and Eve faces a calculation she cannot finish.
+
+From a shared number to a private conversation
+
+The shared number isn't a message. It is a key. Once Alice and Bob both hold it, they can use an ordinary scrambling method that needs a shared key, and send each other as much as they like. Eve sees only scrambled text.
+
+This is what happens, in some form, every time you see a padlock symbol beside a website address. Your device and a server that have never spoken before run an exchange like this one in a split second, then use the result to protect everything that follows.
+
+Why it's called "public-key"
+
+Diffie and Hellman's idea was soon extended. In the systems that followed, each person has a pair of linked numbers. One is a public key, which they can publish for anyone to see, much as you'd print a phone number. The other is a private key, which they never reveal. Anything locked with the public key can only be unlocked with the private one.
+
+An everyday comparison is an open padlock. Bob can hand out open padlocks to anyone who asks. Alice puts her message in a box, snaps one of Bob's padlocks shut on it, and sends it. Once the lock is closed, even Alice can't open it, and only Bob, with his key, can. Eve can watch the padlocks go out and the locked box come back without learning anything useful.
+
+In the exchange above, Alice's 8 and Bob's 19 played the part of public keys, and the 6 and 15 were their private keys.
+
+The catch
+
+The scheme protects against someone who only listens. It does nothing on its own against someone who can intercept and replace messages. If Eve can stand in the middle, she can run one exchange with Alice while pretending to be Bob, and a second exchange with Bob while pretending to be Alice. Each of them would then share a secret with Eve without knowing it.
+
+The fix is a way to check who you are talking to. On the web this comes from certificates: digital statements, vouched for by organisations that browsers already trust, saying "this public key really belongs to this website." The arithmetic keeps the conversation private, and the certificates confirm who is at the other end.
+
+Taken together, this lets two strangers on a line that anyone can listen to end up sharing a secret that no listener can work out.

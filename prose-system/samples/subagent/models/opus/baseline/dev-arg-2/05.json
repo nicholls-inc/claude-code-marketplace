@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2f45601a6672466d",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 2360,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:12:20.846Z",
+  "valid": true,
+  "text": "Stop Guessing Dates. Start Counting.\n\nEvery planning meeting runs the same way. Someone reads a ticket aloud, five engineers hold up cards, and the team settles on a number that everyone suspects is wrong. Two weeks later it turns out to be wrong. Nobody is surprised, and nothing changes.\n\nTeams should stop estimating how long individual pieces of work will take. Predictability matters. Estimates are just a poor way to get it.\n\nStart with accuracy. Most software work lies in the parts you haven't seen yet: the undocumented API, the migration that locks a table, the test suite that only fails on Tuesdays. An estimate is a guess about those unknowns, made at the point where you know least. Barry Boehm's research, later popularized by Steve McConnell as the \"cone of uncertainty,\" found that early estimates routinely miss by a factor of two or more in either direction. Planning poker doesn't fix that. It averages the guesses.\n\nThen there's the cost. Six engineers spending ninety minutes per sprint on estimation adds up to more than a week of engineering time per quarter, all of it spent producing numbers. Then come the follow-ups: re-estimating, explaining the variance, and padding the next estimate. Padding is the real tax. Once a number becomes a commitment, engineers learn to inflate it, managers learn to discount it, and the number stops carrying any information. Parkinson's law takes care of the rest.\n\nThe worst damage is cultural. When estimates become targets, the conversation moves from \"what's the right thing to build?\" to \"why are you late?\" Engineers cut tests to hit a date they never believed in, and managers lose the honest signal they needed.\n\nWhat should teams do instead? Two things.\n\nFirst, slice the work small. If every ticket is a day or two of work, you don't need to estimate tickets. You can count them. Breaking work down is where the real thinking happens anyway. It's the useful half of estimation, and you keep it.\n\nSecond, forecast from history. Over the last quarter your team finished a known number of items each week. That throughput, with its variance, gives you a range: \"We'll likely finish these 40 items in six to nine weeks, with 85% confidence.\" A simple Monte Carlo simulation in a spreadsheet will produce it. The forecast updates itself every week from real data rather than from a meeting.\n\nManagers sometimes hear this as engineers dodging accountability. It's the opposite. A throughput forecast is harder to game than a story-point total, and it shows you sooner when a project is drifting. \"When will it be done?\" deserves an answer, and a better one than a show of hands.\n\nThere are exceptions. A fixed-bid contract or a regulatory deadline may need a rough order of magnitude before work starts. Give one in weeks or months, as a range, and don't pretend it's more precise than it is.\n\nFor most teams' day-to-day work, though, estimation costs time, distorts behavior and predicts poorly. Slice the work, count what you finish, and let the data set the date."
+}

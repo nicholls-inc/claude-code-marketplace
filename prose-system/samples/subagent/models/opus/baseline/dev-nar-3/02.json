@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aec34c100fb46e7ef",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73711,
+    "output_tokens": 1611,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:04:41.590Z",
+  "valid": true,
+  "text": "The Great Molasses Flood\n\nJanuary 15, 1919, was unusually mild in Boston. A few days earlier the city had been in a deep freeze. Now the temperature had climbed past 40 degrees, and people in the North End were out in their shirtsleeves. Workers ate lunch on the waterfront, children gathered firewood near the docks, and freight wagons rolled along Commercial Street.\n\nAbove them stood a steel tank about fifty feet tall and ninety feet across, owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It held about 2.3 million gallons of molasses, which was fermented into industrial alcohol, an ingredient in munitions. A fresh shipment had been pumped in only days before, and the warm, heavier cargo had mixed with the cold molasses already inside.\n\nAt about 12:30 p.m., witnesses heard a deep rumble followed by a sound like a machine gun. That was the rivets popping out of the tank's seams. Then the tank burst apart.\n\nA brown wave, by some accounts twenty-five feet high, poured into the streets at around thirty-five miles an hour. It was not a slow ooze. It came down with enough force to snap the steel supports of the elevated railway on Atlantic Avenue, where a train stopped just short of the broken track. Houses were pushed off their foundations. A city firehouse was knocked partly into the harbor, and its crew was pinned under the wreckage. Horses, wagons and people were swept along and buried.\n\nThe worst came after the wave had passed. Molasses grows thicker as it cools, and in the winter air it soon set to the consistency of wet cement around anyone caught in it. People who could not pull free suffocated where they lay. Rescuers sank up to their waists as they tried to reach them. Sailors from a training ship docked nearby were among the first to arrive, followed by police, firefighters and Red Cross volunteers, who worked by searchlight into the night. Some bodies were not found for days. One was recovered from the harbor months later.\n\nTwenty-one people died, among them children, laborers and a firefighter. About 150 were injured. Cleanup crews hosed the streets with salt water from fireboats and scraped them with shovels. Molasses was tracked across the city on boots and streetcar seats, and the harbor ran brown for months.\n\nThe company first blamed anarchist bombers. Survivors and families sued, in one of the first class-action lawsuits in Massachusetts, and the hearings lasted years. The evidence showed that the tank had been built in a hurry in 1915, under a manager with no engineering training. It had never been tested by filling it with water. Its steel was too thin and brittle, and it leaked so badly from the start that the company painted it brown to hide the streaks. Local residents had been collecting the drips in buckets. In 1925 the court-appointed auditor found the company responsible, and it paid roughly $628,000 in settlements.\n\nThe disaster pushed Massachusetts and other states to require that engineers sign off on building plans and that structural calculations be filed with the city. For decades afterward, older North End residents said that on a hot summer day they could still smell molasses rising from the streets."
+}

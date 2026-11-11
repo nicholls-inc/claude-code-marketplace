@@ -1,0 +1,25 @@
+**Keep Estimating. Stop Lying About What Estimates Are.**
+
+Every few years the #NoEstimates argument comes back, and every time it gets cheers from engineers who have been burned. I understand why. Most of us have given a number in a planning meeting and then watched it come back as a deadline, written on a roadmap slide we never saw. The anger is fair. The proposed fix, though, is wrong. Teams should keep estimating. What needs to change is how organizations use the estimates.
+
+Start with what an estimate actually does. It isn't mainly a prediction. It's how a team finds out whether it understands the work. When two engineers size the same ticket and one says two days while the other says two weeks, the gap tells you something. One of them knows about the legacy auth module and the other doesn't. Or one is picturing a quick patch and the other is picturing the fix the system actually needs. You only find that out because someone asked "how long?" If you drop the question, the disagreement doesn't go away. It shows up three weeks into the sprint, when it costs far more.
+
+Next, consider who else depends on the answer. Engineering isn't the only group with plans. Sales has promised customers things, support needs to know when the fix ships, and finance decides whether to hire. The #NoEstimates answer is usually "ship small slices and let throughput speak for itself." That works well for a team running a steady flow of similar tickets. It doesn't help with the question every manager eventually gets: should we build this at all, given what it will cost? You can't prioritize without some sense of cost, and cost in software means time. A team that won't estimate hasn't removed that judgment. Someone further from the code will make it instead, usually worse.
+
+The fair objection is that estimates are always wrong, so why bother? They are wrong, often by a lot. But a forecast can be wrong and still be useful. Weather forecasts miss all the time, and people still check them before a hike. The trouble starts when an estimate gets treated as a promise. That's a management failure, and the cure is a management fix.
+
+That brings me to what should actually change.
+
+**Estimate in ranges.** "Three to eight days" is honest. "Five days" sounds precise and isn't. If a team can't give a range, the work needs more investigation before anyone commits to it.
+
+**Re-estimate out loud.** When new information comes in, the number should move, and moving it should be routine, not an admission of failure.
+
+**Keep estimates off performance reviews.** Once accuracy is graded, engineers pad everything, and the numbers stop carrying any information.
+
+**Track your misses.** If your estimates run 40% low every quarter, that's a calibration factor you can apply. It isn't proof that estimating is pointless.
+
+Managers have the bigger share of this job. If you turn ranges into dates, punish revisions, or quietly drop the low end of every range, your team will stop telling you the truth, and they'll be right to.
+
+Engineers have a share too. "It's done when it's done" isn't a principled position. It hands the uncertainty to someone else. A good estimate is a professional judgment made under uncertainty, which is most of what this job involves anyway.
+
+So don't abolish estimates. Fix how they're used.

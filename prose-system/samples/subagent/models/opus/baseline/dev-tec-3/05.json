@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "abe5a964acc063858",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 2608,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:14:14.053Z",
+  "valid": true,
+  "text": "How a Lithium-Ion Cell Charges, and Why It Slows Near Full\n\nA lithium-ion cell stores energy by moving lithium ions between two host electrodes. During charge, an external source pulls electrons out of the positive electrode, which is a metal oxide such as NMC or iron phosphate (LFP). The electrons travel through the external circuit to the negative electrode, which is usually graphite. To keep the charge balanced, lithium ions leave the cathode lattice, cross a liquid electrolyte and a porous separator, and slot in between the graphite layers. This insertion is called intercalation. Discharge runs the same process in reverse.\n\nDuring charge, the cell's terminal voltage has two parts. The first is the open-circuit voltage (OCV). This is a thermodynamic property that rises with state of charge, from about 3.0 V when empty to about 4.2 V when full for an NMC/graphite cell. The second is the overpotential, the extra voltage that drives current through the cell. It has three sources: ohmic drop in the electrolyte and contacts, the activation barrier of the electrode reactions, and concentration gradients. Those gradients form as ions diffuse through the electrolyte and, more slowly, through the solid electrode particles.\n\nThe standard method is constant-current/constant-voltage (CC-CV) charging. In the CC phase the charger supplies a fixed current, usually 0.5C to 1C, where 1C would fill the cell in about one hour. The terminal voltage climbs as the OCV rises. When it reaches the chemistry's upper limit, the charger switches to CV mode. Typical limits are 4.2 V for many NMC cells and 3.65 V for LFP. In CV mode the charger holds the voltage fixed and lets the current fall. Charging ends when the current drops below a cutoff, often C/20. At 1C, the CC phase delivers roughly 70–80% of capacity in under an hour, and the CV tail can take about as long again for the rest.\n\nThe slowdown has two causes. First, in CV mode the current is roughly (V_limit − OCV) / R_effective. As the OCV approaches the limit, the driving voltage shrinks and the current decays, much like an RC circuit charging toward its source voltage. Second, intercalation is limited by diffusion. Lithium enters the surface of each particle faster than it spreads to the core, so the surfaces fill first. A good comparison is heating a slab: the surface reaches its temperature limit while the center still lags behind. The CV hold gives the particle interiors time to catch up.\n\nRaising the voltage ceiling to push more current does not work, because of degradation. Above the limit, the cathode structure becomes unstable and the electrolyte oxidizes, which produces gas and heat. At the anode, high current near full charge can pull the graphite potential below 0 V versus lithium metal. Lithium then deposits as metal on the surface instead of intercalating, which is called lithium plating. Plating permanently reduces capacity and can grow dendrites that short-circuit the cell. The risk rises with state of charge, current and cold. This is why fast chargers cut current sharply above about 80% and battery management systems reduce charge current at low temperature."
+}

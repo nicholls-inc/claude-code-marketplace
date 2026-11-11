@@ -1,0 +1,69 @@
+# How Git Stores a Commit
+
+When you run `git commit`, Git does not save a diff. It saves a snapshot of your whole project, built from a few kinds of simple object, and then moves a pointer to the new snapshot. Once you know those objects, most Git behaviour stops looking like magic. This walkthrough follows a single commit from your files down to the bytes on disk.
+
+## The object database
+
+Everything Git stores lives in `.git/objects`. This is a content-addressed store: each object is named by a hash of its contents. Git takes a short header (the object type, a space, the content length in bytes and a null byte), adds the content, and hashes the result with SHA-1. Newer repositories can choose SHA-256 instead. The 40-character hex hash is the object's ID.
+
+The object is zlib-compressed and written to a path made from that ID. The first two hex characters become a directory name and the other 38 become the file name, so object `e69de29b...` lands in `.git/objects/e6/9de29b...`. These single-object files are called loose objects. Later, `git gc` or a push packs many of them into one packfile under `.git/objects/pack/`, where similar objects are stored as deltas against each other. That delta compression only happens in storage. Conceptually, every object is still a complete standalone record.
+
+Content addressing has two consequences. Identical content is stored once, however many files or commits contain it. And objects can never change: changing a single byte changes the hash, which makes it a different object.
+
+You can look at any object with `git cat-file -t <hash>` (its type) and `git cat-file -p <hash>` (its contents, pretty-printed).
+
+## Blobs: file contents
+
+A blob holds the raw bytes of one file and nothing else. It has no file name, no permissions and no timestamp. If `README.md` and `docs/intro.md` have identical contents, they share one blob. `git hash-object README.md` prints the blob ID Git would give a file, and adding `-w` writes the blob into the database.
+
+Blobs are created when you stage a file. `git add` hashes the file, writes the blob, and records the blob ID in the index (`.git/index`). The index is a flat list of paths, modes and blob IDs that describes the next commit.
+
+## Trees: directories
+
+The name and permissions that a blob lacks are stored in a tree, which represents one directory. Each entry in a tree has three parts:
+
+- a mode: `100644` for a normal file, `100755` for an executable, `120000` for a symlink, `040000` for a subdirectory, or `160000` for a submodule commit
+- a name
+- the ID of the blob or tree the entry points to
+
+Subdirectories are trees nested inside trees, so the full project becomes a Merkle tree. `git cat-file -p` on a tree prints something like:
+
+```
+100644 blob a1b2c3...    README.md
+040000 tree d4e5f6...    src
+```
+
+Because a tree's ID depends on the IDs of everything below it, a change to one file deep in `src/lib/` produces a new blob, new trees for `lib` and `src`, and a new root tree. Every directory that did not change keeps its existing tree ID and gets reused. This is why snapshots are cheap: a commit that touches one file adds only a handful of new objects.
+
+When you commit, Git turns the index into this tree structure (as `git write-tree` does) and gets back a root tree ID.
+
+## Commit objects: snapshot plus history
+
+A commit object is a short text record. `git cat-file -p HEAD` shows something like:
+
+```
+tree 9c3f...
+parent 4b1a...
+author Ada Lovelace <ada@example.com> 1762850000 +0000
+committer Ada Lovelace <ada@example.com> 1762850000 +0000
+
+Fix off-by-one in pagination
+```
+
+The `tree` line points to the root tree, which is the complete snapshot. The `parent` line points to the previous commit. A repository's first commit has no parent line, and a merge commit has two or more. Author and committer are recorded separately because they can be different people, for example after a rebase or cherry-pick, and each carries a Unix timestamp and a timezone offset. After a blank line comes the commit message. A signed commit also has a `gpgsig` header.
+
+The commit's ID is the hash of all of this, parent IDs included. That chains each commit to its entire history: rewriting any earlier commit changes its ID, which changes its children's parent lines and so their IDs too. This is why rebasing produces new commits instead of editing the old ones.
+
+Commits never store diffs. When `git show` or `git log -p` shows a diff, Git works it out on the spot by comparing the commit's tree with its parent's tree. Matching subtree IDs let it skip unchanged directories right away.
+
+## Refs: names for commits
+
+Hashes are hard for people to use, so Git adds refs, which are files that hold a commit ID. A branch is just a file: `.git/refs/heads/main` contains the 40-character ID of the commit at the tip of `main`. That is all a branch is. Creating a branch writes one small file, which is why branching in Git is nearly free.
+
+`HEAD` (in `.git/HEAD`) usually points to a branch rather than a commit, through a symbolic ref such as `ref: refs/heads/main`. When you commit, Git writes the new commit with the current tip as its parent, then updates the file of the branch that `HEAD` names. If `HEAD` holds a raw commit ID instead, you are in "detached HEAD" state, and new commits are reachable from nothing but `HEAD` itself.
+
+There are other kinds of ref too. Remote-tracking branches live in `refs/remotes/origin/`, and tags live in `refs/tags/`. A lightweight tag is a plain ref. An annotated tag points to a fourth object type, the tag object, which records the tagger, a message, an optional signature and the target commit. To save space, Git may also gather many refs into a single `.git/packed-refs` file, so a missing file under `refs/` does not always mean the ref is missing. Every move of a ref is logged in `.git/logs/`, which is the reflog that `git reflog` reads when you need to recover a commit you lost.
+
+## Putting it together
+
+A commit is therefore a chain of pointers: a ref names a commit, the commit names a root tree and its parents, trees name subtrees and blobs, and blobs hold the bytes. Objects never change once written, and only refs move. Any object that no ref (or reflog entry) can reach is garbage, and `git gc` eventually deletes it.

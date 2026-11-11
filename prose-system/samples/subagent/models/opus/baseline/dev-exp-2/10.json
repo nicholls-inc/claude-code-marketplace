@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a1faa92c9527f7538",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73730,
+    "output_tokens": 1274,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:26:45.245Z",
+  "valid": true,
+  "text": "**Why the world is giving up on the leap second**\n\nMost of us assume a day lasts exactly 24 hours. The Earth doesn't quite agree.\n\nSince 1967, the official second has been defined by atomic clocks, which count the vibrations of caesium atoms with extraordinary steadiness. The planet keeps time less precisely. Its spin wobbles slightly from year to year. Tides, shifting ocean currents, earthquakes and the slow movement of molten rock deep inside the Earth can all speed it up or slow it down. Over the long run, the drag of the Moon's tides has made the day slightly longer than 86,400 atomic seconds.\n\nThat leaves two clocks that drift apart: the atomic one and the one set by the sun. To keep them together, timekeepers invented the leap second in 1972. When the gap between them got close to nine-tenths of a second, the International Earth Rotation and Reference Systems Service, a scientific body that monitors the planet's spin, announced that one extra second would be added to Coordinated Universal Time (UTC), the standard behind every clock in the world. On those nights, clocks read 23:59:60 before rolling over to midnight. It has happened 27 times, most recently on New Year's Eve 2016.\n\nFor most people the extra second went unnoticed. For computers it was a headache. Software is usually written on the assumption that a minute never has 61 seconds, and leap seconds arrive with only about six months' notice. In 2012 a leap second helped knock Reddit offline and disrupted Qantas's booking systems. On New Year's Day 2017 it caused an outage at the internet company Cloudflare. Large technology firms began \"smearing\" the extra second across a whole day so their systems never saw it. That meant different organisations were keeping slightly different time, which defeats the purpose of a universal standard.\n\nThings may also get worse. In recent years the Earth has been spinning a little faster, so the next adjustment might have to be the first \"negative\" leap second, where a second is removed rather than added. That has never been tried, and few systems have been tested for it.\n\nIn November 2022, the General Conference on Weights and Measures, the international body that oversees the metric system, voted to stop adding leap seconds by 2035. In 2023 the International Telecommunication Union, which coordinates global radio and broadcast time signals, agreed. Atomic time and solar time will be allowed to drift further apart, perhaps by as much as a minute over a century or more, before anyone corrects the difference. How and when that will happen is still to be decided.\n\nPractically nobody will notice. Even a full minute's gap is smaller than the difference between the sun's position and the clock time within a single time zone. What we gain is a steady, predictable clock for the networks, satellites and financial markets that now depend on it."
+}

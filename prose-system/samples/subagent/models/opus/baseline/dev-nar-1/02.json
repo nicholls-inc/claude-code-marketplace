@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0e5a1bf46ca0fbd4",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73732,
+    "output_tokens": 2317,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:03:39.572Z",
+  "valid": true,
+  "text": "The Pump on Broad Street\n\nIn the last days of August 1854, cholera came to Soho. It arrived the way it always did in Victorian London: suddenly and without explanation. A person could be well at breakfast and dead by evening, emptied out by violent diarrhoea and vomiting until the body simply ran dry. Around Broad Street, a crowded neighbourhood of tailors, shopkeepers, servants and small workshops, more than 120 people died in the first three days. Within ten days the toll passed 500. Whole households were wiped out. Those who could leave did, and the streets emptied.\n\nMost doctors of the day believed they knew the cause. Disease, they said, came from \"miasma\", a poisonous vapour rising from rotting matter and filth. London certainly smelled bad enough to make the idea convincing. Cesspools sat beneath houses, sewage ran into the Thames, and the air in poor districts was thick with it. If cholera struck where the stench was worst, the reasoning went, the stench must be to blame.\n\nJohn Snow did not believe it. He was a quiet, careful physician who lived not far from Soho, best known for his skill with the new anaesthetic chloroform. The year before, he had given it to Queen Victoria during the birth of her eighth child. For several years he had also been thinking hard about cholera. He noticed that the disease attacked the gut, not the lungs, which seemed odd for something supposedly breathed in. He suspected instead that people swallowed it, and that the most likely way to swallow it was in drinking water polluted by the waste of the sick. He had published this idea in 1849. Hardly anyone had been persuaded.\n\nThe Broad Street outbreak gave him a chance to test it on his own doorstep. Snow got the names and addresses of the dead from the General Register Office and walked the streets, knocking on doors and asking questions. Where did the family get its water? Who in the house had fallen ill, and when?\n\nAt that time most people in Soho had no running water at home. They filled buckets at public pumps on street corners, drawing from shallow wells beneath. As Snow marked each death on a map, a pattern appeared. The deaths crowded around one spot: the pump on Broad Street. The further a house stood from it, the fewer deaths there were. Where another pump was closer, deaths thinned out sharply, even when the people living there were just as poor and their streets just as foul.\n\nThe exceptions mattered as much as the pattern, and Snow chased them down. A workhouse on nearby Poland Street held more than 500 people, packed together in exactly the conditions the miasma theory said were dangerous. Only a handful died. The workhouse had its own well. A brewery on Broad Street itself employed about seventy men, and none of them died. The workers were given a daily allowance of beer and, it seemed, rarely touched the water at all.\n\nThe most striking case came from miles away. A widow living in Hampstead, far from Soho, died of cholera, and so did her niece, who had come to visit. Nobody else in that district fell ill. Snow learned that the widow had once lived near Broad Street and liked the taste of its water so much that she had a bottle of it carried out to her by cart each day. The water had brought the disease with it.\n\nOn the evening of 7 September, Snow put his evidence before the local parish authorities. They were not convinced by his theory, but they agreed to act. The next day the handle was taken off the Broad Street pump so no one could use it. This moment has since become a legend in public health. The truth is a little less tidy: deaths were already falling by then, partly because so many residents had fled. Removing the handle may not have ended the outbreak, but it probably stopped a second wave.\n\nThe final piece of the puzzle came from an unexpected ally. Henry Whitehead, a young curate at a local church, had set out to prove Snow wrong. He knew the neighbourhood well, and as he gathered his own information he found that it supported Snow at every turn. He also found the likely source. At 40 Broad Street, a few feet from the pump, a baby girl had fallen ill just before the outbreak began. Her mother had rinsed the child's soiled nappies and poured the water into a cesspool in front of the house. When the cesspool was dug up, its brickwork turned out to be crumbling, letting its contents seep into the well.\n\nSnow's conclusion was not widely accepted in his lifetime, and an official inquiry soon afterwards still leaned towards bad air. He died in 1858, aged forty-five. Over the following decades, however, his reasoning won out. London built a proper sewer system, cities everywhere began to protect their drinking water, and in 1883 scientists identified the bacterium that causes cholera. Snow never saw the germ he was looking for. He found it anyway, using a map, a lot of walking, and close attention to the cases that did not fit."
+}

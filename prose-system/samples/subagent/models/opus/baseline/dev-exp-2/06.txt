@@ -1,0 +1,17 @@
+**Why the World's Clocks Are Giving Up the Leap Second**
+
+Most of us assume a day lasts exactly 24 hours. The Earth does not quite agree. Our planet's spin is irregular: tides drag on it, molten rock shifts in its core, and melting ice moves weight around its surface. The result is that the time it takes the Earth to turn once drifts by a few thousandths of a second from day to day.
+
+Since the late 1960s, the world's official time has come not from the sky but from atomic clocks, which count the vibrations of atoms and keep time to within a second over millions of years. That created a problem. Atomic time ticks on steadily while the Earth's rotation wobbles, so the two slowly drift apart.
+
+The fix, adopted in 1972, was the leap second. Whenever atomic time got close to being nine-tenths of a second away from the Earth's rotation, timekeepers added one extra second to the clock, usually at midnight on 30 June or 31 December. For that moment, clocks read 23:59:60. Twenty-seven leap seconds have been added so far. The most recent came at the end of 2016.
+
+For people, an extra second makes no difference. For computers it can be a real headache. Many systems are built on the assumption that a minute never has 61 seconds, and the leap second has caught them out. In 2012 it was blamed for outages at websites including Reddit and for disruption to an Australian airline's booking system. In 2017 it briefly knocked part of an internet company's network offline. Large technology firms now "smear" the extra second across a whole day to avoid such problems, but different companies smear it in different ways. That means clocks that should agree can briefly disagree, which matters for financial trading, telecoms and satellite navigation.
+
+The risk has also grown more awkward. In recent years the Earth has been spinning slightly faster, raising the prospect of the first-ever "negative" leap second, in which a second would be removed from the clock. No one has ever tested that on a global scale, and many engineers fear it could go badly.
+
+In 2022 the General Conference on Weights and Measures, the international body that oversees the world's units of measurement, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which handles time signals broadcast by radio, later backed the decision. Instead of correcting atomic time every few years, timekeepers will let it drift further from the Earth's rotation, by up to a minute or more, before any adjustment is needed. That point may not come for a century or longer.
+
+In practice, the sun will still rise and set as it always has. The difference is that official time will no longer be tied quite so tightly to the turning of the Earth, and the world's computers will have one fewer surprise to cope with.
+
+(About 480 words; trim the 2012/2017 examples or the negative-leap-second paragraph to get closer to 400.)

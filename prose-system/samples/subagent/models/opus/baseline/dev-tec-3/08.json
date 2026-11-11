@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9f7a36ed4a7f9c7a",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 1061,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:23:25.861Z",
+  "valid": true,
+  "text": "**How a lithium-ion cell is charged, and why charging slows near full**\n\nA lithium-ion cell stores energy by moving lithium ions between two host materials. One is the negative electrode, usually graphite. The other is the positive electrode, a layered metal oxide such as NMC or a phosphate such as LFP. A liquid electrolyte carries the ions between them, and the electrons travel through the external circuit. On charge, the charger pushes electrons into the graphite. Lithium ions leave the cathode lattice, cross the electrolyte and slip between the graphene layers of the anode, a process called intercalation. Discharge runs the same process in reverse.\n\nChargers follow a constant-current, constant-voltage (CC-CV) profile. In the CC phase the charger holds the current fixed, often between 0.5C and 1C, where 1C is the current that would fill the cell in one hour. The terminal voltage rises as the cell fills. Once it reaches the upper limit, typically 4.2 V for NMC and 3.65 V for LFP, the charger switches to CV mode. It holds that voltage and lets the current fall. Charging ends when the current drops below a cutoff, commonly C/20.\n\nThe slowdown comes from the gap between terminal voltage and internal state. Electrically, the cell behaves like a voltage source, the open-circuit voltage (OCV), in series with an impedance. That impedance has three main parts: ohmic resistance in the electrolyte and current collectors, charge-transfer resistance at the electrode surfaces, and diffusion resistance as lithium moves through the solid particles. While current flows, the terminal voltage equals the OCV plus the voltage drop across this impedance. So when the terminal voltage first hits 4.2 V, the true OCV is still lower, and the cell is perhaps 70-85% full.\n\nIn CV mode the charger cannot raise the voltage any further, so the only way to keep filling the cell is to let the current fall. As the OCV approaches the limit, the voltage left to drive current through the impedance shrinks toward zero, and so does the current. The behaviour resembles an RC circuit approaching its asymptote. The last 15-20% of capacity can take as long as the first 80%.\n\nThe voltage limit is not arbitrary. Above it, the cathode becomes structurally unstable and the electrolyte begins to oxidise. A second hazard sits at the anode. Graphite operates close to the potential of lithium metal. At high current, especially when the anode is nearly full or cold and diffusion is slow, ions arrive faster than they can intercalate. They then deposit as metallic lithium on the surface, a failure called lithium plating. Plating permanently removes capacity, and it can grow dendrites that short the cell internally.\n\nFast-charging algorithms use multi-stage current steps, temperature-dependent limits and pulse schemes to manage these constraints. The underlying physics is the same: the cell can accept current quickly only while there is enough voltage margin and enough empty space in the anode."
+}

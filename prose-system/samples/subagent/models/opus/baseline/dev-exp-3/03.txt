@@ -1,0 +1,84 @@
+How Two Strangers Can Share a Secret in Public
+
+The problem
+
+Imagine you want to send a private message to someone you have never met. You have never been in the same room, so you could not quietly agree on a password beforehand. The only way to reach them is a line that anyone can listen to, such as a shouted conversation across a crowded square, or the internet, where your messages pass through dozens of machines owned by strangers.
+
+If you had a shared secret, say a number only the two of you knew, you could use it to scramble your messages, and anyone listening in would see only gibberish. But how do you agree on that secret? Anything you say to set it up, the listeners hear too. It looks impossible: you seem to need a secret already in order to make one.
+
+For most of history people believed it was impossible. Then in the 1970s mathematicians found a way round it. The most famous version is called the Diffie-Hellman key exchange, after Whitfield Diffie and Martin Hellman, who published it in 1976. It is the idea behind the padlock symbol in your web browser, and it rests on maths you met at school.
+
+The paint-mixing picture
+
+Start with an analogy that gets the idea across without any numbers.
+
+Suppose mixing two paints is easy, but taking a mixture apart again is practically impossible. If someone hands you a tin of murky brown, you cannot work out which colours went into it.
+
+Two people, traditionally called Alice and Bob, want to share a secret colour. Here is what they do.
+
+1. In public, they agree on a starting colour, say yellow. Everyone listening knows it is yellow.
+2. Each picks a private colour and tells nobody. Alice picks red; Bob picks blue.
+3. Alice mixes her red into some yellow and sends the result (orange) to Bob. Bob mixes his blue into yellow and sends the result (green) to Alice. The eavesdropper sees both of these mixtures go past.
+4. Alice takes Bob's green and adds her own red. Bob takes Alice's orange and adds his own blue.
+
+Now both of them hold a tin of yellow + red + blue. The order of mixing doesn't matter, so the two tins are exactly the same colour. That colour is their shared secret.
+
+What does the eavesdropper have? Yellow, orange and green. To make the final colour they would need to pull the red out of the orange, or the blue out of the green, and un-mixing is the step we said can't be done. If they mix orange and green together, they get yellow + yellow + red + blue, which has too much yellow and comes out the wrong colour.
+
+So the trick needs three things: a step that is easy to do and very hard to undo, results that come out the same whatever order the steps happen in, and private ingredients that never travel down the line.
+
+Swapping paint for numbers
+
+Computers don't mix paint, so we need a mathematical operation that behaves the same way. The one used is powers, combined with clock arithmetic.
+
+Clock arithmetic means keeping only the remainder after division. On a 12-hour clock, 5 hours after 10 o'clock is 3 o'clock, not 15 o'clock. We "wrap around" at 12. Mathematicians write this as 15 mod 12 = 3. You can wrap around at any number. Wrapping at 17, for example, 20 becomes 3 and 39 becomes 5 (because 39 = 2 × 17 + 5).
+
+Now combine this with powers. Take the number 3 and keep multiplying by 3, wrapping at 17 each time:
+
+- 3 to the power 1 = 3
+- 3 to the power 2 = 9
+- 3 to the power 3 = 27, which wraps to 10
+- 3 to the power 4 = 10 × 3 = 30, which wraps to 13
+- 3 to the power 5 = 13 × 3 = 39, which wraps to 5
+
+Going forwards is easy: multiply, take the remainder, repeat. Going backwards is the hard part. If I tell you "3 to some power, wrapped at 17, gave 5. What was the power?", there is no neat formula. The answers jump around in no obvious pattern (3, 9, 10, 13, 5, 15, 11, ...), so you are left trying powers one at a time until you hit the right one.
+
+With 17 that takes a few seconds. But real systems wrap around at a number hundreds of digits long. Working forwards is still quick, because there are clever shortcuts for raising to huge powers. Working backwards, as far as anyone knows, would take every computer on Earth longer than the age of the universe. This is the "can't un-mix the paint" step.
+
+The exchange with real numbers
+
+Here is the paint recipe again, this time with small numbers.
+
+1. In public, Alice and Bob agree on two numbers: the base 3 and the wrap-around number 17. Everyone can know these. They play the part of the yellow paint.
+
+2. Each picks a secret number and keeps it to themselves. Alice picks 5. Bob picks 6.
+
+3. Each works out 3 to the power of their secret, wrapped at 17, and sends the answer openly.
+   - Alice: 3 to the power 5, wrapped at 17, is 5. She sends 5.
+   - Bob: 3 to the power 6 is 729, which wraps to 15. He sends 15.
+
+4. Each takes the number they received and raises it to the power of their own secret, again wrapping at 17.
+   - Alice takes Bob's 15 and raises it to the power 5. That is 759,375, which wraps to 2.
+   - Bob takes Alice's 5 and raises it to the power 6. That is 15,625, which wraps to 2.
+
+They both arrive at 2. That is their shared secret.
+
+Why do they match? Alice has really calculated (3 to the 6) to the 5, and Bob has calculated (3 to the 5) to the 6. By the ordinary rules of powers, both are 3 to the power 30, because 6 × 5 and 5 × 6 are the same. The wrapping around doesn't upset this. This is the "order of mixing doesn't matter" property.
+
+Meanwhile the eavesdropper has heard 3, 17, 5 and 15. To get the secret they would need Alice's 5 or Bob's 6, and that means solving the hard backwards problem: "3 to what power gives 5?" With our small numbers they could manage it. With numbers hundreds of digits long, they can't.
+
+Where the "public key" comes in
+
+This is why the field is called public-key cryptography. Each person has a private key, the secret number they never reveal, and a public key, the number they send openly. The public key comes from the private key by an easy step that cannot practically be reversed. You can hand your public key to the whole world and your private key stays safe.
+
+Once Alice and Bob share a secret number, they use it as the key for an ordinary, fast scrambling method to protect the rest of their conversation. The public-key step only has to set up the key. It doesn't carry the messages.
+
+One important catch
+
+What has been described protects against people who only listen. It does not, by itself, stop someone who sits in the middle of the line, pretends to be Bob when talking to Alice, and pretends to be Alice when talking to Bob. That person could run two separate exchanges and quietly read everything that passes through.
+
+To stop this, real systems add proof of identity, usually certificates. A certificate is a public key vouched for by an organisation your computer already trusts, much like a passport issued by a government. Your browser checks that the website really is who it claims to be, and then runs a key exchange like the one above.
+
+The big idea
+
+Everything here depends on one mathematical fact: some operations are easy to do and extremely hard to undo. Using that one-way street, two strangers can each keep one secret ingredient, swap only harmless-looking mixtures in full public view, and end up with the same answer, which nobody watching can work out. It happens quietly every time you shop, bank or send a message online.

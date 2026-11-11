@@ -1,0 +1,25 @@
+**How a Lithium-Ion Cell Is Charged, and Why the Last 20% Is Slow**
+
+A lithium-ion cell stores energy by moving lithium ions between two host materials. On charge, an external source pulls electrons out of the positive electrode, which is typically a layered metal oxide such as NMC or a phosphate such as LFP. At the same moment, lithium ions leave that oxide, cross a liquid electrolyte, and slot in between the carbon layers of the graphite negative electrode. Discharge reverses the process. The cell's open-circuit voltage (OCV) is set by the difference in lithium's chemical potential between the two electrodes, and it rises as the graphite fills and the cathode empties. For NMC/graphite the range is roughly 3.0 V to 4.2 V.
+
+Chargers use a two-stage profile called constant-current/constant-voltage (CC-CV).
+
+1. **Constant current.** The charger pushes a fixed current, for example 1C, which would fill the cell in about an hour. The terminal voltage climbs as charge accumulates. Most of the capacity, often 70-80%, goes in during this phase.
+2. **Constant voltage.** When the terminal voltage reaches the upper limit, typically 4.2 V, the charger holds it there. The current then decays on its own. Charging stops when the current falls below a cutoff, commonly C/20.
+
+The reason for the taper is that terminal voltage is not the same as OCV. Under current, the terminal voltage is:
+
+V_terminal = OCV + I·R_ohmic + η_kinetic + η_diffusion
+
+Each overpotential term grows with current:
+- **Ohmic loss** comes from the electrolyte, the current collectors and contact resistance.
+- **Kinetic overpotential** is the cost of driving the reaction at each electrode surface.
+- **Diffusion overpotential** comes from concentration gradients. Lithium enters each electrode particle at its surface and must diffuse inward through the solid, which is slow. Near the end of charge, the particle surfaces are close to saturated while their cores lag behind.
+
+Early in the charge the OCV is low, so there is plenty of room under the 4.2 V ceiling for these losses, and a high current is possible. As the OCV approaches the ceiling, that room shrinks. With the terminal voltage held fixed, the current must fall until the overpotentials fit in the remaining gap. The CV phase is in effect a wait for the concentration gradients to relax so that the particle interiors catch up with their surfaces. The current tapers in a roughly exponential way, much like an RC circuit, but the effective time constant grows as the cell fills.
+
+The voltage ceiling is hard for two reasons:
+- **Cathode side.** Above the limit, the electrolyte oxidizes, the cathode becomes structurally unstable as too much lithium is removed, and the cell produces gas and heat.
+- **Anode side.** At high current or low temperature, the graphite's potential can fall below 0 V against lithium metal. Lithium then plates onto the surface as metal instead of entering the graphite. Plating permanently removes usable lithium and can grow dendrites that short the cell.
+
+Fast-charge protocols therefore shape the current to keep the anode potential above the plating threshold. They also derate the current in the cold, and a battery management system monitors temperature and per-cell voltage throughout. The practical result is that charging from 10% to 80% can take 20 minutes, while 80% to 100% often takes about as long again.

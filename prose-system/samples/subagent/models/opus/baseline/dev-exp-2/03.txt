@@ -1,0 +1,15 @@
+The Second That Time Forgot
+
+For most of history, the length of a day was set by the Earth itself: one full spin, sunrise to sunrise. Since 1967, though, the official second has been defined by atomic clocks, which count the vibrations of caesium atoms with extraordinary precision. These clocks do not drift. The Earth does.
+
+Our planet's spin is slightly irregular. Tides, earthquakes, melting ice caps and movements deep in the Earth's molten core all speed it up or slow it down by tiny amounts. Over the long run, the Earth has been turning a little more slowly than the atomic clocks expect. Left alone, clock time and sun time would slowly separate, and noon on the clock would no longer line up with the sun at its highest point.
+
+The leap second was the fix. Starting in 1972, whenever the gap between atomic time and the Earth's rotation approached nine-tenths of a second, scientists added one extra second to the world's official clock, Coordinated Universal Time (UTC). For one moment, clocks read 23:59:60 before rolling over to midnight. Twenty-seven leap seconds have been added so far. The most recent came on New Year's Eve 2016.
+
+That sounds harmless, but modern computers struggle with it. Software usually assumes every minute has exactly 60 seconds, and an unexpected 61st can cause chaos. In 2012 a leap second helped knock out Reddit and disrupted the Qantas airline booking system. In 2017 it caused an outage at the internet company Cloudflare. Because the Earth's behaviour cannot be predicted far ahead, leap seconds are announced only about six months in advance, so engineers cannot plan for them years ahead. Big technology firms such as Google and Meta stopped inserting the extra second directly. They "smear" it across many hours instead, which means their clocks briefly disagree with everyone else's.
+
+A new worry has added urgency. In recent years the Earth has actually been spinning slightly faster. For the first time, that raises the prospect of a "negative" leap second, where a second is removed. That has never been done, and few computer systems have ever been tested for it.
+
+In November 2022 the General Conference on Weights and Measures, the international body in charge of measurement standards, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which coordinates global time signals, backed the decision in 2023. Clock time and Earth time will be allowed to drift further apart, probably by up to a minute or more, which would take many decades to build up. How and when to correct that larger gap, if at all, is left for future generations to decide.
+
+For almost everyone, the change will go unnoticed. Most of us will never see a sunrise arrive a minute late, and the computers that run our lives will no longer have to cope with a minute that lasts 61 seconds.

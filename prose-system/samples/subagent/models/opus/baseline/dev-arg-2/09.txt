@@ -1,0 +1,27 @@
+Don't Stop Estimating. Stop Pretending Estimates Are Promises.
+
+Every few years the #NoEstimates argument comes back. The case is easy to make: estimates are usually wrong, they get turned into deadlines, and engineers end up spending Thursday afternoons arguing over whether a ticket is a 3 or a 5. Teams that drop estimates say they feel freer, ship more steadily, and stop padding.
+
+I understand the appeal. I still think it's the wrong call. Software teams should keep estimating, because the people who depend on them have to make decisions, and those decisions need some sense of how long things will take.
+
+Look at what an estimate is used for. A product manager is choosing between two features. A sales lead wants to know whether to promise an integration this quarter or next. A director is deciding whether to hire now or wait. Not one of them needs to know that the work will take eleven days. They need to know whether it's closer to a week or a quarter. When a team refuses to give any estimate, the decision still gets made. It just gets made by someone with less information than the engineers have, and then the engineers get handed a date.
+
+That's what usually happens on teams that "don't estimate." The guessing doesn't go away. It moves up the org chart to people further from the code, and it comes back as a commitment instead of a forecast. Engineers lose the one moment where they could have said, "This is bigger than it looks, and here's why."
+
+Estimating also helps the engineers doing it. When two people on a team are a factor of five apart on the same task, that gap is the most useful thing in the planning meeting. One of them knows about the legacy auth module or the vendor API with no sandbox, and the other doesn't. Talking through the gap surfaces risk before anyone has written code. A team that skips estimating usually skips that conversation too.
+
+The complaints about estimates are fair, but they're complaints about misuse. Here's how to fix that without throwing the practice away.
+
+Estimate in ranges, not single numbers. "Two to six weeks" is honest. "Four weeks" invites someone to put it on a slide.
+
+Estimate coarsely. Days, weeks, months. If your team argues about story points at a finer grain than that, you're spending effort on precision nobody can use.
+
+Re-estimate as you learn. An estimate made before discovery should be replaced after it. Managers, make that normal. Don't treat a revised estimate as a failure.
+
+Keep forecasts separate from commitments. A forecast is the team's best guess. A commitment is a scope-and-date deal that everyone negotiates on purpose, with the trade-offs out in the open. Most estimation pain comes from quietly turning the first into the second.
+
+Track how wrong you were. Not to blame anyone, but so the team learns whether it's typically optimistic by 30% or 200%, and adjusts.
+
+To managers: if your engineers want to stop estimating, they're probably telling you their estimates have been used against them. Fix that first. To engineers: refusing to forecast doesn't protect you. It hands the forecast to someone who knows less than you do.
+
+Estimates will be wrong. They're still better than nothing, and they're much better than a date someone else made up.

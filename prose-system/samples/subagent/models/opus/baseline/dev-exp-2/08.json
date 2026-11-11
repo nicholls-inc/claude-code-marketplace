@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae6a6967cccc38166",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73730,
+    "output_tokens": 1228,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:20:41.531Z",
+  "valid": true,
+  "text": "**Why the world is giving up on the leap second**\n\nMost of us assume a day lasts exactly 24 hours. The Earth isn't so precise. Our planet's spin is gradually slowing, mainly because the Moon's pull on the oceans acts like a gentle brake. The speed also wobbles from year to year as the molten core shifts, glaciers melt and winds and ocean currents change. As a result, a day measured by the Earth's rotation is sometimes a little longer than the 86,400 seconds our clocks count, and sometimes a little shorter.\n\nSince the late 1960s, official time has been kept by atomic clocks, which tick with extraordinary steadiness. That created a problem: atomic time and \"sun time\" slowly drift apart. Left alone, clocks would gradually stop matching the sun's position in the sky. The fix, introduced in 1972, was the leap second. Whenever the gap approached nine-tenths of a second, timekeepers inserted one extra second, so the last minute of a day ran to 23:59:60 before rolling over to midnight. Twenty-seven leap seconds have been added so far. The most recent was on 31 December 2016.\n\nThe trouble is that leap seconds arrive irregularly, usually with only about six months' notice, and computers handle them badly. Software is generally written on the assumption that every minute has 60 seconds. When a 61st second appears, systems can crash, freeze or record events in the wrong order. In 2012 a leap second helped knock out websites including Reddit and disrupted the Qantas airline booking system. In 2017 it caused an outage at the internet company Cloudflare. For stock exchanges, telecommunications networks and power grids, where transactions are timed to fractions of a second, even a brief glitch is costly. Large technology companies began \"smearing\" the extra second across a whole day to avoid problems, which meant different systems kept slightly different time.\n\nA newer worry has also appeared. In recent years the Earth's rotation has sped up slightly. That raises the prospect of the first ever \"negative\" leap second, in which a second would be removed rather than added. No one has tested that at scale.\n\nIn November 2022 the General Conference on Weights and Measures, the international body that oversees units of measurement, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which governs how time signals are broadcast, endorsed the decision in 2023. Atomic time and Earth time will then be allowed to drift further apart, and a larger correction may be made far in the future, possibly a full minute. Scientists estimate that could be a century or more away.\n\nFor everyday life, the change will go unnoticed. The sun won't rise noticeably later. What changes is that clocks stop stumbling once every few years."
+}

@@ -1,0 +1,25 @@
+Keep Estimating. Stop Treating Estimates as Promises.
+
+Every few years the #NoEstimates argument comes back, and I understand why. Most engineers have given a number in a planning meeting, then had it handed back to them months later as if it were a signed contract. They've watched a "two-week" feature take seven. Then they've watched the blame land on them, not on the three priority changes or the vendor API that didn't do what its docs said. If that's what estimation means, abolish it.
+
+But that isn't estimation. It's what bad management does with estimates. Dropping the practice because people abuse it is like dropping code review because someone once used it to nitpick a junior engineer into quitting.
+
+Here's the case for keeping it.
+
+Estimating is how you find out you don't understand the work. Say three engineers size the same ticket at a day, a week, and "no idea." The number is worthless, but the disagreement is very useful. One of them knows about the migration nobody mentioned. Another assumed the existing auth flow could be reused. That conversation takes ten minutes and saves a month. Teams that skip estimation also skip that conversation, and they find the hidden work in production instead.
+
+Estimates also let other people make decisions. A product manager choosing between two features needs to know whether one costs a week and the other costs a quarter. Sales needs to know whether to promise something this year. "It'll be done when it's done" is honest, but it hands every tradeoff to people who know less than you do. Refusing to estimate doesn't remove the uncertainty. It moves it to someone who can't reason about it.
+
+The NoEstimates camp has a fair reply: slice the work small and count throughput instead. If every story takes one to three days, you can forecast from history without anyone guessing. That's a good technique, and I'd recommend it. But look at what it needs. Someone has to look at a piece of work and judge whether it fits in that range. That judgment is an estimate. You've renamed it, not removed it.
+
+So keep estimating, and change the terms.
+
+Give ranges, not single numbers. "Three to eight weeks" tells a manager something true about risk. "Five weeks" hides it.
+
+Write down what you're unsure about. When an estimate has its assumptions listed next to it, you can revisit it when one of them breaks, and nobody has to defend their honour.
+
+Re-estimate on a schedule. If a forecast hasn't changed since kickoff, either the project is going perfectly or nobody is checking.
+
+And to managers: never turn an estimate into a deadline without the team's agreement. Once you do, engineers learn to pad. The padding becomes the new baseline, and your numbers stop meaning anything. You'll still have estimates, but they'll have lost the information they were supposed to carry.
+
+The guess was never the problem. Treating the guess as a promise was. Fix that, and estimation goes back to being what it should be: a cheap way to learn about the work before the work teaches you the expensive way.

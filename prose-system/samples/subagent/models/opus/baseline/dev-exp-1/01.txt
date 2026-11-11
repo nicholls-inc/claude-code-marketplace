@@ -1,0 +1,33 @@
+How a heat pump heats your home when it's cold outside
+
+It seems wrong that a machine could pull warmth out of air at 0°C and use it to heat a house to 20°C. Cold air feels like it has no heat to give. But "cold" only describes how air feels to us. Physically, air at 0°C still holds a lot of heat energy. Air only runs out of heat at absolute zero, about −273°C. Compared with that, a January morning is warm. A heat pump's job isn't to make heat. It collects the heat already in the outside air and moves it indoors.
+
+Left alone, heat only flows from warmer things to cooler ones. Moving it the other way, from cold outdoors to a warm house, takes work. A heat pump does that work with a fluid called a refrigerant, which circulates in a sealed loop, and an electric compressor.
+
+The cycle has four steps.
+
+1. **Picking up heat outside.** The outdoor unit holds a coil filled with refrigerant at low pressure. At that pressure the refrigerant boils at a very low temperature, well below freezing. A fan pushes outside air over the coil. Because the refrigerant is colder than even freezing air, heat flows from the air into the refrigerant, and it boils into a vapour. This is how the system takes heat from air you would call cold.
+
+2. **Raising the temperature.** The compressor squeezes the vapour. Compressing a gas makes it hotter; a bicycle pump warms up for the same reason. The vapour leaves the compressor at around 50 to 70°C. This step is where the electricity goes.
+
+3. **Giving heat to the house.** The hot vapour passes through a heat exchanger and warms the water that runs to your radiators, underfloor heating or hot water cylinder. As it gives up its heat, the refrigerant cools and turns back into a liquid.
+
+4. **Resetting.** The liquid goes through an expansion valve, which drops its pressure suddenly. That makes it very cold again, and it returns outside to pick up more heat.
+
+Your fridge works the same way in reverse. It pumps heat out of the food compartment and releases it through the coils at the back, which is why they feel warm.
+
+**Why this matters for running costs**
+
+Because the heat pump moves heat rather than making it, it delivers more heat than it uses in electricity. A typical air-source heat pump produces 3 to 4 units of heat for every unit of electricity over a heating season. This ratio is called the coefficient of performance (COP), or the seasonal performance factor when it is averaged over a year. A modern gas boiler gives about 0.9 units of heat for each unit of gas it burns.
+
+Efficiency does fall as it gets colder. The colder the outside air, the harder the compressor has to work to raise the temperature. On a −5°C day the COP might drop to around 2 to 2.5. That still beats direct electric heating, and current models keep working well below −15°C. They are common in Norway and Sweden. On frosty days the outdoor unit will also run short defrost cycles to clear ice off its coil. That is normal.
+
+**What this means for your decision**
+
+- **Lower flow temperatures.** A heat pump is most efficient when it heats radiator water to 35–50°C rather than the 70°C or more a boiler often uses. Some radiators may need replacing with larger ones so the rooms still get warm enough. A good installer will do a room-by-room heat loss calculation to check.
+- **A different rhythm.** A heat pump works best running steadily at a low level, not in short, hot bursts. The house stays at an even temperature all day.
+- **Insulation counts.** The less heat your home loses, the lower the flow temperature can be and the better the efficiency.
+- **Hot water.** You will need a hot water cylinder. If you have a combi boiler now, plan space for one.
+- **Price ratio.** Whether you save money depends on how much a unit of electricity costs compared with a unit of gas. If electricity costs less than about three times as much as gas per kWh, a well-installed heat pump should cost less to run. A heat-pump-specific electricity tariff can improve the numbers a lot.
+
+The physics isn't the hard part. Heat pumps reliably heat homes in cold climates. What matters for you is the quality of the installation and how your home and energy prices fit the system.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac8dc96447a9ad83f",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73711,
+    "output_tokens": 1487,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:19:55.134Z",
+  "valid": true,
+  "text": "The Great Molasses Flood\n\nJanuary 15, 1919, was unusually mild in Boston. After a bitter cold snap, the temperature had climbed above 40 degrees, and people in the North End had their coats open as they ran midday errands. Children were picking up firewood near the harbor. Workers were taking their lunch along Commercial Street. Rail cars rattled along the elevated railway overhead.\n\nBehind them stood a huge steel tank, 50 feet tall and 90 feet across, owned by the United States Industrial Alcohol Company. It held about 2.3 million gallons of molasses that was waiting to be distilled into industrial alcohol, a key ingredient in munitions. Neighbors knew the tank leaked. Molasses ran down its seams so often that local families scooped it up to take home, and the company's answer had been to paint the tank brown so the streaks would show less.\n\nAt about 12:30 p.m., witnesses heard a deep rumble and a sharp rattle that some compared to machine-gun fire. It was the tank's rivets shooting loose. The steel walls tore apart, and the molasses burst out in a wave that reached an estimated 25 feet high and moved at around 35 miles per hour.\n\nIt flattened everything in its path. Buildings were knocked off their foundations. A firehouse was shoved toward the water. Part of the elevated railway's steel frame buckled, and a train only just stopped in time. Horses, wagons, and people were swept up and buried. The molasses was heavy and sticky, so anyone it caught found that the more they struggled, the more tightly it held them. As the afternoon cooled, it thickened further, which made rescue even harder.\n\nSailors from ships in the harbor, cadets from a nearby training vessel, police, firefighters, and ordinary citizens waded in, often up to their waists. Some victims could only be found once rescuers saw the outline of a body under the brown surface. Others were not recovered for days. In all, 21 people died, including several children, and about 150 were injured.\n\nThe cleanup took weeks. Crews hosed the streets with salt water from fireboats and covered the muck with sand. Rescuers and onlookers tracked molasses across the city, onto streetcars, and into homes. Boston Harbor stayed brown well into the summer, and for decades longer, longtime residents said the neighborhood smelled sweet on hot days.\n\nThe company claimed that anarchists had blown up the tank. Survivors and city residents sued, and the case became one of the first large class-action suits in Massachusetts. After years of testimony, a court-appointed auditor found that the tank had been badly built and never properly tested. The man who oversaw construction had no engineering training, and the tank had only been tested with a few inches of water. The company was held responsible and paid about $628,000 in settlements, roughly $11 million today.\n\nThe disaster led to lasting reform. Massachusetts and other states began requiring licensed engineers to approve and sign off on construction plans. A small plaque near Langone Park in the North End now marks the site."
+}

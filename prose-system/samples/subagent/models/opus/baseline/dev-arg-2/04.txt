@@ -1,0 +1,21 @@
+Keep Estimating. Stop Lying About What Estimates Are.
+
+Every few years the #NoEstimates argument comes back, and every time it picks up converts. I understand why. Most engineers have watched a rough guess made in a planning meeting turn into a deadline, then a slipped deadline, then a retro where someone asks why the team "missed." After that, refusing to estimate at all feels like self-defense.
+
+It's the wrong fix. Teams should keep estimating. What they should stop doing is pretending an estimate is a promise.
+
+Start with what estimating is for. The number matters less than the conversation that produces it. When one engineer says "two days" and another says "two weeks," the team has just learned something important: they don't agree on what the work is. One of them knows about the legacy auth path, the migration that has to run in production, or the vendor API that rate-limits at a hundred requests a minute. A team that skips estimating also skips that conversation, and the gap shows up three weeks later as a surprise.
+
+Estimates also let you make decisions you can't make otherwise. If a feature will take two weeks, it may be worth building. If it will take a quarter, it probably isn't, or it needs to be cut down to something smaller first. Product managers, founders, and customers aren't wrong to ask "roughly how big is this?" The honest answer is a range with a stated level of confidence, and that's still far more useful than a shrug.
+
+The #NoEstimates crowd has a real point about the damage done, but they've diagnosed the wrong cause. Estimates don't hurt teams. What hurts is when a single-point guess, made with the least information the team will ever have, gets written into a roadmap and defended as a commitment. That's a management failure, and teams that stop estimating don't escape it. Leadership still needs to plan, so it fills the vacuum with guesses of its own, made by people even further from the code.
+
+So here is what I'd ask of each side.
+
+Engineers: give ranges, not points. "Three to eight days, and the uncertainty is the payments integration" tells your manager more than "five days" ever will. When the range is wide, say why, and propose a short spike to narrow it. Re-estimate as you learn. An estimate you've updated twice is worth more than one you've defended twice.
+
+Managers: never turn the low end of a range into a date. Track how actual time compares with estimates, but use that data to calibrate, not to blame. If your team's estimates are consistently off by 50%, that's a useful planning multiplier, not a performance problem. And when you pass a number upward, pass the range and the risk with it. Most estimates get damaged at that step, when the range gets dropped.
+
+Estimation is a skill, and like any skill it gets better with practice and feedback. Teams that quit estimating don't become more predictable. They just stop finding out how unpredictable they are.
+
+Keep estimating, and be honest about how uncertain the numbers are.

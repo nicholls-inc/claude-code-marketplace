@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a15351ac27f47e8cc",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 1477,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:17:21.880Z",
+  "valid": true,
+  "text": "**How a Lithium-Ion Cell Is Charged, and Why It Slows Near Full**\n\nA lithium-ion cell stores energy by moving lithium between two host materials. During charging, an external source pulls electrons out of the positive electrode, usually a metal oxide such as NMC or a phosphate such as LFP. It pushes them through the external circuit into the negative electrode, usually graphite. To keep each electrode electrically neutral, lithium ions leave the cathode lattice, cross the liquid electrolyte and the porous separator, and slot into the layers of the graphite. This insertion is called intercalation. Neither electrode is consumed. Lithium is moved from a host where its energy is low to one where its energy is high.\n\nAlmost all chargers use a two-stage profile called constant-current/constant-voltage (CC-CV). In the CC stage, the charger regulates current to a fixed value, often 0.5C to 1C, where 1C is the current that would fill the cell in one hour. The terminal voltage rises as charge accumulates. Once it reaches a fixed limit, typically 4.2 V for NMC chemistries or 3.65 V for LFP, the charger switches to CV. It holds that voltage and lets the current fall. Charging ends when the current drops to a small threshold, commonly C/20.\n\nThe taper follows from how the terminal voltage is made up. Under load, it equals the cell's open-circuit voltage (OCV), which depends on state of charge, plus overpotentials that grow with current:\n\n- **Ohmic losses** in the electrolyte, the current collectors and the contacts.\n- **Charge-transfer losses** at each electrode surface.\n- **Concentration losses** from lithium gradients in the electrolyte and inside the electrode particles.\n\nNear full, the OCV is already close to the voltage limit, so little headroom remains for overpotential. The only way to keep the terminal voltage under the limit is to cut the current. An electrical analogy is a capacitor charged through a series resistance to a fixed supply voltage, with its exponential current tail. The real cell is less ideal, because its \"resistance\" includes slow diffusion processes.\n\nDiffusion is the deeper reason the last 20 percent is slow. Lithium enters each electrode particle at its surface and has to diffuse inward through the solid, which is slow. At high current, the particle surfaces saturate while the cores are still lithium-poor. The surface concentration sets the local potential, so the cell looks full before it is. Lowering the current in the CV stage gives the interiors time to catch up.\n\nThe voltage limit protects against real damage. Above it, the cathode becomes unstable and the electrolyte oxidizes. On the graphite side, forcing current into saturated surfaces can push the local potential below that of lithium metal. Lithium then plates as metal instead of intercalating. Plating permanently removes usable lithium and can grow dendrites that short the cell. Plating risk rises at low temperature and high rate.\n\nThe practical result is that a cell can often go from 10 to 80 percent quickly, but the final fraction takes about as long again."
+}

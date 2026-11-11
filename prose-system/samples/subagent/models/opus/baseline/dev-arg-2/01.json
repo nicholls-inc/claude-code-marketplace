@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a468781001165042a",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28179,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1230,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:00:08.624Z",
+  "valid": true,
+  "text": "Keep Estimating. Just Stop Lying About What an Estimate Is.\n\nEvery few years the #NoEstimates argument comes back, and every time it lands well with engineers. I understand why. Most of us have been asked for a number in a planning meeting, given one with honest caveats, and then watched the caveats disappear by the time it reached a slide. Three weeks, maybe four if the auth migration is messy, turns into \"ships the 14th.\" When the 14th passes, the engineer is the one who missed the date.\n\nThat is a real problem. Banning estimates doesn't solve it. Teams should keep estimating, and engineers who want to stop are blaming the tool for how it gets misused.\n\nStart with what happens when a team stops estimating. The questions don't go away. Sales still needs to know whether the feature lands before the renewal. Finance still needs to know whether to hire. Another team still needs to know whether to build on your API or work around it. If the people closest to the code won't give a number, someone further away will make one up, with less information and no caveats at all. You haven't removed the estimate. You've handed it to whoever knows least about the work.\n\nThe second cost gets less attention. Estimating is useful even when the number is wrong. When two engineers say \"two days\" and \"two weeks\" for the same ticket, the gap matters more than either figure. One of them knows about the legacy billing code and the other doesn't. That conversation takes five minutes, and it often saves the two weeks, because the team splits the work, changes the scope, or drops the part that was never worth doing. A team that never estimates never has that conversation. Its hidden complexity stays hidden until somebody is already deep in it.\n\nThe #NoEstimates camp has a good point: forecasting from throughput, meaning how many items the team actually finishes per week, usually beats summing individual guesses. I agree. Use it. But throughput forecasting only works if the work is split into pieces of roughly similar size, and deciding whether something is \"roughly similar size\" is estimating. It's estimation with less ceremony, which is an improvement, but it isn't abolition.\n\nSo keep estimating, and change three habits.\n\nFirst, give ranges, never single numbers. \"Two to five weeks\" is honest. \"Three weeks\" is a range with the uncomfortable half cut off.\n\nSecond, managers: when an estimate moves up the chain, keep the range attached. If your slide can only fit one date, put the high end on it. The fastest way to destroy estimate quality on a team is to treat the low end as a promise. Do it once and every number you get afterwards will be padded.\n\nThird, re-estimate on purpose. An estimate is a forecast, and forecasts are supposed to change as new information arrives. A team that updates its numbers halfway through is doing its job, not admitting failure.\n\nEstimates aren't the problem. False precision is, and so is punishing people for uncertainty they told you about up front. Fix those and the estimates become one of the cheapest risk-management tools a team has."
+}

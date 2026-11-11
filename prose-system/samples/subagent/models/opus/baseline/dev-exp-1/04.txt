@@ -1,0 +1,39 @@
+How a Heat Pump Heats Your House When It's Cold Outside
+
+It sounds wrong at first. On a January morning it might be 2°C outside and you want 20°C inside, so how can a machine take heat out of the colder air and put it into the warmer house? The answer is that "cold" air still holds a lot of heat. Air at 2°C is about 275 degrees above absolute zero, the point where there is no heat energy left at all. A heat pump doesn't make heat the way your boiler does. It collects heat that is already in the outside air and moves it indoors. Moving heat takes far less energy than making it.
+
+Your fridge does the same thing. It pulls heat out of the cold food compartment and pushes it out through the coils at the back, which is why the back of a fridge feels warm. A heat pump is a fridge turned the other way round: the cold side faces the garden and the warm side faces your house.
+
+The cycle
+
+A heat pump circulates a fluid called a refrigerant around a closed loop. The refrigerant is chosen because it boils at a very low temperature, well below the coldest weather you are likely to get. The loop has four stages:
+
+1. Collecting heat. In the outdoor unit, a fan blows outside air across a coil full of cold, low-pressure liquid refrigerant. The refrigerant might be at -15°C, so even 2°C air is warmer than it. Heat flows from the air into the refrigerant, and the refrigerant boils into a gas.
+
+2. Compressing. An electric compressor squeezes that gas. When a gas is compressed its temperature rises, the same reason a bicycle pump gets warm when you use it. The refrigerant leaves the compressor at something like 60–80°C.
+
+3. Releasing heat. The hot gas passes through a heat exchanger connected to your central heating water. The water is cooler than the gas, so heat flows into it, and that water goes round your radiators or underfloor heating. As it gives up its heat, the refrigerant turns back into a liquid.
+
+4. Expanding. The liquid passes through an expansion valve, which drops its pressure suddenly. That makes it very cold again, and it goes back outside to collect more heat.
+
+The electricity runs the compressor, the fans and the pumps. It does not heat your home directly. Most of the heat comes from outside.
+
+What that means for your running costs
+
+Efficiency is measured as the coefficient of performance, or COP. A COP of 3 means that for every 1 kWh of electricity, you get 3 kWh of heat. A modern gas boiler, by comparison, turns 1 kWh of gas into about 0.9 kWh of heat. Over a full year, a well-installed air-source heat pump typically averages a COP of around 3 to 4.
+
+Two things push the COP down:
+
+- Colder outside air. The colder it is, the harder the compressor has to work. On a very cold day the COP might fall to 2. That is still twice the heat you would get from a plain electric heater, and the pump keeps working well below freezing. Units sold in Scandinavia run at -20°C and below.
+- Hotter radiators. A boiler usually sends water out at 60–75°C. A heat pump is most efficient at 35–50°C. To heat the house with cooler water, some rooms may need larger radiators, and your installer should do a room-by-room heat loss calculation to find out which ones. Good insulation helps for the same reason.
+
+In cold, damp weather, frost builds up on the outdoor coil. The unit melts it off now and then with a short defrost cycle. You may see steam coming from the unit while it does this, which is normal.
+
+Questions to put to an installer
+
+- What heat loss did you calculate for my house, and which radiators need changing?
+- What flow temperature are you designing for? Lower is better.
+- What seasonal COP (often called SCOP) do you expect for my home?
+- Do I need a hot water cylinder?
+
+Whether a heat pump costs less to run than your boiler depends mostly on the ratio between your electricity and gas prices, and on how efficiently the system is designed. A well-designed system will usually cut your carbon emissions sharply and often costs about the same as gas to run, or less. A poorly designed one won't. The physics works fine in a cold winter. The quality of the installation is what you need to check.
