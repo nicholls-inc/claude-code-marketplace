@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8121049084df9bfe",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28243,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1286,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:23:56.664Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything; it moves heat that already exists in the outdoor air into your home, and the reason this works on a cold day is that \"cold\" is relative. Air at minus five Celsius still holds a great deal of thermal energy, because absolute zero sits more than two hundred and seventy degrees lower, and the machine's job is to collect some of that energy and deliver it indoors at a useful temperature.\n\nIt does this with a sealed loop of refrigerant, a fluid chosen because it boils at extremely low temperatures. Outside, the refrigerant circulates through a coil with a fan blowing air across it, and because the refrigerant is colder than the air, even on a freezing day, heat flows into it and makes it evaporate into a gas. A compressor then squeezes that gas, which raises its pressure and with it its temperature, in the same way a bicycle pump warms up as you use it, so the gas leaving the compressor might be at fifty or sixty degrees even though it began the journey below freezing. That hot gas passes through a second coil inside the house, where it gives up its heat to your radiators, underfloor circuits or hot water cylinder and condenses back into a liquid. Finally an expansion valve drops the pressure, the liquid becomes very cold again, and the cycle repeats. Heat moves from cold to hot only because the compressor is doing work to force it, and that is where the electricity goes.\n\nThe payoff is efficiency. A gas boiler turns roughly ninety percent of the energy in its fuel into heat, which is good but can never exceed one hundred. A heat pump uses a unit of electricity to move several units of heat, so over a season a typical installation delivers about three units of heat for each unit of electricity, and in mild weather more than that. This ratio, called the coefficient of performance, falls as the outdoor air gets colder and as the water you ask the system to send to your radiators gets hotter, since the compressor has a bigger temperature gap to bridge. Modern units from reputable makers keep running and still deliver a ratio above two at minus ten or even lower, so a cold snap reduces efficiency without switching the system off.\n\nFor your decision, the practical questions are less about physics and more about your house. Heat pumps work best when they run for long periods at moderate flow temperatures, around thirty-five to fifty degrees, whereas a boiler typically sends water out at seventy or more. If your home is well insulated, or you can improve the loft and draught-proofing, and your radiators are large enough to emit enough heat at those lower temperatures, the pump will perform well. If you have small radiators or a draughty solid-walled building, you may need some radiators swapped or upgraded insulation first, and a proper room-by-room heat loss survey from the installer is the way to find out, so be wary of anyone who sizes the system by rule of thumb. You will also need space outside for the unit and usually a hot water cylinder indoors, which can be a problem in a small property that currently relies on a combination boiler.\n\nRunning costs depend on the gap between your electricity and gas prices. Because electricity usually costs several times more per unit than gas, a heat pump with a seasonal ratio of three roughly breaks even with a gas boiler on fuel cost, and does better if you are on a time-of-use tariff, have solar panels, or can shift consumption to cheaper hours. Installation is expensive, often several times the price of a new boiler before any government grant, so the case rests on grants, falling carbon emissions as the grid decarbonises, and avoiding a future gas phase-out rather than on dramatic bill savings alone. If your boiler is near the end of its life, your insulation is decent, and a grant is available, a heat pump is a sound choice; if the boiler is young and the house is leaky, improving the building first is likely to repay you better."
+}

@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad7830218094cc3e0",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28382,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1289,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:24:18.769Z",
+  "valid": true,
+  "text": "A leap second is a single extra second added to the world's official clock time so that it stays in step with the rotation of the Earth. The need for it comes from the fact that there are two ways of measuring time, and they do not agree exactly. One is astronomical: a day is the time the Earth takes to turn once, judged against the Sun and stars. The other is atomic. Since 1967 the second has been defined by the behaviour of caesium atoms, which cycle 9,192,631,770 times in one second. Atomic clocks are far steadier than the planet. The Earth's spin varies a little from year to year and has been slowing over the long run, mainly because of tidal friction from the Moon.\n\nCoordinated Universal Time, the basis of civil time around the world, was set up in 1972. It runs on atomic clocks but is kept within 0.9 seconds of the time given by the Earth's rotation. When the gap approaches that limit, the International Earth Rotation and Reference Systems Service announces a leap second, and clocks count 23:59:60 on the last day of June or December. This has happened 27 times. The most recent was on 31 December 2016.\n\nThe trouble is that computers are not built to expect a minute with 61 seconds. Many systems store time as a running count of seconds, and a repeated or extra second can make timestamps go backwards or cause software to fail. Leap seconds have been linked to outages at websites and data centres, including problems with Linux systems in 2012 and a fault at the network company Cloudflare after the 2016 insertion. Some large companies, Google among them, avoid the problem by stretching the last hours before a leap second so that the extra second is absorbed gradually. That method is not standard, and different systems handle it in different ways.\n\nA further complication arrived recently. Since about 2020 the Earth has been turning slightly faster than before, which raises the possibility of a negative leap second, in which a second would be removed. That has never been done, and engineers have had no real-world test of how software would cope.\n\nIn November 2022 the General Conference on Weights and Measures, the international body that oversees the definition of the second, voted to stop leap seconds by or before 2035. The difference between atomic and astronomical time will then be allowed to grow beyond one second. It is expected to reach about a minute only after a century or more, and the conference asked for a new limit to be agreed by 2026. Supporters of the change say that a slow, predictable drift is easier to manage than occasional shocks to the world's computers."
+}

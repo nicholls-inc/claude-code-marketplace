@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0c6a1a95dcfcd2cf",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28363,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 998,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:52:15.772Z",
+  "valid": true,
+  "text": "On 15 January 1919, a steel tank on the waterfront in Boston's North End burst and released about 2.3 million gallons of molasses into the streets. The tank belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol, which used the molasses to make industrial alcohol and, in part, munitions. It stood about 50 feet high and 90 feet across, beside Commercial Street and not far from the harbour.\n\nThe tank had been finished in late 1915, and it had problems from the start. It leaked so much that neighbours collected the molasses that ran down its sides. Instead of repairing it properly, the company painted it brown so the stains would be less visible. Nobody had a qualified engineer check the design. A test with water was never carried out in full, and the walls were thinner than they should have been for the load.\n\nThe day was unusually warm for January, about 40 degrees Fahrenheit after several days of bitter cold. A fresh shipment of molasses had been pumped into the tank the day before. At around 12.30 in the afternoon, people nearby heard a low rumble and a sound some compared to machine-gun fire, which was probably rivets popping out of the steel. The tank then failed, and a wave of molasses between 8 and 15 feet high moved outward at an estimated 35 miles an hour.\n\nThe wave broke the elevated railway structure on Atlantic Avenue and pushed a train off its supports. It crushed buildings, including a firehouse, whose men were trapped inside. It also knocked over wagons and horses and carried debris along the street. Molasses is much thicker than water, and as it cooled it became harder to move through. People caught in it found it difficult to free themselves, and rescuers had to wade through it to reach them.\n\nTwenty-one people died, some drowned in the molasses and some crushed by wreckage or struck by debris. About 150 were injured. The dead included children and workers from the area. Rescuers worked through the night, and it took days to find all the bodies. The cleanup lasted weeks. Crews used salt water from fire boats to wash the streets, and sand and sawdust to soak up what remained. The harbour ran brown until the summer, and residents said the district smelled of molasses for years.\n\nA lawsuit followed, and it became one of the first large class actions in Massachusetts. The company argued that anarchists had blown up the tank, which was a plausible claim at the time, as bombings had occurred in the preceding years. The court-appointed auditor, Hugh Ogden, heard testimony for about three years. He concluded that the tank had been built poorly and that the company was responsible. The company paid damages to victims and their families, with settlements of about 7,000 dollars for each death in some cases.\n\nThe disaster had lasting effects on regulation. It is often cited as one of the events that led to stricter building codes and to the requirement that engineers sign off on plans. Today a plaque marks the site in the North End."
+}

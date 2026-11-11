@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2ad7ce11b8a66362",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28240,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1231,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:29:35.483Z",
+  "valid": true,
+  "text": "A leap second is an extra second occasionally added to the world's official clocks so that they stay in step with the turning of the Earth. Since the 1960s, time has been kept by atomic clocks, which count the vibrations of caesium atoms with a steadiness no planet can match, whereas the Earth itself is a less reliable timekeeper, because the friction of the tides gradually slows its rotation and earthquakes, shifting ice and the churning of its molten core nudge it faster or slower in ways that cannot be predicted far ahead. Left alone, the two kinds of time would drift apart, so in 1972 the international authorities agreed that Coordinated Universal Time, the standard that civil clocks follow, would be kept within a second of the Earth's actual rotation by inserting an extra second at the end of June or December whenever the gap threatened to grow too large. Twenty-seven of them were added between 1972 and the end of 2016, each announced only a few months beforehand by an observatory in Paris that tracks the planet's spin, and on those occasions a clock would read 23:59:60 before moving on to midnight.\n\nThe trouble is that a calendar of irregular, late-announced extra seconds is a headache for the machines on which modern life depends. Computer systems generally assume that every minute has sixty seconds, and when one arrives with sixty-one, software can freeze, record events in the wrong order or crash outright, as happened to several websites and an airline booking system in 2012 and to part of Cloudflare's network at the end of 2016. Big technology companies have taken to spreading the extra second across a whole day in tiny increments, a workaround that works only so long as everyone is not doing something different, and engineers who run financial markets, satellite navigation, power grids and telecommunications have complained for years that the practice invites errors in systems where timing must be exact to a fraction of a millisecond.\n\nIn 2022 the General Conference on Weights and Measures, the body of national governments that oversees the international system of units, voted to stop the practice by 2035, and to let the gap between atomic time and the Earth's rotation grow well beyond a second, probably for a century or more, before any correction is considered. A further reason for the haste is that the Earth has lately been spinning slightly faster than expected, which could eventually require a negative leap second, a second removed rather than added, something never attempted and for which almost no software has been tested. Astronomers and navigators who need the Earth's true orientation will still be able to calculate it separately, and for the ordinary person the difference between a clock and the sun will remain far too small to notice."
+}

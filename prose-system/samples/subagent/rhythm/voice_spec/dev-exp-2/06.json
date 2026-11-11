@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae096a7d52e8f726a",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28382,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1230,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:01:44.266Z",
+  "valid": true,
+  "text": "A leap second is a single second added to the world's official clock time, usually at the end of June or December, so that the clock stays in step with the turning of the Earth. It exists because there are two ways of measuring a day. One is astronomical: the time the Earth takes to turn once, judged against the Sun. The other is atomic: since 1967 the second has been defined by the vibrations of caesium atoms, which are steady to within a tiny fraction of a second over millions of years. The Earth is a poorer timekeeper. Tides drag on its rotation and slow it by a small amount each century, and movements in the oceans, atmosphere and molten core cause further irregular changes.\n\nCoordinated Universal Time, the standard that civil clocks follow, was set up in 1972 to run on atomic seconds while staying within 0.9 of a second of the Earth's rotation. To do that, the International Earth Rotation and Reference Systems Service, based in Paris, has announced extra seconds when needed. Twenty-seven have been added. The last came on 31 December 2016, when the clock showed 23:59:60 before moving on to the new year.\n\nIn November 2022 the General Conference on Weights and Measures, the international body that oversees the units of measurement, voted to stop using leap seconds by 2035. The main reason is computing. Most systems count time as a steady run of seconds, and a minute with 61 seconds does not fit that scheme. When a leap second was added in 2012, some Linux servers froze, and websites and airline booking systems were affected. A leap second in 2017 was followed by an outage at the web company Cloudflare. Large technology firms such as Google have worked around the problem by stretching the extra second across many hours, but they do this in different ways, which risks small disagreements between systems. Financial markets, telecoms and satellite navigation all depend on timestamps accurate to a tiny fraction of a second, and they prefer a clock with no surprises.\n\nUnder the new arrangement the gap between atomic time and the Earth's rotation will be allowed to grow, and it could reach about a minute in the next century or so. The bodies involved have not yet agreed on how large a gap to allow, or what to do once it is reached. There is one complication. The Earth's spin has recently been slightly faster than expected, and if that continues a second might have to be removed rather than added. This has never been done, and the people who run computer systems expected it to be harder to handle than an extra second. That is one more reason the decision was taken to end the practice."
+}

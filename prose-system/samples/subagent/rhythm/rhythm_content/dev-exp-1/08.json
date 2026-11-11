@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7939701a37975012",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28243,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1279,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:16:00.889Z",
+  "valid": true,
+  "text": "A heat pump works because it does not make heat from fuel the way a gas boiler does; it moves heat that already exists in the outdoor air into your house, and outdoor air that feels bitterly cold still holds a great deal of thermal energy. Temperature measures how vigorously molecules are moving, and even at minus five degrees Celsius the air is far above absolute zero, so there is plenty of energy to be gathered if you have a way to concentrate it. The machine does this with a refrigerant, a fluid chosen because it boils at a very low temperature, well below the freezing point of water. In the outdoor unit, the cold liquid refrigerant passes through a coil while a fan blows outside air across it. Because the refrigerant is colder than the air, even on a frosty day, heat flows into it and it boils into a gas, carrying that energy along with it.\n\nThe trick that makes the whole thing useful is what happens next. A compressor squeezes the gas, and compressing a gas raises its temperature sharply, in the same way a bicycle pump warms up when you use it hard. The gas leaves the compressor hotter than your radiators or underfloor loops need, perhaps forty-five to sixty degrees, so when it flows through a second coil connected to your heating water, heat moves from the refrigerant into the house, and the refrigerant condenses back into a liquid as it gives that heat up. An expansion valve then drops its pressure, which chills it again to well below the outdoor temperature, and the cycle starts over. Heat always flows from hot to cold, and the compressor is what arranges for the refrigerant to be colder than the outside air at one point in the loop and hotter than your heating water at another, so the heat is lifted uphill with the help of electricity rather than created from scratch.\n\nThis is why heat pumps are described with a figure called the coefficient of performance. Because most of the delivered heat is collected from outside and only a portion comes from the electricity driving the compressor, a typical modern unit delivers around three units of heat for every unit of electricity it consumes, which means an efficiency of roughly three hundred percent, whereas even the best condensing gas boiler cannot exceed about ninety-five percent. That ratio does fall as the weather gets colder, because the compressor has to work harder to lift heat across a bigger temperature gap, and a pump that manages four on a mild autumn day might manage closer to two at minus ten. Even so, it is usually still well above what a boiler can offer, and models designed for cold climates keep working effectively at temperatures far below anything most of the country will see.\n\nFor your decision, the things that matter most are how well your house keeps its heat and what your radiators were designed for. Heat pumps run most efficiently when they deliver water at a lower temperature than a boiler does, and they tend to run for long, steady periods rather than firing in short bursts, so a draughty, poorly insulated house with small old radiators may need some upgrades, such as larger radiators or better loft insulation, before the pump performs well and keeps every room comfortable. A heat loss survey from a qualified installer will tell you how much heat your home needs on its coldest design day and what size of unit and emitters that implies. You should also look at running costs, because electricity usually costs more per unit than gas, so the efficiency advantage is partly spent on the price difference, and the balance depends on your local tariffs and on whether a time-of-use or heat pump tariff is available. Installation costs are higher than for a new boiler, though grants in many countries reduce the gap considerably, and a heat pump removes the combustion emissions from your home and cuts carbon more every year as the electricity grid gets cleaner. If your house is reasonably insulated, or you are willing to improve it, and you can obtain a sensible tariff, the physics works in your favour even on the coldest days."
+}

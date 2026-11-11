@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae58ca463fd46182b",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28237,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 865,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:36:37.707Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage, and the reason for the two stages lies in what the cell's terminal voltage is actually measuring. Charging forces lithium ions out of the cathode, across an electrolyte-soaked separator, and into the graphite anode, where they intercalate between carbon layers while electrons travel through the external circuit to balance them. The terminal voltage is the cell's open-circuit voltage, which rises with state of charge because the electrodes' chemical potentials diverge as the anode fills and the cathode empties, plus an overpotential equal to the current times the cell's internal resistance, which is a lumped term covering ohmic losses, charge-transfer kinetics at the particle surfaces, and slow diffusion of lithium inside the solid particles. In the first stage a charger holds current fixed, commonly at a rate that would fill the cell in one to two hours, and the terminal voltage climbs steadily as the open-circuit voltage rises and the overpotential sits on top of it. This stage delivers roughly 70 to 80 percent of the capacity. The charger cannot let the voltage rise indefinitely, because above about 4.2 volts for a typical cobalt or nickel-manganese-cobalt cell the electrolyte begins to oxidise at the cathode, and a fully lithiated graphite anode sits close enough to the potential of lithium metal that further forcing would plate metallic lithium onto its surface, which degrades capacity and can grow dendrites that short the cell. So when the terminal voltage reaches this ceiling the charger switches to the second stage and holds the voltage constant instead. Now the open-circuit voltage is still creeping upward as charge accumulates, and since the terminal voltage is pinned, the room left for overpotential, and therefore for current, shrinks. Current decays roughly exponentially, much as it does when a capacitor charges through a resistor, though here the limiting process is largely solid-state diffusion, because lithium arriving at the surface of a nearly full particle has to move inward through a concentration gradient that is already steep. The cell is declared full when the current falls to a small cutoff, typically a few percent of the original rate, and the charger stops. This taper is the reason the last 20 percent takes disproportionately long, and it is also why fast-charging systems limit how far they push the first stage and often reduce current further when the cell is cold, since both diffusion and the plating margin worsen at low temperature."
+}

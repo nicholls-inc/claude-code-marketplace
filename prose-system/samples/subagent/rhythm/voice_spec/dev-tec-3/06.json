@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac0f1bf9bdc4e63e6",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28379,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 900,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:08:14.146Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a method called constant current followed by constant voltage, usually shortened to CC-CV. The charger first pushes a fixed current into the cell. For a typical 3 Ah cell this might be 1.5 A, which is a rate of 0.5C. While the current is held constant, the cell voltage rises on its own as lithium accumulates in the negative electrode. When the voltage reaches the upper limit, commonly 4.2 V for a cell with a graphite negative electrode and a cobalt-based positive electrode, the charger stops regulating current and instead holds the voltage at that limit.\n\nCharging is the movement of lithium ions from the positive electrode, through a liquid electrolyte and a porous separator, into the graphite of the negative electrode. Electrons travel the same way through the external circuit. The ions enter the graphite by intercalation, sitting between its carbon layers. The charger controls the current, which is the rate at which this transfer happens, but what the cell measures at its terminals is voltage.\n\nThat terminal voltage is not the open-circuit voltage of the electrodes. It is the open-circuit voltage plus the current multiplied by the cell's internal resistance. This resistance comes from the electrolyte, the contact between layers, and the slow steps of moving ions through the solid electrode material. At 1.5 A and an internal resistance of 50 milliohms, the cell reads about 75 mV higher than its resting voltage. The 4.2 V limit is therefore reached before the electrodes are fully charged.\n\nOnce the charger holds 4.2 V, the voltage available to drive current is fixed. As lithium fills the graphite, the open-circuit voltage climbs towards 4.2 V, and the difference between the two shrinks. Current is proportional to that difference divided by resistance, so it falls. The decline is roughly exponential. In addition, the graphite has fewer free sites near its surface, and ions must diffuse further inside the particles, which adds resistance.\n\nCharging is normally ended when the current has dropped to about 0.05C to 0.1C, here 150 to 300 mA. The constant-voltage stage often takes as long as 30 to 60 minutes, though it adds only the last 10 to 20 per cent of capacity. The limit cannot simply be raised to speed this up. Above about 4.2 V the electrolyte oxidises at the positive electrode, and at high current the negative electrode can plate metallic lithium instead of absorbing it. Plated lithium reduces capacity permanently and can grow into dendrites that short the cell, which is why the taper is kept."
+}

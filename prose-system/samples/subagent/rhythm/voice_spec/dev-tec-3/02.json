@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9ba34b0c97ae2f11",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28379,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 915,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:36:54.313Z",
+  "valid": true,
+  "text": "A lithium-ion cell is normally charged in two stages, known as constant current followed by constant voltage. The charger is a controlled source, and what it controls changes partway through.\n\nIn the first stage the charger holds the current at a fixed value, often between 0.5C and 1C, where 1C is the current that would fill the rated capacity in one hour. For a 3 Ah cell, 1C is 3 A. The cell voltage rises steadily during this stage. A typical cobalt-oxide or NMC cell starts near 3.0 to 3.5 V and climbs toward 4.2 V. Most cells reach that upper limit with roughly 70 to 80 per cent of their capacity already stored.\n\nInside the cell, charging moves lithium ions from the cathode, through the electrolyte and the separator, and into the graphite anode, where they sit between the carbon layers. The ions have to diffuse through the electrolyte and then inward through the solid graphite particles. Diffusion in the solid is slow, and it is driven by a concentration difference. The cell also has internal resistance, commonly a few tens of milliohms for a cell of this size, so the voltage at the terminals is higher than the open-circuit voltage by the current times that resistance. At 3 A and 50 mΩ the difference is 0.15 V.\n\nThe voltage limit exists because going above about 4.2 V per cell speeds up electrolyte breakdown at the cathode. On the anode side, a low potential against lithium allows metallic lithium to plate on the graphite surface instead of entering it. Plated lithium cuts capacity and can form dendrites that short the cell. So when the terminal voltage reaches 4.2 V, the charger stops holding the current and holds the voltage instead.\n\nThis is the second stage, and it is where charging slows. The terminal voltage is fixed, but the cell's open-circuit voltage keeps rising as the anode fills. The gap between the two shrinks, and the current that can flow across the internal resistance falls with it. At the same time the graphite surface is already crowded with lithium, so ions arrive faster than they can diffuse inward. The current decays roughly exponentially. The charger ends the charge when the current drops to a set cutoff, usually 0.05C to 0.1C. For the 3 Ah cell that is 150 to 300 mA.\n\nThe last 20 to 30 per cent of the capacity therefore takes a long time, often as much as the first 70 to 80 per cent. Raising the voltage limit would speed it up, but only by moving into the damage region described above. Faster-charging designs mostly work by lowering resistance and improving diffusion, not by relaxing the limit."
+}

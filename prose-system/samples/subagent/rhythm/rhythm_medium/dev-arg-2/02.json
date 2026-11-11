@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a96dbdbcb66360c6f",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28221,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1021,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:31:44.372Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating those estimates as promises. The case is not that planning is useless. It is that the particular ritual most teams practice, in which engineers guess durations, managers write the guesses down, and everyone is later judged against them, produces far more theater than information.\n\nStart with the accuracy problem, which anyone who has shipped software already knows. Estimates for novel work are wrong in a systematic way, because the hardest part of a task is usually the part nobody can see until they are halfway through it. The migration that looked like two weeks turns out to hide a decade of undocumented assumptions, and the feature that looked enormous turns out to be a single configuration change. We keep running this experiment and getting the same result, yet we respond by asking for more careful estimates rather than questioning the exercise itself.\n\nThe cost of that exercise is also higher than it appears. Hours spent in planning meetings debating whether a ticket is a five or an eight are hours not spent building, and the numbers they produce rarely survive contact with reality. Worse, an estimate quietly turns into a commitment the moment it leaves the room. Engineers learn to pad, managers learn to discount the padding, and both sides end up negotiating over a fiction. Trust erodes, not because anyone lied, but because the system rewards defensible numbers over honest ones.\n\nThere is a subtler harm as well. Once a deadline is anchored to an estimate, people start cutting the wrong corners. Tests get skipped, the awkward refactor gets postponed, and a known risk gets labeled a follow-up item so the date can hold. The estimate does not merely fail to predict the work; it bends the work toward the estimate.\n\nWhat should teams do instead? Break work into small pieces and ship them continuously, so that progress is visible in running software rather than in a burndown chart. Measure how long things actually take, using cycle time from real history, and forecast from that data instead of from opinion. If a stakeholder needs to know whether something can land by a certain quarter, answer with a range grounded in past throughput and be explicit about what you do not yet know. That is still forecasting, but it is forecasting from evidence instead of from a roomful of confident guesses.\n\nThe strongest objection is that the business needs dates, because customers, launches, and budgets do not wait. That is true, and it is exactly why the current approach fails them. A precise-looking number that is wrong by a factor of two helps no one plan. What a business actually needs is early warning when something is slipping and the ability to trade scope for time, and small, frequently shipped increments provide both far better than an upfront estimate ever could.\n\nSo the practical advice is simple. Stop asking engineers to predict the unpredictable, stop punishing them when they are wrong, and start asking the questions that actually move projects, such as what is the smallest useful thing we can ship this week and what did we learn from the last one. Teams that make that shift tend to find that the dates get more reliable, not less, because they were never really coming from the estimates in the first place."
+}

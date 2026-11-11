@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a4031bad3cb6a136c",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28237,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 937,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:15:36.039Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged by forcing current through it in the direction opposite to discharge, which pushes lithium ions out of the cathode, usually a layered metal oxide, across an electrolyte-soaked separator, and into the graphite anode, where they sit between carbon layers in a process called intercalation. Because the external circuit supplies the matching electrons, the cell stores energy as a chemical potential difference between two electrodes, and that difference shows up as the open-circuit voltage, which rises from about 3.0 V when empty to about 4.2 V when full for a common cobalt-based chemistry. Chargers therefore follow a protocol called constant-current, constant-voltage, usually abbreviated CC-CV. In the first phase the charger holds the current at a fixed rate, often expressed as a multiple of capacity so that 1C means a current that would fill the cell in an hour, and lets the terminal voltage climb as the state of charge increases. The terminal voltage is not the open-circuit voltage, because the cell has internal resistance from the electrolyte, from the resistive film on the anode, and from the finite speed of charge transfer at the electrode surfaces, so under current the terminal voltage sits above the equilibrium value by roughly the current multiplied by that resistance plus additional kinetic and diffusion overpotentials. Once the terminal voltage reaches the upper limit, set by the point beyond which the electrolyte oxidises and lithium metal can plate onto the anode, the charger stops regulating current and holds the voltage constant instead. This is where charging visibly slows. With the voltage pinned, the open-circuit voltage keeps rising as lithium accumulates, so the gap that drives current shrinks, and the current must fall roughly exponentially, much as a capacitor charging through a resistor draws less as its voltage approaches the supply. There is a second, physical contribution as well: lithium must diffuse into the bulk of the graphite particles, and as the surface layers fill, the concentration gradient that drives diffusion flattens, so the interior fills slowly and only at low current. Pushing harder at this stage would raise the surface concentration faster than diffusion can relieve it, driving the anode potential toward that of lithium metal and risking plating, which permanently removes capacity and can form dendrites that short the cell. The charger ends the cycle when the current falls to a small cutoff, typically about a twentieth to a tenth of the C rate, by which point the cell holds nearly all of its capacity. A battery management system supervises the whole process, limiting current at low temperature, where diffusion and reaction rates drop and plating becomes more likely, and cutting off if any cell exceeds its voltage or temperature limit."
+}

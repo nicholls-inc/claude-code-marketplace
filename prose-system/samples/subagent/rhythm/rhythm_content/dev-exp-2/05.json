@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a5a3efeb47723fde9",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28240,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 839,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:54:09.356Z",
+  "valid": true,
+  "text": "The earth does not turn at a perfectly steady rate, and a leap second is the small correction that keeps the world's clocks in step with it. Since 1972 the official time that governs civilian life, known as Coordinated Universal Time, has been kept by atomic clocks, which count out seconds with extraordinary regularity and which are far more constant than the planet itself. The earth, meanwhile, is a slightly unruly timekeeper, because tides drag on its rotation, its molten core shifts, and glaciers and earthquakes redistribute its mass, so that on average a day has grown a little longer than the 86,400 atomic seconds the clocks assume. If nothing were done, clock time and the position of the sun would drift apart, and so whenever the gap between them approached a second, international authorities inserted an extra second at the end of June or December, which is why a minute occasionally contained sixty-one seconds. Twenty-seven of these have been added, the last at the end of 2016.\n\nThe arrangement worked tolerably well while computers were few, but it has become a nuisance as the world has come to depend on machines that must agree with one another to the millisecond. A leap second cannot be predicted far ahead, since it depends on irregular behaviour of the earth, and so it is announced only a few months in advance. Software that assumes every minute has sixty seconds can stumble when it meets one with sixty-one, and some of the best known outages in recent years, affecting airline reservation systems and large websites, have been traced to such moments. Technology companies have invented their own workarounds, some of which spread the extra second across a whole day, and the lack of a common practice is itself a source of confusion, especially in finance, telecommunications and satellite navigation, where a disagreement of a single second can matter.\n\nFor these reasons the General Conference on Weights and Measures, the intergovernmental body responsible for the definition of the second, voted in 2022 to abandon the leap second by or before 2035. Time will then be allowed to drift away from the earth's rotation by more than a second, and the limit on that gap is to be set at a later date, perhaps not before the middle of the century. Astronomers will have to make their own adjustments, and nobody expects ordinary people to notice, since the difference in question would amount to a minute only after many centuries. A curious feature of the present situation is that the earth has lately been spinning slightly faster, which might call for a negative leap second, something never attempted and a further reason to be rid of the whole practice."
+}

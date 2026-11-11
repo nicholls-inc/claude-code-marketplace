@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a6b334a81645c2dde",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28379,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 855,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:29:07.440Z",
+  "valid": true,
+  "text": "A lithium-ion cell is normally charged in two stages, known as constant current followed by constant voltage. In the first stage the charger supplies a fixed current, usually between 0.5C and 1C, where 1C is the current that would fill the rated capacity in one hour. The cell voltage rises steadily during this stage. For a common cobalt or nickel-based cell with a graphite negative electrode, it climbs from about 3.0 V when empty towards 4.2 V when full. Most of the capacity, roughly 70 to 80 per cent, is delivered in this stage.\n\nWhen the terminal voltage reaches the upper limit, the charger stops holding the current and holds the voltage at 4.2 V instead. The current then falls on its own. Charging is usually ended when it drops to about 0.05C to 0.1C. This stage can take as long as the first one, even though it adds only the last 20 to 30 per cent of the charge.\n\nThe reason is the way the cell is built. Charging moves lithium ions out of the positive electrode, through the electrolyte, and into the layers of the graphite on the negative side. Electrons travel through the external circuit to balance them. The voltage you measure at the terminals is not the equilibrium voltage of the cell. It is the equilibrium voltage plus the current multiplied by the cell's internal resistance, plus further polarisation losses from slow ion movement within the electrodes and electrolyte. At constant current, these losses are present for the whole stage and push the terminal voltage up to the limit before the electrodes are actually full.\n\nAt that point the voltage limit is set by the chemistry. Holding a cell above 4.2 V accelerates electrolyte breakdown and, at the negative electrode, can cause lithium to plate as metal instead of entering the graphite. Plated lithium cuts capacity and can form dendrites that short the cell. The charger therefore cannot raise the voltage to keep the current up.\n\nWith the terminal voltage fixed, the current is set by the difference between 4.2 V and the cell's equilibrium voltage, divided by the resistance. As lithium fills the graphite, the equilibrium voltage rises towards 4.2 V and the difference shrinks. The current falls roughly exponentially. The concentration gradients inside the electrode particles also have to relax, and diffusion in solids is slow, which lengthens the tail.\n\nThe practical result is that fast-charging systems often use higher current only up to about 80 per cent and accept a long taper after that."
+}

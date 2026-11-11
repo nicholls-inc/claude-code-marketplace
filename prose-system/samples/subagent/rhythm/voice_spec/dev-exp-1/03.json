@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac1703b4bc9b6baf3",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28385,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 3046,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:37:37.995Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists from one place to another, and it can take that heat from a place colder than the one it delivers it to. Outside air at minus 5°C feels cold, but it still holds heat energy, because the true zero point is minus 273°C. The machine collects some of that energy and raises it to a temperature that is useful inside a house.\n\nIt does this with a sealed loop of refrigerant, a fluid chosen because it boils at a very low temperature. R32, common in new units sold in Britain, boils at about minus 52°C at normal pressure. In the outdoor unit a fan pulls air across a coil of cold refrigerant. The refrigerant is colder than the air, even on a frosty day, so heat flows from the air into the fluid and the fluid boils into a gas. A compressor then squeezes that gas. Compressing a gas heats it, as you notice when a bicycle pump warms up, and the refrigerant leaves the compressor at roughly 60 to 80°C. The hot gas passes through a second coil that is linked to the water in your radiators or underfloor heating. The water is cooler than the gas, so heat flows into the water and the refrigerant turns back into a liquid. The liquid goes through an expansion valve, which drops its pressure and temperature sharply, and returns to the outdoor coil to start again.\n\nHeat still flows only from hot to cold at every step. The compressor makes that possible by putting the refrigerant below the outdoor temperature on one side of the loop and above the radiator temperature on the other.\n\nThe compressor and fan run on electricity, but the electricity is only a fraction of the heat delivered. The ratio is called the coefficient of performance. A typical air source heat pump reaches about 3 when it is 7°C outside, so one kilowatt hour of electricity brings in about three kilowatt hours of heat. At minus 5°C the figure falls to around 2.5. A gas boiler cannot go above 100 per cent, and an older one often turns 80 to 85 per cent of the gas into heat.\n\nRunning costs depend on the price of the two fuels. Electricity in Britain has recently cost three to four times as much per kilowatt hour as gas. A performance figure of 3 therefore brings the cost of a unit of heat close to that of a gas boiler. Depending on your tariff and how well the system is set up, it may come out slightly above or slightly below. A heat pump is not automatically cheaper to run, and anyone who tells you it is should show the sums. The clearer gain is that it burns no fuel at the house, and its emissions fall as the grid uses more wind and solar.\n\nThe condition of the house matters at least as much as the machine. A heat pump works best sending water out at 35 to 50°C, where a boiler sends it out at 65 to 80°C. Cooler water gives less heat from each radiator, so some rooms may need larger radiators, and a poorly insulated house will need a bigger and more expensive unit. Loft insulation, draught-proofing and cavity wall fill are usually the cheapest way to improve the result. In cold, damp weather frost can build up on the outdoor coil, and the unit then runs a short defrost cycle, which is normal.\n\nThe upfront cost is the main obstacle. An installation commonly costs £10,000 to £15,000 before any grant, and England and Wales have offered £7,500 through the Boiler Upgrade Scheme, so check the current terms. My view is that the strongest case is a reasonably insulated house with a boiler near the end of its life, because you avoid paying for a new boiler as well. Ask two or three installers for a room-by-room heat loss calculation and a quote that states the expected performance figure over a winter, and compare that with your current gas bill."
+}

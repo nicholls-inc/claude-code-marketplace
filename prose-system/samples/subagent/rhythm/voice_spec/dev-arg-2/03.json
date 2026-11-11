@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0489f0c79bf254e9",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28381,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 953,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:40:03.140Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating estimates as commitments. I think the evidence for this is stronger than most managers like to admit.\n\nStart with the record. The Standish Group's CHAOS reports have for years found that a large share of software projects finish late or over budget, and the figures have not improved much with better tooling or more careful planning. Individual engineers know this from experience. A task sized at three days takes eight because of a flaky test environment, a dependency that turned out to be undocumented, or a review that sat for two days. None of these causes can be seen when the estimate is made, and that is the central problem. An estimate is a guess about things nobody knows yet, and it is requested at the moment when knowledge is lowest.\n\nThe cost of asking is also real. A planning session for a team of eight that runs ninety minutes every fortnight uses about twelve person-hours, and that is before the debates over whether a story is a three or a five. Those hours produce numbers that are then used for purposes they were never fit for. A velocity figure becomes a target, a target becomes a deadline, and the deadline starts to shape behaviour. Engineers pad their numbers, or cut testing near the end, or stop mentioning risks that would force a re-estimate. In my view the damage done to trust between engineers and managers is the largest cost of all, because each missed estimate is read as a failure of the person who gave it.\n\nThe usual reply is that the business needs dates. That is true, and I am not arguing otherwise. But a date gives a customer or a finance team something to plan around only if it is reliable, and estimates are not. What they need is better supplied by other means. A team can slice work into pieces small enough to finish in a day or two, then count how many pieces it completes each week. After a dozen weeks that count predicts the next dozen better than any story-point exercise, and it takes no meeting to produce. If the throughput is six items a week and the backlog holds sixty, the answer is about ten weeks, give or take, and everyone can see the range.\n\nA second tool is the appetite. Instead of asking how long a feature will take, a manager asks how much time the feature is worth, say three weeks, and the team shapes the scope to fit. When the time runs out, the scope is cut and the date holds. This reverses the usual arrangement, in which the scope is fixed and the date gives way. Basecamp has described working this way for years, and the approach asks very little of anyone.\n\nThere are cases where upfront estimates earn their place, such as a fixed-price contract or a hardware launch with a trade show date. In those cases a rough estimate, stated as a range, is worth the trouble. For the large majority of product teams, though, the habit survives because it is familiar and not because it works. I would stop estimating, keep the small slices and the throughput count, and spend the hours saved on building the software."
+}

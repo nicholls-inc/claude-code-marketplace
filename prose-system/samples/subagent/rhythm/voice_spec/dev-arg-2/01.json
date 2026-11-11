@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "adbf19dfb1aec49b3",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28381,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 980,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:24:27.401Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating the estimates as commitments. My view is that the practice costs more than it returns, and the evidence for that is not new.\n\nConsider what an estimate is. It is a guess about the future made at the point when the team knows least about the problem. Studies of software projects have found the same pattern for decades. The Standish Group's CHAOS reports have repeatedly found that a large share of projects overrun their budgets or schedules. Bent Flyvbjerg's work on large IT projects found that roughly one in six ran over budget by about 200 percent. Kahneman and Tversky called the underlying bias the planning fallacy, and it does not go away because the people estimating are experienced or careful. Most engineers have a story about a two-day task that took three weeks because of a library upgrade nobody knew about.\n\nThe cost of this is easy to miss because it is spread out. A team spends an hour or two each sprint in planning, pointing tickets and arguing over whether something is a five or an eight. Across a team of eight, that is a full working day every two weeks, which comes to about 26 days a year. The output is a set of numbers that managers then read as dates. Once a number has been said aloud in a meeting, it tends to become a promise, and the team spends the rest of the quarter defending it. Engineers cut corners on testing to hit a figure they never believed in, and the debt arrives later.\n\nThe usual defence is that managers need estimates to plan. I think this is partly true and mostly misplaced. What a manager needs is a sense of when something will be ready and what to do if it is not. A team can supply that without estimating each task. If a team ships roughly the same number of small changes each week, which most teams do, then a count of finished items and a simple chart of throughput will forecast a delivery date as well as any pointing exercise. Several teams have measured this and found the forecasts to be no worse, and sometimes better, than estimates built from story points. The approach is sometimes called flow-based forecasting.\n\nThe other change is to break work into pieces small enough that their size barely matters. If every item takes between one and three days, the argument about whether it is a three or a five stops being useful. The team then spends its planning time on what to build and in what order, which is where the real decisions are.\n\nThere are cases where a date is fixed from outside, such as a regulatory deadline or a launch tied to a conference. Even then, the useful question is what can be cut to fit the date, not how long the full scope will take. That is a question about scope, and it can be answered by looking at the work in order of priority.\n\nI would not claim that no team should ever estimate. A team new to a domain may find a rough sizing useful for a single decision. But as a standing habit, estimating produces false precision, consumes time and shapes behaviour in ways that harm the work. My suggestion is to try a quarter without it, track throughput instead, and compare how well each approach predicted what shipped."
+}

@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0ad8b2f3655f80ba",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28224,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1540,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:20:32.693Z",
+  "valid": true,
+  "text": "In late August 1854, a terrible outbreak of cholera struck Soho, a crowded district of London. Cholera is a disease of the intestines that causes violent vomiting and diarrhea, and it can kill a healthy person within a day or two by draining the water from the body. In those years nobody knew what caused it. The dominant belief was that diseases like cholera spread through \"miasma\", a poisonous foul-smelling air rising from rotting waste and filthy ground. London in the mid-nineteenth century was full of such smells, so the theory seemed natural to most doctors and officials.\n\nJohn Snow, a physician who lived and worked not far from the affected streets, did not accept it. He had already been thinking about cholera for years, and in 1849 he had published a short work arguing that the illness was carried in something people swallowed, most likely contaminated water, rather than something they breathed. He pointed out that the disease first attacked the digestive system, which seemed odd if the cause were bad air entering the lungs. Few of his colleagues were persuaded, and he lacked decisive proof.\n\nThe Broad Street outbreak gave him a chance to find it. Within days of its start, hundreds of people living within a short walk of the street had died, and many families fled the area. Snow knew the neighborhood and set out to learn exactly where the victims had lived. He walked the streets, knocked on doors, and asked survivors and neighbors about who had fallen ill and what they had been drinking. He also obtained the official list of deaths from the registrar's office and began marking the addresses on a map of the district.\n\nAs the marks accumulated, a pattern emerged. The deaths clustered tightly around a public water pump on Broad Street, where residents of the area drew their drinking water by hand. The closer a house stood to the pump, the more likely it was to have lost someone. Snow found that nearly all of the victims lived nearer to this pump than to any other. A few apparent exceptions turned out to strengthen his case rather than weaken it. A workhouse nearby, home to hundreds of poor residents, suffered very few deaths, and Snow discovered that it had its own well and did not use the Broad Street pump. A brewery on the same street likewise escaped almost untouched; its workers were given beer to drink and also had their own supply of water.\n\nThe most haunting case involved a woman who lived far away in Hampstead. She had died of cholera, and Snow learned that she had once lived in Soho and liked the taste of the Broad Street water so much that she had a bottle of it carried to her every day. Her niece, who drank from the same bottle, also fell ill and died. In an area with no outbreak, this was a striking coincidence that miasma could not easily explain.\n\nSnow went to the local board of guardians, the parish authorities responsible for the district, on the evening of the seventh of September and presented his evidence. He urged them to remove the handle of the pump so that nobody could draw water from it. The guardians were skeptical, but they agreed to act, and the handle was taken off the next day. The outbreak was already declining by then, because many residents had fled and because so many had already died, so the removal of the handle was probably not what ended it. Snow himself acknowledged that the epidemic may have been fading anyway. Even so, the gesture became famous, and the pump has remained a symbol of the episode.\n\nThe more important discovery came afterward. A local clergyman, Henry Whitehead, who had at first doubted Snow's theory, began his own inquiries among his parishioners and eventually found something Snow had missed. The first known case, an infant girl living at 40 Broad Street, had fallen ill just before the outbreak exploded, and her mother had washed the baby's soiled cloths and thrown the dirty water into a cesspool just a few feet from the pump's well. An inspection revealed that the cesspool's brick lining was decayed and leaking, so that sewage was seeping into the water below. Here was a plausible route by which the disease had reached the pump.\n\nOfficials of the day were slow to embrace the conclusion. A committee investigating the outbreak concluded that it found no sufficient evidence to accept Snow's explanation, and the miasma idea lingered for years. Snow died in 1858 without seeing his view widely accepted. Only later, after the bacterium responsible was identified and sanitary reforms such as clean water supplies proved their worth, did his work receive the recognition it deserved. Today he is remembered as a founder of modern epidemiology, the study of how diseases spread through populations, and his map and patient door-to-door work remain a model of how careful observation can reveal the cause of a deadly mystery."
+}

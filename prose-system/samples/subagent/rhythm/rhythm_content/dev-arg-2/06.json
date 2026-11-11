@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aff1d91a0c7939709",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28239,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1052,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:03:22.411Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating the estimate as something anyone can be held to, because the practice produces a number that feels like knowledge and carries almost none. Anyone who has watched a two-point ticket swallow a week, or a task that looked like a month collapse into an afternoon once someone found the right library, already knows that the uncertainty in software work is not noise around a stable average but the substance of the work itself. We are paid to do things that have not been done in exactly this form before, which means the part of the task we can estimate is the part that was never going to be the problem, and the part that will actually determine the schedule is precisely what we cannot see until we are inside it. Decades of research on the planning fallacy tell us that people underestimate even when they know they have underestimated before, and every engineer has absorbed the lesson by padding numbers, which only converts a bad estimate into a bad estimate with a hidden negotiation inside it.\n\nThe deeper damage comes from what happens to an estimate after it is spoken. A manager hears \"about three weeks,\" writes down three weeks, repeats it upward to someone who writes down three weeks with less context, and by the time the work is in its fourth week the original range, the caveats and the assumptions have all fallen away and what remains is a deadline that the team is now said to have missed. Engineers respond rationally to that by cutting corners on the parts of the work that are invisible, such as tests, migrations and the cleanup that keeps the next estimate from being worse, and so the estimate degrades the very codebase whose complexity made it unreliable. Meanwhile the hours spent in planning meetings, arguing over whether something is a five or an eight, are hours not spent shipping, and the arguments rarely improve the forecast.\n\nManagers will object that the business needs dates, and they are right that it needs something, but what it needs is a way to make good decisions under uncertainty, and a single number is a poor tool for that. A better one is to break work into pieces small enough that each can be finished in a day or two, to keep a steady flow of those pieces going to production, and to forecast from what the team has actually delivered over the last several weeks rather than from what anyone predicted. Throughput data is boring and unflattering, but it is honest, it improves on its own as the team changes, and it can be turned into a probability range that is more truthful than any point estimate: there is a good chance this lands in the next six weeks and a small chance it takes ten. Pair that with a habit of cutting scope when the range turns out to be wrong, and you have a planning system that responds to reality instead of arguing with it.\n\nStopping does not mean refusing to think about cost. It means deciding what a piece of work is worth, saying how much you are willing to spend on it, and shrinking the ambition until it fits, which is a conversation about value that estimating tends to crowd out. Teams that try it usually report that the first month feels reckless and the second feels like relief, because the energy that went into defending numbers goes back into the work, and the managers who were skeptical discover that they were never really relying on the estimates in the first place, only on the trust that a team which ships every week will keep doing so."
+}

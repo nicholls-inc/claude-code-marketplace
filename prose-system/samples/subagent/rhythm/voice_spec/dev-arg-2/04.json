@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a930d42dd9bd7038a",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28381,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 3305,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:47:44.974Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long individual pieces of work will take, and should count how much work they finish instead. This is a view about practice and not a law, but I think the evidence is strong enough that most teams would do better to act on it.\n\nThe first problem is that estimates are poor, and the errors are not evenly spread. In 2011 Bent Flyvbjerg and Alexander Budzier studied 1,471 IT projects. The average cost overrun was a modest 27 per cent, but one project in six overran its cost by an average of 200 per cent and its schedule by about 70 per cent. The damage sits in that tail. The tasks that go badly wrong are usually the ones nobody knew were hard, so a careful estimate cannot catch them. A story pointed at three is a guess about the parts of the work you can already see.\n\nThe second problem is what happens to the number afterwards. An engineer says a task will take about two weeks, and by the time it reaches a roadmap it has become a date. When the task takes three weeks, the team has missed a commitment it never really made. People respond by padding the next estimate, trimming tests, or saying little about trouble until it can no longer be hidden. The estimate ends up changing the work it was meant to describe.\n\nThe third problem is cost. Suppose six people spend ninety minutes a week in estimation sessions. That is nine hours a week, or about 450 hours a year, which is roughly eleven working weeks of one person's time. The output is a set of numbers that the team's own history shows to be unreliable.\n\nThe alternative is to measure what the team does. Keep items small enough that most take between one and five days, count how many are finished each week, and look at the last twelve weeks. If a team of six has finished between eight and fourteen items a week, a backlog of sixty items will take roughly four to eight weeks. That forecast takes five minutes, uses data the team already holds, and comes with an honest range. It also turns attention to the things that do help, which are cutting work into smaller pieces and deciding what to leave out.\n\nThe strongest objection is that the business needs dates. That is fair, and some work has a hard external deadline, such as a regulatory change or a contract. Even then, the useful question is what can be finished by that date, and a throughput range answers it better than a sum of task guesses. I would keep rough sizing when choosing between projects, at the level of \"this is about a week\" or \"this is about a quarter\". There the cost of being wrong is spread across a decision and is not pinned on one engineer.\n\nI expect that teams who try this will find their managers care less about the number than about being told early when it is moving. That is a prediction and not a finding. Stop estimating tasks, keep counting them, and report the range."
+}

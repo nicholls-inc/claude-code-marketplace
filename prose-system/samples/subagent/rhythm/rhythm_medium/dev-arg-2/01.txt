@@ -1,0 +1,15 @@
+Yes, Software Teams Should Stop Estimating
+
+Every engineer has lived through the same small drama. A manager asks how long a feature will take, the engineer thinks for a moment, and then offers a number that is part guess, part self-defense, and part hope. Three weeks later the number is wrong, and everyone acts surprised. We have repeated this ritual for decades, and it is time to admit that it does not work.
+
+The core problem is that software work is mostly discovery. If the task were fully understood, we would have automated it already, so what remains is the part nobody has done before. Asking someone to predict the duration of unknown work is asking for precision that does not exist. Studies of project outcomes keep showing the same thing, which is that estimates miss by wide margins, and the misses are skewed toward overruns. The tail risks are the ones that hurt, and no amount of story-point calibration captures them.
+
+Defenders of estimation say the number is not really a promise. In practice it always becomes one. A rough guess given in a hallway turns into a date on a roadmap, then into a commitment to a customer, and finally into a performance conversation. Engineers learn this quickly, so they pad. Managers learn that engineers pad, so they trim. The result is a negotiation dressed up as a forecast, and the real information, how uncertain the work actually is, gets lost on the way.
+
+Estimation also carries a heavy cost in time and attention. Planning sessions, pointing rituals, and re-estimation meetings eat hours that could go toward building something. Worse, they push teams toward large, up-front plans at the very moment when small, reversible steps would serve them better. A team that is busy defending its estimate has little appetite for discovering that the original plan was wrong.
+
+What should replace it is not chaos. Teams can slice work into pieces small enough that their size barely matters, then simply count how many pieces ship each week. That throughput is a measurement rather than a prediction, and it is far more honest. Pair it with a habit of showing working software often, and managers get something better than a date, namely a steady view of real progress. When someone needs a forecast, a range drawn from actual delivery history beats any single number a person invents in a meeting.
+
+Managers will worry that without estimates they cannot plan. But they are not planning now; they are consulting a fiction. Real planning means deciding what matters most, funding it for a fixed period, and checking in on results. Fixing the time and flexing the scope is something business leaders already understand from every other part of their work. It also moves the hard conversation to where it belongs, which is about what to cut rather than why the estimate was wrong.
+
+None of this means engineers should stop thinking about how hard things are. Talking through risk and complexity is valuable. The mistake is turning that conversation into a number and then holding people to it. Drop the number, keep the conversation, and spend the saved hours shipping.

@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0323e7ec63178a1d",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28382,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1198,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:32:19.623Z",
+  "valid": true,
+  "text": "A leap second is a single extra second added to the world's clocks so that civil time stays in step with the turning of the Earth. Two kinds of time are involved. One comes from atomic clocks, which count the vibrations of caesium atoms and keep a steady pace that varies by almost nothing over millions of years. The other comes from astronomy and is based on the planet's rotation, which is slightly irregular. Tides, movements of the Earth's core and the shifting of ice and water all change the length of a day by tiny amounts, and over the long run the day has been getting longer.\n\nCoordinated Universal Time, the basis of civil timekeeping, was set up in the early 1970s to follow the atomic clocks while staying within 0.9 of a second of the Earth's rotation. When the two drifted apart by that much, the International Earth Rotation and Reference Systems Service announced that an extra second would be inserted, usually at the end of June or December. On those occasions clocks showed 23:59:60 before moving on to midnight. The first was added in 1972, and 27 have followed. The most recent was on 31 December 2016.\n\nThe practice has caused trouble from the start. Most computers assume that every minute has 60 seconds, and a minute with 61 breaks that assumption. Leap seconds have been linked to software crashes and service outages, including problems at several large websites in 2012 and at Cloudflare after the 2016 insertion. Some companies handle the extra second by stretching it across a day, with each second made a fraction longer, but this is done in different ways by different firms and so creates its own disagreements. Because leap seconds arrive with only a few months' notice and cannot be predicted far ahead, systems that depend on precise timing, such as telecoms, satellite navigation and financial trading, must be updated each time.\n\nIn November 2022 the General Conference on Weights and Measures, which brings together national governments, voted to stop the practice. The change is meant to take effect by 2035. After that, the gap between atomic time and the Earth's rotation will be allowed to grow well beyond one second. No new limit has been fixed, though a minute has been mentioned, and it could take a century or more to reach. Supporters of the decision say that the gap is of no practical use to most people, while the cost to computer systems is real. Astronomers who track the sky by Earth's rotation will need to make their own corrections, as many already do."
+}

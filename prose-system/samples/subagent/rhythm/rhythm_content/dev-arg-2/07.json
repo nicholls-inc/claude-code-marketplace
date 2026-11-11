@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a4bf03a567b03c589",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28239,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1066,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:11:13.928Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating the estimate as something anyone is accountable for, because the practice consumes real time to produce numbers that are wrong in ways that cannot be corrected. Anyone who has sat through a planning meeting knows the pattern: a task is sized at three days, it takes nine, and nobody is surprised, because the only thing the estimate ever measured was how much of the problem the team could see before starting, and the part they could not see is precisely the part that sets the schedule. Software work is dominated by discovery, and discovery is by definition the portion you cannot size in advance. Decades of project data, from the Standish reports to the plain experience of every shop that has ever run a retrospective, show the same lopsided distribution, in which most tasks come in near the guess and a few blow past it by multiples, and those few account for most of the calendar.\n\nThe cost of the ritual is not only the meeting time, though a team of eight that spends two hours a fortnight debating story points has quietly spent a few engineer-weeks a year on theatre. The deeper cost is what happens once the number exists. A guess given under uncertainty hardens into a commitment the moment a manager repeats it upward, and from then on the engineer is no longer solving the problem in front of them but protecting a date, which pushes people to cut corners on tests, to skip the refactor that would have made the next change cheap, and to hide bad news until it is too late to act on. Padding is the rational response to being held to a number, so estimates inflate, managers discount them, engineers pad further, and the whole exchange becomes a negotiation in which accuracy is nobody's goal.\n\nThe usual defence is that the business needs dates, and it is a fair point, since people who sell, hire, and schedule launches around the roadmap cannot plan around a shrug. But what they need is a forecast, and a forecast can be had without anyone estimating a single task. Count how many items your team finishes per week over the last couple of months, keep the items roughly small by splitting anything that looks large, and you can say with an honest range how many will be done by a given date. This approach, which goes by names like throughput forecasting or flow metrics, uses what actually happened instead of what people hoped would happen, and it improves automatically as the data accumulates. It also makes the conversation healthier, because when a manager asks whether something will land by March, the answer becomes a probability drawn from history instead of a promise extracted from an optimist.\n\nWhat replaces estimation is mostly discipline about scope. Teams that do this well slice work until each piece is a day or two, argue about what to cut instead of how long things will take, and give stakeholders a rolling view of what is done and what is likely next, with the understanding that the order of the list is the real commitment and the dates are consequences of it. Some work will still deserve a rough order-of-magnitude judgment, such as whether a migration is a week or a quarter, and nothing here forbids that conversation. What should end is the habit of turning that judgment into a precise number, assigning it to a person, and measuring them against it later. Engineers will lose nothing by giving it up, and managers will get something better, which is a forecast they can actually trust."
+}

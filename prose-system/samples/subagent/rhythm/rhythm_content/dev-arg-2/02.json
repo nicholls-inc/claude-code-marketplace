@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "acacb584d205a2bf5",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28239,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 2142,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:31:44.370Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long individual pieces of work will take, and the reason is not that estimates are sometimes wrong but that they are wrong in a systematic direction, by an amount nobody can predict, while the ritual of producing them consumes hours that could have gone into the work itself. Anyone who has sat through a planning meeting where six engineers argue over whether a ticket is a three or a five knows the pattern: the number that emerges reflects the loudest voice and the most recent embarrassment far more than it reflects the code, and the ticket will take whatever it takes once someone opens the repository and discovers the migration nobody mentioned.\n\nThe deeper problem is that the uncertainty in software work lives exactly where an estimate cannot see it. A task is estimable when you have done it before, and software is the one trade in which doing something before means you would simply reuse the result, so what remains for the team to build is by definition the part nobody has done. Studies of large projects keep finding overruns with a heavy tail, in which most tasks land near their estimates and a few take ten times longer, and since the total is dominated by those few, the carefully refined estimates of the many small tasks add almost no information about when the whole will finish.\n\nThen there is what estimates do to the people who receive them. A manager hears \"about six weeks\" and writes it into a roadmap, the roadmap becomes a promise to a customer, and the engineer who offered the figure as a hopeful guess now owns a deadline, so the next round of estimates is padded, the round after that is padded again, and eventually the number measures how much a team distrusts its organization rather than how hard the work is. Teams respond to the pressure by cutting tests, skipping the refactor, and shipping the thing that matches the date instead of the thing that matches the need.\n\nStopping does not mean working without a plan. It means slicing work into pieces small enough that nobody argues about their size, ordering them by value, shipping continuously, and forecasting from what the team has actually finished, using throughput counted over the last several weeks, which can be computed in a spreadsheet in ten minutes and which in teams that have compared the two tends to match or beat the estimation-based alternative. When a stakeholder asks when a feature will land, the honest answer becomes a range drawn from real history along with a statement of what would change it, and the conversation shifts from defending a number to deciding what to cut or add.\n\nThe strongest objections come from managers who need to coordinate launches, sales commitments, and budgets, and those needs are real, but they are served better by a forecast that updates weekly than by a figure fixed in a meeting months earlier and never revised honestly. Hard external deadlines argue for scope control, since the date is fixed and the only variable left is what fits behind it. Teams that try this usually discover that the hours spent estimating were never buying certainty at all, only the comfort of having a number to point to when things went wrong."
+}

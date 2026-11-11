@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a03ea39e5841205b8",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 73793,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1229,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:22:00.671Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything; it moves heat that already exists outdoors into your house, and the reason this works on a cold day is that \"cold\" is relative. Air at minus five Celsius still holds a great deal of thermal energy, because heat only disappears entirely at around minus 273, so there is plenty to extract if you have a way of doing it. The machine does this with a sealed loop of refrigerant, a fluid chosen because it boils at a very low temperature, far below freezing at normal pressure. Outside, a fan pulls air across a coil of cold refrigerant, and because the refrigerant is colder than the air, heat flows into it and makes it evaporate, much as a puddle absorbs heat from its surroundings as it dries. The now-gaseous refrigerant passes into a compressor, which squeezes it, and compressing a gas makes it hot, in the same way a bicycle pump warms up as you use it. Raised to perhaps 50 or 60 degrees, the gas flows through a coil inside your home, where it is hotter than the water in your radiators or underfloor pipes, so it gives up its heat to them and condenses back into a liquid. That liquid then passes through an expansion valve, which drops its pressure and temperature sharply, and it returns outdoors, cold enough to start the cycle again. The compressor is the only part that needs significant electricity, and since it is moving heat rather than creating it, you get more energy out than you put in. The ratio is called the coefficient of performance. A typical modern air-source unit delivers around three units of heat for every unit of electricity on a mild day, and perhaps two to two and a half when it is near freezing or below, whereas even the best gas boiler can never exceed about 0.9 to 0.95, because some heat always escapes with the flue gases.\n\nFor a homeowner weighing up a replacement, the practical consequences matter more than the physics. Efficiency falls as the gap between outdoor temperature and the temperature your heating system needs gets larger, so a heat pump runs best when it delivers water at 35 to 45 degrees rather than the 70 or more that old boilers often produce. This means your existing radiators may be too small to emit enough heat at the lower temperature, and some will need upsizing, while a well-insulated house with draught-proofing needs a smaller machine and can run it more cheaply. It is worth having a proper heat-loss survey done before you accept any quote, because an oversized unit cycles on and off wastefully and an undersized one leans on its backup electric heater. Modern units are rated to keep working down to minus 15 or even minus 25 degrees, so a British, northern European or North American winter is within their range, though the colder it gets the more electricity you use per unit of heat delivered.\n\nCost is the other question. Installation is usually several times the price of a new gas boiler, though grants in many countries narrow the gap, and running costs depend heavily on the ratio of electricity to gas prices where you live. If electricity costs more than about three times as much per kilowatt-hour as gas, a heat pump may cost about the same to run as your boiler, and if the ratio is lower you will save money, particularly if you can use a time-of-use tariff or rooftop solar. You also need space for an outdoor unit and usually a hot water cylinder indoors, and you should expect some fan noise, comparable to a quiet refrigerator at a few metres. If your boiler is near the end of its life, your house is reasonably insulated and you can get a grant, replacing it now makes good sense, whereas if the boiler is young and the house leaks heat, fixing the insulation first and waiting is a sound alternative."
+}

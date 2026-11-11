@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "afd247ed9ae770bc0",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28379,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 897,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:23:49.029Z",
+  "valid": true,
+  "text": "A lithium-ion cell is normally charged in two stages, known as constant current followed by constant voltage. The charger is a controlled source with two limits: a maximum current and a maximum voltage. For a typical cell with a graphite anode and a cobalt-based or nickel-based cathode, the voltage limit is 4.2 V, and the current limit is set as a multiple of the cell's capacity. A 3 Ah cell charged at 1C receives 3 A.\n\nIn the first stage the charger holds the current fixed and lets the terminal voltage rise. During this period lithium ions leave the cathode, cross the electrolyte and the separator, and insert themselves between the graphite layers of the anode. Electrons travel through the external circuit to balance them. The terminal voltage is the cell's open-circuit voltage, which depends on how much lithium is in each electrode, plus the current multiplied by the cell's internal resistance. At 3 A and an internal resistance of 30 milliohms, the resistive term is about 0.09 V. The open-circuit voltage climbs from about 3.0 V when empty to roughly 4.1 V when nearly full, so the terminal voltage reaches 4.2 V before the cell is actually full. Most cells reach this point at about 70 to 80 per cent of their capacity.\n\nThe second stage begins at that point. The charger holds the voltage at 4.2 V and lets the current fall as the cell requires. Charging cannot simply continue at constant current, because the voltage would exceed 4.2 V. At higher voltages the electrolyte begins to oxidise at the cathode, and lithium metal can plate on the anode surface, which shortens the cell's life and can cause internal short circuits.\n\nThe current falls for two reasons. As the open-circuit voltage approaches 4.2 V, the difference between it and the fixed terminal voltage shrinks, and the current is that difference divided by the internal resistance. In addition, the graphite fills up, so lithium arriving at the surface has to diffuse further into the particles. Diffusion in the solid is slow, and this limits how fast the remaining capacity can be filled. The result is a roughly exponential decay of current.\n\nThe charger ends the cycle when the current drops to a set cut-off, commonly 0.05C to 0.1C. For the 3 Ah cell this is 150 to 300 mA. The constant-voltage stage can take about as long as the first stage, while adding only 20 to 30 per cent of the capacity. Fast-charging systems often shorten the process by stopping the constant-voltage stage early or by stepping the current down in stages."
+}

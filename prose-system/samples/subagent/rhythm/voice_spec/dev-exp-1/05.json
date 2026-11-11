@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a537c3a3a65cf9cc8",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28385,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 3041,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:54:07.007Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat from one place to another, and it can move it from a cold place to a warm one because it uses electricity to drive a compressor. Heat still flows naturally from hot to cold, and the machine works against that tendency, much as a pump lifts water uphill.\n\nCold air is not empty of heat. Air at 0°C is 273 degrees above absolute zero and holds a good deal of thermal energy. A heat pump has an outdoor unit with a fan that draws air across a coil. Inside the coil is a refrigerant, a fluid chosen because it boils at a very low temperature. Propane, which some newer units use, boils at about minus 42°C at normal pressure. Air passing over the coil is warmer than the refrigerant, so the refrigerant takes in heat from it and turns to gas, even when the air is at minus 5°C.\n\nThe gas then goes to a compressor. Compressing a gas raises its temperature, and the compressor brings the refrigerant to somewhere around 60 to 80°C. The hot gas passes through a second heat exchanger, where it gives up its heat to the water in your heating system, and as it cools it condenses back to liquid. The liquid goes through an expansion valve, which drops its pressure and temperature, and returns to the outdoor coil to start again. A fridge runs the same cycle. It moves heat out of the food compartment and releases it into your kitchen.\n\nWhat matters to a homeowner is the amount of heat delivered for each unit of electricity used. A gas boiler turns at best about 90 per cent of the energy in the gas into heat. A heat pump delivers more heat than the electricity it consumes, because most of the energy is collected from the air and the electricity only moves it. Over a heating season, a well installed unit in Britain delivers between 2.5 and 4 kWh of heat for each 1 kWh of electricity. This ratio is called the coefficient of performance. It drops in colder weather, because the compressor has to lift the heat across a larger temperature gap, and it drops when the water being heated has to be hotter.\n\nThat second point bears on your house. A gas boiler usually sends water to the radiators at 60 to 75°C. A heat pump works best at 35 to 50°C. At those lower temperatures a radiator gives out less heat for its size, so some of yours may need replacing with larger ones, or with fan-assisted models. A poorly insulated house may not reach a comfortable temperature at all. A room-by-room heat loss calculation before installation will show which rooms are affected, and it is reasonable to ask for one before you accept a quote. Loft insulation and draught proofing are often done first.\n\nOn running costs, gas in recent years has cost roughly a third to a quarter as much per unit as electricity. With a seasonal coefficient of 3, a heat pump costs about the same to run as a gas boiler. At 4 it costs less, and below 3 it costs more. Tariffs that charge less for electricity overnight can improve the figures, particularly if you also have a hot water cylinder that can store heat. The installation costs several thousand pounds more than a new boiler, and grants have been available in England and Wales, so check the current terms before you decide.\n\nMy view is that a heat pump suits a house that is reasonably well insulated, has room outside for the unit and inside for a cylinder, and needs a new boiler soon. A house with solid walls, little insulation and small radiators needs work done first, and in that case keeping a gas boiler for a few more years while you improve the building may be the better choice."
+}

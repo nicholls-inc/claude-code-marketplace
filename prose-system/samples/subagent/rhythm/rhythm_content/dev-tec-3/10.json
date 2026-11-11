@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa7bd08f5a02f8005",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28237,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 908,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:39:18.918Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant current followed by constant voltage, usually abbreviated CC-CV, and the reason for the two stages comes from the electrochemistry at the electrodes. During charging, an external supply drives electrons through the circuit from the cathode to the anode while lithium ions leave the cathode, which is typically a layered metal oxide, travel through a liquid electrolyte and a porous separator, and insert themselves between the graphite layers of the anode in a process called intercalation. The cell's terminal voltage is the open-circuit voltage, which is set by the difference in lithium chemical potential between the two electrodes and rises as the anode fills and the cathode empties, plus an overpotential equal to the current multiplied by the cell's internal resistance, which lumps together ohmic losses, charge-transfer kinetics at the particle surfaces, and the cost of moving ions through the electrolyte. In the first stage the charger holds the current fixed, commonly near the 0.5C to 1C rate, where 1C means a current that would nominally fill the cell in one hour, and the terminal voltage climbs steadily until it reaches the upper limit, about 4.2 V for a conventional cobalt-based cell, a ceiling chosen because higher potentials oxidize the electrolyte and degrade the cathode structure. Once that limit is reached the charger can no longer keep pushing constant current without exceeding it, since the overpotential would add to an already rising open-circuit voltage, so it switches to holding the voltage fixed and lets the current fall on its own. The decline is natural and has a physical cause: with terminal voltage clamped, the open-circuit voltage keeps creeping upward as lithium accumulates, which shrinks the remaining difference available to drive current across the internal resistance, and the current therefore decays roughly exponentially. A second contribution comes from diffusion inside the solid particles, because lithium arrives at the surface of each graphite or oxide grain faster than it can migrate inward, leaving a surface that is nearly full while the core is still hungry, and as the concentration gradient flattens the surface can accept less and less. The charge is declared complete when the current has tapered to a small fraction of the starting value, often around 0.05C, at which point the cell holds nearly all of its capacity. Engineers accept the slow tail because pushing the voltage higher to finish sooner would trigger lithium plating, in which metallic lithium deposits on the anode surface instead of intercalating, shortening life and creating a safety hazard, so the taper is a deliberate trade of time for longevity and safety."
+}

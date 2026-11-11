@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a960fbb04be9e5d9e",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28240,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 794,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:37:37.996Z",
+  "valid": true,
+  "text": "The Earth does not spin at a perfectly steady rate, and a leap second is the small correction that keeps the clocks on our walls and phones in step with it. Since 1972 the world has run on Coordinated Universal Time, which is built from atomic clocks that count the vibrations of caesium atoms with extraordinary regularity, but the planet itself, whose rotation originally defined the day, is a less dependable timekeeper, slowing a little over the long run because of tidal friction with the Moon and wobbling unpredictably from year to year with shifts in its molten core, its oceans and its ice. When the two drift apart by nearly a second, the International Earth Rotation and Reference Systems Service tells the world to insert an extra second at the end of a June or December day, so that a minute briefly runs to sixty-one seconds and the clock reads 23:59:60 before rolling over to midnight. Twenty-seven of these have been added, the last at the end of 2016. Astronomers and navigators liked the arrangement because it kept civil time tied to the sky, but computing has come to resent it. Most software assumes that a minute has exactly sixty seconds, so a sudden sixty-first can confuse systems that must record events in strict order, and leap seconds have been blamed for crashes and outages at major internet companies and for headaches in financial trading, telecoms, power grids and satellite navigation. Because they cannot be predicted far in advance, engineers cannot program them in ahead of time, and each one has to be handled as a special case, with firms improvising their own workarounds, such as smearing the extra second across a whole day, which means that their clocks do not agree with one another. In 2022 the General Conference on Weights and Measures, the international body that oversees the definition of the second, voted to abandon the practice by 2035, with the precise tolerance between atomic and astronomical time to be set later. Time will not stop being tied to the Earth altogether, since the gap is expected to be allowed to grow to a minute or more, and some future correction, perhaps a leap minute, may eventually be needed, though that is a problem for the next century. A further twist is that the Earth has lately been spinning slightly faster than expected, which could in principle call for a negative leap second, something never tried and likely to be even more disruptive, and that gave the decision added urgency."
+}

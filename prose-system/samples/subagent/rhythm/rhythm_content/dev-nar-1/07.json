@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8ff6e82d44254fbd",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28242,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1486,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:12:28.761Z",
+  "valid": true,
+  "text": "In the late summer of 1854, a violent outbreak of cholera struck the crowded Soho district of London, and within about ten days, more than five hundred people living within a few hundred yards of one another had died. Cholera is a disease that drains the body of fluid through severe vomiting and diarrhea, and in those days it could kill a healthy adult within a day or two. Nobody then understood what caused it. The prevailing belief, held by most physicians and officials, was that diseases of this kind spread through \"miasma,\" a poisonous foul air rising from rotting waste, filthy streets and damp ground, and the remedy that followed from this belief was to clean up smells.\n\nJohn Snow, a physician who lived and worked nearby, had come to a different view years earlier. He was a respected man, known for having pioneered the careful use of anesthesia, and he had given chloroform to Queen Victoria during childbirth, but on cholera he was something of an outsider. Having studied earlier epidemics, he reasoned that because the illness began with violent trouble in the gut rather than in the lungs, whatever caused it must be swallowed, and that it was probably carried in water contaminated by the waste of the sick. He had published this idea in 1849 without persuading many people, and the Broad Street outbreak gave him the chance to test it against a single, concentrated event.\n\nHe began by doing something that sounds obvious now but was not routine then, which was to go door to door and ask. He obtained the list of the dead from the local registrar and visited the households, learning where each victim had lived and, when he could, what the family had drunk. At that time most people in the area had no running water at home and fetched it from public pumps scattered through the streets, so the question of which pump a family used was a natural one to ask. Snow marked each death on a map of the neighborhood, and the dots clustered thickly around a pump on Broad Street, with the number of deaths thinning out as one moved away from it.\n\nA cluster on a map is suggestive but proves little, since people who live close together share many things besides a water supply, and Snow knew that critics would say so. What made his case stronger was the way he dealt with the cases that did not fit and seemed at first to contradict him. A workhouse, which housed several hundred poor residents, stood close to the pump but had suffered only a handful of deaths, and Snow found that it had its own well and did not rely on the Broad Street pump. A brewery on the same street had also been spared, and its workers, who were given free beer, were apparently not drinking from the pump either, and the brewery too had its own supply. In the opposite direction, he found deaths among people who lived far from Broad Street. One was a woman in Hampstead, some distance away, who had died after the pump's water was carried to her daily in a bottle because she liked its taste, and her niece had also died after drinking it.\n\nOn the evening of 7 September, Snow went before the parish board of guardians and urged them to act. The following day, the handle of the Broad Street pump was removed, so that no one could draw water from it. The epidemic was already declining by then, since many residents had fled the district and the outbreak may well have been past its peak, which is why historians have long debated how much the removal itself saved. But the act became a symbol of the principle Snow was arguing for, that preventing disease could begin with acting on a discovered pathway of transmission before the underlying cause was fully understood.\n\nThe explanation came shortly afterward and from an unexpected quarter. A local clergyman, Henry Whitehead, who had at first doubted Snow's theory, set out to disprove it and ended by strengthening it. Through his own inquiries among neighbors he identified what is now called the index case, an infant who had fallen ill with diarrhea just before the outbreak, and whose mother had washed the child's soiled cloths and emptied the water into a cesspool beneath the house. Inspection showed that the cesspool lay only a few feet from the well supplying the pump and that its brickwork was decayed, so that sewage could seep through into the drinking water.\n\nOfficial opinion was slow to move. A committee reviewing the outbreak declined to accept the water explanation, and Snow died in 1858 without seeing it widely embraced. Only in the following decades, as the microscopic organism behind cholera was identified and as the rebuilding of London's sewers coincided with the disappearance of the disease, did his reasoning come to be regarded as foundational, and his careful tracing of cases on a map is now counted among the origins of modern epidemiology."
+}

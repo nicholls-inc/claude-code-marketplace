@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "acecd3fc8df640e1a",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28237,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 932,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:07:57.783Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged by forcing current through it in the direction opposite to discharge, which pushes lithium ions out of the cathode, usually a layered metal oxide, across a porous separator soaked in liquid electrolyte, and into the graphite anode, where they slot between carbon layers in a process called intercalation. The standard protocol is constant-current followed by constant-voltage, abbreviated CC-CV. In the first phase a charger drives a fixed current, commonly between 0.5 and 1 times the cell's capacity per hour, and lets the terminal voltage rise on its own from roughly 3.0 V toward the upper limit, typically 4.2 V for a cobalt-based chemistry. Most of the charge, often 70 to 80 percent, is delivered here. Once the terminal voltage reaches the limit, the charger stops forcing current and instead holds the voltage fixed, and from that point the current is whatever the cell will accept, which falls roughly exponentially until it drops below a cutoff, often around a twentieth to a tenth of the capacity rate, at which point charging ends.\n\nThe taper is a consequence of the voltage ceiling rather than of the cell running out of ions to move, and it helps to separate the cell's internal states. The terminal voltage equals the open-circuit voltage, which is a function of how full the electrodes are, plus the current times the cell's internal resistance, and that resistance bundles together ohmic losses in the electrodes and electrolyte, charge-transfer resistance at the particle surfaces, and the slow diffusion of lithium within the solid particles. During constant-current charging the resistive term is a significant fraction of the terminal voltage, so the cell reaches 4.2 V while the particle interiors are still only partly filled, because lithium has piled up near the surfaces faster than it can diffuse inward. Holding 4.2 V then means the resistive drop must shrink as the open-circuit voltage creeps up toward 4.2 V, and the only way for the drop to shrink is for the current to fall. As the current falls, the surface concentration gradients relax, lithium diffuses deeper, the open-circuit voltage rises a little more, and the loop continues with ever smaller steps, which gives the long exponential tail familiar from an RC circuit charging through a resistor.\n\nThe ceiling cannot simply be raised to speed this up, because above about 4.2 V the electrolyte oxidizes at the cathode and the cathode structure degrades, and because high currents near full charge raise the anode potential close to that of metallic lithium, risking plating that causes capacity loss and short circuits. For that reason the taper is the price of a cell that lasts for thousands of cycles."
+}

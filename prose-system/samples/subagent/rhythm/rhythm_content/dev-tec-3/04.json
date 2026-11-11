@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7bb8f41b76ec069f",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28237,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 909,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:53:14.575Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant current followed by constant voltage, usually abbreviated CC-CV, and the slowing near full charge is a direct consequence of how the second stage works. In the first stage the charger acts as a current source, forcing a fixed current into the cell, typically between half and one times the cell's capacity per hour, while the cell voltage is allowed to rise freely. Lithium ions leave the cathode, which is a lithium metal oxide, travel through the electrolyte and separator, and insert themselves between the graphene layers of the graphite anode in a process called intercalation, while electrons take the external route through the charger. As the anode fills, its potential relative to lithium falls and the cathode's rises, so the terminal voltage climbs along a curve set by the electrochemistry, roughly from 3.0 V to 4.2 V for a common cobalt-based cell. That terminal voltage is not the same as the open-circuit voltage of the electrodes, because the current flowing through the cell's internal resistance, which includes ohmic losses in the electrolyte and contacts plus charge-transfer and diffusion overpotentials, adds a drop equal to current times resistance on top of it. When the terminal voltage reaches the upper limit, here 4.2 V, the charger can no longer hold the current constant without exceeding that limit, and it switches to the second stage, in which it holds the voltage fixed and lets the current fall on its own. The limit exists because pushing the cathode much beyond that potential oxidises the electrolyte and degrades the cathode structure, while an anode driven too close to 0 V against lithium risks plating metallic lithium, which shortens life and can create a short circuit. During the constant-voltage stage the electrodes continue to equilibrate toward a higher state of charge, so their open-circuit voltage rises toward the fixed terminal voltage, and the gap between the two, which is what drives current across the internal resistance, shrinks. Current therefore decays roughly exponentially, much like a capacitor charging through a resistor, although the diffusion of lithium within the solid particles, which becomes slow as the graphite approaches full occupancy, makes the tail longer than a simple resistor-capacitor model predicts. The charger ends the process when the current has fallen to a small threshold, often around a tenth or less of the capacity per hour, and declares the cell full. The practical result is that the first stage delivers perhaps 70 to 80 percent of the capacity quickly, and the remaining fraction takes a comparable time, which is why fast chargers advertise the time to 80 percent rather than to 100."
+}

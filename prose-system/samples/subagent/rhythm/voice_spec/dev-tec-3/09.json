@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9e75ec6395a70dcb",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28379,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 921,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:31:47.701Z",
+  "valid": true,
+  "text": "A lithium-ion cell is normally charged in two stages, known as constant current followed by constant voltage. The charger first pushes a fixed current into the cell, commonly between 0.5C and 1C, where 1C is the current that would fill the rated capacity in one hour. A 3 Ah cell at 1C takes 3 A. While this current flows, the cell voltage rises from about 3.0 V towards the upper limit, which is 4.2 V for most cells with a graphite negative electrode and a cobalt-based positive electrode. Some chemistries use a different limit, such as 3.6 V for lithium iron phosphate.\n\nCharging works by moving lithium ions from the positive electrode, through the electrolyte and a porous separator, into the graphite of the negative electrode, where they sit between the carbon layers. Electrons travel the same way round through the external circuit. The voltage across the terminals is the difference between the two electrode potentials plus the drop across the cell's internal resistance. That resistance is typically a few tens of milliohms for a small cell, so at 3 A the drop is around 0.1 V. The measured voltage is therefore higher than the open-circuit voltage while current flows.\n\nWhen the terminal voltage reaches 4.2 V, the charger stops holding the current and holds the voltage instead. This is the second stage. The limit exists because higher voltages speed up electrolyte decomposition and can cause lithium metal to plate on the negative electrode, which reduces capacity and is a safety risk. With the voltage fixed, the current must fall as the cell fills. The open-circuit voltage of the cell rises as it takes on charge, so the gap between the fixed terminal voltage and the open-circuit voltage narrows. The current is roughly that gap divided by the internal resistance, so it decays towards zero.\n\nA second effect adds to this. Near full, the graphite has few empty sites left, and lithium must diffuse deeper into the particles to find them. Diffusion in solid graphite is slow, so concentration builds up at the particle surfaces, which pushes the electrode potential up faster than the bulk charge would suggest. The cell reaches the voltage limit earlier, and the constant-voltage stage then spends time letting the lithium spread inward.\n\nThe charger ends the cycle when the current has dropped to a cut-off, often 0.05C to 0.1C. At that point the cell holds close to its full capacity. The first stage delivers roughly 70 to 80 per cent of the charge in about an hour at 1C, and the constant-voltage stage takes a further hour or so for the remainder. Lowering the voltage limit shortens the second stage but leaves some capacity unused."
+}

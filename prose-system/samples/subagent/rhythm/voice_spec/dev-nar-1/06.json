@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae8d4e470e51b209c",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28384,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1361,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:05:24.397Z",
+  "valid": true,
+  "text": "In August 1854 London was crowded, poorly drained and hot, and cholera had returned to the city. Cholera is an illness of the gut that causes violent diarrhoea and can kill a healthy adult within a day or two. At that time most doctors held that it spread through \"miasma\", a foul air given off by rotting matter and filthy streets. John Snow, a physician who lived in Soho and had given anaesthetics to Queen Victoria, disagreed. He had argued in a pamphlet in 1849 that cholera was passed on by something swallowed, most likely in drinking water, and that it acted on the body as a poison that multiplied. Few people had accepted this, and he had no microscope evidence to offer.\n\nThe outbreak that tested his idea began on 31 August in the streets around Broad Street, a short walk from his home. Within three days more than a hundred people in the neighbourhood were dead. By 10 September, about 500 had died in ten days, and many of the families who could afford to leave had already gone. Snow knew the area well, and he began to visit houses and ask who had died, where they lived, and where they got their water.\n\nHe started with the official death records. The General Register Office listed the addresses of the dead, and Snow marked them on a street map of the district. Most of the deaths lay close to a public water pump in Broad Street, near the corner with Cambridge Street. People in Soho drew their water from a number of pumps, and this was one of the busiest. Snow noted that there were few deaths among people who lived nearer to other pumps, and that many of the dead had been in the habit of fetching water from Broad Street even when they lived some way off.\n\nThe cases that did not fit the pattern were the most useful to him. A workhouse on Poland Street held about 535 inmates, yet only five of them died. Snow found that the workhouse had its own well and also took water from a piped supply. A brewery on Broad Street employed around seventy men, and none of them died. The men were given a daily allowance of beer, and the brewery had its own well, so they had little reason to use the pump. In the other direction, a woman in Hampstead died after her family sent a cart to Broad Street for bottles of water she preferred the taste of. Her niece, who also drank it, died as well, though no other cholera was reported in their part of Hampstead.\n\nOn 7 September Snow went before the Board of Guardians of St James's parish and urged them to remove the handle from the pump. They agreed, and the handle was taken off the next day. Deaths were already falling by then, probably because so many residents had fled or had already died, so the removal cannot by itself be shown to have ended the outbreak. Snow said so himself in his later writing.\n\nHe kept looking for the source. A local clergyman, Henry Whitehead, had at first thought Snow mistaken but began his own enquiries among his parishioners. Whitehead found that the first known case was a baby girl at 40 Broad Street, who had fallen ill on 28 August. Her mother had washed the child's soiled nappies and tipped the water into a cesspool a few feet from the pump's well. When the cesspool was examined, its brick lining was found to be decayed, and the water could seep through to the well. Whitehead and Snow concluded that the well had been fouled in this way.\n\nThe official response was not favourable. A committee of the General Board of Health looked into the outbreak and reported that it could not accept Snow's explanation. It kept to the view that cholera was spread through the air. The pump handle was replaced in the autumn of 1854. Snow died in 1858, aged 45, still outnumbered by those who held to miasma.\n\nHis view was borne out over the following years. Later in the 1850s London built a new system of sewers, which kept sewage away from the river and the wells and was designed mainly to deal with the smell. In 1883 the German physician Robert Koch identified the bacterium that causes cholera, and the idea that it travels in water became settled medical opinion. Snow's map and his house-to-house enquiries are now taught as an early and clear example of tracing a disease to its source by counting cases and asking where they occurred."
+}
