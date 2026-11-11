@@ -81,3 +81,11 @@ Pilot results:
 - Model served in all 40: `claude-sonnet-5-5`. No run used a tool. Length 547 to 782 words.
 - Pooled profile for this one brief, about 6,500 to 7,100 words per condition. Em dashes are 0.0 per 1,000 words in every condition, the baseline included. Combined joiners per 1,000 words: baseline 7.3, `no_em_dash` 2.0, `no_joiners` 0.0, `vary_length` 2.5. One brief is not a result for experiments 1 to 3.
 - The other 440 runs are not started. The owner decides how to handle the relayed message first.
+
+### The 480 runs: relay differs between workflows
+
+- The owner chose to rerun all 480 under one neutral message and replied "Continue".
+- Group 1, the three explanation briefs, was launched in the turn that answered that message. Its 120 subagents were shown "Continue" as a relayed user request, then the condition's prompt.
+- Groups 2 and 3, the argument and narrative briefs, were launched in turns that followed a workflow's completion notice. Their subagents were shown no relayed request, only the condition's prompt inside the workflow frame. The harness relays a user message only when the launching turn answers one.
+- The no-relay context is the one closer to the handoff. Group 1 is therefore being rerun without the relay after group 4, so that all 480 runs share one context. This adds 120 runs to the 480 the owner approved.
+- The 120 "Continue" samples are kept under `samples/subagent/exp1-3-relayed-continue/`. Comparing them with the rerun shows whether the relayed word changes the profile.
