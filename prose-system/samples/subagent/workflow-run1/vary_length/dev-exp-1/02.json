@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2dfb804be7d2197a",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What’s wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is.",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25360,
+    "cache_read_input_tokens": 47293,
+    "output_tokens": 1312,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:38:35.286Z",
+  "valid": true,
+  "text": "**How a heat pump heats your house when it is colder outside**\n\nIt sounds like a trick. How can a machine warm your home using air that is colder than the room you are trying to heat? The answer is that a heat pump does not make heat by burning anything. It moves heat that already exists.\n\nStart with a basic fact: \"cold\" is only a relative term. Air at 0°C still holds a lot of thermal energy. It holds less than air at 20°C, but there is plenty to harvest. Heat naturally flows from warm things to cooler things, and a heat pump forces it to go the other way, from the cold outdoors to the warm indoors. That takes work, which is why the machine needs electricity.\n\nHere is how it manages that. The system is a sealed loop containing a refrigerant, a fluid that boils at a very low temperature, far below freezing. Outside, a fan blows air across a coil of this refrigerant. Even though the air feels bitter to you, it is warmer than the refrigerant, so the refrigerant absorbs heat and evaporates into a gas. Your fridge does the same thing, except in reverse: it pulls heat out of the food and dumps it into your kitchen.\n\nNext comes the compressor, the part that does the real work. It squeezes the gas, and squeezing a gas makes it hot. This is the same reason a bicycle pump warms up as you use it. The refrigerant now sits at perhaps 50 to 60°C, well above room temperature. It flows through a second coil inside your home, where it gives up its heat to your radiators, underfloor pipes or ducted air. As it cools, it condenses back into a liquid. A valve then drops its pressure, which chills it sharply, and the cycle starts again.\n\nThe payoff is efficiency. A gas boiler turns, at best, about 90 to 95 percent of its fuel into heat. A heat pump delivers roughly three units of heat for every one unit of electricity it uses, because most of the energy is simply carried in from outside. Engineers call this ratio the coefficient of performance. In mild weather it can climb higher. In a hard freeze it falls, though modern machines still work well below -10°C.\n\nThat brings us to what matters for your decision.\n\n**Things to weigh up**\n\n- **Running cost.** Electricity usually costs more per kilowatt-hour than gas, so the efficiency advantage has to outweigh that gap. At a coefficient of performance near three, it often does, but check your local tariffs.\n- **Your home's insulation.** Heat pumps deliver warmth at lower temperatures than a boiler does. A draughty, poorly insulated house will need a bigger, costlier unit, and may feel less cosy.\n- **Your emitters.** Older radiators sized for hot boiler water may be too small. Some need swapping for larger ones. Underfloor heating suits heat pumps very well.\n- **Upfront price.** Installation costs more than a new boiler, often by a few thousand pounds or dollars. Grants and subsidies can narrow the gap, so look for what your region offers.\n- **Space and noise.** You need room outside for the unit, and a hot-water cylinder inside. Modern outdoor units are fairly quiet, but placement near a bedroom window deserves thought.\n- **Carbon.** The cleaner your electricity grid becomes, the lower the emissions of every unit of heat you buy.\n\n**A sensible next step**\n\nDo not guess. Ask an accredited installer for a heat-loss survey of your home. It will tell you how much heat you actually need on the coldest day, whether your radiators will cope, and what the realistic running costs will be. If your boiler is near the end of its life, that survey is especially worth doing now, before the old one fails in January and the decision gets made for you."
+}

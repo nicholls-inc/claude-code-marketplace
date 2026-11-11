@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a3c2e5df3f6abacdf",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What’s wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is.",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72640,
+    "output_tokens": 1661,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:41:48.947Z",
+  "valid": true,
+  "text": "**How a heat pump can heat your house when it is colder outside**\n\nIt feels like a contradiction: how can a machine pull warmth out of freezing air and put it into a warm house? The answer is that a heat pump does not make heat by burning anything. It moves heat that already exists, and \"cold\" air still holds plenty of it.\n\n**Cold is relative**\n\nHeat is the energy of moving molecules, and that energy only disappears at absolute zero, about -273C. Air at 0C, or even -10C, is still a very long way above that. So outdoor air always contains heat that can be collected, provided you have a way to concentrate it and move it somewhere useful.\n\n**The refrigerant loop**\n\nA heat pump is essentially a fridge run in reverse. A sealed circuit of refrigerant, a fluid that boils at a very low temperature (around -50C for modern refrigerants such as R32), does the work in four steps:\n\n1. **Evaporator (outside unit).** A fan blows outdoor air over a coil containing cold liquid refrigerant. Because the refrigerant boils at such a low temperature, even -5C air is warm enough to make it evaporate. Evaporating absorbs heat, so the refrigerant picks up energy from the air.\n2. **Compressor.** This squeezes the refrigerant gas. Compressing a gas heats it up, just as a bicycle pump gets warm. The gas leaves the compressor much hotter than your house, typically 50 to 70C or more.\n3. **Condenser (inside).** The hot gas passes through a heat exchanger that warms your radiators, underfloor heating or hot water cylinder. As it gives up heat, it condenses back to a liquid, releasing the energy it collected outdoors plus the energy added by the compressor.\n4. **Expansion valve.** The liquid is released through a narrow valve, its pressure and temperature drop sharply, and it is cold again, ready to repeat the cycle.\n\nThe compressor raises the temperature of the heat so it can flow into a warm house. Heat naturally flows from hot to cold, and the compressor is what makes the refrigerant hotter than your radiators.\n\n**Why this beats a gas boiler on efficiency**\n\nA gas boiler turns fuel into heat, and the best ones reach roughly 90 to 95 percent efficiency. A heat pump uses electricity only to run the compressor and fans, and it delivers several times that energy as heat. This ratio is called the coefficient of performance (COP). A COP of 3 means that 1 kWh of electricity delivers 3 kWh of heat: about 2 kWh is collected from the air and about 1 kWh comes from the electricity. Over a whole winter, a good installation typically averages a seasonal COP of around 2.5 to 4, which is 250 to 400 percent efficient.\n\n**The catch: colder means harder work**\n\nPerformance falls as the gap between outside air and your flow temperature widens. At 7C outside, a COP of 3.5 to 4 is normal. At -5C it may be nearer 2.5. Modern units still operate down to about -15C to -25C, but they use more electricity per unit of heat. This is also why low flow temperatures matter. Radiators run at 35 to 45C instead of 70C, so the compressor has less lifting to do, and well-insulated homes with larger radiators or underfloor heating get the best results.\n\n**What this means for your decision**\n\n- **Insulation and radiators.** A leaky house or small, old radiators may need upgrades so the system can run at lower temperatures. Ask for a heat loss survey.\n- **Running costs.** Electricity costs more per kWh than gas, so a COP around 3 is needed just to break even, and a higher one to save. Check your tariff, and consider a heat pump or time-of-use tariff.\n- **Upfront cost.** Installation is more expensive than a boiler, though grants (such as the UK Boiler Upgrade Scheme, if you are in England or Wales) can narrow the gap.\n- **Space.** You need room for an outdoor unit and usually a hot water cylinder.\n- **Carbon.** Heat pumps cut emissions considerably, and more so as the grid decarbonises.\n\nIf your home is reasonably insulated and you can run radiators at lower temperatures, a heat pump is often a sound replacement. Get at least two quotes that include a heat loss calculation, not just a standard unit swap."
+}

@@ -1,0 +1,25 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists outside and delivers it indoors. That sounds odd, because cold air feels like it has nothing to give. In physics terms, though, cold is relative. Air at minus 5 degrees Celsius still holds a great deal of thermal energy. Absolute zero is about minus 273, so there is plenty left to collect.
+
+Your fridge works the same way. It pulls heat out of the food compartment and dumps it into your kitchen through the coils on the back. A heat pump is a fridge pointed the other direction. The cold side faces the outdoors and the warm side faces your home.
+
+Here is how the cycle works. A sealed loop contains a refrigerant, a fluid that boils at very low temperatures. Outside, a fan blows air across a coil holding cold refrigerant. Even when the air is freezing, it is warmer than the refrigerant, so heat flows into the liquid and makes it evaporate into a gas. Next, a compressor squeezes that gas. Compressing a gas heats it sharply, much as a bicycle pump warms when you use it. The gas can now reach 50 or 60 degrees, hotter than your radiators need to be. This hot gas passes through a second coil inside the house, where it hands its heat to your heating water or indoor air and turns back into liquid. Finally an expansion valve drops the pressure, the refrigerant becomes very cold again, and the loop restarts.
+
+The compressor is what lets heat travel from cold to warm. Heat naturally flows only from hot to cold, so the machine needs electricity to push it the other way. That electricity is your running cost.
+
+The payoff is efficiency. A gas boiler turns about 90 percent of its fuel into heat at best. A heat pump delivers roughly three units of heat for every one unit of electricity it uses. Engineers call this the coefficient of performance. Most of the energy is borrowed from outdoor air, and you only pay for the electricity that runs the compressor and fan. On a mild day the ratio can climb above four. On a very cold day it drops, perhaps to two, but it stays above one, which means it still beats a plain electric heater.
+
+Modern units keep working well below freezing. Many are rated to run at minus 20 degrees Celsius and some go lower. They may run a short defrost cycle when frost builds on the outdoor coil, and you may notice a brief burst of steam. That is normal.
+
+What does this mean for your decision? Consider these points.
+
+First, running cost depends on the price gap between electricity and gas. If electricity costs more than three times as much per unit as gas, the savings shrink. Check your tariff, and ask about time of use rates, which can lower costs if you heat when power is cheap.
+
+Second, insulation matters. A heat pump works best at lower flow temperatures, so a well insulated home with good radiators or underfloor heating suits it. A draughty house with small old radiators may need upgrades first.
+
+Third, the upfront cost is higher than a new boiler. Installations commonly run several thousand pounds more, although government grants in many countries cut that figure substantially.
+
+Fourth, you need outdoor space for the unit and somewhere inside for a hot water cylinder.
+
+Fifth, think about the future. Gas boilers face tightening rules and carbon costs, and the electricity grid keeps getting cleaner, so a heat pump should look better with each passing year.
+
+Ask two or three installers for a survey and a heat loss calculation. That will tell you the real running costs for your home and show whether the numbers work in your favour.

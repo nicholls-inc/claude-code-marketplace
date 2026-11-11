@@ -1,0 +1,25 @@
+A heat pump can warm your house on a cold day because it moves heat instead of making it. Heat exists in outdoor air even when that air feels freezing. A heat pump collects that heat, concentrates it, and delivers it indoors.
+
+The key is the refrigerant, a fluid that boils at a very low temperature, far below zero Celsius. Outside, the fluid circulates through a coil in the outdoor unit. Because the fluid is colder than the outdoor air, heat flows from the air into the fluid, and the fluid evaporates. Air at minus 5C still holds plenty of heat compared with a fluid that boils at minus 30C or lower.
+
+Next, a compressor squeezes the refrigerant vapour. Compressing a gas raises its temperature sharply, the same way a bicycle pump warms up when you use it. The vapour leaves the compressor much hotter than your living room, often 50C to 70C. Now heat can flow the way it naturally wants to, from hot to cooler. The hot vapour passes through a second coil inside your home, where it gives up its heat to your radiators, underfloor heating or hot water cylinder. As it loses heat, it condenses back into a liquid.
+
+Finally, an expansion valve drops the pressure of the liquid. It becomes very cold again and returns to the outdoor coil to repeat the cycle. A fridge works the same way, only in reverse. It pulls heat out of the food and dumps it into your kitchen. A heat pump pulls heat out of the outdoors and dumps it into your house.
+
+The compressor needs electricity, but it moves several times more heat than the electricity it uses. This ratio is called the coefficient of performance, or COP. A COP of 3 means one unit of electricity delivers three units of heat. A gas boiler cannot beat 100 percent efficiency, and good condensing models reach about 90 to 95 percent. A heat pump runs at 250 to 400 percent in typical conditions.
+
+Cold weather does reduce performance. The colder it gets outside, the harder the compressor must work to lift the heat to a useful temperature, so the COP falls. A modern unit might manage a COP of 4 at 10C, around 3 at 0C, and closer to 2 at minus 15C. Even then it still beats a boiler on energy delivered per unit of energy bought. Many current models keep working down to minus 25C.
+
+For you as a homeowner, several practical points matter.
+
+First, your house needs to suit low-temperature heating. Heat pumps run best when they deliver water at 35C to 50C rather than the 70C or more a boiler produces. Well-insulated homes with larger radiators or underfloor heating suit this well. Older leaky homes may need insulation upgrades or some radiator swaps to stay comfortable.
+
+Second, think about running costs. Electricity usually costs more per unit than gas. A heat pump's efficiency offsets this, but the saving depends on local prices. Ask installers for a calculation based on your actual bills, and check whether a heat pump or time-of-use electricity tariff is available.
+
+Third, consider the upfront cost. Heat pumps cost more to install than boilers, though grants and incentives often cover a large share. Check what is available where you live.
+
+Fourth, ask for a proper heat loss survey. A correctly sized system matters more than the brand. Oversized or undersized units both waste money.
+
+Finally, noise and space. The outdoor unit hums quietly and needs clear space around it. You may also need room for a hot water cylinder.
+
+If your home is reasonably insulated, your gas boiler is near the end of its life, and grants are on offer, a heat pump is often a sound choice. If your home is draughty and poorly insulated, fix that first. Either way, get at least three quotes and ask each installer to show their efficiency calculations.

@@ -25,7 +25,12 @@ import sys
 from pathlib import Path
 
 
+def dedent2(block):
+    return "\n".join(l[2:] if l.startswith("  ") else l for l in block.split("\n"))
+
+
 def read_transcript(path):
+    relayed, wrapper = None, "agent-tool"
     prompt, text, last_text, model, first_ts, tools, tool_inputs = None, None, None, None, None, [], []
     usage_by_msg, sys_prompt = {}, None
     for line in open(path, encoding="utf-8"):
@@ -36,8 +41,16 @@ def read_transcript(path):
             sys_prompt = json.dumps(att.get("systemPrompt"), sort_keys=True)
         m = d.get("message") or {}
         c = m.get("content")
-        if d.get("type") == "user" and isinstance(c, str) and prompt is None:
-            prompt = c
+        if d.get("type") == "user" and isinstance(c, str):
+            # A workflow wraps the task: first the user message that launched the workflow,
+            # relayed verbatim, then the script's prompt, each indented by two spaces.
+            if c.startswith("[Workflow harness \u2014 user request]"):
+                relayed = dedent2(c.split("this request wins:\n", 1)[1])
+                wrapper = "workflow"
+            elif c.startswith("[Workflow harness \u2014 computed task]"):
+                prompt = dedent2(c.split("The computed task text follows:\n", 1)[1])
+            elif prompt is None and not c.startswith("<system-reminder>"):
+                prompt = c
         if m.get("role") != "assistant" or not isinstance(c, list):
             continue
         model = m.get("model") or model
@@ -61,6 +74,7 @@ def read_transcript(path):
     usage["api_messages"] = len(usage_by_msg)
     return {"prompt": prompt, "text": text, "model": model, "timestamp": first_ts,
             "tools": tools, "usage": usage, "returned_by": how,
+            "relayed_request": relayed, "wrapper": wrapper,
             # A run that touched the experiment's own files may have read the brief or other samples.
             "touched_experiment_files": any("prose-system" in t for t in tool_inputs),
             "system_prompt_sha256": hashlib.sha256((sys_prompt or "").encode()).hexdigest()
@@ -120,6 +134,7 @@ def main():
             "system_prompt_sha256": t["system_prompt_sha256"],
             "sampling": "harness defaults; not set by the experimenter",
             "tools_used": t["tools"], "returned_by": t["returned_by"],
+            "wrapper": t["wrapper"], "relayed_user_request": t["relayed_request"],
             "touched_experiment_files": t["touched_experiment_files"],
             "usage": t["usage"], "timestamp_utc": t["timestamp"],
             "valid": bool(text.strip()),

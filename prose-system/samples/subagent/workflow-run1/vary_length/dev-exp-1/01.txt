@@ -1,0 +1,25 @@
+A heat pump can warm a house on a cold day because it moves heat rather than making it. That one idea answers the question, and it also explains why the machine can be so efficient.
+
+Start with a fridge. Inside, it is cold. Out the back, the coils are warm. The fridge pulls heat out of the food compartment and dumps it into your kitchen. A heat pump does the same job, except the "inside" it cools is the outdoors, and the "kitchen" it warms is your whole home.
+
+But it is colder outside than in, and heat naturally flows from hot to cold. So how can the machine pull heat from the cold? The answer is that "cold" is relative. Air at 0°C still holds a great deal of thermal energy. It is only cold compared with your living room. Absolute zero is around minus 273°C, and even a frosty winter day sits far above that. There is energy there to be collected.
+
+Here is how the machine collects it. A sealed loop carries a refrigerant, a fluid that boils at very low temperatures, often well below minus 20°C. In the outdoor unit, the refrigerant is colder than the outside air, so heat flows into it from the air, and it evaporates into a gas. Then comes the clever part. A compressor squeezes that gas. Squeezing raises its pressure and, with it, its temperature, perhaps to 50 or 60°C. That hot gas passes through a heat exchanger indoors, handing its warmth to your radiators, underfloor heating or hot water cylinder. As it gives up heat, it condenses back to liquid. An expansion valve then drops the pressure sharply, the liquid turns very cold, and the cycle starts again.
+
+Why does this matter for your wallet? A gas boiler converts fuel into heat at best about 90 to 94 percent efficiency. It can never beat 100 percent. A heat pump, by contrast, uses electricity mainly to run the compressor and to move heat that already exists. For every unit of electricity, it typically delivers three to four units of heat. Engineers call this the coefficient of performance, or COP. A COP of 3 means you get 300 percent of what you paid for in electricity.
+
+There is a catch. Efficiency falls as the weather gets colder, because the compressor must work harder to lift heat across a bigger temperature gap. Modern units still work well below freezing, and many keep running at minus 15°C or lower, but the COP might drop to 2 on the coldest days. Averaged across a year, a well-installed system usually achieves around 3 or better.
+
+The temperature you ask the system to deliver matters too. Heat pumps are happiest producing warm water, around 35 to 50°C, rather than the 70°C or so a boiler often supplies. The lower the flow temperature, the higher the COP. This is why insulation and emitters matter so much.
+
+So what should you check before replacing your boiler?
+
+First, how well insulated is your home? A draughty house with poor loft insulation will demand more heat, and every extra kilowatt costs money. Fixing that first often pays off regardless.
+
+Second, are your radiators large enough? Because heat pumps run at lower water temperatures, older, smaller radiators may struggle. Some may need upsizing.
+
+Third, compare running costs. Electricity usually costs more per unit than gas, so the heat pump's efficiency has to overcome that price gap. With a COP near 3, many homes break even or save money, but it depends on your tariffs. A time-of-use tariff can help considerably.
+
+Fourth, consider the upfront cost, space for the outdoor unit, and any grants available where you live. Ask installers for a heat loss calculation, not a rule of thumb.
+
+In short, a heat pump heats your home in winter by harvesting warmth from outside air that is cold to us but rich in energy, and upgrading it with a compressor. It will not suit every house. For a reasonably insulated home, though, it can be a clever, efficient replacement for a gas boiler.

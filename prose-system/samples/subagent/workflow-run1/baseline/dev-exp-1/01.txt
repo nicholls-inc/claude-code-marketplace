@@ -1,0 +1,39 @@
+A heat pump can warm a house on a cold day because it does not make heat by burning anything. It moves heat that already exists outside into your home, and that heat is there even when the air feels freezing.
+
+**Cold is a matter of degree**
+
+Heat is the energy in the random motion of molecules. Air at 0°C still holds plenty of it. Only at absolute zero, about minus 273°C, is there none left to take. So outdoor air at 2°C or even minus 10°C is a usable source of heat. It is just a more dilute source than a warm room.
+
+**The fridge in reverse**
+
+Your kitchen fridge already does this. Inside it, a liquid refrigerant evaporates and soaks up heat from the food. A compressor squeezes the vapour, which makes it hot, and coils on the back release that heat into your kitchen. A heat pump is the same machine, with the "inside" being the outdoors and the "back" being your radiators or underfloor heating.
+
+The cycle has four steps:
+
+1. **Evaporator (outside unit).** The refrigerant is a fluid that boils at a very low temperature, far below zero. Outdoor air is blown across the coil, and the refrigerant is colder than the air, so it absorbs heat and turns to gas.
+2. **Compressor.** This squeezes the gas. Compressing a gas raises its temperature sharply, so it leaves the compressor much hotter than your home, perhaps 50 to 60°C. The compressor runs on electricity, and this is where your energy goes.
+3. **Condenser (inside).** The hot gas passes through a heat exchanger connected to your heating water. The water is cooler than the gas, so the gas gives up its heat and condenses back to a liquid.
+4. **Expansion valve.** The liquid is released into a lower pressure, which cools it well below the outdoor temperature, and the loop starts again.
+
+The compressor makes the refrigerant hotter than your house, and the expansion valve makes it colder than the outdoors. Heat flows downhill both times, so no law of physics is broken.
+
+**Why it beats a boiler on efficiency**
+
+A gas boiler turns about 90 to 95 percent of its fuel energy into heat, so it can never deliver more than 1 unit of heat per unit of fuel. A heat pump uses electricity only to move heat, not to create it. For every 1 kWh of electricity, it typically delivers 2.5 to 4 kWh of heat. This ratio is called the coefficient of performance, or COP. The seasonal figure, SCOP, is the one to ask installers for.
+
+**The catch in cold weather**
+
+The colder it gets, the harder the pump has to work. The refrigerant must be pushed to a higher temperature relative to the source, so COP falls. At 7°C a good unit might reach a COP of 4. At minus 7°C it may drop to about 2.5. That is still well above 1, but your running costs rise on the coldest days. Modern units keep working down to around minus 15 to minus 25°C. Outdoor units also ice up in damp, cold weather, so they periodically run a short defrost cycle.
+
+**What it means for your decision**
+
+- **Running cost.** Electricity usually costs more per kWh than gas, so a heat pump only saves money if its COP is high enough to cover the price gap. Check your local tariff ratio. Time-of-use or heat pump tariffs help.
+- **Insulation.** A well-insulated house needs less heat, so a smaller, cheaper pump works well. A draughty, poorly insulated one may need upgrades first.
+- **Emitters.** Heat pumps are most efficient at lower flow temperatures, around 35 to 50°C, compared with a boiler's 65 to 75°C. Larger radiators or underfloor heating help a lot. A heat loss survey will tell you whether your current radiators can cope.
+- **Upfront cost.** Installation typically costs several thousand more than a replacement boiler, though grants or subsidies may cover part of it. Ask what is available where you live.
+- **Space and noise.** You need room outside for the unit and usually an indoor hot water cylinder.
+- **Carbon.** As the grid gets cleaner, a heat pump's emissions fall each year, while a gas boiler's stay fixed.
+
+**Bottom line**
+
+A heat pump works in the cold because it moves heat rather than making it, and it multiplies each unit of electricity into several units of warmth. It suits a reasonably insulated home, and it is worth asking installers for a heat loss calculation and a SCOP-based running cost estimate before you commit.

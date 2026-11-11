@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af6301589909b49ae",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What’s wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is.",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72653,
+    "output_tokens": 1320,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:41:11.561Z",
+  "valid": true,
+  "text": "How a Heat Pump Heats Your House When It Is Colder Outside\n\nThe short answer is that a heat pump does not make heat by burning something. It moves heat that already exists. This is why it can warm your home on a freezing day, and why it can deliver more heat than the electricity it uses.\n\nCold is relative. Air at 0 degrees Celsius still holds a lot of thermal energy, because absolute zero is about minus 273 degrees. Even at minus 10, there is plenty of heat in the outdoor air. The job of a heat pump is to collect it and carry it indoors.\n\nIt does this with a sealed loop of refrigerant, a fluid that boils at very low temperatures. The loop has four main parts, and the cycle works like this.\n\nFirst, the outdoor unit. Refrigerant flows through a coil with a fan blowing outdoor air across it. The refrigerant is colder than the air, even a freezing day's air, so it absorbs heat and boils into a gas.\n\nSecond, the compressor. This squeezes the gas, which raises its pressure and sharply raises its temperature, often to 50 or 60 degrees or more. This step uses the electricity.\n\nThird, the indoor side. The hot gas passes through a coil, radiators or underfloor pipes, and gives up its heat to your home's water or air. As it loses heat, it condenses back into a liquid.\n\nFourth, the expansion valve. The liquid pressure drops suddenly, which chills it well below outdoor temperature, and it heads back outside to start again.\n\nThink of a fridge running in reverse. A fridge pulls heat out of its interior and dumps it into your kitchen. A heat pump pulls heat out of the outdoors and dumps it into your house.\n\nWhy it beats a boiler on efficiency\n\nA gas boiler turns fuel into heat at best around 90 to 95 percent efficiency. It can never give you more energy than the gas contains. A heat pump uses electricity only to run the compressor and fans, while most of the heat is simply moved. A typical modern unit delivers about three units of heat for every one unit of electricity over a season. That ratio is called the coefficient of performance, or COP. In milder weather it can reach four or more. In very cold weather it drops, perhaps to two, but it is still above one.\n\nWhat this means for your decision\n\nPerformance falls as the outdoor temperature falls, so check the specification for the unit's output at your coldest typical days, not just its headline figure. Modern cold-climate models keep working well below minus 15 degrees.\n\nYour house matters as much as the machine. Heat pumps work best delivering water at lower temperatures, around 35 to 50 degrees, compared with a boiler's 70 or more. Good insulation, draught proofing and larger radiators or underfloor heating let the pump run at those lower temperatures, which keeps efficiency high. A poorly insulated home with small radiators may need upgrades first, and that adds cost.\n\nRunning costs depend on the price of electricity relative to gas. Because a heat pump multiplies each unit of electricity into roughly three of heat, it can be cheaper to run even when electricity costs more per unit than gas. Check your local tariffs, and consider a time-of-use tariff if your supplier offers one.\n\nInstallation costs are higher than for a replacement boiler, though grants or subsidies often cover part of it in many regions. You will also need space for an outdoor unit and usually a hot water cylinder indoors.\n\nThe practical next step is to get a survey from an accredited installer. Ask for a heat loss calculation for your home, a sized quote, and an estimate of your yearly running cost compared with your current boiler. That will tell you whether the switch makes sense for your house."
+}

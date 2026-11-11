@@ -68,3 +68,16 @@ Pilot results:
 - 5 of 8 used bold headings and 4 of 8 used lists. `profile.py` counted a bold heading line as a sentence. It now drops a line that is entirely bold.
 - No sample in any condition, the baseline included, contains an em dash. This goes against the expected result for experiment 1 above. Two baseline samples on one brief are too few to settle it.
 
+
+### First workflow run: 40 samples, and a context problem
+
+- The owner approved the 480 runs, asked for them to be staggered through workflows, and ruled that tool use by a subagent is valid. Tool use is recorded per run and not rejected.
+- Workflow run 1: brief `dev-exp-1`, four conditions, ten samples each, four subagents at a time. All 40 returned. Stored under `samples/subagent/workflow-run1/`.
+- Problem found on import. The workflow harness relays the owner's launching message to every subagent, ahead of the condition's prompt. All 40 subagents were shown this text: "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What's wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is." The condition's prompt then arrives inside a frame that calls it a task computed by a workflow script.
+- So these 40 samples were written by subagents that knew they were one of 480 runs and that a baseline prompt existed. They were not shown the brief, the findings or any list of tells. No sample text contains "480", "baseline", "experiment", "workflow" or "sample".
+- The system prompt hash is the same in all 40 and differs from the pilot's, so a workflow subagent and an Agent-tool subagent do not share a system prompt. The pilot and this run are not comparable with each other.
+- A workflow launched after a later owner message would relay that later message. Runs launched under different messages would differ in context.
+- Tokens over 40 runs: 259,264 written to cache, 2,646,866 read from cache, 80 uncached input, 75,486 output including thinking. About 74,500 per run. 39 of 40 runs read the cache, so staggering in waves of four did share it.
+- Model served in all 40: `claude-sonnet-5-5`. No run used a tool. Length 547 to 782 words.
+- Pooled profile for this one brief, about 6,500 to 7,100 words per condition. Em dashes are 0.0 per 1,000 words in every condition, the baseline included. Combined joiners per 1,000 words: baseline 7.3, `no_em_dash` 2.0, `no_joiners` 0.0, `vary_length` 2.5. One brief is not a result for experiments 1 to 3.
+- The other 440 runs are not started. The owner decides how to handle the relayed message first.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7ef91449d3a203af",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What’s wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is.",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72653,
+    "output_tokens": 1318,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:40:02.650Z",
+  "valid": true,
+  "text": "A heat pump does not make heat so much as move it. Even on a cold day, the outdoor air holds a surprising amount of thermal energy. Anything above absolute zero (minus 273 degrees Celsius) contains some, so air at minus 5 degrees Celsius has plenty to spare. The heat pump collects that energy, concentrates it, and delivers it indoors.\n\nThe trick is a sealed loop of refrigerant, a fluid that boils at very low temperatures. The loop has four main parts: an evaporator, a compressor, a condenser, and an expansion valve.\n\nOutside, the refrigerant passes through the evaporator, a coil with a fan blowing air across it. The refrigerant is colder than the outdoor air, even when that air is freezing, so heat flows from the air into the fluid. This warms the refrigerant just enough to make it boil into a gas.\n\nThat gas then goes to the compressor. Squeezing a gas raises its temperature sharply, which is the same reason a bicycle pump gets warm. The compressor lifts the refrigerant to perhaps 50 to 60 degrees Celsius, well above room temperature.\n\nInside the house, the hot gas flows through the condenser. Here it gives up its heat to your central heating water (or to indoor air, in some systems) and turns back into a liquid. This is the heat that warms your radiators or underfloor pipes. Finally, the expansion valve drops the liquid's pressure, which chills it far below outdoor temperature, and the cycle starts again.\n\nSo heat moves from cold to warm, which seems backwards. It works because the compressor does work to force it. Your fridge does the same thing, pulling heat out of the cold interior and dumping it into your kitchen.\n\n**Why this is efficient**\n\nA gas boiler burns fuel and turns nearly all of it into heat, so the best it can do is about 90 to 95 percent efficiency. A heat pump uses electricity only to run the compressor and fans, while the bulk of the heat comes free from the air. The result is typically three to four units of heat for every unit of electricity. This ratio is called the coefficient of performance, or COP. A COP of 3 means 300 percent efficiency in plain terms.\n\n**The catch: colder weather lowers the COP**\n\nThe bigger the gap between outdoor temperature and the temperature you need, the harder the compressor works. On a mild day at 7 degrees Celsius, a COP of 3.5 to 4 is common. At minus 5 it may fall to around 2.5. Modern units still work, and many are rated down to minus 15 or even minus 25 degrees Celsius, but they use more electricity as it gets colder.\n\nYour home's heat delivery matters too. Heat pumps are most efficient when supplying water at 35 to 45 degrees Celsius, rather than the 60 to 70 degrees a gas boiler typically produces. Larger radiators or underfloor heating help, because they release heat well at lower temperatures. Good insulation and draught-proofing help most of all, since they reduce how much heat you need in the first place.\n\n**What to weigh up before replacing your boiler**\n\nRunning costs depend on the price ratio between electricity and gas. If electricity costs more than three times as much per unit as gas, a heat pump with a COP of 3 only breaks even. Time-of-use tariffs and solar panels can shift this in your favour.\n\nUpfront cost is higher than for a new boiler, often several thousand pounds more, though grants and incentives may cover part of it. You will also need outdoor space for the unit, and possibly a hot water cylinder if you currently have a combi boiler.\n\nAsk an installer for a heat loss survey. It will show whether your radiators are big enough, whether insulation upgrades are worth doing first, and what running costs to expect. A heat pump suits a well-insulated home best, but with the right sizing it can work in older properties too."
+}

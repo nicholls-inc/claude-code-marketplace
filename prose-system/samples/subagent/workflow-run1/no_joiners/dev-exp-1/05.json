@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a5b6f596da79204ca",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What’s wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is.",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72665,
+    "output_tokens": 3388,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:40:14.432Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists outdoors and carries it inside. This sounds impossible when the air outside is colder than your living room, but it works because cold is relative. Air at minus five degrees Celsius still holds a large amount of thermal energy. Absolute zero sits far below that, around minus 273 degrees, so there is plenty of heat left to collect.\n\nThe trick is a sealed loop of refrigerant, a fluid that boils at very low temperatures. Outside, a fan pulls air across a coil holding cold refrigerant. The refrigerant is colder than the air, so heat flows into it and it evaporates into a gas. A compressor then squeezes that gas. Squeezing raises its pressure and its temperature sharply, much as a bicycle pump warms up when you use it. The gas may now be at fifty or sixty degrees, hotter than your radiators need. Inside the house it passes through another coil, called the condenser, where it gives up its heat to your central heating water. As it cools it turns back into liquid. An expansion valve then drops the pressure, the liquid becomes very cold again, and the cycle repeats.\n\nThe key figure is the coefficient of performance. A good heat pump delivers around three units of heat for every one unit of electricity it uses, and sometimes more in mild weather. A gas boiler, even a modern condensing one, delivers less than one unit of heat per unit of gas. The electricity only powers the compressor and fans. Most of the heat is simply moved. Efficiency does fall as it gets colder, because the compressor must lift the heat across a bigger temperature gap. Modern units still work well at minus ten and many keep running far below that.\n\nSeveral practical points matter when you weigh up a replacement. Heat pumps run best at lower flow temperatures, so they suit well insulated homes and larger radiators or underfloor heating. Many houses need a few radiators swapped or the loft topped up with insulation. A heat pump also runs gently for long periods rather than blasting on and off, so the house feels steadily warm rather than cycling between hot and cool. Expect to fit a hot water cylinder, since the unit cannot supply instant hot water like a combi boiler. You will need space outside for the unit and a little inside for the cylinder.\n\nOn cost, the upfront price is higher than a boiler, though grants in many regions narrow the gap. Running costs depend on the ratio between your electricity price and your gas price. Where electricity costs more than three times as much as gas per unit, savings shrink. A time of use tariff or solar panels can tilt the sums in your favour. Ask installers for a proper heat loss calculation room by room, not a rule of thumb, and check the quoted seasonal efficiency figure.\n\nSo a heat pump heats a cold house by treating outdoor air as a heat source and using electricity to concentrate that heat rather than create it. If your home is reasonably insulated and your boiler is near the end of its life, it is well worth a serious quote."
+}

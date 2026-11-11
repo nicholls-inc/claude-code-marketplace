@@ -1,0 +1,36 @@
+A heat pump can warm a house on a cold day because it does not make heat by burning anything. It moves heat that already exists outside. Even at 0°C the outdoor air holds a lot of thermal energy. Heat only needs a colder place to leave from, and a heat pump has a way of making "colder" relative to the air outside.
+
+**The cycle**
+
+The working parts are a refrigerant (a fluid that boils at a very low temperature), a compressor, and two heat exchangers (coils with fans or water loops). The refrigerant circulates in a closed loop.
+
+1. Outside, the refrigerant passes through the evaporator coil at a pressure low enough that it boils at around -25°C or lower. Outdoor air at 0°C is far warmer than that, so heat flows from the air into the refrigerant, which turns to vapour.
+2. The compressor squeezes this vapour. Compressing a gas heats it, so the vapour leaves the compressor at perhaps 50 to 70°C, hotter than your radiators or underfloor heating need.
+3. Inside, the hot vapour passes through the condenser. It gives up its heat to your heating water or indoor air and condenses back to a liquid.
+4. An expansion valve drops the pressure again. The liquid becomes very cold, and the loop restarts.
+
+The refrigerator in your kitchen works the same way, pumping heat from the inside of the box to the room. A heat pump runs it in the other direction, with the outdoors as the "inside of the box."
+
+**Why it is efficient**
+
+The compressor uses electricity, but it only has to lift heat from a low temperature to a moderate one. It does not generate the heat. A typical modern unit delivers three to four units of heat for every unit of electricity at moderate temperatures. This ratio is the coefficient of performance (COP). A gas boiler, even a good condensing one, tops out at about 90 to 95% efficiency, which is a COP of under 1. An electric resistance heater is exactly 1.
+
+The COP falls as the outdoor temperature drops, because the compressor must lift the heat further. A good air-source unit might manage a COP of about 3 at 7°C and about 2 to 2.5 at -7°C. Many current models keep working to -20°C or below, though their output and efficiency fall. This is why sizing and installer quality matter. Seasonal figures (SCOP) give a better picture than a single peak rating.
+
+**What this means for the decision**
+
+*Running cost.* Electricity usually costs more per kWh than gas, often by a factor of three or more depending on your tariff and region. A heat pump at COP 3 roughly cancels that gap, so running costs can land close to a gas boiler's, and can be lower on a heat pump or time-of-use tariff or with rooftop solar. Check your own gas and electricity prices rather than assuming savings.
+
+*Your house.* Heat pumps run best at lower flow temperatures (35 to 55°C), so they suit well-insulated homes with large radiators or underfloor heating. In a leaky older house with small radiators, you may need insulation work, bigger radiators or a higher flow temperature, which cuts efficiency. A heat-loss survey is worth paying for before you commit.
+
+*Cold snaps.* The system should be sized for your coldest design day, not an average day. Some installations include a backup electric element for extreme cold. If you are told one is not needed, ask to see the calculation.
+
+*Upfront cost.* Installation typically costs several times the price of a replacement gas boiler, though grants and subsidies may cover a large share. Ask about those in your area. Hot-water cylinders, new radiators and electrical upgrades can add to the bill.
+
+*Carbon.* Because the electricity grid keeps getting cleaner, a heat pump usually emits much less carbon over its life than a gas boiler. That gap widens each year.
+
+*Noise and space.* The outdoor unit hums about as loudly as a fridge to a quiet air conditioner, and needs clear airflow and some space. Indoors you will probably need room for a hot-water cylinder.
+
+**Bottom line**
+
+Cold outdoor air still contains usable heat, and a heat pump concentrates it using a modest amount of electricity. If your home is reasonably insulated, you can get a grant, and your gas-to-electricity price ratio is not extreme, a heat pump is a sound replacement for a gas boiler. If your boiler is working and your house is draughty, fixing the insulation first often makes the later switch cheaper and more comfortable. Get at least two quotes with room-by-room heat-loss calculations and a stated seasonal efficiency, so you can compare real numbers.
