@@ -1,0 +1,21 @@
+Stop Estimating. Start Shipping.
+
+Every engineering team knows the ritual. Someone asks how long a feature will take, the room goes quiet, and a number gets pulled from thin air. Three weeks. Maybe four. Everyone nods, and everyone knows the number is fiction. Then the work begins, and the fiction hardens into a commitment.
+
+I think teams should stop doing this. Not because estimating is hard, but because the estimates do not do what we claim they do.
+
+Consider what the research and plain experience tell us. Software work is dominated by unknowns, and the biggest ones only reveal themselves once you are deep in the code. A tidy estimate describes the work you can see, while the real time goes into the work you cannot. Teams that estimate carefully are not much more accurate than teams that guess. They are simply more confident, which is worse.
+
+The costs of the ritual are real. Planning meetings eat hours that could have gone into building. Estimates become targets, and targets bend behavior. Engineers pad numbers to protect themselves, managers trim them to hit a date, and the resulting figure reflects negotiation rather than reality. When the work runs long, trust erodes. Nobody asks whether the estimate was reasonable. They ask who failed.
+
+Worse, estimates anchor the wrong conversation. Once a number exists, the debate shifts from whether the work is worth doing to whether we are on schedule. A feature that turns out to be a poor idea gets finished anyway, because the sunk cost now has a deadline attached.
+
+The alternative is simpler than it sounds. Break work into small pieces, small enough that each one ships in a day or two. Then measure what actually happens. Count how many pieces your team finishes each week, and use that real throughput to forecast. This tells you far more than any story point ever did, because it comes from your own history rather than your own optimism.
+
+Priority replaces prediction. Instead of asking how long everything will take, ask what matters most and do that first. Show working software often. Let stakeholders see progress and steer, rather than waiting for a date that was never reliable.
+
+The usual objection is that the business needs dates. Sometimes it does, for a launch tied to a conference or a contract. In those cases, fix the date and flex the scope. Decide what must be in, build it in order of value, and cut from the bottom when time runs short. That is honest planning, because it admits which variable is actually free.
+
+Managers worry that dropping estimates means losing control. It means the opposite. You trade a comforting illusion for visible, frequent evidence of progress. You learn about trouble in days, not at the missed deadline.
+
+Estimation promises certainty that software cannot give. Stop paying for it. Slice the work thinner, track what you finish, and tell the truth about what you do not know.

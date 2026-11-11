@@ -1,0 +1,21 @@
+Stop Estimating. Start Shipping Small.
+
+Every engineer has lived this scene. A manager asks how long a feature will take. You say three weeks, because two feels reckless and six feels lazy. That number is written down, repeated in meetings, and treated as a promise. Five weeks later, everyone is unhappy, and the number was never more than a guess dressed up as a fact.
+
+Software teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because they are wrong in a systematic way, and the cost of producing them is real.
+
+Consider what an estimate asks of you. It asks you to predict the unknown. Most software work is novel by definition, since anything repeatable would already be automated. The hard parts are the ones you cannot see until you are inside them, such as the undocumented service, the migration that touches forty tables, or the library that does not behave as advertised. Decades of project data tell the same story. Estimates cluster around the optimistic case, and actual durations have a long tail that no amount of planning poker can tame.
+
+Then there is the behavioral damage. An estimate becomes a target, and targets bend behavior. Engineers pad numbers, so the estimate stops meaning anything. Or they cut corners to hit the date, and the cost shows up later as bugs and rework. Managers learn to discount whatever they hear, so everyone is now negotiating with fiction. Hours go into the ritual itself, in refinement meetings, story pointing, and arguments over whether something is a five or an eight. That time buys no working software.
+
+The objection is predictable. Businesses need dates. Sales has customers waiting, and finance plans quarters. That is true, and it is exactly why we should stop pretending that task-level estimates deliver dates. What delivers dates is flow.
+
+Break work into small pieces, ideally a day or two each. Ship them continuously. Then measure how many pieces actually finish per week. That throughput is observed fact rather than opinion, and it forecasts far better than any estimate. If your team finishes roughly eight items a week and the backlog for a release holds forty, you have a five week forecast with honest error bars. Nobody had to guess anything. When scope changes, you recount and the forecast updates.
+
+This approach also changes the conversation with the business. Instead of asking how long something takes, the useful questions become what is the smallest version worth shipping, and what can we cut if the date matters more than the scope. Those are product decisions, and they are the ones managers are actually good at making.
+
+Small slices also expose problems early. If a piece of work cannot be cut down to a few days, that is a signal you do not understand it yet, which is worth knowing before a deadline is attached to it.
+
+None of this means working without planning. It means swapping a prediction for a measurement. Teams that try it usually report the same surprise. The meetings shrink, the trust grows, and the dates get more reliable, not less.
+
+Stop asking engineers to guess. Ask them to ship small, and read the numbers they produce.

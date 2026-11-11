@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a08b34233c100e0b3",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28199,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1585,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:19:55.754Z",
+  "valid": true,
+  "text": "In late August 1854, a terrible illness struck the crowded streets of Soho in London. The disease was cholera, and it killed with frightening speed. A healthy person could feel fine at breakfast, be gripped by violent vomiting and diarrhea by afternoon, and be dead by the next day. Within about ten days, more than five hundred people living within a few hundred yards of one another had died. Many families fled the district. Shops closed. The neighborhood around Broad Street fell silent.\n\nAt the time, almost nobody understood what caused cholera. The dominant belief among doctors and officials was the miasma theory, which held that disease spread through foul air, the stench rising from rotting waste, sewers and graveyards. London in the 1850s certainly stank. Raw sewage ran into cesspools beneath houses and into the River Thames. It seemed obvious that the smell and the sickness were linked.\n\nA physician named John Snow disagreed. Snow was a respected doctor who had pioneered the use of anesthesia, and he had even given chloroform to Queen Victoria during childbirth. He lived close to Broad Street, and the outbreak was on his doorstep. Years earlier, during a cholera epidemic in 1848 and 1849, he had reached an unusual conclusion. Cholera seemed to attack the gut first, not the lungs. If the cause were something breathed in, he reasoned, the illness should begin in the chest or throat. Instead it behaved as though people were swallowing something. Snow suspected that a poison, passed from one sufferer to the next, was getting into drinking water.\n\nFew took him seriously. Germs were not yet an accepted explanation for disease, and microscopes of the day could not reliably show the culprit. Snow needed evidence that ordinary people could not dismiss.\n\nSo he went door to door. He examined death records and walked the streets of Soho, questioning families about where they had been and what they had drunk. He began marking each death on a map of the neighborhood, drawing a small bar at the address of every victim. As the bars accumulated, a pattern emerged. The deaths clustered tightly around one spot, the public water pump on Broad Street, where residents drew their water by hand.\n\nA cluster alone was not proof, because people living near the pump might simply share bad air. So Snow looked harder at the exceptions, and the exceptions were where his case became convincing.\n\nNear the pump stood a workhouse housing hundreds of poor residents, yet very few of them died. Snow discovered that the workhouse had its own well and did not use the Broad Street pump. Likewise, a brewery on the same street lost none of its workers. The men there drank the beer they brewed, and the company also had a private well. Meanwhile, deaths occurred well away from the pump among people who had a reason to use it. One striking case was a widow who lived in Hampstead, several miles to the north. She had once lived near Broad Street and still liked the taste of its water, so she had a bottle of it delivered to her each day. She and her niece, who drank it too, both died. No one else in their neighborhood fell ill.\n\nBy early September, Snow was confident. On the evening of September 7th he went to the local board of guardians, the parish officials in charge of the area, and presented his findings. He urged them to act. The next day they ordered the handle of the Broad Street pump removed, so that no one could draw water from it.\n\nThe outbreak was already fading by then, because many residents had fled and the worst of the epidemic had passed. Skeptics later pointed to this, and it means that removing the handle cannot be given full credit for ending the crisis. Still, the removal became the best-known moment of the story.\n\nThe real breakthrough came afterward. A local clergyman, Henry Whitehead, had started out doubting Snow. Whitehead knew the community well and set out to disprove him, but his own inquiries pointed the same way. He found what Snow had been missing, the likely starting point. A baby girl living at 40 Broad Street had died of diarrhea shortly before the outbreak, and her mother had washed the child's soiled diapers in a bucket and emptied it into a cesspool just a few feet from the pump's well. Inspectors found that the cesspool had been leaking into the water supply.\n\nOfficials at the time still preferred the miasma explanation, and the authorities largely rejected Snow's conclusion. The pump handle was soon put back. Snow died a few years later, in 1858, without seeing his ideas accepted.\n\nWithin decades, though, scientists identified the bacterium behind cholera and confirmed that it spreads through contaminated water. Snow's method of mapping cases and comparing those who fell ill with those who did not became a foundation of modern epidemiology. His map remains one of the most famous in the history of public health."
+}

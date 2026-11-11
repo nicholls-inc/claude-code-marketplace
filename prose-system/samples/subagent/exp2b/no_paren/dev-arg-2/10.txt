@@ -1,0 +1,17 @@
+Stop Estimating. Start Shipping Slices.
+
+Every software team knows the ritual. A manager asks how long something will take, an engineer squints at a vague ticket and says three weeks, and everyone pretends that number means something. It does not. It is a guess dressed up as a commitment, and it is time to retire it.
+
+The evidence against estimation is not subtle. Studies of software projects keep finding the same thing: the work takes longer than predicted, often by wide margins, and the error is not random noise that averages out. It is systematic. We estimate the happy path, forget the migration, the flaky test, the surprise dependency, the colleague on holiday. The unknowns are unknown, so they cannot be priced in. Asking for precision about them is asking for fiction.
+
+Worse, the fiction has a cost. Once a number is spoken, it becomes a target. Engineers feel pressure to hit it, so they cut corners on tests and review. Or they pad it, so the work expands to fill the padding. Managers, meanwhile, quote the estimate upward to their own bosses, where it hardens into a promise. When reality arrives, the conversation is about who missed the date, not about whether the work is still the right work. Hours that could have gone into building go into defending a number.
+
+Then there is the time spent producing the guess itself. Planning poker, story point calibration, velocity charts, re-estimation after scope changes. Add up the meetings and ask what decisions they improved. Usually the honest answer is none. The team would have done the same work in the same order anyway.
+
+So what replaces it? Not chaos. The alternative is to shrink the work until the question stops mattering. Break features into slices small enough to finish in a day or two. Ship them behind flags. Watch how many slices land each week. That throughput is a real measurement of your team, drawn from what actually happened rather than what anyone hoped. If a manager needs to forecast, count the remaining slices and look at the historical rate. It takes five minutes and beats any estimation meeting.
+
+Managers will object that the business needs dates. It does need to make decisions, but those decisions rarely need a date. They need to know what to build first, what to cut, and when to stop. A frequent stream of small shipped changes answers all three better than a Gantt chart ever did. When a deadline is genuinely fixed, such as a regulation or a launch event, the right response is not to estimate. It is to fix the date, vary the scope, and cut features until the rest fits.
+
+Some will say this is naive for large, expensive projects. Perhaps. But even there, the cure is to slice the work and learn early, not to build a more elaborate spreadsheet of guesses.
+
+Estimation survives because it feels like control. Dropping it feels like giving something up. In truth, you are giving up a comforting story and getting back time, honesty, and trust. Teams that try it tend not to go back. Try it for one quarter. Measure what actually ships. Then decide whether you miss the numbers.

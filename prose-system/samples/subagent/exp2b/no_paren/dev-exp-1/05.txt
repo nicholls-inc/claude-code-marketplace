@@ -1,0 +1,41 @@
+A heat pump does not make heat. It moves heat, and that distinction is the whole answer to your question.
+
+Heat is not absent when it is cold outside. Air at minus five degrees Celsius still holds a great deal of thermal energy, because the real floor is absolute zero, which is about minus 273 degrees. A heat pump takes advantage of that. It collects the low-grade warmth in the outdoor air, upgrades it to a useful temperature, and delivers it indoors.
+
+The trick is a sealed loop containing a refrigerant, a fluid that boils at very low temperatures. The loop has four main parts, and the cycle runs like this.
+
+First, the outdoor unit passes the refrigerant through a coil while a fan blows outside air across it. The refrigerant is colder than the air, even on a freezing day, so heat flows into it and it evaporates into a gas.
+
+Second, a compressor squeezes that gas. Compressing a gas raises its temperature sharply, in the same way a bicycle pump gets hot when you use it. The refrigerant leaves the compressor much hotter than your living room, perhaps 50 to 60 degrees Celsius.
+
+Third, that hot gas flows through a coil indoors. Because it is hotter than your home's water or air, heat flows out of the refrigerant and into your heating system. Losing that heat turns the refrigerant back into a liquid.
+
+Fourth, an expansion valve releases the pressure. The liquid drops to a very low temperature, colder than the outdoor air, and the cycle starts again.
+
+Your fridge works the same way, moving heat from the inside to the kitchen. A heat pump is a fridge pointed the other direction, cooling the outdoors a little in order to warm your home.
+
+Why this beats a gas boiler on efficiency
+
+A gas boiler burns fuel and converts it to heat. Even a modern condensing model tops out around 90 to 95 percent efficiency, so you never get more than one unit of heat per unit of gas.
+
+A heat pump uses electricity only to run the compressor and fans, not to create the heat itself. For each unit of electricity, it typically delivers three to four units of heat. This ratio is called the coefficient of performance. It is the reason heat pumps can look like they break the rules. They do not, because most of the energy is simply being relocated, not generated.
+
+The catch is that performance falls as the outside gets colder. The compressor has to lift the heat across a bigger temperature gap, so the ratio might drop from four on a mild day to nearer two on a very cold one. Modern units still work well below minus 15 degrees Celsius, but they use more electricity as it gets colder.
+
+What this means for your decision
+
+Several factors decide whether replacement makes sense for you.
+
+Insulation matters most. Heat pumps run at lower water temperatures than boilers, so they suit well-insulated homes best. A draughty house with poor loft insulation may need upgrades first, or it will cost more to heat than it should.
+
+Radiators may need attention. Because the water is cooler, you may need larger radiators or underfloor heating to reach the same comfort. Many homes manage with their existing ones, but a survey will tell you.
+
+Running costs depend on your energy prices. Electricity usually costs more per unit than gas, so the efficiency advantage has to overcome that gap. Where the price ratio is below about three to one, a heat pump usually saves money. Time-of-use tariffs can improve the picture further.
+
+Upfront cost is higher. Installation commonly costs several times what a new boiler does, though grants and incentives in many regions narrow the difference substantially. Check what is available where you live.
+
+You also need space outside for the unit and often a hot water cylinder indoors.
+
+Finally, think about the long run. A heat pump also gives you cooling in summer if you choose a model that can reverse the cycle, and it cuts your carbon emissions as the electricity grid gets cleaner. A gas boiler gets no cleaner over time.
+
+If your home is reasonably well insulated and you can cover the upfront cost, a heat pump is usually the better long-term choice. Ask two or three installers for a heat loss survey and a quote before you decide.

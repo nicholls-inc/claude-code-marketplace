@@ -1,0 +1,19 @@
+Stop Estimating. Start Shipping Small.
+
+Every software team knows the ritual. A product manager asks how long something will take, engineers shrug and say three weeks, and everyone pretends that number means something. It does not. Teams should stop estimating how long work will take, and the sooner they do, the sooner they can spend that time building.
+
+Start with the evidence. Decades of project data show that software estimates are wrong in ways that cannot be fixed with more care. The work is novel by definition, since anything we could predict precisely would already be a library. The unknowns hide in the places you did not think to look: the legacy service with no documentation, the dependency that changes its API, the requirement that turns out to mean something else. Estimating harder does not remove these surprises. It only gives them a number to embarrass.
+
+Worse, the estimate does not stay an estimate. The moment you say three weeks, it becomes a promise. Managers repeat it upstream, sales quotes it to customers, and the date hardens into a commitment that nobody agreed to make. When reality diverges, engineers face a bad choice. They can cut corners on quality, work nights, or admit a miss that was baked in from the start. None of these outcomes comes from laziness. They come from asking people to forecast the unforecastable and then holding them to it.
+
+Then there is the cost of the ritual itself. Planning poker, story point calibration, and estimation meetings consume hours every sprint, and the output is a set of numbers the team barely believes. Those hours could go to breaking work into smaller pieces and delivering them, which is the only activity that ever reduces uncertainty.
+
+The alternative is simple, and plenty of teams already practice it. Slice work until each piece is small enough to finish in a day or two. Do not argue about how big a piece is; just make it small. Then track what actually happens. Count how many pieces finish per week, and use that throughput to forecast. A rolling average of real delivery beats any guess about an individual task, because it captures everything the guess misses: meetings, interruptions, review delays, and the surprises that always arrive.
+
+Managers will object that they need dates. They do, but they need honest ones. A throughput forecast says that, based on the last ten weeks, there is an eighty percent chance this body of work lands in six to eight weeks. That is more useful than a confident number from a planning meeting, and it updates automatically as the facts change.
+
+The deeper benefit is trust. When a team stops producing fictional commitments, conversations shift from defending numbers to deciding what to build and what to cut. Managers see working software each week instead of a status report explaining the slip. Engineers get room to flag risk without it being treated as sandbagging.
+
+Some work does need a deadline, such as a regulatory date or a launch tied to an event. Fine. In those cases, fix the date and flex the scope. That is the honest trade, and it does not require an estimate of anything.
+
+Stop asking how long. Ask what is the smallest useful thing we can ship this week, and then ship it.

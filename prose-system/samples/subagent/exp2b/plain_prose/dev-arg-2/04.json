@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a861721369294e3fd",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28205,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 980,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:18:45.969Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, at least in the way most of them do it today. I don't say that because planning is bad. I say it because the ritual of assigning numbers to unfinished work has become one of the most expensive forms of fiction in our industry.\n\nConsider what an estimate actually is. It is a guess made at the moment you know least, about work whose hardest parts are invisible until you are inside them. We all know this. Every engineer has watched a two-day task swallow two weeks because of a migration nobody mentioned, a dependency that behaved differently in production, or a requirement that turned out to mean something else. Studies of project overruns have been saying the same thing for decades, and still we sit in a room and play planning poker, as if a more careful vote could dissolve the uncertainty.\n\nThe deeper problem is what happens to the number after it leaves the room. An estimate begins as a rough guess and hardens into a commitment the moment a manager repeats it to someone further up the chain. Now it is a deadline. When reality disagrees, the team is rarely rewarded for honesty. Instead, engineers learn to pad, to cut corners on testing, to quietly drop the refactor that would have saved the next quarter. The estimate stops measuring the work and starts shaping it, usually for the worse. We pay for this in quality, in morale, and in the trust between engineers and the people who manage them.\n\nThen there is the sheer cost. Teams spend hours every sprint debating whether something is a three or a five. Add up those hours across a year and a department, and you have bought a very precise-looking number that predicts almost nothing. Ask the team how well last quarter's estimates matched outcomes. Most will not like the answer, and many have never checked.\n\nThe alternative is not chaos. It is working in small slices, shipping continuously, and watching what actually happens. If you break work into pieces small enough that each takes a day or two, you no longer need to estimate them; you only need to count them. Throughput, the number of finished items per week, is observed rather than imagined, and it forecasts far better than any vote. When a leader asks when something will be done, you can answer with a range grounded in real history, and you can update it every week as facts arrive. That is a forecast, and it is honest about its error bars in a way an estimate never is.\n\nThe objection I hear most is that the business needs dates. It does, sometimes. A launch tied to a trade show or a regulatory deadline is real. But notice that in those cases the date is fixed and the scope is what flexes. The useful conversation is about what can be cut, what can ship first, and what we learn along the way. Estimating does not help with that conversation. Slicing does.\n\nSo stop asking how long it will take. Ask what the smallest useful thing is, build it, and measure how fast things actually move. You will plan better, argue less, and tell your stakeholders the truth sooner. That is a better trade than any number we have ever guessed."
+}

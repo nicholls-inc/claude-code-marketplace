@@ -1,0 +1,56 @@
+From HTTPS Address to First Byte
+
+Typing an HTTPS address into a browser starts a chain of steps that usually finishes in well under a second. Each step can be slow or can fail, so knowing the order helps you debug real problems.
+
+1. Parsing the address
+
+The browser splits the address into scheme, host, port, path, query and fragment. Take https://shop.example.com/cart?id=7#top. The scheme is https, the host is shop.example.com, the port defaults to 443, the path is /cart, the query is id=7 and the fragment is top. The fragment never leaves the browser. The browser also consults its HSTS list. If the host was previously marked as HTTPS only, any plain http request is upgraded internally before a single packet is sent.
+
+2. Checking caches
+
+Before using the network, the browser looks for a stored response for this URL. If a fresh copy exists, as allowed by the Cache-Control or Expires headers, it is used immediately and nothing is sent. If the copy is stale, the browser may send a conditional request carrying an ETag or Last-Modified value, so the server can answer with a short 304 Not Modified. A service worker, if the site registered one, can also intercept the request at this point and answer from its own storage.
+
+3. DNS resolution
+
+The browser needs an IP address. It checks its own DNS cache, then the operating system cache and the hosts file, then asks a recursive resolver, usually run by your network provider or a public service. If the resolver has no cached answer, it walks the hierarchy. A root server points it to the servers for .com, those point to the authoritative name servers for example.com, and those return the answer. The answer may be an A record holding an IPv4 address, an AAAA record holding an IPv6 address, or a CNAME alias that triggers another lookup. Every record carries a time to live that controls how long it may be cached. Some browsers send this query over HTTPS, called DNS over HTTPS, to keep it private. They may also ask for an HTTPS record that advertises which protocols the server supports. A cached lookup costs almost nothing. A cold one can cost tens or hundreds of milliseconds.
+
+4. TCP connection
+
+With an address in hand, the browser opens a TCP connection to port 443. This needs a three step handshake, SYN, SYN-ACK and ACK, which costs one network round trip. Browsers often try IPv6 and IPv4 in parallel and keep whichever answers first, a technique called Happy Eyeballs. If the browser already holds an open connection to the same origin, it reuses it and skips steps 3 to 5 entirely. This is why keep-alive and HTTP/2 connection sharing matter so much.
+
+HTTP/3 differs here. It runs over QUIC on UDP and merges the transport and encryption handshakes into one. Browsers usually learn that a site supports it from an Alt-Svc header or an HTTPS DNS record, so a first visit commonly still uses TCP.
+
+5. TLS handshake
+
+Now the two sides set up encryption. In TLS 1.3 the browser sends a ClientHello. It lists the cipher suites it supports, includes its half of a key exchange, names the host it wants through the Server Name Indication field, and offers application protocols such as h2 and http/1.1 through ALPN. The server replies with its own half of the key exchange, its chosen cipher suite and protocol, its certificate chain, and a signature proving it controls the certificate's private key. Both sides then derive the same session keys, typically using elliptic curve Diffie-Hellman, without the keys ever crossing the wire. TLS 1.3 needs one round trip for this. TLS 1.2 needs two. Returning visitors can sometimes resume an earlier session and shorten the exchange further.
+
+The browser validates the certificate during this step. It checks that the chain leads to a root it trusts in the operating system or browser store, that the host name appears in the certificate's subject alternative names, that today's date falls within the validity period, and that the certificate has not been revoked. Revocation is checked through stapled OCSP responses or browser maintained lists. If any check fails, the user sees a full page warning and no request is sent.
+
+6. Sending the HTTP request
+
+Only now does the browser send the actual request, through the encrypted channel. In HTTP/1.1 it is plain text:
+
+GET /cart?id=7 HTTP/1.1
+Host: shop.example.com
+Accept: text/html
+Accept-Encoding: gzip, br
+Accept-Language: en-GB
+Cookie: session=abc123
+
+The browser attaches cookies whose domain, path and security attributes match the URL. It advertises the compression formats it can decode. In HTTP/2 and HTTP/3 the same information travels in compact binary frames, with the method, path, host and scheme carried in pseudo headers such as :method and :path. Because the connection is encrypted, anyone watching the network sees only the destination address and the host name sent in SNI, not the path, cookies or body.
+
+7. The server does its work
+
+The request often reaches a CDN edge server or load balancer first. That machine usually terminates TLS, then either answers from its own cache or forwards the request to an origin server. The origin routes the request to application code, which may check the session, query a database, call other services and render a page. Slow queries, cold caches and overloaded servers show up here as waiting time. Nothing is returned to the browser until the server begins its reply.
+
+8. The first byte arrives
+
+The server writes a status line and headers, such as 200 OK and a Content-Type, followed by the body. The moment the first byte of that reply reaches the browser is what developers call time to first byte, or TTFB. Notice what it includes: any redirects, the DNS lookup, the TCP handshake, the TLS handshake, the request's trip to the server, the server's processing time, and the first byte's trip back. A 301 or 302 redirect, for example to the www version of a site, sends the browser back to step 1, though it may reuse the existing connection if the origin is the same.
+
+Seeing it yourself
+
+Open the browser developer tools, choose the Network tab, click a request and read its Timing section. You will see separate entries for queueing, DNS lookup, initial connection, SSL, request sent and waiting for server response. The waiting entry is mostly your server's work. The earlier entries are network setup.
+
+Practical consequences
+
+Slow first bytes usually come from one of a few causes. Slow application code or database queries lengthen the server phase. Too many redirects repeat the whole sequence. Distant servers add round trips to every handshake, which a CDN fixes by moving the edge closer to users. Missing keep-alive forces new connections for each request. Useful countermeasures include correct caching headers, preconnect hints that let the browser open connections early, HTTP/2 or HTTP/3, TLS 1.3, and avoiding unnecessary redirect chains. Once you can name each stage, a vague complaint that a site feels slow becomes a specific measurement you can act on.

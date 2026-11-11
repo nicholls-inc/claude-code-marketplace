@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aab9c0315a08c9557",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28198,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1013,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:18:35.051Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Forecasting From What You Have Shipped.\n\nEvery engineering team knows the ritual. A manager asks how long the feature will take. An engineer, knowing the question is a trap, offers a number padded by fifty percent. The number gets written down, repeated upward, and eventually becomes a promise. Three weeks later reality arrives, and everyone performs surprise.\n\nI think teams should stop doing this. Not stop planning, and not stop talking about time, but stop producing per-task estimates as the basis for commitments.\n\nStart with the evidence. Software work is dominated by unknowns that cannot be seen until you are inside the code. The estimate is made when you know the least and consumed as if you knew the most. Decades of overruns, across companies and methodologies, are not a failure of discipline. They are what happens when you ask people to predict the unpredictable and then hold them to it.\n\nEstimates also change behavior in ways that hurt. Once a number exists, engineers feel pressure to cut corners to hit it. Managers anchor on it even when the scope has quietly doubled. Teams spend hours in planning meetings debating whether a story is a three or a five, and that debate produces false precision at a real cost. Those hours could have gone to building something.\n\nWorse, estimates crowd out the conversation that matters. The useful question is not how long this will take. It is whether this is worth doing, what the smallest useful version looks like, and what we should drop if it grows. A team fixated on defending its number rarely asks those things.\n\nThe usual objection is that the business needs dates. It does, and that need is legitimate. But dates do not require estimates. They require forecasts, and forecasts are a different tool. Count the items your team finishes each week. Look at how long work actually takes from start to done. Use that history to say that, based on the last six months, work of this size ships within four weeks about eighty-five percent of the time. That statement is honest about uncertainty, costs almost nothing to produce, and improves automatically as data accumulates. Nobody had to guess.\n\nBreak work into pieces small enough that their sizes stop mattering. When every item takes a few days, throughput becomes a stable signal, and the argument over individual sizes evaporates. Pair that with a habit of cutting scope instead of moving dates, and you can commit to deadlines more reliably than any team estimating in story points.\n\nSome will say this is unrealistic for fixed-date launches or contracts. Those cases are exactly where you need honest ranges and ruthless scope control, not a single confident number extracted from a nervous engineer on a Monday morning.\n\nManagers, you will give up the comfort of a spreadsheet full of figures. In exchange you get probabilities grounded in reality and a team that tells you the truth early, because the truth is no longer punished by a number it once offered.\n\nEngineers, you get your time back, and an end to defending guesses you never believed.\n\nStop estimating. Measure what you ship, forecast from it, and spend the saved hours building."
+}

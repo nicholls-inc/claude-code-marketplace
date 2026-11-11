@@ -1,0 +1,73 @@
+# Sharing a Secret in Public
+
+## The problem
+
+Imagine Alice and Bob have never met. They want to talk privately, but every message they send passes through a line that anyone can listen to. Their neighbours, their internet provider and a curious stranger could all read it. How can they end up with a shared secret, such as a password, when every word they exchange is overheard?
+
+For most of history this looked impossible. Secret codes needed a key, and the key had to be handed over in person first. If you could not meet, you had no safe way to share the key. Public-key cryptography solved this in the 1970s, and it now protects almost every website you visit and every online payment you make.
+
+## The paint analogy
+
+Picture a pot of yellow paint that both Alice and Bob know about. It is public. Anyone can have some.
+
+Alice secretly picks a private colour, say red, and mixes it into a bucket of the yellow. She sends the mixed bucket to Bob. Bob does the same with his own private colour, say blue, and sends his mixed bucket to Alice.
+
+An eavesdropper sees yellow, plus two mixed buckets. Now Alice adds her private red to the bucket she got from Bob. Bob adds his private blue to the bucket he got from Alice. Both end up with yellow, red and blue all mixed together. The result is the same exact shade, because the order of mixing does not matter.
+
+The eavesdropper cannot copy this. Mixing paint is easy, but unmixing it to find the private colour is almost impossible. Alice and Bob have a shared colour that nobody else can make.
+
+Mathematics gives us something that behaves just like this paint: an operation that is easy to do one way and extremely hard to undo.
+
+## Clock arithmetic
+
+You already know the key idea from reading a clock. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. We wrap around after reaching 12. Mathematicians call this working modulo 12. The word modulo just means we keep only the remainder after dividing.
+
+We can use any size of clock. A clock with 23 positions works in the same way. For example, 25 divided by 23 leaves a remainder of 2, so on this clock 25 is the same as 2.
+
+Now we need the easy-to-do, hard-to-undo operation. Here it is: take a number, multiply it by itself a chosen number of times, then wrap around the clock. Take 5 and multiply it by itself 3 times. That is 5 times 5 times 5, which is 125. Divide by 23: 23 goes into 125 five times, making 115, and leaves a remainder of 10. So 5 raised to the power 3, on a clock of 23, gives 10.
+
+Going forward is quick. Going backward is the trouble. If I tell you that 5 raised to some power gives 10 on this clock, can you find the power? With a small clock you could just try every power in turn until you hit 10. But the answers jump around in a way that has no obvious pattern. Make the clock enormous, with hundreds of digits, and trying every power would take longer than the age of the universe, even on the fastest computers. Going forward stays quick, though, because clever shortcuts let you do it in a handful of steps.
+
+This is our paint. Raising to a power is mixing. Finding the power from the answer is unmixing.
+
+## A worked example
+
+Alice and Bob agree in public on two numbers. The clock size is 23, and the starting number is 5. Anyone may know these. They are the yellow paint.
+
+Alice picks a private number, 6. She tells nobody. She calculates 5 raised to the power 6 on the clock of 23. That is 15,625, and dividing by 23 leaves a remainder of 8. She sends Bob the number 8.
+
+Bob picks a private number, 15. He tells nobody. He calculates 5 raised to the power 15 on the clock of 23, which comes to 19. He sends Alice the number 19.
+
+Everything sent over the line so far is 23, 5, 8 and 19. The eavesdropper hears all of it.
+
+Now Alice takes the number Bob sent, 19, and raises it to the power of her private number, 6. On the clock of 23, this gives 2.
+
+Bob takes the number Alice sent, 8, and raises it to the power of his private number, 15. On the clock of 23, this also gives 2.
+
+They both arrive at 2. Why? Alice effectively computed 5 raised to the power 15 and then raised that to the power 6. Bob computed 5 raised to the power 6 and then raised that to the power 15. Either way, the number 5 has been multiplied by itself 6 times 15, which is 90 times, and wrapped around the clock. Since 6 times 15 equals 15 times 6, they must agree. This is the same fact as the paint colours not caring about the order of mixing.
+
+The shared secret is 2. It never travelled along the line.
+
+## Why the listener is stuck
+
+Look at what the eavesdropper holds: the clock size 23, the starting number 5, and the two messages 8 and 19. To get the secret, they would need one of the private numbers, either 6 or 15. To find 6, they would have to work out which power of 5 gives 8 on the clock. With a clock of 23 that is trivial, since you can try them all in seconds. In real use the clock has a size of hundreds of digits, and there are far more powers than there are atoms in the universe. Nobody knows a quick way to unmix.
+
+So the security does not come from hiding the method. The method is published and studied by experts worldwide. The security comes from the gap between a job that is quick and a job that is hopelessly slow.
+
+## A second idea: locks anyone can close
+
+The scheme above, usually called Diffie-Hellman after its inventors, lets two people agree on a shared secret. A related invention, known as RSA, uses a neighbouring trick to give each person a matched pair of keys.
+
+Think of a padlock. Alice makes thousands of identical open padlocks and hands them out to anyone. She keeps the only key. Bob wants to send her a private message, so he puts it in a box, snaps one of her padlocks shut on it and posts it. Anyone can snap a padlock shut, but only Alice has the key to open it. The padlock is her public key, and the key is her private key.
+
+The mathematics behind this uses a different one-way job. Multiplying two huge prime numbers together is quick. A prime is a number such as 7 or 13 that can only be divided evenly by 1 and itself. Take two primes, multiply them, and you get a larger number. Given only that larger number, finding the two primes that made it is brutally slow when they have hundreds of digits. The padlock is built from the big product. The key depends on knowing the original primes.
+
+## How it is used in real life
+
+When your browser shows a padlock symbol, a conversation like this has just happened between your device and a website. They used a method of this kind to agree on a secret number, without anybody having to meet. Then they used that shared secret as the key for a fast ordinary code, which scrambles all the rest of the conversation. The expensive public-key step is done once at the start. The quick scrambling does the heavy lifting afterwards.
+
+## What to take away
+
+Two strangers can create a shared secret in public because some jobs are easy in one direction and nearly impossible in reverse. Mixing paint, or raising a number to a power on a clock, is the easy direction. Each person keeps one private ingredient, shares only the mixed result, and then adds their own ingredient to the other person's result. Because the order of mixing does not matter, both arrive at the same final colour, while the listener, who saw only the mixed buckets, cannot reconstruct it.
+
+The remarkable thing is that the secret is never sent. It is built separately at each end, from pieces that are safe to share.

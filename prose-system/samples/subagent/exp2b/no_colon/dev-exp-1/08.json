@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a10d01dd6a3a119a6",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28200,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1467,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:39:43.704Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists outdoors into your home. That sounds impossible when it is freezing outside, but it works because \"cold\" is relative. Air at minus 5 degrees Celsius still holds a great deal of thermal energy. It is only cold compared with the temperature you want indoors. Absolute zero is about minus 273 degrees, so there is plenty of heat left to harvest.\n\nThe principle is the same as your fridge, run in reverse. A fridge pulls heat out of its interior and dumps it into your kitchen through the coils on the back. A heat pump pulls heat out of the outdoor air (or the ground, in a ground source system) and releases it inside your house.\n\nThe cycle has four steps. A sealed loop contains a refrigerant, a fluid that boils at a very low temperature, far below zero. First, outdoor air is blown across a coil called the evaporator. The refrigerant inside is colder than the air, so heat flows into it and it evaporates into a gas. Second, a compressor squeezes that gas. Compressing a gas raises its temperature sharply, just as a bicycle pump warms up when you use it, so the gas leaves the compressor much hotter than your radiators or underfloor heating need. Third, that hot gas passes through a second coil, the condenser, where it gives up its heat to your home's water circuit or indoor air and turns back into a liquid. Fourth, an expansion valve drops the pressure, the liquid cools right down, and the loop starts again.\n\nThe key point is that the compressor lifts heat from a low temperature to a useful one. Your electricity pays for the lifting, not for creating the heat itself.\n\nThis is why efficiency is so much higher than a boiler. A modern gas boiler converts about 90 to 95 percent of its fuel into heat, and it can never beat 100 percent. A heat pump is rated by its coefficient of performance, or COP. A COP of 3 means that one unit of electricity delivers three units of heat, because two of those three were collected from outdoors. Over a whole winter, a good installation typically averages somewhere between 2.5 and 4, often written as a seasonal COP.\n\nThere is an honest caveat. Performance falls as the outdoor temperature drops, because the compressor has to lift heat across a bigger gap. At 10 degrees outside you might see a COP near 4. At minus 10 it might be closer to 2. Modern cold climate models keep working at well below minus 15 degrees, but they use more electricity as it gets colder. Heating a house to a lower flow temperature also helps a great deal. The cooler the water your system needs to send to the radiators, the less hard the pump works.\n\nThat leads to the practical questions for your decision.\n\nInsulation and heat loss matter first. A well insulated house needs less heat, so a smaller and cheaper pump will do. If your home leaks heat badly, fix that, because it improves any heating system.\n\nEmitters matter next. Heat pumps run best at lower water temperatures, around 35 to 50 degrees, compared with 65 to 80 for many boilers. Your existing radiators may be too small to deliver enough heat at those temperatures. Some homes need a few larger radiators swapped in, while underfloor heating suits heat pumps very well.\n\nRunning costs depend on the price ratio between electricity and gas. Because a heat pump multiplies the electricity it uses, it can be cheaper to run than gas even when electricity costs two or three times as much per unit. Time of use tariffs can improve this further. Check your own local prices and the available grants before deciding.\n\nInstallation is more disruptive than a boiler swap. You need space outdoors for the unit, usually a hot water cylinder indoors, and a proper heat loss survey from the installer. Insist on that survey, since poor sizing is the commonest reason people end up disappointed.\n\nFinally, think about carbon. Gas produces emissions at your house every time it runs. A heat pump's emissions depend on how your electricity is generated, and they fall as the grid gets cleaner.\n\nIn short, a heat pump heats your house in cold weather by moving existing heat uphill with a compressor, delivering several units of heat per unit of electricity. It suits well insulated homes with suitable radiators or underfloor heating, and it is worth getting a proper survey and a few quotes before you commit."
+}

@@ -1,0 +1,19 @@
+Stop Estimating. Start Shipping Small.
+
+Every engineer has lived this scene. A manager asks how long the feature will take. You say six weeks, because you need a number and six sounds defensible. Everyone writes it down. Three weeks in, the real shape of the problem appears, and that number quietly turns into a promise, then a deadline, then a source of resentment. Nobody lied. The estimate was simply a guess wearing a suit.
+
+Software teams should stop estimating how long work will take. I mean the whole ritual of story points, planning poker and quarterly date commitments. These practices cost real time and buy very little.
+
+Start with the evidence. Decades of research and a great deal of lived experience agree that we are poor at predicting the duration of novel work. Software is almost always novel. If the work were repeatable, we would have automated it already. The hard parts are the unknown unknowns, the surprise in a legacy module, the vendor API that behaves differently from its docs. An estimate cannot account for what nobody knows yet, so it measures our optimism instead of the task.
+
+Then consider what the estimate does to behavior. Once a number exists, it becomes a target. Engineers pad it to protect themselves, and managers trim it to satisfy the roadmap. Teams cut corners on quality to hit a date they never believed in. Meanwhile the hours spent debating whether a ticket is a three or a five are hours not spent building anything.
+
+The usual defense is that the business needs dates. It does need predictability, but estimates are a poor way to get it. A better source is your own history. Track how many small items your team finishes per week. Keep each item small enough that it takes a few days at most. Then forecast from that throughput. This approach is honest about variance, it costs almost nothing to maintain, and it improves automatically as real data arrives. Slicing work thinly does most of the estimating anyway, because a task that fits in two days cannot hide much surprise.
+
+A second defense is that estimates force us to think through the work. That is true, and it is worth keeping. Talking through the approach, the risks and the unknowns is valuable. Attaching a number to the conversation is the part that causes harm. Keep the discussion, drop the digits.
+
+Some managers will worry that without estimates they lose control. In practice the opposite happens. Instead of a date that was wrong from day one, you get a steady stream of finished work and an honest view of what is likely to land. Priorities become the real lever. When something takes longer than hoped, the question shifts from why you missed your estimate to whether it is still worth finishing, which is the question that actually matters.
+
+There are exceptions. A fixed regulatory deadline or a contractual launch date needs planning against a hard constraint. Even then, the right move is to scope to the date rather than guess the effort.
+
+So try an experiment for one quarter. Cut the work into small pieces, count what finishes each week, and stop assigning points. Tell stakeholders you will forecast from throughput. I expect your planning meetings to get shorter, your forecasts to get better, and your team to trust its manager a little more. That alone is worth far more than any number we have ever made up.

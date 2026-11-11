@@ -1,0 +1,21 @@
+Stop Estimating. Start Shipping in Slices.
+
+Every engineering team knows the ritual. Someone asks how long a feature will take, the room goes quiet, and a number appears. The number is a guess dressed as a commitment, and by the end of the quarter nobody remembers who said it or why. Teams should stop producing these estimates.
+
+Start with the evidence. Decades of project data, from large government systems to small startup apps, show the same pattern. Estimates run low, the errors are large, and the worst overruns are far bigger than the best underruns. Software work is dominated by discovery. You learn what the task is by doing it. An estimate made before that learning is a prediction about something nobody has seen yet.
+
+Then look at what the number does to behavior. Once a date exists, it becomes a target, and targets bend people. Engineers pad their figures, so the work expands to fill the padding. Managers shave the figures back down, so everyone starts late. When the date nears and the work is not done, quality is the only variable left to move. Tests get skipped. Shortcuts become permanent. The estimate did not predict the schedule. It damaged the product.
+
+Consider also the sheer cost. Planning sessions eat hours from the most expensive people in the company. Those hours produce numbers that will be wrong, and then more hours go into explaining why they were wrong. Few meetings have a worse return.
+
+The usual objection is that the business needs dates. It does need to make decisions, but a date is not the only input to a decision. What leaders actually need is a way to choose what to build, and when to stop. You can get that without estimates.
+
+Cut work into thin slices that can each ship in a few days. Keep the slices roughly the same size, and count them instead of sizing them. After a few weeks you have a throughput figure drawn from real history, not from hope. If the team finishes about six slices a week and forty remain, the forecast writes itself, and it carries a range that grows honest as the unknowns grow. This costs almost nothing to maintain and it improves each week, because it is measured instead of imagined.
+
+Pair that with a fixed appetite. Instead of asking how long a project will take, ask how much the business is willing to spend on it. Two weeks, say. The team then shapes the scope to fit, and cuts what does not. The constraint does the work that the estimate pretended to do.
+
+Some will say this is only estimation under another name. There is a real difference. A forecast from past throughput is a measurement. A story point is an opinion. The first improves with data, and the second improves only with argument.
+
+There are narrow exceptions. A fixed regulatory deadline or a hardware launch really does impose a date, and there the team must plan backward from it and cut scope early. Even then, the right move is to slice and track, not to estimate each piece up front.
+
+Managers, you will give up the comfort of a number. In exchange you get a signal you can trust, delivered weekly, built from what the team actually ships. Engineers, you will stop defending guesses. Both sides get to talk about the work instead of the number. That is a trade worth making.

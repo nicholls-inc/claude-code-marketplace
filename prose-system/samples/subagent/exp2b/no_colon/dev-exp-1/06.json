@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa8e4aaec81f57a07",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28200,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1266,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:28:07.909Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists outside and brings it indoors. That is why it can warm your house even when the air outside is far colder than the air inside.\n\nCold is a relative idea. Air at minus 5 degrees Celsius still holds a great deal of thermal energy, because the real zero point for heat is absolute zero, around minus 273 degrees. A heat pump takes advantage of that leftover energy.\n\nThe principle is the same one that runs your fridge, only in reverse. A fridge pulls heat out of its inside and dumps it into your kitchen. A heat pump pulls heat out of the outdoors and dumps it into your home.\n\nHere is the cycle in plain steps. A sealed loop carries a refrigerant, a fluid that boils at a very low temperature. Outside, the refrigerant passes through a coil with a fan blowing outdoor air over it. Even cold air is warmer than the refrigerant, so heat flows into the fluid and it evaporates into a gas.\n\nNext comes the compressor, which is the heart of the system. It squeezes the gas, and compressing a gas makes it hot. The temperature may climb to 50 or 60 degrees Celsius or more, well above your room temperature.\n\nThat hot gas then flows through a coil inside your home, linked to radiators, underfloor heating or warm air. Because the gas is hotter than your rooms, heat flows into the house. As it gives up that heat, the refrigerant condenses back into a liquid.\n\nFinally, an expansion valve drops the pressure, the liquid becomes very cold, and the loop starts again.\n\nThe compressor needs electricity, but it uses far less energy than it delivers. For every unit of electricity, a modern heat pump typically delivers about three units of heat, sometimes more. This ratio is called the coefficient of performance, or COP. A gas boiler cannot beat 100 percent efficiency, and good condensing boilers reach roughly 90 to 95 percent. A heat pump running at a COP of 3 is effectively 300 percent efficient, because most of the heat is borrowed rather than made.\n\nWhat does this mean for your decision? First, efficiency falls as it gets colder. At minus 10 degrees outside, the COP may drop to around two. Heat pumps still work, and many models are rated down to minus 20 or lower, but running costs rise in a hard freeze.\n\nSecond, the temperature of the water sent to your radiators matters. Heat pumps are most efficient at lower flow temperatures, around 35 to 45 degrees, compared with 60 to 70 for a typical gas boiler. Houses with underfloor heating suit this well. Houses with small, old radiators may need larger radiators, and good insulation helps a lot.\n\nThird, think about cost. Installation is usually more expensive than a boiler replacement, though grants and subsidies in many countries narrow the gap. Running cost depends on the price ratio between your electricity and your gas. If electricity costs more than three times as much per unit as gas, a heat pump may not save money. A time-of-use tariff, solar panels or a cheaper heat pump tariff can tilt this in your favour.\n\nFourth, there are other benefits. A heat pump cuts household carbon emissions substantially, especially as the grid gets cleaner. It also removes the need for a gas connection, and many models can cool your home in summer.\n\nA sensible next step is to ask installers for a heat loss survey of your home. It will show whether your insulation and radiators are suited to a heat pump, what flow temperature you would need, and what your annual running costs would likely be compared with your boiler. If the survey is encouraging, replacing a boiler that is near the end of its life is the ideal moment to switch."
+}

@@ -1,0 +1,21 @@
+Stop Estimating. Start Shipping Small.
+
+Every engineering team knows the ritual. Someone asks how long a feature will take, the room goes quiet, and a number gets pulled from thin air. Two weeks, say. Everyone knows it is a guess, and everyone writes it on the roadmap anyway. Then reality arrives, the number turns out wrong, and the team spends a retro discussing why it was wrong instead of asking why we asked.
+
+I think teams should stop estimating how long work will take. Not because estimates are unpleasant, but because they are bad at the one job they claim to do.
+
+Start with the evidence. Studies of software projects keep finding the same thing: estimates miss, and they miss in one direction. Work takes longer than predicted, often by a wide margin, and the error grows with the size and novelty of the task. That is no accident. Software work is mostly discovery. If we knew exactly how to build the thing, we would copy it. The unknowns are the work, and you cannot size what you have not yet found.
+
+Then consider what an estimate does once it exists. It stops being a guess and becomes a promise. A manager repeats it upward. A date appears in a slide. When the real work runs long, engineers face an ugly choice: cut corners to hit the number, or deliver bad news and absorb the blame. Teams that ship on arbitrary dates they invented under pressure tend to pay for it later, in bugs and debt.
+
+Estimation also eats time. Planning sessions, point debates, and re-estimates after scope changes consume hours that could go into building. A team that spends a tenth of its week predicting the other nine tenths is not getting a good deal.
+
+The usual objection is that the business needs dates. It does need predictability, but estimates are a poor way to buy it. A better way is to slice work into pieces small enough that nobody argues about their size, then measure how many pieces finish each week. That throughput is a real number drawn from your own history, not a hope. Forecast from it. If the team clears about six small items a week and forty remain, you have a range, and it comes from evidence.
+
+Smaller slices bring a second benefit. When every change ships in a day or two, surprises surface early, when they are cheap. You learn that the API is awkward on day two, not in week six. Scope becomes the lever you pull, because the honest conversation shifts from when it will be done to what we should do first and what we can drop.
+
+Managers worry this means flying blind. It means the opposite. You swap a ceremony of invented numbers for a steady flow of working software and a forecast that updates itself.
+
+Some exceptions exist. A fixed regulatory deadline or a contract with a hard date demands a rough sense of feasibility. Fine, make one coarse call, large or small, and then work backward by cutting scope. That is a decision, not an estimate.
+
+For everything else, retire the planning poker and the story points. Break work down, ship it, count what lands, and tell the truth about what that implies. Your team will spend less time guessing and more time building, and your dates will be better for it.

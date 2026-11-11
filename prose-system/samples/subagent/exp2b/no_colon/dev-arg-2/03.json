@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9063c7cc761ca8b5",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1032,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:12:46.398Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping Small.\n\nEvery engineering team knows the ritual. Someone asks how long a feature will take, the room goes quiet, and a number gets produced. Three weeks. Maybe four. Everyone writes it down, and everyone privately knows it is fiction.\n\nI think teams should stop doing this, at least in the form most of them practice it. The problem is not that estimating is hard. The problem is that the estimate costs far more than it returns.\n\nConsider what an estimate actually is. It is a prediction about work you have not done, made by people who do not yet know what the work involves. The unknowns are the whole job. If we knew exactly what the code would require, we would have written it already. So the estimate is most confident precisely when it is least informed, and it only becomes accurate once it has become useless.\n\nThen the number takes on a life of its own. It stops being a guess and becomes a commitment. Managers repeat it upward. Other teams plan around it. When reality drifts, engineers feel pressure to cut corners, skip tests, or quietly work evenings to protect a figure they never believed in. Trust erodes on both sides. Managers conclude engineers sandbag. Engineers conclude managers do not listen. Both are responding rationally to a broken instrument.\n\nMeanwhile the time spent is real. Planning poker, story point debates, and re-estimation after scope changes eat hours that could have gone into building. Studies of software projects have shown for decades that estimates run wildly over or under, and that the error is not random. It leans optimistic, every time, because we imagine the happy path.\n\nWhat should replace it? Not chaos. Small slices and observed flow.\n\nBreak work into pieces that fit in a day or two. Ship them continuously. Then measure what actually happens, such as how many items finish per week and how long each takes from start to done. This is real data about your real team, and it improves forecasts without anyone having to guess. If your last twenty items took a median of two days, you do not need a ceremony to tell you the next one will probably take about two days.\n\nFor the manager who needs to plan, this is better, not worse. A forecast built from throughput says something like \"at our current pace we will probably finish this in six to ten weeks,\" with a range that honestly reflects uncertainty. Compare that with a single confident date that was wrong the moment it was spoken.\n\nThe objection I hear most is that the business needs dates. Sometimes it does, and when a hard deadline exists, the right response is to fix the date and negotiate scope. Ask which features matter most, build those first, and cut from the bottom as time runs out. That conversation is honest about tradeoffs in a way an estimate never is.\n\nNone of this means refusing to think ahead. Rough sizing to decide whether an idea is worth pursuing at all is sensible. What I am arguing against is the false precision, the story points, and the treating of guesses as promises.\n\nStop asking engineers to predict the future. Ask them to make the work smaller, show progress often, and tell you what they learn. You will get better information, calmer teams, and fewer broken promises."
+}

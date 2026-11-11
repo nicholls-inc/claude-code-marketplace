@@ -1,0 +1,71 @@
+Imagine two people, Asha and Ben, who have never met. They want to share a secret number, say to lock messages that only they can read. The trouble is that the only way to talk is a public line where anyone, including a nosy third person we will call Eve, can hear every word. Common sense says this is impossible. If Eve hears everything, she must know everything. Yet it can be done, and the idea behind it is surprisingly gentle.
+
+**The paint-mixing picture**
+
+Start with colours rather than numbers. Suppose Asha and Ben publicly agree on a starting colour, say yellow. Eve hears this and that is fine.
+
+Asha secretly picks a private colour, say red, and mixes it into a big tub of yellow. She sends the tub to Ben. Ben secretly picks blue, mixes it into his own tub of yellow, and sends that to Asha. Eve can see both tubs travelling along the line, but she cannot easily unmix them to find the red or the blue.
+
+Now Asha adds her private red to Ben's tub (yellow plus blue). Ben adds his private blue to Asha's tub (yellow plus red). Both end up with exactly the same final colour, yellow plus red plus blue. Eve only ever saw tubs containing one private colour, so she cannot produce the final mix without one of the secrets.
+
+The trick is that mixing is easy to do but very hard to undo, and the order of mixing does not matter. Mathematics has a version of this, and it is built from something you already know.
+
+**Clock arithmetic**
+
+You have met the idea of remainders. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, because on a 12-hour clock we wrap around. Mathematicians call this "mod". We write 15 mod 12 = 3, meaning that 15 divided by 12 leaves a remainder of 3.
+
+We will use a clock with 23 hours instead of 12. So 25 mod 23 = 2, because 25 is 23 plus 2. Any number, however big, can be squeezed down to a number from 0 to 22 by taking its remainder on division by 23.
+
+Now think about powers. Five to the power of 3 means 5 × 5 × 5 = 125. On the 23-hour clock, 125 mod 23 = 10, since 23 × 5 = 115 and 125 minus 115 is 10.
+
+Here is the key fact. Going forward is easy. If I tell you "take 5, raise it to the power 6, and find the remainder on a 23-hour clock", you can do it. But going backward is hard. If I tell you "I raised 5 to some power and the clock showed 8, what was the power?", you have no shortcut. The answers jump around the clock in a pattern that looks random, so you are reduced to trying power after power until one fits. With a tiny clock that is quick. With a clock of hundreds of digits it would take longer than the age of the universe.
+
+This one-way street is our "unmixing is hard" ingredient. The other ingredient, "order does not matter", comes from a rule of powers. Raising a number to the power 6 and then to the power 15 gives the same result as raising it to the power 15 and then to the power 6. Both equal the power 90.
+
+**The exchange, step by step**
+
+Here is the whole conversation with small numbers. In real life the numbers are enormous, but the steps are identical.
+
+First, Asha and Ben publicly agree on two numbers. The first is the clock size, 23. The second is a starting number, 5. Think of these as the yellow paint. Eve hears both.
+
+Second, each chooses a private number and tells nobody. Asha picks 6. Ben picks 15.
+
+Third, each does the easy forward calculation and sends the result across the line.
+
+Asha computes 5 to the power 6, which is 15,625. On the 23-hour clock that is 8. She sends 8 to Ben.
+
+Ben computes 5 to the power 15 on the clock, which comes out as 19. He sends 19 to Asha.
+
+These two results, 8 and 19, are like the tubs of mixed paint. Eve hears both.
+
+Fourth, each takes what they received and raises it to their own private power.
+
+Asha takes Ben's 19 and raises it to her private 6. The answer on the clock is 2.
+
+Ben takes Asha's 8 and raises it to his private 15. The answer on the clock is also 2.
+
+Both now hold the number 2, and it was never sent along the line. Why do the answers match? Asha effectively computed 5 raised to the power 15 and then to the power 6. Ben computed 5 raised to the power 6 and then to the power 15. Either way it is 5 to the power 90, and the clock shows 2. The order of the powers does not matter, just as the order of mixing paint does not matter.
+
+**What Eve is stuck with**
+
+Eve knows the clock size 23, the starting number 5, and the two messages 8 and 19. To find the secret she needs one of the private numbers, 6 or 15. To get one, she must work backward from "5 to some power gives 8 on the clock". That is exactly the hard backward problem.
+
+With a clock of 23, Eve can solve it in seconds by trying every power. A small example like this is a toy, and the shared secret 2 is not safe. But the real system uses a clock with more than 600 digits. Trying every power would mean more steps than there are atoms in the observable universe, and no known fast method is available to ordinary computers.
+
+Notice also that the forward calculation stays cheap even for huge numbers. There is a trick of repeated squaring that lets a computer raise a number to a power with hundreds of digits in a fraction of a second. So the honest users do an easy job, while the eavesdropper faces a nearly impossible one. Everything rests on that gap in difficulty.
+
+**Why it is called public-key**
+
+In this scheme each person has a pair of numbers. The private one, like Asha's 6, never leaves her. The public one, like her 8, is calculated from the private one and is shouted openly. Anyone can see the public number, but it does not reveal the private number. That split is where the name "public-key cryptography" comes from.
+
+Other versions of the same idea exist. In one popular design, a person publishes a "padlock" that anyone can use to lock a message, but only the owner holds the key that opens it. The padlock is built from multiplying two huge prime numbers together. Multiplying is easy, but taking the product apart again is very hard. It is the same one-way street wearing different clothes.
+
+**What it does not do**
+
+One honest warning. This method guarantees that eavesdroppers cannot learn the secret, but it does not prove who is on the other end. If Eve could cut the line and pretend to be Ben to Asha, and pretend to be Asha to Ben, she could run two separate exchanges and sit in the middle. To stop this, real systems add a way to check identity, such as certificates that vouch for a public number belonging to a particular person or website.
+
+Also, nobody has proved that the backward problem is truly impossible to speed up. Its difficulty is a strong, well-tested belief rather than a mathematical certainty. Researchers have tried to crack it for decades without success, and that long record is what gives people confidence.
+
+**The big picture**
+
+The beauty of the idea is that secrecy does not require a secret meeting. Two strangers can each do a calculation that is easy for them and brutal for anyone watching, swap the results in public, and end up holding the same hidden number. Each time you see a padlock in your web browser, something very like this conversation has just taken place in a fraction of a second.

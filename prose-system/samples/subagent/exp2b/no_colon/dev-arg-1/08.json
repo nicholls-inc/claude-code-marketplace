@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a943bcad5c203b803",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28188,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1608,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:41:00.693Z",
+  "valid": true,
+  "text": "Let Cities Stop Dictating Parking\n\nEvery city that requires a minimum number of parking spaces for new buildings is running an experiment in central planning, and the results are in. The rules were written to prevent a problem that markets and ordinary building owners are perfectly capable of managing on their own. Cities should repeal them.\n\nStart with what a minimum parking requirement actually is. It is a law that tells a developer, a restaurant owner or a church how many spaces to build, regardless of what they believe their customers or tenants need. The numbers are often absurdly precise. A certain number of spaces per hundred square meters of retail, a certain number per bedroom, a certain number per seat. Many of these ratios trace back to a handbook of traffic counts taken at a handful of suburban sites, often with free parking and no transit nearby. They were never meant to be universal, yet they became law across thousands of jurisdictions.\n\nThe first cost is housing. A single surface space takes up roughly the area of a small studio apartment's worth of land once you count the access lanes. A space in a structured garage can cost tens of thousands of dollars to build, and in an underground garage far more. Those costs do not vanish. They are passed on to renters and buyers, including the many households that own no car. A tenant who sells her car to save money still pays for the space she no longer uses, because it is bundled into her rent. Requiring parking is a hidden tax on housing, and it falls hardest on the poor, who own fewer cars to begin with.\n\nThe second cost is the buildings that never get built. Small lots in older neighborhoods often cannot physically fit the required spaces alongside the building. So the corner store stays a vacant lot, the old house cannot become a fourplex, and the historic main street cannot be filled in. Reformers have repeatedly found that minimum requirements, more than height limits or setbacks, are what kill modest projects on modest sites. The result is a city that is spread thin, expensive and dependent on driving, which then creates the traffic the parking rules claimed to relieve.\n\nDefenders raise a reasonable worry. If a new apartment building provides no parking, will its residents flood the surrounding streets with their cars? Sometimes, in the short run, yes. But the answer to crowded curbs is to price the curb, not to force every private owner to oversupply spaces. A residential permit program, or a meter that rises until a space or two is always open, solves the spillover directly and even raises revenue. Forcing thousands of buildings to carry empty spaces as insurance is a very expensive way to avoid a problem that a modest fee handles.\n\nBesides, removing a minimum is not the same as banning parking. This point gets lost constantly. Cities that have scrapped their requirements, including Buffalo, Minneapolis, and a growing list of others, did not see developers abandon garages overnight. Developers still build parking where tenants and lenders want it. Suburban projects with ample land keep providing plenty. What changes is that the decision moves from a zoning table to the people who will live with the consequences. Where parking is valuable, it will be built and sold at its real price. Where it is not, land goes to homes, shops and gardens instead.\n\nThere is also a fairness argument that deserves more attention. Mandatory parking forces people who do not drive to subsidize those who do. It privileges one way of getting around in the law itself and then calls the resulting car dependence a natural preference. A city that wants walkable blocks, working transit and lower emissions cannot simultaneously legislate an oversupply of free storage for cars. The two goals pull against each other, and the parking mandate quietly wins every time.\n\nSome will say the idea is radical. It is closer to the opposite. Until the middle of the twentieth century, most American cities had no such rules, and their older neighborhoods, the ones people now pay a premium to live in, were built without them. Mandates are the recent innovation. Repealing them returns the city to a tradition that produced many of its most loved places.\n\nA sensible transition helps. Cities can begin by eliminating requirements near transit and downtown, for small businesses and for conversions of existing buildings, then extend the reform citywide as the sky stays up. They can pair it with performance pricing of on-street spaces and with maximums only where land is truly scarce. But the direction is clear.\n\nPlanners are right to care about how people reach their destinations. They are wrong to believe they can calculate the correct number of parking spaces for every building from a spreadsheet. Let owners, tenants and neighbors decide, and let prices tell the truth. Remove the minimums."
+}

@@ -1,0 +1,13 @@
+A leap second is a single extra second that timekeepers occasionally slip into the clock so that our everyday time stays in step with the turning of the Earth.
+
+To understand why, it helps to know that there are two ways of measuring time. The first is astronomical. A day is the time the Earth takes to spin once, and that spin defines the sun's position in the sky. The second is atomic. Since the 1960s, clocks based on the vibrations of atoms, usually caesium, have counted seconds with astonishing steadiness, drifting by less than a second over many millions of years.
+
+The trouble is that the Earth is not nearly so reliable. Tides, shifts in the planet's molten core, melting ice and even large earthquakes nudge its rotation. Over the long run, tidal friction has been slowing the spin, so days are growing slightly longer. The difference is tiny, but it adds up. If nothing were done, atomic time would gradually race ahead of the sun.
+
+In 1972, authorities introduced a compromise. Coordinated Universal Time, the standard that civil clocks follow, would tick at the atomic rate but would be adjusted by whole seconds whenever it strayed too far from the Earth's rotation. Since then, 27 leap seconds have been added, the most recent at the end of 2016. On those occasions, clocks read 23:59:60 before rolling into the new day.
+
+That sounds harmless, yet it has proved a headache. Modern life runs on computers, and computers dislike a minute with 61 seconds. Software has often been written on the assumption that every minute has exactly 60. Leap seconds have triggered crashes and outages at technology companies, and have confused financial trading systems, satellite navigation, telecommunications networks and power grids that depend on precise timestamps. Engineers have devised workarounds, such as smearing the extra second across several hours, but these differ from one company to another, which creates inconsistencies of its own.
+
+There is a further twist. In recent years the Earth has been spinning slightly faster than expected, which raises the prospect of a negative leap second, in which a second is removed. That has never been tried, and experts worry it would be far riskier for software.
+
+In 2022, the international body that sets measurement standards, the General Conference on Weights and Measures, voted to stop using leap seconds by 2035. The gap between atomic and astronomical time will be allowed to grow, and a fix will be considered later, perhaps by adjusting by a larger unit such as a minute, centuries from now. For most people, nothing will change. The sun will still rise, just a little out of step with the atomic clocks.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac4b37f5ca3561ff1",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 950,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:10:42.594Z",
+  "valid": true,
+  "text": "A lithium-ion cell stores energy by holding lithium at different electrochemical potentials in two electrodes. During charging, lithium leaves the cathode, a layered metal oxide, travels through the electrolyte as an ion, and inserts between graphene layers in the graphite anode. Electrons take the external path through the charger. Cell voltage rises as the anode fills with lithium and the cathode empties, because the open-circuit voltage is a function of how full each electrode is.\n\nAlmost all chargers use constant current followed by constant voltage. In the first stage the charger forces a fixed current, commonly between 0.5 and 1 C, where 1 C would fill the nominal capacity in an hour. The terminal voltage climbs steadily toward a limit, typically 4.2 V for a graphite and cobalt-based cell. The charger controls current and the cell dictates voltage. This stage delivers roughly 70 to 80 percent of the capacity.\n\nThe second stage holds the voltage at the limit and lets current fall on its own. Charging ends when current decays to a small cutoff, often 0.05 C. This tail is why the last fraction of charge takes so long.\n\nThe slowdown has a clear cause. The terminal voltage is the open-circuit voltage plus the current times the internal resistance, and that resistance sums ohmic drops, charge-transfer kinetics at the particle surfaces, and slow solid-state diffusion of lithium inside the particles. Late in charge the open-circuit voltage is already close to the 4.2 V ceiling, so little headroom remains for the resistive term. Holding the terminal voltage fixed therefore forces the current down, in roughly exponential decay, as the open-circuit voltage creeps upward.\n\nDiffusion makes this worse. Lithium arrives at the particle surface faster than it can spread inward, so the surface fills before the core. The surface then reads as nearly full and sets the voltage, even though the interior still has room. The constant-voltage tail gives time for concentration gradients to relax, which is a diffusion process with a time scale that grows with the square of particle size.\n\nThe voltage ceiling cannot simply be raised. Above about 4.2 V the electrolyte oxidises at the cathode and the cathode structure degrades. Near full charge, the graphite potential also falls close to that of lithium metal, so fast charging risks plating metallic lithium on the anode surface. Plating consumes lithium, forms dendrites, and creates a short-circuit hazard. Lowering current at high state of charge keeps the anode potential safely above zero.\n\nCold temperatures slow kinetics and diffusion further, so many systems derate charge current when the cell is cold. Fast charging protocols therefore trade time against lifetime and safety."
+}

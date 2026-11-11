@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae476acfa3bf18eda",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 998,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:51:04.168Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a protocol called constant current, constant voltage, usually shortened to CC-CV. It has two phases, and the second explains why the last part of a charge is slow.\n\nEach cell has a safe upper voltage limit, typically 4.2 V for graphite and cobalt-based chemistries. Charging pushes lithium ions out of the cathode, across the electrolyte and into the graphite anode, where they sit between carbon layers. The charger must supply the energy to do this without letting the cell exceed its voltage limit.\n\nIn the first phase, the charger holds a fixed current, commonly between 0.5 and 1 times the cell capacity per hour. The cell voltage rises steadily from about 3.0 V as the anode fills with lithium. This phase delivers roughly 70 to 80 percent of the capacity and is the fast part of the charge.\n\nThe measured terminal voltage is not the true equilibrium voltage of the cell. It is the open circuit voltage plus a loss, where the loss equals current multiplied by the cell's internal resistance. That resistance has several sources. Ohmic resistance comes from the electrodes, current collectors and electrolyte. Charge transfer resistance comes from the reaction at each particle surface. Diffusion resistance comes from the time lithium needs to move inside solid particles, which is slow compared with movement in the liquid electrolyte.\n\nWhen the terminal voltage reaches the limit, the second phase begins. The charger stops regulating current and instead holds the voltage constant. Now the loss term must shrink, because the open circuit voltage keeps rising as the cell fills. To keep terminal voltage fixed, the current falls. It decays roughly exponentially, like a capacitor charging through a resistor, though the true behaviour is more complex.\n\nThere is also a physical reason the limit cannot simply be raised. Near full charge the anode surface is crowded with lithium. Pushing harder risks lithium plating, where metal deposits on the anode instead of inserting into it. Plating consumes lithium permanently and can grow dendrites that short the cell. Higher voltage also accelerates electrolyte oxidation at the cathode and shortens life.\n\nInside the particles, a concentration gradient develops. The surface fills first while the core lags. Constant voltage gives the lithium time to diffuse inward and equalise, so the whole particle approaches full charge. The charger ends the phase when current drops to a cutoff, commonly 0.05 to 0.1 times the capacity per hour. Waiting for zero current would take unreasonably long for little gain.\n\nThe practical result is that the first 80 percent takes about as long as the final 20 percent in a typical protocol. Fast chargers exploit this by stopping early, and some use stepped currents or temperature control to move the limit outward safely. The slowdown is a deliberate safety and longevity measure rather than a flaw."
+}

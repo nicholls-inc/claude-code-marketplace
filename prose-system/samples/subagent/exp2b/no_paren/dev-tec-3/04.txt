@@ -1,0 +1,15 @@
+A lithium-ion cell is charged with a protocol called constant current, constant voltage, usually shortened to CC-CV. It has two phases, and the second explains why the last part of charging is slow.
+
+Charging forces lithium ions out of the cathode, which is typically a layered metal oxide, across a porous separator soaked in liquid electrolyte, and into the graphite anode. There they sit between the carbon layers, a process called intercalation. Electrons travel through the external circuit to balance the ionic charge. The charger therefore has to push current against the cell's own open-circuit voltage, which rises as the anode fills and the cathode empties. A typical cell rises from about 3.0 V when empty to 4.2 V when full.
+
+In the first phase, the charger holds current constant, commonly between 0.5 and 1 times the cell capacity per hour. Terminal voltage climbs steadily as state of charge increases. The terminal voltage is the open-circuit voltage plus the current multiplied by the cell's internal resistance, so it sits above the open-circuit value throughout. This phase delivers roughly 70 to 80 percent of the capacity.
+
+When terminal voltage reaches the upper limit, the charger switches to the second phase and holds voltage constant. The limit is firm. Above about 4.2 V, the electrolyte oxidises at the cathode, and the anode surface risks lithium plating, in which metallic lithium deposits instead of intercalating. Plating consumes lithium, degrades capacity, and can grow dendrites that short the cell.
+
+Holding voltage constant makes the current decay. The current is the voltage headroom divided by the internal resistance. That headroom is the fixed terminal voltage minus the open-circuit voltage, which keeps rising as the cell fills. The headroom shrinks, so the current falls. The result is roughly exponential decay, much like a capacitor charging through a resistor.
+
+Two further effects stretch the tail. First, ions must diffuse into the solid particles. Concentration gradients build up inside each particle, and the surface reaches its limit while the core is still depleted. Diffusion is slow, so the cell needs time for the lithium to redistribute inward. Second, graphite is nearly full at the end, so the open-circuit voltage curve flattens and the available driving force becomes small and sensitive to temperature.
+
+The charger ends the cycle when current falls to a cutoff, typically 0.05 to 0.1 times capacity per hour. Pushing on to zero current would take very long for a few percent more capacity, while holding the cell at high voltage accelerates ageing. The cutoff is a deliberate trade between charge time and cell life.
+
+This is why fast chargers advertise times to 80 percent. Beyond that point the physics, not the hardware, sets the pace.

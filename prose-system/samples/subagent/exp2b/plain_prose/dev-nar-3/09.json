@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a916dd216e7cbd40f",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28187,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1020,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:50:04.906Z",
+  "valid": true,
+  "text": "On a mild Wednesday, January 15, 1919, the North End of Boston was enjoying an unseasonable thaw. Around half past noon, workers and residents went about their business near Commercial Street, where a huge steel tank, fifty feet tall and nearly ninety feet across, towered over the waterfront. It belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol, and it held more than two million gallons of molasses, shipped up from the Caribbean to be turned into industrial alcohol, a vital ingredient in munitions during the war.\n\nThe tank had been trouble from the start. Built hastily in 1915, it was never properly tested, and its seams wept so much that neighborhood children would collect the dripping syrup in cups. Rather than fix the flaws, the company painted the tank brown to hide the leaks. Residents had long complained of groans and shudders from the structure, but their warnings went unheeded. Just the day before, a fresh delivery of warm molasses had been pumped in, and the sudden rise in temperature, combined with the fermentation of the cargo, likely raised the pressure inside.\n\nThen the tank failed. Witnesses described a sound like machine-gun fire as rivets burst, followed by a roar as the steel ruptured. A wave of molasses, perhaps fifteen feet high at its front, swept out at around thirty-five miles an hour. It flattened buildings, lifted a train off its tracks, and tore a section from the elevated railway. A firehouse was knocked from its foundations, trapping men inside. Horses, wagons, and people were swallowed in an instant.\n\nWhat made the disaster so terrible was the nature of the substance itself. As the wave spread, it cooled in the winter air and thickened, becoming something like wet cement. Those caught in it found themselves pinned and slowly suffocating, unable to pull free. Rescuers, including sailors from a nearby ship, soldiers, and Red Cross workers, waded into the sticky mass, struggling to reach survivors. The search went on for days. Twenty-one people died, and about a hundred and fifty were injured. Victims included children playing in the street and workers eating lunch.\n\nThe cleanup was a monumental task. Crews sprayed salt water and sand over the streets, and the harbor ran brown with molasses for months. Some residents claimed that on warm days the neighborhood smelled sweet for decades afterward.\n\nThe aftermath mattered as much as the flood. United States Industrial Alcohol insisted that anarchists had sabotaged the tank, a claim meant to dodge blame. But a lengthy court case, one of the first big class-action suits in Massachusetts, heard thousands of witnesses. The auditor appointed to the case concluded that the tank had been structurally unsound, and the company was ordered to pay damages to victims' families. The case helped push states toward stricter building codes and engineering oversight, requiring qualified professionals to sign off on structures."
+}

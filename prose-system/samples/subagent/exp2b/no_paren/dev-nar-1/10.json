@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "afb728f8228529b31",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28201,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1571,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:54:41.657Z",
+  "valid": true,
+  "text": "In late August 1854, cholera arrived in Soho, a crowded, poor district of London. Within ten days, more than five hundred people living around Broad Street were dead. The disease was terrifying. It brought violent vomiting and diarrhea, and it drained the body of water so quickly that a healthy person could be dead within a day. Nobody knew what caused it.\n\nThe prevailing belief among doctors and officials was the miasma theory. This held that diseases like cholera spread through foul air, rising from rotting waste, filthy streets and polluted ground. London certainly stank. The River Thames was an open sewer, and cesspools lay beneath many houses. The theory seemed to fit what people could smell.\n\nJohn Snow, a physician who lived nearby, doubted it. He had already become well known for his work in anesthesia, and he had given chloroform to Queen Victoria during childbirth. He was careful and methodical, and he had been thinking about cholera for years. During an earlier epidemic in 1848 and 1849, he had noticed something that bad air could not explain. Cholera first attacked the bowels, not the lungs. If people were breathing in a poison, he reasoned, why did the illness begin in the gut? He suspected that people were swallowing something, and that it passed from the sick to the healthy through contaminated water or food.\n\nWhen the Broad Street outbreak erupted, Snow had a chance to test his idea. He did not wait for theory to settle the matter. He went door to door, asking who had fallen sick and who had died, and he gathered the names and addresses. He drew on the official death records as well, and he began to mark each death on a map of the neighborhood. Each case was a small bar drawn at the address where the person had lived. Soon the pattern became hard to miss. The deaths clustered thickly around one spot, a public water pump on Broad Street.\n\nSnow noticed that the pump was not the nearest source of water for everyone who died, yet most of the victims lived closer to it than to any other pump. He then looked closely at the exceptions, which proved as revealing as the pattern itself. A workhouse near the pump housed more than five hundred inmates, yet only a handful died. Snow learned that the workhouse had its own well inside the building, so its residents had no need to use the Broad Street pump. A brewery on the same street also escaped almost untouched. The workers there were given malt liquor to drink, and the brewery had its own well as well.\n\nOther cases pointed the same way. Snow heard about a woman who lived far away in Hampstead and who died of cholera. Her sons said that she had always preferred the taste of the water from the Broad Street pump, and that she had sent a servant to fetch a bottle of it each day. She had drunk from it shortly before she fell ill. Her niece, who had also drunk some of the water, died too. Nobody else in that area of Hampstead was sick.\n\nBy the evening of September 7, Snow felt he had enough evidence. He went to the local board of guardians, the officials who ran the parish, and laid out his findings. He urged them to act. They were not fully convinced, but they agreed to try. The next day, the handle of the Broad Street pump was removed, so nobody could draw water from it. The outbreak was already declining by then, since many residents had fled the area, and some historians argue the decline would have happened regardless. But Snow believed the removal of the handle had helped.\n\nHis work did not end there. A local clergyman named Henry Whitehead, who had started out skeptical of Snow's theory, began his own investigation. Whitehead knew the community far better than Snow did, and he searched for the first case of the outbreak. He found it. A baby girl who lived at 40 Broad Street had fallen ill with severe diarrhea just before the epidemic began, and she had died. Her mother had washed the baby's soiled diapers in a bucket and poured the water into a cesspool, which lay only a few feet from the pump's well. When the well was later examined, it was found that the brickwork was cracked, and waste could have seeped in.\n\nSnow's maps and numbers did not immediately win over the authorities. An official inquiry concluded that the evidence did not prove his water theory, and the miasma idea lingered for years. Snow died in 1858 at the age of forty-five, still not widely vindicated.\n\nYet his method outlasted the argument. He had asked where the sick lived, what they drank and why some people were spared, and he let patterns in real data guide his conclusions. Later scientists identified the bacterium that causes cholera, confirming that he had been right about the water. Today he is remembered as a founder of modern epidemiology, the study of how disease spreads through populations, and his map of Soho is still taught as a model of careful reasoning."
+}

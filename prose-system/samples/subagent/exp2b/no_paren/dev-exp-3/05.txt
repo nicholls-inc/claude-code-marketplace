@@ -1,0 +1,65 @@
+In this explanation, "mod 23" and the clock idea are used with small numbers so you can follow every step by hand.
+
+**Sharing a secret in a crowded room**
+
+Imagine two people, Alice and Bob, who have never met. They want to agree on a secret number that only they know. The only way they can talk is by shouting across a crowded room, and everyone hears everything. It sounds impossible. If every word is public, how can anything stay private?
+
+The answer is one of the most useful ideas of the last fifty years. It rests on a simple observation about arithmetic. Some calculations are easy to do forwards but extremely hard to undo. Public-key cryptography builds a lock out of that difference.
+
+**Easy forwards, hard backwards**
+
+Think about mixing paint. If you stir yellow and blue together, you get green in seconds. But if someone hands you a pot of green and asks you to separate it back into exactly the yellow and blue you started with, you are stuck. Mixing is easy. Unmixing is nearly impossible.
+
+Mathematics has its own version of this. Multiplying two large prime numbers together is quick. Take 101 and 103 and you get 10,403 with a little effort. But if I give you only 10,403 and ask which two primes made it, you have to hunt. With small numbers that is a short hunt. With numbers hundreds of digits long, even the fastest computers would need longer than the age of the universe.
+
+The method I will describe uses a different one-way trick, based on clock arithmetic, but the spirit is identical.
+
+**Clock arithmetic**
+
+You already know clock arithmetic. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. You divided by 12 and kept the remainder. Mathematicians call this working "mod 12".
+
+We can do the same with any number. Working mod 23 means you divide by 23 and keep only the remainder. So 25 becomes 2, because 25 is 23 plus 2. And 46 becomes 0, because 23 fits into it exactly twice.
+
+Now think about powers. Five to the power 3 means 5 times 5 times 5, which is 125. Mod 23, that is 125 minus 115, which leaves 10. Computing a power and then taking the remainder is easy, even when the numbers are big, because you can reduce as you go.
+
+The hard direction is working backwards. Suppose I tell you that 5 raised to some unknown power gives remainder 8, mod 23. What was the power? With a modulus this small you can just try every power until one fits. But when the modulus has hundreds of digits, the remainders jump around so unpredictably that there is no shortcut. You would have to try an astronomical number of possibilities. This is the one-way street we need.
+
+**The exchange, step by step**
+
+Here is how Alice and Bob use it. This method is called Diffie-Hellman key exchange, after the two researchers who published it in 1976.
+
+First, they agree on two public numbers, out loud, in front of everybody. Let us pick 23 for the modulus and 5 for the base. The whole room hears these. That is fine, because they are not secrets.
+
+Second, each person privately chooses a secret number and tells nobody. Alice picks 6. Bob picks 15. These never leave their heads.
+
+Third, each person computes a public number from their secret. Alice works out 5 to the power 6, mod 23. Five to the power 6 is 15,625. Divide by 23 and the remainder is 8. So Alice shouts "8". Bob works out 5 to the power 15, mod 23, and gets 19. Bob shouts "19".
+
+Now the whole room knows 23, 5, 8 and 19. The secrets 6 and 15 are still hidden.
+
+Fourth, each person takes the number the other shouted and raises it to their own secret power. Alice takes Bob's 19 and raises it to the power 6, mod 23. Since 19 is the same as minus 4 on this clock, minus 4 to the power 6 is 4,096, and 4,096 leaves remainder 2. Bob takes Alice's 8 and raises it to the power 15, mod 23. Eight is 2 to the power 3, so this is 2 to the power 45. A short calculation shows that 2 to the power 11 gives remainder 1 on this clock, so 2 to the power 44 also gives remainder 1, and 2 to the power 45 gives remainder 2.
+
+Both arrive at 2. Neither ever said 2 aloud. That shared number is their secret, and they can now use it as a key to scramble their messages.
+
+**Why it works**
+
+The reason both arrive at the same answer is that powers can be stacked in either order. Alice effectively computed 5 to the power of 15 times 6. Bob effectively computed 5 to the power of 6 times 15. Multiplying 6 and 15 gives 90 whichever way round you do it, so the final results match. Each person contributed one secret ingredient, and the order of combining does not matter.
+
+**Why the eavesdropper is stuck**
+
+Suppose a spy, Eve, hears everything. She knows 23, 5, 8 and 19. To find the key she would need either Alice's 6 or Bob's 15. To get 6, she must ask what power of 5 leaves remainder 8. With these tiny numbers she can simply try 1, 2, 3 and so on, and she will find it quickly. That is why real systems use enormous numbers. When the modulus has hundreds of digits, the trial-and-error route is hopeless, even for computers working together for years.
+
+Eve cannot combine 8 and 19 directly either. Multiplying them, or adding them, gives numbers that have no useful link to the shared answer. Only the secret exponents unlock it.
+
+**Locks and keys**
+
+A related family of methods uses a pair of linked numbers called a public key and a private key. Think of a padlock. Alice can make thousands of identical open padlocks and hand them out to anyone. This is her public key. Anyone can snap one shut around a message, but only Alice owns the key that opens it, and that is her private key. Bob can lock a message for her in the middle of a busy street and no onlooker can open it, even though they all saw the padlock.
+
+The mathematics behind this version uses the prime-multiplication trick from earlier. The public key is built from a huge number made by multiplying two secret primes. Anyone can use it to lock a message. Only someone who knows the two primes can unlock it, and recovering them from the product is the impossible unmixing job.
+
+**What it is used for**
+
+You rely on all this every time you see the small padlock in your web browser. When your phone contacts your bank, the two machines have never met, and everyone along the route, from the cafe wifi to the internet provider, can see the traffic. Yet within a fraction of a second they agree a secret, using exactly this kind of exchange, and everything after that is scrambled.
+
+**The big idea**
+
+Secrecy does not require a secret meeting. It requires a calculation that is easy to perform and brutally hard to reverse. Each person keeps one private ingredient, announces a disguised version of it, and the maths lets both reach the same answer while the audience is left staring at the disguises. Mixing paint is easy. Unmixing it is not. That asymmetry is what keeps strangers' messages private in a world where everyone is listening.

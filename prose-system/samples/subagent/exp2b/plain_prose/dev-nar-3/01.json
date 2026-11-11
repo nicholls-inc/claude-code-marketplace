@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aad6d4a660417768b",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28187,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1062,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:03:42.607Z",
+  "valid": true,
+  "text": "On a mild January day in 1919, the North End of Boston was busy with ordinary life. Longshoremen worked the docks, children played in the streets, and firefighters ate lunch at a station near Commercial Street. Overlooking them all, at 529 Commercial Street, stood a huge steel tank belonging to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It was about fifty feet tall and ninety feet across, and it held more than two million gallons of molasses, which the company turned into industrial alcohol for munitions and, with Prohibition on the way, for liquor.\n\nThe tank had been built quickly in 1915, and it showed. It was never properly tested. Its seams leaked so badly that molasses seeped down the sides, and neighbors collected the sticky runoff in pails. Rather than repair the tank, the company painted it brown to hide the stains. A fresh shipment had arrived days earlier, warmer than the cold air, and the sudden change of temperature may have added to the strain.\n\nAt about 12:30 in the afternoon on January 15, the tank failed. Witnesses described a deep rumbling and a sound like machine-gun fire as rivets shot out of the steel. Then the tank burst, and a wave of molasses perhaps fifteen feet high at its crest surged out through the neighborhood at around thirty-five miles an hour. It carried some twenty-six thousand tons of molasses with it.\n\nThe wave crushed buildings and tore a section of the elevated railway off its supports. It slammed a firehouse off its foundation, and men were thrown into the wreckage. Wagons, horses, and people were swept along, and the force of the surge flung debris with terrible violence. Within moments the streets lay under a thick brown tide, and people were trapped in it.\n\nRescuers arrived quickly, among them sailors from a nearby ship and Red Cross workers, soldiers, and police. But the molasses was cold, and it grew thicker as it chilled, clinging to anyone caught in it. Rescuers waded through it to reach survivors, and the work of finding the missing went on for days. Twenty-one people died and about one hundred fifty were injured. Some of the victims were children, and a horse-team driver and several city workers were among the dead.\n\nThe cleanup lasted weeks. Crews sprayed the streets with salt water from fireboats, and sand was spread to soak up what remained. The harbor ran brown well into the summer, and residents claimed that on hot days the neighborhood smelled of molasses for decades.\n\nThe aftermath changed the law. The company at first blamed anarchists, claiming the tank had been bombed. But a lengthy civil suit, one of the first big class actions in Massachusetts, followed. An auditor heard testimony from thousands of witnesses and engineering experts, and in 1925 concluded that the tank had been structurally unsound. The company paid out roughly six hundred thousand dollars in settlements. The case helped push Massachusetts toward requiring that engineers and architects sign off on large construction plans, an early step toward the building codes we take for granted today."
+}

@@ -1,0 +1,71 @@
+SubagentHandback({message: `# How strangers can share a secret in public
+
+## The puzzle
+
+Suppose Asha and Ben have never met. They want to agree on a secret number, which they can then use as a key to lock and unlock their private messages. The only way they can talk is a line that anyone can listen to. Every word either of them says is heard by an eavesdropper, whom we will call Eve.
+
+This sounds impossible. If Eve hears everything, surely she knows everything Asha and Ben know. For thousands of years people believed that two parties needed to meet in private first, to swap a codebook or a key, before they could talk secretly. Then, in the 1970s, mathematicians showed that this belief was wrong. The trick is to use a kind of calculation that is easy to do in one direction and extremely hard to undo. Once you see how that works, the rest is surprisingly simple.
+
+## A paint-mixing picture
+
+Start with paint rather than numbers.
+
+Asha and Ben agree out loud on a common starting colour, say yellow. Eve hears this, so yellow is public.
+
+Each of them also picks a secret colour and tells nobody. Asha picks red. Ben picks blue.
+
+Asha mixes her secret red into the yellow and sends the resulting orange mixture across the line to Ben. Ben mixes his secret blue into the yellow and sends the resulting greenish mixture across to Asha. Eve can see both mixtures as they travel, but she never sees the secret colours themselves.
+
+Now Asha takes the greenish mixture she received from Ben and adds her own secret red. Ben takes the orange mixture he received from Asha and adds his own secret blue. Both end up with exactly the same final colour, because both have combined yellow, red and blue. The order in which you stir paints together does not change the result.
+
+Eve, meanwhile, holds yellow, orange and greenish paint. She would need to add both secret colours to reach the final shade, and she has neither. Worse, you cannot easily "unmix" paint. Looking at the orange, she cannot work out exactly which red was added to the yellow. Mixing is easy, and separating is very hard.
+
+That is the whole idea. The only thing missing is a mathematical version of paint, one that really cannot be unmixed. Numbers can do the job.
+
+## The mathematical paint, clock arithmetic
+
+You already know clock arithmetic. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. You count round and round, and only the leftover matters. Mathematicians call this "working modulo 12" for a 12-hour clock. We can use a clock with any number of hours. Let us use a clock with 23 positions, numbered 0 to 22. When a calculation goes past 22, we wrap around and keep only the remainder after dividing by 23.
+
+Next we need the idea of repeated multiplication, which is what the power notation means. Writing 5 to the power 3 means 5 times 5 times 5, which is 125. On our 23-hour clock, 125 wraps around to 125 minus 115 (that is, 5 lots of 23), which leaves 10. So 5 to the power 3, on the 23-clock, is 10.
+
+Those two ingredients, a clock size and a starting number, are the "yellow paint". Asha and Ben announce them publicly. We will use a clock size of 23 and a starting number of 5.
+
+## The exchange, step by step
+
+**Step 1, secret choices.** Asha secretly picks the number 6. Ben secretly picks the number 15. Neither tells anyone.
+
+**Step 2, mixing.** Asha computes 5 to the power 6 on the 23-clock. Working it out gives 15,625, and after wrapping round, that leaves 8. Ben computes 5 to the power 15 on the 23-clock, which works out to 19.
+
+**Step 3, swapping.** Asha announces 8 across the open line. Ben announces 19. Eve hears both numbers, along with the public 23 and 5.
+
+**Step 4, the final mix.** Asha takes Ben's announced 19 and raises it to her own secret power, 6, on the 23-clock. The result is 2. Ben takes Asha's announced 8 and raises it to his own secret power, 15, on the 23-clock. His result is also 2.
+
+Both have arrived at the number 2, and neither ever sent it across the line. That shared 2 is their secret key.
+
+## Why do both people get the same answer?
+
+Here is the reason, without any heavy algebra. Asha's announced number is the starting number multiplied by itself 6 times. When she raises Ben's number to the power 6, she is repeating Ben's 15 rounds of multiplication a total of 6 times. That is 6 times 15, or 90 rounds of multiplying the starting number in total. Ben does the same job the other way round, repeating Asha's 6 rounds a total of 15 times. Again that is 90 rounds in total. Since 6 times 15 and 15 times 6 are the same, they must land on the same spot on the clock. This is the mathematical version of "the order of stirring does not matter".
+
+## Why Eve cannot catch up
+
+Eve knows the clock size 23, the starting number 5, and the two announced numbers, 8 and 19. To find the key she needs one of the secret powers. Since she knows that 5 raised to some power gives 8, she could just try powers 1, 2, 3 and so on until she hits 8. With a clock of only 23 positions, that takes a few seconds with pencil and paper, and she would discover Asha's secret 6, then compute the key for herself.
+
+Real systems close this loophole by making the numbers enormous. Instead of a clock with 23 positions, they use a clock with hundreds of digits. The secret powers are also hundreds of digits long. Asha and Ben can still do their own calculations quickly, because there are clever shortcuts for repeated multiplication. Squaring a number over and over lets them reach a gigantic power in a few hundred steps, not in more steps than there are atoms in the universe.
+
+Eve's task is different. She must find the secret power given only the clock-wrapped result, and nobody has found a fast method for that. Trying every possibility would take longer than the age of the universe, even with every computer on Earth working together. This is the one-way street at the heart of the system. Going forward, from a secret to a public number, is quick. Going backward, from the public number to the secret, is so slow as to be useless.
+
+Note that this relies on a lack of known shortcuts, not on a proof that none exist. Mathematicians have studied the problem intensely for decades without finding a fast attack on well-chosen numbers. Because of that long record, the world trusts it.
+
+## Why the name "public key"?
+
+The method above is often described in terms of public and private keys. Each person has a private number that never leaves their head, like Asha's 6, and a public number derived from it, like her 8. The public number can be shown to the whole world. Anyone can combine their own private number with your public one to reach a shared secret, but nobody who lacks a private number can do so. This is why two people can start from nothing but a public announcement and finish with a secret.
+
+Other systems built on similar one-way ideas let you do more. One well known example is based on the fact that multiplying two huge prime numbers together is easy, while taking the result and finding the two original primes is hard. That lets someone publish a lock that anyone can snap shut, while only the owner holds the key to open it. The flavour is the same, a public half that is safe to broadcast and a private half that is not.
+
+## What about someone pretending to be Ben?
+
+There is one weakness worth admitting. The method keeps Eve from listening in, but if she can intercept the line and actively swap the messages, she could pretend to be Ben to Asha and pretend to be Asha to Ben, running two separate exchanges. To stop this, real systems add a way of checking identity, for example certificates that vouch that a public number really belongs to the website you meant to reach. That is a separate problem from the one solved here, though, and the clock-and-paint idea still does the heavy lifting.
+
+## The takeaway
+
+Two strangers can agree on a secret in public because they use a calculation that behaves like mixing paint. It is easy to do forwards, hard to reverse, and it gives the same answer whichever of the two does their mixing first. Asha and Ben each keep one small secret and share one mixed result. Eve sees only the mixtures, and without a secret ingredient she cannot reach the final colour. Every time your phone sets up a private connection to a website, a calculation very much like this one takes place in the blink of an eye.`})

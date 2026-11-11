@@ -1,0 +1,69 @@
+**Sharing a Secret in Public**
+
+Imagine you want to agree a secret number with someone you have never met. You can only talk by shouting across a crowded room, and everyone hears every word. It sounds impossible. If the whole conversation is overheard, how can anything stay secret? Yet this is what your phone does whenever it connects to a bank's website. The trick is a clever use of a one-way street in mathematics, and you only need school-level arithmetic to follow it.
+
+**The paint-mixing picture**
+
+Start with paint rather than numbers. Alice and Bob agree out loud on a common starting colour, say yellow. Everyone in the room hears this, and that is fine.
+
+Alice secretly picks a colour of her own, say red. She mixes it with the yellow and gets orange. Bob secretly picks his own colour, say blue, and mixes it with the yellow to get green. They now swap their mixtures. Alice shouts "orange!" and Bob shouts "green!", so everyone hears both.
+
+Now each of them adds their own secret colour to the mixture they received. Alice adds her red to Bob's green. Bob adds his blue to Alice's orange. Both end up with exactly the same muddy brown, because both mixtures contain yellow, red and blue.
+
+An eavesdropper knows the yellow, the orange and the green. But paint is easy to mix and almost impossible to unmix. She cannot take the orange and work out exactly which red went into it, so she cannot build the final brown. The secret colours never left Alice's and Bob's hands.
+
+Mathematics has its own version of "easy to mix, hard to unmix". To use it we need one idea, which is clock arithmetic.
+
+**Clock arithmetic**
+
+On an ordinary clock, if it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. The clock wraps around. Mathematicians call this "working modulo 12". You add normally, then throw away complete laps of the clock and keep the remainder.
+
+We can use any clock size we like. Let us use a clock with 23 positions, numbered 0 to 22. Whenever a number goes past 22, we divide by 23 and keep only the remainder. So 30 becomes 7, and 46 becomes 0.
+
+Powers work the same way. "5 to the power of 3" means 5 × 5 × 5, which is 125. On our 23-position clock, 125 divided by 23 is 5 with remainder 10, so 125 becomes 10. Easy so far.
+
+**The one-way street**
+
+Now the key observation. Suppose I tell you that 5 to some secret power, on the 23-clock, gives 8. Can you find the power? With a small clock you can simply try 5 to the power of 1, 2, 3 and so on until you hit 8. But the numbers used in real life are hundreds of digits long. Trying every possibility would take longer than the age of the universe, even with every computer on Earth working together.
+
+Going forward is quick. Going backward is hopeless. That gap is the whole secret.
+
+**Alice and Bob, with real numbers**
+
+Here is the full exchange, using small numbers so that you can check every step yourself.
+
+Step one is the public agreement. Alice and Bob shout two numbers across the room. The first is the clock size, 23. The second is a starting number, 5. This is their "yellow". Everybody hears it.
+
+Step two is the private choice. Alice secretly picks the number 6. Bob secretly picks the number 15. They never say these aloud, and never write them down where anyone could see.
+
+Step three is the public mixing. Alice works out 5 to the power of 6 on the 23-clock. That is 5 × 5 × 5 × 5 × 5 × 5 = 15,625. Dividing by 23 gives 679 complete laps, since 23 × 679 = 15,617, which leaves a remainder of 8. She shouts "8!" Bob works out 5 to the power of 15 on the same clock and gets 19. He shouts "19!" These are the "orange" and the "green".
+
+Step four is the private finishing. Alice takes Bob's public number, 19, and raises it to her secret power, 6. The result on the 23-clock is 2. Bob takes Alice's public number, 8, and raises it to his secret power, 15. His result is also 2.
+
+They have both arrived at the secret number 2, and neither ever said it aloud.
+
+**Why the two answers match**
+
+This is not luck. Alice's final number is really 5 raised to Bob's power and then raised to her power. Bob's final number is 5 raised to Alice's power and then raised to his power. Both amount to 5 raised to the product of the two secrets, 6 × 15 = 90. And multiplication does not care about order, since 6 × 15 is the same as 15 × 6. So both roads lead to the same place. The clock wrapping does not disturb this, because remainders behave consistently however many laps you throw away.
+
+**What the eavesdropper knows**
+
+The listener heard 23, 5, 8 and 19. To find the secret she would need to discover Alice's 6 or Bob's 15. On our toy clock she can do that in seconds by trial and error. Try 5 to the power of 1, 2, 3 and so on, and 8 turns up at power 6. Then she repeats Alice's final step and gets 2.
+
+That is why real systems use gigantic numbers. With a clock of several hundred digits, the forward calculation still takes a computer a fraction of a second, because there are clever shortcuts for raising to big powers. But the backward search has no known shortcut. The honest participants do a few moments of work, and the attacker faces an impossible task. Cryptographers call this an asymmetry in effort, and they build their whole field on it.
+
+**Where the "public key" comes in**
+
+You may wonder why this is called public-key cryptography. In the exchange above, the number each person shouts out, Alice's 8 and Bob's 19, is called a public key. It is safe to share with the whole world. The number each person keeps hidden, Alice's 6 and Bob's 15, is the private key. Every person has a matched pair. The public half can be handed out freely, and the private half never leaves their possession.
+
+A closely related family of methods uses the same pair idea differently. Imagine Bob manufactures thousands of open padlocks and leaves them in a public place. Anyone can snap one shut around a message, but only Bob has the key that opens it. Alice picks up one of his padlocks, locks her message and sends it. Everyone sees the locked box and nobody can open it except Bob. Here the mathematical one-way street is multiplication versus factoring. Multiplying two huge prime numbers together is quick, but starting from the product and recovering the two primes is brutally slow.
+
+**What happens next**
+
+In practice, the shared secret is not the end. Once Alice and Bob own the same secret number, they use it as the key for a fast, ordinary scrambling method, one where both sides use the same key to lock and unlock messages. Such methods are speedy but have always had a weakness. Both parties need the key in advance, and for centuries that meant meeting in person or trusting a courier. Public-key mathematics solves exactly that problem. It lets strangers create the shared key out of thin air, in full view of everyone.
+
+**A caution**
+
+Our toy example leaves out a real danger. A cunning enemy might not just listen but interfere. She could stand between Alice and Bob, pretending to be Bob to Alice and Alice to Bob, and make two separate secrets. To prevent this, real systems add proof of identity, usually certificates that vouch for who owns which public key. The mixing mathematics hides the secret from listeners, but something else must confirm who you are talking to.
+
+Even so, the core idea is wonderfully simple. Two people each mix a private ingredient into something public. They swap the results. Each then adds their own private ingredient again. The mixtures agree, and the listeners are left holding paint that cannot be unmixed.

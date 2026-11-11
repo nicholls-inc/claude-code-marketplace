@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae101e9dc1e2c82d1",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28197,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1501,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:35:12.566Z",
+  "valid": true,
+  "text": "Cities should scrap their minimum parking requirements, and they should do it soon.\n\nStart with what a parking minimum actually is. It is a rule that says a developer cannot build an apartment building, a restaurant, or a dentist's office unless they also build a fixed number of off-street parking spaces, usually calculated from a formula set decades ago. Those formulas rarely came from careful study of local demand. Many were borrowed from a handbook of suburban traffic counts, taken at a handful of sites with free parking and no alternatives, and then copied from one city's code to the next. The result is a planning rule with the confidence of science and the evidentiary basis of a guess.\n\nThe first problem is cost, and it is paid by people who never see the line item. A surface space takes up roughly three hundred square feet once you count the aisles, and a structured or underground space can cost tens of thousands of dollars to build. That cost does not vanish. It is folded into the rent of the apartment, the price of the sandwich, and the margin of the small business that must absorb it. A tenant who owns no car still pays for the space beside their building. Parking minimums are, in effect, a tax on everyone that is charged in kind and spent on storing vehicles.\n\nThe second problem is that the rule quietly decides what can be built at all. Take a small lot downtown, the kind of site where a modest four-story building with shops below and homes above would make obvious sense. Require enough parking to serve it, and the spaces swallow the lot, or the ramp costs more than the building can earn. The project dies, or shrinks to something dull, or gets built somewhere cheaper and farther out. Older neighborhoods that people love for their density and walkability, with narrow lots and buildings pressed up to the sidewalk, are frequently illegal to rebuild under current codes. We have written rules that forbid the places we admire.\n\nDefenders say that without minimums, developers will build too little parking and spill cars onto neighborhood streets. This deserves a serious answer, because the worry is not silly. But notice what it assumes: that developers, who want to sell and lease their buildings, do not know that tenants and customers drive. They do. Lenders know it too, and they will often insist on parking for a project regardless of what the city demands. When Buffalo eliminated its minimums in 2017, and when Minneapolis and other cities followed, developers did not stop building parking. They built what they judged the market would bear, and in some cases they built more thoughtfully, sharing spaces among uses or leasing them separately from the apartments. The difference is that the decision moved from a formula in a statute to someone with money at stake.\n\nThe spillover concern is also better handled directly than indirectly. If a neighborhood fills up with parked cars, the remedy is to price the curb. Residential permit districts and metered parking turn a free-for-all into a managed resource, and the revenue can be returned to the neighborhood. Requiring every building to provide private parking is a blunt way of avoiding a conversation about the public street that we should simply have.\n\nThere is also a fairness argument that is easy to overlook. Housing is scarce and expensive in much of the country, and every required space makes it a little more so. Households without cars, who tend to be poorer, older, or younger, subsidize the storage of everyone else's vehicles. Meanwhile the cities most committed to climate goals maintain rules that make driving the default for every trip, since a destination surrounded by a sea of free spaces is a destination you cannot sensibly reach any other way. You cannot plausibly claim to want transit, walking, and affordable homes while mandating the opposite in the zoning code.\n\nRemoving minimums does not mean banning parking. This is the point opponents most often miss. A city that repeals its requirements simply stops telling private owners how many spaces to build. A suburban shopping center can keep its enormous lot if it wants to. A grocery store in a car-oriented corridor will still provide plenty. What changes is that a corner lot near a rail station, or a church wanting to convert its unused lot into housing, is no longer forced to build for a level of driving that the location does not call for.\n\nCities that have gone this way have not seen the chaos that was predicted. They have seen more varied projects, more reuse of old buildings, and more housing on sites that previously penciled out at a loss. A rule this costly, this poorly grounded, and this easy to replace with better tools has no business surviving on habit. Repeal the minimums, price the curb honestly, and let the people who build and use these places decide how much parking they need."
+}

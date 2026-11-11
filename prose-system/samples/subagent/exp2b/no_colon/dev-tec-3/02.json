@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a520824fb0c57a0b1",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28194,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 943,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:10:34.047Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a method called constant-current, constant-voltage (CC-CV). It works in two stages, and the second stage is where charging slows down.\n\nIn the first stage, the charger forces a fixed current into the cell, commonly around 0.5C to 1C. A 1C current would fill the nominal capacity in one hour. The cell's terminal voltage rises steadily during this stage, from roughly 3.0 V toward 4.2 V for a typical graphite and cobalt-oxide chemistry. Most of the capacity, often 70 to 80 percent, goes in here at full speed.\n\nCharging moves lithium ions from the cathode, through the electrolyte, and into the graphite anode. Electrons travel through the external circuit to balance the charge. The terminal voltage you measure is not the same as the cell's equilibrium voltage. It equals the open-circuit voltage plus the drop across the cell's internal resistance, which is the current times that resistance. The open-circuit voltage rises as the anode fills with lithium. The resistive drop adds on top of it.\n\nWhen the terminal voltage reaches the upper limit, the charger switches modes and holds the voltage constant. This limit cannot be exceeded. Higher voltages drive electrolyte decomposition, cathode damage and, most seriously, lithium plating on the anode. Plating makes metallic lithium deposit on the graphite surface, which cuts capacity and can create internal short circuits.\n\nWith the voltage clamped, the current is no longer set by the charger. It falls on its own, and the reason is a simple feedback. As charge accumulates, the open-circuit voltage climbs closer to the clamp value. The remaining gap between the clamp and the open-circuit voltage is what drives current through the internal resistance, so a shrinking gap means a shrinking current. The behaviour resembles a capacitor charging through a resistor, with an exponential-like decay toward zero.\n\nPhysical limits add to the effect. As the anode nears full, there are fewer empty sites in the graphite for incoming lithium, and ions must diffuse deeper into the particles to find them. Concentration gradients inside the electrode particles flatten, which reduces the diffusion driving force. Internal resistance also tends to rise at high states of charge.\n\nCharging typically ends when the current decays to a cutoff, often 0.05C to 0.1C. The last 20 to 30 percent of capacity can take as long as the first 70 to 80 percent. Chargers accept this because pushing harder at high states of charge risks plating and accelerates ageing. Heat is another concern, since resistive heating scales with current squared. Fast-charging systems therefore taper current in steps and monitor temperature to protect the cell."
+}

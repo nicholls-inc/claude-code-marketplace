@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aca26d9300b020f16",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28187,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1074,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:32:34.170Z",
+  "valid": true,
+  "text": "On the unseasonably warm midday of January 15, 1919, in Boston's crowded North End, a steel tank towering fifty feet high and holding more than two million gallons of molasses gave way. The tank belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol, which stored the syrup beside the harbor before turning it into industrial alcohol and, in wartime, munitions. It had been built hastily in 1915, and it had always misbehaved. It leaked so badly that neighborhood children collected the dark syrup in tin cups, and the company's remedy was to paint the tank brown so the stains would not show. Nobody seems to have properly tested whether it could bear its load.\n\nThe day before, a fresh shipment had been pumped in, warmer than the January air. As the temperature rose past forty degrees, the contents expanded and fermented, and the pressure inside grew. Around 12:30 in the afternoon, witnesses heard a deep rumbling and a series of sharp bangs like machine-gun fire, which were probably rivets shearing off the seams. Then the tank split open.\n\nWhat came out was a wave, by most accounts around fifteen feet high at its front, moving at perhaps thirty-five miles an hour. It was not a trickle of sweetness but a heavy, churning mass weighing roughly thirteen thousand tons. It crushed the nearby streets in seconds. It tore a section of the elevated railway from its supports, pushed a firehouse off its foundation, and flattened wagons, horses and homes. The sound, survivors said, was like a train roaring through, followed by an eerie hush broken by cries from beneath the sticky ruin.\n\nTwenty-one people died, some drowned in the syrup and others crushed by debris, and about 150 were injured. Among the dead were children who had been playing in the street and workers eating lunch. Rescuers, including sailors from a nearby ship and Red Cross volunteers, waded waist-deep through the mess. The cold made matters worse. As the molasses cooled it thickened, trapping people like flies in glue, and cutting them free was slow, exhausting work. Horses were so badly caught that many had to be shot. It took days to find all the bodies.\n\nCleanup was a long and peculiar labor. Crews sprayed salt water from fireboats and spread sand and sawdust, yet the stickiness clung to everything, from cobblestones to the soles of shoes and the rails of passing trains. The harbor ran brown until summer, and residents claimed the area smelled of molasses on hot days for decades afterward.\n\nThe aftermath mattered as much as the disaster. The company blamed anarchists, claiming a bomb had destroyed the tank, a story that played on the fears of the postwar period. But a lengthy civil suit, one of the first major class actions in Massachusetts, heard thousands of pages of testimony. An auditor ruled that the tank had been structurally unsound, and the company paid a settlement of several hundred thousand dollars. The case helped push the state toward stricter building codes and requirements that engineers sign off on their plans, reforms that still shape construction today."
+}

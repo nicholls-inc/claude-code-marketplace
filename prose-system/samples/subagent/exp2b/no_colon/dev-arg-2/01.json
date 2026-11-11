@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a30056d26f04969bc",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 966,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:01:00.206Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping Small.\n\nEvery engineering team knows the ritual. Someone pulls up a ticket, the room guesses at a number, and that number gets repeated in a planning doc until it hardens into a promise. Three weeks later the work is half done, the estimate is wrong, and everyone feels vaguely guilty. We have run this ritual for decades. It is time to stop.\n\nThe problem is not that engineers are bad at guessing. The problem is that the guess is being asked to do something impossible. Software work is mostly discovery. You learn what the task is by doing it. The unknowns that blow up a schedule are, by definition, the ones nobody could see during planning. An estimate made before the learning happens is a forecast about a fog.\n\nThen there is what we do with the number. An estimate is meant to be a probability, but it gets treated as a commitment. Managers quote it upward. Other teams plan around it. By the time reality disagrees, the number has become a target, and targets change behavior. Engineers pad. They cut corners to hit the date. They quietly avoid raising the bad news. Whole careers are spent defending guesses that were never meant to be defended.\n\nThe time cost is real too. Teams burn hours each sprint on pointing sessions, debates over whether something is a five or an eight, and retrospectives about why the fives turned out to be thirteens. That is effort spent producing a figure that tells you almost nothing the work itself would not tell you sooner.\n\nSo what replaces it? Slice the work small. If every item can be finished in a day or two, you no longer need to guess how long it takes. You count what finishes. Throughput, the number of items completed per week, is a measured fact rather than an opinion, and it is far more stable than any story point. Forecast from it. When someone asks when a feature will land, you can say that at the current rate roughly this many items remain, and here is the range. That answer is honest about uncertainty because it is built from history.\n\nSmall slices bring a second benefit. They force the conversation people actually need to have, which is about scope. Instead of asking how long the whole thing takes, you ask what we can ship first and what we can cut. Dates stay fixed and scope flexes, which is the only lever that has ever worked.\n\nThe usual objection is that the business needs dates. Sometimes it does. A launch tied to a conference or a regulatory deadline is real. But that is a constraint to plan scope against, not an estimate to extract from engineers. Working backward from a fixed date and trimming the plan to fit is a different, healthier activity than guessing forward and being blamed for the miss.\n\nManagers who fear losing visibility should notice that small slices and a visible board give more of it, not less. You can see work move every day rather than trusting a number set a month ago.\n\nStop asking how long. Ask what is next, keep it small, and let the finished work do the talking."
+}

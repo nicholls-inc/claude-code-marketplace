@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac6071ed0534bff23",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 914,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:04:55.750Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a protocol called constant current, constant voltage, usually shortened to CC-CV. It works in two phases, and the second is where the slowdown happens.\n\nIn the first phase, the charger forces a fixed current into the cell, commonly between 0.5 and 1 times the cell's capacity per hour. Lithium ions leave the cathode, which is typically a layered metal oxide, and travel through the electrolyte to the graphite anode. They slot between the graphite layers in a process called intercalation. Electrons travel the same way through the external circuit. As the anode fills with lithium, the cell voltage climbs steadily. A charger that regulates current simply lets the voltage rise to whatever value that current demands.\n\nWhen the terminal voltage reaches a ceiling, around 4.2 V for common chemistries, the charger switches to the second phase. It holds the voltage constant and lets the current decay on its own. This is the slowdown. The cell is declared full when the current falls to a small cutoff, often 5 to 10 percent of the original charging current.\n\nThe ceiling exists because higher voltages damage the cell. Beyond it, the electrolyte oxidises at the cathode and the cathode structure degrades. Any lithium that cannot enter the graphite quickly enough plates onto its surface as metal, which shortens life and creates a safety hazard.\n\nThe decay has a simple electrical explanation. The cell behaves like an ideal voltage source in series with an internal resistance. The source voltage is the open-circuit voltage, which rises as the cell fills. The terminal voltage is the open-circuit voltage plus the current times the internal resistance. With the terminal voltage clamped, any rise in open-circuit voltage must be paid for by a fall in current. Near full charge the open-circuit voltage approaches the clamp value, so the remaining headroom shrinks and the current drops roughly exponentially.\n\nThere is also a physical limit behind the resistance. Lithium must diffuse into the solid graphite particles, and diffusion is slow. As the particle surfaces fill, the concentration gradient driving ions inward flattens, so the cell can accept lithium only as fast as it spreads toward the particle core. The cell is partly limited by transport and partly by the voltage clamp, and both effects push the same way.\n\nFor an engineer, the analogy is charging a capacitor through a resistor, with the added constraint that the voltage limit is a hard safety boundary rather than a convenience. Fast-charging designs therefore try to shorten or reshape the second phase. They use stepped currents, temperature control, and cell designs with lower resistance and smaller particles."
+}

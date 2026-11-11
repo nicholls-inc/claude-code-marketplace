@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a3d7508ad55ac5550",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1046,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:35:28.922Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Delivering.\n\nEvery engineering team knows the ritual. Someone pulls up a ticket, the room goes quiet, and a senior engineer says \"three days, maybe five.\" Everyone nods. Everyone knows the number is fiction. Yet we build roadmaps, quarterly commitments, and sometimes performance reviews on top of it.\n\nSoftware teams should stop estimating how long individual work items will take. The practice costs more than it returns, and the returns are mostly an illusion.\n\nStart with accuracy. Estimates fail because software work is discovery, not construction. You cannot size a task precisely when the hard part is finding out what the task actually is. The unknowns surface halfway through, in the legacy module nobody documented or the API that behaves differently in production. Decades of data, from the planning fallacy research to ordinary project retrospectives, show the same thing. We are optimistic, we ignore the long tail, and the work expands to fill the surprise.\n\nThen consider the cost. Estimation meetings eat hours that could go into building. Worse, estimates harden into commitments the moment a manager repeats them upward. A guess becomes a promise, and a promise becomes pressure. Engineers respond rationally. They pad numbers, cut corners to hit dates, or quietly avoid the risky work that would have taught the team something. The estimate does not just predict behavior. It distorts it.\n\nThe usual defense is that planning requires numbers. It does, but not these ones. What leaders actually need is a credible answer to \"when will we see value?\" You can get that without sizing every ticket. Break work into small, roughly uniform slices, ship them continuously, and measure throughput. If your team finishes about six slices a week, a backlog of thirty slices needs roughly five weeks, with a range you can compute from real history. This is forecasting from evidence, not estimation from opinion. It is cheaper, it improves as data accumulates, and it never requires anyone to defend a number they invented in a meeting.\n\nSmall slices matter most. When work is cut down to a day or two, the variance shrinks and the argument about size becomes pointless. The real skill is decomposition, and that conversation is worth having. Debating whether something is a five or an eight is not.\n\nManagers will worry that dropping estimates means losing control. The opposite is true. Control comes from visibility, not prediction. Working software every few days, a visible queue, and honest conversations about scope tell you far more than a spreadsheet of stale guesses. When a date truly matters, fix the date and flex the scope. That trade is honest about what is knowable.\n\nThere are narrow exceptions. A contractual deadline or a hardware launch may force a coarse, top-down projection. Fine, make one, label it a forecast, and revisit it often. But that is a long way from asking every engineer to price every ticket.\n\nTeams that drop estimates usually report the same thing. Meetings shrink, trust grows, and delivery gets steadier because attention moves from defending numbers to finishing work. Try it for a quarter. Measure what you ship, not what you guessed."
+}
