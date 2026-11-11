@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "acd60b51f0dceacda",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25356,
+    "cache_read_input_tokens": 48365,
+    "output_tokens": 1544,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:24:29.809Z",
+  "valid": true,
+  "text": "Scrap the Parking Mandates\n\nMost people have never read their city's zoning code, yet it has shaped nearly every building they have ever walked into. Buried in those codes is a table that dictates how many parking spaces each kind of building must provide: so many per apartment, per restaurant seat, per bowling lane, per hundred square feet of funeral parlor. These minimum parking requirements are among the most consequential rules in American city planning, and among the least defensible. Cities should remove them.\n\nStart with where the numbers come from. They carry an air of engineering precision, but most were copied from neighboring towns or derived from surveys of a handful of suburban sites at peak demand, where parking was free and no bus ran. The economist Donald Shoup, who spent a career studying the subject, called this pseudoscience, and the label fits. A requirement of one space per 200 square feet of retail does not measure how much parking a shop needs. It measures how much parking a shop in a car-dependent suburb used on its busiest day decades ago, then imposes that figure on every site forever, regardless of whether it sits beside a train station or a freeway exit.\n\nThe result is a staggering oversupply. Estimates vary, but the United States has several parking spaces for every car, and in many cities parking takes up more land than housing does. Anyone who has seen a shopping center lot on an ordinary Tuesday knows what the requirement produces: acres of asphalt built for the Saturday before Christmas, empty the rest of the year.\n\nThat asphalt is not free. A surface space costs thousands of dollars to build; a space in a structured garage commonly costs tens of thousands, and underground parking costs more still. Those costs are folded into rents, restaurant bills and grocery prices. Everyone pays them, including people who do not drive. A tenant without a car, who is more likely than average to be poor, young or elderly, subsidizes the storage of other people's vehicles through her rent. It is hard to design a more regressive hidden tax.\n\nThe damage to housing is worse than the price tag suggests, because parking mandates do not merely raise the cost of homes. They prevent homes from being built at all. On a small urban lot, the geometry of ramps, aisles and stalls often makes the required parking physically impossible, so the corner apartment building or the conversion of an old shopfront into flats simply never happens. Much of the housing people most admire in older neighborhoods, the triple-deckers, courtyard apartments and flats above shops, would be illegal to build today for want of parking. In a country short millions of homes, a rule that outlaws the cheapest forms of housing is a self-inflicted wound.\n\nMandates also lock in the driving they claim to accommodate. Spread buildings apart with parking lots and walking becomes unpleasant, transit becomes unviable, and a car becomes a necessity. More driving then justifies more parking. The lots themselves shed stormwater, trap heat and generate no tax revenue worth mentioning; a block of modest buildings pays a city far more per acre than a big-box store marooned in its lot.\n\nThe strongest objection is spillover. If the new apartment building has no garage, the argument goes, its residents will park on my street. This is a real concern, but it is a problem of managing curb space, not a reason to regulate private land. Streets fill up because curb parking is given away free. Cities have tools for that: permits, meters, prices that vary with demand, and revenue returned to the neighborhood that generates it. Forcing every developer to build a garage in order to protect a free public good is a remarkably expensive way to avoid installing a parking meter.\n\nIt is worth being clear about what abolition means. Removing a minimum does not ban parking. Developers still build it, because lenders demand it and tenants want it. What changes is who decides how much. A builder with money at stake, looking at an actual site and an actual market, will make a better guess than a table written in 1965.\n\nWe no longer need to speculate about this. Buffalo dropped its minimums citywide in 2017, and builders responded by providing less parking where it was not needed, particularly in mixed-use projects, and reusing sites that had sat idle. Minneapolis, Austin, San Jose and others have followed, and several states have curbed mandates near transit. Minneapolis paired the change with other zoning reforms and saw housing construction rise while rents held steadier than in comparable cities. None of these places has descended into parking chaos.\n\nCities do not tell builders how many bedrooms or closets each household must pay for. They should not dictate car storage either. Strike the table from the code, manage the curb sensibly, and let cities grow back into places built for people first."
+}

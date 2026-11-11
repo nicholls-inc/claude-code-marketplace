@@ -1,0 +1,47 @@
+Keep the Joins: Why Primary Schools Should Still Teach Joined-Up Handwriting
+
+Every few years someone proposes that joined-up handwriting be retired from the primary classroom. The argument is easy to make. Children will spend their working lives typing, dictating, or prompting. Curriculum time is scarce. Finland dropped its requirement for cursive in 2016, and the Common Core standards adopted across most of the United States in 2010 left it out altogether. Why spend hours of a seven-year-old's life on loops and ligatures that adult life will never ask for?
+
+I think that argument is wrong, and that primary schools should keep teaching children to join their letters. The case does not rest on nostalgia, and it does not depend on the claim that cursive has magical cognitive properties. It rests on three plainer points: handwriting remains central to how children learn to read and compose, fluency is the part of handwriting that matters most, and joining is the cheapest reliable way to make a hand fluent. A fourth point, about access to the written past and independence from devices, is a bonus.
+
+Handwriting is still doing work that typing does not
+
+Start with what is least disputed. Forming letters by hand helps young children learn them. In a well-known 2012 study, Karin James and Laura Engelhardt had pre-literate five-year-olds either write, trace, or type letters, then scanned their brains as they looked at those letters. Only the children who had written freehand showed activation in the regions that adults use for reading. Later work has pointed the same way: producing a letter stroke by stroke, with all the wobble and variation that involves, seems to teach a child what makes an "a" an "a" better than pressing a key that delivers a perfect one every time.
+
+The benefit extends beyond letter recognition. Virginia Berninger's long programme of research with primary-age children found that they wrote more words, wrote them faster, and expressed more ideas when composing by hand than on a keyboard, at least through the early and middle primary years. Steve Graham's reviews of handwriting instruction found that teaching it directly improves not only the neatness of children's writing but its length and quality. The mechanism is not mysterious. A child who must think about how to form each letter has little attention left for what to say. Make transcription automatic and working memory is freed for spelling, sentences, and ideas.
+
+None of this is an argument against teaching typing. Children should learn that too. It is an argument that handwriting is not a decorative extra in the early years; it is part of the machinery of literacy.
+
+The sceptic will reply that all of this supports handwriting, not joined-up handwriting. Print script would give the same benefits. That is a fair challenge, and anyone defending cursive should admit that the evidence for a specific cognitive advantage of joined over unjoined writing is thin. Claims that cursive uniquely "wires the brain" outrun the research. The case for joining has to be made on other grounds.
+
+Fluency is the point, and joining serves it
+
+The ground is fluency. The research above is consistent that what helps composition is automatic handwriting: fast enough to keep pace with thought, and effortless enough to disappear from attention. A child who writes slowly loses the end of the sentence before reaching it. Slow handwriting in primary school predicts weaker written work later, and it is one of the commonest reasons that capable children underperform on paper.
+
+Joining letters is, fundamentally, a technique for speed and rhythm. Lifting the pen after every letter costs time and breaks the movement; a joined word is written as a single motor unit. This is why joined hands arose in every culture that wrote a lot by hand, and why almost every adult who writes quickly joins at least some letters whether or not anyone taught them to.
+
+The honest evidence here is interesting. A 1998 study by Graham, Berninger and Weintraub found that the fastest writers among older children were not those using pure cursive or pure print but those using a mixed hand, joining some letters and not others. Opponents of cursive sometimes cite this as proof that it need not be taught. It shows the reverse. A child can only arrive at an efficient personal mixture if they possess both sets of movements to choose from. Children taught only print have to invent their own joins, and many invent bad ones or none. Teaching joins gives every child the raw material for a fast adult hand, and then lets them simplify it. This is roughly what the national curriculum in England asks for: joins taught from around age seven, with the explicit understanding that some letters are best left unjoined, and with the goal stated as legibility and speed and not beauty.
+
+Joining has other practical benefits for young writers. A joined word is visibly one object, which helps children who struggle with spacing between words. Continuous movement makes it harder to reverse letters such as b and d, because each has a distinct entry and exit. Many specialist teachers of dyslexic pupils have long favoured joined writing for exactly these reasons, and for the way writing a word as one movement reinforces its spelling as a motor pattern. The experimental support for these claims is more modest than its advocates sometimes suggest, but the classroom experience is extensive and points one way.
+
+The cost is smaller than critics claim
+
+The strongest objection is opportunity cost. Time spent on handwriting is time not spent on coding, science, or reading. But the cost is routinely exaggerated. Effective handwriting teaching is short and frequent: ten or fifteen minutes a day in the early junior years, tapering off once the hand is secure. The meta-analytic evidence suggests that this modest investment pays back in the quality of everything else a child writes. Few items in the primary timetable have as good a ratio of minutes spent to benefit spread across other subjects.
+
+And the alternative is not free. A child who leaves primary school with a slow, effortful print hand pays for it in every lesson that involves a pen, for years. Secondary schools do not teach handwriting; whatever hand a child has at eleven is, for most, the hand they will sit examinations with at sixteen and eighteen. In England and in many other systems, those examinations are still overwhelmingly handwritten, under time pressure, over two or three hours. To stop teaching fluent handwriting while continuing to assess by handwriting would be to handicap precisely the children who get least help at home.
+
+That equity point deserves emphasis. If schools drop joined writing, it will not vanish. It will become something that children of attentive, well-resourced parents acquire and others do not, like so many skills that schools decide are optional.
+
+Paper is not going away
+
+Is the handwritten examination itself a relic? Perhaps, but recent years have pushed in the opposite direction. The arrival of generative AI has made schools and universities more interested, not less, in work produced by hand under supervision, because it is the one form of writing whose authorship is not in doubt. Sweden, long a leader in digitising classrooms, has publicly reversed course and reinvested in books and handwriting. Several American states that abandoned cursive have legislated it back; California did so with effect from 2024. These are not sentimental decisions. They reflect a judgement that the all-screen classroom was oversold and that pen and paper remain a cheap, robust, distraction-free technology for thinking.
+
+There is also something to be said for a skill that needs no battery, no login, and no software licence. A person who can write quickly by hand can take notes anywhere, annotate a text, sketch out an argument, or leave a message, and no company's product roadmap can take that away.
+
+Reading the past
+
+Finally, there is the matter of reading. A generation not taught joined writing struggles to read it. That means difficulty with a grandparent's letters, a parish register, a teacher's marginal comments, and most of the manuscript record of the last several centuries. Historians in the United States have already reported undergraduates who cannot read handwritten sources in their own language. One can learn to read cursive without writing it, but in practice the surest and quickest way to learn to read a script is to write it. A society that lets most of its citizens become unable to read ordinary handwritten documents has narrowed their access to their own history, and it has done so to save a few minutes a day.
+
+Conclusion
+
+The case for joined-up handwriting does not require believing that it makes children cleverer. It requires only believing that handwriting still matters for early literacy, that its value depends on fluency, and that teaching joins is the most reliable way to get every child to a fluent hand, not merely those who would have worked it out anyway. Add the continued reality of handwritten assessment, the renewed value of paper in an age of machine-generated text, and the ability to read what earlier generations wrote, and the balance is clear. Teach children to type, certainly. But teach them to join their letters first.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad6abf15025671b5d",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 940,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:14:07.769Z",
+  "valid": true,
+  "text": "Keep Estimating. Fix What You Do With the Number.\n\nEvery few years the argument returns: estimates are always wrong, they eat hours of meeting time, and they get turned into deadlines nobody agreed to. So stop producing them. Break work into small pieces, ship continuously, and let the throughput speak for itself.\n\nI think this is the wrong conclusion drawn from accurate observations. Teams should keep estimating, because the alternative does not remove the estimate. It only moves it to someone less qualified to make it.\n\nConsider what happens when an engineering team declines to say how long something will take. The sales lead still has to tell a customer whether the integration lands this quarter. The finance partner still has to decide whether to fund two more hires. The product manager still has to choose between the feature that might take three weeks and the one that might take three months. Each of them will put a number on the work, because their decisions require one. They will do it without knowing that the billing service has no tests or that the one person who understands the sync job is on leave in March.\n\nAn estimate is how engineers get a say in those decisions. Refusing to give one gives up that say.\n\nThe stronger form of the no-estimates position says that counting completed items gives a better forecast than asking people to guess. Often it does, and teams with a stable backlog of similar-sized work should use it. But that is an estimating technique. It is a good one, and it still depends on someone judging that the items are roughly the same size, which is the judgment the movement claims to have retired. It also fails in exactly the cases where the stakes are highest: new systems, unfamiliar domains, and work nobody on the team has done before.\n\nThere is a second cost that gets less attention. Estimating is frequently the first moment anyone thinks hard about the work. When one engineer says two days and another says two weeks, the gap is the useful part. One of them knows about a migration the other has not considered, or they are picturing different features. Finding that out in a twenty-minute conversation is cheaper than finding it out in the second week of the build.\n\nWhat deserves to be abolished is the misuse. Most of the damage comes from three habits, and managers control all of them.\n\n- Treating a single number as a promise. Ask for a range, and ask what would push the work to the far end of it.\n- Never updating. An estimate made before the work starts is the least informed one the team will ever produce. Revise it when you learn something, and make revising it safe.\n- Scoring people against it. Once an estimate becomes a performance measure, engineers pad it, and the padded number is useless for planning.\n\nEngineers have a part in this too. Say how confident you are. Name the assumption most likely to be wrong. When the estimate changes, say so the day you know, not the day it is due.\n\nThe teams I would bet on are the ones that have made it cheap to be wrong out loud, and they still guess."
+}

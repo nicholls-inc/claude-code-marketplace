@@ -1,0 +1,15 @@
+A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a metal oxide or phosphate, and the negative electrode is usually graphite. Both are porous coatings on metal foil, soaked in a liquid electrolyte and held apart by a thin separator that passes ions but not electrons. During charging, the charger pulls electrons out of the positive electrode through the external circuit and pushes them into the negative. To balance that charge, lithium ions leave the positive electrode's crystal lattice, cross the electrolyte, and insert themselves between the graphite layers, a process called intercalation. Nothing is plated or consumed in normal operation; the ions simply change hosts.
+
+The standard charging method is constant current, constant voltage (CC-CV), and it has two phases.
+
+1. **Constant current.** The charger holds a fixed current, typically 0.5 to 1 times the cell's capacity per hour. Cell voltage rises as the cell fills, from about 3.0 V when empty towards a limit of about 4.2 V for common chemistries. This phase delivers most of the charge, roughly 70 to 80 percent.
+
+2. **Constant voltage.** Once the terminal voltage reaches the limit, the charger holds it there and lets the current fall. Charging ends when the current has decayed to a small fraction of its initial value, often 5 to 10 percent.
+
+The slowdown comes from the second phase, and the reason is that the voltage limit is a hard one. Above it, the electrolyte oxidises at the positive electrode and the cell degrades permanently.
+
+The voltage at the terminals is the sum of the cell's equilibrium voltage, which depends on state of charge, and an overpotential proportional to current. The overpotential comes from ohmic resistance, the reaction kinetics at the particle surfaces, and the slow diffusion of lithium within the solid particles. As the cell fills, its equilibrium voltage climbs towards the limit, so the headroom left for overpotential shrinks. With less headroom, the cell can accept less current. The current therefore decays roughly exponentially, much like charging a capacitor through a resistor as its voltage approaches the supply voltage.
+
+A second constraint acts at the graphite. Ions arrive at the particle surface faster than they can diffuse inward, and nearly full graphite has few vacant sites left. If the current is too high, the surface potential drops below that of lithium metal, and the ions deposit as metal instead of intercalating. This lithium plating permanently removes capacity and can grow dendrites that short the cell. The risk is greatest at high state of charge and at low temperature.
+
+Fast chargers therefore advertise times to 80 percent: the last fifth of the charge takes about as long as the rest.

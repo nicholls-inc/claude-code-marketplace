@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a32eac128e669f56e",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73730,
+    "output_tokens": 1203,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:04:38.529Z",
+  "valid": true,
+  "text": "A leap second is an extra second added to the world's clocks now and then to keep them in step with the Earth's rotation. From 2035 at the latest, the practice will stop, because the bodies that govern timekeeping have concluded that the adjustment causes more trouble than the drift it corrects.\n\nThe need arises because we keep time in two ways. Atomic clocks count the vibrations of caesium atoms and are almost perfectly steady. The Earth is not. Its spin is gradually slowed by the pull of the Moon, and it speeds up and slows down unpredictably as its molten core, oceans and ice sheets shift. A day measured by the planet's rotation is therefore not exactly 86,400 atomic seconds long.\n\nSince 1972, the official world time, Coordinated Universal Time (UTC), has been kept within nine-tenths of a second of the Earth's rotation. When the gap grows too wide, the scientists who monitor the planet's spin order an extra second, inserted at the end of June or December. On those nights the clock reads 23:59:60 before rolling over to midnight. This has happened 27 times, most recently at the end of 2016.\n\nThe trouble is that computers cope badly with a minute that lasts 61 seconds. Leap seconds are announced only about six months ahead and come at irregular intervals, so they cannot be built into software in advance. The 2012 leap second disrupted websites including Reddit and LinkedIn and delayed Qantas flights when an airline booking system failed. Another on New Year's Eve 2016 caused faults at the internet company Cloudflare.\n\nTechnology firms have devised their own workarounds. Google, for example, \"smears\" the extra second across many hours. But different organisations do this in different ways, so their clocks briefly disagree. That is a risk for financial markets, telecoms networks and satellite navigation, all of which depend on precise, shared time.\n\nA newer worry added urgency. The Earth has been spinning slightly faster in recent years, raising the prospect that a second might one day have to be removed. That has never been done, and nobody knows how the world's systems would react.\n\nIn November 2022, governments at the General Conference on Weights and Measures, the body responsible for international units, voted to let atomic time and Earth time drift further apart from 2035. The United Nations' telecoms agency endorsed the move the following year.\n\nThe practical effect on daily life will be nil. The gap is expected to reach about a minute only after a century or more. The details of how, or whether, to correct it then have been left for later generations to decide."
+}

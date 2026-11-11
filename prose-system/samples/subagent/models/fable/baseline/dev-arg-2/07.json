@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac2cf3e545e2d04e4",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 1046,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:17:06.273Z",
+  "valid": true,
+  "text": "Keep Estimating. Change What You Estimate For.\n\nEvery few years the argument returns: estimates are always wrong, they turn into deadlines, and the hours spent in planning poker could have gone into shipping. So stop estimating, work on the most valuable thing next, and let the software arrive when it arrives.\n\nI think this gets the diagnosis right and the prescription wrong. Teams should keep estimating, because the alternative is not a world without estimates. It is a world where someone else makes them for you.\n\nA business cannot avoid questions about time. Sales needs to know whether to promise the integration this quarter. Finance needs to know whether the migration takes two engineers or six. A product manager choosing between two features needs to know which one is cheap. If engineering declines to answer, those people do not stop needing a number. They guess, and they guess with less information than the team has. The estimate still exists; it has just been made by the person least qualified to make it.\n\nCost is also half of every prioritisation decision. \"Work on the most valuable thing\" sounds like it sidesteps estimation, but value alone does not rank work. A feature worth a hundred thousand pounds is an obvious yes at two weeks and an obvious no at two years. Anyone who claims to prioritise without estimating is estimating silently, and silent estimates never get examined or corrected.\n\nThe strongest case for estimating has little to do with the number. When an engineer says \"three days\" and a colleague says \"three weeks\", the two of them have discovered that they understand the task differently. One knows about the legacy billing table and the other does not. That conversation costs ten minutes now and would otherwise cost a fortnight later. Teams that drop estimation often lose this check without noticing, because nothing else in their process forces people to state their assumptions out loud.\n\nThe real complaints are about misuse, and they are fair. An estimate given on Monday becomes a commitment by Friday. A single-point guess is treated as a promise. Velocity is compared across teams and used in performance reviews. Engineers respond rationally by padding, and the numbers then tell nobody anything.\n\nThose are failures of management, and they have management fixes:\n\n- Give ranges. \"Four to ten weeks, most likely six\" is honest, and it tells the listener how much is unknown.\n- Re-estimate as you learn, and treat a revised estimate as information, not as an admission.\n- Keep the estimate separate from the commitment. A commitment is a decision the business makes, with a buffer, knowing the range.\n- Spend effort in proportion to the decision. A two-day task needs no ceremony; a two-quarter bet deserves an afternoon.\n- Never use estimates to judge individuals.\n\nForecasting from historical throughput, which the no-estimates camp favours, fits comfortably here. It is a good estimating technique, and counting tickets to project a date is still estimating.\n\nManagers who want better numbers have to make it safe to give honest ones. Engineers who want to be trusted with autonomy have to say what things are likely to cost. Refusing to answer protects nobody, and it hands the decision to someone who will make it without you."
+}

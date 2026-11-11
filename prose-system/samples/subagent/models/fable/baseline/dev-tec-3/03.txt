@@ -1,0 +1,14 @@
+A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a lithium metal oxide or phosphate, and the negative electrode is graphite. Between them sit a liquid electrolyte that conducts ions and a porous separator that blocks electrons. Charging forces electrons through the external circuit from the positive electrode to the negative. To keep each electrode electrically neutral, lithium ions leave the oxide, cross the electrolyte, and insert between the graphite layers, a process called intercalation. Discharge runs the same process in reverse.
+
+The cell's open-circuit voltage rises with its state of charge, from about 3.0 V empty to 4.2 V full for common chemistries. The upper limit is a hard one. Above it, the electrolyte oxidises at the positive electrode and the oxide structure degrades, so the charger must never let the terminal voltage exceed it.
+
+The standard charging method, constant current then constant voltage (CC-CV), follows from that limit:
+
+1. **Constant current.** The charger holds a fixed current, typically 0.5 to 1 times the cell's amp-hour capacity per hour. The terminal voltage climbs as the cell fills. This phase delivers roughly 70 to 80 percent of the charge.
+2. **Constant voltage.** Once the terminal voltage reaches 4.2 V, the charger holds it there, and the current decays roughly exponentially. Charging stops when the current falls to a few percent of its initial value.
+
+Charging slows in the second phase because the terminal voltage is not the open-circuit voltage. While current flows, the terminal voltage is higher by an overpotential, which has three sources: ohmic resistance, the kinetics of the reaction at the electrode surfaces, and the slow diffusion of lithium within the solid particles. The terminal voltage therefore reaches 4.2 V before the cell is full. From then on, the only voltage available to drive current is the gap between 4.2 V and the rising open-circuit voltage. That gap shrinks as the cell fills, so the current must fall with it. The behaviour resembles charging a capacitor through a resistor from a fixed-voltage source.
+
+A second constraint acts at the graphite electrode. Its potential when nearly full is only about 0.1 V above that of lithium metal. If ions arrive faster than they can diffuse into the particles, whose surface sites are by then mostly occupied, the local potential drops below zero and lithium deposits as metal on the surface. This plating permanently consumes capacity and can grow dendrites that pierce the separator and short the cell. Low temperature slows diffusion and makes plating more likely.
+
+Fast chargers work within the same limits. They push high current while the cell is empty and the graphite has plenty of vacant sites, then taper sharply. This is why the charge from 80 to 100 percent often takes as long as the charge from 10 to 80.

@@ -1,0 +1,27 @@
+The Pump on Broad Street
+
+On the last night of August 1854, cholera broke out in Soho, a crowded working district of London. It moved with a speed that frightened even people used to epidemics. A person could be well at breakfast and dead by nightfall, drained by violent diarrhoea and vomiting. Within three days more than a hundred people living on or near Broad Street had died. Within a week, three-quarters of the residents had fled, leaving shuttered shops and silent houses.
+
+Most doctors of the day thought they knew the cause. Disease, they believed, travelled in "miasma": bad air rising from rot, sewage and filth. Soho stank, so Soho sickened.
+
+John Snow, a physician who lived a few streets away, did not believe it. Snow was known mainly as a pioneer of anaesthesia; the previous year he had given chloroform to Queen Victoria during childbirth. But he had been thinking about cholera since 1849, and he had noticed that it attacks the gut, not the lungs. To him that suggested something swallowed, not something breathed. He suspected that the disease passed from the sick to the healthy through water contaminated with sewage. He had been unable to convince his colleagues. Now an outbreak had come to his own neighbourhood.
+
+His suspicion fell at once on the public pump at the corner of Broad Street and Cambridge Street, a popular well whose water was thought cleaner and better tasting than most. Snow drew a sample and examined it. He saw little wrong with it. If he was going to make a case, it would have to come from the pattern of deaths.
+
+So he obtained from the registrar's office a list of the 83 cholera deaths recorded in the area that week, and went to the addresses one by one. He asked the surviving families a single question: where did the dead person get their drinking water?
+
+The answers pointed the same way. Nearly all the deaths had occurred in houses for which the Broad Street pump was the nearest water source. Only ten victims had lived closer to another pump. Of those, five came from families who told Snow they always sent to Broad Street because they preferred the water, and three were children who went to school near it.
+
+The exceptions were just as telling. Around the corner in Poland Street stood a workhouse with more than five hundred inmates, surrounded by houses where people were dying. Only five inmates died. The workhouse had its own well. On Broad Street itself there was a brewery with some seventy workers. None of them died. The owner told Snow that the men were given an allowance of beer and that the brewery also had its own well; he doubted any of them drank from the pump.
+
+Then there was the widow in Hampstead, miles away on a hill where there was no cholera at all. She had died of it on 2 September, and so had a niece who had visited her. Snow learned that the widow had once lived in Broad Street and so liked the pump's water that a cart brought her a large bottle of it every day. The last delivery had been drawn on 31 August.
+
+On the evening of 7 September, Snow put his findings to the local parish board. The board members were not persuaded by his theory, but they agreed to his request. The next day the handle was taken off the pump, so that nobody could draw water from it.
+
+The story is often told as though that act ended the epidemic. Snow himself was more careful. The deaths were already falling sharply, he pointed out, because so many people had run away. He could not say whether the well was still dangerous when it was closed. What the removal did was prevent a second wave when residents came back.
+
+Later, to illustrate his report, Snow drew the map for which he is remembered: a street plan of Soho with a black bar marking each death. The bars pile up thickly around the pump and thin out with distance.
+
+One question remained: how had the well been poisoned? The answer came from an unlikely ally. Henry Whitehead, a local clergyman, thought Snow was wrong and set out to disprove him. He knew the residents well and interviewed them at length, and the more he learned, the more the pump stood accused. He eventually found that a baby at 40 Broad Street had fallen ill just before the outbreak. Her mother had washed the soiled nappies and tipped the water into a cesspool in front of the house. When the cesspool was dug up, its brick lining was found to be decayed, and it lay less than three feet from the well.
+
+In all, 616 people died. The authorities still rejected Snow's explanation, and he died in 1858 without seeing it accepted. It took decades, and the identification of the cholera bacterium, for him to be proved right. His method outlasted the argument: he counted cases, went door to door, and treated the exceptions as evidence. That is how disease outbreaks are still investigated today.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac69ecd187a1c82e5",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 1040,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:26:43.939Z",
+  "valid": true,
+  "text": "A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a lithium metal oxide (or lithium iron phosphate) and the negative electrode is graphite. Both are porous coatings on metal foil, soaked in a liquid electrolyte and kept apart by a thin separator that passes ions but not electrons.\n\nDuring charging, the charger drives electrons through the external circuit from the positive electrode to the negative. To balance the charge, lithium ions leave the oxide, cross the electrolyte and insert themselves between the graphite's carbon layers, a process called intercalation. No metallic lithium is meant to form; the ions occupy sites in a host lattice.\n\nThe standard charging method has two phases, constant current then constant voltage (CC-CV).\n\n1. **Constant current.** The charger holds a fixed current, typically 0.5 to 1 times the cell's amp-hour capacity per hour. Terminal voltage climbs from about 3.0 V as the cell fills. This phase delivers roughly 70 to 80 percent of the charge.\n2. **Constant voltage.** When the terminal voltage reaches the limit, usually 4.2 V for oxide chemistries, the charger holds that voltage and lets the current fall. Charging stops when the current has decayed to a few percent of its initial value.\n\nThe slowdown comes from that voltage ceiling. The terminal voltage is the sum of the cell's equilibrium (open-circuit) voltage and an overpotential, which is the extra voltage needed to push current through it. The overpotential has three sources: ohmic resistance, the kinetics of the reaction at the particle surfaces, and the diffusion of lithium through the electrolyte and into the solid particles.\n\nAs the cell fills, its equilibrium voltage rises towards the limit, so the headroom left for overpotential shrinks. With less driving voltage available, the current must fall. It tapers roughly exponentially, much as it does when a capacitor is charged through a resistor.\n\nDiffusion makes this worse. Ions arrive at the graphite surface faster than they can spread into the particle interior, so the surface saturates while the core still has room. Holding the voltage constant gives these concentration gradients time to relax, and the current that flows is set by how fast the solid can absorb lithium.\n\nThe limit cannot simply be raised, for two reasons:\n\n- **Lithium plating.** If the graphite's surface potential drops below that of lithium metal, ions deposit as metal instead of intercalating. Plating consumes capacity permanently and can grow dendrites that pierce the separator and short the cell. The risk is highest at high state of charge, high current and low temperature.\n- **Electrolyte and cathode breakdown.** Above the limit, the electrolyte oxidises at the positive electrode and the oxide lattice becomes unstable, which generates gas and heat.\n\nThis is why fast chargers quote times to 80 percent: the last fifth is limited by the cell's chemistry, whatever the charger's power."
+}

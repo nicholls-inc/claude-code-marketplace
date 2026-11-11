@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a638cc0129a94e50b",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 994,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:04:23.319Z",
+  "valid": true,
+  "text": "A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a lithium metal oxide (or lithium iron phosphate); the negative electrode is graphite. Both are porous layered or framework solids that can accept and release lithium without changing structure, a process called intercalation. Between them sits a liquid electrolyte that conducts ions but not electrons, and a porous separator that prevents the electrodes from touching.\n\nDuring charging, an external supply pulls electrons out of the positive electrode and pushes them into the negative electrode. To keep each electrode electrically neutral, lithium ions leave the oxide, cross the electrolyte, and insert between the graphite layers. Discharge is the same process in reverse, driven by the cell's own voltage.\n\nThe standard charging method has two stages: constant current, then constant voltage (CC-CV).\n\nIn the constant-current stage, the charger supplies a fixed current, typically 0.5 to 1 times the cell's rated capacity per hour. The terminal voltage rises as the cell fills, from roughly 3.0 V when empty to a limit of about 4.2 V for common chemistries. This stage delivers most of the charge, typically 70 to 80 percent.\n\nThe voltage limit is a hard one. Above it, the electrolyte oxidises at the positive electrode and the oxide itself becomes structurally unstable, both of which permanently degrade the cell and can lead to thermal runaway. So once the terminal voltage reaches the limit, the charger holds it there and lets the current fall. This is the constant-voltage stage, and it ends when the current has decayed to a few percent of its initial value.\n\nCharging slows in this second stage because the terminal voltage the charger sees is not the cell's equilibrium voltage. It is the equilibrium voltage plus an overpotential: the extra voltage needed to drive current through the electrolyte's resistance, across the electrode surfaces, and into the solid particles. When the terminal voltage first hits 4.2 V, the cell's internal equilibrium voltage is still lower, and the cell is not yet full. With the terminal voltage now fixed, the only way to keep charging is for the overpotential to shrink as the equilibrium voltage rises, which means the current must fall. The decay is roughly exponential, much like a capacitor charging through a resistor.\n\nA second limit acts at the graphite. Ions must diffuse from the surface of each particle into its interior, and diffusion slows as the available sites fill. If ions arrive faster than they can insert, they deposit as metallic lithium on the surface instead. This plating permanently consumes capacity and can grow dendrites that short the cell. The risk is highest near full charge and at low temperature, which is why fast chargers taper early and cold batteries charge slowly.\n\nThe practical consequence is that the last 20 percent of charge takes about as long as the first 80."
+}

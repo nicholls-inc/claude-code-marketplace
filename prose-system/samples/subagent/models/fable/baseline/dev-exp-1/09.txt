@@ -1,0 +1,42 @@
+How a heat pump heats your house when it is colder outside
+
+A gas boiler makes heat by burning fuel. A heat pump does not make heat at all. It moves heat that already exists from the outside air into your home, and that is why it can deliver more heat than the electricity it uses.
+
+There is heat in cold air
+
+"Cold" is a human judgement, not a physical absence of heat. Air at 0°C still contains a great deal of thermal energy; it would have to fall to -273°C to contain none. The problem is that heat flows on its own only from warmer things to colder things, so the heat in 0°C air will not drift into a 20°C living room. A heat pump gets round this by putting something even colder than the outside air out there to collect the heat.
+
+The cycle
+
+That something is a refrigerant, a fluid that boils at a very low temperature. It travels round a sealed loop in four steps:
+
+1. Collect. In the outdoor unit, the refrigerant is a liquid at low pressure and around -10°C. A fan blows outside air across it. Because the air is warmer than the refrigerant, heat flows into the refrigerant and boils it into a gas.
+2. Compress. An electric compressor squeezes that gas. Compressing a gas raises its temperature, as you feel when a bicycle pump warms up in use. The refrigerant leaves the compressor at 60°C or more.
+3. Release. The hot gas passes through a heat exchanger, where it warms the water that feeds your radiators or underfloor heating. As it gives up its heat it condenses back to a liquid.
+4. Expand. The liquid passes through a valve that drops its pressure, which makes it very cold again, ready to return outdoors.
+
+Your fridge does exactly the same thing in the other direction: it collects heat from inside the cold box and releases it through the warm grille at the back.
+
+Why this is efficient
+
+The electricity only runs the compressor and fan. Most of the heat delivered to your house came free from the outside air. Over a year, a well-installed system typically delivers about three units of heat for each unit of electricity. A modern gas boiler delivers about 0.9 units of heat per unit of gas.
+
+This does not automatically mean lower bills. Electricity usually costs several times more per unit than gas, so the saving depends on the ratio between your two tariffs and on how well the system is designed. Ask an installer for a projected seasonal efficiency figure (often written SCOP) for your house, and compare running costs using your own prices.
+
+What changes in cold weather
+
+The colder it is outside, the harder the compressor has to work to lift the temperature, so efficiency falls. On a freezing day you might get two units of heat per unit of electricity instead of three or four. Modern units keep working well below -15°C and are widely used in Norway, Sweden and Finland. The outdoor unit will occasionally run a short defrost cycle, which is normal.
+
+What is different from a boiler
+
+A heat pump is most efficient when it heats water to about 35 to 50°C, compared with 60 to 75°C for a typical boiler. Cooler radiators give off less heat, so three things usually follow:
+
+- Some radiators may need to be larger, and good insulation and draught-proofing matter more.
+- The heating runs steadily for long periods at a gentle level instead of in short, hot bursts.
+- You will need a hot water cylinder, because a heat pump cannot heat water instantly the way a combi boiler does.
+
+There is also an outdoor unit, about the size of a small wardrobe laid on its side, which makes a low fan noise.
+
+What to ask for
+
+The quality of the design matters more than the brand. Ask any installer for a room-by-room heat loss calculation, the water temperature the system is designed around, and the efficiency they expect to achieve. Those three numbers will tell you whether the heat pump will be comfortable and what it will cost to run.

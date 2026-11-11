@@ -1,0 +1,82 @@
+# How two strangers can agree on a secret in public
+
+Suppose Alice and Bob have never met and can only talk over a line that anyone may listen to. They want to end up with a number that both of them know and no listener does. Once they have it, they can use it as the key to scramble everything else they say.
+
+This sounds impossible. If every word between them is overheard, then anything Alice tells Bob, the listener learns too. For most of history people assumed the only answer was to meet beforehand, or to send a trusted courier with the key.
+
+In 1976 Whitfield Diffie and Martin Hellman published a way round the problem. It rests on one idea: some operations are easy to do and extremely hard to undo.
+
+## The idea, with paint
+
+Mixing paint is such an operation. Stirring two colours together takes seconds. Separating the mixture back into its original colours is practically impossible.
+
+Alice and Bob agree, in the open, on a common colour, say yellow. The listener, Eve, hears this. Then each of them privately chooses a secret colour and tells no one. Alice picks a red and Bob picks a blue.
+
+Alice mixes her red into the yellow and sends the orange result to Bob. Bob mixes his blue into the yellow and sends the green result to Alice. Eve sees both mixtures go past, but she cannot un-mix them to find the red or the blue.
+
+Now Alice adds her secret red to the green she received. Bob adds his secret blue to the orange he received. Both pots now contain yellow, red and blue in the same proportions, so they are the same colour. That colour is the shared secret.
+
+Eve holds yellow, orange and green. If she mixes orange and green she gets two parts yellow to one of red and one of blue, which is the wrong colour. To make the right one she would need a pure red or a pure blue, and those never travelled on the line.
+
+## Replacing paint with numbers
+
+Paint cannot be sent down a wire, so the real method uses arithmetic that behaves the same way: easy forwards, hard backwards.
+
+The arithmetic is the kind you do on a clock face. On a 12-hour clock, 5 hours after 9 o'clock is 2 o'clock, not 14. You go round the dial and keep only what is left over. In other words, you divide by 12 and keep the remainder.
+
+The method uses a clock whose number of hours is a prime number. For this example the clock has 23 hours. So "20 + 7" on this clock is 4, because 27 divided by 23 leaves remainder 4.
+
+The operation that plays the part of mixing is raising a number to a power on this clock. Take the number 5 and multiply it by itself repeatedly, keeping only the remainder each time:
+
+- 5 to the power 1 is 5
+- 5 to the power 2 is 25, which is 2 on the clock
+- 5 to the power 3 is 2 × 5 = 10
+- 5 to the power 4 is 10 × 5 = 50, which is 4
+- 5 to the power 5 is 4 × 5 = 20
+- 5 to the power 6 is 20 × 5 = 100, which is 8
+
+The results jump around the dial with no visible pattern: 5, 2, 10, 4, 20, 8. That is what makes the operation hard to reverse. Going forwards, you multiply and take remainders. Going backwards, given the answer 8, there is no formula that tells you the power was 6. You can only search.
+
+## The exchange, step by step
+
+Alice and Bob agree in the open on two numbers: the clock size, 23, and the starting number, 5. These correspond to the yellow paint. Eve hears both.
+
+Each now chooses a secret number, which corresponds to the secret colour. Alice chooses 6. Bob chooses 15.
+
+Alice works out 5 to the power 6 on the 23-hour clock. As shown above, that is 8. She sends 8 to Bob.
+
+Bob works out 5 to the power 15 on the same clock. The answer is 19. He sends 19 to Alice.
+
+Now each takes the number they received and raises it to their own secret power.
+
+Alice takes Bob's 19 and raises it to the power 6. On the 23-hour clock the answer is 2.
+
+Bob takes Alice's 8 and raises it to the power 15. On the 23-hour clock the answer is also 2.
+
+They have both arrived at 2, and the number 2 was never sent.
+
+## Why they get the same answer
+
+This is the rule of powers from school: raising a power to a power multiplies the exponents. For example, (5²)³ is 5⁶, and so is (5³)².
+
+Alice's number 8 is really 5⁶. When Bob raises it to the power 15, he is working out 5 to the power 6 × 15, which is 5⁹⁰. Bob's number 19 is really 5¹⁵. When Alice raises it to the power 6, she is working out 5 to the power 15 × 6, which is again 5⁹⁰. The order of multiplication does not matter, so they land on the same spot on the clock. The clock does not interfere, because taking remainders along the way gives the same final remainder as taking it once at the end.
+
+## Why Eve is stuck
+
+Eve has heard 23, 5, 8 and 19. To get the secret she needs either Alice's 6 or Bob's 15. That means solving a puzzle like this: 5 to what power gives 8 on a 23-hour clock?
+
+With a clock this small, she simply tries each power in turn and finds the answer within seconds. The example uses small numbers only so that the sums can be followed by hand.
+
+In real use the clock size is a prime number hundreds of digits long, and the secret powers are of similar size. Alice and Bob can still do their calculations quickly, because there is a shortcut for raising to large powers: square the number repeatedly and combine the results, so that a power with hundreds of digits needs only a few thousand multiplications. Eve has no comparable shortcut for going backwards. The best known methods would take all the world's computers far longer than the age of the universe.
+
+One caution belongs here. Nobody has proved that a fast method for the reverse problem cannot exist. The security rests on the fact that mathematicians have searched for one for decades without success.
+
+## Where "public key" comes from
+
+The numbers that travel in the open, 8 and 19, are called public keys. The numbers kept at home, 6 and 15, are private keys. Each public key is made from its private key, but the private key cannot feasibly be recovered from it. That one-way link is the whole of the trick, and every system called public-key cryptography is built on a link of this kind.
+
+## What the method does not do
+
+The exchange gives Alice a secret shared with whoever is at the other end of the line. It does not prove that this person is Bob. If Eve can do more than listen, and can intercept and replace messages, she can run one exchange with Alice while posing as Bob and another with Bob while posing as Alice. She would then read everything that passes through her.
+
+So in practice the exchange is combined with a way of checking identity. When your browser shows a padlock, it has done both: it has checked a certificate that vouches for the website, and it has carried out an exchange of this kind to agree a secret key for that visit.

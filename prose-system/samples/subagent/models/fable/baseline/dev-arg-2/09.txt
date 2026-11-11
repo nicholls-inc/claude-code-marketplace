@@ -1,0 +1,24 @@
+Keep Estimating. Fix What You Do With the Numbers.
+
+Every few years the argument comes around again: estimates are always wrong, they eat hours of meeting time, and they get turned into deadlines nobody agreed to. So stop producing them. Pull the next most important thing, ship it, repeat.
+
+I think this is the wrong fix for a real problem. Teams should keep estimating, and they should change almost everything about how they do it.
+
+Start with what an estimate is for. It does not exist to predict a date. It exists to inform a decision: whether to build this feature or that one, whether to hire, whether to tell the customer March or June, whether a project is worth doing at all. A feature worth doing at two weeks may be a bad idea at four months. Someone has to make that call, and if engineers refuse to supply a number, the call still gets made. It gets made by someone who knows less, and the number they invent will be worse than yours.
+
+That is the weakness in the no-estimates position. Declining to estimate does not remove the estimate. It moves it out of the room where the knowledge is.
+
+The second reason is that estimating is a cheap way to find out what you do not understand. When two engineers size the same piece of work at three days and three weeks, the gap is the useful output. One of them knows about the legacy billing table, or one of them has assumed a scope the other has not. Ten minutes of that disagreement saves a fortnight of discovering it in code. Teams that skip estimation tend to skip this conversation too.
+
+The complaints about estimation are still accurate. They describe misuse:
+
+- A single number is treated as a commitment. An estimate is a range with a confidence level. "Three to six weeks, most likely four" is honest. "Four weeks" is a promise the engineer never made.
+- Estimates are produced once and never revised. The best information arrives after work starts. A team that re-estimates at the end of week one and says so out loud is more useful than a team that hits its original date by cutting corners no one hears about.
+- Precision is demanded where none exists. Sizing every ticket in hours is theatre. For small, similar work, count the items and use your historical throughput. Save deliberate estimation for the large, novel, or expensive bets.
+- Misses are punished. If a missed estimate costs an engineer standing, every future estimate will be padded, and the padding will be invisible. Managers who want accurate numbers must make it safe to give them.
+
+The managers' side of the bargain matters most. If you ask for a number, say which decision depends on it and how precise it needs to be. "Is this closer to a week or a quarter?" is often all you need, and it takes two minutes to answer.
+
+Engineers have a side too. "I don't know" is not an answer; "between two and eight weeks, and a two-day spike would narrow that" is. Uncertainty is information, and stating it is part of the job.
+
+Estimation done badly is waste. Abandoning it gives up the cheapest planning tool a team has, and leaves the decisions to people with less information.

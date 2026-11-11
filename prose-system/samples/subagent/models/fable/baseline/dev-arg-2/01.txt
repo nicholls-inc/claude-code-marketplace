@@ -1,0 +1,21 @@
+Keep Estimating. Fix What You Do With the Numbers.
+
+Every few years the argument returns: estimates are always wrong, they eat hours of meeting time, and they turn into deadlines the moment they leave the room. So stop producing them. Ship small pieces continuously and let the work take as long as it takes.
+
+I think this gets the diagnosis right and the prescription wrong. Teams should keep estimating, because the alternative is not a world without estimates. It is a world where someone else makes them for you.
+
+A business cannot operate without guesses about time. Sales needs to know whether to promise the integration this quarter. Finance needs to know whether to fund three more engineers. A product manager choosing between two features needs to know whether one costs a week and the other costs four months, because that ratio changes the answer. If engineering declines to supply those numbers, the decisions still get made. They get made by people with less information, who then hold the team to a date it never saw.
+
+Estimating also does work that has nothing to do with the number. When two engineers size the same task at two days and three weeks, one of them knows something the other does not: a migration nobody mentioned, a dependency on another team, a different reading of the requirement. That disagreement is the cheapest moment to find the problem. A team that skips the conversation finds it in week two.
+
+The honest complaints are about misuse, and they are fixable.
+
+First, estimates get treated as commitments. The remedy is to give ranges and say how confident you are. "Three to six weeks, and the upper end if the vendor API behaves the way we fear" is more useful than "four weeks" and much harder to convert into a promise. Managers have to hold up their side: if you punish a missed estimate, you will get padded ones, and then you have paid for the ritual and lost the information.
+
+Second, teams spend precision they do not have. Arguing whether a ticket is a five or an eight is waste. Most planning decisions need only a rough bucket: days, weeks, or months. Size to the resolution the decision requires and stop.
+
+Third, nobody checks. A team that never compares its estimates to what happened cannot improve, and has no basis for telling stakeholders how much to trust the next one. Fifteen minutes a month looking at the largest misses will tell you whether you consistently underestimate integration work, or testing, or anything involving the billing system.
+
+The no-estimates camp has one point I would keep. If your work arrives as a steady stream of small, similar items, counting how many you finish per week forecasts better than sizing each one. That is true, and it is still estimating. You have swapped judgment for history, which is a good trade when the history exists.
+
+It does not exist for the work that matters most: the new system, the unfamiliar domain, the project that decides next year's headcount. There, someone has to think hard and say a number out loud. It had better be the people who will do the work.

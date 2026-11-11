@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a999fbb752285dd8b",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28177,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 998,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:01:32.200Z",
+  "valid": true,
+  "text": "A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a lithium metal oxide (or lithium iron phosphate), the negative electrode is graphite, and between them sits a porous separator soaked in a liquid electrolyte that conducts ions but not electrons. Charging forces electrons through the external circuit from the positive to the negative electrode. To keep each electrode electrically neutral, lithium ions leave the oxide lattice, cross the electrolyte, and insert themselves between the graphite layers, a process called intercalation. Discharge is the same reaction running in reverse.\n\nChargers use a two-stage profile called constant current, constant voltage (CC-CV).\n\n1. **Constant current.** The charger holds a fixed current, typically 0.5 to 1 times the cell's rated capacity per hour. Cell voltage rises from about 3.0 V towards a ceiling, commonly 4.2 V. This stage delivers roughly 70 to 80 percent of the charge.\n2. **Constant voltage.** Once the terminal voltage reaches the ceiling, the charger holds it there and the current decays, roughly exponentially. Charging ends when the current falls below a small threshold, often 5 percent of the initial value.\n\nThe slowdown in the second stage is a consequence of the voltage ceiling, and the ceiling is a hard limit. Above it, the electrolyte oxidises at the positive electrode and the oxide lattice degrades, costing capacity and, in the extreme, releasing heat and gas.\n\nThe terminal voltage is the sum of two parts: the cell's equilibrium voltage, which rises with state of charge, and an overpotential proportional to current. The overpotential comes from ohmic resistance, the kinetics of the reaction at the electrode surfaces, and the slow diffusion of lithium within the solid particles. As the cell fills, the equilibrium voltage approaches the ceiling, leaving less headroom for overpotential. With the terminal voltage fixed, the current must fall. It is the same behaviour as a capacitor charging through a resistor from a fixed-voltage source: the driving difference shrinks as the capacitor fills.\n\nDiffusion makes this worse near full. Ions arriving at a graphite particle must diffuse inward from its surface, and with few vacant sites left the surface saturates before the interior catches up. If current is pushed faster than the ions can be absorbed, the graphite's potential drops below that of lithium metal and the ions plate onto the surface as metal instead of intercalating. Plated lithium is partly lost for good, and it can grow as dendrites that pierce the separator and short the cell. The risk is highest at high state of charge and at low temperature, which is why fast chargers taper early and cold batteries charge slowly.\n\nThe practical result is that the last 20 percent of charge can take as long as the first 80."
+}

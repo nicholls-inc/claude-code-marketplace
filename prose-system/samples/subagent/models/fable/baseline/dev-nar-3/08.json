@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af90f8c7f63617ab8",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25361,
+    "cache_read_input_tokens": 48355,
+    "output_tokens": 1154,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:20:55.083Z",
+  "valid": true,
+  "text": "The Boston Molasses Flood of 1919\n\nShortly after noon on January 15, 1919, the North End of Boston was enjoying an unseasonably mild day. The temperature had climbed above 40 degrees Fahrenheit after a bitter cold snap, and workers along Commercial Street sat outdoors with their lunches. Above them stood a steel tank fifty feet tall and ninety feet across, owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It held about 2.3 million gallons of molasses, destined to be distilled into industrial alcohol.\n\nThe tank had been a poor neighbor since it was built in 1915. It was put up in a hurry, under the supervision of a man who could not read engineering plans, and it was never properly tested by filling it with water. It leaked so steadily that local children collected the drippings in pails. The company's response was to paint the tank brown, which made the leaks harder to see.\n\nAt about 12:30 the tank gave way. Witnesses recalled a deep rumble and a rattling sound like machine-gun fire as the rivets shot out of the steel plates. Then the walls split apart and the molasses came out all at once, in a wave estimated at twenty-five feet high and moving at about thirty-five miles an hour.\n\nNobody could outrun it. The wave crushed wooden houses and swept a firehouse off its foundation. A piece of the tank's steel wall struck the supports of the elevated railway on Atlantic Avenue and buckled the track; an approaching train stopped just in time. Horses, wagons and people were carried along and buried. As the molasses spread and cooled in the winter air, it thickened, trapping those caught in it.\n\nRescuers arrived within minutes. Among the first were more than a hundred sailors from the USS Nantucket, a training ship docked nearby, who waded in waist-deep to pull out survivors. Police, firefighters, Red Cross nurses and Army personnel followed. The work was slow and exhausting, and the search for bodies went on for days. In the end twenty-one people were dead and about 150 injured. The victims included city laborers eating lunch at the public works yard, a firefighter pinned beneath his collapsed station, and two ten-year-old children who had been gathering firewood near the tank.\n\nThe cleanup took weeks. Crews washed the streets with salt water pumped from fireboats and spread sand to soak up the residue. Rescuers and sightseers tracked molasses onto streetcars, into offices and homes across the city, and the harbor ran brown into the summer.\n\nThe company blamed anarchists, claiming a bomb had destroyed the tank. Residents and victims' families sued, and the resulting case became one of the first major class-action suits in Massachusetts. After several years of hearings and testimony from thousands of pages of witnesses and experts, a court-appointed auditor concluded in 1925 that the tank had failed because it was structurally unsound. The steel was too thin and the design inadequate for the load. The company paid about $628,000 in damages.\n\nThe disaster had a lasting effect. Massachusetts, and later other states, began requiring that engineers and architects certify plans for major structures and that the calculations be filed with the authorities. The site is now a park, marked by a small plaque. Local tradition holds that on hot summer days the neighborhood still smells faintly of molasses."
+}

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8e5a0deddebcc428",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73711,
+    "output_tokens": 1124,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:12:37.775Z",
+  "valid": true,
+  "text": "The Boston Molasses Flood of 1919\n\nShortly after noon on January 15, 1919, the North End of Boston was enjoying an unseasonably mild day. The temperature had climbed above 40 degrees Fahrenheit after a bitter cold snap, and workers along Commercial Street were eating lunch outdoors. Towering over them was a steel tank fifty feet tall and ninety feet across, owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It held about 2.3 million gallons of molasses, destined to be distilled into industrial alcohol.\n\nAt roughly 12:30, the tank gave way. Witnesses described a deep rumble and a rapid series of sharp cracks, like machine-gun fire, as the rivets shot out of the steel plates. Then the walls split apart and a wave of molasses, estimated at twenty-five feet high at its peak, surged outward at about thirty-five miles per hour.\n\nNothing in its path stood a chance. The wave crushed wooden buildings, swept a firehouse off its foundation, and buckled a support of the elevated railway on Atlantic Avenue, where an approaching train stopped just in time. Horses, wagons, and people were engulfed. Molasses is far denser than water, so the wave struck with enormous force, and once it settled, it trapped whatever it had caught. As the afternoon cooled, the syrup thickened, making escape and rescue harder.\n\nThe first rescuers were sailors from a training ship docked nearby, the USS Nantucket, who waded into the waist-deep mess to pull out survivors. Police, firefighters, Red Cross nurses, and Army personnel followed. They worked for days, often unable to tell where to search beneath the brown surface. The final toll was 21 dead and about 150 injured. The victims included laborers, teamsters, a firefighter, and two ten-year-old children. Some bodies were not recovered for months.\n\nCleanup took weeks. Crews pumped salt water from the harbor to cut through the residue and spread sand to absorb it. Rescuers and onlookers tracked molasses onto streetcars, into homes, and across the city. The harbor ran brown into the summer, and residents claimed for decades that on hot days they could still smell the sweetness.\n\nThe company blamed anarchist saboteurs, a plausible-sounding claim in an era of bombings. But residents filed suit, and the resulting litigation, among the earliest large class-action cases in Massachusetts, ran for years and heard from hundreds of witnesses. The evidence pointed elsewhere. The tank had been built hastily in 1915 under the supervision of a man who could not read blueprints. Its steel walls were too thin, it had never been properly tested by filling it with water, and it had leaked from the start, so badly that local children collected the drippings. The company had responded by painting it brown to hide the streaks.\n\nIn 1925, the court-appointed auditor found the company liable, and it paid roughly $628,000 in damages. The disaster's more lasting legacy was regulatory: Massachusetts, and later other states, began requiring that engineers certify plans for major structures and that the calculations be filed with authorities. Today a small plaque near Langone Park marks the place where the tank stood."
+}

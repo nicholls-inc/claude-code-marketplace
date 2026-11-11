@@ -1,0 +1,15 @@
+A leap second is an extra second occasionally added to the world's official clocks to keep them in step with the Earth's rotation. Timekeepers have agreed to stop adding them by 2035, because the trouble they cause in computer systems now outweighs the benefit of keeping clocks matched to the sun.
+
+The need arises because we have two ways of measuring time. Since the 1960s the second has been defined by atomic clocks, which are extraordinarily steady. The length of a day, however, is set by the turning of the planet, and that is not steady at all. The moon's pull on the tides is gradually slowing the Earth, while movements in its molten core, its oceans and its atmosphere make it speed up or slow down unpredictably from year to year.
+
+Left alone, atomic time and solar time drift apart. In 1972 the world adopted a compromise: whenever the gap approached nine-tenths of a second, an extra second would be inserted at the end of June or December. On those nights, official clocks read 23:59:60 before rolling over to midnight. This has happened 27 times, most recently on 31 December 2016.
+
+The difficulty is that leap seconds cannot be scheduled far ahead. Because the Earth's rotation is erratic, each one is announced only about six months in advance. And most software is written on the assumption that a minute always has 60 seconds.
+
+The results have been disruptive. The 2012 leap second caused outages at websites including Reddit and LinkedIn and delayed flights in Australia when an airline booking system failed. Another on New Year's Eve 2016 briefly knocked out part of the internet company Cloudflare's service. Technology firms such as Google and Meta now "smear" the extra second across many hours instead, but they do so in different ways, which means the world's computers briefly disagree about the time. Satellite navigation, financial trading and telecoms networks all depend on precise, continuous time.
+
+A newer worry sharpened the argument. The Earth has lately been spinning slightly faster, raising the prospect of a "negative" leap second, in which a second would be skipped. That has never been tried, and engineers fear it would expose untested software.
+
+In November 2022 the General Conference on Weights and Measures, the international body responsible for units of measurement, voted to let the gap grow beyond one second from 2035 at the latest. The International Telecommunication Union, which governs time signals, endorsed the move the following year.
+
+For the public, little will change. The gap should reach only about a minute over a century, far less than the adjustment people make for daylight saving time. How large it will be allowed to grow, and how it will eventually be corrected, are still to be decided.

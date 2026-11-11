@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a3429cf73548a29ef",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73733,
+    "output_tokens": 1392,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:15:57.009Z",
+  "valid": true,
+  "text": "How a heat pump heats your house when it is colder outside\n\nA gas boiler makes heat by burning fuel. A heat pump does not make heat at all: it moves heat that already exists from outside your house to inside it. That is why it can deliver more heat energy than the electricity it consumes, and why it still works on a freezing day.\n\n**Cold air still contains heat**\n\n\"Cold\" is relative. Air at 0°C feels cold to us, but it is 273 degrees above absolute zero, the point at which there is no heat left to extract. Outdoor air at -5°C holds only slightly less heat energy than air at 20°C. The difficulty is that heat naturally flows from warm to cold, so it will not drift from a cold garden into a warm living room unaided. A heat pump uses electricity to push it in that direction, in the same way a fridge pushes heat out of its cold interior into your kitchen.\n\n**The cycle**\n\nA heat pump circulates a fluid called a refrigerant through a sealed loop with four stages:\n\n1. **Evaporation.** The refrigerant enters the outdoor unit as a liquid at very low pressure, which makes it far colder than the outside air, perhaps -15°C on a -5°C day. Because the air is now the warmer of the two, heat flows from the air into the refrigerant, and the refrigerant boils into a gas. A fan keeps fresh air moving over the coil.\n2. **Compression.** An electric compressor squeezes that gas. Compressing a gas raises its temperature, as you notice when a bicycle pump warms up. The refrigerant leaves at 60°C or more. This is where nearly all the electricity goes.\n3. **Condensation.** The hot gas passes through a heat exchanger and gives up its heat to the water in your radiators or underfloor pipes. As it cools, it condenses back into a liquid.\n4. **Expansion.** The liquid passes through a valve that drops its pressure, which chills it sharply, and it returns outdoors to start again.\n\nThe electricity runs the compressor and fan; the heat itself comes from the outdoor air.\n\n**What that means for efficiency**\n\nA modern gas boiler turns about 90% of the energy in its fuel into heat. A heat pump typically delivers three to four units of heat for each unit of electricity, because two or three of those units are collected free from outside. This ratio is called the coefficient of performance (COP).\n\nThe COP falls as the gap between outdoor and indoor temperature widens, because the compressor has to work harder. On a mild day it might be 4 or more; at -10°C it might be closer to 2 to 2.5. Current air-source models keep working below -20°C, and they are common in Norway, Sweden and Finland. The figure that matters to you is the seasonal average over a whole winter, which installers quote as the SCOP.\n\n**What is different from a boiler**\n\n- **Lower water temperature.** Heat pumps are most efficient sending water to radiators at 35 to 50°C, not the 60 to 75°C of a boiler. Radiators feel warm, not hot, and the system runs steadily for long periods instead of in short blasts. Some homes need larger radiators, and good insulation helps a great deal.\n- **Hot water.** You will need a hot water cylinder, since a heat pump cannot heat water instantly as a combi boiler does.\n- **Running costs.** Electricity usually costs several times more per unit than gas. Whether your bills fall depends on the ratio of your electricity price to your gas price compared with the SCOP you achieve. As a rough guide, if electricity costs three times as much as gas, you need a SCOP above about 2.7 to break even against a 90% efficient boiler.\n- **Frost.** In cold, damp weather the outdoor coil ices up and the unit briefly reverses to defrost itself. This is normal, and it is included in seasonal efficiency figures.\n\n**What to ask an installer**\n\nAsk for a room-by-room heat loss calculation, the design flow temperature, and the predicted SCOP for your house. Those three numbers, together with your local energy prices, tell you whether the switch will pay off."
+}

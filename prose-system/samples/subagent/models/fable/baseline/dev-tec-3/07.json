@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7409525a3c09889e",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 954,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:18:43.181Z",
+  "valid": true,
+  "text": "A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a metal oxide or phosphate, and the negative electrode is usually graphite. Both have crystal structures with sites that lithium can occupy. Charging forces lithium out of the positive electrode, through a liquid electrolyte, and into the gaps between the graphite layers, while the matching electrons travel through the external circuit. Discharge is the same process running in reverse, driven by the cell's own voltage.\n\nThe charger controls this with a two-stage profile called constant current, constant voltage (CC-CV).\n\nIn the first stage the charger holds a fixed current, typically 0.5 to 1 times the cell's capacity per hour. The cell's voltage rises as it fills, from roughly 3.0 V when empty towards a limit set by the chemistry, commonly 4.2 V. This stage delivers most of the charge, about 70 to 80 percent, at a steady rate.\n\nWhen the terminal voltage reaches the limit, the charger switches to the second stage. It holds the voltage at the limit and lets the current fall. Charging ends when the current has decayed to a small fraction of its initial value, often 5 to 10 percent.\n\nThe slowdown comes from that voltage limit. The voltage at the terminals is the sum of two parts: the cell's equilibrium voltage, which depends on its state of charge, and an overvoltage needed to push current through it. The overvoltage covers ohmic resistance, the reaction kinetics at the electrode surfaces, and the diffusion of lithium through the electrolyte and into the solid particles. It grows with current.\n\nAs the cell fills, its equilibrium voltage approaches the limit, so the headroom left for overvoltage shrinks. With less driving voltage available, less current flows. The current decays roughly exponentially, much as it does when a capacitor charges through a resistor towards a fixed supply voltage.\n\nDiffusion makes this worse near full. Lithium arriving at a graphite particle must spread inward from the surface, and the surface fills before the interior. With few vacant sites left there, further lithium is accepted only as fast as the lithium already there diffuses inward.\n\nThe limit cannot simply be raised to keep the current up. Above it, the electrolyte oxidises at the positive electrode and that electrode's structure degrades. At the negative electrode, forcing lithium in faster than the graphite can absorb it causes it to deposit as metal on the surface. This plating permanently removes capacity and can grow into dendrites that short-circuit the cell.\n\nThe tapering current is therefore the fastest rate the cell can safely accept. It is also why fast-charging figures are usually quoted to 80 percent: the final fifth takes about as long as everything before it."
+}

@@ -1,0 +1,70 @@
+# How two strangers can agree on a secret while others listen
+
+Suppose Alice and Bob have never met and can talk only over a line that anyone may listen to. They want to end up sharing a secret number that no listener knows, so they can use it to scramble their later messages. This sounds impossible, because whatever Alice tells Bob, the listener hears too.
+
+The way out is that Alice and Bob never send the secret at all. Each sends the other a partial ingredient, and each combines what they receive with something they kept to themselves. The listener hears both ingredients but lacks either of the private pieces needed to finish the job. This idea, published by Whitfield Diffie and Martin Hellman in 1976, was the start of public-key cryptography.
+
+## A picture first: mixing paint
+
+Imagine that mixing two paints is easy, but separating a mixture back into its original colours is impossible.
+
+1. Alice and Bob agree, openly, on a common colour, say yellow. The listener hears this.
+2. Alice picks a private colour, red, and tells no one. Bob picks a private colour, blue.
+3. Alice mixes yellow with red and sends the resulting orange to Bob. Bob mixes yellow with blue and sends the green to Alice. The listener sees both mixtures.
+4. Alice adds her red to the green she received. Bob adds his blue to the orange he received.
+
+Both now hold the same colour, yellow plus red plus blue, because the order of mixing makes no difference. The listener has yellow, orange and green, but cannot get the final colour. Mixing orange with green gives two helpings of yellow, which is the wrong shade, and she cannot extract the pure red or blue from the mixtures.
+
+Two things make this work. The mixing can be done in either order with the same result, and it is easy to do but hard to undo. The real method needs an arithmetic operation with those same two properties.
+
+## The arithmetic: clock numbers
+
+The operation uses remainders. On a 12-hour clock, 5 hours after 10 o'clock is 3 o'clock, not 15: you add, then throw away complete laps of 12 and keep what is left. Mathematicians do the same with any clock size. With a clock of 23 hours, the number 50 becomes 4, because 50 is two full laps of 23 (that is 46) with 4 left over.
+
+Now take a number, say 5, and raise it to successive powers on the 23-hour clock, keeping only the remainder each time:
+
+| Power of 5 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Remainder on the 23-clock | 5 | 2 | 10 | 4 | 20 | 8 | 17 | 16 | 11 | 9 |
+
+Each entry is the previous one times 5, reduced by laps of 23. For example, 5 × 5 = 25, which leaves 2, and then 2 × 5 = 10.
+
+The results jump around with no visible pattern. In ordinary arithmetic, powers of 5 simply grow, so if I tell you a result you can tell roughly which power produced it. On the clock, the size of the result tells you nothing. Going forwards (given the power, find the result) is quick multiplication. Going backwards (given the result, find the power) has no known shortcut. This is the paint that will not unmix.
+
+## The exchange, with real numbers
+
+Alice and Bob openly agree on the clock size, 23, and the base number, 5. The listener hears both.
+
+**Each picks a private number.** Alice picks 6. Bob picks 15. Neither number is ever sent.
+
+**Each sends a mixture.** Alice works out 5 to the power 6 on the 23-clock. From the table, that is 8, and she sends 8 to Bob. Bob works out 5 to the power 15 on the 23-clock, which comes to 19, and he sends 19 to Alice.
+
+**Each finishes the job.** Alice takes Bob's 19 and raises it to her private power, 6, on the 23-clock. The answer is 2. Bob takes Alice's 8 and raises it to his private power, 15, on the 23-clock. The answer is also 2.
+
+They now share the number 2, and it never travelled down the line.
+
+## Why they get the same answer
+
+Recall from school that raising a power to a power multiplies the exponents: (5²)³ = 5⁶. The same rule holds on the clock.
+
+Alice computed (5 to the 15) to the 6, which is 5 to the power 90. Bob computed (5 to the 6) to the 15, which is also 5 to the power 90. Because 15 × 6 and 6 × 15 are the same, the two arrive at the same place. This is the "either order" property of the paint.
+
+## Why the listener is stuck
+
+The listener knows 23, 5, 8 and 19. To get the secret, she needs Alice's 6 or Bob's 15. That means answering the question "5 to which power gives 8 on the 23-clock?" Combining what she has does not help: multiplying 8 by 19 gives 5 to the power 6 + 15, not 6 × 15, just as mixing orange and green gave the wrong colour.
+
+With a clock of 23 she can simply try every power until one works. Real systems use a clock size several hundred digits long, with private numbers of similar scale. Alice and Bob's computers still manage their calculations in a fraction of a second, because there is a shortcut for raising to a huge power: square repeatedly, which doubles the exponent at each step, so even an astronomically large power takes only a few thousand multiplications.
+
+The listener has no comparable shortcut for going backwards. The best methods known would take all the computers on Earth far longer than the age of the universe. That gap between a fraction of a second forwards and effectively forever backwards is what the security rests on.
+
+## Two caveats
+
+**Nobody has proved that the backward problem is hard.** It has resisted decades of effort by many able mathematicians, which is strong evidence but not proof. It is also known that a large enough quantum computer, if one can be built, would solve it quickly. For that reason, newer methods built on different hard problems are now being brought into use.
+
+**The exchange hides the secret but does not tell Alice who she is talking to.** An intruder who can alter messages, not merely listen, could sit in the middle, do one exchange with Alice while pretending to be Bob, and another with Bob while pretending to be Alice. Guarding against this needs a second public-key tool, the digital signature, which lets Bob prove that his messages really come from him.
+
+## What happens next
+
+Once Alice and Bob share a secret number, they use it as the key to a conventional scrambling method, which is fast and works well when both sides hold the same key. The exchange exists only to get that key in place.
+
+This happens every time a web browser shows a padlock. The browser and the website, strangers to each other, run an exchange of this kind over the open internet (often in a modern variant that uses a different kind of arithmetic on the same plan), and within a fraction of a second they share a key that no one in between can know.

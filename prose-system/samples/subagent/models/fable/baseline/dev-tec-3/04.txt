@@ -1,0 +1,16 @@
+How a lithium-ion cell is charged, and why charging slows near full
+
+A lithium-ion cell stores energy by moving lithium ions between two host materials. The negative electrode is usually graphite; the positive electrode is a lithium metal oxide or phosphate. Both are porous coatings of micron-scale particles soaked in a liquid electrolyte. During charging, an external supply drives electrons from the positive electrode to the negative through the circuit, while lithium ions leave the positive particles, cross the electrolyte, and insert between the graphite layers. This insertion is called intercalation.
+
+The cell's terminal voltage is the sum of two parts: the equilibrium voltage, which rises with state of charge, and an overvoltage proportional to current, caused by ohmic resistance, the reaction kinetics at the particle surfaces, and the slow diffusion of lithium inside the particles and through the electrolyte.
+
+Chargers use a two-stage protocol called constant current, constant voltage (CC-CV).
+
+1. Constant current. The charger holds a fixed current, typically 0.5 to 1 times the cell's capacity per hour. Voltage climbs as the cell fills. This stage delivers roughly 70 to 80 percent of the charge.
+2. Constant voltage. When the terminal voltage reaches its limit, about 4.2 V for most chemistries, the charger holds that voltage and lets the current fall. Charging ends when the current has decayed to a few percent of its initial value.
+
+The slowdown is the second stage. The voltage limit is a hard ceiling: above it the electrolyte oxidizes at the positive electrode and the positive material itself degrades. When the terminal voltage first reaches the limit, the cell is not full, because part of that voltage is overvoltage. As the equilibrium voltage continues to rise toward the limit, the headroom left for overvoltage shrinks, and the current must shrink with it. The result is a roughly exponential decay in current, much like the last stage of charging a capacitor through a resistor. The last 20 percent of the charge can take as long as the first 80.
+
+A second constraint acts at the negative electrode. Lithium entering a graphite particle must diffuse inward from the surface. Near full charge the surface has few vacant sites, and if ions arrive faster than they can diffuse in, the graphite's potential drops below that of lithium metal. Ions then deposit as metal on the surface instead of intercalating. This lithium plating permanently consumes capacity and can grow dendrites that short the cell internally. Low temperature slows diffusion and makes plating more likely, which is why chargers reduce current in the cold.
+
+Fast-charging systems exploit the same physics in reverse: they push very high current into a nearly empty cell, where headroom is large, and step it down as the cell fills. That is why charging rates are usually quoted to 80 percent.
