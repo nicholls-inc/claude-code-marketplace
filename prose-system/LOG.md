@@ -50,3 +50,21 @@ These are the agent's views. None rests on generated output.
 - Experiment 1. The baseline uses em dashes above the Brown median of 2.2 per 1,000 words in at least three of the four kinds of prose. Names and numbers per 100 words are lowest in the argument briefs.
 - Experiment 2. `no_em_dash` brings em dashes close to zero, and the combined rate of the four marks falls by less than the em dash rate fell, with colons and semicolons making up part of the gap. `no_joiners` brings all four marks close to zero and raises the count of sentence fragments and comma splices against the baseline.
 - Experiment 3. `vary_length` raises the coefficient of variation of sentence length and raises the short-then-long share against the baseline. The lag-1 autocorrelation falls.
+
+### Later the same day: route change and pilot
+
+- The owner chose Sonnet subagents in Claude Code as the generator, in place of API calls, and approved both brief sets. They are frozen at version 1.
+- This departs from the handoff, which asks for a call that holds the condition's prompt and nothing else. A subagent also carries the Claude Code agent system prompt, tool definitions and `CLAUDE.md`. One line in that system prompt asks for "a concise report". Every record from this route is marked `"route": "claude-code-subagent"` and stores a hash of the system prompt.
+- `harness/import_subagent.py` copies each sample from the subagent's transcript on disk, so the text does not pass through the orchestrating agent.
+- Pilot: brief `dev-exp-1`, four conditions, two samples each, 8 subagents, stored under `samples/subagent/pilot/`. These are pilot samples and are not the experiment 1 baseline.
+
+Pilot results:
+
+- Model served in all 8: `claude-sonnet-5-5`. The system prompt hash was the same in all 8.
+- Tokens, summed over 8 runs: 587,337 input tokens written to the prompt cache, 72,116 read from it, 18 uncached input, 16,837 output including thinking. That is 676,308 in total and about 84,500 per run. About 72,100 of each run is the fixed subagent context.
+- The 8 runs started together and none read the cache that another had written. The one cache read came from the second API message of a single run.
+- Length: 623 to 742 words against a request for about 600.
+- 7 of 8 returned the piece and nothing else. 1 of 8, `vary_length` sample 1, used the Bash tool to save a copy, put a word count in its title and added a line about the saved file. It is stored with `tools_used: ["Bash"]`.
+- 5 of 8 used bold headings and 4 of 8 used lists. `profile.py` counted a bold heading line as a sentence. It now drops a line that is entirely bold.
+- No sample in any condition, the baseline included, contains an em dash. This goes against the expected result for experiment 1 above. Two baseline samples on one brief are too few to settle it.
+

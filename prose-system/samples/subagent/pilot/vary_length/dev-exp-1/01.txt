@@ -1,0 +1,29 @@
+How a heat pump heats your house from cold air (about 640 words)
+
+It sounds like a trick. Heat flows from hot to cold, so how can air at minus 5°C warm a house sitting at 21°C? The answer is that a heat pump does not create heat. It moves heat, and it spends a little electricity to push that heat uphill.
+
+Start with what "cold" really means. Air at minus 5°C is cold to you, but it still holds plenty of thermal energy; true zero is minus 273°C. There is heat in that air to be had. The machine just has to collect it.
+
+It does this with a sealed loop of refrigerant, a fluid that boils at a very low temperature, far below freezing. The loop has four stages.
+
+First, a fan pulls outdoor air across a coil called the evaporator. The refrigerant inside is colder than the air, even on a bitter day, so heat flows into it and it boils into a gas. Second, a compressor squeezes that gas. Squeezing raises the pressure and, with it, the temperature, often to 50 or 60°C. A bicycle pump warms up for the same reason. Third, the hot gas flows through a second coil indoors, the condenser, which is linked to your radiators, underfloor heating or hot water cylinder. Now the gas is hotter than the water, so it hands over its heat and turns back into a liquid. Fourth, that liquid passes through an expansion valve, which drops its pressure and chills it sharply. It is now cold enough to start the round again.
+
+If that sounds familiar, it should. Your fridge is a heat pump. It pulls heat out of the food and releases it into your kitchen through the warm coils on the back. A home heat pump does the same job, except the "food" is the outdoors and the "kitchen" is your living room.
+
+Here is why it matters for your wallet. A gas boiler turns each unit of gas into, at best, about 0.9 units of heat. A heat pump only uses electricity to run the compressor and fan, and it delivers far more heat than it consumes. A typical seasonal figure is 2.5 to 3.5 units of heat per unit of electricity. Engineers call this the coefficient of performance.
+
+There are limits. The colder it gets outside, and the hotter the water you ask for, the harder the machine works and the lower that ratio falls. On a very cold day it might manage 2 rather than 3. Modern units keep running at minus 15°C or lower, but they do so less efficiently. They also need occasional defrost cycles, when frost builds on the outdoor coil.
+
+So what should you check before replacing your boiler?
+
+1. Insulation. A heat pump shines in a well-insulated house. In a draughty one, it will be larger, costlier and less efficient.
+2. Radiators. Boilers often send water at 70°C. Heat pumps are happiest at 35 to 50°C, which can mean bigger radiators or underfloor heating.
+3. Energy prices. If a unit of electricity costs more than about three times a unit of gas, your running costs may not fall at all. Check your tariff, and ask about heat pump tariffs.
+4. Upfront cost and grants. Installation is usually much more than a boiler, though subsidies may close much of the gap.
+5. Space. You need a spot outdoors for the unit, and often room indoors for a hot water cylinder.
+
+Ask two or three installers for a room-by-room heat loss calculation and the design flow temperature they propose. A good one will give you a predicted efficiency figure and running cost. Compare that with what your boiler costs you today.
+
+The physics works, even in a frost. Whether the economics work for your house is the real question.
+
+(Saved copy: /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/hp.txt. No repo files were changed.)

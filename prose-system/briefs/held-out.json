@@ -1,8 +1,8 @@
 {
   "set": "held-out",
-  "version": "draft-1",
-  "frozen": false,
-  "note": "Draft for the owner's approval. 24 briefs, 6 of each kind. Used only to confirm a result that will change the system. Never used to write or adjust a prompt. No brief has a human reference text yet.",
+  "version": "1",
+  "frozen": true,
+  "note": "Approved by the owner and frozen on 11 November 2026. 24 briefs, 6 of each kind. Used only to confirm a result that will change the system. Never used to write or adjust a prompt. No brief has a human reference text yet.",
   "briefs": [
     {"id": "held-exp-1", "kind": "explanation", "words": 300, "human_reference": null,
      "prompt": "Write an explanation of about 300 words of why the sky is blue at midday and red at sunset. The reader is a curious twelve-year-old."},

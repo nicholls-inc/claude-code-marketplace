@@ -1,8 +1,8 @@
 {
   "set": "dev",
-  "version": "draft-1",
-  "frozen": false,
-  "note": "Draft for the owner's approval. 12 briefs, 3 of each kind. Used for experiments 1 to 3 and for all tuning. Each prompt is the plain request sent in the baseline condition and carries no style instruction. No brief has a human reference text yet.",
+  "version": "1",
+  "frozen": true,
+  "note": "Approved by the owner and frozen on 11 November 2026. 12 briefs, 3 of each kind. Used for experiments 1 to 3 and for all tuning. Each prompt is the plain request sent in the baseline condition and carries no style instruction. No brief has a human reference text yet.",
   "briefs": [
     {"id": "dev-exp-1", "kind": "explanation", "words": 600, "human_reference": null,
      "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler."},

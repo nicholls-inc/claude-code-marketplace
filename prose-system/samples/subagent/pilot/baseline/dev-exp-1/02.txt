@@ -1,0 +1,36 @@
+**How a heat pump heats a house when it is colder outside**
+
+A heat pump does not make heat by burning something. It moves heat from one place to another, the way a fridge moves heat out of its inside and dumps it into your kitchen. A heat pump is a fridge running in reverse: it pulls heat out of the outdoor air and delivers it indoors.
+
+**Cold air still contains heat**
+
+"Cold" is relative. Heat is the motion of molecules, and that motion only stops at absolute zero, about -273°C. Air at 0°C, or even -10°C, holds a great deal of thermal energy. The trick is getting it to flow from the cold outside to the warm inside, which it will not do on its own. Heat naturally flows from hot to cold, so the machine has to force it the other way. That is what the compressor is for.
+
+**The cycle, step by step**
+
+A sealed loop of refrigerant circulates through four parts:
+
+1. **Evaporator (outdoor unit).** The refrigerant is chosen so that it boils at a very low temperature, far below freezing. Even in cold air it is colder than its surroundings, so it absorbs heat and turns to gas.
+2. **Compressor.** This squeezes the gas. Compressing a gas heats it up sharply, so the refrigerant leaves the compressor much hotter than your radiators need to be. This step uses electricity.
+3. **Condenser (indoors).** The hot gas passes its heat to your heating water or indoor air and condenses back to liquid, releasing a large amount of energy as it does.
+4. **Expansion valve.** The liquid's pressure drops, which chills it well below the outdoor temperature, and the loop starts again.
+
+**Why this beats a boiler on efficiency**
+
+A gas boiler turns about 85 to 95 percent of its fuel energy into heat, so it can never deliver more than you put in. A heat pump uses electricity only to run the compressor and fans, and most of the heat it delivers was collected from outside. Typically it delivers 2.5 to 4 units of heat per unit of electricity. This ratio is called the coefficient of performance (COP), or seasonal COP (SCOP) over a whole year. A SCOP of 3 means about 300 percent efficiency.
+
+**The catch: it works harder as it gets colder**
+
+The bigger the temperature gap the compressor must bridge, the more electricity it needs per unit of heat. On a mild day a COP of 4 or more is realistic. At -10°C it may fall to around 2. Modern cold-climate models keep running at -15°C to -25°C, but a model rated for those conditions costs more than a basic one. Some systems include a backup electric element for extreme cold snaps.
+
+Flow temperature matters too. Heat pumps are most efficient when sending water at 35 to 45°C, while a gas boiler typically runs radiators at 60 to 75°C. Underfloor heating suits this well. Existing radiators can often cope, but may need upsizing in some rooms.
+
+**What this means for your decision**
+
+- **Insulation first.** A heat pump suits a well-insulated house best. A draughty, poorly insulated home needs a bigger, costlier unit and higher running costs. Fixing the loft and draughts may come before the swap.
+- **Running costs depend on prices.** A heat pump uses roughly a third of the energy a boiler would, but electricity usually costs more per unit than gas. Whether you save depends on your local tariff ratio. A time-of-use tariff can improve the sums.
+- **Upfront cost is higher.** Installed prices are usually several times those of a replacement boiler, though grants and subsidies can narrow the gap. Check what applies where you live.
+- **Practicalities.** You need space outside for the unit and usually a hot water cylinder indoors. Ask an installer for a proper heat-loss survey and radiator assessment, and get several quotes.
+- **Carbon.** Heat pumps cut emissions substantially, and more so as the electricity grid gets cleaner.
+
+If your boiler is near the end of its life, your home is reasonably insulated, and grants are available, a heat pump is well worth a serious quote. If the house is leaky and the budget tight, improve the insulation first and revisit.

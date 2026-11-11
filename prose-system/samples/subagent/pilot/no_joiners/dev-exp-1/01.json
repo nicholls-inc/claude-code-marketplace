@@ -1,0 +1,26 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a52f34ec1bdfb84ce",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "76f33987e4ca373aafd268cd84a4bbe50d306076e594848157c6bc0637edaa5e",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 72128,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 2840,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:04:00.254Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists, and that is why it can warm your home even when the air outside feels freezing.\n\nStart with a common misunderstanding. Cold is just a lower amount of heat energy, not an absence of it. Air at minus 5 degrees Celsius still holds a lot of heat, because absolute zero is around minus 273 degrees. A winter day is still rich in energy. A heat pump extracts some of it and delivers it indoors.\n\nThink of your fridge. It pulls heat out of the food and pushes it out of the back into your kitchen. A heat pump is the same machine, with the whole outdoors playing the part of the fridge interior and your house playing the part of the kitchen.\n\nHere is the cycle. A sealed loop holds a refrigerant, a fluid that boils at a very low temperature, well below freezing. Outside, a fan blows air across a coil containing cold refrigerant. Because the refrigerant is colder than the air, heat flows into it and it boils into a gas. Next a compressor squeezes that gas. Squeezing raises pressure and temperature sharply, the same way a bicycle pump gets hot. The gas now reaches perhaps 50 to 60 degrees Celsius, which is hotter than your heating system needs. It flows through a coil indoors, hands its heat to your heating water, and condenses back to a liquid. Finally an expansion valve drops the pressure, the liquid turns very cold, and the cycle begins again.\n\nSo the compressor is the clever part. Heat naturally flows only from hot to cold, but by raising the refrigerant's temperature with pressure, the machine makes the outdoor heat usable indoors.\n\nWhy this beats a gas boiler. Electricity powers the compressor and fans, but most of the heat delivered was collected from outside. A good heat pump delivers around three units of heat for every one unit of electricity. Engineers call this the coefficient of performance. A gas boiler cannot exceed 100 percent efficiency and typically manages 85 to 95. A heat pump effectively runs at 300 percent or more.\n\nNow the honest caveat. The colder it gets, the harder the machine works. At minus 10 outdoors the ratio might fall toward 2, which is still better than a boiler on energy used, though electricity usually costs more per unit than gas. Your running costs therefore depend on the price gap between the two fuels and on how efficiently your system runs.\n\nWhat this means for your decision.\n\nFirst, insulation matters. Heat pumps run best at lower flow temperatures, around 35 to 50 degrees, compared with 70 or more for many boilers. A draughty house with poor insulation forces higher temperatures and lower efficiency. Fix loft insulation and draughts before or alongside the installation.\n\nSecond, check your radiators. Existing ones may be too small for gentler heat. Some need upgrading, and underfloor heating suits heat pumps very well.\n\nThird, ask installers for a room by room heat loss calculation and a correctly sized unit. Oversizing and undersizing both hurt performance and comfort.\n\nFourth, consider space. You need an outdoor unit with clear airflow and usually a hot water cylinder indoors, which replaces any combi arrangement.\n\nFifth, look at grants and tariffs. Many countries offer subsidies for installation, and time of use electricity tariffs can cut bills substantially.\n\nHeat pumps are proven in Scandinavia and Canada, where winters are far harsher than most. If your home is reasonably insulated and your boiler is near the end of its life, a heat pump is a strong candidate. If your home is old, leaky and has small radiators, plan the improvements first. Get at least three quotes and ask each installer for the expected seasonal efficiency of the system they propose."
+}

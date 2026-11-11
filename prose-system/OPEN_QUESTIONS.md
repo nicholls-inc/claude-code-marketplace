@@ -15,4 +15,11 @@ Ask these before the step they block. Record each answer in this file with the d
 
 ## Answers
 
-None yet.
+Answered by the owner on 11 November 2026.
+
+| # | Answer |
+| --- | --- |
+| 1 | Generate with Sonnet subagents in Claude Code, in place of API calls. The pilot's transcripts show the model served was `claude-sonnet-5-5`. No budget ceiling given yet. The owner asked for a pilot and its token cost before any larger run. |
+| 2 | The 12 development briefs and 24 held-out briefs are approved as drafted. Both sets are frozen at version 1. |
+
+Questions 3 to 8 are open.

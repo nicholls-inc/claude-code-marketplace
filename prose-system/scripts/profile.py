@@ -46,6 +46,9 @@ def clean(text: str) -> str:
         if not s or s.startswith("#") or s.startswith("|") or s.startswith(">"):
             out.append("")                                       # headings, tables, quotes
             continue
+        if re.fullmatch(r"(\*\*|__)[^*_]+\1:?", s):
+            out.append("")                                       # a line that is all bold is a heading
+            continue
         s, n_marker = re.subn(r"^(?:[-*+]|\d+[.)])\s+(?:\[[ xX]\]\s+)?", "", s)  # list markers
         s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)           # links -> text
         s = re.sub(r"https?://\S+", " ", s)                      # bare urls
