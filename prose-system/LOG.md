@@ -110,3 +110,12 @@ Follow-up runs, with expected results stated before running. These are the agent
 - Two of those misfires had effects outside the run. Each called `create_session` with no arguments and created an empty Claude Code cloud session on the owner's account: `session_01NFQZoWACkoQUQP95Sxt2mY` and `session_01NFQZoTogBRsaiHxi48iUYr`. Both were idle with 0 tokens used. The orchestrating agent tried to archive both and the session's permission check refused the action, so both are still there for the owner to archive.
 - One run queued a suggested-task card with placeholder text and withdrew it itself. Two runs listed the account's environments, one listed its repositories and one listed its sessions. Those results went to the subagent only.
 - The owner's ruling that tool use is valid stands for the samples. The side effects are a separate matter: a subagent given only a writing brief can still reach every tool the session has.
+
+### Rhythm test, expected results stated before running
+
+The owner read the write-up of experiments 1 to 3 and asked for the rhythm test and the reader page. All conditions are on Sonnet subagents, 12 development briefs, 10 samples each, and are compared with the stored `plain_prose` samples and the human reference. These are the agent's views.
+
+- `rhythm_content`: plain prose, plus "Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one." Expected: sentences of four words or fewer fall below 2% and the short-then-long share falls to 8% or less. The lag-1 autocorrelation stays below zero.
+- `rhythm_medium`: plain prose, plus "Write mostly medium-length, complete sentences." Expected: the coefficient of variation falls below 0.45 against a human 0.55, which is a new outlier. The autocorrelation stays below zero.
+- `voice_spec`: plain prose, plus the test voice specification from the brief. Expected: mean sentence length above 20 words, coefficient of variation below 0.45, parentheses below 0.5 per 1,000 words, autocorrelation below zero.
+- `revise_rhythm`: a second subagent revises each of the 120 stored `plain_prose` samples for rhythm. Expected: the short-then-long share falls against its drafts, the autocorrelation moves towards zero by less than half the gap to the human value, and digits per 100 words stay within 10% of the drafts.

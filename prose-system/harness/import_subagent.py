@@ -90,6 +90,8 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--agent", action="append", default=[])
     ap.add_argument("--all", action="store_true", help="import every agent transcript in the directory")
+    ap.add_argument("--manifest", help="JSON with jobs: [{prompt, condition, brief_id, source_sample}]; "
+                    "used when each prompt is unique, as in a revision pass")
     ap.add_argument("--skip-unmatched", action="store_true",
                     help="skip transcripts whose prompt matches no condition and brief")
     args = ap.parse_args()
@@ -98,6 +100,11 @@ def main():
     conds = json.loads(Path(args.conditions).read_text(encoding="utf-8"))
     by_prompt = {c["template"].replace("{prompt}", b["prompt"]): (cn, b["id"])
                  for cn, c in conds["conditions"].items() for b in briefs["briefs"]}
+    source = {}
+    if args.manifest:
+        for j in json.loads(Path(args.manifest).read_text(encoding="utf-8"))["jobs"]:
+            by_prompt[j["prompt"]] = (j["condition"], j["brief_id"])
+            source[j["prompt"]] = j.get("source_sample")
     out = Path(args.out)
     imported = {json.loads(p.read_text(encoding="utf-8"))["agent_id"] for p in out.rglob("*.json")}
 
@@ -129,6 +136,7 @@ def main():
             "brief_id": brief, "brief_set": briefs.get("set"),
             "brief_set_version": briefs.get("version"), "index": idx,
             "model_served": t["model"], "prompt": t["prompt"],
+            "source_sample": source.get(t["prompt"]),
             "context_note": "Prompt sent as the subagent's whole task. The subagent also carried "
                             "the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
             "system_prompt_sha256": t["system_prompt_sha256"],
