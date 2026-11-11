@@ -56,7 +56,7 @@ Expected: em dashes above 2.2 per 1,000 words in at least three kinds of prose. 
 | Samples with headings | n/a | 57% | 0% | 40% | 28% | 28% |
 | Samples with lists | n/a | 36% | 0% | 36% | 42% | 27% |
 
-Raw dash characters, counted directly in the text: Sonnet 0 in 106,000 words, Haiku 0, Fable 2, Opus 25 in 113,000 words.
+Raw dash characters, counted directly in the text: Sonnet 0 in 109,000 words, Haiku 0, Fable 2, Opus 25 in 114,000 words.
 
 What the table shows:
 
