@@ -1,0 +1,15 @@
+Software teams should stop estimating how long work will take, or at least stop treating estimates as commitments, which in most organizations is the only way they are ever used.
+
+Start with the evidence we all already have: pull up the last ten projects your team estimated and compare the guess with what happened. The misses are not random noise that averages out; they skew late, they skew badly, and they skew that way for the same reasons every time, because the work turned out to contain things nobody could see in advance. This is not a failure of discipline, since software is unusual among engineering fields in that the thing being built is mostly discovery. If you knew exactly how to build it, you would copy the existing one. An estimate is a forecast about what you will learn, made at the moment you know the least.
+
+The cost of this exercise runs higher than the hour spent in planning, because estimates harden into dates, dates into promises, and promises into pressure. Engineers learn quickly that a number said aloud will be quoted back to them, so they pad it, and managers learn that engineers pad, so they trim it. Everyone ends up negotiating over a fiction. Meanwhile the team makes quiet tradeoffs to hit the date: skipped tests, thinner error handling, a refactor deferred forever. The estimate does not predict the quality of the work, it quietly degrades it.
+
+There is also an opportunity cost that rarely gets counted: hours spent debating whether a ticket is a three or a five are hours not spent shipping it, and large estimation ceremonies produce precision theatre, a spreadsheet that looks rigorous and rests on guesses stacked on guesses.
+
+The sensible objection is that businesses need to plan, since sales needs to tell customers something, finance needs a budget, and a launch needs a date for marketing. That is true, and it is why I would not abandon forecasting; I would abandon estimating individual tasks and replace it with something honest. Slice work small, so that each piece takes a few days at most. Track how many pieces your team actually finishes per week. Then forecast from that observed throughput, with a range rather than a point. A range drawn from your own history beats an opinion about a single ticket every time, and it takes minutes rather than meetings.
+
+Better still, shift the conversation from when to what. If a date is fixed, the variable is scope, and the team's job is to ship the most valuable slice by then and keep cutting the rest. That turns a deadline from a prediction you will probably lose into a constraint you can manage, and small increments, shipped often, also give you the one thing an estimate never can: real information about whether you are on track.
+
+Managers worry that dropping estimates means losing visibility, but it means the opposite: a team that ships something working every few days is more legible than one hiding behind a burndown chart, because you see progress directly instead of reading it off a guess.
+
+So stop asking how long it will take. Ask what is the smallest useful thing we can ship next, and then ship it.

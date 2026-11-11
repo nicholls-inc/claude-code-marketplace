@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a36708916effa1db9",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d009.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/09.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37861,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2218,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:23:00.003Z",
+  "valid": true,
+  "text": "Cities should scrap their minimum parking requirements, and they should do it soon. The rules were adopted with good intentions and have produced a quiet disaster: cities that were supposed to be built for people are instead built for the storage of cars.\n\nA parking minimum is a rule, usually buried in a zoning code, that tells a builder how many spaces to provide for every apartment, every hundred square feet of retail, every restaurant seat. The numbers are rarely grounded in careful study. Many came from a handbook of parking generation rates compiled from a small number of surveys at suburban sites with ample free parking, then applied as if they described the needs of every neighborhood everywhere. A planner in one city copies the ratio from another, and a guess hardens into law.\n\nThe first cost is housing, because a single structured parking space can cost tens of thousands of dollars to build, and far more underground. That cost does not vanish; it is passed to tenants and buyers, whether or not they own a car, so a household without a vehicle ends up subsidizing a space it never uses, folded invisibly into the rent. Where land is scarce, the requirement also eats into what can be built at all: a lot that could hold twelve apartments holds eight, because the rest of the site is consumed by stalls and driveways. Small, cheap, incremental projects die first, since a modest corner building cannot fit the required spaces on its footprint, and that is precisely the kind of building cities say they want more of.\n\nThe second cost is the shape of the city itself. When every destination must be fronted by a sea of asphalt, everything spreads out: shops sit far from one another, sidewalks run along blank lots, and walking becomes unpleasant even where it would be quick. Distance forces people into cars, which then justifies more parking, in a loop that planners have been feeding for decades. Historic downtowns that people pay a premium to visit were mostly built before such rules existed, and many of their beloved blocks would be illegal to construct today. If we admire the old main street, we should stop outlawing it.\n\nThe third cost is fiscal, since land under a parking lot produces little tax revenue compared with land under a building with shops and homes. Cities that mandate abundant parking are choosing to leave money on the table while still paying to maintain the roads that lead to it. Several downtowns that have studied the question have found that parking-heavy parcels yield a small fraction of the property tax per acre of denser, mixed-use ones.\n\nThe strongest objection is that without minimums, buildings will go up with no parking, and neighborhoods will be choked with cars competing for curb space. This worry deserves a direct answer, and the answer is that removing a minimum is not the same as banning parking. It simply lets the builder and the market decide. A developer who believes tenants want spaces will provide them, because apartments with parking rent for more in many places, and cities that have eliminated or sharply reduced requirements, including Buffalo, Minneapolis, and parts of California, have not seen parking vanish from new construction. Builders still supply it where demand exists and simply stop supplying it where it does not, so the amount becomes a choice rather than a mandate, and the choice reflects real conditions on the ground.\n\nIf spillover onto streets is the fear, the remedy is to price the curb, not to force every private project to overbuild. Residential permit programs, metered parking with rates that rise when a block fills up, and revenue returned to the neighborhood all manage scarce curb space directly. Free street parking is the real culprit, since anything offered at zero price will be overused, and if we fix the price the shortage mostly dissolves. It is odd to insist that markets cannot handle parking while relying on them for nearly everything else a building contains.\n\nA fair critic might also note that removing minimums will not transform a city overnight, since many developers will keep building generous parking out of habit and lenders often demand it. That is true, and it is an argument for patience, not for keeping the rule. Reform works at the margin: the odd lot that finally pencils out, the corner store that can open, the converted office that becomes homes. Those marginal projects are exactly what the present system forbids.\n\nThere is also a matter of fairness. Parking minimums quietly assume that everyone drives, and they penalize those who do not: the young, the old, the disabled, and the poor, who are less likely to own cars. A policy that makes everyone pay for car storage is a regressive tax dressed up as a technical standard.\n\nCities need not pretend to know how many spaces each building requires, because builders, lenders, and residents know far better, and they bear the consequences of getting it wrong. Strike the minimums, manage the curb with prices, and let the shape of the city follow what people truly need rather than a ratio from a handbook written decades ago."
+}

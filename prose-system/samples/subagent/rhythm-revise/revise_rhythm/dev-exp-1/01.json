@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "abd88cf98f24b182b",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d031.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/01.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37567,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2125,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:25:59.936Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything but moves heat that already exists, which is why it can warm a house on a day when the air outside is far colder than the air inside. The trick is that \"cold\" is relative: outdoor air at minus five Celsius still holds a great deal of thermal energy, because it is nowhere near absolute zero, which is about minus 273, and a heat pump is a machine for collecting that scattered energy and concentrating it indoors.\n\nIt works the same way as your fridge, just pointed the other direction, with a sealed loop carrying a refrigerant, a fluid chosen because it boils at very low temperatures. In the outdoor unit, the refrigerant is kept at a pressure where it boils at something like minus 20 or minus 30 Celsius, so because the outside air is warmer than that, heat flows naturally from the air into the refrigerant, which evaporates into a gas. Nothing unusual is happening so far; heat is simply flowing from warmer to colder.\n\nThe clever part comes next, when a compressor, driven by electricity, squeezes that gas. Compressing a gas raises its temperature sharply, so the refrigerant leaves the compressor much hotter than your living room, perhaps 50 to 60 degrees or more, and now the flow of heat works in your favour. In the indoor heat exchanger, the hot gas passes its heat into your radiators, underfloor heating, or hot water cylinder, and as it loses heat it condenses back into a liquid. An expansion valve then drops the pressure, the refrigerant becomes very cold again, and the cycle repeats.\n\nSo the electricity is not being turned into heat directly but is paying for the compression, which lifts heat from a low temperature to a useful one, and that is why heat pumps are so efficient. A good modern unit delivers roughly three to four units of heat for every unit of electricity it uses, a ratio called the coefficient of performance, or COP. A gas boiler, even a very good condensing one, cannot exceed about 90 to 95 percent efficiency, meaning less than one unit of heat per unit of fuel, and an electric heater manages exactly one.\n\nThere is a catch you should know about: the colder it gets outside, and the hotter the water you ask for, the harder the compressor must work and the lower the COP falls. On a mild day you might see a COP of four or more; on a freezing night it might drop to two and a half or three. Most modern models keep working down to minus 15 or even minus 25 Celsius, but they are less efficient there, which is why the flow temperature matters: heat pumps do their best work delivering water at 35 to 45 degrees, rather than the 65 to 80 degrees a gas boiler typically produces.\n\nThat has practical consequences for your decision. Older, smaller radiators are designed around hot boiler water, so a heat pump may need larger radiators or underfloor heating to heat the same rooms at a lower temperature. A well-insulated house with good draught proofing needs a smaller, cheaper, more efficient system, so a survey of your heat loss before you commit is worth paying for. You will also need space outside for the unit and usually a hot water cylinder indoors.\n\nOn costs, installation is typically several thousand pounds more than a boiler before any grants, though many countries offer subsidies. Running costs depend on the ratio of your electricity price to your gas price: if electricity costs less than about three times as much as gas per unit, a heat pump with a COP near three will cost less to run. Where that ratio is worse, savings shrink or vanish, though a time-of-use tariff or rooftop solar can improve the picture.\n\nIn short, a heat pump heats your house in winter by moving outdoor heat inside using a modest amount of electricity. It suits well-insulated homes best, and it deserves a proper survey and a quote comparison before you replace a working boiler."
+}

@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa6fe0d0a2fa44599",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d099.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/09.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37821,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2454,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:34:11.492Z",
+  "valid": true,
+  "text": "When you run git commit, the result is stored in a hidden directory called .git, and what lives there is far simpler than the commands suggest. At its heart, Git is a key-value store: you hand it some content, it computes a SHA-1 (or, in newer repositories, SHA-256) hash of that content, and it saves the content under that hash. Everything Git remembers about your project is built from four kinds of thing: blobs, trees, commits, and refs. The first three are immutable objects kept in .git/objects; the last is a small mutable pointer.\n\nA blob holds the contents of a single file and nothing else, with no filename, no permissions, and no timestamp. Git prepends a short header, the word blob, a space, and the byte length, then compresses the result with zlib and writes it to a path derived from the hash. The first two hex characters become a directory name and the remaining characters become the filename, so an object whose hash begins ab12 sits at .git/objects/ab/12.... Because the hash is computed from the content, two files with identical bytes produce the same blob, and Git stores that content once no matter how many paths or commits refer to it. This is why renaming a large file costs almost nothing: the blob is unchanged, and only the structure that names it differs.\n\nThat structure is the tree, and a tree object represents one directory as a list of entries, each with a file mode, a name, and the hash of what that name points to. The mode distinguishes regular files, executables, symbolic links, and subdirectories. An entry for a file points to a blob; an entry for a subdirectory points to another tree. The root of your project is therefore one tree, whose entries lead down through nested trees to the blobs at the leaves. Since a tree is itself hashed from its contents, its identity depends on every name and every child hash beneath it. Change one character in a deeply nested file and the blob hash changes, which changes its parent tree's hash, and so on up to the root. Two directories with identical contents share a single tree object, and a commit that touches one file in a large repository creates only a handful of new trees along the path to that file, reusing every untouched subtree by reference.\n\nThe commit object is what turns a tree into history. A commit is a small text record containing the hash of the root tree, the hashes of zero or more parent commits, an author with a name, email, and timestamp, a committer with the same fields, and finally your message. It does not store a diff but a pointer to a complete snapshot of the project, and the parent pointers link snapshots into a graph. A first commit has no parent, an ordinary commit has one, and a merge commit has two or more. Because the parent hash is part of the commit's own content, and therefore part of its hash, you cannot alter an old commit without changing its identity and the identity of every commit descended from it. This is what makes history tamper-evident, and it is also why rebasing produces new commits rather than moving old ones: the rewritten commits have different parents, so they are different objects with different hashes. The diffs you see in git log -p are computed on demand by comparing the trees of a commit and its parent.\n\nObjects are addressed by hash, but humans do not remember forty hex characters, and that is the job of refs. A ref is a file whose entire content is a commit hash. Branches live under .git/refs/heads, so the file .git/refs/heads/main contains the hash of the commit at the tip of main. Tags live under .git/refs/tags, and remote-tracking branches under .git/refs/remotes. When you make a commit on a branch, Git writes the new commit object, then overwrites the branch file with the new hash. That single small write is what moving a branch means. Branches are cheap precisely because they are just a forty-character file, not a copy of anything.\n\nOne more file ties this together: HEAD, at .git/HEAD, normally contains not a hash but a line such as ref: refs/heads/main, indicating which branch is checked out, which makes it a pointer to a pointer. When you are in the detached HEAD state, the file holds a raw commit hash instead, which is why commits made there can become unreachable once you switch away.\n\nPutting it together, a commit in your daily workflow unfolds like this. Git reads the staging area, builds trees from it, writing any new blobs and trees it has not seen before, creates a commit object pointing at the root tree and at the previous commit, and moves the current branch ref forward without modifying anything already stored. Over time, Git packs many loose objects into compressed packfiles that store similar objects as deltas, but that is an optimization of storage, not a change to the model. You can verify all of this yourself with git cat-file -p followed by any hash, which prints the decoded content of a blob, tree, or commit, and lets you walk the graph by hand."
+}

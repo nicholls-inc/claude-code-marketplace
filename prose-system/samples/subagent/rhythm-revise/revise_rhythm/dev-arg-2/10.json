@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a53fe8a1e63169cde",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d020.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/10.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37272,
+    "cache_read_input_tokens": 119385,
+    "output_tokens": 2012,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:24:01.815Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating estimates as commitments, and the sooner they do, the better their software and their working lives will be.\n\nStart with the evidence we already have: anyone who has spent a few years in this trade knows the pattern of the two-day task that takes two weeks, the \"quick fix\" that unearths a decade of debt, and the migration everyone swore was a sprint, and studies of large projects keep finding the same thing, which is that overruns are the norm and not the exception. We are bad at estimating not because we lack discipline but because software work is mostly discovery. If we knew exactly how to build the thing, we would already have built it, or copied it. The unknowns are precisely where the time goes, and they are invisible until we are standing in them.\n\nDefenders of estimation say the number is not the point, the conversation is, and there is something in that, since talking through a task does surface risks; but notice that you can have the conversation without producing the number. Asking \"what could go wrong here, and what is the smallest useful version?\" is valuable, while asking \"so, three points or five?\" and then totting up the points into a date turns a good conversation into a bad contract.\n\nIn practice an estimate, once spoken aloud, hardens into a deadline: managers repeat it upward, other teams plan around it, and the engineer who gave a hopeful guess in a planning meeting spends the following month defending it. People respond rationally. They pad the numbers, which makes the plan fiction, or they cut corners on tests and design to hit the date, which makes the code worse, or they quietly stop reporting surprises, which is the most dangerous outcome of all. A process meant to create predictability ends up suppressing the information that would create it.\n\nThe cost is also real in hours, since teams burn a meaningful slice of every cycle grooming, pointing, re-pointing, and explaining variance, and that time buys a forecast that is rarely better than a coin weighted by history.\n\nWhat should replace it is work in small slices that can ship in a day or two, shipped continuously, and slices that small do not need estimating because you just do them, and the difference between a one-day and a two-day slice is noise. Then forecast from reality: count how many slices your team finishes per week, and project from that throughput. It is cruder than a Gantt chart and far more honest, because it is built from what actually happened and not from what people hoped. When leadership needs a date, give a range with a confidence level, and update it as you learn.\n\nManagers will worry that this means flying blind, but it is the reverse: today you have precise-looking numbers detached from reality, whereas under this approach you have a visible flow of finished work, a candid sense of uncertainty, and the freedom to cut scope when the date matters more than the feature, which is the lever that has always actually worked.\n\nStop asking engineers to predict the unpredictable. Ask them to make work small, ship it often, and tell you the truth about what they find."
+}

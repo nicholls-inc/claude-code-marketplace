@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a053dc123881cfb5f",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d042.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/02.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37107,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 1163,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:27:06.007Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment occasionally added to the world's official clocks so that they stay in step with the turning of the Earth, and the need for it arises because there are two ways of measuring time that do not quite agree. The first is astronomical: a day is the time the Earth takes to spin once, and by that measure noon is when the sun is highest in the sky. The second is atomic: since the 1950s, clocks based on the vibrations of atoms, mainly caesium, have kept time far more steadily than any planet could, and an atomic second is the same length today as it was yesterday.\n\nThe trouble is that the Earth is a sloppy timekeeper, with tides dragging on its rotation and slowly lengthening the day, while earthquakes, shifting ice and movements deep inside the planet nudge it in unpredictable ways. Left alone, atomic time and the sun's time would drift apart. In 1972 the international community introduced Coordinated Universal Time, the basis of civil timekeeping everywhere, with a rule that it should never stray more than 0.9 seconds from Earth-based time. When the gap threatened to exceed that, a leap second was inserted, usually at the end of June or December, so that the clock read 23:59:60 before rolling over to midnight. Twenty-seven have been added since 1972, the last at the end of 2016.\n\nThe main reason to stop is that leap seconds have become a headache for the digital world. Computers, financial exchanges, telecommunications networks and navigation systems depend on timestamps that run smoothly, and a minute with 61 seconds breaks many of their assumptions. Because leap seconds arrive irregularly, with only a few months' warning, they cannot be programmed in advance, and software has crashed or misbehaved when one occurred. Some large technology companies have taken to smearing the extra second across a whole day, which creates its own inconsistencies between systems.\n\nIn 2022 the General Conference on Weights and Measures, the international body that governs the definition of units, voted to abandon leap seconds by or before 2035. In practice, the clocks will be allowed to drift away from the sun's time by more than a second, and a bigger correction, perhaps a minute, may be considered in the far future. Ordinary people will notice nothing, since a difference of a few seconds is invisible in daily life. Interestingly, the Earth's recent tendency to spin slightly faster has even raised the possibility of a negative leap second, something never tried, which strengthened the case for scrapping the system."
+}

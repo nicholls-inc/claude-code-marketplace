@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa6e7444f93de3598",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d036.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/06.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37522,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 1872,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:26:25.096Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything; it moves heat that already exists from one place to another, which is why it can warm your house even when the air outside is colder than the air inside. The key idea is that \"cold\" is relative: outdoor air at minus five degrees Celsius still holds a great deal of thermal energy, because heat only disappears entirely at around minus 273, and a heat pump is a machine for collecting that energy and delivering it indoors.\n\nIt does this with the same cycle your fridge uses, run in the opposite sense. A sealed loop contains a refrigerant, a fluid chosen because it boils at very low temperatures, far below freezing. In the outdoor unit, the liquid refrigerant is colder than the outside air, so heat flows from the air into the refrigerant and makes it boil into a gas; since heat always flows from warmer to cooler, this works as long as the refrigerant is colder than the air, and the refrigerant can be made extremely cold.\n\nNext comes the compressor, the part that uses electricity, which squeezes the gas and so makes it hot, much as a bicycle pump warms up as you use it. The refrigerant leaves the compressor much hotter than your house, typically hot enough to heat water to somewhere between 35 and 55 degrees, and that hot gas passes through a heat exchanger indoors, where it gives up its heat to your radiators or underfloor heating circuit and condenses back to a liquid. Finally, an expansion valve drops the pressure, the refrigerant becomes very cold again, and the loop repeats.\n\nSo the compressor creates the temperature difference needed to push heat the \"wrong\" way uphill, from cold outside to warm inside, and that is not a violation of any rule, because you are spending electricity to do it.\n\nThe payoff is efficiency: a gas boiler turns each unit of gas into at most about 0.9 to 0.95 units of heat, whereas a heat pump delivers roughly three units of heat for every one unit of electricity it uses, and sometimes more in mild weather, a ratio called the coefficient of performance. Because electricity usually costs more per unit than gas, that threefold advantage is what decides your running costs: at a ratio of three, the heat is cheaper than gas only if electricity costs less than about three times as much as gas per unit, so check your own tariffs. In many places the gap is close, and a time-of-use electricity tariff can tip it in your favour.\n\nCold weather does reduce performance. At minus ten, a good modern unit may deliver perhaps two units of heat per unit of electricity rather than three or more, and it will need to run defrost cycles when frost builds on the outdoor coil, though cold-climate models are designed to keep working well below minus 15, so ask installers for the rated output at your local design temperature, not the headline figure.\n\nFor a homeowner, the practical questions are about the house rather than the machine. Heat pumps run at lower water temperatures than boilers, so they work best with good insulation, large radiators or underfloor heating, and a leaky, poorly insulated home with small radiators may need upgrades first, or the unit will work hard and cost more to run. Ask for a heat loss survey, not a rule-of-thumb quote.\n\nOther things to weigh include the upfront cost, which is usually well above a boiler's before any grants or subsidies, the space for the outdoor unit and possibly a hot water cylinder, and the fact that you will often run it steadily at a gentle temperature instead of blasting it on and off. If your boiler is near the end of its life, your home is reasonably insulated, and incentives are available, a heat pump is usually a strong choice; if not, improving insulation first may be the better first step."
+}

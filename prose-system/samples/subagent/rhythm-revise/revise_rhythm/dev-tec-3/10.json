@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a79bd91bf968ec5e7",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d120.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/10.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37224,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 1796,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:36:39.131Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage (CC-CV), in which a charger first forces a fixed current into the cell, typically between 0.5 and 1 C, where 1 C is the current that would fill the nominal capacity in one hour. As charge accumulates, the cell's terminal voltage rises steadily, and when it reaches a set ceiling, usually 4.2 V for a graphite-anode, cobalt- or nickel-based cell, the charger stops regulating current and begins holding voltage constant. From then on the current is whatever the cell will accept, and it decays roughly exponentially. Charging is terminated when the current falls to a small cutoff, often around 0.05 C.\n\nThe reason for this behaviour lies in what the voltage represents: the terminal voltage is the cell's open-circuit voltage plus the current multiplied by the internal resistance, and the open-circuit voltage is a function of state of charge. Charging moves lithium ions from the cathode, through the electrolyte, and into the graphite anode, where they insert between carbon layers (intercalation). As the anode fills, its potential falls toward that of metallic lithium, and the cathode potential rises as it empties, so the open-circuit voltage climbs until, near full charge, it is within a few tens of millivolts of the 4.2 V ceiling. In the CC stage the resistive drop, called overpotential, is what lets the terminal voltage reach the limit before the cell is truly full, and it has three parts: ohmic loss in the electrodes and electrolyte, charge-transfer resistance at the particle surfaces, and concentration polarization from ions that cannot diffuse into the particles as fast as they arrive.\n\nHolding the voltage fixed means the overpotential must shrink as the open-circuit voltage creeps upward, so the current has to fall. Meanwhile the lithium concentration gradients inside the particles slowly relax, as ions diffuse from the surface into the bulk of each particle, and because diffusion in solid particles is slow, this relaxation sets the time scale of the taper. The final few percent of capacity can take as long as the first 70 to 80 percent.\n\nSimply pushing harder is not an option, because the voltage ceiling and the current are protections against degradation: charging at high current near full charge drives the anode surface potential below 0 V against lithium, which plates metallic lithium on the graphite. That causes permanent capacity loss and can form dendrites that short the cell. Higher voltages also oxidize the electrolyte and destabilize the cathode. The taper is therefore the cell's physics enforced by the control scheme, not a limitation of the charger, and fast-charge designs that lower the CC current at high state of charge, add temperature compensation, or use stepped currents all accept the same underlying slowdown."
+}

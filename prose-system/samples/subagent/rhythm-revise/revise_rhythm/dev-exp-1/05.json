@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aab2ec6939382c9dd",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d035.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/05.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37451,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 1297,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:26:20.162Z",
+  "valid": true,
+  "text": "A heat pump heats your house on a cold day because it moves heat instead of making it, and once that idea clicks the rest follows. Heat is not the same thing as temperature: even air at minus five Celsius holds a great deal of thermal energy, because it is still far above absolute zero, where molecules stop moving altogether. A heat pump extracts some of that energy from outdoor air, concentrates it, and releases it inside, where you want it.\n\nThe trick is a sealed loop of refrigerant, a fluid chosen because it boils at a very low temperature, well below freezing. Outside, the refrigerant passes through a coil in the outdoor unit while a fan blows air across it. Because the refrigerant is colder than the air, even on a frosty morning, heat flows into it and the liquid boils into a gas. Nothing exotic is happening there, since heat always flows from warmer to cooler and the refrigerant has simply been made colder than the outdoors.\n\nNext the gas goes through a compressor, which is the part that uses electricity. Squeezing a gas raises its pressure and, with it, its temperature, much as a bicycle pump warms up when you inflate a tyre. The refrigerant leaves the compressor hot, often around 50 to 70 degrees Celsius, which is now hotter than your home. Indoors it flows through another coil, and heat moves from the hot refrigerant into your radiators, underfloor loops or hot water cylinder; as it gives up that heat, it condenses back into a liquid. Finally it passes through an expansion valve, which drops its pressure and temperature sharply, leaving it cold enough to start the cycle again. A fridge works the same way in reverse, pulling heat out of the food and dumping it into your kitchen.\n\nThe payoff is efficiency. A gas boiler can at best turn all the energy in the gas into heat, and a good modern condensing boiler gets about 90 percent, whereas a heat pump delivers around three to four units of heat for every unit of electricity it uses, because most of the energy is collected from the air rather than paid for. This ratio is called the coefficient of performance. It falls as the weather gets colder, because the pump must lift heat across a bigger temperature gap, but modern models still manage roughly two to three at minus ten degrees. Even then they beat a boiler on energy used, though not always on running cost, since electricity usually costs more per unit than gas, so check the ratio of your local electricity and gas prices, as that largely determines whether your bills fall.\n\nFor you as a homeowner, a few practical points matter more than the physics. Heat pumps run best when they produce gentler heat, so they suit well insulated homes and larger radiators or underfloor heating. If your house is draughty, or your existing radiators were sized for very hot boiler water, you may need insulation upgrades or some bigger radiators to stay comfortable, and a heat loss survey by a qualified installer will tell you what your particular house needs. Expect a higher upfront cost than a boiler, though grants and subsidies in many countries narrow the gap, and expect a unit outside the house that makes a low hum. Heat pumps also tend to run steadily for long periods rather than blasting on and off, which feels different but is perfectly normal.\n\nFinally, the cold is not a deal breaker, since models designed for Nordic climates work in temperatures far below anything most of us see. The deciding factors are your insulation, your radiators, your energy prices and the installer you choose, not whether it is cold outside."
+}

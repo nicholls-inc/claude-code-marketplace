@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a70dfad2063b25fe3",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d111.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/01.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37228,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 1743,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:35:53.428Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). A charger, which is essentially a controlled power supply, first forces a fixed current into the cell. During this phase the cell's terminal voltage rises steadily as lithium ions are pulled out of the cathode, for example a layered metal oxide, carried through the electrolyte, and inserted (intercalated) between the graphene layers of the graphite anode, so that for a typical cell the voltage climbs from roughly 3.0 V to the upper limit of 4.2 V. The charger watches the voltage, and when it reaches that limit it stops regulating current and instead holds the voltage constant, which begins the constant-voltage phase and is where the slowdown happens.\n\nThe slowdown follows from the cell's electrical structure, which you can model as an open-circuit voltage source, depending on how much lithium sits in each electrode, in series with an internal resistance that lumps together ohmic losses in the electrolyte and current collectors, charge-transfer kinetics at the electrode surfaces, and solid-state diffusion of lithium inside the particles. The terminal voltage during charging is the open-circuit voltage plus the current times the internal resistance. Once the terminal voltage is clamped at 4.2 V, any further rise in the open-circuit voltage as the cell fills leaves less headroom across the resistance, so by Ohm's law the current must fall, and it decays roughly exponentially, much like a capacitor charging through a resistor. The charge is considered complete when the current tapers to a small cutoff, commonly around 5 to 10 percent of the initial rate.\n\nThe clamp exists because pushing the terminal voltage higher would cause damage: beyond about 4.2 V, electrolyte oxidises at the cathode and the cathode structure degrades, and, worse, if the anode surface potential falls too close to that of lithium metal, lithium plates out as metallic deposits instead of intercalating, which cuts capacity and can form dendrites that short the cell. Pushing current at a nearly full cell raises the risk of plating, because the graphite surface is already crowded with lithium and ions pile up faster than they can diffuse inward. Diffusion inside solid particles is slow, so a concentration gradient builds from surface to core, and the surface reaches its limit before the interior does. Tapering the current lets that gradient relax.\n\nThe practical consequence is that the first stage restores perhaps 70 to 80 percent of capacity in well under an hour, while the final fraction takes a comparable time or longer. Fast-charging systems manage this tradeoff by raising current early, when the electrodes are empty and tolerant, and by limiting temperature, since both resistance and degradation rates vary strongly with heat."
+}

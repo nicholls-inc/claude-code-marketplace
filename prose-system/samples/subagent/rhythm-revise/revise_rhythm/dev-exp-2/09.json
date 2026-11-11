@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9957a698c029104c",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d049.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/09.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37141,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2608,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:27:47.276Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment occasionally added to the world's official clocks so that they stay in step with the turning of the Earth, and it exists because there are two ways of measuring time that do not quite agree.\n\nThe first way is astronomical: for most of history, a day was defined by the Earth's rotation, with a second being a tiny slice of that day. The trouble is that the planet is an imperfect timekeeper, since tides drag on its spin, earthquakes and shifting ice nudge it, and movements deep in its molten core add further wobbles. Over the long run the Earth has been slowing, so days are slightly longer than they used to be, though the changes are small and unpredictable.\n\nThe second way is atomic: since the 1960s, scientists have counted time using the vibrations of atoms, which tick with such astonishing regularity that an atomic clock would lose perhaps a second over many millions of years. This steady count became the basis for International Atomic Time, and it is the reference that satellites, financial markets and telecommunications networks depend on.\n\nIn 1972, authorities created Coordinated Universal Time, the civil standard used around the world, which runs on atomic seconds but is kept within a second of the Earth's rotation. When the two drifted close to a full second apart, a leap second was inserted, usually at the end of June or December, so that the last minute of the day lasted 61 seconds. Since 1972, 27 have been added, the most recent at the end of 2016.\n\nFor decades this seemed a tidy compromise, but the modern world runs on computers, and computers dislike surprises. A minute with 61 seconds does not fit neatly into most software, which assumes every minute has 60. Systems have handled the extra second in different ways, some by repeating a second, others by stretching it out over hours. These differences have caused outages and glitches at major internet companies, and they pose risks for navigation, power grids and trading systems where timestamps must be precise and consistent. Because the Earth's rotation is unpredictable, leap seconds cannot be scheduled far ahead, which makes the problem harder to plan for.\n\nIn 2022, the international body that sets measurement standards voted to stop using leap seconds by 2035. Rather than adding them, the world's clocks will be allowed to drift away from the Sun's position for some time, with the gap expected to grow to a minute or so only after a century or more, so most people will never notice. Timekeepers judged that the small cost of a slowly widening gap was preferable to the recurring risk of breaking the digital systems that now underpin daily life. A different solution may be devised in the distant future."
+}

@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8fdd0797e07cf4ed",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d011.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/01.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37257,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2059,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:23:13.065Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating estimates as commitments, and the sooner engineers and managers admit it, the better their plans will get.\n\nStart with the evidence everyone already carries around in their heads: nobody in this industry has a clean record of hitting estimates on anything larger than a week of work. We have run planning poker, story points, t-shirt sizes and three-point ranges for decades, and the result is the same: the interesting projects run long, the boring ones finish early, and nobody can tell you in advance which is which. If a practice fails this consistently, the problem is not that we haven't done it carefully enough but that the thing being predicted is not predictable. Software work is mostly discovery, and because you learn what the task is by doing it, the estimate is made at the moment you know least.\n\nThe cost of this ritual is not just the hour spent in the meeting; the real damage comes after. An estimate, once spoken, hardens into a date, and the date becomes a promise that someone upstream has repeated to a customer. Now the team is no longer solving the problem in front of them but defending a number. Corners get cut, tests get skipped, and the engineer who discovers the real complexity on day three learns that the safest move is to say nothing until it is undeniable. Estimation does not just fail to predict delay; it manufactures the conditions in which delay is hidden.\n\nManagers will object that they need dates to coordinate sales, hiring and launches, and that is fair, but what they actually need is a sense of whether the work is on track and the freedom to change course when it is not. Both are better served by breaking work into small slices that ship in a day or two, tracking how many of those slices finish each week, which is just counting, and using that observed throughput to forecast, the way a weather service uses past patterns rather than a meteorologist's gut feeling about a single storm. A forecast built on what your team has actually delivered is more honest than a number built on what your team hopes to deliver.\n\nThere is a harder trade underneath this: without estimates, you must be willing to decide what to build by value and cost of delay rather than by whatever fits a neat schedule, to cut scope instead of extending deadlines, and to say out loud that a fixed date and a fixed feature list cannot both be honored. That conversation is uncomfortable, which is exactly why estimates are so popular: they let everyone postpone it.\n\nI am not arguing for chaos, since rough sizing is fine when it helps a team decide whether something is a day or a quarter, and an order of magnitude is often all a decision needs. What should go is the false precision and the accountability theater built on top of it.\n\nStop asking how long it will take, and ask instead what is the smallest useful thing we can ship next and what we learned from the last one. Teams that make that switch tend to find that they are not slower, only more truthful, and that truthfulness turns out to be the scarcest resource in planning."
+}

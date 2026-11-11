@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a5f5afa25da9d1c23",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d019.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/09.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37289,
+    "cache_read_input_tokens": 119385,
+    "output_tokens": 1724,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:23:56.834Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, at least in the form most of us practice it, and the sooner we admit why, the better our plans will get.\n\nStart with the track record, because decades of project data, from the Standish reports to the experience of anyone who has sat through a sprint retrospective, tell the same story: estimates for novel work are wrong, and wrong in one direction. Tasks run long because the cost of a task lives in the surprises, and surprises are by definition what you could not see when you sized it. A story pointed at three turns out to hide a schema migration, a flaky test suite, and a dependency owned by a team on leave. Nobody was lazy or foolish; the information simply did not exist until the work began.\n\nSo the number we produce is not a measurement but a guess dressed up as a commitment, and once it leaves the engineer's mouth it hardens. A manager repeats it to a director, the director slots it into a quarterly plan, and by the time reality arrives, the guess has become a promise with someone's credibility attached. Engineers learn the predictable lesson: pad everything, or sandbag, or stop telling the truth about risk. Estimation meetings then consume hours of senior time to generate figures that everyone privately discounts.\n\nThe deeper cost is what the ritual displaces. When a team argues over whether something is a five or an eight, it is not asking the more useful questions. Is this worth doing at all? What is the smallest version that teaches us something? What would make us stop? Estimation frames work as a fixed quantity to be priced, when most valuable software work is a search whose cost depends on what you find.\n\nI am not arguing for chaos or for telling the business to wait and see, since leaders do need to plan and customers do need dates, but there are better tools. Slice work into pieces small enough that their size barely matters, then count them. A team that ships ten roughly similar small changes a week can forecast from throughput with more honesty than any planning poker session, and the forecast comes with a range instead of a false point. Set appetites rather than estimates: decide how much time something is worth, and shrink the scope to fit. Make the bet explicit, review it at checkpoints, and kill work that is going badly instead of defending the original number.\n\nSkeptics will say that this just moves the estimating somewhere else, and that is partly true, but the move matters because throughput is observed, not imagined, and because an appetite is a decision made by the person who owns the trade-off, not a prediction extracted from the person who has to do the work. Those are different acts, and only one of them punishes honesty.\n\nSome work really is predictable, such as a routine upgrade or a well-trodden integration, and a quick sizing there costs little, so keep it, but make rough sizing the exception and stop treating the ritual as a sign of professionalism. The mark of a mature team is not that it can name a date, but that it can tell you what it will know next week, what it will cut if the work grows, and how it will find out early. Drop the false precision and you will get something worth more: plans that survive contact with the code."
+}

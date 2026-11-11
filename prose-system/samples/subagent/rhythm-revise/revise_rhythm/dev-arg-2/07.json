@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a28df753d137e5407",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d017.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/07.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37247,
+    "cache_read_input_tokens": 119385,
+    "output_tokens": 1068,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:23:49.715Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating the answer as something that matters. I say this as someone who has sat through hundreds of planning meetings and watched the same ritual produce the same fiction every time.\n\nConsider what an estimate really is: a guess about the future, made by the person with the least information at the very moment when they have the least of it. You estimate before you open the code, before you discover that the payments library is held together with tape, before the security review lands, before your best engineer takes a week off. The honest answer to \"how long will this take?\" is almost always \"I will know when I am halfway through,\" and nobody puts that on a roadmap.\n\nThe evidence that we are bad at this is not subtle. Projects overrun so reliably that the overrun has a name, the planning fallacy, and decades of research show that experience does not cure it; experienced teams are not better at predicting, only better at padding, and padding has its own cost, because work expands to fill the time it is given.\n\nMeanwhile the costs of estimating are real and paid in advance. Teams burn hours in refinement sessions debating whether something is a three or a five, and those hours produce numbers that are quietly converted into dates, which become promises, which become pressure. Engineers learn to protect themselves by inflating numbers, managers learn to discount them, and since both sides know the game, trust erodes a little with every sprint that closes with half the commitments rolled over.\n\nThe usual defense is that the business needs predictability. It does, but estimates are a poor way to buy it; what actually gives you predictability is a team that ships small pieces continuously. If work is cut into slices of a day or two, you do not need to guess: you count what finished last month, look at the queue, and have a forecast built from evidence rather than optimism. Throughput data beats opinion, and it costs nothing extra to collect, because your tracker already has it.\n\nSmaller slices also change the real question. Instead of asking how long the big thing will take, you ask whether the next small thing is worth doing, which is a better conversation because it is about value and not about arithmetic. When a feature turns out to be harder than hoped, a team shipping in small increments can stop, look at what it has learned, and decide to cut scope, whereas a team chained to an estimate defends the number instead.\n\nThere are fair objections. Some work has hard external deadlines, such as a regulatory date or a launch with a fixed event, but notice that in those cases the date is fixed and scope is what flexes. You do not need an estimate to know that; you need a willingness to cut.\n\nSo try the experiment. For one quarter, drop story points and delivery guesses, slice work small, publish what ships each week, and forecast from the record. I expect you will get dates that are no worse than the ones you had, an hour or two back per person per week, and meetings where people argue about what to build rather than how many points it is worth."
+}

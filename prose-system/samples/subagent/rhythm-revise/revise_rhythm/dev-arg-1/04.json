@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a75b44b2375cd2390",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d004.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/04.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37816,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2154,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:22:18.520Z",
+  "valid": true,
+  "text": "Cities should scrap minimum parking requirements, not because cars are evil or because parking never matters, but because a rule that forces every builder to supply a fixed number of spaces is a blunt tool that does more harm than good, and because the problem it claims to solve is better handled by other means.\n\nTo see why, start with what the rules actually do: a typical zoning code says that an apartment building must provide one or two spaces per unit, a restaurant so many per thousand square feet, a medical office so many more. These numbers did not come from careful study of local conditions, and many were copied from manuals built on a handful of suburban sites surveyed at their busiest hour, then adopted by one city after another. The result is that planners, rather than the people who build and use a given place, decide how much parking it needs, and unsurprisingly they tend to guess high, since an empty space is invisible while a full street draws complaints.\n\nThe cost of that guess is large and lands on everyone. A surface space takes roughly three hundred square feet once you count the aisles, and a space in a structure or underground can cost tens of thousands of dollars to build, money that does not vanish but is folded into the rent, the sale price, the menu price at the corner cafe. Tenants who own no car still pay for the spaces they never use, and researchers who have studied this, most famously Donald Shoup, have argued for years that bundling parking into housing costs is a hidden tax that falls hardest on poorer households, who own fewer cars. A requirement meant to be neutral quietly subsidizes drivers at the expense of everyone else.\n\nParking mandates also strangle housing in exactly the places we claim to want more of it. On a small downtown lot, the space needed for required parking can make a project impossible, or cut the number of homes that fit by a third. Old buildings suffer too: a corner shop that wants to become a restaurant, or a historic house that could be split into flats, often cannot change use because the lot cannot accommodate the spaces the code demands. Cities lament their housing shortages and then enforce a rule that reliably prevents small, cheap, walkable infill from being built, and those same cities wonder why their streets are lined with blank garages and parking lots instead of storefronts.\n\nThe usual objection is that without mandates, developers will build nothing and spillover cars will clog the neighborhood, but the evidence is not kind to this fear. When Buffalo eliminated its requirements in 2017, and when other cities from Minneapolis to Auckland followed, builders did not abandon parking; they kept building it where buyers and tenants wanted it, and they built less where they did not, which is exactly the point. A developer who is financing a project has every reason to provide enough parking to lease the units, because a building nobody can reach by car, in a place where people expect to drive, will not rent. The market is not perfect, but it is responsive to local facts in a way a citywide formula can never be, and a site next to a rail station and a site on a highway frontage should not carry the same number.\n\nAs for spillover, the honest answer is that street parking is a real concern and it deserves a real tool, and that tool is pricing. If curb spaces near a busy district fill up, charge for them, and use the revenue to improve the sidewalks and streets nearby; residential permit programs can keep neighborhood blocks from being swamped. A few dollars an hour keeps a handful of spaces open at all times, which is better for shoppers and drivers than a free but permanently full curb. Mandates, by contrast, try to prevent the shortage by flooding the area with free storage, which invites more driving, which creates more demand, which justifies more mandates.\n\nThere is also a broader argument about what kind of cities we want, because required parking pushes buildings apart, spreads destinations out, and makes walking and transit less useful by leaving everything behind a moat of asphalt. It locks in car dependence even for people who would gladly live otherwise, and it makes every trip longer, every street wider, every neighborhood less like the dense, lively places that people pay a premium to visit on vacation and are forbidden to build at home.\n\nNone of this means parking disappears, since lenders will still ask for it, tenants will still want it, and plenty of suburban and rural projects will include more than any code would require. Removing the mandate simply returns the decision to those who bear its costs. Some cities will want to go in steps, dropping requirements first near transit and in downtowns, then everywhere, and that is a reasonable path, but the destination is the same: parking should be a choice made by people who build and use buildings, not a number handed down by a committee decades ago. Cities that end the mandate lose almost nothing and gain cheaper homes, more flexible land, and streets that serve people instead of storage."
+}
