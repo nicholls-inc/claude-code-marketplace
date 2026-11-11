@@ -1,0 +1,38 @@
+{
+ "round": "r0",
+ "seed": 1,
+ "source_a": "../samples/subagent/exp1-3/baseline",
+ "source_b": "../samples/subagent/exp2b/plain_prose",
+ "trials": {
+  "t9d790ed4": {
+   "brief_id": "dev-exp-2",
+   "a": "../samples/subagent/exp1-3/baseline/dev-exp-2/03.json",
+   "b": "../samples/subagent/exp2b/plain_prose/dev-exp-2/10.json"
+  },
+  "tc9123177": {
+   "brief_id": "dev-tec-3",
+   "a": "../samples/subagent/exp2b/plain_prose/dev-tec-3/05.json",
+   "b": "../samples/subagent/exp1-3/baseline/dev-tec-3/02.json"
+  },
+  "t99e7c2a1": {
+   "brief_id": "dev-arg-2",
+   "a": "../samples/subagent/exp1-3/baseline/dev-arg-2/08.json",
+   "b": "../samples/subagent/exp2b/plain_prose/dev-arg-2/08.json"
+  },
+  "tf5b1f0f9": {
+   "brief_id": "dev-nar-3",
+   "a": "../samples/subagent/exp2b/plain_prose/dev-nar-3/02.json",
+   "b": "../samples/subagent/exp1-3/baseline/dev-nar-3/04.json"
+  },
+  "tcaf7f792": {
+   "brief_id": "dev-exp-1",
+   "a": "../samples/subagent/exp1-3/baseline/dev-exp-1/07.json",
+   "b": "../samples/subagent/exp2b/plain_prose/dev-exp-1/07.json"
+  },
+  "t0ac5a1c3": {
+   "brief_id": "dev-nar-1",
+   "a": "../samples/subagent/exp2b/plain_prose/dev-nar-1/08.json",
+   "b": "../samples/subagent/exp1-3/baseline/dev-nar-1/01.json"
+  }
+ }
+}

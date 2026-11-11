@@ -119,3 +119,11 @@ The owner read the write-up of experiments 1 to 3 and asked for the rhythm test 
 - `rhythm_medium`: plain prose, plus "Write mostly medium-length, complete sentences." Expected: the coefficient of variation falls below 0.45 against a human 0.55, which is a new outlier. The autocorrelation stays below zero.
 - `voice_spec`: plain prose, plus the test voice specification from the brief. Expected: mean sentence length above 20 words, coefficient of variation below 0.45, parentheses below 0.5 per 1,000 words, autocorrelation below zero.
 - `revise_rhythm`: a second subagent revises each of the 120 stored `plain_prose` samples for rhythm. Expected: the short-then-long share falls against its drafts, the autocorrelation moves towards zero by less than half the gap to the human value, and digits per 100 words stay within 10% of the drafts.
+
+### Reader page
+
+- `reader/page.html` is the blind paired-comparison page from `EVALUATION.md`, published as a private artifact at https://claude.ai/artifact/KtGe2FonWVA5uuxtV9YQ6b. It shows one pair at a time, asks which passage the reader prefers, who wrote each passage and one line of reason, and records the reader's use of language models once.
+- Answers are stored in the artifact's database, one document per reader under `responses/`. A reader can read and write only their own document. The owner and editors can read all of them.
+- `reader/build_round.py` builds a round. `rounds/<round>/trials.json` is published and holds opaque ids, the brief and two passages. `rounds/<round>/key.json` stays in the repository and says which source is A and which is B.
+- Round `r0` is a pilot for trying the page: six pairs of `baseline` against `plain_prose` on the six shortest briefs, 7,171 words. Both passages in every pair are model text. It is not one of the pairings in `EVALUATION.md`.
+- Not tested: a reader other than the owner taking part. The page has not been opened by a person yet.
