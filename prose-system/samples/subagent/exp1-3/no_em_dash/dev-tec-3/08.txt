@@ -1,0 +1,15 @@
+Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV), and the slowdown near full charge comes from the second stage.
+
+In the first stage, the charger forces a fixed current into the cell, typically between 0.5C and 1C (C being the current that would fill the nominal capacity in one hour). The cell voltage rises steadily as lithium ions move from the cathode, through the electrolyte, and into the graphite anode, a process called intercalation. Electrons travel through the external circuit to balance the charge. Because the current is fixed, the charge delivered grows linearly with time, and this stage supplies roughly 70 to 80 percent of the capacity.
+
+The stage ends when the terminal voltage reaches a ceiling, commonly 4.2 V for cobalt-based chemistries. This ceiling is a hard safety and longevity limit. Above it, the electrolyte oxidizes at the cathode, lithium can plate as metal on the anode, and degradation accelerates sharply.
+
+In the second stage, the charger holds the voltage at the ceiling and lets the current fall. The slowdown has two causes, and it helps to treat the cell as an open-circuit voltage source in series with an internal resistance.
+
+First, the terminal voltage equals the open-circuit voltage (OCV) plus the current times the internal resistance. OCV is a rising function of state of charge. Early on, OCV is low, so a large current fits under the voltage ceiling. As the cell fills, OCV climbs toward 4.2 V, and the voltage headroom left for the resistive drop shrinks. Holding the terminal at 4.2 V therefore forces the current to decay, roughly exponentially, as OCV approaches the ceiling. The charge is not so much throttled by a control law as limited by the thermodynamics of the electrodes.
+
+Second, the internal resistance is not purely ohmic. Part of it is diffusion: lithium must migrate into the interior of the graphite particles, and as the surface layers fill, the concentration gradient driving further transport flattens. Near full, the only remaining empty sites are deep inside particles, so the slower solid-state diffusion limits how fast charge can be accepted. Forcing more current would pile lithium up at the particle surface and risk plating.
+
+The charger ends the cycle when the current falls to a cutoff, often 0.05C to 0.1C. Chasing the last few percent takes disproportionate time, which is why fast chargers typically quote times to 80 percent rather than 100.
+
+The practical consequence for a system designer is that the charge profile is a trade-off between speed, heat, and cell lifetime, with the voltage ceiling as the fixed constraint.

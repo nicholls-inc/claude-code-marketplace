@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2e85e3c41b9471e4",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73738,
+    "output_tokens": 1110,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:32:46.347Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). The cell behaves like a nonlinear voltage source with an internal resistance, so the charger controls current and watches terminal voltage.\n\nStage 1, constant current (CC). The charger forces a fixed current, typically 0.5C to 1C (a 1C current is the one that would fill the rated capacity in an hour). Terminal voltage rises steadily from about 3.0 V toward the cell's upper limit, commonly 4.2 V for graphite/cobalt-oxide chemistries (some newer chemistries use 4.35 V or more, and LFP uses about 3.65 V). During this stage most of the charge goes in, roughly 70 to 80 percent of capacity. Lithium ions leave the cathode, cross the electrolyte and separator, and intercalate (insert between the carbon layers) into the graphite anode.\n\nStage 2, constant voltage (CV). When terminal voltage reaches the limit, the charger stops forcing current and instead holds voltage fixed. The current then decays roughly exponentially. Charging ends when current falls to a cutoff, typically 0.05C to 0.1C.\n\nWhy current must fall. Terminal voltage is the cell's open-circuit voltage (OCV, set by the state of charge) plus the current times the internal resistance, plus polarization terms: V = OCV(SOC) + I·R + overpotentials. Near full, OCV is already close to the limit. Holding V at the limit means the allowed I·R and overpotential budget is shrinking, so current must fall as OCV climbs. This is the same behavior as charging a capacitor through a resistor from a fixed-voltage source, with the cell's OCV acting as the capacitor voltage.\n\nPhysical reasons the cell is hard to fill at the end:\n1. Solid-state diffusion. Lithium must diffuse into the graphite particles. As the surface fills, the concentration gradient driving diffusion flattens, so the interior fills slowly. The surface looks full to the voltage measurement while the core is not.\n2. Electrolyte and electrode transport limits. Ion concentration gradients across the thick porous electrodes build up at high current and relax only gradually.\n3. Fewer vacant sites. Intercalation kinetics slow as the available sites vanish.\n\nWhy the limit is not raised. Pushing voltage or current harder near full risks lithium plating (metallic lithium deposits on the anode surface instead of intercalating, which causes capacity loss and short-circuit hazard), accelerated electrolyte oxidation and cathode degradation at high voltage, and heat generation. Plating is worst when the anode potential nears 0 V versus lithium, which happens at high current, high state of charge and low temperature.\n\nPractical consequences. The CV stage is slow: the last 20 to 30 percent can take as long as the first 70 to 80 percent. Fast-charging systems therefore taper current in steps, based on temperature, voltage and state of charge, and often stop near 80 percent. Battery management systems also enforce temperature windows (typically no charging below about 0 C) and balance the voltage between series-connected cells."
+}

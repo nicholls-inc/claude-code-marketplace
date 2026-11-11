@@ -1,0 +1,15 @@
+Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV).
+
+Stage 1, constant current (CC). The charger forces a fixed current, typically 0.5C to 1C (C is the current that would fully charge the cell in one hour). The cell's terminal voltage rises steadily from about 3.0 V toward 4.2 V (for a typical graphite/cobalt-oxide chemistry). Most of the charge, roughly 70 to 80 percent, is delivered in this stage. Lithium ions leave the cathode, cross the electrolyte, and insert (intercalate) between the graphite layers of the anode, while electrons travel through the external circuit.
+
+Stage 2, constant voltage (CV). When the terminal voltage reaches the upper limit, the charger holds it there and lets the current fall on its own. Charging ends when the current drops to a cutoff, commonly 0.05C to 0.1C. This stage is where charging visibly slows.
+
+Why the current must fall. The terminal voltage is not the open-circuit voltage. It equals the open-circuit voltage (set by how full the electrodes are) plus the current times the internal resistance, plus polarization terms: V_term = V_oc(SOC) + I*R + overpotentials. As state of charge (SOC) rises, V_oc rises toward the limit. Early on, V_oc is well below 4.2 V, so the charger can push a large current while the sum stays under the cap. Near full, V_oc approaches 4.2 V and the allowance (4.2 V - V_oc) shrinks. Holding the voltage fixed then forces I = (V_limit - V_oc)/R to decay, roughly exponentially, like an RC circuit charging.
+
+Underlying physics. Two effects reinforce this. First, the electrodes fill up. Lithium diffuses into graphite slowly, so as the surface layers saturate, the concentration gradient driving ions inward flattens and diffusion limits the rate. Second, the anode potential sits close to that of lithium metal (about 0 V versus Li/Li+). Charging fast at high SOC risks lithium plating, where metal deposits on the surface instead of intercalating. Plating costs capacity, grows dendrites, and is a safety hazard. Tapering the current keeps the anode potential safely positive.
+
+Why not just raise the voltage? Above about 4.2 V, the electrolyte oxidizes and the cathode structure degrades, shortening life and raising the risk of thermal runaway. The voltage cap is a hard safety and longevity limit, so the only variable left to give is current.
+
+Practical consequences. The last 20 percent of charge can take as long as the first 80 percent. Fast chargers therefore stop or sharply reduce power at around 80 percent SOC, and battery management systems also monitor temperature, since cold cells are more prone to plating and hot cells degrade faster. Many devices charge to slightly below 4.2 V (for example 4.1 V) to trade a little capacity for much longer cycle life.
+
+In short: CC delivers charge quickly while the cell has voltage headroom, and CV exists because that headroom runs out, leaving a slow, diffusion- and safety-limited tail.

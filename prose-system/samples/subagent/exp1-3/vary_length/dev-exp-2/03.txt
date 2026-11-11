@@ -1,0 +1,15 @@
+The Earth does not keep perfect time. It is a slightly wobbly, slightly sluggish clock, and for decades the world's timekeepers have been nudging their own clocks to keep up with it. That nudge is the leap second, and it is about to be retired.
+
+Here is the problem. Since 1967, the official definition of a second has come from atomic clocks, which count the vibrations of caesium atoms with astonishing steadiness. They would lose less than a second over many millions of years. The planet, by contrast, is a poor timekeeper. Tides drag on its rotation, earthquakes and shifting ice nudge it, and the churning of molten metal in its core adds further jitters. Over the long run, the day has been getting longer by a couple of thousandths of a second per century.
+
+Left alone, the two kinds of time would drift apart. Atomic time would race ahead of "solar time", the time set by the sun's position in the sky. So in 1972 the international community adopted Coordinated Universal Time, or UTC, which follows atomic clocks but is occasionally adjusted to stay within a second of the Earth's rotation. When the gap grew close to that limit, an extra second was slipped in at the end of June or December, so that clocks read 23:59:59, then 23:59:60, then midnight. There have been 27 such seconds, the last on 31 December 2016.
+
+It sounds harmless. For computers, it is not.
+
+Most software assumes that every minute has exactly sixty seconds. A minute with sixty-one breaks that assumption. Over the years, leap seconds have caused servers to freeze, databases to produce impossible timestamps, and airline and financial systems to misbehave. Large technology firms have invented their own workarounds, such as "smearing" the extra second across a whole day, and they do not all do it the same way. Systems that must agree to the millisecond, from power grids to satellite navigation to stock exchanges, find the irregularity a hazard rather than a help.
+
+There is a further twist. In recent years the Earth has begun spinning slightly faster, so the day has been shortening. This raised the prospect of the first negative leap second, in which a second would be deleted. Engineers dread that scenario even more, because almost no software has been tested against it.
+
+In 2022, the General Conference on Weights and Measures voted to stop. Leap seconds are to be abandoned by 2035, allowing the gap between atomic and solar time to grow well beyond one second. Few people will notice. A discrepancy of a minute would take roughly a century to build up, and the plan is to revisit the question then, perhaps with a new scheme for correcting it.
+
+In short, the decision trades a tiny loss of fidelity to the sun for a large gain in reliability. The sky will have to look after itself.

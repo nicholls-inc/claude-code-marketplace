@@ -1,0 +1,85 @@
+## How Git Stores a Commit
+
+Run `git init` and look inside `.git`. Most of what you find is a content-addressed key-value store. Git computes a SHA-1 hash (SHA-256 in newer repositories) of a piece of content, and that hash is the key under which the content is stored. Four ideas cover almost everything: blobs, trees, commits and refs. Only the first three are objects. Refs are something else.
+
+### The object database
+
+Every object lives under `.git/objects`. The first two hex characters of its hash name a subdirectory, and the remaining characters name the file. An object is stored zlib-compressed. Before compression, it is a header followed by content: the type (`blob`, `tree`, `commit` or `tag`), a space, the content length in bytes, a NUL byte, then the content itself.
+
+The hash is calculated over that whole header-plus-content string. Two consequences follow. Identical content always gets the same hash, so it is stored once. And objects are immutable: changing one byte produces a different hash, which means a different object.
+
+You can inspect any object with `git cat-file -p <hash>`, and `git cat-file -t <hash>` prints its type.
+
+### Blobs: file contents
+
+A blob holds the bytes of one file, and nothing else. It has no filename, no permissions and no timestamp. If `README.md` and `docs/INTRO.md` have identical content, they share one blob.
+
+You can create one by hand:
+
+```
+echo 'hello' | git hash-object -w --stdin
+ce013625030ba8dba906f756967f9e9ca394464a
+```
+
+The `-w` flag writes it into `.git/objects/ce/013625...`. Running `git cat-file -p ce0136` prints `hello`.
+
+### Trees: directories
+
+A tree object represents one directory. It is a list of entries, and each entry has a mode, a type, a hash and a name:
+
+```
+100644 blob ce013625...  README.md
+100755 blob 8f94139...   build.sh
+040000 tree 9a1b7c2...   src
+```
+
+The mode records the file type and permission bits. `100644` is a regular file, `100755` an executable, `120000` a symlink and `040000` a subdirectory. File names live here, in the parent tree, not in the blob. Subdirectories are nested trees, so the whole project snapshot forms a tree of trees with blobs at the leaves.
+
+Because hashes are computed over content, a tree's hash depends on every name and hash it contains. A change to a deeply nested file therefore changes its blob, its parent tree, that tree's parent, and so on up to the root tree. Every directory on that path gets a new object. Everything untouched keeps its existing hash and is reused, which is why snapshots are cheap even though each commit describes the whole project.
+
+### Commits: snapshots with history
+
+A commit object ties a root tree to a point in history. `git cat-file -p HEAD` shows its entire content:
+
+```
+tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+parent 1f2e3d4c5b6a79880a1b2c3d4e5f60718293a4b5
+author Ada <ada@example.com> 1731300000 +0000
+committer Ada <ada@example.com> 1731300000 +0000
+
+Fix off-by-one in pagination
+```
+
+There are only a few fields. `tree` points at the root tree for the snapshot. `parent` points at the previous commit; the first commit has none, and a merge commit has two or more. The author and committer lines carry a name, email, Unix timestamp and timezone. They are separate because rebasing or cherry-picking changes the committer but keeps the original author. After a blank line comes the message.
+
+Two facts follow. A commit does not store a diff. It stores a complete snapshot via its tree, and tools like `git show` compute differences by comparing trees. And because each commit contains its parent's hash, history is a chain in which every hash depends on everything before it. Altering an old commit changes its hash, and therefore the hash of every descendant. This is why rewriting history (rebase, amend) produces new commits and why shared history is awkward to rewrite.
+
+There is also a fourth object type, the annotated tag. It holds a name, a tagger, a message and a pointer to another object, usually a commit.
+
+### Refs: human-readable names
+
+Hashes are hard to remember, so Git keeps names separately. A ref is a small text file whose content is a commit hash.
+
+Branches are files under `.git/refs/heads/`. The file `.git/refs/heads/main` contains one line, the hash of the tip commit of `main`. Tags live in `.git/refs/tags/`, and remote-tracking branches in `.git/refs/remotes/`. Refs are the only mutable part of the repository.
+
+Making a commit therefore works like this:
+
+1. Git writes blobs for any changed files and trees for the directories containing them.
+2. It writes a commit object pointing at the new root tree, with the current commit as parent.
+3. It overwrites the current branch's ref file with the new commit's hash.
+
+Creating a branch is just writing a 41-byte file, which is why it is instant.
+
+`HEAD` is the file `.git/HEAD`. Normally it holds a symbolic reference such as `ref: refs/heads/main`, meaning "the current branch is main". When you check out a specific commit, it holds a raw hash instead. That state is the familiar "detached HEAD".
+
+When a repository has many refs, Git may pack them into the single file `.git/packed-refs` for efficiency.
+
+### The index and packfiles
+
+Two more details are worth knowing. `.git/index` is the staging area. It is a binary file listing the paths, modes and blob hashes that will go into the next commit. `git add` writes blobs and updates the index. `git commit` turns the index into trees.
+
+Also, loose objects are only the starting point. Over time, `git gc` and network transfers bundle objects into packfiles under `.git/objects/pack/`, where similar objects are stored as deltas against each other. This is purely a storage optimisation. The logical model of blobs, trees, commits and refs is unchanged.
+
+### Summary
+
+A commit is a pointer to a tree snapshot plus metadata and parent links. Trees map names to blobs and other trees. Blobs are raw file content. Hashes bind it all into an immutable graph, and refs such as branches, tags and HEAD are the movable labels you use to navigate it.

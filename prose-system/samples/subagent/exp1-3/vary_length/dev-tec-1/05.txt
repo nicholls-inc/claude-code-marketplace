@@ -1,0 +1,71 @@
+Every Git command you run ends up writing a handful of small files into the .git directory. Once you've seen what those files are, commits stop being mysterious. Git is a content-addressed database sitting on top of a plain filesystem, and a commit is just four kinds of thing pointing at each other: blobs, trees, commit objects and refs.
+
+**The object database**
+
+Open .git/objects and you'll find directories with two-character names, like 3f or a9. Inside each is a file named with the remaining 38 characters. Together, the directory name and file name form a 40-character hexadecimal ID, which is the SHA-1 hash of the object's contents (newer repositories can use SHA-256, which gives longer IDs but works the same way). This is the central idea. Git never asks you to name an object. It computes the name from the content, so identical content always gets the same ID, and changing even one byte produces a completely different one.
+
+Each object is stored zlib-compressed, with a short header giving its type and size. There are only four types. Three of them make up a commit.
+
+**Blobs: file contents**
+
+A blob holds the contents of one file and nothing else. It has no filename, no permissions and no timestamp. If you have two files with identical contents in different directories, Git stores one blob and both point at it. If you rename a file without editing it, the blob doesn't change at all.
+
+You can try this yourself. Run `echo "hello" | git hash-object -w --stdin` and Git writes a blob and prints its ID. Then `git cat-file -p <id>` prints the content back. That's a blob.
+
+**Trees: directories**
+
+If blobs are contents, trees are the structure. A tree object is a directory listing. Each entry has a mode (such as 100644 for a regular file, 100755 for an executable, 040000 for a subdirectory), a type, an ID and a name.
+
+```
+100644 blob 8baef1b...  README.md
+100644 blob a3f2c9d...  main.go
+040000 tree 5e1c309...  internal
+```
+
+Entries that are blobs point at file contents. Entries that are trees point at other trees, which is how nested directories work. The tree at the top represents your entire project root at one moment in time. Run `git cat-file -p HEAD^{tree}` to see yours.
+
+Because a tree's ID is a hash of its own listing, and that listing includes the IDs of its children, a change anywhere propagates upward. Edit one file deep in your project and you get a new blob, a new tree for its directory, a new tree for that directory's parent, and so on up to a new root tree. Everything you didn't touch is reused as is. This is why Git snapshots are cheap even though each commit records the whole project, not a diff.
+
+**Commit objects: a snapshot plus context**
+
+A commit object is surprisingly small. Run `git cat-file -p HEAD` and you'll see something like this.
+
+```
+tree 5e1c309dae7f45e0f39b1bf3ac3cd9db12e7d689
+parent 9c2a1f7b0e4d3a8c6b5f1e2d3c4b5a697887766f
+author Ada Lovelace <ada@example.com> 1731312000 +0000
+committer Ada Lovelace <ada@example.com> 1731312000 +0000
+
+Fix off-by-one in pagination
+```
+
+That's all of it. One pointer to a root tree, which is the full snapshot. Zero or more parent commits (none for the first commit, one normally, two or more for a merge). Author and committer identity with timestamps, then the message.
+
+Note what is absent. A commit doesn't store a diff and doesn't contain a branch name. When you run `git show` and see changes, Git is computing them on the fly by comparing the commit's tree with its parent's tree.
+
+Because the parent's ID is part of the commit's content, it's also part of the commit's hash. Each commit therefore vouches for its entire ancestry. Alter an old commit and every descendant gets a new ID, which is exactly what happens when you rebase or amend. You aren't editing history, you're writing a parallel copy of it.
+
+**Refs: human-friendly names**
+
+Hashes are accurate but hard to remember, so Git adds refs, which are named pointers to commit IDs. They're plain text files.
+
+Look in .git/refs/heads/ and you'll find one file per local branch. Open main and it contains a single line: a 40-character commit ID. That's the whole branch. Creating a branch writes one tiny file, which explains why it's instant. Committing on a branch moves the pointer forward by overwriting that line with the new commit's ID. Tags live under .git/refs/tags/, and remote-tracking branches such as origin/main live under .git/refs/remotes/. (Git may pack many refs into a single .git/packed-refs file for efficiency, but the idea is identical.)
+
+Then there's HEAD, the file at .git/HEAD. Normally it holds not an ID but the line `ref: refs/heads/main`, meaning "the current branch is main". That is what it means to be on a branch. Check out a specific commit instead and HEAD contains a raw ID. That's the detached HEAD state, which sounds alarming and is simply HEAD pointing at a commit directly rather than through a branch name.
+
+**What happens when you commit**
+
+Putting it together, when you run `git commit`:
+
+1. Git takes the staging area (.git/index), which lists every tracked path with the blob ID of its staged content, and builds trees from it, bottom up.
+2. It writes any new blobs and trees into .git/objects. Existing ones are skipped because they already exist.
+3. It writes a commit object pointing at the new root tree, with the current HEAD commit as its parent.
+4. It updates the branch ref that HEAD names so that it points at the new commit.
+
+Step 4 is the only place anything is overwritten. Everything else is purely additive, which is why Git rarely loses work. Old objects stay in the database until garbage collection removes the unreachable ones, and `git reflog` can usually point you back to them.
+
+Over time, Git also packs loose objects into .git/objects/pack files and stores similar objects as deltas to save space. That's a storage optimisation only. The model you've just seen doesn't change.
+
+**The mental model**
+
+Blobs hold content, trees hold names and structure, commits hold a tree plus history, and refs give the interesting commits human names. Everything else you do in Git, from branching to rebasing, comes down to creating objects and moving small text files around.

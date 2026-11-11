@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "abad7b848197647a6",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 800 words of how Git stores a commit, covering blobs, trees, commit objects and refs. The reader is a developer who uses Git every day and has never looked inside the .git directory.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Bash",
+    "Bash"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 13107,
+    "cache_read_input_tokens": 228845,
+    "output_tokens": 5245,
+    "api_messages": 3
+  },
+  "timestamp_utc": "2026-11-11T18:17:52.888Z",
+  "valid": true,
+  "text": "Every time you run git add and git commit, Git writes a few small files into a hidden directory called .git. This description walks through what those files are, so that the directory reads as a simple design instead of a mystery.\n\nThe core idea is that Git is a content addressed store. You give it data and it gives back a key. The key is a SHA 1 hash of the data, written as forty hexadecimal characters. Git saves the data under .git/objects, in a folder named after the first two characters of the hash, in a file named after the remaining thirty eight. Each file is compressed with zlib and begins with a short header giving the object type and its size in bytes. Because the key comes from the content, identical data always lands in the same place, and any change to the data produces a different key. Git can also be configured to use SHA 256, which only makes the names longer.\n\nOnly a few kinds of object exist, and three of them carry your project.\n\nBlobs\n\nA blob holds the raw contents of one file and nothing else. It has no filename, no permissions and no timestamp. If the same license text appears in ten directories, Git stores a single blob. Renaming a file creates no new blob at all, because the contents did not change.\n\nTrees\n\nA tree is a directory listing. Each entry holds a mode, a name and the hash of the thing it points to. The mode says whether the entry is a regular file, an executable, a symbolic link or a subdirectory. File entries point to blobs and subdirectory entries point to other trees. This is where filenames actually live. A tree for the top of your project leads through nested trees down to blobs.\n\nHashes ripple upward. If you edit one file, its blob gets a new hash, so the tree containing it gets a new hash, so its parent tree does too, all the way to the root tree. Every subtree you did not touch keeps its old hash and is reused as it was. That is why committing in a huge repository is cheap.\n\nCommits\n\nA commit is a short piece of text. It names the root tree it captures with a line starting with the word tree. It then lists zero or more parents, each starting with the word parent. After that come an author line and a committer line, each holding a name, an email address, a timestamp and a timezone offset. A blank line follows, and then your message. The very first commit has no parent, an ordinary commit has one and a merge commit has two or more.\n\nThe commit's own hash covers the tree and the parents, so it identifies the entire history behind it. Change an old commit and every descendant gets a new hash. This explains why a rebase creates new commits instead of editing existing ones.\n\nA commit is a snapshot, not a diff. Git does not record what changed. It records the complete tree as it stood and works out differences on demand by comparing two trees. Storage stays small because unchanged files share blobs, and later on Git packs objects into packfiles that store similar objects as deltas against each other. Packing does not change the model.\n\nRefs\n\nHashes are hard to remember, so refs give them names. A branch is a file under .git/refs/heads whose entire content is one commit hash and a newline. Tags live under .git/refs/tags, and remote tracking branches live under .git/refs/remotes. Creating a branch writes about forty one bytes.\n\nThe file .git/HEAD says where you are. Normally it holds the word ref followed by the path of a branch file, which makes it a pointer to a pointer. When HEAD holds a raw commit hash instead, you are in a detached HEAD state, and any new commits are not named by a branch. That is why they are easy to lose.\n\nThe index\n\nOne more file sits between your working directory and the object store. The index, at .git/index, is a binary list of paths and the blob hashes you have staged. Running git add writes the blob into the object store straight away and records it in the index.\n\nPutting it together\n\nWhen you run git commit, Git turns the index into a set of tree objects, building from the deepest directories up to the root. It writes a commit object that points to that root tree and names the current commit as its parent. Finally it opens the branch file that HEAD points to and replaces the old hash with the new one. Nothing else moves. A commit is therefore a few new objects plus one tiny file rewrite.\n\nCommits that no ref reaches are not deleted immediately. They stay in the object store until garbage collection prunes them, and the reflog under .git/logs records where each ref used to point. So when a branch seems to lose work, the objects are usually still there waiting to be named again."
+}

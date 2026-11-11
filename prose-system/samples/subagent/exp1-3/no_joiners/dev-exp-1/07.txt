@@ -1,0 +1,23 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists. This is the key idea, and it explains why a heat pump can warm your living room even when the air outside feels freezing.
+
+Cold is only a relative idea. Air at minus five degrees Celsius still holds a great deal of thermal energy. Heat only disappears completely at absolute zero, which is around minus 273 degrees. So outdoor air is a large store of heat, just a diluted one. The job of a heat pump is to gather that diluted heat and concentrate it.
+
+Your fridge works the same way. It pulls heat out of the food and releases it from the coils at the back. A heat pump is a fridge that treats your garden as the inside of the fridge and your house as the kitchen.
+
+Here is how it works. A sealed loop contains a refrigerant, a fluid that boils at a very low temperature, far below zero. Outside, a fan blows air across a coil called the evaporator. The refrigerant in the coil is colder than the air, so heat flows into it and the refrigerant boils into a gas. A compressor then squeezes that gas. Squeezing a gas heats it sharply, just as a bicycle pump gets warm in your hand. The gas may now reach 50 to 70 degrees, well above the temperature your radiators or underfloor pipes need. Inside the house, the hot gas passes through a second coil called the condenser and gives its heat to your heating water. In doing so it cools and turns back to liquid. A valve then drops the pressure, the liquid becomes very cold, and the cycle repeats.
+
+The compressor needs electricity, but far less than the heat it delivers. Typically one unit of electricity moves around three units of heat from outside, so you receive about four units in total. This ratio is called the coefficient of performance. A gas boiler can never beat about 90 to 95 percent efficiency, meaning it gives you less than one unit of heat for each unit of fuel. That is why heat pumps are often described as 300 percent efficient or more. The figure is a little misleading, because the extra heat is simply collected free from outside.
+
+What happens in a real cold snap? Modern units keep working in outdoor temperatures well below minus 15 degrees. Output and efficiency do fall as it gets colder, because the compressor has to lift heat across a wider temperature gap. A seasonal average of 2.5 to 3.5 is realistic in many climates. Installers size the system for the coldest design day in your area, and many include a backup electric element for extreme spells.
+
+For a homeowner thinking about replacing a gas boiler, several practical points matter.
+
+Insulation comes first. Heat pumps run best when they deliver gentle warmth for long periods. A draughty house with a thin loft layer will need a bigger unit and cost more to run, so fixing the building often pays back before you change the heating.
+
+Radiators matter too. Yours were probably sized for water at 70 degrees. A heat pump is most efficient with flow temperatures around 35 to 50 degrees, so some radiators may need to be larger, or you may add underfloor heating in key rooms.
+
+Running costs depend on the price of electricity compared with gas. If a unit of electricity costs less than about three times a unit of gas, a heat pump with a seasonal coefficient of 3 will save you money. Where the ratio is higher, savings shrink or vanish. Check your own tariffs and ask your supplier about cheaper off peak rates, which suit a heat pump well.
+
+The upfront cost is higher than for a new boiler, though grants and subsidies exist in many places. Ask for a proper room by room heat loss survey rather than a rule of thumb quote. Ask each installer what seasonal efficiency they expect for your specific house, and what happens if it falls short.
+
+Finally, expect a different feel. A heat pump runs quietly for long hours rather than blasting very hot water in short bursts, so radiators feel warm rather than hot. The result is a steady, even temperature. For a well insulated home with a fair electricity price, that makes a heat pump a strong replacement for an ageing gas boiler.

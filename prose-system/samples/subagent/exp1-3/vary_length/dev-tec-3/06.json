@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8b88333c19674bff",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73751,
+    "output_tokens": 936,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:34:39.155Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). Understanding why the second stage exists, and why it takes so long, requires a picture of what is happening inside the cell.\n\nA cell stores energy by shuttling lithium ions between two electrodes. During charging, the charger drives ions out of the cathode, typically a lithium metal oxide, across a porous separator soaked in liquid electrolyte, and into the graphite anode, where they slot between carbon layers in a process called intercalation. Electrons travel the external circuit to balance the charge. The cell's terminal voltage rises as the anode fills, because the anode's potential relative to lithium falls and the cathode's rises.\n\nIn the first stage, the charger holds current constant, often between 0.5C and 1C, where 1C would fully charge the cell in one hour. Terminal voltage climbs steadily. Voltage here is not just the cell's equilibrium voltage. It also includes the drop across internal resistance, plus overpotentials needed to push ions through the electrolyte and across the electrode surfaces. These extra terms scale with current.\n\nWhen the terminal voltage reaches the upper limit, about 4.2 V for a common chemistry, the charger switches modes. That limit is a hard ceiling. Exceeding it accelerates electrolyte decomposition, growth of the surface film on the anode, and, in the worst case, plating of metallic lithium, which can short the cell.\n\nIn the second stage, the charger holds voltage at 4.2 V and lets current fall on its own. The reason is straightforward. As the anode fills, the equilibrium voltage creeps toward the limit, leaving less of the fixed 4.2 V available to drive current through the internal resistance. Ohm's law does the rest. Smaller headroom means smaller current.\n\nThere is a diffusion effect too. Ions move inside the graphite particles slowly, and during fast charging the particle surfaces fill well before the cores do. The surface concentration, which sets the voltage, runs ahead of the bulk. Once the voltage is clamped, the cell cannot push more ions in until they diffuse inward and relieve that surface crowding. This process is intrinsically exponential, with current decaying toward zero.\n\nCharging ends when current drops to a cutoff, commonly 0.05C to 0.1C. Stopping there gives roughly 100% of usable capacity. Chasing the last few percent would take hours for little gain and added degradation.\n\nPractically, the CC stage often delivers 70 to 80 percent of the charge in about half the time, while the CV stage consumes the remainder. That is why a phone reaches 80 percent quickly and then crawls."
+}

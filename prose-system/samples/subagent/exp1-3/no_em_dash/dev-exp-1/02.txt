@@ -1,0 +1,42 @@
+A heat pump does not make heat. It moves heat that already exists outside into your house. That is why it can warm a room when the air outside is colder than the air inside.
+
+**Cold is not zero heat**
+
+Heat flows from hotter things to colder things, but "cold" is only relative. Air at 0°C still holds a lot of thermal energy. It is just less than a warm room holds. The temperature only decides which way heat flows on its own. A machine that uses energy can push heat the other way.
+
+**The fridge in reverse**
+
+Your kitchen fridge already does this. It pulls heat out of the food compartment and dumps it into your kitchen, which is why the coils on the back feel warm. A heat pump is the same device pointed the other way. It pulls heat out of the outdoor air and releases it inside your home.
+
+**How the cycle works**
+
+A sealed loop of refrigerant runs through four steps.
+
+1. **Absorb.** Outside, a fan blows air over a coil holding liquid refrigerant. The refrigerant boils at a very low temperature, far below freezing, so even cold air is warm enough to make it evaporate. In doing so it soaks up heat from the air.
+2. **Compress.** A compressor squeezes the gas. Squeezing a gas makes it much hotter, in the same way a bicycle pump warms up as you use it. The gas now sits well above the temperature of your radiators or indoor coil.
+3. **Release.** Inside, the hot gas passes through a heat exchanger and condenses back to liquid. This gives up its heat to your home's water or air.
+4. **Reset.** An expansion valve drops the pressure, the refrigerant turns very cold, and it heads back outside to start again.
+
+The compressor is the clever part. By raising the refrigerant's temperature above your indoor temperature, it lets heat flow into the house even though the outdoor air started out colder.
+
+**Why it can beat a boiler**
+
+A gas boiler burns fuel and converts that energy to heat. At best it delivers a bit under one unit of heat for each unit of energy in, and most modern condensing boilers are around 90%.
+
+A heat pump spends electricity mainly on running the compressor and fans. For each unit of electricity it moves roughly two to four units of heat into your home. This ratio is called the coefficient of performance, or COP. A COP of 3 means 300% efficiency in plain terms. Nothing is being created from nothing. The extra heat comes from the outside air.
+
+**The catch: colder weather lowers efficiency**
+
+The colder it gets, the harder the compressor must work to lift the heat up to a useful temperature, so COP falls. A heat pump might manage a COP of 3.5 at 7°C and about 2.5 at minus 5°C. Modern units still work at minus 15°C or lower, but they use more electricity as it gets colder. Look for a seasonal figure (SCOP) when comparing models, since it reflects a whole winter rather than a single mild day.
+
+**What this means for your decision**
+
+- **Running costs depend on the price gap.** Electricity usually costs more per unit than gas. A COP of 3 only saves money if electricity costs less than three times as much as gas, so check your local tariffs. Time-of-use tariffs and solar panels improve the case.
+- **Insulation matters.** Heat pumps work best at lower flow temperatures, typically 35 to 50°C, compared with a boiler's 60 to 80°C. A well-insulated home with good windows suits that. A draughty one may need upgrades, or larger radiators, to stay comfortable.
+- **Space and noise.** The outdoor unit needs clear space and makes a low hum, a bit like a fridge. Ask installers about placement.
+- **Upfront cost.** A heat pump usually costs more to buy and install than a new gas boiler. Check for government grants, which can close much of the gap in many countries.
+- **Carbon.** Because a heat pump moves heat rather than burning gas, it typically cuts household heating emissions substantially, and more so as the electricity grid gets cleaner.
+
+**Bottom line**
+
+A heat pump works in cold weather because it uses a compressor to lift outdoor heat to a useful temperature. It gets less efficient as the temperature drops, but it still delivers more heat than the electricity it consumes. Whether it beats your boiler comes down to your insulation, your energy prices, and the upfront cost. Ask for a heat loss survey from a qualified installer before you decide.

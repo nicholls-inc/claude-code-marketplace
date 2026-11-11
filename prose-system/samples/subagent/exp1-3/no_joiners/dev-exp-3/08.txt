@@ -1,0 +1,55 @@
+Imagine you want to agree a secret with a stranger, but the only way to talk is by shouting across a crowded room. Everyone can hear every word. It sounds impossible to share a secret under those conditions, yet this is exactly what your phone does each time it connects to a shop website or a bank. The trick is called public key cryptography, and the clever part is that it rests on a simple fact about arithmetic. Some calculations are easy to do forwards and extremely hard to undo.
+
+The problem with ordinary secrets
+
+For most of history, secret codes needed a shared key. If you and a friend wanted to swap private messages, you first had to meet and agree on a code word or a scrambling rule. Anyone who learned the rule could read everything. That works for spies who can meet in person, but it is hopeless for a billion strangers who want to shop online. There is no way to meet everyone in advance.
+
+Public key cryptography solves this by splitting the secret in two. Each person has a private part that never leaves their head or device, and a public part that they are happy to shout across the room. The two parts are linked by maths, but knowing the public part does not let you work out the private part.
+
+The paint analogy
+
+A famous way to picture this uses paint. Suppose Alice and Bob each start with a tub of yellow paint that everyone can see. Alice secretly picks a private colour, say red, and mixes a good amount of it into the yellow. Bob secretly picks his own colour, say blue, and does the same. Each sends the resulting mixture across the room for all to see.
+
+Now Alice takes Bob's mixture and adds her private red to it. Bob takes Alice's mixture and adds his private blue. Both end up with the same final shade, because both have combined yellow, red and blue. A watcher sees only the yellow, the orange mixture and the greenish mixture. Unmixing paint is nearly impossible, so the watcher cannot recover the private colours, and cannot make the final shade without one of them.
+
+Maths has a version of mixing that cannot be undone, and it is called clock arithmetic.
+
+Clock arithmetic
+
+On a clock with 12 hours, if it is 10 o'clock and you wait 5 hours, it is 3 o'clock. You did 10 plus 5 to get 15, then took away 12 to land back on the clock face. Mathematicians call this working modulo 12. You simply keep only the remainder after dividing by the size of the clock.
+
+You can use a clock of any size. Let us use a clock with 23 positions, numbered 0 to 22. When you multiply and the answer goes past 22, you go round again and keep the remainder. For example 5 times 6 is 30, and 30 is one lap of 23 with 7 left over, so the answer on this clock is 7.
+
+Now consider repeated multiplication, which we write as a power. Five to the power 3 means 5 times 5 times 5, which is 125. On our clock, 125 is five laps of 23, which uses up 115, with 10 left over, so the answer is 10.
+
+Here is the key fact. Suppose I tell you I started with 5, multiplied it by itself some number of times, and the clock answer was 8. Can you tell me how many times I multiplied? With a small clock you could simply try 1, 2, 3 and so on until you hit 8. But when the clock has hundreds of digits, the number of tries needed is more than the number of atoms in the universe. Going forwards is quick. Going backwards is hopeless. That one way street is our paint mixing.
+
+The exchange in numbers
+
+Here is how Alice and Bob use it. The public ingredients are the clock size, 23, and the starting number, 5. Everyone can know these. They are the yellow paint.
+
+Alice chooses a private number, 6, and tells nobody. She works out 5 multiplied by itself 6 times on the clock. The full number is 15,625, and after removing laps of 23 she is left with 8. She shouts 8 across the room.
+
+Bob chooses a private number, 15, and tells nobody. He works out 5 multiplied by itself 15 times on the clock and gets 19. He shouts 19 across the room.
+
+Now Alice takes Bob's public number, 19, and multiplies it by itself 6 times, which is her private number. On the clock this comes to 2. Bob takes Alice's public number, 8, and multiplies it by itself 15 times, which is his private number. This also comes to 2.
+
+They have both arrived at 2, and neither ever said it aloud. The reason is that both calculations amount to the same thing, which is 5 raised to the power of 6 times 15, or 90 multiplications, only grouped differently. Since the order of grouping does not change the result, the answers agree.
+
+An eavesdropper heard 23, 5, 8 and 19. To find the secret, they would need to discover Alice's 6 or Bob's 15. With a tiny clock this is easy, which is why real systems use enormous numbers. With a clock of hundreds of digits, the hunt for the private number is out of reach even for the fastest computers in the world.
+
+What happens next
+
+The number 2 is now a shared secret, known only to the two of them. They use it as the key for an ordinary fast scrambling method, so that everything they send afterwards is unreadable to the room. Public key maths is slow, so it is used only for this opening handshake. After that, the cheap and quick shared key does the heavy lifting.
+
+The padlock version
+
+There is a second flavour of public key cryptography that people often meet first. Here Bob makes a padlock and a key. He keeps the key and hands out copies of the open padlock to anyone. Alice snaps a padlock onto a box holding her message and sends it. Only Bob has the key, so only he can open it. Even Alice cannot reopen the box once it is locked.
+
+In real life the padlock is a pair of linked numbers. The public number scrambles a message, and only the private number can unscramble it. The best known method, called RSA, builds the pair from two huge prime numbers. Multiplying two primes together is easy. Taking the result and finding the two primes again is the hard direction, just like the paint, and just like the clock.
+
+Why you can trust it
+
+It is fair to ask whether the shouted numbers might be swapped by a trickster. Suppose someone in the room pretends to be Bob. This is a real danger, and it is why websites also carry certificates, which are public key signatures from trusted organisations vouching that a given public number really belongs to a given site. Signing works in reverse to scrambling. You use your private number to produce a stamp, and anyone can check it with your public number but nobody can forge it.
+
+That is the whole story. A clock, repeated multiplication, and a one way street let two strangers shout numbers across a room and walk away with a secret that nobody else holds.

@@ -1,0 +1,15 @@
+Why the world is giving up on the leap second
+
+A leap second is a single extra second slipped into the world's official time, usually at the very end of December or June, so that clocks stay in step with the planet beneath them. It exists because there are two ways to measure a day, and they do not quite agree.
+
+The first way is astronomical. A day is one turn of the Earth, judged by the position of the sun. The second way is atomic. Since the 1960s, scientists have defined the second using the vibrations of caesium atoms, which tick with astonishing regularity. Atomic clocks lose less than a second over hundreds of millions of years.
+
+The Earth is far less dependable. Tides tug at the oceans and slowly drag on the planet's spin, while earthquakes, shifting ice and movements deep in the core nudge it up and down. Over the long run the days have been getting slightly longer. When the official clocks were first tied to atomic time in 1972, the keepers of time decided that Coordinated Universal Time should never drift more than about nine tenths of a second from the sun. To manage this, they have added a leap second whenever needed. There have been 27 of them, the most recent at the end of 2016.
+
+So why stop? The trouble is that a leap second is a nuisance for modern technology. Computers normally assume every minute has exactly 60 seconds. A minute with 61 can confuse software, and past leap seconds have been blamed for crashes at major websites and for glitches in systems that depend on precise timing, such as telecoms, financial trading and satellite navigation. Engineers have resorted to awkward tricks, such as smearing the extra second across a whole day. Each fix is another thing that can go wrong.
+
+The Earth has also complicated matters. In recent years it has been spinning slightly faster, and for the first time in history the clocks might need a second removed rather than added. That would be a far riskier change, because much software has never been tested for it.
+
+In 2022 the international body that governs measurement, the General Conference on Weights and Measures, voted to abandon leap seconds by 2035. Time will not stop following the sun forever. Instead, the gap between atomic time and the Earth will be allowed to grow, perhaps to a full minute or more, and some future generation will decide how to correct it, possibly with a single larger adjustment made once in a century.
+
+For ordinary people nothing will change. Sunrise will still happen when it should, and no one will notice a second here or there. The decision simply admits that keeping computers happy matters more than keeping time perfectly in step with the sky.

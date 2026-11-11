@@ -1,0 +1,40 @@
+A heat pump does not make heat by burning something. It moves heat that already exists outdoors into your home. That is why it can warm a house when the air outside is colder than the air inside.
+
+**Cold air still contains heat**
+
+Heat is the motion of molecules, and that motion only stops at absolute zero, about minus 273 degrees Celsius. Air at 0 degrees Celsius, or even minus 10, holds a lot of thermal energy. A heat pump extracts some of it and delivers it indoors.
+
+**How it works**
+
+The system is a sealed loop of refrigerant, a fluid that boils at very low temperatures, well below freezing. The loop has four main parts.
+
+1. **Outdoor coil (evaporator).** Cold liquid refrigerant flows through it, at a temperature lower than the outside air. Because the refrigerant is colder than the air, heat flows from the air into the refrigerant, which boils into a gas.
+2. **Compressor.** This electric pump squeezes the gas. Compressing a gas heats it sharply, so the refrigerant leaves the compressor hotter than your radiators or indoor air need to be, typically 40 to 60 degrees Celsius or more.
+3. **Indoor coil (condenser).** The hot gas passes its heat into your home's water or air and condenses back to liquid.
+4. **Expansion valve.** The liquid is released through a narrow valve. Its pressure drops, and it becomes very cold again, ready to absorb more outdoor heat.
+
+The compressor is the key. Heat naturally flows only from hot to cold, so on its own it would never travel from a cold garden into a warm house. The compressor uses electricity to push the refrigerant to a temperature above your indoor temperature, so heat can flow in the right direction. A fridge works the same way, pulling heat out of the cold box and dumping it into your kitchen.
+
+**Why this beats a boiler on efficiency**
+
+A gas boiler turns fuel into heat at best about 90 to 95 percent efficiency. A heat pump uses electricity mainly to move heat, not to create it. For each unit of electricity, it typically delivers about 2.5 to 4 units of heat. This ratio is called the coefficient of performance (COP). A COP of 3 means 300 percent efficiency in plain terms. The extra comes free from the outside air, ground or water.
+
+**Limits you should know about**
+
+- **Colder weather lowers efficiency.** There is less heat to harvest and the compressor must work harder. At minus 10 degrees Celsius the COP might fall to around 2. Modern cold-climate models still work well at minus 15 or lower, but they use more electricity.
+- **Lower flow temperatures suit heat pumps best.** They are most efficient at 35 to 45 degrees Celsius, whereas boilers often run at 70 or more. Your radiators may need to be larger, or you may need underfloor heating, and good insulation helps a lot.
+- **Defrost cycles.** In damp, cold weather ice can form on the outdoor unit. The system briefly reverses to melt it. This is normal and is built in.
+- **Backup heat.** Many systems include an electric element for the coldest days.
+
+**What to check before you decide**
+
+- **Insulation and heat loss.** A well-insulated house suits a heat pump far better. Ask an installer for a room-by-room heat loss calculation.
+- **Radiators.** Find out whether yours can deliver enough heat at lower water temperatures.
+- **Running costs.** Compare your electricity price with your gas price. A heat pump with a COP of 3 beats gas on cost when electricity costs less than about three times as much per unit. Time-of-use tariffs and solar panels improve the case.
+- **Upfront cost and grants.** Installation costs more than a boiler, but many regions offer grants or incentives.
+- **Space and noise.** The outdoor unit needs clear space and makes a low hum.
+- **Hot water.** You will usually need a cylinder, which can take up room.
+
+**Bottom line**
+
+A heat pump heats your house in winter by moving outdoor heat inside, using electricity to lift that heat to a useful temperature. It can deliver several times more heat than the electricity it consumes. For a reasonably insulated home with suitable radiators or underfloor heating, it is often a strong replacement for a gas boiler. Get a proper heat loss survey and a few quotes before committing.

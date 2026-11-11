@@ -1,0 +1,15 @@
+Lithium-ion cells are charged with a two-stage protocol: constant current (CC), then constant voltage (CV). It is chosen because the cell has a hard upper voltage limit (typically 4.2 V for graphite/NMC or cobalt-oxide chemistries) that must never be exceeded, since overvoltage drives electrolyte decomposition, lithium plating, and in the worst case thermal runaway.
+
+**Stage 1: constant current.** The charger forces a fixed current, commonly 0.5 to 1 C (a C-rate of 1 means a current that would fill the nominal capacity in one hour). The cell's terminal voltage rises steadily from roughly 3.0 V to the limit. During this phase the charger's job is simple: push current, let voltage float upward. Most of the capacity, often 70 to 80 percent, goes in here.
+
+**Stage 2: constant voltage.** Once terminal voltage reaches 4.2 V, the charger holds it there and lets the current fall on its own. Charging ends when current decays to a cutoff, typically 0.02 to 0.05 C. This taper is why the last stretch feels slow.
+
+**Why the current has to fall.** Treat the cell as an ideal voltage source (the open-circuit voltage, OCV, which rises with state of charge) in series with an internal resistance R. Terminal voltage during charging is V = OCV + I·R. The resistance is the sum of ohmic losses, charge-transfer kinetics at the electrodes, and solid-state diffusion of lithium within the electrode particles.
+
+In the CC phase, I·R is a fixed offset, so V reaches 4.2 V while OCV is still below 4.2 V, perhaps at 4.0 V. The charger can no longer hold the current without exceeding the limit. In the CV phase, V is pinned, so as OCV creeps up toward 4.2 V, the available headroom (V minus OCV) shrinks and I = (V − OCV)/R must shrink with it. Current decays roughly exponentially, much like an RC circuit charging, and approaches zero as OCV approaches 4.2 V. Full charge is approached asymptotically and never reached in finite time.
+
+**The diffusion effect.** The electrical model understates the problem. Lithium must diffuse into the graphite particles, and near full charge the surface is saturated while the interior is still filling. This concentration gradient means the surface OCV leads the bulk average, so the cell looks "full" at its surface before it is full inside. The CV phase gives the lithium time to equilibrate inward, which is partly why it matters for capacity rather than being a cosmetic step.
+
+**Why not just push harder.** Forcing higher current at high state of charge raises the anode's overpotential. If the graphite potential falls near 0 V versus Li/Li+, lithium metal plates on the surface instead of intercalating. This is irreversible, consumes cyclable lithium, and can grow dendrites that short the cell. Cold temperatures worsen it by slowing diffusion.
+
+**Practical consequences.** Fast chargers deliver most energy in CC, then accept a long tail. Stopping at 80 to 90 percent saves substantial time and reduces stress, which is why many devices and EVs advertise "80 percent in X minutes." Real systems also derate current for temperature, and a battery management system monitors per-cell voltage to enforce the limits.

@@ -1,0 +1,38 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists outside and brings it indoors. That is why it can warm a house when the air outside is colder than the air inside.
+
+**Cold air still holds heat**
+
+"Cold" is relative. Air at 0°C still contains a great deal of thermal energy. Heat only stops being available at absolute zero, which is about -273°C. A heat pump pulls energy out of outdoor air that feels freezing to us and delivers it inside.
+
+**How it works**
+
+A heat pump uses a sealed loop of refrigerant, a fluid that boils at very low temperatures. It is the same principle as your fridge, run in the opposite direction. The loop has four stages.
+
+1. **Outdoor coil (evaporator).** Cold liquid refrigerant, colder than the outside air, passes through a coil outdoors. Heat flows from the warmer air into the colder refrigerant, which boils into a gas.
+2. **Compressor.** The compressor squeezes this gas. Compressing a gas raises its temperature sharply, so the gas leaves the compressor much hotter than your living room, typically 40 to 60°C.
+3. **Indoor coil (condenser).** The hot gas passes through a coil connected to your radiators, underfloor heating or hot water cylinder. Because it is hotter than the water or air there, heat flows into your home. The refrigerant cools and turns back into a liquid.
+4. **Expansion valve.** The liquid's pressure drops, which makes it very cold again, and the cycle repeats.
+
+Heat moves from cold to hot only because the compressor does work to force it. The compressor runs on electricity.
+
+**Why this is efficient**
+
+A gas boiler turns fuel into heat at best around 90 to 95 percent efficiency. Every unit of energy in gives you less than one unit of heat out.
+
+A heat pump delivers more heat than the electricity it uses, because most of the heat is moved rather than created. This is measured by the coefficient of performance (COP). A COP of 3 means one unit of electricity delivers three units of heat, two of them collected from outside air. Over a whole season, typical air-source heat pumps achieve a seasonal COP of roughly 2.5 to 4, which is 250 to 400 percent efficiency.
+
+**The catch: colder days cost more**
+
+Efficiency falls as the temperature gap between outside and inside widens, and the compressor has to work harder. At 7°C outside a unit might reach a COP of 3.5 or better. At -10°C it might drop to 2 or below. Modern cold-climate models keep working well below -15°C, but the trend is the same. Output also tends to fall slightly on the coldest days. Some systems include a backup electric heater for extremes.
+
+**What this means for a boiler replacement**
+
+- **Your house matters.** Heat pumps heat most efficiently at lower water temperatures than boilers, around 35 to 50°C compared with 60 to 75°C. Well-insulated homes with large radiators or underfloor heating suit them best. Poorly insulated homes may need insulation upgrades or larger radiators first.
+- **Running costs depend on prices.** Because the COP is above 1, a heat pump can undercut gas even though electricity costs more per unit. This works best when electricity is not much more than about three times the price of gas per kWh. Check your own tariffs, and consider a time-of-use tariff.
+- **Upfront cost is higher.** Installation typically costs several times that of a new boiler, though grants and subsidies may close much of the gap depending on where you live. Ask for a heat loss survey, not just a quote.
+- **Carbon.** Even on a fossil-heavy grid, a heat pump usually emits less than a gas boiler, and the advantage grows as electricity gets cleaner.
+- **Space and noise.** You need room outdoors for the unit, and usually space indoors for a hot water cylinder. Modern units are fairly quiet but not silent.
+
+**The bottom line**
+
+A heat pump is not creating warmth from nothing. It uses electricity to move heat from outside to inside, which is why it can beat the efficiency of any boiler. The question for you is not whether it works in the cold, because it does. It is whether your house, your energy prices and your budget make it worthwhile. Get a heat loss assessment and at least two installer quotes before deciding.

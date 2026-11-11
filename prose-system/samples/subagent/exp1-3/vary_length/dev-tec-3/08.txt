@@ -1,0 +1,15 @@
+Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV). Understanding why the second stage exists, and why it takes so long, comes down to what happens inside the cell.
+
+A cell stores energy by holding lithium ions in two host materials. During discharge, ions sit in the positive electrode (often a metal oxide) and the negative electrode (usually graphite) is nearly empty. Charging forces the ions the other way. An external supply drives electrons through the circuit, and lithium ions move through the electrolyte and intercalate, or slot in, between the graphite layers. The cell's open-circuit voltage rises as the graphite fills, from about 3.0 V empty to roughly 4.2 V full for a typical cell.
+
+In the first stage, the charger holds current constant, commonly between 0.5C and 1C (C being the current that would fill the cell in one hour). The charger raises its output voltage as needed to keep that current flowing. The cell's terminal voltage climbs steadily. This stage delivers perhaps 70 to 80 percent of the capacity and is fast.
+
+The terminal voltage is not the same as the open-circuit voltage, though. It also includes the drop across the cell's internal resistance, plus extra voltage needed to push ions through the electrolyte and across the electrode surfaces. Call this overpotential. At 1C the terminal voltage reaches the 4.2 V ceiling while the cell's actual state of charge is still well short of full.
+
+That ceiling is a hard limit. Going above about 4.2 V accelerates electrolyte decomposition and, on the graphite, can cause metallic lithium plating, which degrades the cell and can create a safety hazard.
+
+So the charger switches to the second stage and holds voltage constant at the limit. Now the arithmetic changes. As the cell charges, its open-circuit voltage keeps rising toward the fixed supply voltage. The difference between them is what drives current through the internal resistance. That difference shrinks, so the current falls, roughly exponentially, like a capacitor charging through a resistor. Diffusion contributes as well: lithium concentrations inside the electrode particles even out slowly, and the surface becomes crowded with ions before the interior does.
+
+The charger ends the process when the current decays to a cutoff, typically 0.05C to 0.1C. The last 20 percent of capacity can take as long as the first 80.
+
+This is why fast-charging claims usually quote "0 to 80 percent" times. The final stretch is slow by design. Pushing it faster would mean exceeding the voltage limit, and the cell would pay for that in lifespan.

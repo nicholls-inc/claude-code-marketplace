@@ -1,0 +1,67 @@
+**How two strangers can agree on a secret in public**
+
+**The problem**
+
+Suppose you want to send a private message to someone you have never met. For most of history the only way to do it was to share a secret first. You and your friend would agree on a code, perhaps over dinner, and then use it afterwards. That works well until the person is far away, or a stranger, or you have to arrange it through a line that anyone could be listening to. Then you seem to be stuck. To agree on a secret you would need a secret way to talk, and to get a secret way to talk you would need to agree on a secret.
+
+In the 1970s mathematicians found a way out of this loop. It is called public key cryptography. The idea sounds impossible at first. Two people shout numbers across a crowded room, and at the end they both know a secret number that nobody else in the room can work out. This explanation shows how that is done, using nothing more than the arithmetic you met at school.
+
+**The paint analogy**
+
+Start with a picture before any numbers. Imagine you and a stranger called Bob each have a pot of paint. You begin by agreeing, loudly, on a shared colour, say yellow. Anyone can hear this. Now you each secretly pick a private colour. You choose red and Bob chooses blue, and you tell no one.
+
+You mix your red into the yellow and send the orange result to Bob. Bob mixes his blue into the yellow and sends the green result to you. A spy watching sees the yellow, the orange and the green, but never the red or the blue.
+
+Now you add your private red to the green you received. Bob adds his private blue to the orange he received. Both of you end up with the same muddy brown, because you have both mixed yellow, red and blue. The spy has orange and green only. Here is the key point. Mixing paint is easy, but unmixing it is very hard. The spy cannot take the orange and pull out the red.
+
+The real method works the same way, except that the mixing is done with numbers and the unmixing is just as hard.
+
+**Clock arithmetic**
+
+The maths needs one idea that you may not have met, which is clock arithmetic. On a clock with twelve hours, if it is ten o'clock and you wait five hours, the time is three o'clock. You went past twelve and started again. Mathematicians call this working modulo twelve. You do the ordinary sum, divide by twelve, and keep only the remainder.
+
+We will use a clock with 23 positions instead of twelve. If you work out 5 times 7, you get 35, and dividing by 23 leaves a remainder of 12. So on this clock, 5 times 7 lands on 12. The remainder is the only thing we keep.
+
+Next we need powers. Five to the power of three means 5 times 5 times 5, which is 125. On the 23 clock, 125 leaves a remainder of 10, because 23 times 5 is 115 and 125 minus 115 is 10. So we say that 5 to the power of 3 gives 10 on this clock.
+
+Here is the crucial observation. Going forwards is easy. Given a power, you can compute the clock answer quickly. Going backwards is hard. If I tell you that 5 raised to some secret power lands on 8 on the 23 clock, you cannot work out the secret power except by trying the powers one at a time. With a clock of 23 positions that takes a minute. With a clock that has hundreds of digits, it would take longer than the age of the universe, even for the fastest computers we have.
+
+This one way street is the mathematical version of mixing paint.
+
+**The exchange in numbers**
+
+Here is the whole procedure, with small numbers so you can check it yourself.
+
+First, you and Bob announce two public numbers. The first is the size of the clock, which is 23. The second is a starting number, which is 5. Everyone can hear these. They play the role of the yellow paint.
+
+Second, each of you picks a private number. You pick 6 and Bob picks 15. You never say these aloud.
+
+Third, you each calculate a public number from your private one. You work out 5 to the power of 6, which is 15625, and on the 23 clock this leaves a remainder of 8. Bob works out 5 to the power of 15 on the same clock, which lands on 19. These are the orange and green paint.
+
+Fourth, you swap them in public. You tell Bob "8" and Bob tells you "19". The spy hears both.
+
+Fifth, you each combine what you received with your own private number. You take Bob's 19 and raise it to the power of your private 6. On the 23 clock this lands on 2. Bob takes your 8 and raises it to the power of his private 15. On the same clock this also lands on 2.
+
+You both arrived at 2. That is your shared secret, the muddy brown. It was never spoken aloud.
+
+**Why the two answers match**
+
+You might wonder if this is luck. It is not, and the reason is a rule about powers you learned at school. Raising a power to another power means you multiply the exponents. So 5 to the power of 6, then raised to the power of 15, is the same as 5 to the power of 90. It makes no difference which exponent comes first, because 6 times 15 equals 15 times 6.
+
+That is exactly what happened. You computed 5 raised to Bob's number, then raised that to your number. Bob computed 5 raised to your number, then raised that to his number. Both of you ended up at 5 to the power of 90, which lands on 2 on the clock. The clock does not disturb this, because taking remainders along the way gives the same final remainder as taking it at the end.
+
+**What the spy knows**
+
+Look at what the eavesdropper has. The clock size 23, the starting number 5, and the two public numbers 8 and 19. To find the shared secret the spy needs one of the private numbers. To find a private number the spy has to undo the clock, asking which power of 5 lands on 8. With a clock this small, the spy can simply try powers until one fits, so our example is not safe. But real systems use clocks with more than six hundred digits. On a clock that large there is no shortcut known, and trying powers one by one is hopeless.
+
+This is why the method is said to rest on a hard problem rather than on a hidden trick. Nothing is concealed about how it works. The design is published for anyone to read. The security comes from the fact that going forwards is quick and going backwards is not.
+
+**What you do with the secret**
+
+The shared number is then used as the key for an ordinary fast code that scrambles messages. Both of you know the key, nobody else does, and so you can now talk privately. This is what happens when your browser shows a padlock. Your computer and the website have never met, yet within a fraction of a second they agree on a secret by a method very like the one described here.
+
+**An honest limit**
+
+One caution is worth stating. This exchange protects against someone who only listens. It does not by itself protect against someone who can intercept and replace your messages, pretending to be Bob. To prevent that, people also need a way to confirm who they are talking to, and a second use of the same ideas provides it. That is a story for another day.
+
+For now, the lesson is a surprising one. Two strangers do not need a secret meeting. They need a task that is easy to do and very hard to undo, and a little agreement about how to combine their results.

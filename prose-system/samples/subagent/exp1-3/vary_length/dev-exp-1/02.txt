@@ -1,0 +1,43 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists outdoors into your house. That sounds impossible when it is freezing outside, but it works because "cold" is relative.
+
+**Cold air still contains heat**
+
+Heat is the energy of moving molecules, and that motion only stops at absolute zero, about minus 273 degrees Celsius. Air at minus 5 still holds plenty of thermal energy. The trick is getting it from there to somewhere warmer.
+
+**The refrigeration cycle, run in reverse**
+
+Your fridge already does this. It pulls heat out of the food compartment and dumps it into your kitchen through the coils on the back. A heat pump is the same machine pointed the other way: it pulls heat from outdoors and dumps it inside.
+
+It relies on a refrigerant, a fluid that boils at a very low temperature. The cycle has four steps.
+
+1. Outside, the refrigerant flows through a coil. It is colder than the air, perhaps minus 20, so heat flows into it from the air and it boils into a gas.
+2. A compressor squeezes that gas. Compressing a gas heats it sharply, and it may leave the compressor at 60 to 80 degrees.
+3. Inside, the hot gas passes through another coil. Your radiators, underfloor loops or air handler are cooler than the gas, so heat flows into the house and the refrigerant condenses back to a liquid.
+4. An expansion valve drops the liquid's pressure. It turns very cold, and the loop starts again.
+
+The compressor does the key job. It lifts the heat from a low temperature to a useful one, much as a pump lifts water uphill.
+
+**Why this beats a boiler on efficiency**
+
+A gas boiler turns fuel into heat. Even the best condensing models top out around 90 to 95 percent efficiency, so you get at most 0.95 units of heat per unit of gas energy.
+
+A heat pump spends electricity only on the compressor and fans. Most of the heat it delivers was already in the air. Typically one unit of electricity yields three or four units of heat. This ratio is called the coefficient of performance, or COP. A COP of 3 means 300 percent efficiency, which sounds absurd until you remember nothing is being created, only moved.
+
+**The catch: colder weather lowers performance**
+
+The bigger the gap between outdoor and indoor temperature, the harder the compressor works, and the COP falls. A modern unit might manage a COP near 4 on a mild day and around 2.5 at minus 7. That is still better than any boiler. Many current models keep running down to minus 15 or even minus 25, though with reduced output. Look for the seasonal figure, SCOP, rather than the headline number, because it reflects a whole winter.
+
+**What this means for your decision**
+
+Several practical points matter more than the physics.
+
+- **Heat loss.** Heat pumps work best with a well-insulated home. A leaky house needs a lot of heat, and drafts and thin walls will raise your running costs.
+- **Emitters.** Heat pumps run at lower water temperatures, about 35 to 50 degrees against a boiler's 70 or more. Old, small radiators may need replacing with larger ones, or you may want underfloor heating. This is often the hidden cost.
+- **Running costs.** Electricity usually costs more per unit than gas. A COP of 3 or better offsets that, but check your local tariffs. Time-of-use tariffs can help a lot.
+- **Upfront cost.** Installation typically costs several times more than a new boiler, though grants and subsidies often close much of the gap. Check what is available locally.
+- **Sizing and installer quality.** A badly sized system performs poorly. Get a proper room-by-room heat loss calculation, not a rule of thumb, and compare at least three quotes.
+- **Space.** You need room outside for the unit and often a hot water cylinder inside.
+
+**Bottom line**
+
+A heat pump works in cold weather because it moves heat rather than making it, and a compressor lifts that heat to a usable temperature. If your house is reasonably insulated and your emitters can be adapted, it will almost certainly use far less energy than a gas boiler. Ask for a heat loss survey and a written estimate of annual running costs before you commit.

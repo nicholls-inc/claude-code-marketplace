@@ -1,0 +1,81 @@
+**How Two Strangers Can Agree on a Secret in Public**
+
+Imagine you and a stranger sit at opposite ends of a crowded room. You want to agree on a secret password, but you can only shout. Everyone will hear every word. It sounds impossible, and for thousands of years it was. Then, in the 1970s, mathematicians found a way. It rests on one simple idea: some jobs are easy to do and nearly impossible to undo.
+
+**The paint trick**
+
+Start with colours rather than numbers. You and a friend, Alice and Bob, agree out loud on a common paint colour, say yellow. Everyone hears it. Fine.
+
+Now each of you secretly picks a private colour. Alice chooses red. Bob chooses blue. Neither tells anyone. Each of you mixes your private colour into the shared yellow. Alice gets an orange-ish mixture, Bob gets a greenish one. Then you swap the mixtures across the room, in full view of the crowd.
+
+Here is the clever part. Alice takes Bob's greenish mixture and adds her own secret red. Bob takes Alice's orange-ish mixture and adds his own secret blue. Both end up with exactly the same muddy brown, because both have combined yellow, red and blue. Paint mixing doesn't care about the order.
+
+An eavesdropper saw yellow, the orange-ish mix and the greenish mix. But to reach the final brown, they would need to add red or blue, and they know neither. Worse, they cannot simply un-mix the paint to find the secret colours. Mixing is easy. Unmixing is hopeless.
+
+Real cryptography copies this structure exactly. It just needs a mathematical version of paint: something easy to mix and impossible to unmix. That is where clocks come in.
+
+**Clock arithmetic**
+
+You already know a kind of arithmetic that wraps around. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock. Not 15. On a clock, numbers loop back after 12.
+
+Mathematicians call this "modular arithmetic", and the number where it wraps is the "modulus". We write "mod" for it. So 15 mod 12 = 3, because 15 is one full lap plus 3 extra.
+
+We can use any modulus, not only 12. With a modulus of 23, the numbers run from 0 to 22, and then wrap. So 30 mod 23 = 7. And 46 mod 23 = 0, since 46 is exactly two laps.
+
+Now add powers. "5 to the power of 3" means 5 × 5 × 5 = 125. Under mod 23, 125 becomes 125 − 115 = 10. So 5³ mod 23 = 10.
+
+Here is what matters. Going forward is easy. Give me 5, a power of 3 and a modulus of 23, and I find 10 in seconds. But go backwards. Suppose I tell you that 5 to some unknown power, mod 23, gives 10, and ask what the power was. You have no shortcut. You must try powers one by one: 5¹, 5², 5³ and so on. The results jump around the clock like a ball in a pinball machine. They show no pattern you can follow.
+
+With a tiny modulus like 23, trying everything takes a minute. But real systems use moduli with hundreds of digits. Then the number of tries is beyond the reach of every computer on Earth, working for longer than the universe has existed. This one-way street is the "unmixing" problem from the paint story.
+
+**The exchange, with real numbers**
+
+Let us run it with small numbers, so you can check the sums yourself.
+
+Alice and Bob shout two public numbers: a modulus of 23, and a "base" of 5. The base plays the role of the yellow paint.
+
+Alice secretly picks the number 6. She computes 5⁶ mod 23. That is 15,625, and after removing whole laps of 23, the remainder is 8. She shouts "8". That is her orange-ish mixture.
+
+Bob secretly picks 15. He computes 5¹⁵ mod 23, which comes out to 19. He shouts "19".
+
+Now the crowd knows 23, 5, 8 and 19. Nobody knows 6 or 15.
+
+Alice takes Bob's 19 and raises it to her secret power: 19⁶ mod 23. The answer is 2.
+
+Bob takes Alice's 8 and raises it to his secret: 8¹⁵ mod 23. The answer is also 2.
+
+They have the same number, and nobody told it to anyone. Why does it work? Both are really computing 5 raised to (6 × 15), just by different routes. Alice got there by raising Bob's result to her power. Bob raised Alice's result to his. Multiplication does not care about order, so the roads meet at the same place.
+
+An eavesdropper who wants the secret 2 must first work out 6 or 15 from 8 or 19. That is the pinball problem. With a modulus of 23 it is trivial. With a modulus of 600 digits, it is not.
+
+**What the secret is for**
+
+The shared number, 2 in our toy case, becomes a key. Alice and Bob feed it into an ordinary scrambling method, one that locks and unlocks messages using the same key at both ends. From then on, they can talk privately in front of the whole room. The crowd sees only gibberish.
+
+This is what happens when your phone connects to a website with a padlock icon. You and the site have never met. Within a fraction of a second, you have agreed on a secret key over a wire that anyone could tap.
+
+**Public keys, properly so called**
+
+The method above is called a key exchange. Its close relative gives the field its name: public-key cryptography.
+
+The idea is a pair of linked numbers. One is a "public key", which you hand to the whole world. The other is your "private key", which never leaves you. Whatever one locks, only the other can unlock.
+
+Think of a letterbox with a slot. Anyone can post a letter through the slot. That is the public part. But only the owner has the key to open the box and read what is inside. Posting is easy. Reading takes the private key.
+
+A popular scheme called RSA builds such a pair from a different one-way street: multiplying two huge prime numbers together is quick, but splitting the result back into those two primes is brutally slow. Multiply 7 by 13 and you get 91 in an instant. Now start from 91 and find the factors. With small numbers, you can still do it. With numbers hundreds of digits long, you cannot.
+
+So a stranger can lock a message with your public key, and only you, holding the private key, can open it. You never needed to meet, and you never needed to share a secret in advance.
+
+**The catch**
+
+None of this is magic, and one weakness deserves a warning. The maths protects against people who listen. It does not, by itself, protect against someone who pretends to be Bob.
+
+Suppose a trickster sits between Alice and Bob. He runs one exchange with Alice, posing as Bob, and another with Bob, posing as Alice. Each victim shares a perfectly good secret, but with the trickster, not each other. He decrypts, reads, re-locks and passes things along.
+
+To stop this, systems need a way to prove that a public key really belongs to who it claims. Websites do this with certificates, which are digital documents vouched for by trusted organisations. It is the same instinct as checking a passport. You trust the number because someone you already trust stamped it.
+
+**The big idea**
+
+Step back and the whole thing is simple. Find a task that is easy forwards and ruinously hard backwards. Let each person do their own private forward step. Swap the results openly. Combine them in a way where the order doesn't matter. Both arrive at the same answer, and the listener, stuck at the hard backwards step, arrives at nothing.
+
+That is how strangers whisper in a crowded room.

@@ -1,0 +1,87 @@
+**Agreeing on a Secret in Public**
+
+**The problem**
+
+Suppose Asha and Ben have never met. They want to talk privately, but the only way to reach each other is a line that anyone can listen to. If they could meet once in a quiet room, they could whisper a secret number and use it as a shared password afterwards. They cannot. Everything they say to set up the password is overheard by an eavesdropper, whom we will call Eve.
+
+It sounds impossible. How can two people agree on something that a third person, who hears every word, cannot work out? The answer is a clever piece of maths from the 1970s, and it needs nothing more than the kind of arithmetic you met at school.
+
+**Easy one way, hard the other way**
+
+The trick rests on a simple idea: some jobs are easy to do but very hard to undo.
+
+Think of mixing paint. Stirring yellow and blue together to get green takes seconds. Looking at the green and working out exactly which yellow and blue went in is far harder. Or think of a padlock. Snapping it shut is trivial, but opening it without the key is not.
+
+Mathematicians have found calculations with this same one-way feel. We will use one built from clock arithmetic and powers.
+
+**Clock arithmetic**
+
+On a clock, 10 o'clock plus 5 hours is 3 o'clock, not 15. You wrap around after 12. Mathematicians call this "arithmetic modulo 12", and they write "mod" for it. You simply divide by the clock size and keep the remainder.
+
+We will use a clock with 23 hours instead of 12. So 30 mod 23 is 7, because 30 is one full lap of 23 with 7 left over.
+
+**Powers**
+
+A power just means repeated multiplication. Five to the power of 3 means 5 × 5 × 5 = 125. We write it 5³.
+
+Now combine the two ideas. What is 5³ on our 23-hour clock? We have 125, and 23 goes into it 5 times (115), leaving 10. So 5³ mod 23 = 10.
+
+Here is the one-way part. Given the starting number 5, the clock size 23 and the power 3, finding the answer 10 is quick. But suppose I tell you only that 5 to some mystery power gives 10 on this clock, and ask what the power was. You would have to try 1, 2, 3, and so on, checking each one. With a clock of 23 hours that is easy. With a clock that has hundreds of digits, the number of tries is so huge that all the computers on Earth could not finish before the sun burns out. Going forwards is easy, and going backwards is a nightmare.
+
+**The paint analogy**
+
+Before the real numbers, here is the same idea with paint, which is how it is often explained.
+
+Asha and Ben publicly agree on a common colour, say yellow. Each privately picks a secret colour and mixes it with the yellow. Asha picks red and Ben picks blue, and they send each other their mixtures across the open line. Eve sees both mixtures but cannot un-mix them.
+
+Now Asha adds her own secret red to Ben's mixture, and Ben adds his secret blue to Asha's mixture. Both end up with the same final blend: yellow, red and blue. Eve, who never had either secret colour, cannot make that blend from what she saw.
+
+The paint is only a picture. The numbers work the same way, with powers on the clock playing the part of mixing.
+
+**The real thing, step by step**
+
+Here is the full procedure, with small numbers so you can check it yourself.
+
+*Step 1: agree on the public setup.* Asha and Ben shout across the line: "Let's use a 23-hour clock, and the number 5." Eve hears this. It does not matter, because these two numbers are not secret.
+
+*Step 2: each picks a private number.* Asha secretly picks 6. Ben secretly picks 15. They never tell anyone, not even each other.
+
+*Step 3: each calculates a public number.* Asha works out 5⁶ mod 23. That is 15,625, and 23 goes into it 679 times (15,617), leaving 8. So Asha's public number is 8. Ben works out 5¹⁵ mod 23 and gets 19. They send these to each other openly. Eve hears "8" and "19".
+
+*Step 4: each combines the other's public number with their own secret.* Asha takes Ben's 19 and raises it to her secret power 6: 19⁶ mod 23. Working it through, 19² mod 23 is 16, 19⁴ is 16 × 16 = 256, which leaves 3, and 19⁶ is 3 × 16 = 48, which leaves 2. So Asha gets 2.
+
+Ben takes Asha's 8 and raises it to his secret power 15: 8¹⁵ mod 23. Working it through the same way, he also gets 2.
+
+They have both arrived at 2, a number that never travelled along the line.
+
+**Why does it work?**
+
+The shared answer comes from a rule you may remember: (5⁶)¹⁵ and (5¹⁵)⁶ are the same thing, because both equal 5 multiplied by itself 6 × 15 = 90 times. It does not matter which order you do the powers in. Asha effectively computes "5 to the power 6, then to the power 15", and Ben computes "5 to the power 15, then to the power 6". The clock wrapping does not disturb this, and both land on the same spot.
+
+The beauty is that each person only needed their own secret and the other's public number. Neither ever needed the other's secret.
+
+**Why can't Eve do the same?**
+
+Eve knows the clock size (23), the starting number (5), and the two public numbers (8 and 19). To get the shared secret she would need one of the private numbers, 6 or 15. To find one, she has to solve exactly the hard backwards problem from earlier: "5 to what power gives 8 on this clock?"
+
+With a 23-hour clock, she can find it by trial and error in a minute, and she would discover that 6 works. That is why real systems never use clocks this small. In practice the clock has more than six hundred digits. The forward calculation is still fast for Asha and Ben, because clever shortcuts let a computer square its way up to enormous powers in a few hundred steps. But Eve's backwards search has no known shortcut, and her task becomes hopelessly long.
+
+**From a shared number to private messages**
+
+Once Asha and Ben share the secret number, they use it as the key to scramble their messages. Both can unscramble, and Eve, who lacks the key, sees only gibberish. This is how your phone or laptop sets up a private connection to a website within a fraction of a second of loading it, even though you have never met that website before.
+
+**The name "public key"**
+
+This general approach is called public-key cryptography. The public numbers (8 and 19) are the "public keys", which are safe to publish to the world. The private numbers (6 and 15) are the "private keys", which never leave their owners.
+
+A related system uses the same one-way principle in a slightly different form: anyone can lock a message using your public key, but only you, holding the private key, can unlock it. Think of a mailbox with a slot. Anyone can drop a letter in, but only the owner with the key can take letters out. Each of these systems gets its strength from some job that is easy to do and brutal to reverse.
+
+**What to remember**
+
+- Some calculations are easy forwards and extremely hard backwards.
+- Powers on a clock are one such calculation.
+- Asha and Ben each publish a mixture of public and private ingredients, and then each adds their own private ingredient to the other's mixture.
+- The order of the powers does not matter, so they both reach the same secret.
+- Eve sees everything except the private numbers, and without them she is stuck at the hard backwards problem.
+
+Two strangers, a public line and a bit of clock arithmetic are enough to make a secret that nobody else can share.

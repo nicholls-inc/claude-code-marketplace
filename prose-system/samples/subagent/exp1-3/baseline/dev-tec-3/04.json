@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "acbea25ad6411c8f4",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73738,
+    "output_tokens": 1078,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:33:36.727Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant-current/constant-voltage (CC-CV). The slowdown near full is a consequence of that protocol and of the physics behind it.\n\n**Stage 1: constant current (CC).** The charger forces a fixed current, typically 0.5 to 1 C (C is the current that would charge the cell in one hour). Current drives lithium ions out of the cathode, for example a layered oxide, across the electrolyte and into the graphite anode. This is called intercalation. Electrons travel through the external circuit. During this stage the terminal voltage rises gradually from about 3.0 V toward 4.2 V. The charger raises its output voltage as needed to hold the current steady. Most of the capacity, roughly 70 to 80 percent, goes in during this stage.\n\n**Stage 2: constant voltage (CV).** When the terminal voltage reaches the upper limit (about 4.2 V for common chemistries), the charger holds that voltage and lets the current fall on its own. Charging ends when the current drops to a cutoff, usually 0.05 to 0.1 C. Current tapers in a roughly exponential decay, so the last 20 percent of capacity can take as long as the first 80 percent.\n\n**Why the current has to fall.** The voltage limit is a safety boundary. If the charger pushed full current past it, the anode potential would fall close to the potential at which lithium metal plates out (0 V versus Li/Li+). Plated lithium is dendritic, consumes cyclable lithium, and can cause internal short circuits. High cathode potential also accelerates electrolyte oxidation and structural damage.\n\nThe measured terminal voltage is not the electrode voltage. It is the open-circuit voltage (OCV, set by state of charge) plus the current times the internal resistance. That resistance has several parts:\n\n- ohmic resistance of the electrolyte and current collectors\n- charge-transfer resistance at the electrode surfaces\n- diffusion limits, because lithium must migrate through solid particles slowly\n\nAs the cell fills, OCV climbs toward 4.2 V. Holding terminal voltage at 4.2 V then leaves a shrinking voltage margin, V_limit - OCV, to drive current through the resistance. By Ohm's law the current must fall as that margin shrinks, so the taper is automatic.\n\nDiffusion makes it worse. Near full, the graphite surface is saturated and the remaining sites are deep inside the particles. Lithium must diffuse inward through a concentration gradient. The surface reaches its limit before the particle interior does, and the CV phase gives time for the gradient to relax. Forcing more current would only push the surface potential into the plating regime.\n\n**Practical consequences.** Fast chargers deliver most of their energy in the CC stage, which is why a car may reach 80 percent quickly and then slow sharply. Lower temperature raises resistance and slows diffusion, so charging is further limited or derated in the cold. Stopping at a lower voltage, such as 4.1 V, shortens the CV phase and extends cell life at the cost of some capacity."
+}

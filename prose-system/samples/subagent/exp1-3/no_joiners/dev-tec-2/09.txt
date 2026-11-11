@@ -1,0 +1,53 @@
+When you type an HTTPS address into a browser and press enter, a surprising amount of work happens before the first byte of the response arrives. Most of it takes only a few hundred milliseconds in total, and each step exists for a reason. Understanding the steps helps you debug slow pages and make better decisions about performance.
+
+Parsing the address
+
+The browser first breaks the address into parts. In https://www.example.com/shop/shoes?size=9 the scheme is https, the host is www.example.com, the path is /shop/shoes and the query string is size=9. The scheme tells the browser to use an encrypted connection, and since no port is given, it assumes the default for HTTPS, which is 443.
+
+Before going to the network, the browser checks a few local shortcuts. It may have a stored rule called HSTS that says this site must only be reached over HTTPS. It may have a cached copy of the resource that is still fresh according to its caching headers. If the cache is valid, no network request happens at all, and the page appears almost instantly. A service worker, if the site registered one, may also intercept the request and answer it from its own storage.
+
+Finding the server with DNS
+
+Computers connect using numeric IP addresses, not names, so the browser must translate www.example.com into an address. This is the job of the Domain Name System, or DNS.
+
+The browser looks in its own DNS cache first. If it finds nothing, it asks the operating system, which checks its own cache and then asks a recursive resolver, usually run by your internet provider or a public service. The resolver does the real searching. If it has no cached answer, it asks a root server which servers handle .com, then asks those servers which servers handle example.com, and finally asks the domain's own authoritative server for the address of www.example.com. The answer comes back with a time to live value that tells every cache along the way how long it may remember the result.
+
+A name can map to several addresses, and modern resolvers often return both IPv4 and IPv6 results. The browser typically tries both and uses whichever connects first. A cold lookup might take tens of milliseconds, while a cached one takes almost none.
+
+Opening a connection
+
+With an IP address in hand, the browser needs a channel to the server. Traditionally this is a TCP connection, set up with a three step handshake. The client sends a SYN message, the server answers with SYN and ACK, and the client replies with an ACK. This costs one full round trip, meaning the time for a message to travel to the server and back. If the server is far away, that round trip may be 100 milliseconds or more, which is why geographic distance matters so much and why content delivery networks place servers close to users.
+
+Newer versions of the web use HTTP/3, which runs over a protocol called QUIC on top of UDP. QUIC combines the connection setup and the encryption setup into fewer round trips. The browser learns that a site supports HTTP/3 from earlier visits or from an Alt-Svc header, so a first visit usually still begins with TCP.
+
+Negotiating encryption with TLS
+
+The S in HTTPS means the conversation is protected by Transport Layer Security, or TLS. After TCP connects, the browser and server run a TLS handshake before any web data is sent.
+
+The browser sends a ClientHello listing the TLS versions and cipher suites it supports, along with a random value and key material. It also includes the server name it wants, using an extension called SNI. This matters because one IP address often hosts many sites, and the server needs to know which certificate to present.
+
+The server replies with its chosen settings, its own key material and its certificate. Both sides then use the key material to derive shared secret keys, using a method such as elliptic curve Diffie-Hellman. Anyone watching the network sees the exchange but cannot work out the secret keys. In TLS 1.3 this finishes in one round trip, and a returning visitor can sometimes resume a session and send data even sooner.
+
+Verifying the certificate
+
+The certificate is how the browser knows it is talking to the real example.com and not an impostor. It contains the site's public key and name, and it is signed by a certificate authority. The browser checks several things. The signature chain must lead back to a root authority that the browser or operating system already trusts. The certificate must be within its validity dates. The name must match the host in the address. The certificate must not have been revoked, which the browser may check through stapled responses or compiled revocation lists. If any check fails, the browser shows a full page warning and stops. This is the error you see with an expired certificate during development.
+
+Sending the HTTP request
+
+Now the secure channel exists, and the browser finally sends the request itself. It looks something like this in plain terms. The first line says GET /shop/shoes?size=9 and names the protocol version. Then come headers, such as Host, which names the site, Accept, which lists the content types the browser understands, Accept-Encoding, which offers compression like gzip or Brotli, User-Agent, and any cookies the browser holds for that site. All of this is encrypted by TLS before it leaves the machine.
+
+With HTTP/2 and HTTP/3 the same information is sent in a compact binary form, and many requests can share one connection at once. With older HTTP/1.1 the text format is sent directly, and a browser opens several connections to fetch things in parallel.
+
+What the server does
+
+The request travels across the network and arrives at the server, often at a load balancer or CDN edge first. These systems may terminate the TLS connection, check whether they have a cached response, and otherwise forward the request to an application server. The application server routes the path to some code, which may read from a database, call other services, check the cookies to identify the user and build a response. This stage is often called server think time, and it is the part you control most directly as a developer. A slow database query shows up here.
+
+The first byte arrives
+
+The server writes the response, beginning with a status line such as 200 OK, then headers like Content-Type and Cache-Control, and then the body. The moment the first byte of that response reaches the browser is measured as Time to First Byte, or TTFB.
+
+TTFB is therefore the sum of everything above. It includes DNS lookup, TCP connection, TLS handshake, the request traveling to the server, the server's processing time and the first bytes traveling back. Browser developer tools show these pieces separately in the Network panel, so you can see which part is slow.
+
+Practical takeaways
+
+Each stage suggests an optimization. Keep DNS fast by using a good provider and sensible time to live values. Reduce round trips by serving content from a CDN near your users and by enabling HTTP/3 and TLS 1.3. Reuse connections so later requests skip the handshakes. Cache aggressively with correct headers so some requests never leave the browser. Finally, keep your server code and database queries efficient, because no amount of network tuning can hide a slow backend.

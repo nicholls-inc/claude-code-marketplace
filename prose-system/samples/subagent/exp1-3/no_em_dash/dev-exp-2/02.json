@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af645b0417ed64cc4",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73754,
+    "output_tokens": 864,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:42:36.196Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment added to official world time every so often, so that clocks stay in step with the spinning Earth. The world's timekeepers have now agreed to stop adding them.\n\nTo see why they existed, you need to know that there are two ways to measure a day. The first is astronomical: how long the Earth takes to turn once, measured against the sun and stars. The second is atomic. Since the 1950s, scientists have counted time using the vibrations of atoms, which tick with extraordinary regularity. An atomic clock would lose barely a second over many millions of years.\n\nThe trouble is that the Earth is a far less reliable timekeeper than an atom. Its rotation wobbles and, over the long run, slows, mostly because of the pull of the Moon's tides. Earthquakes, shifting ice and ocean currents nudge it too. So atomic time and Earth time slowly drift apart.\n\nIn 1972, authorities introduced a compromise. Coordinated Universal Time, the standard on which the world's clocks are based, would follow atomic ticks but be nudged by a whole second whenever the gap with Earth time grew too large. Since then, 27 leap seconds have been added, the most recent at the end of 2016. On those occasions, the clock reads 23:59:59, then 23:59:60, then midnight.\n\nFor most people, this was invisible. For computer systems, it has been a headache. Software generally assumes every minute has 60 seconds. A minute with 61 can cause programs to freeze, crash or record events out of order. Financial trading, telecommunications, satellite navigation and cloud computing all depend on precise timestamps, and leap seconds have triggered outages at major websites. Different companies handle them differently, some by \"smearing\" the extra second across a whole day, which creates its own inconsistencies.\n\nThere is a further twist. In recent years, the Earth has been spinning slightly faster than expected, which could eventually call for the first negative leap second, with a second removed. Engineers warn that this untested step could cause even more trouble than adding one.\n\nIn 2022, the General Conference on Weights and Measures voted to abandon leap seconds by 2035. Clocks will be allowed to drift away from Earth time, by up to about a minute, for at least a century. After that, officials will settle on a new method of correction, perhaps a larger adjustment made only rarely.\n\nDaily life will not change. The sun will still rise when your clock says it should, give or take a moment. The decision simply favours the needs of machines over a perfect match with the sky."
+}

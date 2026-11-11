@@ -1,0 +1,31 @@
+When you give a browser an HTTPS address, it first reads the address as structured text. It splits it into a scheme, a host, an optional port, a path, a query string and a fragment. The scheme, https, tells the browser two things. The connection must be encrypted, and the default port is 443 unless the address names another. The host, such as www.example.com, is the name of the machine the browser must reach. The fragment, which follows a hash sign, never leaves the browser, so it plays no part in what follows.
+
+Before it touches the network, the browser checks local state. If you typed only a host name, it may upgrade the address to HTTPS, especially if the site has told the browser through an HSTS header to always use encryption. The browser also checks its HTTP cache. If a fresh copy of the resource is stored, and its cache headers say it can still be used, the request ends here without any network traffic. If the copy is stale, the browser remembers its validators so it can ask the server whether anything changed.
+
+Finding the server with DNS
+
+The browser knows a name but the network needs an IP address, so it performs a DNS lookup. It checks its own DNS cache first, then asks the operating system, which checks its cache and the hosts file. If neither knows the answer, the request goes to a recursive resolver, usually run by your internet provider or a public service. The resolver may also have the answer cached. If not, it works down the hierarchy. It asks a root server which servers handle the .com zone, asks one of those which servers are authoritative for example.com, and finally asks an authoritative server for the record. Every answer carries a time to live that says how long it may be cached, which is why a DNS change can take a while to spread. The answer may be an A record holding an IPv4 address, an AAAA record holding an IPv6 address, or a CNAME that points to another name and needs a further lookup. Many networks and browsers now send these queries over encrypted channels such as DNS over HTTPS, and the browser may also request records that announce support for HTTP/3. When several addresses come back, the browser tries them in a staggered race, favouring IPv6 but quickly falling back to IPv4 if it is slow.
+
+Opening the connection
+
+With an address in hand, the browser opens a connection. For HTTP/1.1 and HTTP/2 this means TCP. The browser sends a SYN packet, the server replies with SYN and ACK, and the browser sends a final ACK. This three step handshake costs one full round trip, so the physical distance to the server matters. HTTP/3 works differently. It runs over QUIC, which sits on UDP and merges the transport and encryption handshakes to save time. A browser usually learns that a server supports HTTP/3 from an Alt-Svc header on an earlier visit or from DNS, and otherwise starts with TCP.
+
+Securing it with TLS
+
+Next comes the TLS handshake, which is what makes the connection secure. The browser sends a ClientHello message listing the TLS versions and cipher suites it supports, a random value, a key share for key agreement, and the Server Name Indication, which is the host name. SNI matters because one IP address often serves many sites and the server must know which certificate to present. The ClientHello also carries ALPN, a list of application protocols the browser can speak, typically h2 and http/1.1. The server answers with its choices, its own key share and its certificate chain. In TLS 1.3 both sides can now compute the same session keys using ephemeral Diffie Hellman, so only one round trip is needed. Older TLS 1.2 needs two. Because the keys are temporary, recording traffic today and stealing the server's private key later does not reveal it, a property called forward secrecy.
+
+The browser also validates the certificate. It checks that the chain of signatures leads to a root authority it already trusts, that the dates are valid, that the host name appears in the certificate's subject alternative names, and that the certificate has not been revoked. If any check fails, you see a full page warning instead of the site. Both sides then exchange Finished messages that prove the handshake was not tampered with, and from this point everything is encrypted. If the browser has connected before, session resumption can shorten or skip parts of this exchange.
+
+Sending the request
+
+Now the browser finally sends the request. In HTTP/1.1 this is readable text made of a request line naming the method, the path and the protocol version, followed by headers. In HTTP/2 and HTTP/3 the same information travels in compressed binary frames. Typical headers include Host, User Agent, Accept, Accept Encoding, Accept Language and any cookies stored for that domain. If the browser has a stale cached copy, it adds conditional headers such as If None Match with the stored ETag, which lets the server reply with a tiny 304 Not Modified instead of resending the body.
+
+The request often does not reach your application directly. The address frequently belongs to a CDN or load balancer that terminates TLS at an edge location near the user. The edge may answer from its own cache or forward the request to the origin server, which routes it to application code, perhaps querying a database before building a response.
+
+The first byte
+
+The moment the first bytes of the response, the status line and headers, arrive back at the browser, this whole journey ends. The delay from starting navigation to that point is called time to first byte. The browser has not yet downloaded the body, parsed the HTML or fetched any images or scripts. All of that comes later.
+
+Seeing it yourself
+
+You can see these stages in the Network panel of your browser's developer tools. Select a request and open its timing view. You will see separate entries for DNS lookup, initial connection, SSL and waiting for server response. Slow DNS points to resolver or TTL problems. Slow connection and SSL point to distance or missing keep alive, since reusing an open connection skips both steps. A long wait usually means slow server code or a cold cache. Useful habits include avoiding redirect chains, since each one repeats much of this work, using a CDN, enabling HTTP/2 or HTTP/3 and TLS 1.3, and adding preconnect hints for origins you know the page will need.

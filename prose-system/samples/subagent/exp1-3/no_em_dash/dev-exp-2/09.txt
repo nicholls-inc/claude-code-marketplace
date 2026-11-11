@@ -1,0 +1,15 @@
+**The leap second, and why it is being retired**
+
+A leap second is a single extra second occasionally added to the world's official clocks so that they stay in step with the Earth. On the days when one is added, the last minute of the day runs to 61 seconds, and the clock reads 23:59:60 before rolling over to midnight.
+
+The need for it comes from a clash between two ways of measuring time. For centuries, a day was defined by the planet's spin. Since the 1950s, the most precise timekeeping has come from atomic clocks, which count the vibrations of atoms and tick with extraordinary steadiness. The Earth is a much less reliable timekeeper. Tides drag on its rotation and slow it by a tiny amount, while earthquakes, shifting ice and movements of the molten core nudge it unpredictably.
+
+Since 1972, the official global standard, Coordinated Universal Time, has been atomic time held within a second of the Earth's rotation. Whenever the two drifted too far apart, an extra second was inserted, usually at the end of June or December. There have been 27 of them, the most recent on 31 December 2016.
+
+For astronomers and navigators, that tidy arrangement was useful. For the computer age, it became a headache. Leap seconds arrive irregularly and are announced only months ahead, so they cannot be predicted by a formula. Software that assumes every minute has 60 seconds can stumble when it meets 61. Leap seconds have been blamed for crashes and outages at websites and in data centres, and some technology companies invented workarounds, such as stretching the extra second across a whole day. Systems that depend on exact timing, including financial trading, telecommunications, power grids and satellite navigation, all face risks when clocks disagree.
+
+In November 2022, the international body that sets measurement standards voted to stop adding leap seconds by 2035. The plan lets the gap between atomic time and the Earth's rotation grow well beyond a second, and the rule for dealing with it will be settled later. Another international body, the International Telecommunication Union, endorsed the move in 2023.
+
+A further complication helped tip the balance. The Earth has recently been spinning slightly faster, and 2022 saw some of the shortest days on record. If that continued, timekeepers might need to remove a second rather than add one. A negative leap second has never been tried, and engineers fear it would be even more disruptive.
+
+Ordinary people will notice nothing. The drift would amount to roughly a minute over a century, far too little to change when the sun rises. Scientists suggest that a correction, perhaps a leap minute, could be made far in the future. For now, the world is choosing steadier clocks over perfect alignment with the sky.

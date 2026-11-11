@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8a042b89d79021d3",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73751,
+    "output_tokens": 921,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:34:14.571Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). Understanding why it works, and why the end of the charge drags, is mostly a matter of treating the cell as a battery with an internal resistance and a diffusion-limited storage medium.\n\nIn the first stage, the charger forces a fixed current into the cell, typically between 0.5C and 1C, where 1C is the current that would fill the nominal capacity in one hour. The cell's terminal voltage rises steadily from roughly 3.0 V toward a ceiling of about 4.2 V for common cobalt-based chemistries. During this stage, lithium ions leave the cathode, cross the electrolyte, and insert (intercalate) between the graphite layers of the anode. Electrons take the external path through the charger. Most of the capacity, often 70 to 80 percent, goes in here.\n\nTerminal voltage is not the same as the cell's open-circuit voltage. It is the open-circuit voltage plus the current times the internal resistance, plus extra terms for concentration gradients inside the electrodes. So the terminal voltage reaches 4.2 V while the cell is still not truly full. The charger cannot simply push on, because holding a cell above its ceiling accelerates electrolyte decomposition, lithium plating on the anode, and in the worst case thermal runaway. The voltage limit is a safety and lifetime constraint, and it is a hard one.\n\nThat is why the second stage exists. Once the terminal voltage reaches the limit, the charger holds it constant and lets the current fall on its own. The current is whatever the cell will accept at that voltage. Charging ends when the current drops to a cutoff, commonly 0.05C to 0.1C.\n\nWhy does the current decay? Two effects combine. First, as the cell's open-circuit voltage climbs toward 4.2 V, the gap between the fixed terminal voltage and the open-circuit voltage shrinks. By Ohm's law, a smaller driving voltage across the same internal resistance means less current. Second, solid-state diffusion limits how fast lithium can spread into the bulk of each graphite particle. Near full, the particle surfaces are crowded with lithium, so incoming ions have nowhere to go until those already there migrate inward, a slow process. The decay is roughly exponential, much like a capacitor charging through a resistor, though with a diffusion tail that makes it slower than a simple RC model predicts.\n\nThe practical result is that the last 20 percent of capacity can take as long as the first 80. Fast chargers exploit this by stopping early, around 80 percent, where the cell still accepts high current."
+}

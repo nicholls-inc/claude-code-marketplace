@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af9e5b540ca7819d8",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73738,
+    "output_tokens": 1146,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:33:11.091Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). The slowdown near full is a consequence of the CV stage.\n\n**Stage 1: constant current (CC).** The charger forces a fixed current into the cell, typically 0.5C to 1C (a 1C current would fill the rated capacity in one hour). The charger raises its output voltage as needed to hold that current. Cell terminal voltage climbs from roughly 3.0 V toward 4.2 V (for common graphite/cobalt-type chemistries). This stage delivers about 70 to 80 percent of the capacity.\n\n**Stage 2: constant voltage (CV).** When the terminal voltage reaches the upper limit, the charger stops forcing current and instead holds the voltage at 4.2 V. The current is now whatever the cell will accept, and it decays roughly exponentially. Charging ends when the current falls to a cutoff, commonly 0.05C to 0.1C. A fixed voltage ceiling is not optional: above about 4.2 V, electrolyte oxidation and lithium plating on the anode accelerate degradation and create safety risk.\n\n**Why the current falls.** The terminal voltage is not the open-circuit voltage (OCV) of the cell. It is:\n\nV_terminal = OCV(state of charge) + I x R_internal + diffusion and kinetic overpotentials\n\nOCV rises with state of charge (SOC) as lithium fills the anode. During CC, the I x R and overpotential terms make up the gap between OCV and the 4.2 V limit. As SOC rises, OCV climbs toward 4.2 V, so the headroom for the I x R term shrinks. To keep terminal voltage at the limit, the current must drop. In a simple model, I = (4.2 V - OCV) / R_internal. As OCV approaches 4.2 V, the driving voltage approaches zero, and current falls with it. The cell is behaving like a capacitor charged through a resistor.\n\n**Diffusion adds a second limit.** Lithium must diffuse into the graphite particles. Near full charge the particle surfaces are already saturated, so lithium arriving at the surface cannot move inward quickly. Concentration gradients inside the particles relax slowly (timescales of minutes to hours), which is why the last few percent are slow even after the current is small. Higher temperature speeds diffusion; cold cells charge more slowly and are more prone to plating.\n\n**Practical consequences.**\n- Time to 80 percent is much shorter than time from 80 to 100 percent. Fast-charging systems quote \"0 to 80 percent\" for this reason.\n- Raising the CC current only shortens Stage 1; it does not change the CV decay.\n- Stopping at a lower voltage (for example 4.1 V) sacrifices a few percent of capacity but noticeably extends cycle life.\n- Battery management systems enforce per-cell voltage limits, temperature limits, and current limits that taper with temperature and SOC, and balance cells in a pack so that the weakest cell does not hit the ceiling early.\n\nIn summary, CC fills the cell as fast as internal resistance and safety allow. CV protects the cell from overvoltage, and the falling current is the direct result of the cell's own voltage approaching the fixed limit."
+}

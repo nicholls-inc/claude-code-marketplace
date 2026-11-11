@@ -1,0 +1,66 @@
+From HTTPS Address to First Byte
+
+You type https://example.com/products into the address bar and press Enter. Roughly a tenth of a second later, the first byte of the server's reply shows up. A lot happens in between, and almost all of it is invisible. Here is the sequence.
+
+1. Parsing the URL
+
+The browser first splits the address into parts. The scheme is https, the host is example.com, and the path is /products. No port is given, so it uses 443, the default for HTTPS. If you typed something that is not a valid URL, the browser treats it as a search query instead.
+
+Before going to the network, the browser checks a few local things. It looks at its HSTS list, which records sites that must only be reached over HTTPS. It also checks its caches. If it holds a fresh stored copy of the page, the process can end here with no network traffic at all. Otherwise it moves on.
+
+2. DNS: turning a name into an address
+
+Computers route traffic by IP address, not by name, so the browser needs to know which IP address example.com maps to. This lookup is called DNS resolution.
+
+The browser asks a series of caches, from nearest to farthest. It checks its own cache, then the operating system's cache, then a resolver run by your ISP or a public service. If nobody has the answer, the resolver works through the hierarchy. It asks a root server which servers handle .com, asks those which servers handle example.com, and finally asks example.com's authoritative server for the address. The answer comes back with a time to live (TTL), which says how long it may be cached. A cached lookup takes about a millisecond. A full lookup might take 50 milliseconds or more.
+
+The result is an IP address such as 93.184.216.34, and possibly an IPv6 address too. Modern browsers often try both and use whichever connects first.
+
+3. The TCP handshake
+
+Now the browser knows where to go. It needs a reliable connection first, and for traditional HTTPS that means TCP. TCP uses a three-step handshake. The client sends a SYN packet. The server replies with SYN-ACK. The client answers with ACK. Both sides now agree the connection exists and have exchanged starting sequence numbers.
+
+This costs one full round trip, the time for a message to reach the server and a reply to come back. Round trips are the main unit of delay in this whole story. Light in fiber is fast but not instant, so a server across an ocean may cost you 80 milliseconds per round trip however good your connection is.
+
+A note on HTTP/3: it runs over QUIC, which uses UDP instead of TCP and merges the transport and encryption handshakes. The ideas below still apply, but fewer round trips are needed. Browsers learn a site supports it from earlier visits or from an Alt-Svc header.
+
+4. The TLS handshake: making the connection private
+
+The "S" in HTTPS means the connection is encrypted and the server is authenticated. This is TLS, and it happens on top of the TCP connection.
+
+In TLS 1.3, the current version, the client opens with a ClientHello. It lists the encryption methods it supports and includes a key share, its half of a key exchange. Crucially, it also includes the server name, example.com, in a field called SNI. One IP address often hosts many sites, and SNI tells the server which certificate to present.
+
+The server replies with its chosen settings, its own key share, and its certificate. At that point both sides can compute the same secret key without ever sending it across the network. This is done with a Diffie-Hellman key exchange. Everything after this point is encrypted.
+
+The certificate is how the browser decides whether to trust the server. It contains the server's public key and is signed by a certificate authority (CA). The browser checks several things. Was it signed by a CA the operating system or browser trusts, directly or through a chain? Does the name match example.com? Is it within its validity dates? Has it been revoked? If any check fails, you see the full-page warning. The server also proves it owns the certificate by signing part of the handshake with its private key. Anyone can copy a certificate, but only the real server can sign.
+
+TLS 1.3 needs one round trip. Older TLS 1.2 needed two. If you have visited the site recently, session resumption can shorten this further, and with 0-RTT the browser can even send its request alongside the first handshake message, with some replay-attack caveats.
+
+5. Sending the HTTP request
+
+The secure channel is up. Now, finally, the browser sends the request itself. It looks something like this:
+
+GET /products HTTP/2
+Host: example.com
+User-Agent: ...
+Accept: text/html
+Accept-Encoding: gzip, br
+Cookie: session=...
+
+The first line gives the method and path. The headers carry extra information. Host says which site you want, Accept-Encoding says which compression you can decode, and Cookie sends back any cookies previously set by this site. With HTTP/2, the request is encoded in a compact binary form, and headers are compressed, but the content is the same. Many requests can share one connection, which is why browsers reuse connections whenever they can.
+
+6. The server does its work
+
+The request is encrypted in transit, so it first reaches whatever terminates TLS. That is often a CDN edge server or a load balancer, not your application. It decrypts the request and decides where it goes. If the CDN has a cached copy of /products, it can answer immediately. If not, it forwards the request to an origin server.
+
+The origin runs your code. A web framework matches the path to a route, runs middleware such as authentication, queries a database, renders HTML or JSON, and builds a response. This is the part you control as a developer, and it is often the slowest. A slow database query here adds directly to the wait.
+
+7. The first byte arrives
+
+The server writes the response: a status line such as HTTP/2 200, headers like Content-Type and Cache-Control, and then the body. The first byte of that response reaching the browser is the moment measured by Time to First Byte, or TTFB. TTFB is the sum of everything above: DNS, TCP, TLS, the request travelling there, the server's processing time, and the first piece travelling back.
+
+Why this matters to you
+
+Each stage maps to something you can improve. A CDN shortens every round trip by moving the server closer. Keeping connections alive and using HTTP/2 or HTTP/3 avoids repeating handshakes. Caching headers can skip the network entirely. Faster queries and server-side caching cut the processing step. You can see all of this yourself. Open the browser's developer tools, go to the Network tab, click a request, and look at the Timing breakdown. You will find DNS lookup, initial connection, SSL, and waiting (TTFB) listed as separate bars.
+
+That is the whole path, and every page you have ever loaded followed it.

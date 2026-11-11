@@ -1,0 +1,13 @@
+**What a leap second is, and why it is being dropped**
+
+The Earth is a poor timekeeper. For most of history, we defined the second as a fraction of the day: the time the planet takes to spin once, divided into 86,400 parts. Then, in 1967, scientists redefined it using atomic clocks, which count the vibrations of caesium atoms with extraordinary steadiness. The new second was precise, but it no longer matched the planet beneath our feet.
+
+The Earth's rotation is slightly irregular. Tides, the movement of molten rock in the core, shifting ice and even large earthquakes nudge it, and over the long run tidal friction slows it by a tiny amount. The mismatch is small, but it accumulates. Left alone, atomic time would drift away from the cycle of day and night, and eventually noon would no longer fall when the sun is highest.
+
+The fix, introduced in 1972, was the leap second. When the gap between atomic time and the planet's rotation approached nine-tenths of a second, a body in Paris called the International Earth Rotation and Reference Systems Service told the world to add one second to Coordinated Universal Time, the global civil standard. Clocks read 23:59:59, then 23:59:60, then midnight. Twenty-seven have been added, the most recent at the end of 2016.
+
+The trouble is that the modern world runs on computers, and computers dislike a minute with 61 seconds. Most software assumes every minute has exactly 60. A leap second can cause systems to crash, freeze, record events out of order or repeat them. Flight-booking systems, data centres and online services have all stumbled over them. In 2012, several well-known websites went down after one. Because there is no standard way of handling the extra second, technology companies invented their own, including "smearing" it by stretching it across many hours, which means different systems can briefly disagree about the time.
+
+Meanwhile, the Earth has complicated matters. In recent years it has been spinning slightly faster, not slower, which raises the unprecedented possibility of a negative leap second, in which a second is removed. Engineers say that is even riskier, because software has barely been tested for it.
+
+So in 2022 the General Conference on Weights and Measures, the international body that oversees the definition of units, voted to abandon leap seconds by or before 2035. The plan is to let the gap between atomic and Earth time grow far larger than one second, to perhaps a minute, before any correction is made, probably not for a century or so, using a method yet to be agreed. For ordinary people nothing will change. The sun will still rise on time, near enough.

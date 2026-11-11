@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a1a8ee7d11766cc83",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73763,
+    "output_tokens": 2088,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:36:20.500Z",
+  "valid": true,
+  "text": "A lithium ion cell stores energy by holding lithium in two host materials. During charging, lithium leaves the cathode, usually a layered metal oxide, travels as an ion through the electrolyte and separator, and inserts between the carbon layers of the graphite anode. Electrons take the external route through the charger. The charger therefore sets the rate of ion transfer by controlling the current it forces through the circuit.\n\nStandard charging uses two stages, called constant current and constant voltage. In the first stage the charger holds current steady, often between 0.5 and 1 times the cell capacity per hour. Terminal voltage rises gradually from about 3.0 volts toward 4.2 volts for a common cell chemistry. Most of the capacity, roughly 70 to 80 percent, goes in during this stage. When the terminal voltage reaches its upper limit, the charger switches to the second stage and holds the voltage fixed. Current is then whatever the cell will accept, and it decays smoothly toward a cutoff, typically a few percent of the first stage current. Charging ends there.\n\nThe slowdown comes from the electrical behavior of the cell. The terminal voltage equals the open circuit voltage, which depends on how full the electrodes are, plus the current times the internal resistance. That resistance is the sum of ohmic losses in the metal and electrolyte, charge transfer resistance at the particle surfaces, and a diffusion term. Because the voltage ceiling is fixed, any drop across the resistance reduces the voltage available to push the electrode potentials higher. Early on, the open circuit voltage is far below the limit, so a large current fits within the budget. Near full, the open circuit voltage approaches the limit and leaves almost no headroom. Current must fall in proportion to keep the terminal voltage constant.\n\nDiffusion makes this worse. Lithium must migrate inward through solid graphite particles, a slow process governed by a diffusion coefficient. A high current builds a concentration gradient, so the particle surface fills before the core. The surface reads as full and the voltage rises quickly, although the interior still has room. Lower current gives the lithium time to spread inward, which is why the tail of the charge is long.\n\nThe limit exists for protection. Pushing the anode potential too low relative to lithium metal allows plating, where metallic lithium deposits on the surface. Plating cuts capacity, raises resistance, and can grow dendrites that short the cell. Higher voltage also accelerates electrolyte oxidation at the cathode. Holding the ceiling and letting current taper trades speed for lifetime and safety. Cold temperatures slow diffusion further, so chargers reduce current when the cell is cold."
+}

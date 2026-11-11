@@ -1,0 +1,15 @@
+The Earth does not keep perfect time. Our clocks do.
+
+A leap second is a one-second adjustment added to the world's official time, usually at the end of June or December, to keep clocks in step with the planet's spin. Without it, the two would slowly drift apart.
+
+The problem starts with two competing ways of measuring a day. For most of history, a day meant one full rotation of the Earth, and a second was a sliver of that. Then, in the 1950s, scientists built atomic clocks, which count the vibrations of atoms and keep time with astonishing steadiness. They lose perhaps a second in hundreds of millions of years. The Earth is far less reliable. Tides drag on its rotation, earthquakes and shifting ice nudge it, and over the long run it has tended to slow down, so that days grow a fraction of a millisecond longer.
+
+Since 1972, the world has used Coordinated Universal Time, or UTC, which runs on atomic seconds but is kept within a second of the Earth's rotation. When the gap grows too large, a leap second is inserted: the clock reads 23:59:59, then 23:59:60, then midnight. Twenty-seven have been added so far, the most recent at the end of 2016.
+
+For most people this is invisible. For computers, it is a headache. Software generally assumes every minute has sixty seconds, and a sixty-first can confuse it. Leap seconds have been blamed for crashed websites, scrambled timestamps and outages at large internet companies. Systems that depend on precise timing, such as financial markets, telecommunications networks, satellite navigation and power grids, must all handle the extra second in exactly the same way, and not every system does. The more interconnected the world's machinery becomes, the greater the risk.
+
+In 2022, the General Conference on Weights and Measures, the international body that oversees the definition of the second, voted to stop the practice by 2035. The decision reflected a wide view among metrologists, the people who study measurement, that the cost of tinkering with the clocks now outweighs the benefit.
+
+There is a twist. In recent years the Earth has been spinning slightly faster than expected, which has raised the odd prospect of a negative leap second, where a second is removed. Engineers dread that even more, since software has almost never been tested for it.
+
+What happens next? Clocks will be allowed to drift away from the Sun. By some estimates the gap would take a century or more to reach a minute, and scientists will have time to decide on a fix. For anyone who simply wants to know when to eat lunch, nothing changes at all.

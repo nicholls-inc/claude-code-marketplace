@@ -1,0 +1,43 @@
+A heat pump does not make heat from nothing, and it does not need warm air outside. It moves heat from one place to another, and that works even when the outdoor air is cold.
+
+**Cold is relative**
+
+Heat is the energy of moving molecules, and any air above absolute zero (-273°C) holds some. Outdoor air at -5°C still contains a lot of heat energy. It is simply less than the air in your living room. Left alone, heat only flows from warm to cold, so a heat pump uses a little electricity to push heat the other way, from the cold outdoors to the warm indoors.
+
+**How it works**
+
+Think of a fridge running backwards. A fridge pulls heat out of its inside and dumps it into your kitchen. A heat pump pulls heat out of the outside air and dumps it into your home.
+
+A sealed loop of refrigerant does the work. This is a fluid that boils at a very low temperature, far below freezing. The loop has four main parts:
+
+1. **Evaporator (outside unit).** The liquid refrigerant is colder than the outdoor air, even on a freezing day. So heat flows from the air into the refrigerant, which boils into a gas.
+2. **Compressor.** This is the electric part. It squeezes the gas, which raises its pressure and makes it much hotter, often 50 to 60°C or more.
+3. **Condenser (indoors).** The hot gas passes its heat to your heating water or indoor air, then turns back into a liquid.
+4. **Expansion valve.** The liquid's pressure drops, which makes it very cold again, and the cycle repeats.
+
+The key trick is the compressor. Squeezing a gas heats it, the same way a bicycle pump warms up as you use it. That lets a modest amount of electricity lift low-grade outdoor heat to a useful temperature for radiators or underfloor heating.
+
+**Why it is efficient**
+
+Because most of the heat is moved rather than created, you get more heat out than electricity in. This ratio is the coefficient of performance (COP). A COP of 3 means one unit of electricity delivers three units of heat: two come from the outside air and one from the electricity. A gas boiler cannot beat 100% efficiency, and modern condensing boilers reach roughly 90 to 95%. A heat pump typically delivers 250 to 400% over a season.
+
+**The honest caveats**
+
+Efficiency drops as the temperature gap grows. At 7°C outside, a COP of 3.5 to 4 is common. At -10°C it may fall to around 2. Modern units still work in deep cold, and many are rated down to -20°C or lower, but they cost more to run on the coldest days. Look at the seasonal figure (SCOP), not the best-case number on the brochure.
+
+Your home also matters:
+
+- **Insulation.** A poorly insulated house loses heat quickly and forces the pump to work harder. Fix draughts, lofts and walls first if they are poor.
+- **Radiators.** Heat pumps work best at lower flow temperatures (35 to 50°C) than boilers use (60 to 75°C). You may need larger radiators or underfloor heating in some rooms.
+- **Hot water.** You will need a cylinder, which takes space. Water is heated to a higher temperature, so that part is less efficient, though still better than direct electric heating.
+- **Defrost cycles.** In damp, cold weather the outdoor unit can ice up and periodically runs a short defrost. This is normal.
+
+**Running costs depend on your tariffs**
+
+Electricity usually costs more per unit than gas. A heat pump pays off when its COP outweighs that price gap. If electricity costs three times as much as gas, a COP of 3 only breaks even, while a COP above that saves money. Time-of-use or heat pump tariffs, and solar panels, improve the sums. Check current prices and any government grants in your area, since these change.
+
+**Deciding whether to replace your boiler**
+
+A heat pump is a strong choice if your home is reasonably insulated, you plan to stay for years, your boiler is near the end of its life, and you want lower carbon emissions. It is a harder case if the house is very leaky, you have no space for a cylinder or outdoor unit, or your electricity is expensive relative to gas.
+
+Ask installers for a heat loss calculation room by room, a quoted SCOP, and an estimate of running costs on your actual tariffs. A good installer will size the system to your house rather than guess. Get at least three quotes before committing.

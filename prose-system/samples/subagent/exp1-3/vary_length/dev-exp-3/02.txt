@@ -1,0 +1,67 @@
+**Sharing a Secret in Public: How Public-Key Cryptography Works**
+
+Imagine you want to tell a friend a secret, but the only way to reach her is by shouting across a crowded square. Everyone can hear every word. You have never met her, so you have no secret code agreed in advance. It sounds hopeless. Yet this is exactly the problem your phone and your bank solve every time you shop online, and the solution is one of the neatest ideas in mathematics.
+
+**The old problem**
+
+For most of history, secret messages needed a shared key. If you and a friend both knew the same code, you could scramble a message and she could unscramble it. The weakness was obvious. How did you share the code in the first place? You had to meet in person, or send it by a trusted courier. If a spy copied the code on the way, everything afterwards was worthless.
+
+Now think about the modern world. Billions of people need to talk securely to websites they have never visited, and they cannot meet each one first. So we need a way to agree on a secret while the spy is listening to every single word. In the 1970s, researchers found one.
+
+**Paint, not numbers (to start with)**
+
+Here is the famous picture of the idea, using paint. Suppose Alice and Bob each have a tin of paint. They agree openly, in front of everyone, on a shared starting colour: yellow. The spy, Eve, hears this and knows it too.
+
+Alice secretly picks a private colour, say red, and mixes it with the yellow. She sends the resulting orange mixture to Bob. Bob secretly picks blue, mixes it with the yellow, and sends his greenish mixture to Alice. Eve sees both mixtures travel across the square.
+
+Now Alice takes Bob's mixture and adds her own secret red. Bob takes Alice's mixture and adds his own secret blue. Both end up with the same thing: yellow, red and blue all combined. Same ingredients, same final colour, whatever the order.
+
+Eve, meanwhile, has only the two mixtures and the yellow. To get the final colour she would need to un-mix paint, and that is the catch. Mixing is easy. Separating a mixture back into its ingredients is, for paint, practically impossible.
+
+That is the whole trick. We need an operation that is easy to do but very hard to undo.
+
+**Clock arithmetic**
+
+Mathematics has such an operation. It uses something you may already know: clock arithmetic. On a clock, after 12 comes 1 again. If it is 10 o'clock and 5 hours pass, it is 3 o'clock, not 15. We say we are working "modulo 12". We can use any size of clock. A clock with 7 hours on its face wraps around at 7, so 5 + 4 gives 2.
+
+Now add powers. Take the number 3 and multiply it by itself a few times: 3, 9, 27, 81, and so on. On a clock with 7 hours, we keep only the remainder after dividing by 7. So 3 becomes 3, then 9 becomes 2, then 27 becomes 6, then 81 becomes 4. The numbers jump around in a way that looks random.
+
+Here is the key asymmetry. Suppose I tell you I raised 3 to some secret power on a 7-hour clock and got 4. Can you find my power? With a tiny clock, yes: just try them all. But if the clock has hundreds of digits in its size, the numbers are so large that even the fastest computers cannot try enough possibilities in the age of the universe. Working forward is quick. Working backward is, as far as anyone knows, hopeless.
+
+**The numbers version of the paint trick**
+
+Now we replace the paint with arithmetic. This is called Diffie-Hellman key exchange, after two of the people who invented it in 1976.
+
+Alice and Bob openly agree on two numbers: a clock size, and a starting number. Let us use a clock of 23 hours and a starting number of 5. Eve hears both.
+
+Alice secretly chooses a number, say 6. She computes 5 to the power 6 on the 23-hour clock. That is 15,625, and its remainder after dividing by 23 is 8. She sends 8 to Bob.
+
+Bob secretly chooses 15. He computes 5 to the power 15 on the same clock, which comes to 19. He sends 19 to Alice.
+
+Eve sees 8 and 19 fly across the square. Her problem: she knows 5, 23, 8 and 19, but not 6 or 15.
+
+Now Alice takes Bob's 19 and raises it to her own secret power 6, on the clock. Bob takes Alice's 8 and raises it to his secret power 15. Both get 2.
+
+Why do they match? Because of a simple rule you learned at school. Raising a power to a power just multiplies the exponents. Alice has effectively computed 5 to the power (15 × 6). Bob has computed 5 to the power (6 × 15). Multiplication does not care about order, so they land on the same answer. The number 2 is now their shared secret. They can use it as a key to scramble all their later messages.
+
+Eve, to get the same 2, needs one of the private numbers. Recovering 6 from the number 8 means solving the hard backward problem. With a clock of 23 hours, she can do it by trial in seconds. With a clock whose size runs to six hundred digits, she cannot.
+
+**Locks and keys: the other half of the story**
+
+Diffie-Hellman agrees a shared secret. A second family of methods, including the one called RSA, works differently and gives you what is better known as public-key encryption.
+
+Think of a padlock. Alice makes thousands of identical open padlocks and hands them out to anyone who asks. She keeps the only key. If Bob wants to send her a secret, he puts it in a box, snaps one of her padlocks shut on it, and posts it. Anyone can lock the box. Only Alice, with her private key, can open it. Eve can intercept the box, and she holds a padlock herself, but that does not help her.
+
+In mathematical form, the padlock is a public number and the key is a private one. The public number is built by multiplying two huge prime numbers together. Multiplying is easy. Given the answer, finding the two primes is brutally hard. Try it yourself: what two primes multiply to give 15? Easy: 3 and 5. What two primes multiply to give 8,633? That takes longer (they are 89 and 97). Now imagine a number with six hundred digits. Nobody knows a fast way to do it.
+
+**What this protects, and what it does not**
+
+When your browser shows a padlock symbol, a version of this dance has just happened in the background. Your device and the website agreed a secret key within a fraction of a second, over a connection anybody could watch. After that, both sides use the shared key with a fast scrambling method for the actual traffic, because it is cheaper than doing the heavy arithmetic for every message.
+
+There is one more important point. Everything above stops a passive listener. An active attacker, one who stands in the middle and pretends to be Bob to Alice and Alice to Bob, could do the exchange with each separately and read everything. To prevent that, websites carry certificates: statements, vouched for by trusted organisations, that "this public number really belongs to this website". Public-key methods again provide the proof, through digital signatures, which turn the padlock idea around so that only the owner can sign and anyone can check.
+
+**The big idea**
+
+Notice what has happened. The secret was never sent. Only ingredients that are useless alone crossed the square. Each side combined them with something that never left home. The security does not rest on hiding the method; the method is published in textbooks. It rests on a gap in difficulty: some sums are quick to do and ruinously slow to undo.
+
+Nobody has proved that the gap is permanent. A clever new method, or a powerful new kind of computer, could one day shrink it, and researchers are already building replacements for that day. But for now, two strangers can shout across a crowded square and walk away with a secret that nobody else holds. It is a remarkable thing, and it is done with nothing more than clocks, powers and primes.

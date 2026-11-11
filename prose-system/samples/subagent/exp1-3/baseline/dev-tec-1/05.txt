@@ -1,0 +1,79 @@
+## How Git Stores a Commit
+
+Open any repository and look inside `.git`. The core of it is a simple key-value store. Git hashes content, stores it under that hash, and builds everything else (files, directories, history) from four kinds of object plus a layer of named pointers. Seeing how those fit together explains much of Git's behavior.
+
+### The object database
+
+Everything lives in `.git/objects`. Each object is stored as a file named after the SHA-1 (or SHA-256, in newer repositories) hash of its contents. The first two hex characters become a subdirectory and the rest the filename, so `a94a8fe5ccb1...` is stored at `.git/objects/a9/4a8fe5ccb1...`. Objects are compressed with zlib and are immutable. Because the name is derived from the content, identical content always maps to the same object, and changing anything produces a different one.
+
+An object is a short header (type, a space, the size in bytes, a null byte) followed by the payload. You can read one with `git cat-file -p <hash>` and get its type with `git cat-file -t <hash>`. Over time Git also packs many objects into delta-compressed packfiles under `.git/objects/pack`, but logically the model is unchanged.
+
+### Blobs: file contents
+
+A blob holds the raw bytes of one file and nothing else. It has no filename, no permissions and no path. Two files with identical contents, anywhere in the history, share a single blob. This is why renaming a file costs almost nothing in storage: the blob is unchanged, and only the directory listing that refers to it differs.
+
+You can create one by hand:
+
+```
+echo "hello" | git hash-object -w --stdin
+```
+
+This writes a blob into the database and prints its hash.
+
+### Trees: directories
+
+A tree object is a directory listing. Each entry holds a file mode, a type, a hash and a name:
+
+```
+100644 blob a94a8fe5...  README.md
+100755 blob 3b18e512...  build.sh
+040000 tree 9c1185a5...  src
+```
+
+Blob entries point at file contents. Tree entries point at subdirectories, which are themselves trees. The names and modes live here, in the parent, not in the blob. A tree therefore describes a complete snapshot of a directory, and the top-level tree describes the whole project at one moment.
+
+Trees are what give Git cheap snapshots. If you change one file deep in the hierarchy, Git creates a new blob for that file, a new tree for each directory on the path up to the root, and reuses the hash of every untouched blob and tree. Unchanged parts of the project are shared between snapshots, not copied.
+
+### Commits: a snapshot plus context
+
+A commit object ties a snapshot to history. `git cat-file -p HEAD` shows its entire structure:
+
+```
+tree 9c1185a5c5e9fc54612808977ee8f548b2258d31
+parent 4d0e8bd1f9a1b2c3d4e5f60718293a4b5c6d7e8f
+author Ada Lovelace <ada@example.com> 1731300000 +0000
+committer Ada Lovelace <ada@example.com> 1731300000 +0000
+
+Fix off-by-one in pagination
+```
+
+There are only a few parts:
+
+- **tree**: the hash of the root tree, the full project snapshot.
+- **parent**: zero or more hashes of previous commits. The first commit has none, an ordinary commit has one, and a merge commit has two or more.
+- **author and committer**: a name, email, timestamp and timezone. They are separate because a commit can be rewritten (for example, rebased or cherry-picked) by someone other than the original author.
+- **message**: free text after a blank line.
+
+A commit does not store a diff. Diffs are computed on demand by comparing the trees of two commits. The parent hashes make history a directed acyclic graph: each commit's hash covers its tree and its parents' hashes, so changing any ancestor changes every descendant. This is the integrity guarantee behind Git, and it is why "rewriting history" really means creating new commits with new hashes and moving pointers to them.
+
+Putting it together, a commit points to a root tree, which points to subtrees and blobs, and to its parent commits. Staging a file with `git add` writes the blob and updates the index (`.git/index`), a binary file listing the paths, modes and blob hashes for the next commit. `git commit` turns the index into a tree, writes a commit object that references it, and records the result.
+
+### Refs: names for hashes
+
+Hashes are hard to remember, so Git keeps names for them. These are refs, and they are just small files containing a commit hash.
+
+- **Branches** live in `.git/refs/heads/`. The file `.git/refs/heads/main` contains one line: the hash of the tip commit on `main`. A branch is nothing more than this pointer, which is why creating one is instant and costs 41 bytes.
+- **Remote-tracking branches** live in `.git/refs/remotes/`, for example `origin/main`. They record where the remote's branches were at your last fetch.
+- **Tags** live in `.git/refs/tags/`. A lightweight tag points directly at a commit. An annotated tag points at a separate tag object that adds a tagger, date and message.
+
+Git may also consolidate refs into a single `.git/packed-refs` file, with the loose files taking precedence.
+
+### HEAD: where you are
+
+`.git/HEAD` records your current position. Normally it holds a symbolic reference such as `ref: refs/heads/main`, meaning "I am on the branch main". When you commit, Git creates the new commit with the current tip as its parent, then updates the branch file to the new hash. HEAD itself does not change; it still points at the branch, which has moved forward.
+
+If you check out a commit hash directly, HEAD contains the hash itself. This is the "detached HEAD" state. New commits advance HEAD but no branch follows, so they become unreachable once you switch away, apart from the reflog (`.git/logs`), which records where refs used to point and lets you recover them for a while.
+
+### The whole picture
+
+Making a commit means: write blobs for changed files, build trees bottom-up, write a commit pointing at the root tree and the previous commit, then move the branch ref to the new commit. Four object types and a directory of text files describe the entire repository, and every higher-level command is built on that.

@@ -1,0 +1,13 @@
+Every so often, the world's clocks pause for a single second. That pause is a leap second, and it exists because the Earth is not a perfect timekeeper.
+
+For most of history, we defined time by the sky. A day was the time the Sun took to return to the same spot overhead. Then, in 1967, scientists redefined the second using atomic clocks, which count the vibrations of atoms and stay accurate to within a tiny fraction of a second over millions of years. These clocks are far steadier than our spinning planet.
+
+The trouble is that the Earth wobbles. Tides, shifting oceans, the movement of molten rock in its core and even melting ice all nudge its rotation. Over the long run the planet has been slowing, so a day is slightly longer than the 86,400 seconds that atomic clocks count. Left alone, atomic time would drift away from the Sun's time, and noon would slowly stop meaning midday.
+
+To keep the two in step, international timekeepers began adding leap seconds in 1972. When the gap grew close to a second, they declared that one particular minute, usually at the end of June or December, would last 61 seconds. Twenty-seven have been added so far. The most recent came at the end of 2016.
+
+That sounds harmless, but computers hate it. Most software assumes every minute has exactly 60 seconds. When a 61st arrives, systems can crash, record events in the wrong order or disagree with one another about the time. Several well known outages, affecting airlines, websites and online services, have been blamed on leap seconds. Companies such as Google and Meta have even developed tricks to smear the extra second across a whole day, but each firm does it a little differently, which creates fresh confusion. Financial markets, power grids, satellite navigation and telecoms all depend on precise shared time, and a surprise second is a risk with little reward.
+
+In 2022, the General Conference on Weights and Measures, the international body that governs the definition of the second, voted to stop adding leap seconds by 2035. The reasoning is simple. Hardly anyone needs the Sun and the clock to agree to the exact second, while a great many systems need the clock never to hiccup.
+
+The gap will not be ignored forever. Without correction, the difference between atomic and Earth time could reach about a minute in a century or so. Experts say that is a problem for the distant future, and a larger adjustment, perhaps a whole minute at once, can be planned long in advance. Notably, the Earth has lately been spinning slightly faster, which may even call for a negative leap second, an idea that worries programmers most of all.

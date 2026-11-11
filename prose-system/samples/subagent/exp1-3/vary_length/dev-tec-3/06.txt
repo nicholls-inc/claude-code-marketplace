@@ -1,0 +1,15 @@
+Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). Understanding why the second stage exists, and why it takes so long, requires a picture of what is happening inside the cell.
+
+A cell stores energy by shuttling lithium ions between two electrodes. During charging, the charger drives ions out of the cathode, typically a lithium metal oxide, across a porous separator soaked in liquid electrolyte, and into the graphite anode, where they slot between carbon layers in a process called intercalation. Electrons travel the external circuit to balance the charge. The cell's terminal voltage rises as the anode fills, because the anode's potential relative to lithium falls and the cathode's rises.
+
+In the first stage, the charger holds current constant, often between 0.5C and 1C, where 1C would fully charge the cell in one hour. Terminal voltage climbs steadily. Voltage here is not just the cell's equilibrium voltage. It also includes the drop across internal resistance, plus overpotentials needed to push ions through the electrolyte and across the electrode surfaces. These extra terms scale with current.
+
+When the terminal voltage reaches the upper limit, about 4.2 V for a common chemistry, the charger switches modes. That limit is a hard ceiling. Exceeding it accelerates electrolyte decomposition, growth of the surface film on the anode, and, in the worst case, plating of metallic lithium, which can short the cell.
+
+In the second stage, the charger holds voltage at 4.2 V and lets current fall on its own. The reason is straightforward. As the anode fills, the equilibrium voltage creeps toward the limit, leaving less of the fixed 4.2 V available to drive current through the internal resistance. Ohm's law does the rest. Smaller headroom means smaller current.
+
+There is a diffusion effect too. Ions move inside the graphite particles slowly, and during fast charging the particle surfaces fill well before the cores do. The surface concentration, which sets the voltage, runs ahead of the bulk. Once the voltage is clamped, the cell cannot push more ions in until they diffuse inward and relieve that surface crowding. This process is intrinsically exponential, with current decaying toward zero.
+
+Charging ends when current drops to a cutoff, commonly 0.05C to 0.1C. Stopping there gives roughly 100% of usable capacity. Chasing the last few percent would take hours for little gain and added degradation.
+
+Practically, the CC stage often delivers 70 to 80 percent of the charge in about half the time, while the CV stage consumes the remainder. That is why a phone reaches 80 percent quickly and then crawls.

@@ -1,0 +1,44 @@
+A heat pump can warm a house on a cold day because it does not make heat. It moves heat from one place to another. That is also why it can use less energy than a gas boiler.
+
+**Cold air still contains heat**
+
+Heat flows from hotter things to colder things. Cold is only a lower temperature, not an absence of heat. Air at 0°C still holds a great deal of thermal energy. Absolute zero is around minus 273°C, so outdoor air at 0°C, or even minus 10°C, has plenty of energy left to extract.
+
+**The fridge in reverse**
+
+A heat pump works like a fridge, except the fridge's "inside" is your garden. A sealed loop carries a refrigerant, a fluid that boils at a very low temperature (far below zero).
+
+1. **Evaporator (outdoor unit).** A fan blows outdoor air over a coil of cold refrigerant. The refrigerant is colder than the air, so heat flows into it. That heat makes it boil into a gas.
+2. **Compressor.** This electric pump squeezes the gas. Compressing a gas heats it, the same way a bicycle pump warms up. The gas might now be 50 to 70°C, hotter than your radiators need to be.
+3. **Condenser (indoors).** The hot gas passes through a heat exchanger connected to your heating water. It gives up its heat and condenses back into a liquid.
+4. **Expansion valve.** The liquid's pressure drops suddenly. It becomes very cold again, and the loop restarts.
+
+The compressor's job is to lift the heat from a low temperature to a useful one. Electricity pays for that lift. The heat from outside comes free.
+
+**Why this beats a boiler on efficiency**
+
+A modern gas boiler converts roughly 90 to 95 percent of the gas's energy into heat. It cannot do better than 100 percent, because it creates heat by burning fuel.
+
+A heat pump moves more heat than the electricity it uses. The ratio is called the coefficient of performance (COP). A COP of 3 means one unit of electricity delivers three units of heat: two come from the outside air and one from the electricity. Typical seasonal figures are around 2.5 to 4, which is 250 to 400 percent efficiency. Because electricity usually costs more per unit than gas, the saving depends on your tariff. A COP of 3 does not simply cut your bill by two thirds.
+
+**The catch: it works harder in the cold**
+
+The bigger the gap between outdoor temperature and the temperature you need to deliver, the harder the compressor works and the lower the COP. On a mild day it might reach 4. On a freezing night it might fall to 2 or so. Good modern units still run at minus 15°C or lower, but with reduced efficiency and output.
+
+Two practical points follow:
+
+- **Flow temperature matters.** A heat pump is most efficient when it delivers lower-temperature water, around 35 to 45°C, rather than the 60 to 70°C many boilers use. Larger radiators or underfloor heating suit it best.
+- **Insulation matters.** A well-insulated, draught-proofed house needs less heat, so a smaller, cheaper, more efficient pump can do the job.
+
+**What to check before replacing your boiler**
+
+- **Heat loss survey.** Ask an installer for a room-by-room calculation, not a rule of thumb. This sizes the unit and shows whether your radiators need upgrading.
+- **Insulation.** Cheap fixes such as loft insulation and draught-proofing often improve the economics a lot.
+- **Space.** You need room outside for the unit, and usually space inside for a hot water cylinder, which may replace a combi boiler setup.
+- **Running costs.** Compare your electricity and gas prices. Heat pump tariffs, which offer cheaper electricity at certain times, can help.
+- **Upfront cost and grants.** Installation costs more than a boiler. Check whether government grants or loans are available where you live.
+- **Noise and planning.** Outdoor units hum quietly, and local rules may limit where they can go.
+
+**The short version**
+
+A heat pump uses electricity to move heat from cold outdoor air into your home, delivering several units of heat for every unit of electricity. It works best in a well-insulated house with low-temperature heating. If your home is poorly insulated, or your radiators are small, expect extra upfront work before the numbers add up. Get a proper survey and quotes from several installers before deciding.

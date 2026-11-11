@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a1f6d3cb0383773dc",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73751,
+    "output_tokens": 1015,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:36:11.539Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV). The slowdown near full follows from how the cell's voltage behaves and from the voltage ceiling the chemistry imposes.\n\nThink of the cell as an ideal voltage source in series with a resistor. The source is the open-circuit voltage (OCV), which depends on state of charge (SoC). For a typical graphite/NMC cell, OCV rises from about 3.0 V when empty to about 4.2 V when full. The resistor is the internal resistance, a lumped term covering ohmic losses, charge-transfer kinetics at the electrode surfaces, and slow diffusion of lithium inside the electrode particles. The terminal voltage you measure while charging is V = OCV + I x R, plus extra polarization from diffusion gradients.\n\nStage 1 is constant current. The charger forces a fixed current, commonly 0.5C to 1C (a 1C current would fill the nominal capacity in one hour). Lithium ions move from the cathode, through the electrolyte, and into the graphite anode, where they intercalate between carbon layers. Terminal voltage climbs steadily as OCV rises and the I x R offset sits on top. This stage delivers roughly 70 to 80 percent of the capacity, and it is fast.\n\nStage 2 begins when terminal voltage reaches the upper limit, 4.2 V in this example. That limit is a hard safety and longevity constraint. Above it, the electrolyte oxidizes at the cathode, the cathode structure degrades, and at the anode, lithium can plate as metal instead of intercalating, which creates fire risk and permanent capacity loss. So the charger switches to holding voltage constant at 4.2 V.\n\nHolding voltage is what makes current fall. Because V is fixed, the current obeys I = (V_limit - OCV) / R. As the cell fills, OCV approaches 4.2 V, the voltage headroom shrinks, and current decays roughly exponentially toward zero. This is like charging a capacitor through a resistor from a fixed supply: the closer it gets to the supply voltage, the less drive remains. The charger terminates when current drops to a threshold, typically 0.05C to 0.1C.\n\nA second effect compounds this. Lithium diffuses slowly inside solid electrode particles. At high SoC, the particle surface is nearly saturated while the interior is still filling, and the concentration gradient is what drives inward diffusion. The surface concentration is what sets the electrode potential, so the cell hits its voltage limit before the particle cores are full. The final capacity can only be collected by waiting while diffusion equalizes, which is slow.\n\nPractical consequence: the last 20 percent of charge can take as long as the first 80. Fast chargers exploit this by stopping early, often at 80 percent, and by tapering current in steps in response to temperature and voltage."
+}

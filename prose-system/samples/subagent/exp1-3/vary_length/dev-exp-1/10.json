@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a74d0f1d56df9df35",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73757,
+    "output_tokens": 1246,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:41:57.857Z",
+  "valid": true,
+  "text": "A heat pump does not make heat. It moves heat that already exists outdoors into your house, and that is why it works even when the air outside is colder than your living room.\n\nCold is a relative idea. Air at 0°C still holds a great deal of thermal energy. It only feels cold to us because it is cooler than we are. Absolute zero sits at minus 273°C, so a winter day is nowhere near empty of heat.\n\nThe machine works like a fridge run in reverse. A sealed loop carries a refrigerant, a fluid chosen because it boils at very low temperatures. Outside, the refrigerant passes through a coil in the outdoor unit. It is colder than the air, so heat flows into it from the air, and the refrigerant boils into a gas. Next, a compressor squeezes that gas. Squeezing raises its temperature sharply, often to 50°C or more, much hotter than your rooms. The hot gas then flows through a second coil inside the house, where it hands its heat to your radiators, underfloor pipes or warm-air system. As it gives up heat it condenses back to liquid. A valve then drops its pressure, it turns very cold again, and the cycle repeats.\n\nThe key point is that the compressor lifts heat \"uphill\", from a cold place to a warm one. That takes electricity, but far less than you might expect.\n\nThis is where the efficiency figures matter. A gas boiler cannot turn more than about 90 to 95 percent of its fuel into heat. A heat pump delivers roughly three to four units of heat for every unit of electricity it uses. This ratio is called the coefficient of performance, or COP. The extra heat is the free part, drawn from outdoor air. Efficiency does fall as it gets colder, since the compressor must lift heat further. Modern units still manage a COP of about two at minus 10°C, and they keep running well below that.\n\nWhat does this mean for you? Several practical points decide whether a switch makes sense.\n\nFirst, your house. A heat pump runs best at lower water temperatures than a boiler, typically 35 to 50°C against 65 to 80°C. Good insulation, draught-proofing and decent glazing make a big difference. Old, small radiators may need to be swapped for larger ones, or the pump will struggle on the coldest days.\n\nSecond, running costs. Electricity usually costs more per kilowatt-hour than gas. A good COP can offset that, but the saving depends on your local tariffs. A time-of-use tariff, or solar panels, improves the sums considerably. Ask installers to model your actual bills, not a generic example.\n\nThird, upfront cost. A heat pump is more expensive than a new boiler. Many countries offer grants or loans that narrow the gap, so check what you are eligible for before you decide.\n\nFourth, the installation itself. You need space outside for the unit, and often a hot water cylinder inside. Noise is modest, about like a fridge at a few metres, but placement still matters near bedrooms and neighbours.\n\nFifth, comfort. Heat pumps tend to run for long periods at a gentle output rather than firing hard and stopping. Rooms feel steadily warm, not blasted. Some people need a few weeks to get used to that.\n\nFinally, the sensible way to decide. Get a heat-loss survey from at least two accredited installers. Ask for the design temperature, the predicted COP, and the radiator changes needed. If your boiler is reaching the end of its life, replacing it with a heat pump avoids buying a gas boiler you would then replace again within a decade or two. If it is only five years old and works well, there may be no rush. Either way, the physics is sound: your cold garden is a free heat source, and the heat pump simply collects it."
+}

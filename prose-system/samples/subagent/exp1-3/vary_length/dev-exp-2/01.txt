@@ -1,0 +1,13 @@
+Every so often, the world's clocks pause for a single second.
+
+That pause is the leap second. It exists because there are two ways to measure a day, and they do not quite agree. Atomic clocks, which count the vibrations of caesium atoms, tick with extraordinary steadiness. The Earth, by contrast, is a wobbly timekeeper. Its rotation slows and speeds up in small, unpredictable ways, nudged by tides, earthquakes, shifting ice, and the churning of its molten core. Since 1972, whenever the gap between atomic time and the planet's actual spin has threatened to exceed 0.9 of a second, officials have inserted an extra second at the end of a June or December day. The clock reads 23:59:59, then 23:59:60, and only then ticks over to midnight. Twenty-seven of these have been added.
+
+For most people, none of this matters. Your phone simply adjusts. But for the computer systems that run modern life, a minute with 61 seconds is a genuine headache.
+
+Software is built on the assumption that every minute has 60 seconds. Insert an extra one, and programs can misread the time, record events out of order, or crash outright. In 2012, a leap second knocked out several major websites and airline booking systems. Google and other large technology firms have taken to "smearing" the extra second, stretching it across many hours so that no clock ever sees a 61-second minute. That works, but different companies smear in different ways, which creates its own confusion. Financial markets, power grids, satellite navigation and telecommunications all depend on timestamps being precise and consistent. The more tightly such systems are linked, the more dangerous a stray second becomes.
+
+So in 2022, the General Conference on Weights and Measures, the international body that defines the units of science, voted to abandon the leap second by 2035. The rule is not being scrapped without a fallback. The gap between atomic and Earth time will be allowed to grow much larger, and scientists will decide later how to handle it, perhaps by correcting it in a single step centuries from now.
+
+There is a twist. In recent years the Earth has been spinning slightly faster, not slower, which could eventually require a "negative" leap second, removing one rather than adding one. Engineers dread that prospect even more, since removing a second has never been tried and could trigger unforeseen failures. That prospect strengthened the case for ending the practice.
+
+In short, the decision trades astronomical tidiness for digital stability. Noon will drift very slowly away from the sun's highest point. Almost no one will notice.

@@ -1,0 +1,61 @@
+Sharing a Secret in Public
+
+Imagine you want to agree a secret code with a friend you have never met. The only way to talk is by shouting across a crowded room, and everyone can hear every word. It sounds impossible. If you shout the code, everybody knows it. Yet this is what happens every time your phone connects to a bank or a shop. Two machines that have never met agree a secret while strangers can read every message that passes between them. The trick is a branch of mathematics called public key cryptography, and the core idea is simpler than the name suggests.
+
+The problem with ordinary secrets
+
+For most of history, secret messages worked like a locked box with one key. You and your friend both needed a copy of the same key. That works well, provided you can hand over the key safely beforehand. If you had to post the key, someone could copy it on the way. The whole difficulty was getting the key to the other person without anyone else seeing it.
+
+The great idea of the 1970s was to remove that step. What if each person did something private, shared only the result, and still ended up with the same secret?
+
+The paint mixing picture
+
+Here is the classic way to picture it. Alice and Bob agree out loud on a common colour, say yellow. Everyone hears this, so yellow is public. Each person then picks a private colour. Alice chooses red and Bob chooses blue. They never say these aloud.
+
+Alice mixes her red into the yellow and sends the resulting orange across the room. Bob mixes his blue into the yellow and sends over a green. Everyone in the room can see the orange and the green.
+
+Now Alice adds her private red to Bob's green. Bob adds his private blue to Alice's orange. Both end up with the same muddy brown, made of yellow, red and blue. The listener has only the yellow, the orange and the green. Mixing paint is easy, but unmixing it is very hard. Nobody can look at orange and say exactly which red went in. So the eavesdropper cannot make the brown, because they lack either red or blue.
+
+The picture works because mixing is a one way action. Easy to do, painful to undo. Mathematics offers the same thing, and it is what real computers use.
+
+The clock and the remainder
+
+You already know the maths needed. When you work out what time it will be 30 hours from now, you divide by 24 and keep only the remainder. Remainders are the whole secret. In this kind of arithmetic we say we are working modulo a number. Modulo 7, the number 10 becomes 3, because 10 divided by 7 leaves 3 over.
+
+Now think about powers. Raising 5 to the power 6 means multiplying six fives together, which gives 15,625. Working modulo 23, we divide 15,625 by 23 and keep the remainder. That is 8. Going forward is easy. But suppose someone tells you that 5 to some power leaves a remainder of 8 when divided by 23, and asks which power it was. You would have to try powers one at a time until one fits. With small numbers that is quick. With enormous numbers it becomes hopeless, because the remainders jump around with no pattern that guides you to the answer. This is the one way action we need.
+
+A full example with small numbers
+
+Alice and Bob publicly agree on two numbers, 23 and 5. These play the part of the yellow paint. Anyone can know them.
+
+Alice secretly picks the number 6. She works out 5 to the power 6, modulo 23, and gets 8. She shouts 8 across the room.
+
+Bob secretly picks 15. He works out 5 to the power 15, modulo 23, and gets 19. He shouts 19.
+
+Everyone now knows 23, 5, 8 and 19. Alice and Bob each have one private number that nobody else has heard.
+
+Alice takes the 19 that Bob sent and raises it to her private power 6, modulo 23. The answer is 2.
+
+Bob takes the 8 that Alice sent and raises it to his private power 15, modulo 23. The answer is also 2.
+
+They have the same number, and it was never spoken aloud. Why does it match? Alice effectively computed 5 raised to the power of 15 times 6. Bob computed 5 raised to the power of 6 times 15. Since 6 times 15 and 15 times 6 are the same number, both land on the same result. Multiplication does not care about order, and that small fact does all the work.
+
+Why the listener is stuck
+
+A spy has heard 23, 5, 8 and 19. To find the secret, they need either Alice's 6 or Bob's 15. To get Alice's 6, they must ask which power of 5 leaves a remainder of 8. In our toy example you could just try every power in a few seconds, and find that 6 works. So the example is not safe in practice. It is only there to show the shape of the idea.
+
+Real systems use numbers with hundreds of digits. Trying every possible power would take longer than the age of the universe, even with every computer on Earth working together. The honest legwork cannot be avoided, and no one has found a quick shortcut, although nobody has proven that none exists. The security rests on a problem that people have studied hard for decades without cracking.
+
+Public keys and private keys
+
+The method above is a way to agree a shared secret. A related method gives the name public key cryptography its meaning. In that version, each person owns a pair of linked numbers. One is the public key, which they can publish to the whole world. The other is the private key, which never leaves their possession.
+
+Think of the public key as an open padlock. Anyone can take one, snap it shut around a message and send it. But only the owner holds the key that opens it. Bob can leave a thousand open padlocks on a table in the town square. Anyone may lock a message with one, and only Bob can unlock the results. The well known system called RSA does exactly this, built on the fact that multiplying two huge prime numbers together is easy, while splitting the answer back into its two primes is extremely hard.
+
+How this protects you online
+
+When your browser connects to a website, the two sides quickly do something like our example. They agree a fresh shared secret in public. They then use that secret as the key for a fast, ordinary locked box, which scrambles everything else they send. Public key methods are slower, so they are used only to set up the secret. After that, the quick method takes over.
+
+Why this matters
+
+Before this idea, secure communication needed a trusted meeting or a trusted courier. Now two strangers can build trust from nothing, using only arithmetic that a school pupil could follow in small cases. The listener hears everything and still learns nothing useful. The whole structure stands on one simple observation. Some things are easy to do and very hard to reverse, and when you pick the right ones, you can turn that difference into privacy.

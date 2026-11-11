@@ -1,0 +1,13 @@
+Every so often, the world's clocks pause for a single second. This is a leap second, and it exists because two ways of measuring time do not quite agree.
+
+For centuries, we defined time by the sky. A day was the time Earth took to spin once, and a second was a tiny slice of that. But Earth is a sloppy timekeeper. Tides drag on its spin and slow it down, and earthquakes, melting ice and movements deep in the planet nudge it around. Some days run a fraction of a millisecond longer than others.
+
+In the 1950s, scientists built atomic clocks that count the vibrations of atoms. These are astonishingly steady, losing perhaps a second over many millions of years. Atomic time became the basis for the official global standard, known as Coordinated Universal Time. The trouble was that the steady atomic clocks slowly drifted away from the wobbly spinning Earth.
+
+So in 1972 the authorities introduced the leap second. Whenever the gap between the two grew close to a second, an extra second was slipped in at the end of June or December, so that clocks stayed in step with the Sun and stars. A minute would briefly have 61 seconds, and the clock would read 23:59:60 before the new day began. Twenty-seven have been added so far, the most recent at the end of 2016.
+
+That sounds harmless, but computers hate it. Most software assumes every minute has exactly 60 seconds. When an extra second appears, systems can freeze, crash or record events in the wrong order. Leap seconds have disrupted websites, airline booking systems and online services. Big technology firms have invented their own workarounds, such as smearing the extra second across a whole day, but these methods differ from one company to another and invite confusion. Anything that relies on precise timing, from financial trading to satellite navigation and power grids, finds the irregular extra second a nuisance and a risk.
+
+Meanwhile, the Earth has surprised everyone. In recent years it has been spinning slightly faster, which means a leap second might need to be subtracted rather than added. A negative leap second has never been tried, and engineers fear it could cause even more trouble than an extra one.
+
+In 2022, the international body that sets measurement standards voted to stop adding leap seconds by 2035. Time will be allowed to drift away from the Sun for decades, perhaps up to a minute or more, before a better solution is chosen. The change comes down to a simple trade. Our machines value smooth, predictable time more than they value matching the planet's irregular turning, and for nearly everyone the difference will go unnoticed.

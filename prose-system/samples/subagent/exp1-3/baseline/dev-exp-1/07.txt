@@ -1,0 +1,38 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists outside and carries it indoors. That is why it works when the air outside is colder than your living room.
+
+**Cold is not zero heat**
+
+Heat is the energy of moving molecules. Air at 0°C still holds a great deal of it. Heat only stops being available at absolute zero, about -273°C. Heat flows naturally from warm to cold, so a cold outdoor coil can absorb heat from the outside air, provided the coil is colder still.
+
+**The refrigeration cycle**
+
+A heat pump is a fridge run in reverse. A sealed loop carries a refrigerant, a fluid that boils at very low temperatures. The loop has four main parts.
+
+1. **Evaporator (outdoor unit).** The refrigerant is kept at very low pressure, so it boils at around -20°C or lower. Outdoor air at, say, 2°C is warmer than that, so heat flows from the air into the refrigerant, which evaporates into a gas.
+2. **Compressor.** This electric pump squeezes the gas. Compressing a gas heats it, so the refrigerant leaves at perhaps 50 to 70°C. This is where most of the electricity is used.
+3. **Condenser (indoor side).** The hot gas passes its heat to your radiators, underfloor heating, or hot water cylinder. As it gives up heat, it condenses back into a liquid.
+4. **Expansion valve.** The liquid is suddenly released into a low-pressure space. Its pressure and temperature drop sharply, and the cycle starts again.
+
+The trick is that pressure sets the boiling point. By changing pressure, the machine makes the refrigerant colder than outside in one place and hotter than your radiators in another.
+
+**Why it beats a gas boiler on efficiency**
+
+A modern gas boiler converts about 90 to 95 percent of its fuel into heat. It cannot do better than 100 percent. A heat pump delivers more heat than the electricity it uses, because most of the output is heat it has moved, not made. This is measured as the coefficient of performance (COP). A COP of 3 means 3 kWh of heat for every 1 kWh of electricity. Over a whole year, typical home systems average a seasonal COP of roughly 2.5 to 4.
+
+**The catch: colder weather lowers efficiency**
+
+The colder it gets outside, the harder the compressor has to work to lift heat up to the temperature you need. COP falls on very cold days, perhaps to 2 or a little lower. Modern units still run in sub-zero conditions, and many are rated down to -15°C or below, but they use more electricity per unit of heat delivered. Defrost cycles are also needed when frost builds on the outdoor coil.
+
+**What this means for your decision**
+
+- **Running cost.** Electricity usually costs more per kWh than gas. A COP of 3 can offset that, but the saving depends on local prices. Check the ratio of your electricity price to your gas price. Roughly, if electricity costs less than three times as much as gas, a heat pump tends to be cheaper to run. Time-of-use tariffs can help further.
+- **Your house matters most.** Heat pumps work best at lower flow temperatures (35 to 50°C), compared with 60 to 80°C for many boilers. A well-insulated home with large radiators or underfloor heating suits them. A draughty, poorly insulated house may need insulation upgrades or bigger radiators first. Ask for a proper heat-loss survey, not a rule-of-thumb quote.
+- **Upfront cost.** Installation typically costs several times more than a new gas boiler, though grants or subsidies may cover part of it. Ask installers about what is available where you live.
+- **Carbon.** Even on a mixed-fuel grid, a heat pump normally produces far less carbon per unit of heat than burning gas, and the gap widens as grids decarbonise.
+- **Practicalities.** You need outdoor space for the unit, and usually a hot water cylinder. Noise is modest but worth checking against neighbours' windows.
+
+**A sensible way to decide**
+
+Get at least two quotes that include a heat-loss calculation and a predicted seasonal COP. Ask for estimated annual running costs compared with your current gas bill. If your boiler is near the end of its life, that is the natural moment to switch, since you avoid paying for a new boiler you would soon replace. If it is young and your home is poorly insulated, improving insulation first and revisiting in a few years may be wiser.
+
+In short, a heat pump works in the cold because outdoor air still contains heat, and a pressure-driven refrigerant loop can pull it indoors. Whether it suits you depends on your insulation, your heat emitters, and your energy prices.

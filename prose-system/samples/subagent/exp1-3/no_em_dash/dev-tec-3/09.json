@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "afdb6d13a3bdf1272",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73751,
+    "output_tokens": 996,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:35:48.613Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV), and the slowdown near full charge is a direct result of the second stage.\n\n**Stage 1: constant current.** The charger forces a fixed current into the cell, commonly around 0.5 to 1 C (a 1 C current would fill the rated capacity in one hour). Lithium ions leave the cathode (for example a nickel-manganese-cobalt oxide), cross the electrolyte, and insert between the graphite layers of the anode, a process called intercalation. As the anode fills, the cell's open-circuit voltage rises from about 3.0 V toward 4.2 V. The terminal voltage the charger sees is higher than this open-circuit value, because current flowing through the cell's internal resistance adds a drop of roughly V = I x R. The charger therefore holds the current fixed and lets the terminal voltage climb until it reaches the upper limit, typically 4.2 V for a standard cell. At this point the cell is usually around 70 to 80 percent charged.\n\n**Stage 2: constant voltage.** The charger now holds the terminal voltage at 4.2 V and lets the current fall on its own. The limit exists for safety and lifespan. Above it, the electrolyte oxidizes at the cathode, lithium metal can plate onto the anode, and the cathode structure degrades. The voltage cannot simply be raised to push current in faster.\n\n**Why the current tapers.** The terminal voltage equals the open-circuit voltage plus the drop across the internal resistance. As the cell fills, the open-circuit voltage creeps toward 4.2 V, so the voltage left over to drive current through the resistance shrinks. Current is roughly (4.2 V minus open-circuit voltage) divided by resistance, so it decays in an approximately exponential curve, much like a capacitor charging through a resistor. Two further effects compound this. Lithium concentration builds up at the surface of the graphite particles faster than it can diffuse inward, so the particle surface appears full while the interior still has room, and the remaining sites are filled only as fast as solid-state diffusion allows. Also, the anode's potential falls close to that of lithium metal as it fills, which narrows the margin before plating begins.\n\n**Termination.** The charger ends the cycle when the current drops to a small threshold, often 0.05 C to 0.1 C, since the final few percent would take disproportionately long. Stopping there leaves the cell at about 95 to 100 percent of capacity.\n\n**Practical consequences.** Fast chargers deliver most of their energy in the CC stage, which is why the first 80 percent charges much faster than the last 20. Heat and cell aging rise with higher current and voltage. Many devices therefore stop short of 4.2 V, or use lower CV limits, to trade a little capacity for longer life."
+}

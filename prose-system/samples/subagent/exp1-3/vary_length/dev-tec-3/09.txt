@@ -1,0 +1,13 @@
+Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). The charger is a controlled source, and it works against a battery whose open-circuit voltage rises as it fills.
+
+In the first stage, the charger forces a fixed current, typically between 0.5C and 1C. (1C is the current that would fill the rated capacity in one hour.) During this phase the cell's terminal voltage climbs steadily. When it reaches the upper limit, usually 4.2 V for a graphite-and-cobalt-oxide cell, the charger stops holding current and starts holding voltage. That is the second stage. By then the cell is commonly 70 to 80 percent full.
+
+Why not keep pushing current? Because 4.2 V is a hard ceiling. Above it, the electrolyte oxidizes at the cathode, the cathode structure degrades, and metallic lithium can plate onto the anode, which creates both capacity loss and a short-circuit hazard. So the voltage is clamped, and the current becomes the dependent variable.
+
+Here is the mechanism, in circuit terms. The terminal voltage equals the open-circuit voltage (OCV) plus the current times the internal resistance. OCV is a function of state of charge: lithium ions moving into the anode raise it. At the start of the CV phase, the OCV is still well below 4.2 V, so the difference across the internal resistance drives a large current. As charging continues, OCV rises toward 4.2 V. The voltage headroom shrinks, so the current must fall. It decays roughly exponentially, much like a capacitor charging through a resistor, though the analogy is imperfect because OCV is nonlinear in charge.
+
+There is also a physical limit beneath the electrical one. Lithium has to diffuse into the bulk of the graphite particles, and that is slow. During fast charging, the particle surfaces fill first while the interiors lag behind. The surface concentration, which sets the voltage, hits its limit early. In the CV phase, the charger is simply waiting for lithium to diffuse inward and even out the concentration gradient. Less gradient means less driving force, which means less current.
+
+Charging ends when the current drops to a cutoff, commonly 0.05C to 0.1C. Continuing past that point gains little capacity and adds time at high voltage, which accelerates aging.
+
+The practical consequence is that the last 20 percent takes disproportionately long. Fast-charge systems therefore push hard in the CC phase, often with stepped current profiles that taper as voltage rises, and accept the slow tail. Temperature matters too. Cold cells have higher resistance and slower diffusion, so the same voltage limit is reached sooner and plating risk rises. Chargers therefore derate current at low temperatures.

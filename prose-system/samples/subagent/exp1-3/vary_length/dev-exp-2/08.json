@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab3b92afe0e1740ec",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73754,
+    "output_tokens": 1183,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:45:00.669Z",
+  "valid": true,
+  "text": "**The Last Leap Second**\n\nFor most of history, we measured time by the sky. A day was the time the Earth took to turn once, and a second was a tiny slice of it. Then, in 1967, scientists redefined the second using atomic clocks, which count the vibrations of caesium atoms with astonishing steadiness.\n\nThat created a problem. The Earth is a far less reliable timekeeper than an atom.\n\nOur planet's spin wobbles and drifts. The Moon's tidal drag slowly brakes the rotation, shifting the length of a day by a few thousandths of a second over a century. Earthquakes, shifting ice, and the churning of the molten core all nudge it too. So the atomic day and the astronomical day slowly drift apart.\n\nIn 1972, the world's timekeepers came up with a fix. Whenever the gap between atomic time and the Earth's rotation threatened to exceed 0.9 of a second, an extra second would be slipped into Coordinated Universal Time, the standard clock that governs everything from aviation to the internet. It was added at the very end of June or December, so that the clock ran 23:59:59, then 23:59:60, and only then struck midnight. Twenty-seven of these leap seconds have been added. The most recent came on 31 December 2016.\n\nWhy stop? Because the fix has become a nuisance, and in a world run by computers, a nuisance can be a hazard.\n\nMost software assumes that every minute has exactly sixty seconds. A sixty-first second breaks that assumption. In 2012, a leap second knocked several well-known websites offline, and similar glitches have followed. Some technology companies now \"smear\" the extra second, stretching it across a whole day, but they do not all do it the same way, which creates fresh disagreements. Financial markets, power grids, satellite navigation and telecom networks all depend on clocks agreeing to within tiny fractions of a second. For them, a one-off irregularity is an invitation to error.\n\nThere is a newer wrinkle too. Lately the Earth has been spinning slightly faster than expected. If that continues, timekeepers might have to subtract a second, something that has never been done and has barely been tested.\n\nIn 2022, the General Conference on Weights and Measures voted to abandon the practice by 2035. The gap between atomic and astronomical time will be allowed to grow, and the size of the permitted gap is still to be settled. It could eventually reach a full minute. Some experts suggest that a larger correction could one day be made far less often.\n\nFor ordinary people, nothing much changes. Dawn and dusk will not move noticeably within our lifetimes. Clocks, at last, will simply stop checking in with the sky."
+}

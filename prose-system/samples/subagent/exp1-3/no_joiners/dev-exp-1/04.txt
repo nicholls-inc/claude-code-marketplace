@@ -1,0 +1,41 @@
+How a Heat Pump Heats a House When It Is Colder Outside
+
+The puzzle
+
+It seems odd that a machine can warm your home using air that is colder than your living room. The answer is that a heat pump does not make heat by burning anything. It moves heat that already exists. Even air at minus five degrees Celsius holds plenty of thermal energy. Absolute zero is about minus 273 degrees, so cold air is only cold compared with what you want.
+
+The refrigerant loop
+
+Inside the outdoor unit runs a sealed loop of refrigerant, a fluid that boils at very low temperatures. The loop has four main parts, which are an evaporator, a compressor, a condenser and an expansion valve.
+
+Outside, the refrigerant is kept at a pressure where it boils at something like minus 20 degrees. Because the outdoor air is warmer than that, heat flows from the air into the refrigerant and it evaporates into a gas. A fan pushes air across the coil to help.
+
+The compressor then squeezes that gas. Compressing a gas heats it, just as a bicycle pump warms up when you use it. The gas may reach 50 or 60 degrees or more. This is the key step, because the refrigerant is now hotter than the water in your radiators or the air in your rooms.
+
+Inside, the hot gas passes through the condenser. Heat flows from the refrigerant into your heating water, and the refrigerant turns back into a liquid. The expansion valve then drops its pressure, which cools it sharply, and the cycle starts again.
+
+So the compressor creates the temperature difference needed to push heat in the direction you want. Your fridge does the same job in reverse, pulling heat out of the food and releasing it into your kitchen.
+
+Why this beats a boiler
+
+A gas boiler turns each unit of fuel energy into at most about 0.9 to 0.95 units of heat. A heat pump uses electricity only to run the compressor and fans, and it collects the rest from the air. Typically it delivers three to four units of heat for each unit of electricity. This ratio is called the coefficient of performance, or COP. Your running costs depend on the COP and on the price gap between electricity and gas.
+
+What happens in a hard frost
+
+Performance does fall as it gets colder, because the compressor must work harder to lift heat across a bigger temperature gap. A modern unit might manage a COP of 4 on a mild day and around 2.5 on a very cold one. That is still far better than a boiler. Most current models keep working down to minus 15 or even minus 25 degrees. The outdoor coil can ice up, so the unit occasionally runs a short defrost cycle, which is normal and not a fault.
+
+What this means for your house
+
+Heat pumps work best when the home is well insulated and the radiators are sized for lower water temperatures, typically 35 to 50 degrees rather than the 70 or more a boiler uses. Lower flow temperatures raise efficiency. If your radiators are small, you may need to upsize some or add underfloor heating. A draughty house with a thin loft layer will cost more to heat whatever system you install, so fix those problems first.
+
+Questions to ask installers
+
+Ask for a heat loss calculation for every room. Ask what flow temperature they are designing for, what yearly COP they expect, and whether your hot water cylinder and electrical supply need upgrading. Check for grants, which in many regions cut the upfront price substantially.
+
+Costs and trade offs
+
+Installation usually costs more than a new boiler, and the work is more involved. Running costs can come out lower, especially if you choose a heat pump tariff or have solar panels. You also stop depending on gas and cut your household carbon emissions, often by more than half even on a mixed grid.
+
+The bottom line
+
+A heat pump works in cold weather because it never needs the outside air to be warm. It only needs the air to be warmer than the refrigerant, and the compressor handles the rest. If your home is reasonably well insulated and you can accept some radiator upgrades, replacing a gas boiler can be a sound long term choice. If your home leaks heat badly, spend on insulation first and the heat pump will repay you far better.
