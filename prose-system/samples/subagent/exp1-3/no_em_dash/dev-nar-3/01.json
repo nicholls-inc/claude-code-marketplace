@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a423256cc7569a01f",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28180,
+    "cache_read_input_tokens": 44269,
+    "output_tokens": 1146,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:11:24.415Z",
+  "valid": true,
+  "text": "On January 15, 1919, the North End of Boston was enjoying an unseasonably warm winter day. The temperature had climbed to about 40 degrees Fahrenheit after days of bitter cold, and it was just past noon. Workers, children and families moved through the crowded Italian-American neighborhood along Commercial Street, near the harbor.\n\nLooming over them stood a steel tank 50 feet tall and 90 feet across, owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It held roughly 2.3 million gallons of molasses, shipped up from the Caribbean. The molasses was destined to be fermented into industrial alcohol, a business made urgent by wartime munitions needs and the looming arrival of Prohibition, which would take effect within the year.\n\nThe tank had always been troubled. Built quickly in 1915, it was never properly tested, and the company ignored a basic safety check of filling it with water to look for leaks. It groaned and shuddered when filled. It leaked so badly that molasses ran down its sides. Rather than fix the flaws, the company reportedly painted the tank brown to hide the stains. Neighborhood children collected the sweet drips in cups.\n\nOnly a day earlier a fresh shipment had been pumped in, and the sudden warmth of January 15 may have made the contents expand and ferment. At about 12:30 in the afternoon, the tank gave way. Witnesses described a sound like a machine gun, the rapid popping of rivets shooting loose, followed by a deep rumble as the steel burst open.\n\nA wave of molasses, estimated at 15 feet high in places, surged out at around 35 miles per hour. It crushed buildings, lifted a train off its tracks and tore a section of the elevated railway from its supports. It swept up horses, wagons and people alike. A firehouse was knocked from its foundation, and men inside were trapped in the wreckage. Because molasses is thick and cold air stiffened it, it grew harder to move through with every minute. Rescuers waded in to their waists, and those caught underneath struggled to breathe.\n\nTwenty-one people died and about 150 were injured. Victims included children, a city worker, and firefighters. Horses suffered terribly too. Rescue crews, including sailors from a nearby ship and Red Cross volunteers, worked through the night. Cleanup took weeks, with crews using salt water, sand and sawdust. Locals claimed the harbor stayed brown until summer, and some residents insisted that on hot days the neighborhood still smelled of molasses for decades.\n\nThe aftermath changed American law. The company blamed anarchists, claiming the tank had been bombed, but a lengthy civil trial, one of the first major class action suits in Massachusetts, rejected that. An auditor, Hugh Ogden, spent years reviewing testimony, and in 1925 concluded the tank had been poorly built and that the company was negligent. Survivors and families received settlements of about 600,000 dollars in total, a modest sum for such loss.\n\nThe disaster helped lead to stricter building codes. It pushed engineers to submit calculations and plans for review, and to be licensed, rather than relying on guesswork. A seemingly absurd tragedy had turned out to carry real, lasting lessons about safety, honesty and the cost of cutting corners."
+}

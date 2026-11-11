@@ -1,0 +1,35 @@
+The Apollo 13 Accident and the Return Home
+
+On the afternoon of April 11, 1970, Apollo 13 lifted off from Cape Kennedy carrying three men toward the Moon. James Lovell, the commander, was a veteran of three earlier flights. Fred Haise, the lunar module pilot, was making his first trip into space. Jack Swigert was there only because of a last-minute swap: Ken Mattingly, the original command module pilot, had been exposed to German measles days before launch and was grounded. Swigert had trained for the role for just a few days. After two successful lunar landings, the public had begun to treat the Moon as routine. Television networks did not even carry the crew's broadcasts live.
+
+The first sign of trouble was small and went unnoticed. During the climb into orbit, the center engine of the Saturn V's second stage shut down early, and the remaining engines burned longer to compensate. Nothing came of it. The spacecraft coasted out of Earth orbit, and the crew settled into the long, quiet cruise to the Moon.
+
+The real trouble had started years earlier, on the ground. The spacecraft's service module held two oxygen tanks, each fitted with a heater, a thermostat and a stirring fan. The thermostats had been designed for 28 volts, but the launch-site power supply ran at 65. Then, during a ground test before launch, one tank would not drain properly, and technicians used the heater to boil the oxygen off. The overheated thermostat switches fused shut. The wiring inside the tank was left with its insulation badly damaged, and nobody knew.
+
+On April 13, about 56 hours into the flight, mission control asked the crew to stir the tanks. Swigert flipped the switch. Ninety-odd seconds later, a bang shook the spacecraft. Bare wires inside tank two had sparked in an atmosphere of pure oxygen, and the tank ruptured. The blast blew off a panel of the service module and crippled the neighboring tank.
+
+"Okay, Houston, we've had a problem here," Swigert said. Lovell repeated it, a moment later, with the word "Houston" in front.
+
+At first, nobody understood how bad it was. Warning lights flickered. Lovell looked out a window and saw gas streaming into space, a venting cloud that glittered in the sunlight. That told him what the instruments were only beginning to confirm. Oxygen was leaking away, and with it went the fuel cells that made the command module's electricity and water. Within hours the main spacecraft would be dead.
+
+The Moon landing was gone. The only question that mattered now was whether the three men could get home.
+
+The answer lay in the lunar module, the spindly Aquarius, still docked to the command module Odyssey. It was built to carry two men for two days on the lunar surface. Now it would have to keep three alive for four. Mission control, under flight director Gene Kranz, made the call: use Aquarius as a lifeboat. The crew powered down Odyssey to save what little battery power remained, then crowded into the lunar module and switched it on.
+
+There was a second problem, one of geometry. Apollo 13 was on a "free return" path that would swing it around the Moon and back toward Earth, but only if nothing changed, and the path as flown would miss the planned splashdown area. Worse, the trip would take far too long. Engineers decided to fire Aquarius's descent engine, designed for landing, to speed the return. The first burn, shortly after the spacecraft passed behind the Moon, shaved hours off the journey. A second burn later corrected the course.
+
+Then came the cold and the thirst. With power rationed, the spacecraft's temperature fell to a few degrees above freezing. Condensation beaded on the walls. The crew drank little, because water was needed to cool the lunar module's electronics. Haise developed a kidney infection and a fever. Sleep was almost impossible.
+
+Carbon dioxide was the next killer. Aquarius's canisters of lithium hydroxide, which scrub the gas from the cabin air, were rated for two men for two days. They were filling up. Odyssey carried plenty of canisters, but they were square, and the lunar module's sockets were round. On the ground, engineers dumped a pile of the items the crew had on board onto a table: cardboard, plastic bags, a spacesuit hose, duct tape. They devised a way to join a square canister to a round socket. Mission control read the instructions up to the crew, step by step, and the astronauts built the adapter with their own hands. The carbon dioxide level dropped.
+
+Meanwhile, the engineers faced a still harder task. Before reentry, the crew would have to restart Odyssey, a spacecraft that had been shut down and left to freeze. Nobody had ever done that. Mattingly, the astronaut bumped from the crew, worked in a simulator for days, hunting for a power-up sequence that would use as little electricity as possible. The final procedure came up to the crew in the last hours.
+
+As Earth grew in the windows, the crew made their last preparations. They jettisoned the damaged service module, and Lovell, looking back, saw for the first time how badly it was wrecked. A whole panel was missing. The side of the spacecraft was scorched and gutted. They said goodbye to Aquarius, which had saved them, and cut it loose. It would burn up in the atmosphere.
+
+On April 17, Odyssey hit the atmosphere. Reentry always cuts off radio contact for about three minutes. This time the silence stretched past four, then past five. In mission control, nobody spoke. Everyone was watching the clock and thinking of the heat shield, which might have been damaged by the blast. Then, at last, a voice crackled through the static, and three parachutes opened over the South Pacific.
+
+The capsule splashed down near the recovery ship Iwo Jima, a few miles from its target. The crew had been gone nearly six days. They were thin, dehydrated and exhausted, but alive.
+
+The investigation that followed pinned the cause on the tank: the damaged wiring, the thermostats, the ground test that no one had flagged. NASA redesigned the oxygen tanks, removed the stirring fans and added a third tank, along with a spare battery. The program continued, and Apollo 14 landed on the Moon the following year.
+
+Apollo 13 is often called a "successful failure." The mission never reached the Moon, but it showed what a team of people could do when everything had gone wrong. Kranz later told his controllers that failure was not an option. The phrase became famous. What is less often remembered is how many people, in how many rooms, spent how many sleepless hours on small problems, a hose here, a battery there, a procedure that had to be written from scratch. The crew came home because ordinary skills, patiently applied, added up to something extraordinary.

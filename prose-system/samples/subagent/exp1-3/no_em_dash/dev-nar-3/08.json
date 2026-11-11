@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a1edb44c3a489fa87",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72449,
+    "output_tokens": 1058,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:14:23.239Z",
+  "valid": true,
+  "text": "On a mild January afternoon in 1919, the North End of Boston was busy with ordinary life. It was January 15, unseasonably warm after a bitter cold snap, and just past noon. Children played near the waterfront. Workers ate lunch. Horses and trucks clattered along Commercial Street beneath the elevated railway.\n\nBeside them stood a huge steel tank, fifty feet tall and about ninety feet across, owned by the Purity Distilling Company. It held more than two million gallons of molasses, shipped up from the Caribbean to be turned into industrial alcohol, a key ingredient in munitions as the First World War had only recently ended. The tank had been built quickly and cheaply. The walls were thin, the rivets weak, and nobody had run a proper safety test. When it was first filled, it leaked so badly that neighbors collected the dripping syrup in cups. The company's answer was to paint the tank brown, which hid the stains. Residents had also learned to ignore the groaning noises it made.\n\nThat warm day made matters worse. Fresh molasses, arriving cold from a recent shipment, had been added to the tank only a day earlier. As the temperature rose, the mixture began to ferment and expand, pressing hard against the weakened steel.\n\nAt about 12:30, witnesses described a deep rumbling, then a sound like a machine gun as the rivets burst loose. The tank tore open. A wave of molasses, perhaps fifteen to twenty-five feet high at its crest, surged out at around thirty-five miles an hour. It was dense, heavy, and relentless.\n\nThe wave crushed buildings as if they were made of matchsticks. It lifted a train off the tracks at the elevated railway and swept a truck into the harbor. It trapped people and animals in a sticky, suffocating flood. Firefighters and sailors from a nearby ship rushed in, wading through knee-deep syrup to dig out survivors. Rescuers found it nearly impossible to move, since the molasses grew thicker and harder to escape as the cold air worked on it.\n\nTwenty-one people died, and about one hundred fifty were injured. Among the dead were children and a city worker who had been eating lunch. Horses perished too, and the cleanup took weeks. Crews hosed the streets with saltwater and spread sand and sawdust. For months afterward, the harbor ran brown, and people said the neighborhood smelled sweet on warm days for decades.\n\nThe disaster led to a lawsuit, one of the first major class actions in Massachusetts. The company blamed anarchists, claiming a bomb had been planted, but an auditor appointed by the court heard years of testimony and concluded the tank had simply been poorly built. The company paid roughly six hundred thousand dollars in damages, and families received about seven thousand dollars for each life lost.\n\nThe case helped reshape the way Americans thought about construction. It led to stricter building codes and the requirement that engineers review and sign off on plans. A tragedy once dismissed as bizarre became a lasting lesson about safety, accountability, and the cost of cutting corners."
+}

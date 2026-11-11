@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad2b853bbc887db96",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72436,
+    "output_tokens": 1014,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:14:47.402Z",
+  "valid": true,
+  "text": "On a mild January day in 1919, the North End of Boston was busy. Wagons clattered along Commercial Street, children played near the waterfront, and workers took their lunch beside the elevated railway. Looming over them stood a steel tank, 50 feet tall and 90 feet across, owned by the Purity Distilling Company. It held more than two million gallons of molasses.\n\nThe tank had never been trusted by the neighbourhood. It leaked so badly that residents collected the dark syrup in cups. Rather than fix the seams, the company reportedly painted the tank brown to hide the stains. It had never been properly tested, and its builder had not consulted an engineer. The molasses, meant to be turned into industrial alcohol for munitions, had arrived just the day before, warmer than the winter air, and the new shipment had been poured on top of cooler, older stock.\n\nAt about 12:30 p.m. on January 15, 1919, witnesses heard a low rumble, followed by a sound like machine-gun fire as rivets shot out of the tank. Then the steel gave way. A wave of molasses, estimated at 25 feet high at its crest, surged out at around 35 miles an hour.\n\nIt crushed everything in its path. The wave tore a girder from the elevated railway and lifted a train off its tracks. It smashed buildings off their foundations, including a firehouse, whose collapse trapped and killed several men. Horses, wagons, and people were swept up and held fast. Boston's air was filled with a sweet, sickly smell and the screams of the trapped.\n\nAs the wave slowed, it left a sticky flood about two to three feet deep across the streets. Rescuers waded in, but the cold syrup thickened around victims and rescuers alike. Sailors from a nearby navy ship, the Red Cross, police, and ordinary neighbours worked for hours to pull people free. Eventually 21 people were dead and around 150 were injured. Some bodies were not recovered for days.\n\nCleanup took weeks. Crews sprayed saltwater from fireboats and covered the streets with sand and sawdust. The harbour ran brown into the summer, and locals said that on hot days the neighbourhood still smelled of molasses for decades.\n\nThe disaster became a landmark legal case. Residents brought a class-action suit against United States Industrial Alcohol, which had taken over Purity Distilling. The company blamed anarchists, claiming a bomb had destroyed the tank. After years of testimony, an auditor appointed by the court concluded that the tank had been poorly built and under-engineered, and the company was ordered to pay damages, roughly $600,000 in total.\n\nThe consequences reached beyond the courtroom. The case helped push Massachusetts to require that architects and engineers certify building plans, and it contributed to a broader shift towards stricter safety standards for construction. A strange, almost comic-sounding event had exposed a serious truth: corporate neglect, left unchecked, can kill."
+}

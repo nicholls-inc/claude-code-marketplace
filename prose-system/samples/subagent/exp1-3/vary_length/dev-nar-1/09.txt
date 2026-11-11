@@ -1,0 +1,25 @@
+In the late summer of 1854, a terrible sickness fell on Soho, a crowded district of London. The disease was cholera. It begins with sudden, violent diarrhoea and vomiting, and it can kill a healthy adult within a day by draining the body of water. Within three days of the outbreak's start, on the last night of August, more than a hundred people living near Broad Street were dead. Within a week, hundreds more had gone. Many families fled, leaving shuttered houses behind them.
+
+Nobody knew what caused it. The prevailing belief, held by most doctors and officials, was that cholera spread through "miasma," a foul vapour rising from rotting waste and filthy ground. The air itself was thought to be poisonous. It was a sensible idea in a city that stank. London in those years was an open sewer, and the Thames ran thick with refuse.
+
+John Snow thought the theory was wrong. He was a physician who lived and worked just a few streets from Broad Street, and he had already spent years wondering about cholera. He had noticed that the disease attacked the bowels first, not the lungs. If people were breathing in poison, he reasoned, why would the illness begin in the gut? Something must be swallowed. Snow suspected that cholera travelled in contaminated water, though he could not yet name the culprit, since germs as a cause of disease were not generally accepted. He had published his ideas in 1849. Hardly anyone had been persuaded.
+
+Now the epidemic was on his doorstep, and he went to work.
+
+Snow did what few doctors thought to do: he walked the streets and knocked on doors. He wanted to know exactly where the dead had lived, and what they had drunk. He obtained a list of deaths from the local register office, and he began to mark them on a map of the neighbourhood, one small bar for each death, stacked at each address. The pattern emerged slowly, then unmistakably. The deaths clustered thickly around a single spot. At the centre stood the public water pump on Broad Street.
+
+People came from all over the neighbourhood to fill their buckets there. Its water was said to be especially clear and pleasant.
+
+Snow did not rest on the map alone. He checked the exceptions, because exceptions can destroy a theory or confirm it. A workhouse nearby, home to some five hundred people, had suffered remarkably few deaths. Why? Snow discovered that the workhouse had its own well, and its inmates never needed the Broad Street pump. A brewery on the same street had no cases at all among its workers. The men there were given free beer, and they also had their own supply of water. Presumably they never touched the pump.
+
+Then came the stranger cases. A widow who lived far away in Hampstead died of cholera after the outbreak began. Snow learned that she had once lived in Soho and loved the taste of the Broad Street water. Her son sent a bottle of it to her every day. She and a niece who visited her both drank it, and both died. No one else in her neighbourhood fell ill.
+
+By now Snow was convinced. On 7 September, he took his evidence to the local Board of Guardians, the men who governed the parish. He asked them to remove the pump handle, so that no one could draw water. The officials were sceptical, but they agreed. The handle came off the next day.
+
+The epidemic was already fading by then, and some historians argue that it would have ended anyway, because so many residents had fled or died. That is fair. But Snow's work did not end with the handle.
+
+A local clergyman, Henry Whitehead, began as a doubter and ended as an ally. He knew the community far better than Snow did, and he kept investigating. Whitehead eventually traced the beginning of the outbreak to a baby girl who had died of cholera at 40 Broad Street. Her mother had washed the child's soiled nappies and tipped the dirty water into a cesspool just a few feet from the well. Inspection later showed that the brickwork lining the well was cracked, and that sewage had seeped through.
+
+That was the missing link. The water was not poisoned by air. It had been fouled by human waste, carrying whatever unseen thing made people sick.
+
+Snow's account did not win immediate acceptance, and officials produced reports that rejected his conclusions. He died in 1858, aged forty-five, without seeing his theory triumph. But his method lasted: counting cases, mapping them, and asking what the sick had in common. Today that is the foundation of public health, and Snow is remembered as the father of modern epidemiology. He solved a mystery not with a microscope but with shoe leather, patience, and a pencil.

@@ -1,0 +1,27 @@
+In the late summer of 1854, a horror arrived in Soho, a crowded, grimy district of London. Within days, hundreds of people were dead. The illness was cholera, and it killed fast. A healthy person could wake with violent diarrhea and vomiting, grow shrunken and blue-grey from lost fluid, and be dead by nightfall.
+
+Nobody knew what caused it. The reigning belief, held by most doctors and officials, was miasma: the idea that disease spread through foul air, rising from rot and filth. London certainly stank. It was the largest city on earth, and its sewage ran in open ditches and cesspools, many of them leaking into the ground and the river.
+
+John Snow, a physician in his early forties, disagreed. He was a quiet, teetotal man who had made his name giving anaesthetic to patients, including Queen Victoria during childbirth. He had also been thinking about cholera for years. After an earlier epidemic, in 1848 and 1849, he had published an argument that the disease was swallowed, not breathed. It attacked the gut first, he reasoned, so whatever caused it must enter through the mouth. Water was the likeliest carrier. Few took him seriously.
+
+Then the outbreak around Broad Street began, and it happened practically on his doorstep. Snow lived nearby. He knew the streets.
+
+He did not start with a theory about the pump. He started with the dead. The local register of deaths gave names and addresses, and Snow walked the district, knocking on doors, asking families what they had drunk and where they had got it. It was slow, unglamorous work. It was also the heart of the matter.
+
+Patterns emerged. Deaths clustered tightly around one spot: a public water pump on Broad Street, where residents queued with buckets. The farther a house stood from that pump, the fewer deaths it had. Snow marked each death on a map of the neighbourhood, a small black bar at every address, until the pile of bars around the pump was impossible to ignore. Maps of this kind were not new. Using one to expose the source of a disease was.
+
+But a cluster alone proves little, and Snow knew it. The exceptions mattered more, and he hunted them down.
+
+Nearby stood a workhouse housing some five hundred people. Only a handful died. Why? Snow found that the workhouse had its own well and rarely touched the Broad Street pump. A brewery on the same street, employing seventy workers, had no deaths at all. The men there were given free beer, and they also had their own well. They simply did not drink from the pump.
+
+Then came the strangest case. A widow in Hampstead, miles from Soho, died of cholera, and so did her niece. Snow learned that the widow had once lived on Broad Street. She loved the taste of its water so much that a servant fetched a bottle of it to her every day. She drank from it before she fell ill. Her niece drank from the same bottle. Nobody else in her neighbourhood caught the disease.
+
+By September 7th, Snow was ready. He took his findings to the local Board of Guardians, the men who governed the parish, and urged them to act. The next day they removed the pump handle, so no one could draw water.
+
+The epidemic was already fading, partly because many residents had fled the district. Critics later seized on this, and Snow himself was honest about it. He did not claim the handle alone ended the outbreak. What he had was a body of evidence, and it was strong.
+
+Evidence arrived afterward, too. A local clergyman, Henry Whitehead, began as a sceptic. He knew the neighbourhood far better than Snow and set out to disprove him. Instead he found the source. A baby girl living at 40 Broad Street had died of a diarrhoeal illness days before the outbreak exploded. Her mother had washed the child's soiled nappies and tipped the water into a cesspool beside the house. Its brickwork was cracked, and it sat only a few feet from the well. Whitehead became a convert.
+
+The authorities were not. An official inquiry rejected Snow's theory, and the pump handle went back on. The old belief about bad air held firm for years.
+
+Snow died in 1858, aged only forty-five, never knowing he had been right. Within a generation, microbiology confirmed that cholera was caused by a living organism carried in contaminated water. He is remembered today as a founder of modern epidemiology, the science of tracing how diseases spread through populations. His method was simple: count carefully, map honestly, and chase every exception until it makes sense.

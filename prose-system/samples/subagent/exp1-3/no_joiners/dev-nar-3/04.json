@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a85492c3bb785ed70",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72461,
+    "output_tokens": 2675,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:12:47.443Z",
+  "valid": true,
+  "text": "On the afternoon of January 15, 1919, the North End of Boston was enjoying an unexpected thaw. After days of bitter cold, the temperature had climbed above 40 degrees. Dockworkers ate lunch outside, children played near the waterfront, and horses and wagons crowded the narrow streets beneath the elevated railway.\n\nLooming over the neighborhood stood a steel tank belonging to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It was about 50 feet tall and 90 feet across, and it held more than two million gallons of molasses shipped up from the Caribbean. The sweet cargo was destined to become industrial alcohol, which was used in making munitions and, before long, in the liquor trade that Prohibition was about to outlaw.\n\nThe people who lived nearby had never trusted the tank. It groaned when filled. It leaked so badly that neighbors collected the syrup in cans, and the company's answer was to paint the tank brown so the stains would not show. No one had properly tested whether the structure could bear its load. A fresh shipment had arrived only the day before, and the warmer weather made the contents expand and thin.\n\nShortly after noon, a sound like machine gun fire rang out as rivets shot from the steel. Then the tank burst open. A wave of molasses as high as 25 feet surged outward at roughly 35 miles an hour, pushing a wall of twisted metal ahead of it. Witnesses described a rumbling like a train and a thick, sickly sweet smell.\n\nThe wave tore a section of the elevated railway from its supports and flattened homes. It crushed part of a firehouse, trapping firemen beneath collapsing floors. Wagons, horses and people were swept off their feet. Molasses is far thicker than water, and in the cold air it began to stiffen quickly. Those caught in it could scarcely move, and rescuers had to wade through the sticky mass to reach them. Soldiers, sailors and Red Cross workers joined the effort, and doctors set up makeshift hospitals nearby.\n\nIn the end twenty one people died and about 150 were injured. Among the dead were children and a city worker. Some bodies were not recovered for days. Cleanup lasted weeks, with crews blasting the streets with saltwater from fireboats and spreading sand to cut the sweetness. The harbor ran brown into the summer, and residents claimed the area smelled of molasses on warm days for decades afterward.\n\nThe company blamed anarchists and insisted a bomb had destroyed the tank. A long lawsuit followed, one of the first major class actions in Massachusetts. After hearing from experts and thousands of witnesses, an auditor ruled in 1925 that the tank was poorly built and that the company was responsible. It paid out roughly 600,000 dollars in settlements.\n\nThe disaster changed how America builds. Plans for large structures came to be reviewed and signed by qualified engineers and architects, and the flood became a lasting lesson in public safety, a tragedy that is often remembered as a curiosity but that was, above all, entirely preventable."
+}

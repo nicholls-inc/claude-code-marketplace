@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a33295991a8bfa3af",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72436,
+    "output_tokens": 1135,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:13:08.439Z",
+  "valid": true,
+  "text": "On a mild January day in 1919, the North End of Boston was busy with ordinary life. It was around 12:30 p.m. on the 15th, and the temperature had climbed unusually high for winter, near 40 degrees Fahrenheit after days of bitter cold. Workers ate lunch, children played in the streets, and horses and wagons crowded the waterfront near Commercial Street.\n\nLooming over the neighborhood stood a huge steel tank, fifty feet tall and about ninety feet across. It belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol, and it held roughly 2.3 million gallons of molasses. The sweet syrup was destined to be fermented into industrial alcohol, a business that was soon to grow even bigger, since Prohibition was about to take effect. The tank had been built quickly and cheaply in 1915. Its walls were too thin, its rivets poorly set, and nobody had properly tested it before filling it. Residents had long noticed it leaking, and some neighbors collected the dripping molasses in pails. The company's response was to paint the tank brown to hide the stains.\n\nOnly the day before, a fresh shipment of molasses had been pumped in, and the warmer weather may have caused the contents to expand and ferment, building pressure inside. Then, without much warning, the tank gave way. Witnesses described a deep rumble, a sound like a machine gun as the rivets popped, and then a roar as the steel burst apart.\n\nA wave of molasses, perhaps fifteen to twenty-five feet high at its crest, surged through the streets at an estimated thirty-five miles an hour. It was heavy, sticky, and impossible to outrun. It smashed buildings off their foundations, crushed a firehouse, and knocked an elevated railway track out of true as a train approached. Wagons, horses, and people were swept up in the churning mass. Some of the dead were killed by the force of the impact, and others were trapped and suffocated in the thick, cold syrup.\n\nRescuers rushed to the scene, including sailors from a nearby ship, police, Red Cross workers, and army cadets. They waded through the muck, which in places stood waist deep, and struggled to pull survivors free. It was exhausting and slow work. In the end, twenty-one people died and about 150 were injured. Among the victims were children, and the bodies of some took days to find.\n\nThe cleanup was an ordeal in its own right. Crews sprayed the streets with salt water from fireboats and covered the ground in sand and sawdust. For weeks, the harbor ran brown, and the smell of molasses lingered in the neighborhood for decades, especially on hot summer days.\n\nThe aftermath was just as important as the disaster. Residents filed a class action lawsuit, one of the first of its kind in Massachusetts. United States Industrial Alcohol argued that anarchists had sabotaged the tank, but an auditor appointed by the court heard thousands of pages of testimony and rejected that claim, concluding that the structure was simply unsafe. The company was found liable and paid roughly 600,000 dollars in settlements. The case helped push cities toward stricter building codes and requirements that engineers sign off on large structures.\n\nToday a small plaque marks the spot, a quiet reminder of a strange and tragic day."
+}

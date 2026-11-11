@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a931c8ab9ef7cd918",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72449,
+    "output_tokens": 1108,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:15:13.442Z",
+  "valid": true,
+  "text": "On a mild January day in 1919, the North End of Boston was busy with the ordinary noise of a working neighborhood. Horses pulled wagons along Commercial Street, dockworkers ate lunch near the harbor, and children played in the shadow of a great steel tank. The tank, owned by the Purity Distilling Company, stood fifty feet tall and held more than two million gallons of molasses. It had been rushed into service in 1915, and nobody who built it had paid much attention to safety. It leaked so badly that neighbors collected the dripping syrup in jugs. The company's answer was to paint it brown, so the stains would not show.\n\nThe molasses was bound for the distilleries, where it would become industrial alcohol, a trade that was about to be made more urgent by Prohibition and by wartime demand for munitions. Just the day before, a fresh shipment had been pumped in. The weather, cold for days, had turned unusually warm, and the liquid inside was expanding.\n\nAt about 12:30 in the afternoon on January 15, a sound like a machine gun rattled through the district as rivets began to shoot from the tank's seams. Then the steel gave way. A wave of molasses, by most accounts around fifteen feet high at its crest, burst outward at an estimated thirty-five miles an hour.\n\nIt crushed whatever stood in its way. The elevated railway structure buckled. A firehouse was knocked off its foundations, and the men inside were swept into the flood. Buildings folded and collapsed, and wagons, horses and people were carried along in a thick brown tide. The air itself was filled with a heavy, sweet smell.\n\nThose who were caught could barely move. The molasses was cold, and it grew thicker as it spread, gripping legs and arms like glue. Rescuers waded in, sinking to their knees. Soldiers and sailors from a nearby naval ship, the Boston police and Red Cross nurses all rushed in to help. They used what they had, cutting through the goo to free the trapped and pulling out the injured. Search crews kept digging for days, because bodies kept surfacing in the sticky mass.\n\nIn the end, twenty-one people were dead and about 150 were injured. Many of the victims were poor immigrants and laborers who happened to be working or living nearby. The harbor ran brown for months. Cleanup crews sprayed the streets with salt water and sand, and for years afterward, residents swore that the area smelled of molasses on hot days.\n\nThe aftermath changed how Americans build. Survivors and families sued the company, and one of the first major class action suits in Massachusetts followed. Purity Distilling blamed anarchists, claiming the tank had been bombed. But an auditor appointed by the court heard hundreds of witnesses and examined the engineering. He concluded that the tank had been poorly designed, built with metal that was too thin and never properly tested. The company was ordered to pay damages, roughly a million dollars in total.\n\nThe case helped push states to require that engineers and architects approve and sign off on large structures. What began as a bizarre disaster became a lasting lesson in public safety. Today, a small plaque marks the spot in Boston's North End, a quiet reminder of the day a neighborhood was swallowed by a sweet and terrible flood."
+}

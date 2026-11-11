@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af92b5b12ef6ac843",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72449,
+    "output_tokens": 1101,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:12:23.184Z",
+  "valid": true,
+  "text": "On January 15, 1919, the North End of Boston was enjoying an unusually warm winter day. The temperature had climbed above forty degrees after a bitter cold snap, and the neighborhood's mostly Italian and Irish residents were out at lunch. Workers ate near the waterfront. Children played in the streets. Looming over them all stood a steel tank, fifty feet tall and nearly ninety feet across, owned by the Purity Distilling Company.\n\nIt held more than two million gallons of molasses.\n\nThe tank had been built quickly in 1915, and cheaply. The molasses inside was destined to be fermented into industrial alcohol, a business made urgent by the war in Europe and by the looming arrival of Prohibition. The company's owners rushed construction, skipped basic safety tests, and never consulted an architect or engineer. When the tank was first filled, it leaked so badly that neighbors collected the dripping syrup in pails. The company's answer was to paint the tank brown, which hid the stains. Rivets popped and the walls groaned, yet the tank stood on.\n\nAround 12:30 that afternoon, it gave way.\n\nWitnesses described a sound like a machine gun, the rapid-fire popping of rivets shearing off. Then came a deep rumble, and the tank tore open. A wave of molasses perhaps fifteen feet high at its crest surged into the streets at an estimated thirty-five miles per hour. It carried a force of destruction no one could have imagined from something so sweet.\n\nThe wave crushed buildings. It lifted a freight car off its tracks and knocked part of the elevated railway from its supports. It swept up wagons, horses, and people alike. A firehouse was torn from its foundation, and the firefighters inside were pitched into the flood. Within seconds, a neighborhood lay buried under a thick, sticky tide.\n\nRescue was agonizing. The cold air began to thicken the molasses almost at once, turning it into a trap. Those caught in it could barely move, and each breath of struggle drew them deeper. Rescuers waded in knee-deep and waist-deep, sinking with every step. Sailors from a nearby ship, the USS Nantucket, rushed in to help. Doctors and nurses worked in makeshift hospitals. Searchers kept digging for days.\n\nTwenty-one people died. About 150 were injured. Among the dead were children, a man crushed in a building, and several horses that had to be put down. The harbor ran brown with molasses for months, and residents claimed the neighborhood smelled sweet on hot summer days for decades afterward.\n\nThe aftermath turned to blame. Purity Distilling insisted that anarchists had sabotaged the tank, a claim that sounded plausible in a country still jittery after the war. But a lengthy class-action lawsuit, one of the first in Massachusetts, took a different view. An auditor combed through thousands of pages of testimony and found the tank was simply poorly built, with walls too thin and a design that did not account for its own weight. The company paid roughly $600,000 in settlements.\n\nThe disaster left a lasting mark on American law. It helped push states to require licensed engineers to sign off on large structures, and it showed that corporations could be held to account."
+}

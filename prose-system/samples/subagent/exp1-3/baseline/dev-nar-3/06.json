@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac684b2297dcb40a4",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72436,
+    "output_tokens": 1008,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:13:34.431Z",
+  "valid": true,
+  "text": "On a mild January day in 1919, the North End of Boston was busy. Around half past noon on the fifteenth, workers, children and horses crowded the streets near Commercial Street and the harbor. Towering above them stood a steel tank fifty feet high and ninety feet across, owned by the Purity Distilling Company. It held more than two million gallons of molasses.\n\nThe molasses had arrived from the Caribbean and was destined to be fermented into industrial alcohol, a trade that had grown urgent as the First World War ended and Prohibition loomed. The tank had been built quickly in 1915 by a company eager to profit. It was never properly tested, and its walls were thinner than they should have been. It leaked so badly that neighborhood children collected the syrup in cups. The company's answer was to paint the tank brown to hide the stains.\n\nThat week, a fresh shipment had been pumped in, and the weather had turned unseasonably warm, thinning the contents and raising the pressure within. Residents later said they heard a low rumble, like a train, and then a sound like machine-gun fire as rivets burst from the steel.\n\nThen the tank failed. A wave of molasses, perhaps fifteen to twenty-five feet high at its crest, swept out at roughly thirty-five miles an hour. It carried a mass of metal and debris with it. It crushed buildings, lifted a train off its tracks on the elevated railway, and knocked a firehouse from its foundation. Men, women and horses were caught in a sticky tide that cooled and thickened as it spread. Rescuers waded in knee deep, and found that every movement dragged them further down.\n\nTwenty-one people died, some drowned in the syrup, others crushed. About a hundred and fifty more were injured. Among the dead were children who had been playing nearby, and city workers eating lunch at the firehouse. Recovery took days. Bodies were still being found weeks afterward, and the harbor ran brown well into summer. Sailors and firefighters used salt water to wash the streets, and sand to dry them. People said the district smelled of molasses for decades afterward, especially on hot days.\n\nThe lawsuits that followed became one of the first large class actions in Massachusetts. United States Industrial Alcohol, the parent company of Purity Distilling, insisted that anarchists had blown up the tank, a claim that fit the fears of the Red Scare. But a court-appointed auditor, Hugh Ogden, heard from hundreds of witnesses over several years. He concluded that the tank had been structurally unsound, and the company paid roughly a million dollars in settlements, with families of the dead receiving only about seven thousand dollars each.\n\nThe disaster left a lasting legacy. It pushed Massachusetts toward stricter building codes and made engineers' stamps on construction plans a standard requirement. It remains a reminder that shortcuts in safety can have terrible consequences, even when the danger looks as harmless as something sweet."
+}

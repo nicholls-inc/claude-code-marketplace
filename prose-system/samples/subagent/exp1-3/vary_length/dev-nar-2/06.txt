@@ -1,0 +1,41 @@
+The Dark Side of the Moon
+
+On April 11, 1970, Apollo 13 lifted off from Kennedy Space Center at 2:13 in the afternoon, Houston time. It carried three men: James Lovell, the commander, a veteran of two Gemini flights and Apollo 8; Jack Swigert, the command module pilot, who had joined the crew only days earlier; and Fred Haise, the lunar module pilot, making his first trip to space. Swigert was a late substitute. The prime command module pilot, Ken Mattingly, had been exposed to German measles and was grounded. The crew trained with Swigert for just a few days.
+
+The mission was meant to be the third landing on the Moon. By then, the public had grown a little bored. Television networks did not carry the crew's broadcasts. Apollo 11 had made the impossible look routine, and routine does not hold an audience.
+
+The launch itself was not perfect. One of the second-stage engines shut down early, and the others burned longer to make up the difference. Nobody thought much about it. The ship was healthy, and the crew settled into the long coast toward the Moon.
+
+For two days, little happened. The astronauts ate, checked systems, and opened the hatch to the lunar module, which they had named Aquarius. The command and service module was called Odyssey. Together, the two craft were a delicate stack of metal and wiring, hurtling outward at thousands of miles an hour.
+
+On the evening of April 13, about 200,000 miles from Earth, the crew finished a television broadcast. Few were watching. Then Mission Control asked Swigert to stir the oxygen tanks in the service module. This was routine. The tanks held supercooled liquid oxygen, and stirring it prevented it from stratifying, which kept the gauges accurate.
+
+Swigert flipped the switch.
+
+Fifty-five seconds later, at about 9:08 p.m. Houston time, the crew heard a bang. Lovell felt a shudder run through the ship. Warning lights lit up the panel. Swigert radioed the words that became famous in a slightly altered form: "Okay, Houston, we've had a problem here." Lovell repeated it, clarifying that they had a main bus B undervolt.
+
+The cause lay inside oxygen tank number two. Years earlier, a tank had been dropped slightly during handling, damaging an internal fitting. Later, during ground testing, the tank would not drain normally, and technicians used heaters to boil off the oxygen. Those heaters were designed for 28 volts, but the ground power supply was 65 volts. The higher voltage fused the contacts on the thermostat switches meant to protect the tank. Insulation on the wiring inside baked away. Nobody knew. The tank went into the spacecraft with bare wires and a fatal weakness.
+
+When Swigert hit the switch, the fans in the tank sparked. The exposed wires ignited the Teflon insulation, and the fire built pressure inside the tank until it burst. The explosion blew off a panel of the service module and damaged the neighboring tank. Oxygen began to leak into space. So did the fuel cells' supply, and with it, the ship's electricity and water.
+
+Lovell looked out a window and saw gas venting into space. He told Houston. It was clear that something had gone badly wrong, and over the next hour it became clear that Odyssey was dying. Within about three hours, the command module's battery power would be the only thing left, and it was needed for reentry. The crew had to move into the lunar module.
+
+That decision, made in the first hour, saved their lives. Aquarius was built for two men for two days on the lunar surface. Now it had to keep three alive for four days. Every system had to be stretched. In Houston, flight director Gene Kranz gathered his White Team and, later, a series of teams that worked around the clock. Kranz is remembered for the line "failure is not an option," which comes from the film, not from the control room itself. But the spirit was real.
+
+Then came the question of the route home. The ship was on a trajectory that would slingshot it around the Moon and back toward Earth, but engineers had deliberately put it on a path that would miss Earth if no corrections were made. The mission had been planned that way for safety. Now they had to fix it. The crew used Aquarius's descent engine to burn about five and a half hours after the explosion, setting them on a faster return. A second burn later, after swinging around the far side, shortened the trip further.
+
+The far side was strange. For roughly 25 minutes the ship was out of contact with Earth, behind the lunar bulk. The men looked down at craters in the dark. They could not stop to enjoy it. They were not going to land.
+
+The next days were a trial of endurance. To conserve power, nearly everything was shut down. The cabin temperature fell to around 38 degrees Fahrenheit. Condensation dripped down the walls. Haise developed a kidney infection and a fever. The crew slept little. They drank very little water, rationing it to keep cooling for the electronics, and all three lost weight, some of them over a dozen pounds.
+
+Then there was the carbon dioxide. Aquarius had lithium hydroxide canisters to scrub the air, but they were round, and designed for two people. Odyssey's canisters were square. They did not fit. As the carbon dioxide level crept up toward dangerous levels, engineers on the ground assembled a solution from items the crew had on board: cardboard from a flight manual, plastic bags, a sock, a hose from a spacesuit, and duct tape. They read the instructions up to the crew, step by step. The crew built the device, and the readings fell. It became known as the mailbox.
+
+There was one more problem. They would have to restart Odyssey, a command module that had been dead and cold for days, for reentry. No one had ever powered up a spacecraft that way. Engineers on the ground, including Mattingly, the grounded astronaut, worked out a new power-up procedure in the simulators and sent it up. Mattingly, who had spent days in the simulator, was a central figure in the effort.
+
+Before reentry, the crew jettisoned the service module. As it drifted away, they saw for the first time the damage: an entire panel had been blown off, and the side of the module was a ruin. Lovell reported it to Houston. Then they released Aquarius, which had served as a lifeboat, and watched it go.
+
+Reentry began on April 17. The usual communications blackout, when plasma envelops the capsule, lasts about three minutes. This time it ran longer. The seconds ticked past the expected time and then past it again. In Houston, the room waited. Then, after about 87 seconds more than planned, Swigert's voice came through. Three parachutes bloomed over the South Pacific, and Odyssey splashed down near Samoa at 12:07 p.m. Houston time, within sight of the recovery ship USS Iwo Jima.
+
+The astronauts were tired and thin, but alive. The mission had failed in its goal, yet became known as a successful failure. A later review board traced the accident to the tank and its history of small errors. NASA redesigned the tanks and the wiring, and added a third oxygen tank and a battery to the service module.
+
+Lovell later said it was not a miracle but the result of the work of many people. That seems right. Humans had made the mistakes, and humans had solved the problem, with engineering, improvisation, and a lot of duct tape.
