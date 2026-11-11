@@ -1,0 +1,101 @@
+{
+ "human full": {
+  "docs": 142,
+  "sentences_per_doc": 96.2,
+  "lag1": 0.035,
+  "null_mean": -0.011,
+  "null_lo": -0.028,
+  "null_hi": 0.007,
+  "excess": 0.046
+ },
+ "human cut to 20 sentences": {
+  "docs": 617,
+  "sentences_per_doc": 20.0,
+  "lag1": -0.026,
+  "null_mean": -0.05,
+  "null_lo": -0.067,
+  "null_hi": -0.032,
+  "excess": 0.024
+ },
+ "human cut to 45 sentences": {
+  "docs": 228,
+  "sentences_per_doc": 45.0,
+  "lag1": 0.018,
+  "null_mean": -0.022,
+  "null_lo": -0.041,
+  "null_hi": -0.004,
+  "excess": 0.04
+ },
+ "sonnet baseline": {
+  "docs": 120,
+  "sentences_per_doc": 60.6,
+  "lag1": -0.079,
+  "null_mean": -0.016,
+  "null_lo": -0.039,
+  "null_hi": 0.006,
+  "excess": -0.063
+ },
+ "sonnet plain_prose": {
+  "docs": 120,
+  "sentences_per_doc": 45.8,
+  "lag1": -0.129,
+  "null_mean": -0.021,
+  "null_lo": -0.045,
+  "null_hi": 0.002,
+  "excess": -0.108
+ },
+ "voice_spec": {
+  "docs": 120,
+  "sentences_per_doc": 45.9,
+  "lag1": -0.138,
+  "null_mean": -0.024,
+  "null_lo": -0.051,
+  "null_hi": -0.0,
+  "excess": -0.114
+ },
+ "rhythm_medium": {
+  "docs": 120,
+  "sentences_per_doc": 39.0,
+  "lag1": -0.185,
+  "null_mean": -0.027,
+  "null_lo": -0.054,
+  "null_hi": 0.003,
+  "excess": -0.159
+ },
+ "rhythm_content": {
+  "docs": 120,
+  "sentences_per_doc": 23.1,
+  "lag1": -0.155,
+  "null_mean": -0.044,
+  "null_lo": -0.073,
+  "null_hi": -0.007,
+  "excess": -0.111
+ },
+ "revise_rhythm": {
+  "docs": 120,
+  "sentences_per_doc": 32.3,
+  "lag1": -0.156,
+  "null_mean": -0.032,
+  "null_lo": -0.063,
+  "null_hi": 0.004,
+  "excess": -0.125
+ },
+ "opus baseline": {
+  "docs": 120,
+  "sentences_per_doc": 64.9,
+  "lag1": -0.071,
+  "null_mean": -0.015,
+  "null_lo": -0.036,
+  "null_hi": 0.006,
+  "excess": -0.056
+ },
+ "fable baseline": {
+  "docs": 120,
+  "sentences_per_doc": 54.6,
+  "lag1": -0.095,
+  "null_mean": -0.02,
+  "null_lo": -0.043,
+  "null_hi": 0.002,
+  "excess": -0.075
+ }
+}
