@@ -26,7 +26,7 @@ from pathlib import Path
 
 
 def read_transcript(path):
-    prompt, text, model, first_ts, tools = None, None, None, None, []
+    prompt, text, last_text, model, first_ts, tools, tool_inputs = None, None, None, None, None, [], []
     usage_by_msg, sys_prompt = {}, None
     for line in open(path, encoding="utf-8"):
         d = json.loads(line)
@@ -44,17 +44,25 @@ def read_transcript(path):
         if m.get("usage") and m.get("id"):
             usage_by_msg[m["id"]] = m["usage"]          # one usage per API message
         for b in c:
+            if b.get("type") == "text" and b.get("text", "").strip():
+                last_text = b["text"]
             if b.get("type") == "tool_use":
                 if b["name"] == "SubagentHandback":
                     text = b["input"].get("message")
                 else:
                     tools.append(b["name"])
+                    tool_inputs.append(json.dumps(b.get("input"), ensure_ascii=False))
+    how = "handback" if text is not None else "final_text"
+    if text is None:
+        text = last_text                                # agents that return their final text
     usage = {k: sum(u.get(k) or 0 for u in usage_by_msg.values())
              for k in ("input_tokens", "cache_creation_input_tokens",
                        "cache_read_input_tokens", "output_tokens")}
     usage["api_messages"] = len(usage_by_msg)
     return {"prompt": prompt, "text": text, "model": model, "timestamp": first_ts,
-            "tools": tools, "usage": usage,
+            "tools": tools, "usage": usage, "returned_by": how,
+            # A run that touched the experiment's own files may have read the brief or other samples.
+            "touched_experiment_files": any("prose-system" in t for t in tool_inputs),
             "system_prompt_sha256": hashlib.sha256((sys_prompt or "").encode()).hexdigest()
             if sys_prompt else None}
 
@@ -66,7 +74,10 @@ def main():
     ap.add_argument("--briefs", required=True)
     ap.add_argument("--conditions", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--agent", action="append", required=True)
+    ap.add_argument("--agent", action="append", default=[])
+    ap.add_argument("--all", action="store_true", help="import every agent transcript in the directory")
+    ap.add_argument("--skip-unmatched", action="store_true",
+                    help="skip transcripts whose prompt matches no condition and brief")
     args = ap.parse_args()
 
     briefs = json.loads(Path(args.briefs).read_text(encoding="utf-8"))
@@ -76,13 +87,20 @@ def main():
     out = Path(args.out)
     imported = {json.loads(p.read_text(encoding="utf-8"))["agent_id"] for p in out.rglob("*.json")}
 
+    agents = list(args.agent)
+    if args.all:
+        agents += sorted(p.name[len("agent-"):-len(".jsonl")]
+                         for p in Path(args.transcripts).glob("agent-*.jsonl"))
     runs = []
-    for a in args.agent:
+    for a in agents:
         if a in imported:
             print("already imported:", a)
             continue
         t = read_transcript(Path(args.transcripts) / ("agent-%s.jsonl" % a))
         if t["prompt"] not in by_prompt:
+            if args.skip_unmatched:
+                print("skipped, no match:", a)
+                continue
             sys.exit("agent %s: prompt matches no condition and brief" % a)
         runs.append((t["timestamp"], a, t))
     for _, a, t in sorted(runs):
@@ -101,7 +119,8 @@ def main():
                             "the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
             "system_prompt_sha256": t["system_prompt_sha256"],
             "sampling": "harness defaults; not set by the experimenter",
-            "tools_used": t["tools"],
+            "tools_used": t["tools"], "returned_by": t["returned_by"],
+            "touched_experiment_files": t["touched_experiment_files"],
             "usage": t["usage"], "timestamp_utc": t["timestamp"],
             "valid": bool(text.strip()),
             "text": text,
