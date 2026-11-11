@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "abaefae5846efbd17",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73755,
+    "output_tokens": 2476,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:22:44.553Z",
+  "valid": true,
+  "text": "Stop Estimating How Long Work Takes\n\nEvery quarter the same ritual plays out. A manager asks when something will be done. Engineers huddle, assign points or hours, add a buffer, and hand back a date. Six months later the date has slipped, everyone is annoyed, and the estimate is quietly forgotten until the next planning cycle. We keep doing this because it feels responsible. It isn't. Software teams should stop estimating how long work will take.\n\nStart with what estimates actually measure. Most software work is discovery. The hard part of a feature is rarely typing the code. It is finding out what the system really does, what the customer really needs, and which of the unknowns will bite. An estimate made before that discovery is a guess dressed up as arithmetic. Decades of research on planning, from the planning fallacy onward, show that these guesses are systematically optimistic. The error is not random noise that more data would average out. It is structural.\n\nPoints and hours also invite the wrong conversation. Teams spend a meeting debating whether a task is a 3 or a 5. That feels rigorous, but it mostly measures how well people read the ticket. Meanwhile the real risks, such as a dependency on another team, a flaky integration, or a compliance question nobody has asked, go unexamined because they don't fit in the estimate box.\n\nManagers, in turn, treat the number as a commitment. Once a date is written down, it becomes a promise, and every deviation becomes a failure to explain. This punishes exactly the behavior we want: raising unknowns early, saying \"we don't know yet,\" and changing course when new information arrives. People learn to pad estimates, hide blockers, and protect their dates instead of the outcome.\n\nWhat should replace estimation? Three things work better.\n\nFirst, work in small slices and measure throughput. If your team finishes roughly eleven items a fortnight, that history predicts the next fortnight far better than any planning session. Forecasts drawn from historical throughput, shown as a range, give a realistic spread of outcomes instead of one fragile date.\n\nSecond, time-box the uncertainty. Instead of asking \"how long will this take?\", ask \"what will we learn in the next two weeks, and what will we do with it?\" A spike or prototype produces an answer. An estimate produces a number.\n\nThird, make the decision cadence explicit. Managers need to decide whether to fund, staff, or drop work. They can make that decision on a range, reviewed regularly, with clear triggers for replanning. A forecast that updates every two weeks is more useful than a commitment that expires in silence.\n\nThe objection is that stakeholders need dates. Sometimes they do: a contract deadline, a conference, a regulatory filing. In those cases, plan backwards from the fixed date and cut scope. That is a different activity from estimating, and it is more honest about what is being traded off.\n\nThe change is uncomfortable. It means admitting that certainty is not on offer. But teams that stop pretending to know how long software takes tend to deliver more reliably, because they spend their energy finding problems early rather than defending numbers they never believed. Put the estimates down. Measure what happened, forecast from it, and let the plan move when the facts do."
+}

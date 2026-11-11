@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa01451b6d7f7d62c",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73759,
+    "output_tokens": 2538,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:08:56.978Z",
+  "valid": true,
+  "text": "How a Heat Pump Heats a House When It Is Colder Outside\n\nA heat pump does not create heat. It moves heat from one place to another, and that is why it can work when the outdoor air feels cold. Air at -5 °C still holds a large amount of thermal energy. The only requirement is that the working fluid inside the heat pump is colder than the air, so heat flows into it.\n\nThe system uses a refrigerant, a fluid that boils at a very low temperature. It cycles through four main parts:\n\n1. Outdoor coil (evaporator). Liquid refrigerant at well below freezing point flows through a coil outside. Outdoor air is warmer than the refrigerant, so heat flows into the refrigerant, which boils and turns into a gas.\n\n2. Compressor. An electric motor squeezes the gas. Compressing a gas raises its temperature sharply, so the refrigerant leaves the compressor much hotter than the house needs, often 60 to 80 °C.\n\n3. Indoor coil (condenser). The hot refrigerant passes through a coil that heat exchanges with indoor air or with water in a heating circuit. It gives up its heat and condenses back into a liquid.\n\n4. Expansion valve. The liquid passes through a restriction that drops its pressure and temperature, and it returns to the outdoor coil to repeat the cycle.\n\nThis is the same process a refrigerator uses, run for a useful purpose. A fridge pulls heat out of its contents and releases it into the kitchen. A heat pump pulls heat out of the outside air and releases it inside the house.\n\nEfficiency is measured as the coefficient of performance (COP): units of heat delivered per unit of electricity consumed. In mild weather a typical air-source heat pump delivers two to four times as much heat as the electricity it uses. Efficiency falls as the outdoor temperature drops, because the compressor must lift the refrigerant through a larger temperature gap. Cold-climate models use variable-speed compressors and enhanced refrigerant circuits to keep output up at -15 °C or lower, but capacity still declines. Most installations include a backup electric element or rely on the existing system for the coldest days.\n\nTwo practical points affect performance:\n\n- Frost forms on the outdoor coil in cold, humid conditions. The unit periodically reverses briefly to melt it, which can cause short dips in comfort.\n- Heat is delivered at lower temperatures than a gas boiler produces, typically 35 to 50 °C, against 60 to 80 °C from a boiler. Radiators sized for a boiler may need to be enlarged or replaced. Underfloor heating and fan coils work well at low temperatures. A well-insulated house needs less heat, which makes this easier.\n\nFor the decision, compare running costs, not efficiency ratings. A gas boiler at about 90 percent efficiency turns one unit of gas into about 0.9 units of heat. A heat pump with a seasonal COP of 3 turns one unit of electricity into about three units of heat. The heat pump is cheaper to run whenever electricity costs less than roughly 3.3 times as much per unit as gas. That ratio varies by country and tariff, so check your local prices. Also consider the cost of installation, any radiator or pipework upgrades, and available grants.\n\nIn short, a heat pump heats a house by collecting low-grade heat from cold air and concentrating it with a compressor. It works in cold weather, but its output and efficiency depend on climate, insulation, and the heat emitters already in the house."
+}

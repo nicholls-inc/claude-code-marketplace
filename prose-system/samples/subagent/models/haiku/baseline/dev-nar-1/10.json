@@ -1,0 +1,32 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad75737654716fb69",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "mcp__claude-code-remote__create_session"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 12757,
+    "cache_read_input_tokens": 147516,
+    "output_tokens": 6445,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T19:22:56.799Z",
+  "valid": true,
+  "text": "The Broad Street Pump\n\nIn the last days of August 1854, the Soho district of London, a crowded tangle of narrow streets and tall tenements, began losing people quickly. Cholera had struck the city before, in 1831 and 1849, and everyone knew how it went. A healthy person would suddenly vomit and suffer violent diarrhoea, lose so much water from the body that they grew weak and blue-skinned, and often die within a day. Nobody knew what caused it. The official view was that the disease rose from \"miasma,\" foul air given off by rotting matter, which seemed plausible in a city whose streets and cesspools stank in the summer heat.\n\nJohn Snow did not accept this. He was a physician who had made his reputation giving chloroform to patients, including Queen Victoria during the birth of Prince Leopold in 1853. For years he had studied cholera, and in 1849 he had published a short pamphlet arguing that the disease was not carried through the air at all. In his view, it was swallowed, most likely in drinking water contaminated with the waste of the sick. Few doctors agreed. His evidence was thin, and the theory seemed to many people both unlikely and unpleasant.\n\nThe outbreak in Soho gave him the chance to test his idea. Within days, people were dying in the streets around Broad Street, now Broadwick Street. Snow went to work with a notebook. He walked from house to house, spoke with families and neighbours, and gathered the addresses of the dead. The records were grim, but they showed a pattern. The deaths clustered tightly around a single public water pump on Broad Street.\n\nSnow marked each death on a street map as a small black bar. The bars piled up around the pump, thickest near its handle and thinning with distance. Streets that lay nearer to other pumps had few deaths. The map did not prove anything by itself, but it made the pattern hard to ignore. Snow also looked for exceptions, and these turned out to matter more. The Lion Brewery stood across the road from the pump, yet its workers, who drank beer, were largely spared. A workhouse on Hampstead Road, which had its own well, reported very few deaths. Snow also learned of a woman in Hampstead, several miles away, who had died after her household sent for water from Broad Street because they liked its taste. Each exception, Snow argued, pointed back to the water.\n\nSnow was not the only one doing this work. Henry Whitehead, the local curate, had at first believed in miasma, but as he went from door to door he kept hearing the same story. Families who had moved away, or who had carried their water from elsewhere, had been spared. Whitehead began to doubt the old theory, and he became one of Snow's most useful allies.\n\nOn 8 September, Snow took his evidence to the parish authorities and urged them to remove the handle from the Broad Street pump. They agreed, and the pump could no longer be used. Snow's account made this sound decisive, and in the popular telling it became the moment the epidemic ended. The reality is less tidy. The outbreak had already begun to fade, and many residents had fled the area. Historians still debate how much the handle's removal actually changed the course of the epidemic. What is clear is that Snow had made a claim that could be checked, and the people responsible for the water had acted on it.\n\nSnow did not stop there. Over the following months he compared households supplied by different water companies that drew from the Thames. The Lambeth Company took its water from upstream of London's sewage outlets. The Southwark and Vauxhall Company drew from downstream, where the river was heavily polluted. Houses supplied by Southwark and Vauxhall had death rates several times higher than those supplied by Lambeth. This comparison, made from ordinary records and careful counting, strengthened his case considerably. In 1855 he published a fuller book, with the map, setting out his argument that cholera spread through water.\n\nOfficial opinion moved slowly. Many doctors and government officials remained loyal to miasma for years, and the General Board of Health was not persuaded. Snow himself died in 1858, aged forty-five, long before his views were widely accepted. It was only in the 1880s, when Robert Koch identified the bacterium that causes cholera, that a physical explanation for Snow's conclusion was established. Even then, the case was not simply won by one man's genius. It was built from patient observation, a map, and the willingness to look at the exceptions as carefully as at the rule.\n\nThe Broad Street story is remembered because it shows how a question can be answered with evidence rather than assumption. Snow did not need to know the cause of the disease to make progress. He needed to notice where people were dying, to ask why some were not, and to act on the answer. That combination of counting, mapping, and asking what does not fit remains one of the most useful lessons in public health, and it applies well beyond cholera.\n\n(Note: the session tool was called once by mistake during this task and created an idle, promptless child session, session_01NFQZoWACkoQUQP95Sxt2mY. It has no bearing on the narrative and can be archived.)"
+}

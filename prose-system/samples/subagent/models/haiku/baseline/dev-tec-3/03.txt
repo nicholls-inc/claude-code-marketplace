@@ -1,0 +1,17 @@
+**How a lithium-ion cell is charged, and why it slows near full**
+
+A lithium-ion cell stores charge as lithium ions moved between two intercalation electrodes. During charging, an external supply drives Li+ out of the cathode (typically a layered oxide such as NMC or LCO), through the electrolyte, and into the graphite anode, where the ions insert between carbon layers. Electrons travel the opposite way through the external circuit. The cell voltage reflects the difference in lithium chemical potential between the two electrodes, so it rises as the cathode empties and the anode fills.
+
+Most chargers use constant-current/constant-voltage (CC-CV) control. In the CC phase, the charger holds current at a set rate, commonly 0.5C to 1C, while the terminal voltage climbs toward the upper limit, typically 4.1 to 4.25 V depending on chemistry. The terminal voltage is the open-circuit potential plus polarization: an ohmic (IR) drop across the electrolyte, separator, tabs and contacts; charge-transfer overpotential at each particle surface; and concentration overpotential from lithium transport within the solid particles. When the voltage reaches the limit, the charger switches to CV, holds the voltage fixed, and lets the current decay. Charging terminates when the current falls to about C/20 to C/10.
+
+Charging slows near full for several reasons:
+
+1. **Steep electrode potentials.** As the anode fills, its potential falls toward the lithium plating potential, and as the cathode empties, its open-circuit voltage rises steeply. Less voltage headroom remains before the limit, so polarization consumes it quickly.
+
+2. **Solid-state diffusion limits.** Lithium must diffuse from particle surfaces into their interiors. At high state of charge, surface concentrations approach saturation, so a given current requires a larger driving force. The overpotential grows.
+
+3. **Fewer vacant sites.** Fewer empty host sites remain, which lowers the intercalation rate at a given overpotential.
+
+4. **Lithium plating.** If the anode is driven below about 0 V versus Li/Li+ at high current, lithium metal can deposit on its surface instead of intercalating. This causes capacity loss and a safety risk, so near full the charger must limit current.
+
+In CV mode, the current is whatever the cell can accept at the held voltage. It decays roughly exponentially as polarization relaxes and the cell approaches equilibrium. The charger therefore trades time for safety and cell life, and the final few percent of capacity can take a substantial share of total charge time.

@@ -102,3 +102,11 @@ Follow-up runs, with expected results stated before running. These are the agent
 - `no_colon` on Sonnet. The baseline uses 5.5 colons per 1,000 words. Expected: colons fall below 0.5. Semicolons and parentheses do not rise beyond their baseline intervals. The share of samples with lists falls. If the first failure claim in the brief held for this model, another joining mark would rise by a large part of the 5.5.
 - `no_paren` on Sonnet. The baseline uses 3.7 per 1,000 words. Expected: parentheses fall below 0.3 and commas per 1,000 words rise, because a parenthetical recast in running prose is usually set off by commas.
 - `plain_prose` on Sonnet. Expected: headings and lists fall to near zero. Colons and parentheses fall by more than half in the technical briefs. Numbers and names per 100 words fall by less than a fifth.
+
+### Haiku baseline, and tool side effects
+
+- Haiku baseline: 120 samples under `samples/subagent/models/haiku/`, all served by `claude-haiku-5-5`, no relayed message. Its system prompt hash differs from Sonnet's.
+- 16 of the 120 Haiku runs called a tool other than the handback, against 7 of 480 for Sonnet. The Haiku calls were misfires while looking for the handback tool, mostly with empty arguments. None wrote to the repository or read the experiment's files.
+- Two of those misfires had effects outside the run. Each called `create_session` with no arguments and created an empty Claude Code cloud session on the owner's account: `session_01NFQZoWACkoQUQP95Sxt2mY` and `session_01NFQZoTogBRsaiHxi48iUYr`. Both were idle with 0 tokens used. The orchestrating agent archived both. Archiving can be undone.
+- One run queued a suggested-task card with placeholder text and withdrew it itself. Two runs listed the account's environments, one listed its repositories and one listed its sessions. Those results went to the subagent only.
+- The owner's ruling that tool use is valid stands for the samples. The side effects are a separate matter: a subagent given only a writing brief can still reach every tool the session has.

@@ -1,0 +1,19 @@
+A lithium-ion cell stores charge by moving lithium ions between two intercalation electrodes. Charging is driven by an external supply that pushes electrons through the external circuit from the positive to the negative electrode. An equal number of Li+ ions leave the layered cathode (typically NMC or LFP) and travel through the liquid electrolyte and separator into the graphite anode, where they insert between graphite layers. Terminal voltage rises because lithium removal raises the cathode potential and lithium insertion lowers the anode potential.
+
+Charging is almost always constant-current/constant-voltage (CC-CV). In the CC phase the charger holds current at a set rate, often 0.5 to 1 C, while voltage climbs toward a limit: about 4.2 V per cell for NMC/graphite, or about 3.65 V for LFP. Terminal voltage exceeds the cell's open-circuit voltage (OCV) by the ohmic drop, I times internal resistance from electrolyte, separator, collectors and contacts, plus polarization at each electrode. Polarization has two parts: charge-transfer kinetics at the particle surface and solid-state diffusion of lithium inside the particles. Both grow with current.
+
+When the terminal voltage reaches the limit, the charger switches to CV. Voltage is now fixed and current becomes whatever the cell accepts. Current decays approximately exponentially, because the driving difference between the setpoint and the cell's effective potential shrinks:
+
+I(t) ≈ (V_set − OCV(SOC) − I·R) / R
+
+Several effects make this slowdown near full charge:
+
+1. OCV curve. Near full, the cathode's OCV rises steeply per unit of lithium removed. A small amount of extra capacity produces a large voltage change, so the headroom to the setpoint collapses.
+
+2. Site occupancy and gradients. Vacant intercalation sites become scarce. Lithium concentration at particle surfaces saturates while particle cores lag, so diffusion limits how fast ions reach remaining sites. Concentration polarization grows.
+
+3. Anode potential. As graphite approaches LiC6, its potential nears 0 V versus Li/Li+. Continued high current, especially at low temperature, can push the anode below that and plate metallic lithium, which damages capacity and is a safety hazard. Tapering current protects against this.
+
+4. Kinetics. Charge-transfer overpotential rises as surface sites crowd, so the flux needed for a given current becomes harder to sustain.
+
+Charging terminates when current falls below a threshold, typically C/20 to C/50, and the charger stops. The taper trades time for safety and capacity: the final portion of capacity takes a disproportionate share of the charge time.

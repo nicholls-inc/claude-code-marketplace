@@ -1,0 +1,40 @@
+**How a Heat Pump Heats a House When It Is Colder Outside**
+
+A heat pump does not create heat. It moves heat from one place to another. Cold outdoor air still contains thermal energy, just less than warm air does, and a heat pump collects that energy and concentrates it indoors.
+
+**The cycle**
+
+A heat pump circulates a sealed loop of refrigerant, the same kind of fluid used in a refrigerator. The loop has four main parts:
+
+1. **Outdoor coil (evaporator).** Liquid refrigerant flows through this coil at very low pressure. At that pressure it boils at a temperature far below freezing, often well below zero Fahrenheit. Outdoor air that is warmer than that gives up its heat to the refrigerant, which boils into vapor.
+2. **Compressor.** The vapor is squeezed. Compressing a gas raises its temperature, so the refrigerant leaves the compressor much hotter than the indoor air you want to reach.
+3. **Indoor coil (condenser).** A fan blows indoor air across this hot coil. The heat passes into the air, and the refrigerant condenses back into a liquid.
+4. **Expansion valve.** The liquid passes through a narrow restriction, its pressure drops, and it returns to the outdoor coil to repeat the cycle.
+
+Each cycle carries heat from outside to inside. The compressor is the main electricity user. Its job is to raise the refrigerant's pressure and temperature so the heat can be released indoors. It is not burning anything.
+
+**Why efficiency matters**
+
+The key figure is the coefficient of performance (COP). A COP of 3 means that for each unit of electricity, the system delivers about three units of heat. Heat pumps commonly reach a COP of 2 to 4 in moderate weather.
+
+A gas boiler converts fuel directly into heat. A modern condensing boiler converts roughly 90 to 98 percent of its fuel energy into useful heat, a figure called AFUE. A heat pump can deliver more heat per unit of energy purchased, but whether it costs less to run depends on your local electricity price compared with your gas price.
+
+**What happens in cold weather**
+
+As outdoor temperatures fall, the outdoor coil absorbs less heat per cycle and the compressor works harder. Both capacity and COP drop. Standard heat pumps can lose a large share of their output below about 20°F.
+
+Cold-climate models use improved compressors and controls, and they are rated to deliver substantial heat at temperatures around -13°F and sometimes lower. Many installations also include electric resistance backup heat for the coldest days or as a safety margin. Periodic defrost cycles briefly reverse the loop to melt frost off the outdoor coil. This is normal and does not mean something is wrong.
+
+**Questions to answer before replacing a boiler**
+
+- **Climate.** Compare your local design temperature and the number of hours per year below the heat pump's rated capacity.
+- **Energy prices.** Compare the cost per kilowatt-hour of electricity with the cost per therm or kilowatt-hour of gas, then account for each system's efficiency.
+- **Home condition.** Insulation, air sealing, and ductwork strongly affect performance. Poorly sealed ducts waste much of the heat a heat pump produces.
+- **Emitters.** Homes with radiators can use air-to-water heat pumps, but radiators often need to be larger to work well at the lower water temperatures these systems produce. Forced-air homes usually need little change.
+- **Electrical service.** Some older homes need a panel upgrade to support a heat pump.
+- **Sizing.** Ask the installer for a room-by-room heat load calculation, such as ACCA Manual J, rather than matching the size of the old boiler. Oversized equipment cycles on and off and runs less efficiently.
+- **Incentives.** Many regions offer rebates or tax credits that narrow the upfront cost gap.
+
+**Bottom line**
+
+A heat pump heats a cold house by pumping heat that already exists in outside air through a refrigerant cycle. It is typically more efficient than a boiler in mild and moderate weather, and cold-climate models perform well in severe winters. Whether it is the right replacement depends on your local energy prices, how well your home holds heat, and whether the system is sized correctly.

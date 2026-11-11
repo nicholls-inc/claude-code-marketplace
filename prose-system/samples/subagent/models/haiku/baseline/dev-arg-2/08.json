@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0fad07dde5a482a2",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73755,
+    "output_tokens": 2269,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:17:26.266Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Forecasting.\n\nEvery quarter the same ritual plays out in engineering teams. A product manager asks how long a feature will take. An engineer looks at the ticket, thinks through the parts they understand, pads the parts they don't, and says \"two weeks.\" Six weeks later the feature ships, everyone is surprised, and the estimate is quietly forgotten until the next planning meeting, where the ritual starts again.\n\nSoftware teams should stop doing this. Uncertainty is real, but estimating how long one piece of work will take is the wrong tool for the problem managers actually have.\n\nConsider what an estimate is: a point prediction about a process with heavy tails. Most tasks finish near the guess. A few take ten times longer because they hit an unknown system, a missing permission, or a dependency nobody mentioned. Collapsing that spread into one number hides the tail, and the tail is where schedules die. Teams respond by padding, which makes estimates bigger without making them more accurate. Managers then plan against padded numbers that nobody fully believes.\n\nForecasting from throughput works better. If your team finished 9, 11 and 8 items in the last three sprints, you can simulate the next twelve weeks thousands of times and say, \"There is an 85 percent chance we finish these 30 items by March 14.\" That statement is honest about uncertainty. It requires no one to guess at individual tasks, and it updates automatically as new data arrives. It also surfaces the question that matters: not \"how long will this take?\" but \"what are we willing to drop if it takes longer?\"\n\nSlicing work small makes this practical. When items are roughly the same size, counting them is enough. Engineers stop arguing about whether a story is three points or five and start arguing about whether it is worth doing at all, which is a better argument to have.\n\nThe objection is that managers need dates. They do. But a date with a confidence level and a scope boundary is more useful than a single date everyone privately knows is fiction. Estimate-driven planning also trains teams to hide problems until the deadline, because an early warning feels like a failure. Throughput forecasts make slippage visible in week three, when there is still room to respond.\n\nEstimation still has a place. A quick guess helps decide whether a two-day spike is worth running before a launch, or compares two designs by rough effort. The claim here is narrower: stop asking engineers to commit to durations for individual tasks, and stop treating those commitments as promises.\n\nEngineers should be asked for finished work, not best guesses. Managers should ask for odds, not dates. The schedule will not get more accurate on its own, but the conversation will finally be about the right thing."
+}

@@ -1,0 +1,22 @@
+Stop Estimating. Start Forecasting.
+
+Every engineering manager has sat through the same ritual. A ticket gets a number, the number becomes a promise, and weeks later someone explains the slip. We keep doing this because we think the problem is accuracy. It isn't. The problem is the act itself, and teams should stop doing it.
+
+Start with the evidence. Estimates of software work are wrong in a consistent direction. They run optimistic, and the error grows with the size and novelty of the task. Research on the planning fallacy shows people underestimate durations even when their own past data proves they do. Telling engineers to "estimate more carefully" asks them to beat a bias that experts in many fields have not beaten.
+
+Second, the estimate changes the work. Once a number is attached, people protect it. Scope gets quietly cut to hit the date, or corners get cut to hit the sprint, and the failure is blamed on the engineer rather than the process. Estimates harden into commitments, commitments create pressure, and pressure produces the rushed reviews and bugs that make the next estimate worse.
+
+Third, what managers actually need is not a per-ticket duration. They need to know when a body of work will likely land and how much risk they carry. Those are questions about distributions, and you answer them from throughput: how many items the team really finished per week over the last few months. Feed that history into a simple Monte Carlo simulation and you get a range, such as "there is an 85 percent chance these twenty items ship by the end of March." That is more useful than "eight story points, two sprints," and no one had to guess.
+
+Stopping estimation does not mean abandoning planning. It means changing what you plan with.
+
+- Slice work into small, similar-sized items. When items are roughly uniform, throughput predicts well and sizing debates disappear.
+- Time-box exploration. If the question is "can we do this," spend three days finding out, then decide. That is a decision, not an estimate.
+- Track cycle time and throughput, and show the team its own data.
+- Re-forecast regularly. A range updated every two weeks beats a date defended for six months.
+
+The objections are fair. Some customers need a date, and contracts demand one. In those cases, forecast from throughput, add an explicit buffer, and say what the buffer is for. Some work is genuinely novel and resists measurement. Use a spike for that, not a guess dressed up as a number.
+
+The deeper case is about honesty. A point estimate claims knowledge nobody has. A forecast range states what we know and what we don't. Engineers can stop defending numbers they never believed, and managers can stop being surprised by arithmetic they should have expected.
+
+Stop estimating. Measure what you finish, forecast from it, and be willing to say "somewhere between these two dates, most likely the earlier one."

@@ -1,0 +1,21 @@
+Stop Estimating How Long Work Will Take
+
+Every quarter the same ritual plays out. A team gathers, someone says "three days," someone else says "more like a week," and a number lands on a card. Six weeks later that number is in the roadmap, the sales deck and a customer email. When the work slips, the team gets blamed for a promise it never meant to make.
+
+Software teams should stop doing this. Planning still matters. The estimate is just the wrong tool.
+
+Estimates fail for predictable reasons. Engineers size the work they can see, but most delay lives in the work they can't: the vague requirement, the flaky staging environment, the review that sits for three days, the release that waits on another team. Individuals are optimistic about their own tasks, and that optimism compounds across a plan. Padding follows, and padding makes the next estimate less honest.
+
+Estimates also distort behavior. Once a number becomes a commitment, people protect it. They cut testing, avoid the awkward scope conversation, and start the next ticket before the last one is done. The estimate ends up measuring how well a team can defend its number, not how fast it ships.
+
+Three things work better.
+
+Forecast from history. If the team finished 40 items over the last eight weeks, it already has a throughput distribution. A simple Monte Carlo simulation over that data answers the question managers actually ask: "What is the chance we finish these 25 items by March?" The answer is a range with probabilities, which is what a planning decision needs.
+
+Shrink batches and limit work in progress. Small, finished items are far more predictable than large, half-done ones. When items are roughly similar in size and the team finishes before starting, cycle time settles enough to forecast without sizing every ticket.
+
+Fix the window and let scope flex. Agree on a deadline, deliver the most valuable subset, and treat the remainder as the thing that gets cut. This turns "when will it be done?" into "what do we get by the deadline?", which is usually the question the business is really asking.
+
+The strongest objection is that the business needs dates. It does, but it needs honest dates with ranges, and a single guess made on day one is neither. A forecast built from real throughput shows its uncertainty openly, so nobody is blindsided when the range turns out wide.
+
+Stop estimating. Measure what you finish, limit what you start, and decide in advance what you will cut. The calendar will still move, but you will see it coming.

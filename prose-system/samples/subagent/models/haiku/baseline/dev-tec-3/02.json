@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a03dce8881b7f7f54",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73753,
+    "output_tokens": 2698,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:04:06.292Z",
+  "valid": true,
+  "text": "A lithium-ion cell is usually charged with a constant-current, constant-voltage (CC-CV) profile. In the constant-current stage, the charger forces a set current into the cell, typically 0.5 to 1C, where 1C is the current that would fully charge the cell in one hour. Inside the cell, that current drives lithium ions out of the layered metal-oxide cathode (such as NMC or LCO), through the liquid electrolyte, and into the graphite anode, where they intercalate between graphite layers. Electrons move through the external circuit in the opposite direction. Terminal voltage rises throughout this stage because the potential difference between the electrodes grows as lithium leaves the cathode and enters the anode. Terminal voltage equals the open-circuit voltage (OCV, a function of state of charge) plus the ohmic drop (I x R) plus the polarization overpotentials from charge transfer and diffusion.\n\nWhen the terminal voltage reaches the limit, typically 4.2 V per cell for conventional chemistries, the charger switches to constant voltage. Holding the voltage fixed forces the current to decline, because the driving term, the limit voltage minus OCV minus the IR drop, shrinks as the cell fills. Charging ends when the current falls below a threshold such as C/20 or C/50.\n\nThe current falls sharply near full for several compounding reasons.\n\nFirst, OCV rises steeply at high state of charge. Both electrodes are approaching their most extreme lithiation states, so small changes in lithium content cause large potential changes. The headroom between OCV and the voltage limit collapses quickly.\n\nSecond, solid-state kinetics slow down. Lithium must diffuse through the active particles, and as host sites become scarce, concentration gradients steepen and diffusion-limited overpotential grows. Charge-transfer resistance at the particle surface also rises, because the exchange current depends on the remaining available sites on both electrodes.\n\nThird, the anode potential approaches 0 V versus Li/Li+. If it drops below that, lithium plates as metal on the graphite surface instead of intercalating. Plating causes irreversible capacity loss and a safety hazard. Holding the anode above plating conditions requires the charger to reduce current as sites fill.\n\nFourth, cathode resistance increases as lithium is removed, which lowers electronic and ionic conductivity in the electrode.\n\nThe practical consequence is that the CV phase often takes a large share of total charge time, even though it delivers a small fraction of the capacity. Engineers manage this with CV tapering, temperature limits, and cell balancing in packs."
+}

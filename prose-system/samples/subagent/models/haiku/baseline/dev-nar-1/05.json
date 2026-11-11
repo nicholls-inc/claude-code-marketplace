@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a195518b1705a75a9",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73758,
+    "output_tokens": 3619,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:10:01.734Z",
+  "valid": true,
+  "text": "In the last days of August 1854, residents of the Soho district of London began to fall ill with a sudden and violent disease. Within a week the sickness had become a flood. By the time it ended, about six hundred people in and around Broad Street were dead. Among the few who understood what was happening was a physician named John Snow, whose ideas were widely dismissed at the time.\n\nMost doctors of the day believed cholera spread through \"miasma,\" a foul air rising from rotting matter, sewers and graveyards. Snow disagreed. He had spent years studying the disease, and in 1849 he had argued that cholera was carried by something people swallowed, not something they breathed. The sickness struck the bowels, not the lungs, and it seemed to travel along the paths people took between one another. Few colleagues were persuaded.\n\nSnow approached the outbreak the way a detective approaches a crime. He did not start with theories about the air. He started with the dead. He walked the streets, spoke with families and checked the death records. Then he made a map. On a street plan of the district he marked each death with a small black bar at the house where it had occurred. The bars piled up thickly around one spot: a public water pump on Broad Street, in the middle of a crowded working-class neighborhood. It was as if the whole district had gathered at one door.\n\nSnow did not stop at the map. He wanted to know why the pattern held, and why it had gaps. He found that the workhouse on Poland Street, which housed hundreds of people, had almost no deaths. It had its own well. Workers at the Lion Brewery, just across the road, were also largely spared. The brewery had its own supply, and its men drank beer rather than water. Snow also traced cases far from Soho. A woman in Hampstead, several miles away, had died after drinking water carried to her home from the Broad Street pump, because she preferred its taste. Those who lived nearby but chose not to use the pump were mostly safe. Each exception fit his theory, and none of them fit miasma.\n\nSnow took his case to the local authorities, but the men who ran the parish were not persuaded. The water looked clear and tasted fine. Miasma was the established doctrine, and Snow was an outsider. He kept pressing. On 8 September, the handle of the Broad Street pump was removed, largely at his urging. Snow later acknowledged that the epidemic was already fading by then, since many residents had fled the area. That made the pump's role hard to prove to skeptics, but Snow believed the link was clear.\n\nA local clergyman, the Reverend Henry Whitehead, went further. He investigated the neighborhood house by house and discovered that a cesspit, a holding pit for human waste, lay only a few feet from the well and had been leaking into it. He also learned that the napkin of an infant who had died of cholera had been rinsed in that cesspit. Whitehead came to accept Snow's argument, and his evidence strengthened it.\n\nSnow then looked beyond Broad Street. London's water companies drew supplies from the River Thames, and by 1854 the Southwark and Vauxhall company took its water from a stretch polluted by sewage. The Lambeth company had moved its intake upstream, to cleaner water. Snow compared the death rates among households served by each company and found that people who drank Southwark and Vauxhall water died of cholera at far higher rates. The evidence pointed the same way again: cholera was carried in water.\n\nSnow published his findings in 1855, in a book with his map included. Many doctors still rejected his ideas, and the authorities were slow to change their practices. Snow had no way to see the microbe responsible. Robert Koch identified the bacterium Vibrio cholerae in 1883, long after Snow's death in 1858 at age 45.\n\nSnow's achievement was not a single discovery but a method. He counted, mapped, compared and checked exceptions, letting the pattern of the evidence make the argument. The Broad Street pump is now a small, quiet landmark, and a replica handle has been placed on it. It stands as a reminder that a careful look at ordinary facts can overturn a belief that seemed certain."
+}

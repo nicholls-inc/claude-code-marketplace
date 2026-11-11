@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a99a55f5e973c5219",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "final_text",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73747,
+    "output_tokens": 2800,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:16:57.446Z",
+  "valid": true,
+  "text": "**Cities Should Stop Requiring Parking**\n\nEvery planning department has heard the same fear: if a new apartment building or shop opens without enough parking, residents will clog the streets and neighbors will lose their curbs. So the zoning code sets a minimum number of spaces per home or per square metre, and developers build them. The rule feels like common sense. It is also one of the most expensive and least examined requirements in urban planning, and cities should remove it.\n\nStart with cost. A structured parking space can run tens of thousands of dollars to build, and underground spaces cost more. Developers do not absorb that expense. They pass it on through higher rents, higher sale prices and higher prices for the groceries and coffee sold on the ground floor. Research on parking requirements has repeatedly found that they raise the cost of housing, and that the burden falls hardest on households least likely to own a car. A tenant in a studio apartment who never drives still pays for a space she never uses. Minimums turn a choice into a charge.\n\nThe requirements also misfire. A single number applied to every site cannot distinguish a block beside a frequent bus line from a rural cul-de-sac, or a walkable neighborhood from a highway frontage. The result is oversupply where people walk and undersupply where people drive. A rule that cannot tell the difference between a transit corridor and a suburb is a poor tool for either.\n\nMinimums also undermine the goals cities say they want. Climate plans, housing targets and downtown revitalization strategies call for denser, more walkable development. Parking requirements push the other way. They consume land that could hold homes or shops. They produce blank garage walls and wide curb cuts that make sidewalks less pleasant. They add paved surface that sheds stormwater into already strained drains. A city that adopts ambitious climate goals while keeping large parking mandates is working against itself.\n\nThe strongest objection is spillover. Without minimums, the argument goes, residents will park on the street and make life miserable for everyone else. This is a fair concern, but it is an argument for managing curb space, not for mandating garages. Cities already have better tools. They can price on-street parking so that scarce spaces cost something. They can create residential permit zones where spillover is a real problem. They can unbundle parking from leases so tenants can decide whether a space is worth paying for. Those measures target the actual problem, which is competition for street space, rather than guessing at demand for every building in advance.\n\nThe experience of cities that have acted is encouraging. Buffalo and Minneapolis have dropped citywide parking minimums, and developers there have continued to build parking where lenders and tenants wanted it. The difference is that the decision now belongs to the people paying for it. Where parking is valuable, the market will provide it. Where it is not, builders can put that money into housing, shops or open space.\n\nRemoving minimums does not mean abandoning people who need accessible parking. Accessible spaces for people with disabilities should stay mandatory, and cities can keep reasonable standards for loading zones and bicycle parking. Those are targeted protections for real needs. A blanket requirement for every new building is a different thing. It is a subsidy for car storage, paid for by renters, buyers and anyone who wants a walkable street.\n\nCities should repeal parking minimums, keep the accessibility requirements, and manage their streets through pricing and permits. The people who want a parking space should pay for it, and the people who do not should not have to."
+}

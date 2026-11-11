@@ -1,0 +1,44 @@
+From HTTPS address to first byte: what happens in the browser and on the network
+
+When you type https://example.com/page and press Enter, the first byte of the response can take anywhere from tens of milliseconds to a second or more. Most of that time is spent waiting for network round trips. A round trip is one message going to the server and the reply coming back, and it is the unit most of this process is measured in.
+
+1. Parsing the address
+
+The browser splits the URL into parts: the scheme (https), the host (example.com), the port (443 by default for HTTPS), and the path and query (/page). The scheme decides the protocol. The browser also checks its HSTS list, a stored set of sites that must only be reached over HTTPS. If the host is listed, the browser upgrades any plain http:// request before it leaves the machine.
+
+2. Finding the server's IP address (DNS)
+
+Computers talk to IP addresses, not names, so the browser needs to resolve example.com. It checks its own DNS cache first, then the operating system's cache. If neither has the answer, the query goes to the configured recursive resolver, usually supplied by your ISP, your company, or a public service such as 1.1.1.1 or 8.8.8.8. That resolver asks a root server, which points it to the server for .com, which points it to the authoritative name server for example.com, which returns the address. Each answer carries a time-to-live (TTL), so the caches can reuse it for a while. Modern browsers can also send this query over DNS-over-HTTPS, which hides it from local network observers. A cold lookup can take several round trips; a cached one takes none.
+
+3. Opening a TCP connection
+
+TCP gives a reliable, ordered byte stream. To open one, the client sends a SYN packet, the server answers SYN-ACK, and the client replies ACK. This costs one full round trip before any application data can move. If the server's address has both IPv4 and IPv6 records, the browser may race the two (Happy Eyeballs) and keep whichever connects first.
+
+4. The TLS handshake
+
+TLS provides encryption, server authentication, and integrity. In TLS 1.3, the most common version today, it takes one round trip.
+
+- ClientHello: the browser sends the TLS versions and cipher suites it supports, a random value, a key share (its public half of an ephemeral key exchange, usually X25519), the server name (SNI, so one IP address can host many sites), and ALPN values such as h2 or http/1.1.
+- ServerHello: the server picks the parameters and sends its own key share. From this point on, both sides can derive the same symmetric keys from the shared secret, and everything after this is encrypted.
+- Certificate and CertificateVerify: the server sends its certificate chain and signs the handshake transcript with the certificate's private key. This proves it holds the key the certificate names.
+- Finished: each side sends a message that proves it derived the same keys.
+
+The browser then checks the certificate. It must chain to a root authority in the operating system or browser trust store, cover the name example.com in its Subject Alternative Names, and fall within its validity dates. The browser may also check revocation status through OCSP or CRLite. Only after these checks does the browser trust the connection.
+
+Because ephemeral keys are used, past traffic stays safe even if the server's long-term key is later stolen. This property is called forward secrecy.
+
+5. Sending the HTTP request
+
+The client can send its HTTP request in the same flight as its final Finished message, so no extra round trip is wasted. The protocol is whichever one ALPN selected: HTTP/1.1 as plain text, or HTTP/2, which multiplexes requests over one connection as binary frames. If the server earlier advertised HTTP/3 through an Alt-Svc header, the browser may switch to QUIC on later visits. The request line and headers include the method (GET), the path, the Host header, cookies for this domain, and the Accept headers. Those headers are encrypted, so an observer on the network sees only the server name from SNI and the IP address.
+
+6. What the server does before the first byte
+
+Most sites do not answer from one machine. The IP address usually belongs to a load balancer or a CDN edge node. That node terminates TLS, possibly using the same handshake steps described above, and forwards the request to an application server. The application may check authentication, query a database or cache, render a template, and so on. The server may also send a 103 Early Hints response before the final one. Each internal hop adds time, and that time is part of the wait.
+
+7. The first byte arrives
+
+The response starts with a status line, such as HTTP/2 200, followed by headers. The time from sending the request to receiving that first byte is called time to first byte (TTFB). It covers one network round trip plus server processing. The browser can begin parsing as soon as the headers arrive, and the body follows as more packets.
+
+Summary of the cost
+
+On a cold start with no caches, you pay roughly: DNS lookups (one or more round trips), one round trip for TCP, one for TLS, and one for the request, plus server work. Caching, connection reuse, session resumption, and HTTP/3 reduce this. The main practical lesson for a web developer is that every extra round trip is expensive on mobile networks, so keep connections alive, use a CDN close to users, and avoid unnecessary redirects, since each redirect repeats the whole process.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab8417d630f434e07",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73753,
+    "output_tokens": 2815,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:11:12.799Z",
+  "valid": true,
+  "text": "**How a lithium-ion cell is charged, and why charging slows near full**\n\nA lithium-ion cell stores charge by moving lithium ions between two intercalation electrodes. On charge, the external source pulls lithium out of the cathode (typically a layered oxide such as NMC or LCO) and inserts it into the anode (usually graphite). Electrons travel through the external circuit in the opposite direction. Full graphite corresponds to roughly LiC6, and each ion removed from the oxide lowers its lithium content.\n\nAlmost all cells are charged with constant-current/constant-voltage (CC-CV) control. In the CC phase the charger holds current at a set rate, commonly 0.5C to 1C, where 1C means a full charge in one hour. Terminal voltage rises as the open-circuit voltage (OCV) climbs and as losses add to it:\n\nV_terminal = OCV(SoC) + I·R_internal + η_transfer + η_diffusion\n\nWhen V_terminal reaches the cell's limit, usually 4.20 V for graphite/NMC cells (about 4.35 V for some high-voltage chemistries), the charger switches to CV and holds voltage at that limit.\n\n**Why current falls in CV.** With voltage fixed, current equals the gap between the applied voltage and the cell's own opposing voltage, divided by the total resistance. As the cell fills, three effects shrink that gap:\n\n1. **OCV steepens near full.** Few vacant lithium sites remain in the cathode, so each added amp-hour raises OCV more than it did earlier. The headroom between OCV and the clamp voltage narrows.\n2. **Transport limits grow.** Lithium must diffuse through solid particles and the electrolyte. At high loading, concentration gradients steepen, and the diffusion overpotential rises. Particle surfaces saturate while their cores remain lithium-poor.\n3. **Anode potential drops.** As graphite fills, its potential approaches 0 V versus Li/Li+. If lithium arrives faster than the anode can absorb it, the potential falls below 0 V and metallic lithium plates on the surface. Plating causes irreversible capacity loss and a safety hazard, so the charger must reduce current.\n\nTogether these effects make the cell behave like a capacitor in series with a resistor, so current decays roughly exponentially. Charging ends when current drops to a threshold, typically C/20 to C/10, or after a timer expires. The CV phase often takes a large share of total charge time while adding only a small fraction of capacity. This is why fast-charge specifications quote times for 10 to 80 percent state of charge rather than a full charge."
+}

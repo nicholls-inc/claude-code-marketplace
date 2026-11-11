@@ -1,0 +1,17 @@
+**Charging a lithium-ion cell**
+
+A lithium-ion cell stores charge by moving lithium ions between two intercalation electrodes. During charging, an external supply drives electrons out of the positive electrode (typically a layered oxide such as NMC or LCO, or LFP) and into the negative electrode (usually graphite). To keep charge balanced, lithium ions leave the cathode lattice, cross the liquid electrolyte and separator, and insert between graphite layers at the anode. Each step has a resistance, so the terminal voltage is approximately:
+
+V_terminal = OCV(SOC) + I·R_ohmic + η_ct + η_conc
+
+OCV is the open-circuit voltage at the current state of charge. R_ohmic covers the electrolyte, separator, current collectors and contacts. η_ct is the charge-transfer (Butler-Volmer) overpotential at the electrode surfaces. η_conc is the concentration overpotential from lithium gradients in the electrolyte and inside the solid particles.
+
+Charging normally runs in two phases. In constant-current (CC) mode, the charger supplies a fixed current, typically 0.5 to 1C, and the voltage rises as OCV increases. When the terminal voltage reaches the limit (about 4.20 V per cell for NMC/LCO, 3.65 V for LFP), the charger switches to constant-voltage (CV) mode and holds that voltage. Current then decays until it reaches a cutoff, commonly C/20 to C/10, and charging terminates.
+
+Why does current fall near full? In CV mode the terminal voltage is fixed, so the current is set by the remaining headroom:
+
+I ≈ (V_max − OCV(SOC) − overpotentials) / R_total
+
+Two effects shrink that headroom and raise the resistance. First, the OCV curve steepens near full. As the cathode loses lithium, its potential rises sharply, and as graphite fills, the anode potential approaches the lithium-plating threshold. Small additions of charge now produce large voltage rises, so little margin remains between OCV and V_max. Second, the kinetics slow. Fewer vacant host sites remain, which lowers the exchange current density at the surface, and solid-state diffusion inside the particles becomes the limiting step. Concentration gradients grow, the concentration overpotential rises, and the cell's resistance increases at high SOC.
+
+Forcing high current at this stage would drive the anode potential toward 0 V versus Li/Li+ and deposit metallic lithium on the graphite. That loses capacity and creates a safety hazard. The current taper is therefore both a kinetic consequence and a deliberate safety constraint.

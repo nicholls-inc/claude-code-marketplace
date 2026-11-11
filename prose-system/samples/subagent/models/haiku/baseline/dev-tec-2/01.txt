@@ -1,0 +1,72 @@
+# From HTTPS Address to First Byte
+
+When you type `https://shop.example.com/products?id=7` and press Enter, the browser performs several network steps before the first byte of the response reaches it. Each network step costs at least one round trip (RTT), the time a packet takes to reach the server and come back. Time to first byte (TTFB) runs from the moment the request starts until the first response byte arrives, so it includes every step below plus the server's work.
+
+## Step 1: Parse the URL
+
+The browser splits the address into its parts: scheme (`https`), host (`shop.example.com`), port (none given, so the default 443), path (`/products`) and query (`id=7`). If the user had typed `http://`, the browser would check its HSTS list first. A site that has sent a `Strict-Transport-Security` header is upgraded to HTTPS without any network request.
+
+## Step 2: Check the Caches and Existing Connections
+
+If the browser holds a fresh copy of this response (per `Cache-Control: max-age`), it uses that copy and no network traffic happens. A stale copy can be revalidated with a conditional request (`If-None-Match` or `If-Modified-Since`). The browser also keeps a pool of open connections. If an idle connection to `shop.example.com:443` exists, the browser reuses it and skips steps 3 to 5. For the rest of this description, assume there is no cache hit and no reusable connection.
+
+## Step 3: Resolve the Host Name (DNS)
+
+The browser needs an IP address. It checks its own DNS cache, then the operating system's cache and `/etc/hosts`. On a miss, the stub resolver sends a query to the configured recursive resolver, often the ISP's or a public one such as 1.1.1.1. If that resolver has no cached answer, it walks the hierarchy: a root server points it to the `.com` servers, which point it to the authoritative nameserver for `example.com`, which returns the record. The answers include A (IPv4) and AAAA (IPv6) records, each with a TTL that controls how long it may be cached. A cached lookup takes a few milliseconds. A full uncached walk can take several RTTs across different servers. Browsers may also query an HTTPS (SVCB) record, which can advertise HTTP/3 support. DNS usually travels over UDP port 53, or over encrypted DoH/DoT when configured.
+
+## Step 4: Open a TCP Connection
+
+The client picks a server IP and a random local port, then runs the TCP three-way handshake: it sends SYN, the server replies SYN-ACK, and the client sends ACK. This costs 1 RTT, and no application data can flow until it finishes. If both IPv4 and IPv6 addresses came back, modern browsers race the two (Happy Eyeballs, RFC 8305) and keep whichever connects first. TCP also starts with a small congestion window, so early throughput is limited.
+
+## Step 5: TLS Handshake
+
+TLS 1.3 needs one round trip to set up encryption.
+
+1. **ClientHello.** The client sends its supported TLS versions and cipher suites, a random value, an ephemeral public key (a key share, usually X25519), the Server Name Indication (SNI, which names the host in plaintext unless Encrypted Client Hello is used) and an ALPN list such as `h2, http/1.1`.
+2. **ServerHello and server flight.** The server picks a cipher suite and returns its own key share. It then sends its certificate chain, a CertificateVerify signature proving it holds the private key, and a Finished message.
+3. **Key derivation.** Both sides combine the key shares with Elliptic Curve Diffie-Hellman to get the same shared secret, then derive symmetric keys (typically AES-GCM or ChaCha20-Poly1305). From this point on, everything is encrypted.
+4. **Certificate checks.** The browser verifies that the chain leads to a root in its trust store, that the leaf certificate's Subject Alternative Name includes `shop.example.com`, that the dates are valid, and that the certificate has not been revoked. Revocation is often answered by OCSP stapling, so the browser does not need a separate lookup. Any failure stops the load and shows an error page.
+5. **Client Finished.** The client sends its Finished message. In practice, the HTTP request can follow in the same flight.
+
+If the client holds a session ticket from an earlier visit, TLS 1.3 can send the request as 0-RTT early data. That data can be replayed, so it is limited to idempotent requests such as GET.
+
+## Step 6: Send the HTTP Request
+
+The browser builds the request. In HTTP/1.1 it is plain text:
+
+```
+GET /products?id=7 HTTP/1.1
+Host: shop.example.com
+User-Agent: ...
+Accept: text/html,...
+Accept-Encoding: gzip, br
+Cookie: session=...
+```
+
+In HTTP/2 and HTTP/3 the same information travels in a binary HEADERS frame, using pseudo-headers such as `:method`, `:scheme`, `:authority` and `:path`. The Host header matters because one IP address often serves many sites. The browser attaches any cookies stored for that domain. The request is then encrypted as TLS application data and written to the TCP socket.
+
+## Step 7: Server Processing
+
+The packets reach the server's edge first. This is often a CDN or load balancer, which terminates TLS (performing the handshake from step 5), may answer from its own cache, and otherwise forwards the request to an origin server. The origin, such as nginx, passes it to the application, which may query a database and render a template. For dynamic pages this step is usually the largest part of TTFB. The server writes its status line and headers before the body.
+
+## Step 8: The First Byte Returns
+
+The response travels back over the same encrypted connection. The first byte is the status line (`HTTP/1.1 200 OK`) or the HTTP/2 `:status` frame. The browser stops the TTFB timer at this point. The body then streams in chunks, and the browser begins parsing HTML before it has finished downloading.
+
+## A Worked Budget
+
+Suppose the round-trip time to the server is 50 ms, DNS is cached, and the server takes 100 ms to build the page.
+
+- TCP handshake: about 50 ms
+- TLS handshake: about 50 ms
+- Request and first response byte: about 50 ms of travel plus 100 ms of server work
+
+TTFB is therefore roughly 250 ms. An uncached DNS lookup adds tens to hundreds of milliseconds. A cold connection costs two extra RTTs compared with a reused one. HTTP/3 over QUIC combines the transport and TLS handshakes, which cuts setup to about one RTT.
+
+## Practical Takeaways
+
+- Reuse connections (keep-alive, HTTP/2 multiplexing) so steps 3 to 5 are not repeated.
+- Put content behind a CDN to shorten the RTT.
+- Use TLS 1.3, session resumption and OCSP stapling.
+- Avoid redirect chains, since each redirect repeats the whole process.
+- Measure with the browser's DevTools Network tab. The "Waiting (TTFB)" value covers steps 6 to 8, while the Timing tab breaks out DNS, TCP and TLS.

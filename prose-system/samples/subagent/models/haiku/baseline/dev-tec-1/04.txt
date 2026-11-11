@@ -1,0 +1,42 @@
+How Git stores a commit
+
+Git's .git directory is a content-addressed object database plus a set of named pointers. Almost everything Git knows about your project lives as one of four object types (blob, tree, commit, tag) stored under .git/objects, and a handful of ref files that point into that database.
+
+Objects and their names
+
+Every object is identified by a hash of its contents. Git builds the bytes to hash as a short header, "<type> <size>\0", followed by the content, and then computes the SHA-1 of that whole byte string (newer repositories can use SHA-256 instead). The 40-hex-character result is the object's name. Objects are zlib-compressed and stored as loose files at .git/objects/ab/cdef..., where the first two hex characters become a directory. Because the name is derived from the content, identical content always gets the same name, and an object can never change without its name changing. You can inspect any object with git cat-file -t <hash> (type) and git cat-file -p <hash> (pretty-printed content).
+
+Blobs
+
+A blob holds the raw bytes of a file and nothing else. It has no filename, no permissions and no timestamp. Two files with identical contents in different directories, or in different commits, share one blob. Renames are therefore free: the blob does not change, only the tree that names it does.
+
+Trees
+
+A tree represents one directory. Each entry has a mode, a name and the hash of the object it refers to. Modes distinguish regular files (100644), executables (100755), symlinks (120000), subdirectories (040000, which point to another tree) and submodules (160000, a commit from another repository). Entries are sorted by name so that the same directory always serialises to the same bytes. A root tree therefore describes an entire project snapshot: blobs for files, subtrees for folders, all the way down. If a subdirectory is unchanged between two commits, its tree hash is unchanged, and Git does not store it again. You can see this with git ls-tree HEAD, which lists the root tree's entries, and git ls-tree -r HEAD for the full recursive list of blobs.
+
+Commits
+
+A commit object is a short text record. It contains exactly these parts:
+
+tree <hash of the root tree>
+parent <hash of previous commit>   (zero for a root commit, two or more for a merge)
+author <name> <email> <unix time> <timezone>
+committer <name> <email> <unix time> <timezone>
+
+<commit message>
+
+The author is who wrote the change and the committer is who recorded it (they differ after rebase or cherry-pick). The commit does not store a diff. It stores a complete pointer to the snapshot via the tree, plus pointers back to its parents. Diffs are computed on demand by comparing two trees. History is therefore a directed acyclic graph of commits, each pointing at its parents. Merge commits simply list two parents.
+
+Annotated tags are a fourth object type with the same structure: they point at any object (usually a commit), carry a tagger and a message, and can be signed.
+
+Refs
+
+Hashes are unreadable, so Git keeps human names in refs. A ref is a file containing a hash, stored under .git/refs/heads/ for branches, .git/refs/tags/ for tags and .git/refs/remotes/ for remote-tracking branches. Old refs may be consolidated into .git/packed-refs. A branch is nothing more than a file holding the hash of its newest commit. Making a commit writes the new commit object and then moves the branch file to point at it; the old commit remains untouched.
+
+HEAD is a special ref stored in .git/HEAD. Normally it is a symbolic ref, a line such as "ref: refs/heads/main", meaning "whichever commit the branch main currently points to". When HEAD holds a bare hash instead, you are in detached HEAD state, and new commits are reachable only through HEAD until you create a branch.
+
+Consequences worth knowing
+
+Commits are immutable, so operations that look like edits create new objects. git commit --amend and git rebase write new commits with new hashes and move the branch. The old commits stay in the object store, reachable from the reflog (.git/logs/, which records every movement of HEAD and branches for a while), until git gc prunes objects no ref or reflog entry reaches. This is why git reflog can recover "lost" work. Loose objects are periodically packed into packfiles, which store many objects compactly, often as deltas against similar objects; the logical model is unchanged.
+
+Putting it together: a commit is a pointer to a root tree plus parent pointers; a tree is a directory of pointers to blobs and subtrees; a blob is file content; and a branch is a movable name for a commit. The object graph is immutable and content-addressed, and everything mutable is a ref.

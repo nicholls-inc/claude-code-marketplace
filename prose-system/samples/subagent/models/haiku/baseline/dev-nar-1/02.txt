@@ -1,0 +1,21 @@
+The Pump on Broad Street
+
+In late August 1854, Soho was a crowded district of workshops, lodging houses and small family homes in the centre of London. Its streets were narrow, its drains were poor, and many households drew their drinking water from a public pump on Broad Street. Cholera had struck the city twice before, in 1832 and 1849, killing thousands each time. Nobody knew how it spread.
+
+Most doctors believed in miasma, the idea that disease rose from foul air and the stench of rotting matter. John Snow, a physician known for his work on anaesthetics (he had given chloroform to Queen Victoria during childbirth), thought otherwise. In 1849 he had argued in a short pamphlet that cholera was swallowed, most likely in water polluted by the waste of the sick. The medical establishment largely ignored him.
+
+On the last day of August 1854, a baby in Broad Street fell ill with severe diarrhoea. Within days, adults in the same few streets began to die, some within hours of their first symptoms. The outbreak spread quickly. Undertakers were overwhelmed, and by the second week of September hundreds of people in the district had died.
+
+Snow went door to door. He gathered the addresses of the dead and then did something unusual for the time: he made a map. On a street plan he marked each death with a small black bar. As the bars accumulated, they clustered thickly around the pump at the corner of Broad Street and Cambridge Street. The pattern was hard to dismiss.
+
+The map did not settle everything. Some deaths fell outside the cluster, and Snow examined each one. The brewery on Broad Street, where hundreds of men worked, had recorded very few deaths, because the workers drank beer made from boiled water. The workhouse, which had its own well, had escaped nearly untouched. A woman who had moved to Hampstead, several miles away, had died after her household sent for water from the Broad Street pump because she preferred its taste. Each exception, Snow found, fitted his theory.
+
+On 7 September, Snow put his case to the local parish board and urged them to remove the pump handle. The officials hesitated. The outbreak was already slowing, and many believed it would burn itself out regardless. The next day, the handle was taken off. Historians still debate whether this saved lives, since the epidemic was waning anyway, and Snow himself admitted as much.
+
+While Snow gathered evidence, the Reverend Henry Whitehead, a clergyman who had visited families in the area, carried out his own inquiry. He discovered that a cesspit a few feet from the well had been leaking into it, and that the soiled linen of a child who had died of cholera had been rinsed out into that cesspit.
+
+Snow's critics were not persuaded. William Farr, the official responsible for public health statistics, attributed the cluster to the density of the population and the bad air of the neighbourhood. Snow answered with a stronger test, a natural experiment. Two water companies supplied south London. The Southwark and Vauxhall Company drew its water from the Thames at a point polluted by sewage. The Lambeth Company had moved its intake upstream in 1852, above the sewage outlets. Households on both systems lived side by side, breathed the same air and were otherwise alike. Yet deaths from cholera were many times higher among those who received Southwark and Vauxhall water.
+
+Snow published his findings in 1855 in On the Mode of Communication of Cholera, which included the map. Acceptance came slowly. The bacterium that causes the disease, Vibrio cholerae, was identified by Robert Koch in 1883, nearly thirty years later. The Italian anatomist Filippo Pacini had seen it in 1854, but his work was largely unknown outside Italy.
+
+Snow never saw the germ. What he offered was a method: count the cases, map them, compare groups, and act on what the pattern shows. He died in 1858, still working on cholera and anaesthesia. Today a replica of the Broad Street pump stands near the original site, a reminder of how much depends on the water we drink.

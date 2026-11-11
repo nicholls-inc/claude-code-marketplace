@@ -1,0 +1,32 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0d171152bed0fdd6",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "mcp__claude-code-remote__list_environments"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 10188,
+    "cache_read_input_tokens": 147512,
+    "output_tokens": 2827,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T19:13:40.318Z",
+  "valid": true,
+  "text": "What a leap second is, and why timekeepers are retiring it\n\nClocks around the world run on Coordinated Universal Time, or UTC. For most of history, time was tied to the Earth's rotation: a day was one spin of the planet, and a second was a fraction of that. But the Earth is an unreliable clock. Tides slow it, earthquakes and shifts in its molten core change its spin, and over long periods it is gradually losing speed. Atomic clocks, developed in the 1950s, are far steadier, so timekeepers faced a choice between keeping time by the atoms, which drifts away from the sky, or by the planet, which is erratic.\n\nThey chose a compromise. In 1972, UTC began running on atomic time. When the gap between the two threatened to exceed about nine-tenths of a second, the International Earth Rotation and Reference Systems Service announced an extra second, a leap second, usually at the end of June or December. Twenty-seven have been added since 1972, the most recent at the end of 2016. None has been added since.\n\nThe trouble is that computers handle an extra second badly. Many systems assume every minute has exactly 60 seconds. When a leap second arrives, clocks can repeat a second or jump backwards, and software not built for this has caused outages in phone networks, financial systems, power grids and websites. Engineers have developed workarounds, such as spreading the extra second across a day, but there is no single agreed method, which makes matters worse.\n\nIn November 2022, the General Conference on Weights and Measures, the international body that oversees the SI system of units, voted to stop adding leap seconds by 2035. The question of what replaces them will be decided later. The reasons were practical. Leap seconds cannot be predicted far in advance, they repeatedly disrupt infrastructure that depends on precise time, and the Earth's rotation has recently been speeding up in places. That raises the prospect of a negative leap second, which few systems have ever been tested for.\n\nDropping leap seconds means UTC would slowly drift away from solar time. Over the coming century the gap could grow to a minute or more. For ordinary people this would be barely noticeable, since clocks would still read close to the sun's position for decades. For engineers, it removes a recurring hazard that has long been a headache."
+}

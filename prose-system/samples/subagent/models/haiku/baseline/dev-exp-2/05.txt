@@ -1,0 +1,13 @@
+Why the world is retiring the leap second
+
+Every so often, the clocks in the world's computers, phones and satellites are told to pause for one extra second. That extra second is a leap second, and the bodies that set the world's time have now voted to stop adding them.
+
+The reason lies in two ways of measuring time. Since 1967, the official length of a second has been defined by atoms: caesium atoms vibrate with extraordinary regularity, and atomic clocks count those vibrations. Coordinated Universal Time, or UTC, is built on these clocks. But people have always tracked the day by the Earth's rotation, which decides when the sun rises and sets. That rotation is not perfectly steady. Tides, earthquakes and shifts in the planet's core speed it up or slow it down, and over the long run it has been slowing. Atomic time ticks evenly, so the two gradually drift apart.
+
+To keep UTC within 0.9 seconds of the Earth's rotation, timekeepers have inserted a leap second when needed, usually at the end of June or December. The clock reads 23:59:60 before rolling over to midnight. Since the system began in 1972, 27 have been added. The most recent was on 31 December 2016.
+
+The trouble is that computers dislike them. Many systems assume every minute has exactly 60 seconds, so a leap second can crash software or make timestamps jump backwards. A leap second in 2012 disrupted websites and airline check-in systems. Google avoided the problem by "smearing" the extra time across the day instead. Telecoms, financial trading, power grids and satellite navigation all depend on precise timestamps, and engineers have long complained that leap seconds are rare, unpredictable and hard to test.
+
+In November 2022, the General Conference on Weights and Measures, the intergovernmental body that oversees the International System of Units, voted to abolish leap seconds by 2035. Instead, UTC will be allowed to drift away from solar time, and a future conference will decide how large a gap is acceptable. Because the Earth's rotation changes slowly, that gap would stay small for generations.
+
+Put simply, the choice is between a clock that matches the sky exactly and a clock that is far easier to run reliably. Most of the bodies responsible decided that the stability of modern technology mattered more than keeping midnight aligned with the sun.

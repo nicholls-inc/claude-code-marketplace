@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2db7e3546d4b9d49",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73759,
+    "output_tokens": 5105,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:16:35.203Z",
+  "valid": true,
+  "text": "**How a Heat Pump Heats a House When It Is Colder Outside**\n\nA heat pump does not create heat. It moves heat from one place to another. Cold outdoor air still contains thermal energy, just less than warm air does, and a heat pump collects that energy and concentrates it indoors.\n\n**The cycle**\n\nA heat pump circulates a sealed loop of refrigerant, the same kind of fluid used in a refrigerator. The loop has four main parts:\n\n1. **Outdoor coil (evaporator).** Liquid refrigerant flows through this coil at very low pressure. At that pressure it boils at a temperature far below freezing, often well below zero Fahrenheit. Outdoor air that is warmer than that gives up its heat to the refrigerant, which boils into vapor.\n2. **Compressor.** The vapor is squeezed. Compressing a gas raises its temperature, so the refrigerant leaves the compressor much hotter than the indoor air you want to reach.\n3. **Indoor coil (condenser).** A fan blows indoor air across this hot coil. The heat passes into the air, and the refrigerant condenses back into a liquid.\n4. **Expansion valve.** The liquid passes through a narrow restriction, its pressure drops, and it returns to the outdoor coil to repeat the cycle.\n\nEach cycle carries heat from outside to inside. The compressor is the main electricity user. Its job is to raise the refrigerant's pressure and temperature so the heat can be released indoors. It is not burning anything.\n\n**Why efficiency matters**\n\nThe key figure is the coefficient of performance (COP). A COP of 3 means that for each unit of electricity, the system delivers about three units of heat. Heat pumps commonly reach a COP of 2 to 4 in moderate weather.\n\nA gas boiler converts fuel directly into heat. A modern condensing boiler converts roughly 90 to 98 percent of its fuel energy into useful heat, a figure called AFUE. A heat pump can deliver more heat per unit of energy purchased, but whether it costs less to run depends on your local electricity price compared with your gas price.\n\n**What happens in cold weather**\n\nAs outdoor temperatures fall, the outdoor coil absorbs less heat per cycle and the compressor works harder. Both capacity and COP drop. Standard heat pumps can lose a large share of their output below about 20°F.\n\nCold-climate models use improved compressors and controls, and they are rated to deliver substantial heat at temperatures around -13°F and sometimes lower. Many installations also include electric resistance backup heat for the coldest days or as a safety margin. Periodic defrost cycles briefly reverse the loop to melt frost off the outdoor coil. This is normal and does not mean something is wrong.\n\n**Questions to answer before replacing a boiler**\n\n- **Climate.** Compare your local design temperature and the number of hours per year below the heat pump's rated capacity.\n- **Energy prices.** Compare the cost per kilowatt-hour of electricity with the cost per therm or kilowatt-hour of gas, then account for each system's efficiency.\n- **Home condition.** Insulation, air sealing, and ductwork strongly affect performance. Poorly sealed ducts waste much of the heat a heat pump produces.\n- **Emitters.** Homes with radiators can use air-to-water heat pumps, but radiators often need to be larger to work well at the lower water temperatures these systems produce. Forced-air homes usually need little change.\n- **Electrical service.** Some older homes need a panel upgrade to support a heat pump.\n- **Sizing.** Ask the installer for a room-by-room heat load calculation, such as ACCA Manual J, rather than matching the size of the old boiler. Oversized equipment cycles on and off and runs less efficiently.\n- **Incentives.** Many regions offer rebates or tax credits that narrow the upfront cost gap.\n\n**Bottom line**\n\nA heat pump heats a cold house by pumping heat that already exists in outside air through a refrigerant cycle. It is typically more efficient than a boiler in mild and moderate weather, and cold-climate models perform well in severe winters. Whether it is the right replacement depends on your local energy prices, how well your home holds heat, and whether the system is sized correctly."
+}

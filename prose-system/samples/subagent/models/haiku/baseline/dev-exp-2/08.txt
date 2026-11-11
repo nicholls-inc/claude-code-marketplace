@@ -1,0 +1,13 @@
+Why the World Is Ending the Leap Second
+
+Every so often, the world's clocks are told to wait. A leap second is an extra second inserted into the calendar, usually at the end of June or December, so that official time stays aligned with the sky.
+
+The need comes from a mismatch between two kinds of time. Since 1967, the second has been defined by atomic clocks, which tick with extraordinary regularity. The Earth is a far less reliable timekeeper. Tidal friction from the Moon gradually slows its rotation, and the oceans, atmosphere and molten core shift in ways that speed it up and slow it down unpredictably. Earthquakes can nudge the length of a day too. Left alone, midday on the atomic clock would drift away from the moment the sun stands highest.
+
+To prevent that drift, the International Earth Rotation and Reference Systems Service, which tracks the planet's spin, has called for a leap second whenever the gap between official time and Earth's rotation approaches 0.9 seconds. Since 1972, 27 have been added, the most recent on 31 December 2016. Each is only one second, but everything that relies on precise time must handle it.
+
+That is where the trouble lies. Computers, phone networks, satellite navigation, power grids and financial systems generally assume every minute has exactly sixty seconds. When an extra second arrives, some systems repeat a second, some crash and others fall out of step. Major internet services and airlines have suffered outages in past leap seconds. Engineers often "smear" the change, stretching the day slightly so the extra second is absorbed gradually, but there is no universal standard for doing so. A negative leap second, which would remove one, has never been needed and would be harder still to handle.
+
+In November 2022, the General Conference on Weights and Measures, the intergovernmental body that oversees the International System of Units, voted to stop adding leap seconds, with the change to be in place by 2035. Rather than cut the link to Earth's rotation entirely, the plan lets the gap between atomic time and solar time grow, with the permitted size to be settled later. Over centuries the difference would reach minutes. Officials judged that a manageable cost compared with the recurring risk of technical failures.
+
+Some astronomers and navigators argue that a clock detached from the sun loses a useful connection. But for most of the digital world, timekeeping is becoming simpler and more reliable. The clock will simply keep counting, and a minute will always be sixty seconds.

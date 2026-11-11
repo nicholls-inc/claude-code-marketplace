@@ -1,0 +1,11 @@
+Every so often, the clocks that run the modern world are asked to pause. They do not stop. Instead, one minute is given 61 seconds: a "leap second," usually added at the end of June or December. It is the only practical way to reconcile two different ideas of time.
+
+The first idea is atomic time. Since 1967 the second has been defined by the vibrations of caesium atoms, and atomic clocks tick with extraordinary steadiness. The second idea is solar time, the day as measured by the Earth's actual rotation. The Earth is not a precise clock. Tidal friction, earthquakes and shifts in its molten core change its spin, and the changes are hard to predict. Over decades, atomic time and the sky drift apart.
+
+In 1972 the world's timekeepers agreed on Coordinated Universal Time (UTC). It runs on atomic seconds but is kept within 0.9 seconds of the Earth's rotation. When the gap nears that limit, the International Earth Rotation and Reference Systems Service announces a leap second. Since 1972 there have been 27, all of them additions, because the Earth has on balance been slowing. The most recent was at the end of 2016.
+
+The trouble is that leap seconds are awkward for machines. Computers expect every minute to have 60 seconds, and many systems have handled the extra second badly, with some crashing or stalling. Telecoms networks, power grids, financial trading and satellite navigation all depend on precisely synchronised clocks. A sudden insertion can cause errors that engineers spend nights preparing for, and the notice is short, often only a few months, so software must be ready in time.
+
+In November 2022, the General Conference on Weights and Measures, the intergovernmental body that oversees the International System of Units, voted to stop adding leap seconds by 2035 at the latest. It did not settle what replaces them. One option is to let UTC drift away from the Earth's rotation, so the gap could grow to minutes or hours over a century. That would matter to astronomers and to anyone who expects noon to be when the sun is highest. Decisions on the alternative are due before 2035.
+
+The change is not a claim that the Earth's spin no longer matters. It is a judgement that, for most of modern life, a steady and predictable clock is worth more than matching the sky to the last fraction of a second.

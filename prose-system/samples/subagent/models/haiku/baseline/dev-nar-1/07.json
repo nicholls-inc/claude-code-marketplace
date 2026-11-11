@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a220d59b2b41f3c1e",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "final_text",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73758,
+    "output_tokens": 3761,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:14:31.656Z",
+  "valid": true,
+  "text": "**The Pump Handle: John Snow and the Broad Street Cholera, 1854**\n\nIn late August 1854, London was in the grip of cholera. The disease moved quickly. A healthy adult could be vomiting and cramping in the morning and dead by nightfall, drained of so much fluid that the body gave out. Most doctors blamed \"miasma,\" the bad air thought to rise from rotting matter in cesspits, graveyards and marshes. Some blamed the weather. Few suspected the water.\n\nJohn Snow was one of the few. He was a physician in his early forties, known in medical circles for pioneering the use of anaesthetics. He had given chloroform to Queen Victoria during two childbirths. But for years he had argued that cholera was spread by something people swallowed, and he had written about it in 1849 with little response. Snow was methodical. He did not want to argue from theory. He wanted evidence he could count.\n\nIn the Soho district, around Broad Street (now Broadwick Street), cases began piling up in the first days of September. Over roughly ten days, more than five hundred people died. Families who had been healthy at breakfast were buried within the week. Snow went out into the streets. He knocked on doors, asked about meals and drinking habits, and wrote everything down.\n\nHe worked from a street map. Each death he confirmed he marked with a small black bar on the page. The bars clustered tightly around one spot: the public water pump on Broad Street. Streets only a few hundred yards away had far fewer deaths. Snow looked at the exceptions as carefully as the cases. The brewery on Broad Street had its own well, and its workers, who drank beer, were largely spared. A nearby workhouse with its own water supply reported few deaths. A woman who had moved to Hampstead, several miles away, had grown fond of the Broad Street water and had it carted to her home. She died. Snow recorded that too.\n\nSnow was not the only investigator. The Reverend Henry Whitehead, curate of St Luke's church, was gathering his own accounts of the dead and reached similar conclusions. Together they found a further clue. A cesspool lay close to the well, and a baby's soiled napkins, reportedly washed out in that cesspool, had been followed by infection. Whether the leak was the cause could not be proven at the time, but the pattern pointed in one direction.\n\nOn September 8, Snow took his findings to the Board of Guardians, the local body that oversaw the parish and its pump. He asked them to remove the pump handle. They did. The outbreak was already waning by then, partly because many residents had fled the area. Snow's critics later used this against him, arguing that the cases were falling anyway. Snow acknowledged the point. He never claimed the handle alone had ended the epidemic, only that the water had been the means of spread.\n\nThe episode did not settle the question at once. Snow's arguments were persuasive to some and dismissed by others, and the miasma theory held on for years. But Snow kept building his case. He later compared houses in south London served by two water companies. One company drew its water from the Thames downstream of London's sewage outfalls, and the other from upstream. Households served by the downstream company suffered far more cholera deaths. The comparison was a kind of natural experiment, and it strengthened his argument considerably.\n\nSnow never saw the microbe that caused cholera. The bacterium, *Vibrio cholerae*, was identified in 1854 by the Italian anatomist Filippo Pacini, but his work was largely ignored, and the organism was not established as the cause until Robert Koch's work in 1883. Snow had only his maps, his notebooks and his stubbornness. What he had was enough to show that a disease could be traced to its source by patient observation, and that the people in charge could act on what the evidence showed.\n\nThe map that made him famous was printed in the second edition of his book in 1855. Today it is often cited as the founding example of epidemiology, the study of how disease spreads through populations. The pump on Broad Street has been replaced, but a replica handle stands nearby, and a pub that bears Snow's name marks the spot."
+}

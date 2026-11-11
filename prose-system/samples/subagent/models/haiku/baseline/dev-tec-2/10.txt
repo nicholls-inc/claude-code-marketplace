@@ -1,0 +1,91 @@
+# What Happens Between an HTTPS Address and the First Byte of Response
+
+When you type `https://shop.example.com/products?id=42` and press Enter, the browser does a lot of work before the server sends anything back. This is a walkthrough of each stage, roughly in order. Most of the delay comes from network round trips, so the key idea to keep in mind is that every step waits for the one before it.
+
+## 1. Parsing and local checks
+
+The browser splits the URL into parts: scheme (`https`), host (`shop.example.com`), port (443 by default), path (`/products`) and query (`id=42`). Before touching the network it checks:
+
+- **HSTS list.** If the site previously told the browser to use HTTPS only, or is on the preload list, any `http://` request is upgraded before it leaves the machine.
+- **HTTP cache.** A fresh cached response can be used with no network traffic at all.
+- **Service worker.** If the site registered one, the request is passed to that JavaScript code first, and it may answer from its own cache.
+
+## 2. DNS resolution
+
+Computers use names, but the network routes by IP address, so the name must be turned into an address. The lookup goes through several layers:
+
+1. The browser's own DNS cache.
+2. The operating system's resolver cache.
+3. The configured recursive resolver (often your ISP or a public resolver such as 1.1.1.1). It answers from its cache if it can.
+4. On a cache miss, the recursive resolver walks the hierarchy: a root server points to the `.com` servers, which point to the authoritative name server for `example.com`, which returns the answer.
+
+The answer is usually an `A` record (IPv4) and/or an `AAAA` record (IPv6). Large sites often return a `CNAME` chain that sends the name to a CDN, so the final IP belongs to a server near you. Each answer carries a TTL, which controls how long it can be cached. Modern browsers may also query an `HTTPS` (SVCB) record, which can advertise supported protocols such as HTTP/3 before any connection is made.
+
+A cold lookup can take tens to hundreds of milliseconds. A cached one takes almost nothing.
+
+## 3. TCP connection
+
+With an IP address, the browser opens a TCP connection to port 443. TCP needs a three-way handshake before any data flows:
+
+- Client sends `SYN`.
+- Server replies `SYN-ACK`.
+- Client sends `ACK`.
+
+That costs one **round trip time (RTT)**, the time for a packet to go to the server and back. If the machine has both IPv4 and IPv6 addresses, the browser may try both at once and keep whichever connects first, a technique called "Happy Eyeballs."
+
+## 4. TLS handshake
+
+TLS provides encryption, server identity and message integrity. In TLS 1.3 the handshake works like this:
+
+1. **ClientHello.** The browser lists the TLS versions and cipher suites it supports, sends a key share for a Diffie-Hellman key exchange, and includes:
+   - **SNI** (Server Name Indication): the hostname, so one IP address can serve many sites and the server knows which certificate to present.
+   - **ALPN** (Application-Layer Protocol Negotiation): the protocols the browser can speak, such as `h2` or `http/1.1`.
+2. **ServerHello and certificate.** The server picks a cipher, returns its own key share, and sends its certificate chain. It also signs part of the handshake with its private key, which proves it actually holds that key.
+3. **Browser verification.** The browser checks that:
+   - the chain leads to a root CA in its trusted store;
+   - the certificate names this hostname;
+   - the certificate has not expired or been revoked (usually via OCSP stapling).
+4. **Key derivation.** Both sides combine their key shares to derive the same symmetric session keys. A passive eavesdropper who sees the traffic cannot compute them.
+5. **Finished.** Both sides send a finished message, and then encrypted application data can flow.
+
+In TLS 1.3 this takes **one round trip**. TLS 1.2 needs two. Returning visitors can often use session resumption or 0-RTT to skip most of this.
+
+## 5. Sending the HTTP request
+
+Now the browser sends the request, encrypted inside TLS records. Over HTTP/1.1 it is plain text:
+
+```
+GET /products?id=42 HTTP/1.1
+Host: shop.example.com
+User-Agent: ...
+Accept: text/html
+Accept-Encoding: gzip, br
+Cookie: session=...
+```
+
+The `Host` header tells the server which site is wanted, even if several sites share the IP address. The browser also attaches cookies for this domain. If ALPN selected HTTP/2, the same information travels as binary frames on a multiplexed stream. HTTP/3 runs over QUIC, which is built on UDP and combines the transport and TLS handshakes into a single round trip. The browser learns that HTTP/3 is available from an `Alt-Svc` header or an `HTTPS` DNS record, and uses it on later connections.
+
+## 6. Server-side processing
+
+The request usually does not reach your application directly:
+
+1. **Edge or CDN.** A nearby server terminates TLS. It may answer from its cache, which is the fastest case.
+2. **Load balancer or reverse proxy.** On a cache miss, the edge forwards the request to the origin, often over a connection it keeps open and reuses.
+3. **Application server.** The router matches `/products`, the handler runs, the code queries the database, and the template or JSON is rendered.
+
+Any slow step here delays the response. Caching, connection reuse and fewer database queries all reduce this time.
+
+## 7. The first byte comes back
+
+As soon as the server writes the status line, `HTTP/1.1 200 OK`, the first byte is on its way. The bytes are encrypted into TLS records, split into TCP or QUIC packets, and sent back. The browser decrypts them and starts parsing. **Time to first byte (TTFB)** is measured from the start of the request to this moment, so it includes server processing and all the network waits.
+
+## Putting numbers on it
+
+Suppose the round trip to the server is 50 ms and the server takes 100 ms to process the request. A cold visit with HTTP/1.1 and TLS 1.3 needs:
+
+- DNS: about 1 RTT (50 ms), more on a cold cache;
+- TCP handshake: 1 RTT (50 ms);
+- TLS handshake: 1 RTT (50 ms);
+- request and first byte: 1 RTT (50 ms), plus 100 ms of server work.
+
+That is roughly 300 ms before the first byte, and most of it is waiting on the network rather than computing. This is why CDNs, connection reuse, HTTP/2 and HTTP/3, DNS caching and session resumption matter so much for page speed.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "acbc9e26a5780c686",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25363,
+    "cache_read_input_tokens": 48395,
+    "output_tokens": 2625,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:21:45.114Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged in two stages: constant current (CC), then constant voltage (CV). The charger drives lithium ions out of the cathode (typically a layered oxide such as NMC or LCO, or LFP) through the electrolyte and into the graphite anode, where they intercalate between graphene layers. Electrons move through the external circuit in the opposite direction.\n\nStage 1, CC: The charger holds current at a set rate, commonly 0.5C to 1C, where 1C is the current that would discharge the rated capacity in one hour. Terminal voltage rises steadily because the open-circuit voltage (OCV) increases with state of charge (SOC), and resistive and polarization losses add to it:\n\nV_terminal = OCV(SOC) + I·R_internal + η_polarization\n\nStage 2, CV: When the terminal voltage reaches its limit (about 4.2 V per cell for NMC/LCO, 3.6 V for LFP), the charger holds voltage constant and lets current decay. Because the charger voltage is fixed, the current is set by the remaining headroom:\n\nI(t) ≈ (V_limit − OCV(SOC)) / R_total\n\nWhy charging slows near full:\n\n1. Shrinking headroom. OCV keeps rising with SOC, and its curve steepens near the top. The voltage gap available to drive current narrows, so current falls roughly exponentially.\n\n2. Anode saturation. Near full, graphite is mostly lithiated (approaching LiC6). Vacant host sites become scarce, and the anode potential approaches 0 V vs Li/Li+, the plating threshold. Charging must slow to avoid depositing metallic lithium, which is a safety hazard and a source of permanent capacity loss.\n\n3. Transport limits. Lithium diffusion inside the particles slows as concentration gradients steepen, and the cathode's electronic and ionic conductivity drops as it delithiates. Both raise polarization, which consumes more of the voltage budget and leaves less for current.\n\n4. Termination. Charging ends when current falls to a cutoff, commonly C/20 to C/50 (roughly 2 to 5% of rated current). The tail adds little capacity while costing time and generating heat.\n\nPractical result: the first 70 to 80% of capacity takes a small fraction of total charge time, while the last few percent takes disproportionately long. The CV phase is best understood as a self-limiting electrochemical process, with the limit set by overpotential and electrode kinetics rather than by a timer."
+}

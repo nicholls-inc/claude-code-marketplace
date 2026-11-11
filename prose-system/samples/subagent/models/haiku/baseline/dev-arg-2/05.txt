@@ -1,0 +1,19 @@
+Stop Estimating. Start Forecasting From What You Finish.
+
+Every quarter, a room of engineers guesses how long things will take. The guesses become dates, the dates become commitments, and the commitments become the stick that beats the team for the next three months. Software teams should stop doing this. The problem is not that estimation is hard, although it is. The problem is that the activity produces the wrong thing.
+
+Start with the track record. Estimates for software work are usually wrong, and they are wrong in one direction. Tasks take longer than predicted, integrations surprise you, and requirements shift under your feet. Anyone who has shipped a feature knows the pattern. We keep repeating the mistake because the feedback loop is slow and the people estimating rarely absorb the cost of being wrong.
+
+The deeper problem is what estimates do to behavior. Once a number is written down, it stops being a forecast and becomes a target. Engineers pad to protect themselves, or they rush and cut testing to hit a date that was never realistic. Managers treat the estimate as a promise and escalate every slip as a failure, which teaches the team to hide risk instead of surfacing it. An estimate is supposed to create information. In practice it creates politics.
+
+Estimation also spends the most expensive resource in the room: the attention of the people who should be building. A planning session for a two-week epic can eat an afternoon, and the output is a number nobody checks afterwards.
+
+So what replaces it? Two practices, both cheaper.
+
+First, measure what you finish. Track throughput, meaning how many items the team completes each week. Keep items roughly the same size by slicing work until each piece fits in a few days. Once you have a history, forecast with a simple simulation or even a plain range. If you have 30 items and historically finish six to nine a week, you ship in four to six weeks, with the confidence stated. That is an honest answer, and it updates itself as the data changes.
+
+Second, treat commitments as bets, not estimates. Decide what the team will do in a fixed time box, then look at what happened when the box closes. Scope is the variable you adjust. The deadline stays fixed.
+
+Critics will say customers and finance need dates. They do. But a range built from real throughput is a better date than a point estimate built from optimism, and it shows its uncertainty. Stakeholders can plan around a range. They cannot plan around a number that gets revised in week nine.
+
+Dropping estimates is not dropping planning. It is refusing to pretend we know what we do not. Managers should ask teams for flow data instead of guesses. Engineers should ask for smaller tickets instead of bigger buffers. And everyone should accept that the honest answer to "how long will this take?" is usually "somewhere between these two numbers, and here is how we will find out."

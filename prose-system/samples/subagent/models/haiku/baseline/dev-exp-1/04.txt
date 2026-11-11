@@ -1,0 +1,31 @@
+How a Heat Pump Heats a House When It Is Colder Outside
+
+Most people think of heating as making heat, the way a gas boiler burns fuel to produce it. A heat pump works differently. It moves heat that already exists outside into your home, and it can do this even when the outdoor air feels cold. Cold is relative. Air at 0°C still holds a large amount of thermal energy, and the heat pump's job is to collect some of it and concentrate it.
+
+The system relies on a refrigerant, a fluid that boils at very low temperatures. The cycle has four stages.
+
+First, the outdoor unit's coil, called the evaporator, carries cold refrigerant. Outside air blows across it. Because the refrigerant is colder than the air, heat flows into it, and that heat makes the refrigerant boil into a gas. The refrigerant boils at a temperature well below the outdoor air, so this works even on a frosty day.
+
+Second, a compressor squeezes the gas. Compressing a gas raises its pressure and temperature, which is why a bicycle pump gets warm. The refrigerant leaves the compressor far hotter than your living room.
+
+Third, the hot gas flows through the indoor coil, called the condenser. Your home's air or water is cooler than the refrigerant, so heat flows out of the refrigerant into the house, and the refrigerant condenses back into a liquid.
+
+Fourth, the liquid passes through an expansion valve. This drops its pressure and temperature sharply, so it is colder than the outside air again, and the cycle repeats.
+
+A fridge works on the same principle, pulling heat out of its interior and releasing it at the back. A heat pump does the same job, but it aims the released heat indoors.
+
+The key efficiency figure is the coefficient of performance (COP), the units of heat delivered per unit of electricity used. Typical air-source heat pumps reach roughly 2.5 to 4 in mild weather. A gas boiler at 90 percent efficiency delivers 0.9 units of heat per unit of gas. Because a heat pump moves heat rather than creating it, it can deliver more heat energy than the electricity it consumes.
+
+Cold weather does reduce performance. As the outdoor temperature falls, there is less heat to draw from the air, the compressor has to work harder to lift the temperature, and COP drops. Heating capacity falls too. Many modern units still produce useful heat at -15°C or lower, but on the coldest nights a house may need a backup electric heater, or the unit may be undersized for those conditions. When frost forms on the outdoor coil, the unit briefly reverses to defrost, which can interrupt heating for a few minutes.
+
+For your decision, several points matter more than the mechanism itself.
+
+Heat pumps supply water at lower temperatures, typically 35 to 50°C, compared with 60 to 80°C from a boiler. Radiators may need to be enlarged, or the house may suit underfloor heating. A heating engineer should check this with a heat-loss calculation before you commit.
+
+Insulation and draught-proofing matter more with a heat pump. It runs steadily at low output rather than in short bursts, so heat lost through walls and windows has to be replaced continuously.
+
+Running cost depends on your electricity price relative to your gas price. A heat pump is cheaper to run when your electricity tariff is favorable, so compare your actual bills rather than assuming either fuel wins.
+
+Hot water is heated less efficiently than space heating, so tank size and the hot-water temperature setting affect running costs.
+
+In short, a heat pump heats a house by collecting low-grade heat from cold outdoor air, compressing it to a useful temperature, and releasing it indoors. It works well in most UK-style climates, but it is most suitable where the house is well insulated and the heating system can run at lower temperatures.

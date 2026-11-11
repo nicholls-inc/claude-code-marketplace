@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad1734cb2e1ad90f7",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73755,
+    "output_tokens": 2206,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:14:19.376Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Slicing.\n\nEvery quarter the same ritual plays out. A product manager asks how long the new billing flow will take. Engineers huddle, someone says \"three weeks,\" someone else says \"maybe five,\" and the number lands on the roadmap as a promise. Six weeks later the flow ships in nine, the team takes the blame, and everyone agrees to estimate more carefully next time. We should stop doing this.\n\nThe problem is not that software is mysterious. The problem is that our estimates are bad and the process that produces them is expensive. Researchers have documented the same pattern for decades: developers are poor at predicting how long work will take, and they are consistently optimistic. The planning fallacy is how people reason about unfamiliar work, and most software work is unfamiliar by definition. If we already knew how to build it, we would have less need to build it at all.\n\nEstimation also costs more than it appears to. Each estimate invites a negotiation, a padding exercise, and a meeting about the meeting. Engineers inflate tickets so they will not be punished for overruns. Managers quietly discount the inflated numbers. The estimate stops measuring the work and starts measuring politics.\n\nWorse, the estimate shapes what gets built. When a feature is \"three weeks,\" people cut scope to hit the date, cut quality, or stop investigating the parts of the problem that might reveal it is harder than expected. The date becomes the goal, when the goal was supposed to be the outcome.\n\nSo what replaces it? Not chaos. Teams can cut work into slices that ship in days, and then track how many slices they finish. Throughput is a fact you measure, not a forecast you invent. If a team finishes about eight slices a fortnight, you can answer \"when will this be done?\" by counting the slices the work contains. That answer is a range, it updates every week, and it rests on what the team actually did rather than what it imagined in a meeting.\n\nManagers will object that they need dates for budgets, contracts and launches. They do. But a date drawn from recent throughput, with an honest range attached, is more useful than a point estimate everyone privately knows is fiction. You can plan around a range. You cannot plan around a number you already suspect is wrong.\n\nEngineers gain too. When nobody grades them against a figure they gave in a planning session, they can say \"this is harder than I thought\" on day two instead of day twenty-nine. That early signal is what we actually need, and estimation trains people to hide it.\n\nStop estimating how long work will take. Make the work small enough that the question matters less, and measure what you deliver."
+}

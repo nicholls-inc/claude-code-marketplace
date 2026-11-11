@@ -1,0 +1,35 @@
+How a heat pump heats a house that is colder than the air outside
+
+A heat pump does not create heat by burning fuel. It moves heat that already exists in the outside air into your home, and this works even when that air feels bitterly cold. "Cold" is relative. Air at -5°C still holds a large amount of thermal energy, because the lowest possible temperature is absolute zero, about -273°C. The task is to collect that energy and deliver it at a higher temperature indoors.
+
+It does this with a refrigeration cycle, the same principle a fridge uses. A fridge removes heat from its interior and releases it behind the unit. A heat pump's indoor coil is the useful side, so the heat goes into your house. The system has four main parts and a refrigerant, a fluid that boils at very low temperatures.
+
+1. Evaporation. The refrigerant flows through an outdoor coil colder than the outside air, so heat flows from the air into the fluid. The refrigerant's boiling point is well below freezing (around -26°C for common refrigerants at normal pressure), so it turns into vapour even when the air is far below zero. A fan pulls air across the coil to keep this going.
+
+2. Compression. The compressor squeezes the vapour. Compressing a gas raises its temperature sharply, which is why a bicycle pump warms up. The refrigerant leaves the compressor hotter than your home, often 60°C to 90°C or more.
+
+3. Condensation. The hot refrigerant flows through the indoor coil, or through a water coil in a radiator or underfloor system. The house air or water is cooler than the refrigerant, so heat flows out of the refrigerant into your home, and the refrigerant condenses back into a liquid.
+
+4. Expansion. The liquid passes through an expansion valve, which drops its pressure and temperature. It is now colder than the outside air again, and the cycle repeats.
+
+Why it works in cold weather, and where it struggles
+
+Heat delivered is the heat taken from outdoors plus the work the compressor does. Efficiency is expressed as the coefficient of performance (COP): units of heat delivered per unit of electricity used. Modern cold-climate heat pumps often deliver two to three units of heat per unit of electricity around freezing, and more in mild weather.
+
+As outdoor temperatures fall, the gap between the outside air and the refrigerant widens. The compressor works harder, COP drops, and the unit's maximum output shrinks. A heat pump sized only for mild days may struggle on the coldest nights. This is why installers size units for your home's design temperature (the coldest typical conditions where you live) and often include backup electric resistance heat for the few hours that need it.
+
+How it compares with a gas boiler
+
+A modern condensing gas boiler converts fuel to heat at roughly 90% to 96% efficiency at the point of use, and its output does not depend on outside temperature. A heat pump's seasonal efficiency over a full year is often two and a half to four times that of the electricity it consumes, counting heat delivered per unit of electricity. Whether that lowers your bills depends on the price of electricity relative to gas where you live, not on efficiency alone.
+
+Practical points for your decision
+
+- Ask for the unit's rated heating output at your design temperature, not only its headline figure.
+- Ask for a room-by-room heat-loss calculation. An undersized or oversized unit costs you either way.
+- Heat pumps run most efficiently at lower water temperatures than boilers. Some radiators may need upgrading, and better insulation improves results.
+- Installation costs vary widely with insulation, radiators, electrical supply and the outdoor unit's location and noise.
+- Check whether grants or incentives apply in your area, since they can change the payback period.
+
+Bottom line
+
+A heat pump heats your house by extracting heat from cold outside air, raising its temperature with a compressor, and releasing it indoors. It works in cold weather, but its efficiency and output fall as temperatures drop. The right size, a good heat-loss survey and a sensible backup matter more than the headline efficiency figure when you compare it with a gas boiler.

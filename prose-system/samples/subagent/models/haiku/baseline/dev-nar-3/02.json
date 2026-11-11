@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab37870bf3ccc35d1",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73737,
+    "output_tokens": 2914,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:03:47.851Z",
+  "valid": true,
+  "text": "The Great Molasses Flood\n\nOn the afternoon of January 15, 1919, the North End of Boston was unusually warm for winter, and people moved freely along the streets near the waterfront. Children played nearby. Horses pulled carts past warehouses. Few people paid attention to the enormous steel tank rising above Commercial Street, owned by the Purity Distilling Company. It held about 2.3 million gallons of molasses, a raw ingredient the company used to make alcohol.\n\nAround 12:30 p.m., the tank failed. Witnesses later described a sound like machine-gun fire as rivets popped from the seams. Then the steel wall gave way, and a wave of molasses, estimated at as much as 25 feet high, burst into the streets at speeds some reports put near 35 miles per hour. It flattened buildings, knocked a freight car off its tracks, and tore into the firehouse of Engine Company 31, trapping firefighters inside.\n\nSurvivors said the molasses was too thick to outrun and too heavy to swim through. Rescuers waded through a sticky brown mess that reached their chests, pulling out people who had been pinned by debris or smothered where they lay. Twenty-one people died, and about 150 were injured. Several of the dead were children, and many horses were killed as well.\n\nThe response was improvised. Firefighters, sailors from a nearby Navy ship, and local volunteers dug through the molasses with shovels and buckets. Crews used sand and seawater to try to clear the streets. The cleanup took weeks. Even after the pavement was scrubbed, the sweet smell lingered in the neighborhood for years, and residents said that on warm days the air still carried it.\n\nWhy had the tank failed? It had been built hastily in 1915, and it had leaked and groaned for months. Residents had complained, and the company had been warned. Investigators pointed to poor engineering and weak construction, and the company was found liable. Rumors that anarchists had sabotaged the tank circulated for years, but no evidence ever supported them.\n\nThe lawsuits dragged on for more than a decade. In 1925, a judge ruled that the company was responsible, and victims eventually received compensation. It came long after the disaster and never fully repaid the losses. The case became an early lesson in corporate accountability and in the engineering standards that followed.\n\nThe disaster is remembered partly for its absurdity, a city flooded with syrup, and partly for the grim reality behind it: twenty-one people died because a company cut corners and no one stopped it in time."
+}

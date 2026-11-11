@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7004b7335d9bbb34",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25358,
+    "cache_read_input_tokens": 48401,
+    "output_tokens": 3354,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:01:39.997Z",
+  "valid": true,
+  "text": "How a heat pump heats a house that is colder than the air outside\n\nA heat pump does not create heat by burning fuel. It moves heat that already exists in the outside air into your home, and this works even when that air feels bitterly cold. \"Cold\" is relative. Air at -5°C still holds a large amount of thermal energy, because the lowest possible temperature is absolute zero, about -273°C. The task is to collect that energy and deliver it at a higher temperature indoors.\n\nIt does this with a refrigeration cycle, the same principle a fridge uses. A fridge removes heat from its interior and releases it behind the unit. A heat pump's indoor coil is the useful side, so the heat goes into your house. The system has four main parts and a refrigerant, a fluid that boils at very low temperatures.\n\n1. Evaporation. The refrigerant flows through an outdoor coil colder than the outside air, so heat flows from the air into the fluid. The refrigerant's boiling point is well below freezing (around -26°C for common refrigerants at normal pressure), so it turns into vapour even when the air is far below zero. A fan pulls air across the coil to keep this going.\n\n2. Compression. The compressor squeezes the vapour. Compressing a gas raises its temperature sharply, which is why a bicycle pump warms up. The refrigerant leaves the compressor hotter than your home, often 60°C to 90°C or more.\n\n3. Condensation. The hot refrigerant flows through the indoor coil, or through a water coil in a radiator or underfloor system. The house air or water is cooler than the refrigerant, so heat flows out of the refrigerant into your home, and the refrigerant condenses back into a liquid.\n\n4. Expansion. The liquid passes through an expansion valve, which drops its pressure and temperature. It is now colder than the outside air again, and the cycle repeats.\n\nWhy it works in cold weather, and where it struggles\n\nHeat delivered is the heat taken from outdoors plus the work the compressor does. Efficiency is expressed as the coefficient of performance (COP): units of heat delivered per unit of electricity used. Modern cold-climate heat pumps often deliver two to three units of heat per unit of electricity around freezing, and more in mild weather.\n\nAs outdoor temperatures fall, the gap between the outside air and the refrigerant widens. The compressor works harder, COP drops, and the unit's maximum output shrinks. A heat pump sized only for mild days may struggle on the coldest nights. This is why installers size units for your home's design temperature (the coldest typical conditions where you live) and often include backup electric resistance heat for the few hours that need it.\n\nHow it compares with a gas boiler\n\nA modern condensing gas boiler converts fuel to heat at roughly 90% to 96% efficiency at the point of use, and its output does not depend on outside temperature. A heat pump's seasonal efficiency over a full year is often two and a half to four times that of the electricity it consumes, counting heat delivered per unit of electricity. Whether that lowers your bills depends on the price of electricity relative to gas where you live, not on efficiency alone.\n\nPractical points for your decision\n\n- Ask for the unit's rated heating output at your design temperature, not only its headline figure.\n- Ask for a room-by-room heat-loss calculation. An undersized or oversized unit costs you either way.\n- Heat pumps run most efficiently at lower water temperatures than boilers. Some radiators may need upgrading, and better insulation improves results.\n- Installation costs vary widely with insulation, radiators, electrical supply and the outdoor unit's location and noise.\n- Check whether grants or incentives apply in your area, since they can change the payback period.\n\nBottom line\n\nA heat pump heats your house by extracting heat from cold outside air, raising its temperature with a compressor, and releasing it indoors. It works in cold weather, but its efficiency and output fall as temperatures drop. The right size, a good heat-loss survey and a sensible backup matter more than the headline efficiency figure when you compare it with a gas boiler."
+}

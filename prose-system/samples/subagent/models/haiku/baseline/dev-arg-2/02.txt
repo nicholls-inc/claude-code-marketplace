@@ -1,0 +1,17 @@
+Stop Estimating. Start Measuring.
+
+Every quarter the same ritual plays out. A manager asks when something will be done. Engineers huddle, assign story points or T-shirt sizes, add a buffer, and hand back a date. Months later the date is missed, everyone shrugs, and the cycle restarts. We keep doing this because estimates feel responsible. They are a comforting fiction, and software teams should stop producing them.
+
+The core problem is that software work is mostly discovery. When someone estimates a feature at three weeks, they are guessing at the unknowns: the legacy module nobody understands, the API that behaves differently under load, the requirement that surfaces in week two. Those surprises are the work itself. Estimates also fail in one direction. Tasks finish late far more often than early, so the errors pile up on the schedule.
+
+Estimates also distort behavior. Once a date is attached to a task, people optimize for the date instead of the outcome. They skip the refactor that would make the next three features faster. They ship the version that technically meets the ticket. They hide risk, because raising it reopens the estimate and makes them look slow. The estimate becomes a commitment, and commitments punish honesty.
+
+The alternative is measurement and short feedback loops. Track throughput, the number of items finished per week, and use that history to forecast. A Monte Carlo simulation over past throughput answers "when might this be done, and how confident are we?" far more honestly than a planning poker session. The output is a range with probabilities, which is what decision makers need. A manager who wants a date can get one: there is an 85 percent chance we finish by March. That is a commitment backed by data, not a guess dressed up as a plan.
+
+This works best when work is cut into small, similar-sized slices. If items are roughly the same size, counting them is enough. Nobody has to argue about whether something is a five or an eight.
+
+Dropping estimation also frees time. Sizing sessions, refinement meetings, and the padding engineers add to protect themselves all cost real hours. Spend that effort on shortening feedback instead: deploy more often, put working software in front of users sooner, and let the results decide what to build next.
+
+Critics will say managers need predictability. They do. Predictability comes from a stable system and honest forecasts that narrow over time, not from numbers that were wrong before the ink dried. Releases that ship and forecasts that tighten build more trust than any Gantt chart.
+
+So drop the story points at the next planning session. Ask instead what the smallest valuable slice is, ship it, and measure what happens. Estimation feels like control. Measurement actually provides it.

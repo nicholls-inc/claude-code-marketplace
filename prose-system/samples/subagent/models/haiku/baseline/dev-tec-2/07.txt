@@ -1,0 +1,55 @@
+What Happens Between an HTTPS Address and the First Byte of the Response
+
+When you press Enter on https://shop.example.com/cart, the browser runs a chain of network steps before any page content arrives. Most of these steps involve talking to another machine, and each conversation costs at least one round trip (RTT): the time for a packet to travel to the other side and back. On a connection with a 50 ms RTT, every round trip adds 50 ms, so the number of round trips matters more than almost anything else. The time from sending the request to receiving the first byte of the reply is called time to first byte (TTFB), and it is the number developers watch most closely.
+
+1. Parse the URL
+
+The browser splits the address into its parts: the scheme (https), the host (shop.example.com), the port (443 is implied for HTTPS), the path (/cart), and the query string. The fragment after a # is never sent to the server. Before doing anything else, the browser checks whether the site has an HSTS policy stored. If it does, any http:// address is upgraded to https:// automatically. A service worker registered for the site may also intercept the request at this point.
+
+2. Resolve the host name (DNS)
+
+Machines connect to IP addresses, not names, so the host must be translated. The browser checks its own DNS cache first, then asks the operating system's resolver, which checks its cache too. If neither knows the answer, the query goes to a recursive resolver, usually run by the ISP or the company network. That resolver walks the hierarchy if it has no cached answer: a root server points it to the .com servers, which point it to the authoritative name server for example.com, which returns the address. Each answer carries a TTL (time to live), and caches keep it until the TTL expires. Names often pass through a CNAME chain first, for example when a CDN is involved, before reaching an A record (IPv4) or AAAA record (IPv6). Browsers may also query HTTPS DNS records, which can advertise protocol support such as HTTP/3. Cost: nothing if cached, otherwise several round trips to servers that may be far away.
+
+3. Open a TCP connection
+
+The browser opens a TCP socket to the chosen IP address on port 443. TCP uses a three-way handshake: the client sends SYN, the server replies SYN-ACK, and the client replies ACK. The client can send data right after its ACK, so this costs one round trip. If the name has both IPv4 and IPv6 addresses, browsers may try both at once (Happy Eyeballs) and keep whichever connects first.
+
+4. Negotiate TLS
+
+TLS provides encryption, integrity and authentication. In TLS 1.3, which most sites use today, the handshake looks like this:
+
+- ClientHello: the client lists the TLS versions and cipher suites it supports. It also sends a key share, its half of an ephemeral Diffie-Hellman exchange. It sends SNI (Server Name Indication), which contains "shop.example.com", so a server hosting many sites knows which certificate to present. It also sends ALPN, which lists the application protocols it supports, such as h2 and http/1.1.
+- ServerHello: the server picks the parameters and sends its own key share. Both sides can now compute the session keys, and everything after this point is encrypted.
+- The server sends its certificate chain and a signature proving it holds the matching private key. It then sends a Finished message.
+- The client checks that the chain leads to a root certificate authority in its trust store, that the certificate names shop.example.com, that it is within its validity dates, and that it has not been revoked. Revocation is usually checked through OCSP stapling, where the server includes a signed status message. The client then sends its own Finished message.
+
+This takes one round trip. TLS 1.2 needs two. If the client has resumed a session before, it can reduce the cost further, and 0-RTT mode can send the request in the first flight, though those early requests can be replayed, so they must be safe to repeat.
+
+5. Send the HTTP request
+
+The browser now writes the request. Cookies for the domain are attached automatically. Over HTTP/1.1 the request is plain text:
+
+GET /cart HTTP/1.1
+Host: shop.example.com
+Accept: text/html
+Accept-Encoding: gzip, br
+Cookie: session=...
+
+Over HTTP/2 the same information is sent as a binary HEADERS frame, compressed with HPACK, on a numbered stream. Several requests can share one connection at the same time. If the server has advertised HTTP/3 (through an Alt-Svc header or an HTTPS DNS record), later connections may use QUIC over UDP, which combines the transport and TLS handshakes into one round trip.
+
+6. Server processing
+
+The request first reaches whatever machine accepts connections for that IP address. This is often a CDN edge node, a load balancer, or a reverse proxy. It may end the TLS session there and forward the request to an origin server over a new connection. The web server then routes /cart to an application, which may query a database or a cache, render a template, and so on. The time this takes is called server think time. It is the part of TTFB that the application developer controls most directly.
+
+7. The first byte arrives
+
+The server writes the status line, such as HTTP/1.1 200 OK, or the first HTTP/2 HEADERS frame. The bytes travel back across the network, and the browser receives the first one. That moment is TTFB.
+
+A rough budget makes the cost clear. Assume a 50 ms RTT, no DNS cache, and TLS 1.3. DNS adds one or more round trips, the TCP handshake adds one, the TLS handshake adds one, and the request and the start of the response add one more, for about 200 ms or more before any byte arrives. Server think time comes on top of that, even on a fast server.
+
+Practical takeaways for a junior developer:
+- Reuse connections (HTTP keep-alive, HTTP/2 multiplexing). A reused connection skips steps 2 to 4.
+- Serve static assets and HTML from a CDN close to the user, which shortens every round trip.
+- Avoid redirect chains. Each redirect repeats steps 2 to 7 for a new URL.
+- Keep server-side work for the first response small, and cache expensive queries.
+- Use DevTools (Network tab, Timing panel) to see DNS, connect, TLS and waiting times separately for each request.

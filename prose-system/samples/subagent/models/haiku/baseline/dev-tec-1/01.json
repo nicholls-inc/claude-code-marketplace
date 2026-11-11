@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9b49c4af3b42437d",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 800 words of how Git stores a commit, covering blobs, trees, commit objects and refs. The reader is a developer who uses Git every day and has never looked inside the .git directory.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28193,
+    "cache_read_input_tokens": 45573,
+    "output_tokens": 3271,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:00:55.750Z",
+  "valid": true,
+  "text": "How Git Stores a Commit\n\nGit is a content-addressed key-value store. Every object it saves is named by a hash of its contents, and a repository's history is a graph of those objects, with a small set of named refs pointing into it. You never need to open .git to use Git, but knowing the layout explains why branching is cheap, why identical files are stored once, and why history is hard to alter without leaving a trace.\n\nObjects\n\nGit has four object types: blob, tree, commit and tag. Each is stored as a loose file under .git/objects/. The path is derived from the hash: the first two hex characters name a subdirectory and the remaining 38 name the file. Before compression, the stored bytes start with a header such as \"blob 12\" followed by a NUL byte, then the payload. The object ID is the SHA-1 of that whole byte string (SHA-256 in SHA-256 repositories). Because the ID depends only on content, identical content anywhere in history yields the same object, and any change yields a different ID.\n\nYou can inspect objects with git cat-file -t <id> (type) and git cat-file -p <id> (pretty-printed contents).\n\nBlobs\n\nA blob holds the raw bytes of a file and nothing else. It has no name, path, permissions or timestamp. Renaming a file without editing it creates no new blob, because Git only sees the bytes.\n\nTrees\n\nA tree represents a directory. Each entry records a mode (100644 for a regular file, 100755 for an executable, 040000 for a subdirectory), a type, the ID it points to, and a file name. A subdirectory entry points to another tree, so the working directory is mirrored as a tree of trees. The root tree describes the entire project snapshot.\n\nChanging one file deep in the project means writing a new blob for that file, a new tree for its directory, and new trees for each ancestor up to the root. Every unchanged subtree keeps its old ID and is shared with the previous snapshot.\n\nCommits\n\nA commit object is a small text record. It names exactly one root tree, zero or more parent commits, an author and a committer (each with name, email and timestamp), and a message. A commit does not store a diff. It stores a complete snapshot through its tree, and the parent links are what form history. Merge commits have two or more parents.\n\nBecause each commit's ID hashes its tree and parents, the chain is tamper-evident. Altering an old file changes its blob ID, which changes every ancestor tree, which changes the commit ID, which changes every later commit.\n\nRefs\n\nCommit IDs are unmemorable, so Git uses refs: files that map a name to an ID. Branches live under .git/refs/heads/. A branch file such as main contains a 40-character hash and a newline. Tags live under refs/tags/, and remote-tracking branches under refs/remotes/. Many refs are consolidated into .git/packed-refs.\n\nHEAD is a special ref, usually symbolic: its contents are \"ref: refs/heads/main\", meaning the current branch is main. If HEAD holds a bare commit ID instead, you are in detached HEAD state.\n\nMaking a commit writes the new commit object and then moves the current branch ref to its ID. Creating a branch just writes a small file containing an existing ID, which is why branching is nearly instant. Moving a branch with git reset changes one ref and deletes nothing.\n\nThe Index\n\nThe staging area is .git/index, a binary file holding a sorted list of paths with their modes and blob IDs. git add writes blobs and updates index entries. git commit builds trees from the index, writes the root tree and a commit that points to it, and advances HEAD's branch.\n\nPackfiles\n\nLoose objects are periodically consolidated into packfiles in .git/objects/pack/. Packs use delta compression, storing similar objects as deltas against a base. This changes only the storage format. Object IDs stay the same.\n\nPractical Consequences\n\nObjects are never edited in place. Rebase, amend and filter operations write new commits with new IDs and move refs to them. The old commits stay in the object store until garbage collection, and the reflog keeps recent ref positions reachable for a grace period, so mistakes are usually recoverable with git reflog. Objects that nothing reaches are pruned only after an expiry window.\n\nIn short, a commit is a pointer to a tree snapshot plus parent pointers, a tree is a directory of blob and tree IDs, a blob is file contents, and a ref is a human-readable name for one commit ID."
+}

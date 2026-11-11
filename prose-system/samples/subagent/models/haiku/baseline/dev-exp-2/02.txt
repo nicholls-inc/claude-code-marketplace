@@ -1,0 +1,15 @@
+**Why the world's clocks may stop catching up with the sun**
+
+Most days last 24 hours, but not quite. Earth's rotation varies slightly from day to day, and over the long run it has been slowing, mainly because the Moon's pull raises tides that drag on the planet. Earthquakes and shifts in the planet's core also nudge it.
+
+Atomic clocks, by contrast, tick with great regularity. Since 1972, the world's official time, Coordinated Universal Time (UTC), has been kept by atomic clocks. But people's daily routines follow the sun, and the sun follows Earth's rotation. Left alone, the two would drift apart.
+
+The fix was the leap second. When the gap approached nearly a second, timekeepers added one extra second to the end of a day, so the final minute had 61 seconds instead of 60. This happened 27 times between 1972 and 2016, always as an addition, because Earth has generally slowed. The most recent was at the end of December 2016.
+
+The trouble is that computers feel the extra second more than people do. Many systems assume every minute has 60 seconds. When one does not, software can freeze, crash or record events out of order. Power grids, phone networks, financial trading systems and satellite navigation all depend on precise timing, and engineers had to prepare for each insertion, often with little notice, because the body that tracks Earth's rotation announced them only about six months ahead.
+
+Prediction has also become harder. Earth has recently been spinning slightly faster, which raises the possibility of a negative leap second, removing a second. Few systems have been tested for that, and it could cause more disruption than adding one.
+
+In November 2022, the General Conference on Weights and Measures, the international body that oversees the SI system of units, voted to stop adding leap seconds by 2035. It did not settle what replaces them. One option is to let the gap between atomic time and solar time grow for a century or more before correcting it, so that clocks and the sun would slowly drift apart and be reconciled only much later. Engineers would then face one long adjustment rather than a sudden second every few years.
+
+In short, the leap second was a small, well-meant correction to keep clocks in step with the sky. Its unpredictability and the strain it places on modern technology have persuaded the authorities that the cost now outweighs the benefit.

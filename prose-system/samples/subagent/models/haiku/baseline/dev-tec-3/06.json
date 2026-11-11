@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0a1dd5125f359524",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73753,
+    "output_tokens": 2834,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:13:26.209Z",
+  "valid": true,
+  "text": "A lithium-ion cell stores charge by moving lithium ions between two intercalation electrodes. Charging is driven by an external supply that pushes electrons through the external circuit from the positive to the negative electrode. An equal number of Li+ ions leave the layered cathode (typically NMC or LFP) and travel through the liquid electrolyte and separator into the graphite anode, where they insert between graphite layers. Terminal voltage rises because lithium removal raises the cathode potential and lithium insertion lowers the anode potential.\n\nCharging is almost always constant-current/constant-voltage (CC-CV). In the CC phase the charger holds current at a set rate, often 0.5 to 1 C, while voltage climbs toward a limit: about 4.2 V per cell for NMC/graphite, or about 3.65 V for LFP. Terminal voltage exceeds the cell's open-circuit voltage (OCV) by the ohmic drop, I times internal resistance from electrolyte, separator, collectors and contacts, plus polarization at each electrode. Polarization has two parts: charge-transfer kinetics at the particle surface and solid-state diffusion of lithium inside the particles. Both grow with current.\n\nWhen the terminal voltage reaches the limit, the charger switches to CV. Voltage is now fixed and current becomes whatever the cell accepts. Current decays approximately exponentially, because the driving difference between the setpoint and the cell's effective potential shrinks:\n\nI(t) ≈ (V_set − OCV(SOC) − I·R) / R\n\nSeveral effects make this slowdown near full charge:\n\n1. OCV curve. Near full, the cathode's OCV rises steeply per unit of lithium removed. A small amount of extra capacity produces a large voltage change, so the headroom to the setpoint collapses.\n\n2. Site occupancy and gradients. Vacant intercalation sites become scarce. Lithium concentration at particle surfaces saturates while particle cores lag, so diffusion limits how fast ions reach remaining sites. Concentration polarization grows.\n\n3. Anode potential. As graphite approaches LiC6, its potential nears 0 V versus Li/Li+. Continued high current, especially at low temperature, can push the anode below that and plate metallic lithium, which damages capacity and is a safety hazard. Tapering current protects against this.\n\n4. Kinetics. Charge-transfer overpotential rises as surface sites crowd, so the flux needed for a given current becomes harder to sustain.\n\nCharging terminates when current falls below a threshold, typically C/20 to C/50, and the charger stops. The taper trades time for safety and capacity: the final portion of capacity takes a disproportionate share of the charge time."
+}

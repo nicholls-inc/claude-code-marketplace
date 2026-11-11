@@ -1,0 +1,31 @@
+How Two Strangers Agree on a Secret in Public
+
+Imagine you want to send a friend a private message, but the only way between you is a postcard that anyone along the route can read. Until the mid-1970s this was a real obstacle. Scrambling a message needs a shared key, the same secret held by both sides, and two people who have never met have no safe way to hand one over. In 1976 Whitfield Diffie and Martin Hellman published a method that gets around this. Their idea is now used every time a web browser opens a secure page. It looks like magic until you see the one principle that makes it work.
+
+Start with paint. Alice and Bob agree publicly on a starting colour, yellow. Alice picks a secret colour, red, and mixes it into the yellow. Bob picks a secret colour, blue, and mixes it into his yellow. They post their mixtures across the open channel. Alice receives Bob's yellow-and-blue and adds her own red. Bob receives Alice's yellow-and-red and adds his own blue. Both now hold yellow, red and blue mixed together, which is the same colour. An eavesdropper saw only the two intermediate mixtures. Mixing paint is easy, but separating it again is hard, and the eavesdropper cannot recover either secret colour from what was posted.
+
+The paint analogy has a flaw. Paint can be separated by a clever person with a lab, and it has no arithmetic that a computer can check. The real method uses numbers and a kind of arithmetic that has the one property we need: it is easy in one direction and very hard in the other.
+
+That arithmetic is clock arithmetic, formally called modular arithmetic. Look at a clock face. Eight hours after 9 o'clock is 5 o'clock, because you go round the dial and count from 12 again. Mathematicians use the same idea with any number as the size of the clock. Choose a clock with 23 hours. Five times five is 25, but on that clock 25 wraps round to 2, so we write 5 times 5 equals 2, working modulo 23.
+
+Now consider raising a number to a power and then wrapping the result around the clock. Calling the base g and the power x, we compute g to the power x, reduce it modulo a prime p, and get a result. Computing this is fast even when x is enormous, because you can square repeatedly and never handle a huge number. Going the other way is the hard part. Given g, p and the result, finding x is called the discrete logarithm problem. For well-chosen numbers hundreds of digits long, no known method solves it in any reasonable time. That asymmetry is the whole trick.
+
+Here is the protocol with small numbers so that every step can be checked by hand. Publicly agree on p = 23 and g = 5.
+
+Alice secretly chooses a = 6. She computes A = 5 to the power 6, modulo 23. Working through the squares gives 8, so she sends 8 across the open channel.
+
+Bob secretly chooses b = 15. He computes B = 5 to the power 15, modulo 23, which gives 19. He sends 19.
+
+Alice now takes Bob's 19 and raises it to her secret power, 19 to the power 6, modulo 23. The answer is 2.
+
+Bob takes Alice's 8 and raises it to his secret power, 8 to the power 15, modulo 23. The answer is also 2.
+
+Both now hold the number 2, and neither sent it. The reason is algebra. Alice's calculation amounts to 5 to the power of b times a, and Bob's amounts to 5 to the power of a times b. Multiplication does not care about order, so both exponents are the same, and both sides land on the same clock position.
+
+What does the eavesdropper see? She sees 23, 5, 8 and 19. To recover the secret she must solve 5 to the power a equals 8, or 5 to the power b equals 19, modulo 23. With numbers this small she could simply try 1, 2, 3 and so on until she reached 6. Real systems use primes of around 2048 bits, which is roughly 617 decimal digits. At that size, trying every possibility is hopeless, and the best known methods are far too slow to be practical. The eavesdropper has all the public numbers and still cannot find either private exponent.
+
+The shared number 2 is the result. Each side then uses it to derive a symmetric key, a secret for a fast cipher that encrypts the real messages. The key exchange itself is slow compared with the encryption, so it is used briefly to agree on a key, and the key does the bulk of the work.
+
+The method has limits. It does not prove who you are talking to. A man in the middle can run one exchange with Alice and another with Bob, decrypting and re-encrypting every message as it passes through. Real protocols close this gap with digital signatures or certificates, which tie the public numbers to an identity that both sides trust. Also, the difficulty of the discrete logarithm problem depends on today's computers. A sufficiently large quantum computer running Shor's algorithm could solve it efficiently, which is why researchers are developing replacement methods designed to resist quantum attacks. In practice, many modern systems use elliptic curves, a different setting where the same one-way idea works with much smaller numbers.
+
+To summarise: two people can agree on a secret across a channel that everyone can hear, because each side performs an easy calculation with a private value and publishes only the result. Both sides then combine the received value with their own secret, and the algebra guarantees they reach the same answer. The shared secret never crosses the line, and recovering it would require reversing a calculation that is practically impossible to reverse. The arithmetic of clock faces, and the difference between computing a power and finding its exponent, are what let strangers talk in public and remain private.
