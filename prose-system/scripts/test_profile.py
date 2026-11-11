@@ -27,6 +27,7 @@ CASES = [
     ("list items", "- First item here\n- Second item here", [3, 3]),
     ("heading dropped", "# Title\n\nOne sentence only.", [3]),
     ("ellipsis", "He waited... Nothing came.", [2, 2]),
+    ("accented letters", "Fran\u00e7ois left Is\u00e8re for D\u00fcsseldorf.", [5]),
     ("bold heading dropped", "**The cycle**\n\nOne sentence only.", [3]),
     ("bold lead-in kept", "**Insulation.** A leaky house needs more heat.", [1, 6]),
 ]

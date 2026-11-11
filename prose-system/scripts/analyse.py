@@ -25,7 +25,7 @@ P = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(P)
 
 CONJ = {"and", "but", "so", "or", "yet", "because", "which", "nor"}
-MEASURES = ["words_per_sample", "mean_len", "cv_len", "lag1", "short_long", "le4_share",
+MEASURES = ["words_per_sample", "mean_len", "cv_len", "lag1", "lag1_doc_median", "short_long", "le4_share",
             "conj_start", "em_dash", "semicolon", "colon", "paren", "joiners", "comma",
             "numbers_per_100", "names_per_100", "heading_share", "list_share"]
 
@@ -56,18 +56,32 @@ def pooled(samples):
         return {}
     mean = sum(lens) / len(lens)
     var = sum((x - mean) ** 2 for x in lens) / len(lens)
-    pairs = num = sl = 0
+    # lag1 is centred on each document's own mean, so documents with different average
+    # sentence lengths do not push it up when they are pooled.
+    pairs = sl = 0
+    num = den = 0.0
+    doc_lag = []
     for s in samples:
         L = s["lens"]
+        if not L:
+            continue
+        md = sum(L) / len(L)
+        dn = sum((L[i] - md) * (L[i + 1] - md) for i in range(len(L) - 1))
+        dd = sum((x - md) ** 2 for x in L)
+        num += dn
+        den += dd
+        if dd and len(L) >= 3:
+            doc_lag.append(dn / dd)
         for i in range(len(L) - 1):
             pairs += 1
-            num += (L[i] - mean) * (L[i + 1] - mean)
             sl += L[i] <= 8 and L[i + 1] >= 2.5 * L[i]
+    doc_lag.sort()
     k = 1000 / words
     marks = {key: sum(s["marks"][key] for s in samples) for key in ("em_dash", "semicolon", "colon", "paren")}
     out = {
         "words_per_sample": words / n, "mean_len": mean, "cv_len": var ** 0.5 / mean,
-        "lag1": (num / pairs) / var if pairs and var else 0.0,
+        "lag1": num / den if den else 0.0,
+        "lag1_doc_median": doc_lag[len(doc_lag) // 2] if doc_lag else 0.0,
         "short_long": sl / pairs if pairs else 0.0,
         "le4_share": sum(s["le4"] for s in samples) / len(lens),
         "conj_start": sum(s["conj"] for s in samples) / len(lens),
@@ -99,7 +113,7 @@ def boot(by_brief, reps, rng):
 
 
 def fmt(key, t):
-    dec = 0 if key == "words_per_sample" else (1 if key in ("mean_len", "em_dash", "semicolon", "colon", "paren", "joiners", "comma", "numbers_per_100", "names_per_100") else 2 if key in ("cv_len", "lag1", "heading_share", "list_share") else 3)
+    dec = 0 if key == "words_per_sample" else (1 if key in ("mean_len", "em_dash", "semicolon", "colon", "paren", "joiners", "comma", "numbers_per_100", "names_per_100") else 2 if key in ("cv_len", "lag1", "lag1_doc_median", "heading_share", "list_share") else 3)
     return "%.*f [%.*f, %.*f]" % (dec, t[0], dec, t[1], dec, t[2])
 
 

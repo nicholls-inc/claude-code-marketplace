@@ -31,7 +31,7 @@ from pathlib import Path
 
 # A word is a dotted abbreviation (U.S., a.m., e.g.), a number with internal separators
 # (3.5, 1,200) or a run of letters and digits with internal apostrophes and hyphens.
-WORD = re.compile(r"(?:[A-Za-z]\.){2,}|\d+(?:[.,]\d+)+|[A-Za-z0-9][A-Za-z0-9'\u2019\-]*")
+WORD = re.compile(r"(?:[^\W\d_]\.){2,}|\d+(?:[.,]\d+)+|[^\W_][^\W_'\u2019\-]*(?:['\u2019\-][^\W_]+)*")
 # No sentence break after these: titles and common abbreviations, a single capital
 # initial (J. K. Rowling), or an upper-case dotted abbreviation (U.S. Army).
 ABBREV = re.compile(r"(?:\b(?:Mr|Mrs|Ms|Dr|Prof|St|vs|etc|e\.g|i\.e|al|No|Fig|Inc|Ltd|Co)\.|"
