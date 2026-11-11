@@ -1,0 +1,22 @@
+{
+  "version": "draft-1",
+  "note": "Conditions for experiments 1 to 3. {prompt} is replaced by the brief's plain prompt. No condition has a system prompt. Condition A of experiments 2 and 3 is the stored baseline from experiment 1 and is not generated again.",
+  "conditions": {
+    "baseline": {
+      "experiment": "1, and condition A of 2 and 3",
+      "template": "{prompt}"
+    },
+    "no_em_dash": {
+      "experiment": "2, condition B",
+      "template": "{prompt}\n\nDo not use em dashes."
+    },
+    "no_joiners": {
+      "experiment": "2, condition C",
+      "template": "{prompt}\n\nDo not use dashes, semicolons, colons or parentheses."
+    },
+    "vary_length": {
+      "experiment": "3, condition B",
+      "template": "{prompt}\n\nVary your sentence length."
+    }
+  }
+}

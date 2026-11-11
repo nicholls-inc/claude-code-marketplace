@@ -1,0 +1,132 @@
+{
+  "by_genre": {
+    "news": {
+      "sentences": 4611,
+      "words": 88592,
+      "mean_len": 19.2,
+      "cv_len": 0.58,
+      "lag1": 0.09,
+      "dash": 3.4,
+      "semicolon": 1.8,
+      "colon": 1.7,
+      "paren": 1.9,
+      "joiners": 8.7
+    },
+    "editorial": {
+      "sentences": 2985,
+      "words": 54502,
+      "mean_len": 18.3,
+      "cv_len": 0.63,
+      "lag1": 0.12,
+      "dash": 3.5,
+      "semicolon": 1.8,
+      "colon": 2.8,
+      "paren": 1.7,
+      "joiners": 9.9
+    },
+    "reviews": {
+      "sentences": 1746,
+      "words": 35347,
+      "mean_len": 20.2,
+      "cv_len": 0.59,
+      "lag1": 0.07,
+      "dash": 4.0,
+      "semicolon": 3.0,
+      "colon": 1.8,
+      "paren": 2.9,
+      "joiners": 11.7
+    },
+    "government": {
+      "sentences": 3010,
+      "words": 62457,
+      "mean_len": 20.7,
+      "cv_len": 0.74,
+      "lag1": 0.01,
+      "dash": 2.2,
+      "semicolon": 3.6,
+      "colon": 1.8,
+      "paren": 5.5,
+      "joiners": 13.0
+    },
+    "learned": {
+      "sentences": 7717,
+      "words": 162119,
+      "mean_len": 21.0,
+      "cv_len": 0.58,
+      "lag1": 0.15,
+      "dash": 2.1,
+      "semicolon": 3.1,
+      "colon": 1.7,
+      "paren": 5.0,
+      "joiners": 11.8
+    },
+    "hobbies": {
+      "sentences": 4162,
+      "words": 72530,
+      "mean_len": 17.4,
+      "cv_len": 0.61,
+      "lag1": 0.2,
+      "dash": 4.1,
+      "semicolon": 3.5,
+      "colon": 2.7,
+      "paren": 3.9,
+      "joiners": 14.2
+    },
+    "lore": {
+      "sentences": 4865,
+      "words": 97210,
+      "mean_len": 20.0,
+      "cv_len": 0.58,
+      "lag1": 0.19,
+      "dash": 4.0,
+      "semicolon": 2.5,
+      "colon": 1.5,
+      "paren": 1.7,
+      "joiners": 9.7
+    },
+    "belles_lettres": {
+      "sentences": 7189,
+      "words": 152097,
+      "mean_len": 21.2,
+      "cv_len": 0.6,
+      "lag1": 0.2,
+      "dash": 3.0,
+      "semicolon": 2.9,
+      "colon": 1.9,
+      "paren": 1.6,
+      "joiners": 9.4
+    }
+  },
+  "pooled": {
+    "sentences": 36285,
+    "words": 724854,
+    "mean_len": 20.0,
+    "cv_len": 0.61,
+    "lag1": 0.15,
+    "dash": 3.1,
+    "semicolon": 2.8,
+    "colon": 1.9,
+    "paren": 3.0,
+    "joiners": 10.8
+  },
+  "per_document": {
+    "documents": 357,
+    "dash_p10_p50_p90": [
+      0.0,
+      2.2,
+      7.44
+    ],
+    "joiners_p10_p50_p90": [
+      3.18,
+      8.9,
+      20.3
+    ],
+    "lag1_p10_p50_p90": [
+      -0.11,
+      0.05,
+      0.22
+    ],
+    "documents_with_no_dash": 52,
+    "documents_with_negative_lag1": 121
+  }
+}
