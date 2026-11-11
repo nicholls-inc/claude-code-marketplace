@@ -89,3 +89,16 @@ Pilot results:
 - Groups 2 and 3, the argument and narrative briefs, were launched in turns that followed a workflow's completion notice. Their subagents were shown no relayed request, only the condition's prompt inside the workflow frame. The harness relays a user message only when the launching turn answers one.
 - The no-relay context is the one closer to the handoff. Group 1 is therefore being rerun without the relay after group 4, so that all 480 runs share one context. This adds 120 runs to the 480 the owner approved.
 - The 120 "Continue" samples are kept under `samples/subagent/exp1-3-relayed-continue/`. Comparing them with the rerun shows whether the relayed word changes the profile.
+
+### 480 runs complete, and follow-up runs
+
+- All 480 samples for experiments 1 to 3 are stored under `samples/subagent/exp1-3/`: 12 briefs, 4 conditions, 10 samples each. All were served by `claude-sonnet-5-5` with one system prompt and no relayed user message. 7 runs used Bash. None touched the experiment's files. Tokens: 37.5 million, of which 34.7 million were cache reads and 1.0 million were output.
+- Tables are in `results/exp1-3-sonnet.md`, produced by `scripts/analyse.py`.
+- The owner said usage is not a constraint and that further runs or tests are welcome where they add value.
+
+Follow-up runs, with expected results stated before running. These are the agent's views.
+
+- Baseline on three more models through the same route: Opus, Fable and Haiku subagents, 120 samples each. Expected: no more than one of the three exceeds 2.2 dashes per 1,000 words. Sentence length means sit between 12 and 17 words for all three, below the Brown mean of 20.0.
+- `no_colon` on Sonnet. The baseline uses 5.5 colons per 1,000 words. Expected: colons fall below 0.5. Semicolons and parentheses do not rise beyond their baseline intervals. The share of samples with lists falls. If the first failure claim in the brief held for this model, another joining mark would rise by a large part of the 5.5.
+- `no_paren` on Sonnet. The baseline uses 3.7 per 1,000 words. Expected: parentheses fall below 0.3 and commas per 1,000 words rise, because a parenthetical recast in running prose is usually set off by commas.
+- `plain_prose` on Sonnet. Expected: headings and lists fall to near zero. Colons and parentheses fall by more than half in the technical briefs. Numbers and names per 100 words fall by less than a fifth.

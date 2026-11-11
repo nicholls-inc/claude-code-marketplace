@@ -1,0 +1,18 @@
+{
+  "version": "1",
+  "note": "Follow-up conditions added after the first results. The Sonnet baseline contains no em dash, so banning em dashes removes nothing. no_colon and no_paren ban the two marks the baseline uses most. plain_prose removes headings and lists so that marks can be compared in running prose. {prompt} is replaced by the brief's plain prompt.",
+  "conditions": {
+    "no_colon": {
+      "experiment": "2b",
+      "template": "{prompt}\n\nDo not use colons."
+    },
+    "no_paren": {
+      "experiment": "2b",
+      "template": "{prompt}\n\nDo not use parentheses."
+    },
+    "plain_prose": {
+      "experiment": "1b",
+      "template": "{prompt}\n\nWrite it as plain prose with no headings or lists."
+    }
+  }
+}
