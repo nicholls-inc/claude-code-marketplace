@@ -250,6 +250,7 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
     e.preventDefault();
     if (!trialReady() || !current) return;
     var id = current.id;
+    if (Object.isFrozen(state.rounds) || Object.isFrozen(answers())) state.rounds = JSON.parse(JSON.stringify(state.rounds));
     answers()[id] = { prefer: checked("pref"), a_source: checked("src-a"), b_source: checked("src-b"),
       reason: $("reason").value.trim(), seconds: Math.round((performance.now() - shownAt) / 1000),
       position: order.indexOf(current) + 1, at: new Date().toISOString() };
@@ -278,7 +279,8 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
       storeKey = "paired-reading:" + uid;
       return ref.get().then(function (snap) {
         clearTimeout(timer);
-        if (snap.exists) { var d = snap.data() || {}; state.lm_use = d.lm_use || null; state.rounds = d.rounds || {}; }
+        // The database hands back a read-only object. Copy it, or new answers cannot be added to it.
+        if (snap.exists) { var d = JSON.parse(JSON.stringify(snap.data() || {})); state.lm_use = d.lm_use || null; state.rounds = d.rounds || {}; }
         // Answers kept in this browser that the server does not have yet.
         var local = readLocal();
         if (local && local.rounds) {
