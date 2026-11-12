@@ -127,3 +127,9 @@ The owner read the write-up of experiments 1 to 3 and asked for the rhythm test 
 - `reader/build_round.py` builds a round. `rounds/<round>/trials.json` is published and holds opaque ids, the brief and two passages. `rounds/<round>/key.json` stays in the repository and says which source is A and which is B.
 - Round `r0` is a pilot for trying the page: six pairs of `baseline` against `plain_prose` on the six shortest briefs, 7,171 words. Both passages in every pair are model text. It is not one of the pairings in `EVALUATION.md`.
 - Not tested: a reader other than the owner taking part. The page has not been opened by a person yet.
+
+### 12 November 2026: reader page fault
+
+- The owner tried the pilot round and could not get past the fourth pair. The database held three saved answers. Two further writes had been committed that day without a fourth answer.
+- Cause not established. The record key of the fourth pair stores correctly in a probe write, and the page's rendering code runs on all six pairs. The page deleted an answer from its record when a save failed and sent the record by reference, so a failed save followed by a later write would match what the database shows. Why the save failed is unknown.
+- Change: the page copies the record before sending, treats a save that does not settle in 12 seconds as failed, shows the error code, keeps every answer in the browser, and moves on to the next pair. Each save sends the whole record, so an unsent answer goes out with the next one. The last screen offers a save button if anything is unsent.

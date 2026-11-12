@@ -62,6 +62,8 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
     <span class="count" id="count"></span>
   </div>
 
+  <p class="note" id="sync-msg" hidden></p>
+
   <section id="loading" class="narrow"><p class="muted">Loading the passages.</p></section>
 
   <section id="blocked" class="narrow" hidden>
@@ -129,7 +131,9 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
 
   <section id="done" class="narrow" hidden>
     <h2>That is every pair. Thank you.</h2>
-    <p>Your answers are saved. You can close this page.</p>
+    <p id="done-saved">Your answers are saved. You can close this page.</p>
+    <p class="note" id="done-unsaved" hidden>Some of your answers have not reached the server yet. They are kept in this browser. Keep this page open and press the button.</p>
+    <button type="button" id="retry" hidden>Save my answers</button>
   </section>
 </div>
 
@@ -185,6 +189,17 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
   }
 
   var round = null, order = [], state = { lm_use: null, rounds: {} }, ref = null, shownAt = 0, current = null;
+  var unsaved = false, storeKey = null;
+
+  function keepLocal() { try { if (storeKey) localStorage.setItem(storeKey, JSON.stringify(state)); } catch (e) {} }
+  function readLocal() { try { return storeKey ? JSON.parse(localStorage.getItem(storeKey) || "null") : null; } catch (e) { return null; } }
+  function syncNote(err) {
+    var el = $("sync-msg");
+    if (!unsaved) { el.hidden = true; return; }
+    var why = err && (err.code || err.message) ? " (" + (err.code || err.message) + ")" : "";
+    el.textContent = "Your last answer has not reached the server yet" + why + ". It is kept in this browser and will be sent with your next answer.";
+    el.hidden = false;
+  }
 
   function answers() { return state.rounds[round.round] || (state.rounds[round.round] = {}); }
   function remaining() { var a = answers(); return order.filter(function (t) { return !a[t.id]; }); }
@@ -195,7 +210,10 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
   function next() {
     var left = remaining();
     $("count").textContent = (order.length - left.length) + " of " + order.length + " pairs done";
-    if (!left.length) { show("done"); return; }
+    if (!left.length) {
+      $("done-saved").hidden = unsaved; $("done-unsaved").hidden = !unsaved; $("retry").hidden = !unsaved;
+      show("done"); return;
+    }
     current = left[0];
     $("brief").textContent = current.brief;
     $("text-a").innerHTML = render(current.a);
@@ -208,9 +226,16 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
     shownAt = performance.now();
   }
 
+  // Every save sends the whole record, so an answer that failed to send goes out with the next one.
+  // The record is copied before sending, and a save that does not settle in 12 seconds counts as failed.
   function save() {
     state.updated_at = new Date().toISOString();
-    return ref.set(state);
+    keepLocal();
+    var copy = JSON.parse(JSON.stringify(state));
+    return new Promise(function (resolve, reject) {
+      var t = setTimeout(function () { reject({ code: "timeout" }); }, 12000);
+      ref.set(copy).then(function () { clearTimeout(t); resolve(); }, function (e) { clearTimeout(t); reject(e || {}); });
+    }).then(function () { unsaved = false; syncNote(); }, function (e) { unsaved = true; syncNote(e); throw e; });
   }
 
   $("intro-form").addEventListener("change", function () { $("start").disabled = !checked("lm"); });
@@ -229,11 +254,11 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
       reason: $("reason").value.trim(), seconds: Math.round((performance.now() - shownAt) / 1000),
       position: order.indexOf(current) + 1, at: new Date().toISOString() };
     $("next").disabled = true;
-    save().then(next, function () {
-      delete answers()[id];
-      $("save-msg").textContent = "That answer was not saved. Check your connection and press the button again.";
-      $("save-msg").hidden = false; $("next").disabled = false;
-    });
+    save().then(next, next);
+  });
+  $("retry").addEventListener("click", function () {
+    $("retry").disabled = true;
+    save().then(next, next).then(function () { $("retry").disabled = false; });
   });
 
   var timer = setTimeout(function () { block("The page could not reach its data. Reload it, and if that fails tell the person who sent you the link."); }, 15000);
@@ -250,9 +275,20 @@ button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
       if (!uid) { clearTimeout(timer); block("Sign in to Claude to take part. Your answers are saved to your account."); return; }
       order = shuffled(round.trials, hash(uid + "|" + round.round));
       ref = db.doc("responses/" + uid);
+      storeKey = "paired-reading:" + uid;
       return ref.get().then(function (snap) {
         clearTimeout(timer);
         if (snap.exists) { var d = snap.data() || {}; state.lm_use = d.lm_use || null; state.rounds = d.rounds || {}; }
+        // Answers kept in this browser that the server does not have yet.
+        var local = readLocal();
+        if (local && local.rounds) {
+          state.lm_use = state.lm_use || local.lm_use || null;
+          Object.keys(local.rounds).forEach(function (r) {
+            var mine = state.rounds[r] || (state.rounds[r] = {});
+            Object.keys(local.rounds[r]).forEach(function (t) { if (!mine[t]) { mine[t] = local.rounds[r][t]; unsaved = true; } });
+          });
+          syncNote();
+        }
         var words = round.trials.reduce(function (n, t) { return n + t.a.split(/\s+/).length + t.b.split(/\s+/).length; }, 0);
         $("intro-size").textContent = round.trials.length + " pairs, about " + Math.round(words / 230 / 5) * 5 + " minutes of reading. You can stop and come back, and the page will pick up where you left off.";
         if (state.lm_use) next(); else { $("count").textContent = ""; show("intro"); }
