@@ -135,3 +135,9 @@ The owner read the write-up of experiments 1 to 3 and asked for the rhythm test 
 - Change: the page copies the record before sending, treats a save that does not settle in 12 seconds as failed, shows the error code, keeps every answer in the browser, and moves on to the next pair. Each save sends the whole record, so an unsent answer goes out with the next one. The last screen offers a save button if anything is unsent.
 - Second report from the owner: still stuck. The database had two more writes with a new timestamp and no fourth answer. Likely cause, not confirmed in a browser: on a return visit the page took the saved record straight from the database, and that object is read-only, so adding an answer to it did nothing and the page showed the same pair again. On the first visit the record was the page's own object, which is why the first three answers saved. Change: the page copies the saved record on load. The earlier save changes stay.
 - The owner gave the answer for the fourth pair, `t9d790ed4`, in chat. It was entered into the owner's record by the agent and is marked `entered_by`. It has no reading time.
+
+### 13 November 2026: pilot round complete
+
+- The owner finished the six pilot pairs. Pairs 5 and 6 were saved by the page after the second fix, so the save path now works on a return visit.
+- Result, one reader, six pairs, both passages model text in every pair: `plain_prose` preferred in 4 of 6. `plain_prose` passages were marked as written by a person in 4 of 6 and `baseline` passages in 2 of 6. Six judgements from one reader is not a result. The protocol asks for 30 per pairing.
+- The answer for pair 4 was entered from chat and has no reading time. Pair 2 shows 4,457 seconds because the page was left open.
