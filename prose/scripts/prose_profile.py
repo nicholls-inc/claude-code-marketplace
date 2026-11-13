@@ -240,12 +240,19 @@ def cmd_rank(args):
     ref, ref_name = reference(args.kind)
     rows = []
     for f in args.files:
+        if not Path(f).is_file():
+            continue
         p = profile(Path(f).read_text(encoding="utf-8", errors="replace"))
         if p is None:
             continue
         flags = [k for k in RANK_KEYS if flag(p[k], ref["percentiles"][k])]
         rows.append((distance(p, ref), f, p, flags))
     rows.sort(key=lambda r: r[0])
+    if not rows:
+        sys.exit("No candidate could be measured. Check that the files exist and hold at least three sentences.")
+    if len(rows) < len(args.files):
+        print("Note: %d of %d files could not be measured and are left out." % (len(args.files) - len(rows), len(args.files)),
+              file=sys.stderr)
     if args.json:
         print(json.dumps([{"file": f, "distance": round(d, 2), "outside_range": fl,
                            **{k: round(p[k], 3) for k in RANK_KEYS}} for d, f, p, fl in rows], indent=1))

@@ -53,6 +53,13 @@ def main():
         lines = [l for l in out.splitlines() if l[:1].isdigit()]
         check(lines and lines[0].rstrip().endswith("b.txt"), "rank puts the even text first")
         check("Short sentence followed" in run(["check", str(d / "a.txt")]), "check lists the pairs")
+        out = run(["rank", str(d / "a.txt"), str(d / "missing.txt"), "--kind", "narrative"])
+        check("a.txt" in out, "rank skips a missing candidate file")
+        try:
+            run(["rank", str(d / "missing.txt")])
+            check(False, "rank stops when no candidate can be measured")
+        except SystemExit as e:
+            check(isinstance(e.code, str), "rank stops when no candidate can be measured")
         (d / "m.txt").write_text("John Snow mapped 616 deaths around the Broad Street pump in 1854.")
         (d / "draft.txt").write_text("In 1854 John Snow mapped 616 deaths. He told Henry Whitehead that 73 houses were affected.")
         out = run(["specifics", str(d / "draft.txt"), "--material", str(d / "m.txt")])
