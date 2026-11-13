@@ -1,5 +1,6 @@
 {
   "field-report": "1.1.0",
   "pr-swarm": "0.3.0",
-  "lever": "0.2.1"
+  "lever": "0.2.1",
+  "prose": "0.1.0"
 }

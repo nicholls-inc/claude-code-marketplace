@@ -1,0 +1,19 @@
+{
+  "name": "prose",
+  "displayName": "prose",
+  "version": "0.1.0",
+  "description": "Write and check non-fiction prose against a measured reference of human writing: drafts several candidates under a voice file, picks by profile, and checks specifics against supplied material.",
+  "author": {
+    "name": "nicholls-inc",
+    "email": "harry@harrynicholls.com"
+  },
+  "homepage": "https://github.com/nicholls-inc/claude-code-marketplace/tree/main/prose",
+  "repository": "https://github.com/nicholls-inc/claude-code-marketplace",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "writing",
+    "prose",
+    "evaluation"
+  ]
+}
