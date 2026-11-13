@@ -1,0 +1,68 @@
+# How two strangers agree on a secret in public
+
+Alice and Bob have never met. Their only link is a telephone line, a radio signal or a network cable, and anyone with access to that line can hear every message. Eve is listening. Alice and Bob still need a shared secret key so they can scramble their messages.
+
+At first this looks impossible. Anything Alice sends, Eve can read. If Alice sends the key, Eve has the key. If Alice sends anything from which the key could be worked out, Eve can try to work it out too. Public-key cryptography gets around this by changing what is sent. Alice and Bob exchange values derived from their secrets, but the derivation runs in one direction only. Eve can see the values but cannot reverse the derivation to recover the secrets.
+
+## A paint analogy
+
+Suppose Alice and Bob publicly agree to start with yellow paint. Each then picks a private colour. Alice picks red and Bob picks blue. Alice mixes her red into a pot of yellow and sends the result across the open line. Bob mixes his blue into yellow and sends that.
+
+Eve sees the yellow, the yellow-red mix and the yellow-blue mix. Now Alice takes Bob's mix and adds her red. Bob takes Alice's mix and adds his blue. Both end up with the same colour, a blend of yellow, red and blue. Eve has the three public pots, but she does not know how to combine them, and she cannot unmix paint to find out.
+
+The analogy captures the structure, but paint is a weak model. A skilled chemist could in principle separate it. The real method needs an operation that is easy to perform and effectively impossible to reverse. Arithmetic provides one.
+
+## Clock arithmetic
+
+Everyone knows how clocks wrap around. If it is 10 o'clock and you wait five hours, it is 3 o'clock, because 15 on a 12-hour clock is 3. Mathematicians write this as "mod": 15 mod 12 = 3 means the remainder when 15 is divided by 12.
+
+Key-agreement schemes use this wrapping with a large prime number, which we will call p. Every result is a remainder after dividing by p. They also use powers, which are repeated multiplication: 5 cubed is 5 × 5 × 5 = 125. Combining the two gives expressions like 5^6 mod 23. That means multiply 5 by itself six times, then take the remainder after dividing by 23.
+
+Here is the one-way property. Given a base g, a power x and a prime p, computing g^x mod p is quick, even when x has hundreds of digits, because you can square repeatedly and reduce as you go. The reverse is very different. Given g, p and the result, finding x is called the discrete logarithm problem. For large numbers, no known method solves it in any feasible time. That asymmetry is what Alice and Bob exploit.
+
+## A worked example
+
+Small numbers let every step be checked by hand. Real systems use numbers hundreds of digits long.
+
+Publicly agreed: p = 23 and g = 5.
+
+Alice picks a secret number, a = 6. She computes 5^6 mod 23. Since 5^6 = 15,625, and 15,625 = 23 × 679 + 8, the answer is 8. She sends 8 to Bob.
+
+Bob picks a secret number, b = 15. He computes 5^15 mod 23 by repeated squaring. 5^2 = 25, which is 2 mod 23. Then 5^4 is 4, and 5^8 is 16. So 5^15 = 5^8 × 5^4 × 5^2 × 5 = 16 × 4 × 2 × 5 = 640, which is 19 mod 23. He sends 19 to Alice.
+
+Each now takes the other's number and raises it to their own secret power.
+
+Alice computes 19^6 mod 23. Since 19 is equivalent to -4, this is (-4)^6 = 4^6 = 4096. And 4096 = 23 × 178 + 2, so her result is 2.
+
+Bob computes 8^15 mod 23. Repeated squaring gives 8^2 = 64, which is 18; 8^4 is 18^2, which is 2; 8^8 is 4. So 8^15 = 4 × 2 × 18 × 8 = 1152, which is 2 mod 23. His result is also 2.
+
+They now share the secret 2, and neither of them sent it.
+
+Eve knows 23, 5, 8 and 19. To find the shared 2 she needs either a or b. With numbers this small she can try 5, 5^2, 5^3 and so on until she reaches 8, which happens at the sixth power. Real numbers are so large that trying is hopeless.
+
+## Why the two results always match
+
+The answers agree because of algebra. Alice's result is (5^b)^a, which equals 5^(a×b). Bob's result is (5^a)^b, which equals 5^(b×a). Multiplication does not care about order, so a×b and b×a are the same number, and both sides land on the same value.
+
+Eve has 5^a and 5^b. To get 5^(a×b) from them, she must solve the Diffie-Hellman problem, which is widely believed to be about as hard as the discrete logarithm problem. The public values reveal the shared key only to someone who already holds one of the secrets.
+
+## Limits and real use
+
+Three caveats matter.
+
+First, this protocol does not prove who you are talking to. A man-in-the-middle, call him Mallory, can sit between Alice and Bob. He agrees one key with Alice and another with Bob, and relays messages between them, reading everything. Real systems prevent this with signatures and certificates. A trusted authority vouches for each party's public values, so Alice can check that a number really came from Bob. This is the other meaning of "public key": a public value tied to an identity.
+
+Second, real implementations use far larger primes, or elliptic curves, which give comparable security with smaller numbers. The shared value is then passed through a hash function to produce a key of fixed length.
+
+Third, the security depends on the discrete logarithm problem being hard. A large enough quantum computer could solve it efficiently, using Shor's algorithm. Researchers are developing post-quantum key agreement methods to replace these schemes.
+
+Diffie-Hellman and its variants are used in protocols such as TLS, which secures web browsing, SSH, which handles remote login, and many messaging apps.
+
+## Summary
+
+Four ideas carry the whole method:
+
+1. Alice and Bob publicly agree on a prime and a base.
+2. Each keeps a secret number and sends a scrambled version of it, a power computed modulo p.
+3. Each raises the other's scrambled value to their own secret power. Both arrive at the same result, because multiplying exponents gives the same answer in either order.
+4. An eavesdropper sees everything sent, but reversing the scrambling is a problem nobody can solve at real sizes.

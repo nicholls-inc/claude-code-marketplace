@@ -1,0 +1,17 @@
+**How a Lithium-Ion Cell Charges, and Why It Slows Near Full**
+
+A lithium-ion cell stores energy by moving lithium ions between two host materials. During charging, an external source pulls electrons out of the positive electrode (typically a layered metal oxide such as NMC, or iron phosphate) and pushes them into the negative electrode (usually graphite). To keep each electrode charge-neutral, lithium ions leave the cathode lattice, cross the liquid electrolyte and the porous separator, and intercalate (slot into the layers) of the graphite. Discharge runs the same process in reverse.
+
+Chargers use a two-stage profile called constant-current/constant-voltage (CC-CV). In the CC stage the charger drives a fixed current, often 0.5C to 1C, where 1C is the current that would fill the cell in one hour. The terminal voltage climbs steadily during this stage. Once it reaches the chemistry's upper limit (about 4.2 V for NMC, 3.65 V for LFP), the charger switches to CV. It holds that voltage and lets the current decay. Charging ends when the current falls to a small fraction of its starting value, commonly C/20. By then the CC stage has usually delivered about 70-80% of the capacity in roughly half the total time. The CV tail delivers the rest slowly.
+
+The taper follows from treating the cell as an electrical circuit. The terminal voltage is the cell's open-circuit voltage (OCV, its equilibrium voltage at a given state of charge) plus the voltage drops needed to push current through it:
+
+V_terminal = OCV(SoC) + I·R_ohmic + η_kinetic + η_diffusion
+
+The ohmic term covers resistance in the electrolyte, the current collectors and the contacts. The kinetic overpotential is the extra voltage needed to drive the charge-transfer reaction at each electrode surface. The diffusion overpotential comes from concentration gradients that build up as lithium moves through the electrolyte and into the solid particles. OCV rises as the cell fills. With the terminal voltage capped, the margin left for the current-driven terms shrinks, so the current must fall. This works much like a capacitor charged through a resistor from a fixed-voltage source.
+
+Solid-state diffusion is often the slowest step. Lithium enters each graphite particle at its surface and diffuses inward slowly. At high current the particle surfaces saturate while the cores are still partly empty. The CV stage gives the interiors time to catch up, and the current falls as the gradients relax.
+
+The voltage cap itself exists for safety and cycle life. If you push harder near full charge, the graphite surface potential approaches 0 V relative to lithium metal. Below that point, metallic lithium plates onto the anode instead of intercalating. Plated lithium permanently reduces capacity and can grow dendrites that short the cell. The risk is greatest at low temperature, where diffusion is slower. At the cathode, overcharging strips too much lithium from the lattice and oxidizes the electrolyte, which causes structural damage, gas and heat. A battery management system therefore enforces the voltage limit and lowers the allowed current further when the cell is cold.
+
+Fast-charging schemes (multi-stage CC, pulse charging, model-based control) try to keep the anode potential just above the plating threshold. None of them avoids the slowdown near full charge. The diffusion limits and the shrinking voltage margin come from the cell chemistry, so no charger design removes them.

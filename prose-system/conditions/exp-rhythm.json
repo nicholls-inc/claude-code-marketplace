@@ -1,0 +1,18 @@
+{
+  "version": "1",
+  "note": "Rhythm test on Sonnet. Every condition keeps the plain-prose line so that it is compared with the stored plain_prose samples and with the human reference, which is running prose. voice_spec uses the test voice specification from BRIEF.md word for word.",
+  "conditions": {
+    "rhythm_content": {
+      "experiment": "rhythm",
+      "template": "{prompt}\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one."
+    },
+    "rhythm_medium": {
+      "experiment": "rhythm",
+      "template": "{prompt}\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences."
+    },
+    "voice_spec": {
+      "experiment": "rhythm, and experiment 6 condition A",
+      "template": "{prompt}\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling."
+    }
+  }
+}

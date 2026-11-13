@@ -1,0 +1,77 @@
+How Strangers Agree on a Secret in Public
+
+The problem
+
+Imagine you want to send a private message to someone you have never met. The only way to reach them is a line that anyone can listen to. A nosy neighbour, a shopkeeper, a stranger on the same network can all hear every word. For centuries this seemed hopeless. If you want to lock a message, the other person needs the key, and to give them the key you must send it somehow. If you send it down the same open line, the listener has it too.
+
+The surprising answer, found in the 1970s, is that two people can build a shared secret while a listener hears everything they say and still cannot work out the secret. This is the idea behind public key cryptography. It protects online banking, private messages and shopping every day. Here is how it works, using nothing beyond school maths.
+
+The paint analogy
+
+Start with a picture. Alice and Bob each have a private pot of paint that only they know. They also agree, out loud, on a shared starting colour, say yellow.
+
+Alice mixes her private colour into the yellow and sends the result to Bob. Bob does the same with his own private colour and sends his mixture to Alice. Everyone can see both mixtures as they travel.
+
+Now Alice takes the mixture Bob sent and adds her private colour to it. Bob takes the mixture Alice sent and adds his private colour to it. Both end up with yellow plus Alice's colour plus Bob's colour. The order of mixing does not change the final shade. They hold the same colour.
+
+The listener saw yellow and both mixtures. To get the final shade the listener would need one of the private colours. And here is the key fact. Unmixing paint is very hard. Mixing is easy, separating is not. The whole method rests on this difference between an easy direction and a very hard direction.
+
+Maths has its own version of this, and it is easy to try with a calculator.
+
+Clock arithmetic
+
+You already know clock arithmetic. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, because the clock wraps round after 12. Mathematicians call this working with remainders. You add or multiply as usual, then divide by the size of the clock and keep only the remainder.
+
+Our clock will have 23 hours instead of 12. So any number gets replaced by its remainder after dividing by 23. For example 25 becomes 2, because 25 is 23 plus 2.
+
+Now we need the easy direction and the hard direction. The easy direction is this. Take a starting number, here 5, and multiply it by itself a chosen number of times, wrapping round the clock as you go. Doing this is quick, even for huge numbers, because you can square repeatedly to take big leaps.
+
+The hard direction is working backwards. Suppose I tell you that 5 multiplied by itself some number of times lands on 8 on the clock. Which number of times was it? With a small clock you can just try them all. With a clock of several hundred digits, nobody has found a fast method, and trying them all would take longer than the age of the universe. That is the hard direction.
+
+The exchange, step by step
+
+Let us run the exchange with small numbers so you can check every step.
+
+First, in public, Alice and Bob agree on the clock size 23 and the starting number 5. The listener hears this and that is fine.
+
+Second, Alice secretly picks the number 6. She tells nobody. Bob secretly picks 15.
+
+Third, Alice multiplies 5 by itself 6 times, wrapping round the 23 hour clock. Let us follow it. 5 times 5 is 25, which wraps to 2. So 5 multiplied by itself twice gives 2. Then 2 times 2 is 4, so four copies of 5 gives 4. Six copies is four copies times two copies, which is 4 times 2, giving 8. Alice sends the number 8 to Bob. This is her public number.
+
+Fourth, Bob multiplies 5 by itself 15 times in the same way. The result on the clock is 19. Bob sends 19 to Alice. This is his public number.
+
+Everything so far was said in the open. The listener knows 23, 5, 8 and 19. Nothing else.
+
+Fifth, Alice takes Bob's public number, 19, and multiplies it by itself 6 times, her secret count. The result on the clock is 2.
+
+Sixth, Bob takes Alice's public number, 8, and multiplies it by itself 15 times, his secret count. The result on the clock is also 2.
+
+Both of them now hold the number 2, and neither ever sent it. It was never on the line.
+
+Why it works
+
+There is a neat reason both land on the same number. Alice ended up multiplying 5 by itself 15 times and then by itself 6 times more. That is 5 multiplied by itself 90 times in total. Bob multiplied 5 by itself 6 times and then 15 more times. That is also 90 in total. Multiplying 15 times 6 gives the same answer as 6 times 15, so the two routes meet at the same point. This is the same fact as the paint colours not caring about the order of mixing.
+
+Why the listener is stuck
+
+To find the secret the listener needs either 6 or 15. All they have is that 5 multiplied by itself some number of times gives 8, and some other number of times gives 19. They must work backwards, which is the hard direction.
+
+With our tiny clock this is easy to do by trial. Try 1, 2, 3 and so on until you hit 8, and you find 6 in a moment. That is why real systems use a clock with hundreds of digits. At that size the trial method is hopeless, and Alice and Bob can still do their own quick multiplications in a blink. The gap between what the legitimate pair must do and what the spy must do is enormous. Security comes from that gap.
+
+From a shared number to private messages
+
+The shared number is then used as a key. Alice and Bob use it to scramble their messages with an ordinary lock that works the same way in both directions. A scrambled message looks like random nonsense to anyone without the key. The clever part was never the scrambling. It was getting the same key to both people without ever sending it.
+
+The second idea, public and private keys
+
+There is a related method that explains the name public key. Here each person makes a matched pair of numbers. One is a public key that they publish for the whole world, like a street address. The other is a private key that never leaves their possession.
+
+The two keys are linked by maths that is easy in one direction and hard in the other. Anyone can use your public key to lock a message for you, a bit like dropping a letter through a slot in a postbox. Only the holder of the private key can open the postbox. A famous version of this uses the fact that multiplying two huge prime numbers together is quick, while finding those two primes from the product alone is extremely slow. The product becomes the public part and the primes stay private.
+
+What can still go wrong
+
+The method protects against someone who only listens. It does not by itself protect against someone who sits in the middle and pretends to be Bob when talking to Alice, and pretends to be Alice when talking to Bob. To stop this, systems also check identities, using certificates that vouch for who owns a public key. That is why your browser shows a padlock only after it has checked who it is talking to.
+
+The big idea
+
+Two strangers can build a shared secret in public because some jobs are easy to do and nearly impossible to undo. Mixing is easy and unmixing is not. Multiplying is easy and working backwards is not. Alice and Bob each add something private, swap the results in the open, and then each add their private part once more. The same secret appears on both sides, and the listener, who saw every message, is left holding pieces that cannot be put back together.

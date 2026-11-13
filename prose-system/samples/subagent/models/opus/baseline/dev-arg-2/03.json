@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ade8d6bc520ccf7e8",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 1202,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:06:22.166Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Counting.\n\nEvery two weeks, in thousands of conference rooms and video calls, engineers hold up cards with numbers on them. Three. Five. Eight. Someone says thirteen and the room laughs. An hour later the team has a sprint plan full of numbers that everyone suspects are wrong. Two weeks after that, the suspicion turns out to be right.\n\nTeams should stop doing this. I don't mean they should stop telling the business when things will ship. I mean they should stop asking engineers to predict, item by item, how long unbuilt work will take.\n\nStart with accuracy. Software estimates are bad, and they are bad in a consistent direction. Work runs over because the job is discovery. If you knew exactly what the code needed to be, it would already be written. The unknowns that sink a ticket, like the undocumented API quirk, the migration that locks a table, or the reviewer who is out for a week, are by definition the things nobody could see when the estimate was made. Asking for better estimates is asking people to foresee what they can't see. Decades of planning poker have not fixed this, and more ceremony won't either.\n\nThen there is the cost. Estimation meetings eat hours of senior engineering time every sprint. Worse, the numbers don't stay estimates. Once \"five points\" is written next to a ticket, it becomes a commitment. Managers report it upward, and engineers who run over feel they have failed when all that happened was ordinary uncertainty. People learn to pad. The padding gets questioned, so they pad more quietly. The number stops describing the work and starts describing negotiations about the work.\n\nManagers will say, fairly, that they need dates. Sales has a customer waiting. Marketing has a launch. Finance has a budget. These are real needs and engineers who dismiss them deserve to lose the argument.\n\nBut estimates are a poor way to meet those needs. Your own history is a better one. If you split work into small pieces, roughly a day or two each, you no longer need to size them. You count them. A team that finishes between eight and twelve items a week, with forty items left in a feature, will probably land in four to five weeks. That forecast rests on what the team actually did, including all the surprises, sick days and production incidents that no estimate ever includes. Run a simple Monte Carlo over your past throughput and you can give stakeholders a range with a confidence level attached, which is more honest than a single date nobody believes.\n\nThis approach puts the effort where it pays off. The skill that matters is slicing work small, and slicing well also gives you better design, faster review and earlier feedback. When a slice turns out big, you split it. When the forecast slips, the data shows you early, weeks before an estimate-driven plan would admit anything was wrong.\n\nSo drop the cards and cancel the sizing meeting. Cut the work thin, count what gets finished, and give the business a forecast built on evidence. Your engineers get their afternoons back, and your managers get dates they can actually plan around."
+}

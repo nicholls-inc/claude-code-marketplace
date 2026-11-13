@@ -1,0 +1,90 @@
+# How two strangers can agree on a secret in public
+
+## The problem
+
+Suppose Alice and Bob have never met. They want to talk privately, but the only line between them is one anyone can listen to. Every number they send can be copied by an eavesdropper, whom I'll call Eve. How can Alice and Bob end up sharing a secret that Eve, who heard everything, cannot work out?
+
+For most of history this was thought impossible. Secret messages needed a shared key, such as a codebook, and the key had to be handed over in person first. In the 1970s researchers found a way round this. The idea is called public-key cryptography. This essay explains the oldest and simplest version, known as Diffie-Hellman key exchange.
+
+## The paint analogy
+
+First, an analogy with no numbers. Mixing paint is easy, but un-mixing it is practically impossible.
+
+Alice and Bob agree out loud on a common colour, say yellow. Eve hears this, so yellow is public.
+
+- Alice secretly picks a private colour, red, and mixes it with the yellow. She sends the orange result to Bob.
+- Bob secretly picks a private colour, blue, and mixes it with the yellow. He sends the green result to Alice.
+
+Eve sees the yellow, the orange and the green. She cannot un-mix them to find the red or the blue.
+
+Now Alice adds her private red to Bob's green. Bob adds his private blue to Alice's orange. Both end up with yellow + red + blue, the same muddy brown. Eve has no way to reach that colour. She would need red or blue, and neither ever travelled along the line.
+
+The mathematics works the same way. We need an operation that is easy to do but very hard to undo.
+
+## The maths: clock arithmetic
+
+You already know the key idea, which is the remainder. Divide 17 by 5 and you get 3 with remainder 2. A clock does the same thing: 15 hours after 10 o'clock is 1 o'clock, because the hours wrap around at 12.
+
+Mathematicians write "the remainder after dividing by 23" as "mod 23". So 30 mod 23 = 7, and 46 mod 23 = 0. Everything we do happens on a 23-hour clock. Real systems use much bigger clocks.
+
+Next, a power. 5^3 means 5 × 5 × 5 = 125. Combine the two ideas and we get a "power on a clock". For example, 5^3 mod 23 means working out 125, then taking the remainder after dividing by 23. That gives 125 − 115 = 10.
+
+Here is the key fact. Going forward is easy: given 5, the exponent 3 and the clock size 23, anyone can compute the answer. Going backward is hard. If I tell you that 5 raised to some secret power gives 10 on the 23-hour clock, you can only find the power by trying 1, 2, 3, 4 and so on. On a tiny clock that is quick. On a clock with hundreds of digits, the number of tries is more than all the computers on Earth could manage in the lifetime of the universe.
+
+That is our "mixing paint" operation.
+
+## The exchange, step by step
+
+Here is the whole procedure with small numbers you can check on a calculator.
+
+**Step 1: public agreement.** Alice and Bob announce two numbers openly. The first is the clock size, 23. The second is a base, 5. Eve hears both. It doesn't matter.
+
+**Step 2: private choices.** Alice picks a secret number, 6. Bob picks a secret number, 15. Neither ever says their number aloud, to each other or to anyone.
+
+**Step 3: mixing and sending.**
+
+- Alice computes 5^6 mod 23. Now 5^6 = 15,625, and 15,625 divided by 23 leaves remainder 8. She sends **8** to Bob.
+- Bob computes 5^15 mod 23. This is a big number, but the remainder works out to 19. He sends **19** to Alice.
+
+Eve now knows 23, 5, 8 and 19. She does not know 6 or 15.
+
+**Step 4: the final mix.**
+
+- Alice takes Bob's number, 19, and raises it to her secret power: 19^6 mod 23. The answer is **2**.
+- Bob takes Alice's number, 8, and raises it to his secret power: 8^15 mod 23. The answer is also **2**.
+
+Both arrive at the same secret, 2, without ever sending it.
+
+## Why they get the same answer
+
+This isn't luck. Alice's final number is (5^15)^6, which means 5 raised to 15 × 6. Bob's is (5^6)^15, which means 5 raised to 6 × 15. Multiplication doesn't care about order, so 15 × 6 = 6 × 15 = 90. Both are really computing 5^90 mod 23. Each person simply reached it by a different route, and each route needed one private number that only that person knew.
+
+Eve is stuck. To compute 5^90 she needs the product of the two secret exponents. All she has is 5^6 and 5^15 (as remainders), and nothing in those lets her combine the exponents without first recovering at least one of them. Recovering one of them is the hard "undo" problem from earlier.
+
+## Why Eve cannot just try everything
+
+With a clock of 23, Eve can solve this in seconds by trial. Take 8 and test powers of 5 until one gives 8. She finds 6, and from there she can reconstruct everything.
+
+This is why real systems use enormous numbers. A modern clock size is a number with about 600 digits. Counting through possible exponents would mean a number of tries far beyond any physical computer. Meanwhile, Alice and Bob's computers handle these big numbers quickly, because there are clever shortcuts for working out huge powers (repeated squaring) without multiplying 5 by itself millions of times.
+
+So the asymmetry is what matters. The honest parties do a modest amount of work. The attacker faces an astronomical amount.
+
+## From shared secret to private conversation
+
+The number 2 is not itself a message. It's a shared key. Once Alice and Bob both hold it, they use it with an ordinary fast lock-and-unlock method (a symmetric cipher), where the same key scrambles and unscrambles messages. In real life, your phone and a website do exactly this in the first fraction of a second after you see the padlock in your browser. They agree on a key in public, then use it to encrypt everything else.
+
+## The related idea: public and private keys
+
+The name "public-key cryptography" comes from a close cousin of this scheme. In systems such as RSA, each person has a pair of numbers. One is public and anyone may have it. The other is private and never leaves its owner. Something locked with the public number can be unlocked only with the private one. You could put your public number on a billboard, and anyone could send you a message only you can read.
+
+The principle is the same as with the paint. There is a mathematical operation (in RSA, multiplying two huge prime numbers together) that is easy one way and extremely hard to reverse. The public key is the easy direction, and the private key is the secret shortcut back.
+
+## The honest caveats
+
+Two things are worth knowing. First, this scheme protects against listening, but not against impersonation. If Eve can sit in the middle and pretend to be Bob to Alice and Alice to Bob, she can run a separate exchange with each. Real systems therefore add certificates, which are a way of checking that a public number really belongs to the person claiming it.
+
+Second, the security rests on the assumption that the "undo" problem is truly hard. No one has proven it, but decades of effort by many clever people have found no fast method for ordinary computers. A sufficiently large quantum computer could break these particular schemes, which is why researchers are building replacements.
+
+## The takeaway
+
+Two strangers can share a secret in public because some mathematical operations are easy to perform and practically impossible to reverse, and because the order in which two secret ingredients are combined doesn't change the result. Each person contributes a private number that never travels. The eavesdropper hears everything except the one ingredient she needs.

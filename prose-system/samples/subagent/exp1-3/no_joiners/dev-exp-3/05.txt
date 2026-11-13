@@ -1,0 +1,57 @@
+How Strangers Can Share a Secret in Public
+
+Imagine you want to agree a secret number with someone you have never met. The only way to talk is across a noisy room where everyone hears every word, and a spy in the corner writes down all of it. At first this sounds impossible. Any number you say aloud, the spy hears too. For most of history, secret codes worked only if both people had met beforehand and swapped a shared key in private. Then, in the 1970s, a few mathematicians found a way around the problem. Their trick rests on a simple observation. Some jobs in mathematics are easy to do but almost impossible to undo.
+
+Easy one way, hard the other
+
+Take two prime numbers, which are numbers like 7 or 13 that cannot be divided evenly by anything except 1 and themselves. Multiply 7919 by 7907. With a pencil it takes a couple of minutes, and you get 62,615,533. Now imagine I give you only 62,615,533 and ask which two primes multiplied together to make it. There is no clever shortcut. You would have to try dividing by prime after prime until something fits. For a number this size you could still manage. For a number with six hundred digits, the fastest computers on Earth would need longer than the age of the universe.
+
+A picture with paint
+
+Before any numbers, here is the idea with paint. Alice and Bob agree out loud on a shared colour, say yellow. Alice secretly picks a colour of her own, perhaps red, and mixes a big bucket of yellow and red. Bob secretly picks blue and mixes yellow and blue. They swap buckets across the room. The spy sees both buckets, but cannot unmix paint to find the red or the blue.
+
+Now Alice pours her own secret red into the bucket she got from Bob. Bob pours his own secret blue into the bucket he got from Alice. Both buckets now hold yellow, red and blue, in exactly the same amounts. Order of mixing does not matter, so they end with an identical colour. The spy has only yellow and two partial mixtures, and cannot reach that final shade. Alice and Bob have a shared secret that never crossed the room.
+
+Numbers do the same job as paint, with one change. Mixing is easy to do and hard to reverse, just like unmixing paint, but numbers can be made so that the spy would need ages to untangle them.
+
+Clock arithmetic
+
+We need one piece of school maths, which is the remainder. On a clock with 12 hours, 15 o'clock becomes 3, because 15 divided by 12 leaves remainder 3. We can use a bigger clock. Suppose our clock has 23 hours. Then 30 becomes 7, since 30 divided by 23 leaves 7. Mathematicians call this working modulo 23, but it is only remainders.
+
+Now include powers. Three fives multiplied together make 125. Divide 125 by 23 and you get 5 with remainder 10. So on our 23 hour clock, three fives multiplied together land on 10. The answer always falls between 0 and 22 however large the original number gets.
+
+The exchange with real numbers
+
+Alice and Bob agree out loud on two public numbers, 23 for the clock size and 5 as the base. The spy hears both.
+
+Alice secretly picks 6. She multiplies six fives together and gets 15,625. Dividing by 23 leaves remainder 8. She announces 8.
+
+Bob secretly picks 15. He multiplies fifteen fives together, which gives 30,517,578,125. Dividing by 23 leaves remainder 19. He announces 19.
+
+Now each combines the other's announcement with their own secret. Alice takes Bob's 19 and multiplies six nineteens together, then finds the remainder on the 23 hour clock. The result is 2. Bob takes Alice's 8 and multiplies fifteen eights together, then finds the remainder. His result is also 2.
+
+The shared secret is 2. Neither of them ever said it aloud.
+
+Why does it work? Alice's 19 stands for fifteen fives multiplied together, and she uses it six times over. Bob's 8 stands for six fives multiplied together, and he uses it fifteen times over. Both end up with ninety fives multiplied together, since 6 times 15 equals 15 times 6. The remainders agree because the remainder of a product does not depend on the order in which you combined the pieces. This is the paint mixing again, with the order of pouring made irrelevant by multiplication.
+
+What the spy knows
+
+The spy heard 23, 5, 8 and 19. To find the secret 2, the spy would need either Alice's 6 or Bob's 15. Finding Alice's number means asking how many fives, multiplied together, leave remainder 8 on the 23 hour clock. With a tiny clock you can just try 1, 2, 3 and so on until you hit it, and the spy would crack our example in seconds. That is why real systems use a clock size with hundreds of digits and secret numbers just as large. Trying every possibility would take longer than the life of the sun. No quick method is known for this puzzle, which is called the discrete logarithm problem, and the entire safety of the method rests on that.
+
+Keys and padlocks
+
+The exchange above is one form of public key cryptography. The other famous form works like a padlock. Each person creates a pair of linked numbers. One is the public key, which is like an open padlock. Bob can give copies to the whole world, and even post them on a noticeboard. The other is his private key, which is the only key that opens that padlock and which he never shares.
+
+If Alice wants to send Bob a secret, she takes his open padlock, clicks it shut around her message and sends it. The spy sees the locked box, and even holding the padlock design cannot open it. Only Bob, with his private key, can. The maths behind this version leans on the multiplication puzzle from earlier. Bob's public key is built from the product of two huge primes, and his private key depends on knowing those primes. Anyone can lock, but only someone who can split the product back into its primes can unlock.
+
+Where you meet this every day
+
+Whenever your browser shows a padlock beside a web address, a version of this exchange has just happened between your device and a website you have never visited before. The two sides agree a shared secret in public, then use it as the key for a fast ordinary scrambling method. They do this because public key maths is slow, so it is used only to set up the secret, and the quicker method handles the rest of the conversation.
+
+A limit worth knowing
+
+The method keeps the spy from listening, but it does not prove who you are talking to. A spy could pretend to be Bob to Alice and pretend to be Alice to Bob, and run two separate exchanges, reading everything in the middle. To stop this, trusted organisations issue certificates, which are like signed letters vouching that a public key belongs to a particular website. Your browser carries a list of the organisations it trusts.
+
+The big idea
+
+Two strangers can build a shared secret in public because some mathematical steps are simple to perform and punishingly hard to reverse. Each person keeps one private ingredient, the public sees only the mixtures, and the way numbers combine lets both sides arrive at the same answer. Like the paint, the secret appears at the end without ever being passed across the room.

@@ -1,0 +1,83 @@
+How Strangers Agree on a Secret in Public
+
+Imagine two people, Alice and Bob, who have never met. They want to share a secret, perhaps a password that will let them scramble their messages so nobody else can read them. The trouble is that the only way they can talk is a line that anyone can listen to. Whatever they say, an eavesdropper, call her Eve, hears every word.
+
+It sounds impossible. If Eve hears everything Alice and Bob say, how can they end up knowing something Eve does not? Yet it can be done, and the idea behind it is one of the cleverest in modern mathematics. It protects almost every online payment and private message today.
+
+The paint analogy
+
+Start with colours instead of numbers. Alice and Bob agree out loud on a common starting colour, say yellow. Eve hears this, and that is fine.
+
+Each person then picks a private colour and tells nobody. Alice picks red. Bob picks blue. Each mixes their private colour with the shared yellow and sends the result across the line. Alice sends an orange-ish mixture. Bob sends a greenish one. Eve sees both mixtures.
+
+Now Alice takes Bob's greenish mixture and adds her private red. Bob takes Alice's orange-ish mixture and adds his private blue. Both have now added yellow, red and blue, so both end up with the same final colour.
+
+Eve has the yellow and the two mixtures, but she cannot get the final colour. To do it she would need to un-mix a colour, to work out which paint went in. Mixing is easy. Unmixing is hopelessly hard. That is the whole trick, and it is called a one-way operation.
+
+Numbers can do the same job, and they do it far better than paint, because a computer can make the unmixing hard in a precise way.
+
+Clock arithmetic
+
+To build a one-way operation from numbers we need one piece of school maths in a slightly unusual form: clock arithmetic.
+
+On a 12-hour clock, if it is 9 o'clock and you wait 5 hours, it is 2 o'clock, not 14. When the count goes past 12, you wrap around and start again. In effect you are keeping only the remainder after dividing by 12. Mathematicians write this as "mod". So 14 mod 12 = 2, and 29 mod 12 = 5.
+
+There is nothing special about 12. We can use any number as the size of the clock. For our example we will use a clock with 23 positions, so every answer is a whole number from 0 to 22. When a result goes past 22 we divide by 23 and keep the remainder.
+
+The one-way operation
+
+Now take powers. 5 to the power 3 means 5 x 5 x 5 = 125. On our 23-position clock, 125 divided by 23 is 5 with remainder 10, so 5 to the power 3 gives 10.
+
+Here is the key fact. Going forward is easy. Given the base 5, the power 3 and the clock size 23, anyone can work out the answer 10 quickly. But going backward is a different story. Suppose I tell you that 5 to some secret power, on the 23-position clock, gives 10, and I ask you which power I used. You have no shortcut. You must try powers one at a time: 5 to the 1, 5 to the 2, 5 to the 3, and so on, until you hit 10.
+
+With a clock of 23 positions, that search takes a moment. But real systems use clocks with hundreds of digits. The forward calculation is still quick for a computer, because there are clever ways to do powers in a small number of steps. The backward search, however, would take longer than the age of the universe. Easy one way, ruinous the other. That is our unmixing problem.
+
+The exchange, step by step
+
+Here is the whole procedure using small numbers, so you can follow the arithmetic. Keep the paint picture in mind: the shared base number plays the role of yellow, and each private number plays the role of a private colour.
+
+Step 1. Alice and Bob agree publicly on two numbers: the clock size 23 and a base number 5. Eve hears both. They are the yellow paint.
+
+Step 2. Alice secretly picks a number, 6. She tells no one. Bob secretly picks 15. He tells no one.
+
+Step 3. Alice calculates 5 to the power 6 on the clock. That is 15,625, and dividing by 23 leaves a remainder of 8. She sends 8 to Bob. This is her mixed paint.
+
+Bob calculates 5 to the power 15 on the clock. The answer works out to 19. He sends 19 to Alice.
+
+Eve hears both 8 and 19. Those are the mixtures.
+
+Step 4. Alice takes Bob's number, 19, and raises it to her secret power 6. On the clock, 19 to the power 6 gives 2.
+
+Bob takes Alice's number, 8, and raises it to his secret power 15. On the clock, 8 to the power 15 also gives 2.
+
+They both arrive at 2. That is their shared secret.
+
+Why does it match?
+
+This is not luck. Alice effectively computed 5 to the power (15 x 6), because she raised Bob's number, which was already 5 to the power 15, to the power 6. Bob effectively computed 5 to the power (6 x 15), raising Alice's number, which was 5 to the power 6, to the power 15. Multiplication does not care about order, since 6 x 15 and 15 x 6 are both 90. So both land on 5 to the power 90 on the clock, and that gives 2.
+
+Each person did the final step using something only they knew, their private number, combined with something public that the other person sent. The result is the same either way.
+
+What Eve is stuck with
+
+Eve knows the clock size 23, the base 5, and the two public numbers 8 and 19. To find the secret she needs one of the private numbers. To get Alice's, she must answer: "5 to what power gives 8 on this clock?" That is the hard backward problem.
+
+With 23 positions Eve can solve it by trying a handful of powers, so our example is only a toy. Real systems use enormous clocks, with numbers hundreds of digits long, and private numbers just as large. At that size the forward steps still take a computer a fraction of a second, but the backward search is out of reach for any known method on any machine that exists.
+
+Why "public key"?
+
+The numbers 8 and 19 that Alice and Bob openly sent are examples of what are called public keys. Each person also holds a private key, here 6 and 15, which never leaves their hands. Each public number is made from the matching private one by the easy forward step, and the hard backward step is what stops anyone from recovering the private number from it.
+
+That is why the whole system is named public-key cryptography. The public part can be shouted across a crowded room. The private part stays home.
+
+A close cousin of this idea lets people do more than agree on a secret. It lets someone lock a message with a public number so that only the owner of the matching private number can unlock it, and it lets someone prove who they are. But the heart of all of it is the same: a calculation that is easy to do and practically impossible to undo.
+
+An honest caveat
+
+One thing the exchange does not do is tell Alice that she is really talking to Bob. If Eve could do more than listen, if she could cut the line and pretend to be Bob to Alice and Alice to Bob, she could run two separate exchanges and sit in the middle. Real systems deal with this by also checking identities, using signatures that rely on the same kind of maths. The exchange described here protects against someone who only listens, and that is the situation the puzzle began with.
+
+What to take away
+
+Two strangers can build a shared secret in public because some calculations are easy to do and brutally hard to reverse. Each person mixes a private number into something public, swaps the results, and mixes again. The order of mixing does not matter, so both reach the same answer. The listener, who sees only the mixtures, cannot unmix them.
+
+It is a bit like a magic trick where the audience sees every move and still cannot tell what happened. The difference is that here the trick is not sleight of hand. It is arithmetic, and it works every time.

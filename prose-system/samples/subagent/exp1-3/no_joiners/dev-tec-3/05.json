@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aec0cc53e91ff4747",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73763,
+    "output_tokens": 1964,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:34:14.489Z",
+  "valid": true,
+  "text": "A lithium ion cell stores energy by moving lithium ions from the cathode, usually a metal oxide, into the graphite anode. Charging forces this transfer against the cell's natural tendency, so the charger must push current in while keeping voltage and temperature inside safe limits. The standard method is called constant current then constant voltage.\n\nIn the first stage the charger holds current steady, typically between 0.5 and 1 times the cell's capacity per hour. The cell voltage rises gradually from roughly 3.0 volts toward 4.2 volts for a common chemistry. The charger supplies whatever voltage is needed to sustain the set current, and this stage delivers about 70 to 80 percent of the capacity in under an hour.\n\nOnce the terminal voltage reaches the upper limit, the charger stops regulating current and instead holds voltage fixed. This is the second stage. Current now falls on its own, tapering roughly exponentially. The charge is declared complete when current drops to a small threshold, often about 5 to 10 percent of the original rate.\n\nWhy does it taper? Think of the cell as an ideal voltage source in series with an internal resistance. The source voltage is the open circuit voltage, which depends on how full the cell is. The terminal voltage equals the open circuit voltage plus current times resistance. In the first stage the resistive drop uses up part of the terminal voltage. As the cell fills, open circuit voltage climbs and approaches the fixed limit. The gap between the limit and the open circuit voltage is all that remains to drive current across the resistance, so current equals that gap divided by resistance. As the gap shrinks, current shrinks with it.\n\nSeveral physical effects deepen this. Ions must diffuse into solid graphite particles, and as the particle surface fills, the concentration gradient that drives diffusion weakens. Near full, the anode potential also drops close to that of metallic lithium. Pushing hard there risks lithium plating, where metal deposits on the surface instead of entering the graphite. Plating shortens life and can cause internal short circuits. Holding voltage constant is therefore a safety measure as well as a convenience. Charging beyond the limit also drives electrolyte oxidation and heat generation.\n\nFor an engineer from another field, the useful picture is a resistor capacitor circuit. The cell behaves like a large nonlinear capacitor with a series resistor, and constant voltage charging of a capacitor produces the familiar exponential decay. Fast charging systems manipulate the current profile, temperature and cutoff threshold to trade speed against degradation, but the taper near full remains a consequence of the physics rather than a flaw in the charger."
+}

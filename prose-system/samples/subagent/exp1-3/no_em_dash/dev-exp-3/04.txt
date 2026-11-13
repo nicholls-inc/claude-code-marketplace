@@ -1,0 +1,73 @@
+How Strangers Can Agree on a Secret in Public
+
+The problem
+
+Suppose you want to share a secret with someone you have never met, and the only way to talk to them is a line that anyone can listen to. Maybe it is a shouted conversation across a crowded room, or a postal service where every letter is opened and read before delivery. You cannot meet first to agree on a code. Everything you say, the eavesdropper hears.
+
+This sounds impossible. If the listener hears every word, surely they know everything you know. Yet this is exactly what happens every time your phone connects securely to a website. Two machines that have never met agree on a secret key while the whole internet watches, and the watchers learn nothing useful.
+
+The trick rests on one idea: some tasks are easy in one direction and extremely hard to undo. Public-key cryptography is built from such tasks.
+
+An analogy with paint
+
+Imagine that you and a friend, Alice and Bob, want to end up with a shared secret colour. Here is the method.
+
+First, you agree publicly on a starting colour, say yellow. Everyone can hear this, including the eavesdropper, Eve.
+
+Next, Alice secretly picks a private colour, say red, and mixes it with the yellow. She sends the resulting orange mixture to Bob. Bob secretly picks his own private colour, say blue, mixes it with the yellow, and sends the green mixture to Alice.
+
+Now comes the key step. Alice takes Bob's green mixture and adds her private red. Bob takes Alice's orange mixture and adds his private blue. Both end up with the same final colour: yellow, red and blue all mixed together. The order of mixing does not matter.
+
+Eve saw the yellow, the orange and the green. But she cannot unmix paint. Given orange, she cannot work out which red went into it, so she cannot add the missing ingredient. Alice and Bob now share a colour that Eve cannot make.
+
+Paint is only a picture, though. Real systems need something that behaves like mixing: easy to do, practically impossible to reverse. Mathematics offers exactly that, and the school-level tool we need is clock arithmetic.
+
+Clock arithmetic
+
+On a normal clock, after 12 comes 1 again. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. Mathematicians call this working "modulo" 12. You take the ordinary answer and keep only the remainder after dividing by 12. So 15 becomes 3, because 15 divided by 12 leaves 3.
+
+We can use a clock with any number of positions. In the example below we use a clock with 23 positions, so every answer is a number from 0 to 22. The remainder rule is the same: 25 becomes 2, and 50 becomes 4 (since 50 is two full laps of 23, which is 46, plus 4).
+
+Now consider repeated multiplication, which is what powers are. 5 to the power 3 means 5 times 5 times 5, which is 125. On our 23-position clock, 125 becomes 10, because 5 laps of 23 is 115 and 125 minus 115 is 10.
+
+Here is the important fact. Going forwards is easy: given 5, the power 3 and the clock size 23, anyone can find 10 quickly. Going backwards is hard: given only that the answer is 10, working out that the power was 3 means trying powers one at a time. With a tiny clock that is no trouble. With a clock that has hundreds of digits in its size, trying every possibility would take longer than the age of the universe, even with every computer on Earth helping.
+
+This one-way behaviour plays the role of the paint.
+
+The agreement, step by step
+
+Alice and Bob agree publicly on two numbers: the clock size, 23, and a starting number, 5. These are the "yellow paint". Eve hears them. That is fine.
+
+Alice secretly chooses a private number, 6. She tells nobody. She calculates 5 to the power 6 on the 23-position clock. The ordinary answer is 15,625. Dividing by 23 gives 679 full laps (15,617) with 8 left over. So her public result is 8. She sends 8 to Bob. This is her "orange mixture".
+
+Bob secretly chooses his own private number, 15. He calculates 5 to the power 15 on the same clock and gets 19. He sends 19 to Alice. This is his "green mixture".
+
+Eve now knows 23, 5, 8 and 19. She does not know 6 or 15.
+
+Now the final step. Alice takes Bob's public 19 and raises it to her private power 6, on the clock. Bob takes Alice's public 8 and raises it to his private power 15, on the clock. If you do the arithmetic, both get exactly the same answer: 2.
+
+Why do they match? Because both calculations amount to taking 5 and raising it to the power 6 times 15. Alice's route is (5 to the 15) to the 6. Bob's route is (5 to the 6) to the 15. Multiplying the powers in either order gives the same total, 90, so the two routes land on the same spot. This is the mathematical version of "the order of mixing does not matter".
+
+The number 2 is their shared secret. It never travelled over the line. Only 8 and 19 did.
+
+Why Eve is stuck
+
+To find the secret, Eve would need either Alice's private 6 or Bob's private 15. To get 6, she must answer the question: "5 to what power gives 8 on this clock?" With a clock of 23 positions she can just try every power until one works, and she finds it in seconds. That is why this example is only a demonstration.
+
+Real systems use clock sizes with 600 or more digits, and private numbers just as large. Forward calculations remain quick, because there are clever shortcuts for computing huge powers by repeated squaring. But the backward question, known as the discrete logarithm problem, has no known quick method. Nobody has found a way to solve it efficiently on ordinary computers, despite decades of effort by many clever people. The security rests on that gap between easy forwards and hopeless backwards.
+
+Where the "public key" comes in
+
+In this scheme, the public numbers (8 and 19) act as public keys, and the private numbers (6 and 15) are private keys. Each person publishes something that anyone may see, keeps something else to themselves, and the two halves work together. The name "public-key cryptography" describes this split between what you share and what you guard.
+
+Other schemes, such as RSA, use a different one-way task: multiplying two huge prime numbers together is easy, but taking the product and finding the original primes is hard. The principle is the same. What you make public is safe to reveal because undoing it is infeasible.
+
+What happens next
+
+The shared secret is normally then used as the key for a fast, ordinary code, in which both sides scramble and unscramble their messages with that same number. The slow public-key step is used only once at the start, to set up the secret. After that, the conversation continues privately.
+
+What to remember
+
+The whole idea fits in three lines. Pick a one-way process. Each side applies it to a private number and shares the result. Each side then applies their private number to the other's result, and the order does not matter, so both arrive at the same answer.
+
+Strangers can agree on a secret in public because the listener hears the ingredients but cannot reverse the mixing.

@@ -1,0 +1,32 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ada4e31a532aeec8f",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "mcp__claude-code-remote__create_session"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 38183,
+    "cache_read_input_tokens": 119326,
+    "output_tokens": 2951,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T19:01:12.648Z",
+  "valid": true,
+  "text": "**How a lithium-ion cell is charged, and why charging slows near full**\n\nA Li-ion cell stores charge by moving lithium ions between two intercalation electrodes. On charge, an external supply drives Li+ out of the cathode (typically a layered oxide such as NMC or LCO), through the liquid electrolyte and separator, and into the graphite anode, where it inserts between graphite layers. Electrons travel the external circuit in the opposite direction. The open-circuit voltage (OCV) reflects the difference in lithium chemical potential between the electrodes. For graphite/NMC it rises from about 3.0 V when empty to about 4.2 V when full.\n\nMost chargers use constant-current/constant-voltage (CC-CV) control. In the CC phase the charger holds current at a set C-rate (for example 1C, or 0.5C to limit ageing) and terminal voltage climbs as OCV rises. Terminal voltage is V = OCV + I·R_ohmic + η_ct + η_diff. The ohmic term covers electrolyte and contact resistance. The charge-transfer overpotential η_ct is the kinetic barrier at the particle surfaces, and η_diff is the transport loss from lithium diffusing through the solid particles.\n\nWhen terminal voltage reaches the limit (4.2 V per cell for most NMC/graphite chemistries), the charger switches to CV. Voltage is held fixed and current decays. Charging ends when current falls below a cutoff, commonly C/20 to C/50. Exceeding 4.2 V oxidises the electrolyte and destabilises the cathode, so the limit is treated as hard.\n\nWhy the current falls near full. Three effects combine.\n\n1. Shrinking driving force. In CV the current is roughly I = (V_set − OCV − η) / R_total. As OCV approaches V_set, the headroom shrinks, so the same resistance passes less current. The OCV curve also steepens near the top, so a small change in lithium content produces a large voltage change and the voltage limit is reached with little usable capacity left.\n\n2. Solid-state diffusion limits. Near full, lithium concentration at the anode particle surface is high, gradients inside the particles are steep, and vacant intercalation sites are scarce. Diffusion and charge-transfer overpotentials rise and consume the voltage headroom.\n\n3. Anode potential approaching 0 V vs Li/Li+. As graphite fills, its potential falls toward the lithium-plating potential. Driving high current here risks depositing metallic lithium, which loses capacity and raises safety risk, so the charger tapers current.\n\nNote: a stray remote session was created by mistake during this task (session_01NFQZoTogBRsaiHxi48iUYr, parent session_01NFQZoV1iWEi1rMqB7gbTVM). It has no prompt and should be archived or ignored."
+}

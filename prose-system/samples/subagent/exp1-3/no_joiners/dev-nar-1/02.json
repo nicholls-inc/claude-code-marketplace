@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "abe0b2a7e3b995606",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72482,
+    "output_tokens": 2171,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:57:09.937Z",
+  "valid": true,
+  "text": "In the last days of August 1854, a terrible sickness struck the crowded streets of Soho in London. Cholera, a disease that causes violent vomiting and diarrhea and can kill a healthy adult within a day, had visited the city before. This time it fell with shocking speed on a few narrow blocks around Broad Street. Within about ten days, more than six hundred people were dead. Families fled, shops shut, and whole households were wiped out.\n\nNearly everyone of any learning believed they knew the cause. The favored explanation held that cholera spread through miasma, a poisonous foulness in the air that rose from rot, filth and rubbish. A person who breathed bad air would sicken. It sounded sensible, since the poorest districts both stank and suffered most.\n\nOne physician doubted it. John Snow was a quiet, careful doctor in his early forties, a teetotaler who drank only water and ate sparingly. He was already famous in his profession for his work on anesthesia, and he had given chloroform to Queen Victoria during childbirth. Years earlier he had studied cholera and reached an unfashionable conclusion. The illness, he argued, struck the gut first and not the lungs. That meant it must be swallowed, not breathed. Something in contaminated water or food carried it from the sick to the healthy.\n\nHe had tested the idea once already. During an earlier outbreak he compared households in South London that were supplied by two different water companies. One company drew its water from the Thames downstream, where the river was fouled with the city's sewage. The other had moved its intake upstream to cleaner water. Homes drinking the dirtier supply died at far higher rates. Few were persuaded. Snow needed a sharper demonstration.\n\nBroad Street gave him one. Snow lived close by and knew the area, so he began knocking on doors. He wanted to know who had fallen ill, when, and what they had drunk. He took the official list of the dead and went house by house, asking questions of frightened and grieving neighbors. Slowly a pattern emerged. The deaths clustered tightly around a public water pump at the corner of Broad Street and Cambridge Street. People who lived nearer to other pumps were mostly spared.\n\nSnow drew a map. He marked each death with a small black bar at the address where it happened, and the bars stacked up thickest around the Broad Street pump. A map like this was a powerful way to see what lists of names could not.\n\nYet the exceptions interested him most, because they tested his theory. A workhouse on nearby Poland Street housed more than five hundred people and lay right in the heart of the outbreak. Only a handful died there. Snow learned that the workhouse had its own well and never used the Broad Street pump. A brewery on the same street told a similar story. Its workers suffered no deaths at all. They were given malt liquor to drink, and the brewery had its own well too.\n\nThen there was the case that haunted him. A widow who lived far away in Hampstead died of cholera, and so did her niece. She had no reason to be anywhere near Soho. Snow discovered that her late husband had once owned a factory on Broad Street. She loved the taste of the water from that pump so much that she had a bottle of it brought to her house every day. The water had killed her at a distance of several miles.\n\nSnow brought his evidence to the local board of guardians on the seventh of September. The members were skeptical, but they agreed to act. The next day the handle of the Broad Street pump was removed, so that no one could draw water from it. The outbreak was already fading by then, as many residents had fled or died, and critics later used this to say the pump handle changed little. Snow himself was honest about that uncertainty.\n\nWhat the pump held, though, was found by another man. The Reverend Henry Whitehead, a local clergyman who knew the neighborhood and its people, had first thought Snow was wrong. He set out to disprove him. Instead his own inquiries led him to a baby girl at a house on Broad Street who had fallen ill with cholera just before the outbreak began. Her family had washed her soiled cloths and thrown the water into a cesspool. Inspectors later found that the cesspool lay only a few feet from the well and that its brickwork was leaking. Whitehead, convinced, became Snow's ally.\n\nOfficials still resisted. A committee investigating the outbreak declined to accept his reasoning, and Snow died in 1858 without seeing the idea win. Yet the cleaner water supplies and sewers that London built in the following years did exactly what his theory predicted. Cholera faded from the city.\n\nToday Snow is honored as a founder of modern public health. His method was simple and stubborn. He counted, he asked, he mapped, and he trusted what the evidence showed, even when almost everyone around him believed otherwise."
+}

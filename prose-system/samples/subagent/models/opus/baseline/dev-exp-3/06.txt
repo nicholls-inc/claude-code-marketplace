@@ -1,0 +1,72 @@
+How Two Strangers Can Share a Secret in Public
+
+Picture two people, Alice and Bob, who have never met. They want to send each other private messages, so they need a shared secret: a number that only the two of them know, which they can use as the key to scramble and unscramble what they write. The difficulty is that every word they exchange travels over a line that anyone can listen to. A third person, Eve, hears everything. If Alice simply says "let's use the number 4,817", Eve now knows it too.
+
+For most of history this looked impossible. If you wanted a shared secret with someone, you had to meet them, or send a trusted courier, or post them a codebook and hope nobody opened it on the way. In 1976 two researchers, Whitfield Diffie and Martin Hellman, published a way around it. Their method lets Alice and Bob end up with the same secret number even though every message between them is overheard. This explanation shows how that works, using paint first and then real arithmetic.
+
+The paint picture
+
+Imagine Alice and Bob each have a pot of paint, and that mixing paints is easy while unmixing them is impossible. Once two colours are stirred together, nobody can separate them again.
+
+1. Alice and Bob agree out loud on a starting colour, say yellow. Eve hears this, and that is fine.
+2. Alice picks a secret colour of her own, say red, and tells nobody. Bob picks his own secret colour, say blue.
+3. Alice mixes her secret red into some yellow, giving orange. Bob mixes his secret blue into some yellow, giving green.
+4. They swap these mixtures in public. Eve sees the orange and the green go past.
+5. Alice takes Bob's green and adds her secret red. Bob takes Alice's orange and adds his secret blue.
+
+Now both pots hold yellow plus red plus blue. The order of mixing does not matter, so Alice and Bob have exactly the same colour, a muddy brown.
+
+Eve has seen yellow, orange and green. To make the brown she would need either Alice's red or Bob's blue, and to get one of those she would have to pull it back out of a mixture, which is the one thing she can't do. If she mixes the orange and green together she gets a colour with two lots of yellow in it, which is the wrong shade.
+
+The whole trick depends on having a step that is easy to do and very hard to undo. Paint is only a picture of that. Real systems use arithmetic.
+
+Clock arithmetic
+
+The arithmetic behind it is "clock arithmetic". On a 12-hour clock, 5 hours after 9 o'clock is 2 o'clock, not 14. You wrap round: you divide by 12 and keep only the remainder. The same works with any number in place of 12. Here we will use a clock with 17 positions, numbered 0 to 16. So 20 on this clock is 3 (because 20 = 17 + 3), and 36 is 2 (because 36 = 34 + 2, and 34 is two lots of 17).
+
+Now take a starting number, 3, and keep multiplying it by itself, wrapping round the 17-clock each time:
+
+- 3
+- 3 × 3 = 9
+- 9 × 3 = 27, which wraps to 10
+- 10 × 3 = 30, which wraps to 13
+- 13 × 3 = 39, which wraps to 5
+- 5 × 3 = 15
+- 15 × 3 = 45, which wraps to 11
+
+and so on. The answers jump about with no obvious pattern. Going forwards is easy: if I ask "what do you get after multiplying by 3 fifteen times?", you just keep going and count. Going backwards is hard. If I tell you "I landed on 6, how many times did I multiply?", there is no shortcut. You have to run the sequence and wait until 6 turns up.
+
+With 17 positions that only takes a few seconds by hand. Real systems use a clock with a number of positions that is hundreds of digits long. Going forwards is still quick, because there are clever ways to take large steps at once. Going backwards would take the world's fastest computers far longer than the age of the universe, as far as anyone knows. This is the "easy to mix, impossible to unmix" step we needed.
+
+The exchange, with real numbers
+
+Alice and Bob agree in public on two numbers: the clock size, 17, and the starting number, 3. Eve hears both. These play the part of the yellow paint.
+
+Alice secretly picks the number 15. Bob secretly picks 13. These are their private keys, the red and the blue, and they never say them out loud.
+
+Alice works out 3 multiplied by itself 15 times on the 17-clock (mathematicians write this as 3 to the power 15). The answer is 6. Bob works out 3 to the power 13 on the same clock and gets 12. These are their public keys, the orange and the green, and they send them to each other openly. Eve now knows 17, 3, 6 and 12.
+
+Then each of them does one more step with their own secret:
+
+- Alice takes Bob's 12 and raises it to her secret power, 15, on the 17-clock. She gets 10.
+- Bob takes Alice's 6 and raises it to his secret power, 13, on the 17-clock. He also gets 10.
+
+They match because, underneath, both have calculated 3 raised to the power 15 × 13. Alice did the "15" part first and Bob did the "13" part first. Just as with the paint, the order doesn't change the result. The shared secret is 10, and it never travelled over the line.
+
+Eve is stuck. To find the 10 she needs Alice's 15 or Bob's 13. To get Alice's 15 she would have to answer "how many times was 3 multiplied to land on 6?", which is the backwards problem we said was hard. She might try combining 6 and 12 directly, but multiplying them, adding them or raising one to the power of the other all give the wrong answer, much as mixing orange and green gave the wrong brown. With 17 positions she could simply try every possibility. With a clock hundreds of digits long she can't.
+
+Once Alice and Bob share the secret number, they use it as the key for an ordinary, fast scrambling method, and from then on their conversation is private.
+
+Why it is called "public-key"
+
+Each person has two numbers. One is kept private (Alice's 15) and one is published (Alice's 6). The published number can be shouted across a crowded room, written on a website or printed in a newspaper, because knowing it does not reveal the private number behind it. That split between a private key and a public key is what the name refers to. Other public-key systems, such as RSA, use a different hard problem (splitting a very large number into the two primes that were multiplied to make it) but rest on the same idea of a step that is easy one way and hard the other.
+
+The catch: knowing who you are talking to
+
+This method protects against someone who only listens. It does not, by itself, protect against someone who can intercept messages and replace them. Suppose Eve sits in the middle of the line. She could pretend to be Bob when talking to Alice and pretend to be Alice when talking to Bob, setting up one secret with each of them and passing messages along while reading every one.
+
+The fix is to make sure that the public number really belongs to the person it claims to belong to. In practice this is done with digital signatures and certificates: a trusted organisation vouches that a particular public key belongs to a particular website, much as a passport office vouches for a photo. When your browser shows a padlock, it has checked such a certificate and then carried out a key exchange very much like the one above, with clock sizes so large that no eavesdropper could work backwards.
+
+Summary
+
+Alice and Bob each keep one number secret and publish a scrambled version of it. Each combines the other's published number with their own secret, and both arrive at the same result. An eavesdropper sees every published number, but turning any of them back into a secret means solving a problem that, at real-world sizes, nobody knows how to solve in any reasonable time.

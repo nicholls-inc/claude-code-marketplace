@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a869eaa2ef4702251",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73755,
+    "output_tokens": 2245,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:02:33.963Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Measuring.\n\nEvery quarter the same ritual plays out. A manager asks when something will be done. Engineers huddle, assign story points or T-shirt sizes, add a buffer, and hand back a date. Months later the date is missed, everyone shrugs, and the cycle restarts. We keep doing this because estimates feel responsible. They are a comforting fiction, and software teams should stop producing them.\n\nThe core problem is that software work is mostly discovery. When someone estimates a feature at three weeks, they are guessing at the unknowns: the legacy module nobody understands, the API that behaves differently under load, the requirement that surfaces in week two. Those surprises are the work itself. Estimates also fail in one direction. Tasks finish late far more often than early, so the errors pile up on the schedule.\n\nEstimates also distort behavior. Once a date is attached to a task, people optimize for the date instead of the outcome. They skip the refactor that would make the next three features faster. They ship the version that technically meets the ticket. They hide risk, because raising it reopens the estimate and makes them look slow. The estimate becomes a commitment, and commitments punish honesty.\n\nThe alternative is measurement and short feedback loops. Track throughput, the number of items finished per week, and use that history to forecast. A Monte Carlo simulation over past throughput answers \"when might this be done, and how confident are we?\" far more honestly than a planning poker session. The output is a range with probabilities, which is what decision makers need. A manager who wants a date can get one: there is an 85 percent chance we finish by March. That is a commitment backed by data, not a guess dressed up as a plan.\n\nThis works best when work is cut into small, similar-sized slices. If items are roughly the same size, counting them is enough. Nobody has to argue about whether something is a five or an eight.\n\nDropping estimation also frees time. Sizing sessions, refinement meetings, and the padding engineers add to protect themselves all cost real hours. Spend that effort on shortening feedback instead: deploy more often, put working software in front of users sooner, and let the results decide what to build next.\n\nCritics will say managers need predictability. They do. Predictability comes from a stable system and honest forecasts that narrow over time, not from numbers that were wrong before the ink dried. Releases that ship and forecasts that tighten build more trust than any Gantt chart.\n\nSo drop the story points at the next planning session. Ask instead what the smallest valuable slice is, ship it, and measure what happens. Estimation feels like control. Measurement actually provides it."
+}

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a388c1c0628aaa534",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 2176,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:03:16.223Z",
+  "valid": true,
+  "text": "**Keep Estimating. Stop Treating Estimates as Promises.**\n\nEvery few years someone proposes that software teams simply stop estimating, and engineers cheer. I understand why. Most of us have been handed a deadline that started as an offhand \"maybe two weeks\" in a hallway. Later it turned into a commitment on a roadmap slide we never saw. As most companies practice it, estimation punishes honesty and rewards padding.\n\nBut the answer is not to stop. Teams should keep estimating, because the estimate is not mainly for the manager. It's for the engineer.\n\nThink about what happens when you try to say how long something will take. You have to ask what \"done\" means. You have to notice the migration nobody mentioned, the API you've never called, and the reviewer who is on leave next week. Say one teammate guesses three days and another guesses three weeks. They don't disagree about speed. They've found out they are picturing two different pieces of work. That conversation is worth more than the number it produces, and you don't get it unless someone asks for the number.\n\nThen there's the business. Someone has to decide whether a feature is worth building, and that decision depends on cost. If engineers refuse to give a figure, someone makes one up anyway, and that person knows less than they do. Refusing to estimate doesn't take the guess out of the system. It hands the guess to the person least qualified to make it.\n\nThe strongest version of the no-estimates argument says: count finished items, measure throughput, and forecast from history. That's good practice, and teams should do it. But it only works when work is cut into pieces of similar size, and cutting work that way is itself estimation. You judge, item by item, whether each piece is small enough. The method hides the estimate. It doesn't get rid of it.\n\nSo what should stop? Three things.\n\nFirst, single-number estimates. \"Two weeks\" claims more precision than anyone has. \"Most likely two weeks, but five if the vendor's sandbox is as bad as last time\" is honest, and it tells a manager where the risk is.\n\nSecond, estimates that never get revised. An estimate is a forecast, and forecasts change. If a team learns on day three that the work is twice as big, saying so that day should be routine, not a confession.\n\nThird, and this one is on managers: using estimates to judge people. Once a missed estimate shows up in a performance review, every number your team gives you will be padded. You'll have paid for a signal that tells you nothing. If you want accurate estimates, make it safe to be wrong in public.\n\nEngineers have a part too: stop treating \"I don't know\" as a final answer. \"I don't know yet. Give me a day to spike it and I'll tell you\" is a reasonable thing to say. Saying nothing is not.\n\nEstimation fails when it's used as a contract. Used as a way to think through the work out loud, it's one of the cheapest tools a team has. Keep it, and change how you use it."
+}

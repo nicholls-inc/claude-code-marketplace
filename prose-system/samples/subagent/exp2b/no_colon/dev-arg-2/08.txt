@@ -1,0 +1,19 @@
+Stop Estimating. Start Shipping Small.
+
+Every engineer has lived this scene. A manager asks how long a feature will take. You say three weeks, because you have to say something. Everyone writes it down. Six weeks later, the number is still on a slide, and nobody believes it, including the person who gave it.
+
+Software teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because the practice is built on a false premise. We treat software as a known quantity to be measured, when the hard part is discovering what needs to be built. The unknowns do not show up until you are knee deep in the code. An estimate made before that discovery is a guess dressed up as a plan.
+
+The costs are real. Estimates become commitments the moment they leave your mouth. Anchoring does the rest, so a number tossed out in a hallway turns into a deadline. Teams then spend hours in planning meetings debating story points, which are a currency with no exchange rate. Those hours produce no software. Worse, people start to game the system. They pad numbers, avoid risky work, and cut corners on quality to hit a date that never had a basis in reality.
+
+Estimates also distort priorities. If a task is estimated at two weeks, the conversation shifts to whether it fits the schedule, when it should be about whether it is worth doing. The better question is always what the work is worth and what we would give up to do it.
+
+Managers will object that they need predictability. Fair. Customers, sales, and finance all have legitimate planning needs. But estimation does not deliver predictability. Flow does. Break work into small pieces, ideally a day or two each, and track how many finish per week. After a month you have a real throughput number based on what actually happened, not on what someone hoped would happen. Forecasting from that history is more accurate than any estimation ritual, and it costs almost nothing.
+
+Small slices do something else too. They force the team to find the unknowns early. A task that cannot be cut down is a task nobody understands yet, and that is the useful thing to learn on day one rather than week five.
+
+What replaces the estimate is a conversation about scope. Instead of asking how long this will take, ask what we can have by the end of the quarter, and what we will cut if it gets harder. Fix the time, flex the scope, and ship something usable early. That puts the uncertainty where it belongs, in the decisions, rather than hiding it in a number.
+
+None of this means working without dates. Hard deadlines exist, such as a regulatory cutoff or a launch event. Those are constraints, and they are handled by cutting scope, not by pretending we can predict effort.
+
+Teams that drop estimating do not become chaotic. They become honest. They spend less time performing certainty and more time producing software. If your estimates are already ignored in practice, the kindest thing you can do is stop writing them down.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a1763365f89a7ae8f",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28205,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1053,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:07:05.832Z",
+  "valid": true,
+  "text": "Teams should stop estimating how long work will take, at least in the form most of them practice it, and the sooner managers admit why, the better.\n\nStart with the track record. Software estimates are wrong so reliably that the error has become a genre of joke. The cause is not laziness or poor discipline. The work is mostly discovery. If we knew exactly what building a feature involved, we would have already built it, or we would have bought it. What remains is the unknown: the legacy module that fights back, the API that behaves differently from its documentation, the requirement that turns out to be two requirements. An estimate is a guess about the part of the job nobody has seen yet, and we ask engineers to express that guess as a number and then treat the number as a promise.\n\nThat last step is where the damage happens. Once a number exists, it hardens. A rough \"two weeks, maybe\" said in a hallway becomes a date on a roadmap, then a commitment to a customer, then a performance conversation. Engineers learn quickly that the safe move is to pad. Managers learn that padding exists and quietly cut the figure. Everyone now negotiates over a fiction, and the negotiation consumes hours that could have gone into the product. Planning poker, story point calibration, and velocity charts are elaborate machinery for producing a figure that nobody believes.\n\nWorse, estimates distort the work itself. A team racing a deadline it set blindly will skip the refactor, shave the tests, and ship the thing that technically meets the date. The cost arrives later and is never charged back to the estimate that caused it. Meanwhile the truly valuable question, whether this work is worth doing at all, gets crowded out by the question of how long it will take.\n\nThe alternative is not chaos. Stopping estimation does not mean refusing to plan. It means replacing prediction with constraint and feedback. Decide what a problem is worth, and set an appetite: we will spend two weeks on this, and if it does not fit, we will cut scope rather than extend time. Break work into slices small enough to finish in a few days, so that any slice taking longer is an early warning and not a surprise at the end of a quarter. Measure how long things actually take, using cycle time from your own history, and forecast from that record instead of from opinion. A distribution of past outcomes beats a confident guess every time.\n\nThere are fair objections. Some work has hard external deadlines, such as a regulatory date or a contracted launch, and the business genuinely needs to know whether it is reachable. Fine. Then work backward from the date, fix the scope to what fits, and track progress in small increments. That is still not an estimate of duration handed to a team to defend.\n\nManagers worry that dropping estimates means losing visibility. In practice it is the reverse. A team shipping small pieces weekly gives you more honest information than a Gantt chart ever did. You see real progress, real blockers, and real trade-offs, rather than a confident forecast that slips in silence.\n\nSo retire the ritual. Ask what the work is worth, bound the time you are willing to spend, ship in small pieces, and let your own data tell you what to expect. You will be wrong less often, and you will stop pretending."
+}

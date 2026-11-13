@@ -1,0 +1,19 @@
+Stop Estimating. Start Measuring.
+
+Every quarter, a room of engineers produces numbers that everyone privately knows are fiction. "Three points." "Two weeks, maybe four." The numbers go into a roadmap, the roadmap goes to a VP, and six weeks later the team explains why the thing took nine. Then we do it again.
+
+We should stop. That does not mean we stop planning or stop caring when things ship. It means we stop asking individual engineers to predict how long work will take, and we stop treating those predictions as commitments.
+
+Three observations support this.
+
+First, estimates are wrong in the same direction every time. Software work is dominated by things nobody can see before starting: the surprise dependency, the flaky integration, the requirement that only surfaces in a demo. Estimators know this and still guess low, because the task in front of them looks finite. This is systematic bias, not noise that averages out, and no planning ritual removes it.
+
+Second, the process is expensive and teaches the wrong lessons. Sizing debates eat hours. They reward whoever sounds most confident and punish the engineer who says, "It depends on the migration, and I don't know yet." Teams learn to produce plausible numbers instead of honest uncertainty. Managers learn to trust those numbers because they look precise.
+
+Third, what managers actually need can be answered without estimates. "When will this ship?" can be answered from throughput: how many comparable items this team finished recently, and how much that number varies. A simple simulation over past cycle times produces a date with a confidence range in an afternoon, and it updates as the work moves. "What fits this quarter?" is answered by splitting work into small, similar-sized items and committing to a count, not to hours.
+
+Critics will say this removes accountability. It does the reverse. An estimate is a promise made before anyone knows the work. A throughput forecast is a statement about what actually happened, and when it is wrong, the team can see why: the batches were too large, review sat for a week, the scope kept moving. Those causes are fixable. "We estimated badly" rarely leads anywhere.
+
+Some decisions do need a rough sense of cost, such as a contract bid or build-versus-buy. Use ranges there, label them as ranges, and revisit them. Do not let them slide into sprint plans with the authority of a schedule.
+
+What to do on Monday: track cycle time for a month. Split work until items finish within a few days. Forecast from that data. When someone asks for a date, give a range and say what would move it. Then notice how much meeting time comes back, and how much less your team argues about numbers that were never going to be right.

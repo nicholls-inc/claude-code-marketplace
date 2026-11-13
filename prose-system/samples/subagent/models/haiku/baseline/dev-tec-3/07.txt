@@ -1,0 +1,26 @@
+**How a lithium-ion cell is charged, and why current falls near full**
+
+A lithium-ion cell is charged with a constant-current, constant-voltage (CC-CV) profile. The charger drives lithium ions out of the positive electrode (typically a layered oxide such as NMC or LCO, or LFP) through the electrolyte and into the graphite negative electrode, where they intercalate between carbon layers. Electrons move through the external circuit in the opposite direction. The open-circuit voltage (OCV) is the difference between the two electrode potentials, and it rises as lithium moves across.
+
+In the CC stage, the charger holds current at a set C-rate (1C fills nominal capacity in one hour; 0.5C to 1C is common). Terminal voltage climbs toward the limit, typically 4.2 V for NMC/graphite:
+
+V_terminal = OCV(SOC) + I·R + η_ct + η_conc
+
+R is the ohmic resistance (electrolyte, electrodes, contacts, SEI). η_ct is the charge-transfer overpotential and η_conc the concentration overpotential. Reaching the voltage limit ends the CC stage.
+
+In the CV stage, the charger holds terminal voltage at the limit and lets current decay. Rearranging the same equation:
+
+I = (V_limit − OCV(SOC) − η) / R
+
+As the cell fills, OCV approaches V_limit, so the driving term shrinks and current falls roughly exponentially. Charging ends when current drops to a cutoff, commonly C/20 to C/10.
+
+**Why charging slows near full**
+
+Several effects combine.
+
+- Shrinking driving voltage. The gap between V_limit and OCV narrows, so the same voltage pushes less current through a fixed resistance. This is the dominant effect in the CV stage.
+- Rising overpotentials. Near full, the cathode has few lithium atoms left to release and the graphite is nearly saturated, so the remaining host sites are scarce and hard to reach. Solid-state diffusion inside the particles limits how fast lithium can be delivered to the surface, and charge-transfer resistance increases. Both raise η and reduce the current the voltage budget can support.
+- Resistance is not constant. It varies with state of charge, temperature and age, because the SEI and electrode surfaces change over the cell's life.
+- Plating protection. If the anode potential falls below 0 V versus Li/Li+, metallic lithium can deposit on the graphite. That causes capacity loss and raises the risk of internal shorts. Tapering the current keeps the anode potential above that threshold.
+
+The taper also protects thermal margins. Joule heating scales with I²R, so the battery management system (BMS) limits current as the cell nears its voltage ceiling. In series packs, the cell that reaches the limit first governs the taper, which is why balancing matters in the final phase.

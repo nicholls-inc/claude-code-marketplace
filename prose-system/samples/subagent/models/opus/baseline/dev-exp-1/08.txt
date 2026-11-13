@@ -1,0 +1,33 @@
+How a Heat Pump Heats Your Home When It's Cold Outside
+
+It sounds wrong at first. On a frosty January morning the air outside is 0°C, you want your living room at 20°C, and yet a machine sitting out in that cold air is supposed to warm your house. How can cold air heat anything?
+
+The answer is that "cold" air still holds a lot of heat. Temperature measures how much heat energy something has, and nothing is truly empty of it until absolute zero, about -273°C. Compared with that, air at 0°C, or even -15°C, still holds plenty of energy. A heat pump doesn't make heat the way your boiler does. It collects heat that is already in the outside air and moves it indoors.
+
+**Moving heat uphill**
+
+Heat flows from warm to cold on its own. To push it the other way, from the cold garden into a warm house, you need to put in work. Your fridge does exactly this: it pulls heat out of the food compartment and dumps it through the coils at the back, which is why they feel warm. A heat pump is a fridge turned inside out. Your garden plays the part of the fridge's inside, and your house gets the warm coils.
+
+The trick relies on a special fluid called a refrigerant, which boils at very low temperatures. Some refrigerants boil well below -30°C. The cycle runs in four steps:
+
+1. **Absorbing heat outside.** The refrigerant enters the outdoor unit very cold, colder than the outside air. A fan blows outdoor air across a coil full of it. Because the refrigerant is colder than the air, heat flows into it, and the refrigerant boils into a gas. Even 0°C air is "hot" compared with refrigerant at -10°C.
+
+2. **Compressing.** An electric compressor squeezes that gas. Squeezing a gas raises its temperature sharply, the same effect that makes a bicycle pump warm as you use it. The refrigerant comes out hot, often 50°C or more.
+
+3. **Releasing heat inside.** The hot gas passes through a heat exchanger connected to your radiators or underfloor heating. It gives up its heat to the water in your heating system, cools down and turns back into a liquid.
+
+4. **Expanding.** The liquid passes through an expansion valve, which drops its pressure suddenly. That makes it very cold again, and it goes back outside to collect more heat.
+
+The cycle runs continuously, carrying heat into your home.
+
+**Why this matters for your bills**
+
+Electricity is needed only to run the compressor and fans, not to create the heat itself. Most of the heat comes free from outside. For every 1 kWh of electricity it uses, a typical heat pump delivers around 3 kWh of heat to your home over a year. This ratio is called the Seasonal Coefficient of Performance, or SCOP. A gas boiler, by contrast, gives you at most about 0.9 kWh of heat for every kWh of gas, because it can only burn fuel, never collect extra heat for free.
+
+**The honest caveats**
+
+Efficiency does fall as the outside temperature drops, because the heat has to be lifted further. On the coldest days a heat pump might manage 2 units of heat per unit of electricity rather than 3 or 4. That is still well above what any boiler can manage, and modern units keep working down to -20°C or below. In damp, near-freezing weather the outdoor coil can ice up, and the unit will briefly run a defrost cycle. That is normal.
+
+Heat pumps work best when they deliver heat at lower water temperatures, typically 35–50°C rather than the 70°C a boiler often runs at. So your radiators will feel warm rather than hot, and the system is designed to run steadily for long periods instead of in short bursts. Some homes need a few larger radiators or better insulation to stay comfortable this way. A good installer will do a room-by-room heat loss survey to check this before quoting.
+
+Whether a heat pump saves you money depends on your local electricity and gas prices. Good insulation and a proper installation shift the odds firmly in your favour.

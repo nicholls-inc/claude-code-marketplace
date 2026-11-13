@@ -1,0 +1,21 @@
+Keep Estimating. Change What You Do With the Number.
+
+Every few years the argument comes round again: estimates are always wrong, they eat engineering time, and they turn into deadlines the moment they leave the room, so teams should stop producing them. I think the diagnosis is mostly right and the prescription is wrong. Teams should keep estimating, because the people who depend on software cannot do their jobs without some answer to "when?"
+
+Start with what an estimate is for. It is rarely for the engineers. It is for the person deciding whether to build the thing at all. A feature that takes two weeks and a feature that takes six months are different business decisions, even if the code is the same kind of code. A manager who cannot tell them apart will choose between them anyway, with less information. Refusing to estimate does not remove the guess. It moves the guess to someone who knows less about the work.
+
+The same is true of everyone downstream. Sales has a customer asking about a renewal. Support needs to staff a migration. Another team is waiting on your API. They will all plan around some date, and if you do not give them one they will invent it.
+
+The best argument for abolition is that small, similar-sized tickets and a throughput count give you a forecast without anyone guessing. That works, and teams that can do it should. But it is estimation by another name. Slicing work into pieces of roughly a day or two requires judging how big each piece is. And it only works for steady streams of familiar work. It tells you little about the project nobody on the team has done before, which is the one the business most needs sized.
+
+What deserves to be abolished is the way estimates are used. Three habits do most of the damage.
+
+The first is the single number. "Six weeks" hides whether the engineer means "five to seven" or "three to twenty." Give a range, and say what would push the work to the far end of it. A wide range is useful information: it tells a manager the team does not yet understand the problem, and that a week of investigation would be worth buying before committing.
+
+The second is treating an estimate as a promise. An estimate is a forecast made with the knowledge available on the day. When the team learns the vendor's API does not do what the documentation says, the forecast should change, and nobody should have to apologise for it. Managers who punish revised estimates get padded ones, and then lose the ability to tell a padded number from an honest one.
+
+The third is false precision. Arguing for an hour over whether a ticket is three points or five is waste. Most decisions need only an order of magnitude: days, weeks, or months. Spend effort in proportion to what the decision is worth.
+
+The practice is also how a team gets better. Comparing forecast with outcome shows where the surprises come from, whether that is integration work, unclear requirements or review queues. A team that never commits to a number never finds out.
+
+Engineers are right to be angry about deadlines made from guesses. The remedy is to give better guesses and to insist they are treated as guesses.

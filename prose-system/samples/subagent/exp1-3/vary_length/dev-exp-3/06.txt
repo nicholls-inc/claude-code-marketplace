@@ -1,0 +1,81 @@
+**Secrets in Public: How Strangers Can Agree on a Code While Others Listen**
+
+Imagine you want to whisper a secret to someone across a crowded room, but the only way to talk is by shouting. Everyone hears everything. It sounds hopeless. Yet this is exactly the problem your phone solves every time it connects to your bank, and it does so without the two sides ever having met. Here is how.
+
+**The problem with sharing a key**
+
+For most of history, secret messages needed a shared secret to begin with. Picture a lock with one key. You lock the message, I unlock it, and we both need a copy of that key. If we have already met, fine: we swap keys in person. But a shop's website and a customer in another country cannot do that. Anyone watching the wire could copy the key as it passes, and then the lock is worthless.
+
+For centuries this looked unavoidable. Then, in the 1970s, a few mathematicians noticed something clever. Some jobs are easy to do in one direction and brutally hard to undo. That lopsidedness is the whole trick.
+
+**Easy one way, hard the other**
+
+Try a simple example. Multiply 7,919 by 7,907. With pencil and paper it takes a few minutes. Now go backwards: I give you 62,615,533 and ask which two prime numbers were multiplied to make it. You would be stuck trying one candidate after another. Multiplying is quick. Un-multiplying is slow, and for numbers hundreds of digits long, it is beyond the reach of every computer on Earth.
+
+Public-key cryptography is built from jobs like this. Those jobs are known as one-way problems. Each person keeps one half of the problem private and shows the other half to the world.
+
+**Paint, as a picture of the idea**
+
+Before the real maths, here is the classic picture using paint.
+
+Alice and Bob agree, openly, on a common colour: yellow. Everyone can know this. Then each privately picks a secret colour. Alice chooses red. Bob chooses blue. They never reveal these.
+
+Alice mixes her red into the yellow and sends the resulting orange mixture to Bob. Bob mixes his blue into the yellow and sends the green mixture to Alice. A spy sees yellow, orange and green go by.
+
+Now Alice adds her own secret red to the green she received. Bob adds his own secret blue to the orange he received. Both end up with the same muddy brown, because each mixture holds yellow, red and blue. The spy has the orange and the green, but separating paint is nearly impossible. Without red or blue, the spy cannot make that brown.
+
+That is the shape of the whole idea. The maths simply replaces paint with numbers, which can be mixed easily but not un-mixed.
+
+**Clock arithmetic**
+
+The number version relies on something you have already met: a clock. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. We wrap around after 12. Mathematicians call this working "modulo" 12, and we write "mod". So 15 mod 12 = 3.
+
+Our clock will not have 12 hours. We will use a clock with 23 positions, because 23 is a prime number, and primes make the trick work properly. On this clock, anything past 23 wraps round. So 25 mod 23 = 2, and 46 mod 23 = 0.
+
+We also need a starting number, which we will call the base. Let us pick 5. Both the clock size (23) and the base (5) are public. Anybody can see them, just like the yellow paint.
+
+**The exchange, step by step**
+
+Alice picks a private number: 6. She tells nobody. Bob picks his own private number: 15. He tells nobody either.
+
+Alice now calculates 5 multiplied by itself 6 times, which is 5⁶ = 15,625, and then wraps it round the 23-clock. Dividing 15,625 by 23 leaves a remainder of 8. So Alice's mixture is 8. She sends 8 openly to Bob.
+
+Bob calculates 5 multiplied by itself 15 times, then wraps it round the clock. The answer comes out as 19. He sends 19 openly to Alice.
+
+Everyone listening now knows four things: the clock (23), the base (5), Alice's 8 and Bob's 19. Nobody knows 6 or 15.
+
+Next comes the moment that matches the muddy brown. Alice takes Bob's 19 and raises it to her private power, 6. That is 19⁶, wrapped round the 23-clock, which gives 2. Bob takes Alice's 8 and raises it to his private power, 15. That is 8¹⁵, wrapped round the clock, and it also gives 2.
+
+Both of them now hold the number 2. They never sent it. It was never on the wire. They each built it themselves.
+
+**Why do they match?**
+
+The reason is a rule from school maths. Raising a power to a power multiplies the exponents. Alice's final number is (5¹⁵)⁶, and Bob's is (5⁶)¹⁵. Both equal 5 raised to the power 6 × 15, which is 5⁹⁰. The order of multiplication does not matter, so the two answers agree. The clock wrapping does not disturb this, because wrapping can be applied at any stage without changing the result.
+
+So the shared secret is 5⁹⁰ on the clock. Neither person ever had to reveal their own exponent.
+
+**Why the eavesdropper is stuck**
+
+The spy has 23, 5, 8 and 19. To find the secret, the spy needs 6 or 15. Could they work backwards from 8 to find the 6? With a clock this small, yes. Try 5¹, 5², 5³ and so on until one gives 8. That takes seconds.
+
+But real systems use a clock with more than 600 digits, and private numbers just as large. Going forwards, a computer can calculate a power on a huge clock in a fraction of a second, using clever shortcuts of repeated squaring. Going backwards, there is no known shortcut. The spy would have to try essentially every possibility, and the number of possibilities is greater than the number of atoms in the observable universe. Forwards is easy. Backwards is hopeless. That is the one-way problem at work.
+
+Notice what the spy would need: time, and a lot of it. The secret is not hidden by cleverness in the message. It is protected by the sheer amount of work required to undo it.
+
+**Locks and keys: the other half of the story**
+
+Mixing paint gives two people a shared secret. A related design gives something slightly different: a pair of keys for each person. One is the public key, which anyone may see, like a padlock left open on a counter. The other is the private key, which stays hidden, like the only key that opens that padlock.
+
+Anyone can snap the padlock shut on a message for you, but only you can open it. Strangers can therefore send you secrets without any prior meeting at all. The famous system called RSA works this way, and it uses the same multiplication trick we saw earlier: your public key is the big product, and your private key depends on knowing the two primes inside it.
+
+In practice, your computer uses these methods only briefly, to agree on a secret number. After that, both sides use that shared number as the key for a fast, ordinary lock to scramble the rest of the conversation. It is a bit like using a slow armoured van to deliver one key, then using that key to run a speedy courier service.
+
+**What this does not do**
+
+One caution. Spying is not the only threat. Someone might stand in the middle and pretend to be Bob to Alice and Alice to Bob, running two separate exchanges and reading everything. To prevent that, the system also needs a way to prove who owns a public key. That job falls to certificates, which are digital stamps of approval issued by trusted organisations. This is why your browser shows a padlock icon only when it has checked the website's identity.
+
+**The big idea**
+
+Two strangers can build a shared secret in public because some calculations are easy to do and almost impossible to reverse. Each person mixes in something private, they exchange the mixtures, and each adds their private part again. The results match, but nobody watching can reproduce it.
+
+It feels like magic. It is really just clock arithmetic, a little patience, and numbers too big to guess.

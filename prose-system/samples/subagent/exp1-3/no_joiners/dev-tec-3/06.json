@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "accba9f0fd2cd8a9f",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73763,
+    "output_tokens": 2890,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:34:37.566Z",
+  "valid": true,
+  "text": "A lithium ion cell stores energy by moving lithium ions from the cathode, usually a metal oxide, into the graphite anode. Charging forces this transfer against the natural tendency of the cell, so the charger must push current in and watch the voltage that results. Almost every commercial charger uses a two stage protocol called constant current then constant voltage.\n\nIn the first stage the charger holds current fixed, often near one times the cell capacity per hour. The cell terminal voltage rises steadily from about 3.0 volts toward 4.2 volts for a typical cobalt or nickel based chemistry. This stage delivers roughly 70 to 80 percent of the charge and is fast because the electrodes have plenty of room for lithium and the voltage gap between charger and cell is wide.\n\nThe terminal voltage is not the electrode voltage. It equals the open circuit voltage of the cell plus the current times the internal resistance, along with other polarization terms. Internal resistance comes from the electrolyte, the electrode coatings, the interface films, and the slow diffusion of ions inside solid particles. When current flows, lithium piles up at the particle surface faster than it can diffuse inward. The surface becomes more full than the core, so the measured voltage reads higher than the average state of charge would suggest.\n\nWhen terminal voltage reaches the upper limit, the charger switches to the second stage and holds voltage fixed. This limit is a hard safety boundary. Above it, the electrolyte oxidizes, lithium metal can plate onto the anode, and the cathode can degrade or release oxygen, all of which shorten life and risk thermal runaway.\n\nHere the physics explains the slowdown. With voltage clamped, the current is set by Ohm's law across the remaining gap between the clamped voltage and the rising open circuit voltage. As the cell fills, its open circuit voltage climbs toward the clamp, so the gap shrinks and the current falls. Meanwhile diffusion gradients inside the particles relax, so the surface concentration drops back toward the core value. The current decays roughly exponentially, much like a capacitor charging through a resistor, though the diffusion makes the tail longer than a single time constant would suggest.\n\nThe charger ends the process when current drops to a cutoff, commonly five percent of the initial rate. Chasing the last few percent would take hours for little extra energy and would keep the cell at high voltage, which accelerates aging.\n\nEngineers accept the slowdown as the price of safety and longevity. Fast charging designs push the transition point later by using lower resistance electrodes, controlled warm temperatures, and tuned current profiles that taper before the hard limit is reached."
+}

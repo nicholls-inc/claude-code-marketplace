@@ -1,0 +1,31 @@
+How a Heat Pump Heats Your Home When It's Cold Outside
+
+If you're thinking about replacing a gas boiler, the obvious objection to a heat pump goes like this: on a freezing January morning there doesn't seem to be any heat outside to collect. How can a machine pull warmth out of air at minus five and use it to heat a living room to twenty?
+
+The answer is that "cold" air still holds a lot of heat. Heat only stops existing at absolute zero, which is minus 273°C. Compared with that, air at minus five is quite warm. The difficulty is that the heat is spread thinly and sits at a low temperature. A heat pump doesn't make heat. It gathers this low-grade heat and concentrates it into a smaller amount of heat at a useful temperature. Your fridge does the same job in reverse. It takes heat out of the food compartment and releases it through the coils at the back, which is why they feel warm.
+
+The work is done by a refrigerant, a fluid that boils at a very low temperature, and the cycle has four steps.
+
+1. **Collecting heat outdoors.** Liquid refrigerant flows through the outdoor unit's coil at low pressure. At that pressure it boils at around minus 25°C or lower. Heat always moves from warmer to colder, so air at minus five is still warmer than the refrigerant. The fan pushes air across the coil, heat moves into the refrigerant, and the refrigerant boils into a gas. The air leaving the unit is a few degrees colder than the air that went in.
+
+2. **Compressing.** An electric compressor squeezes that gas. Compressing a gas raises its temperature, the same reason a bicycle pump gets warm when you use it. The refrigerant leaves the compressor at roughly 50 to 70°C.
+
+3. **Releasing heat indoors.** The hot gas passes through a heat exchanger that warms the water going to your radiators or underfloor heating. As it gives up its heat, the refrigerant condenses back into a liquid.
+
+4. **Expanding.** The liquid goes through an expansion valve, which drops its pressure and makes it very cold again. Then the cycle repeats.
+
+The electricity runs the compressor and fans. It doesn't heat anything directly, which is why a heat pump is efficient. A typical unit delivers about 3 kWh of heat for every 1 kWh of electricity over a year. This ratio is called the coefficient of performance (COP), and averaged over a year it's the seasonal COP (SCOP). A gas boiler at best turns 1 kWh of gas into about 0.9 kWh of heat.
+
+**What this means for your decision**
+
+*Efficiency drops as it gets colder.* The larger the gap between outdoor and indoor temperatures, the harder the compressor works. A COP of 4 on a mild day can fall to around 2 at minus 10°C. Even then you get twice as much heat as the electricity you pay for. Modern units are rated to run at minus 15 to minus 25°C, and they're common in Scandinavia.
+
+*It works at lower water temperatures.* A boiler usually sends water to the radiators at 60 to 80°C. A heat pump is most efficient at about 35 to 50°C. So it runs for longer, gently, rather than in short hot bursts. Rooms stay evenly warm, but the radiators feel less hot to the touch. Some rooms may need larger radiators to get enough heat at these temperatures.
+
+*Insulation and sizing matter.* A proper room-by-room heat-loss calculation is essential. An undersized or badly designed system is the main cause of disappointing results. Loft and wall insulation can cut the size, and the cost, of the unit you need.
+
+*Defrosting is normal.* In damp, near-freezing weather, frost forms on the outdoor coil. The unit reverses for a few minutes to melt it, and you may see steam. This is expected, not a fault.
+
+*Running costs depend on prices.* Whether a heat pump is cheaper to run than gas mostly comes down to how your electricity price compares with your gas price. If electricity costs less than about three times as much as gas per kWh, a well-installed heat pump will usually cost the same or less to run. Heat-pump tariffs and solar panels can improve this. Ask installers for a running-cost estimate based on your current tariffs and annual gas use.
+
+In short, outdoor air is never too cold to contain heat. A heat pump's job is to move that heat indoors, and it does this efficiently even in winter, provided the system is designed for your house.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a446a87c0375ac4c7",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28203,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 976,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:05:03.951Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). A charger, which is essentially a controlled power supply, first forces a fixed current into the cell. During this phase the cell's terminal voltage rises steadily as lithium ions are pulled out of the cathode, for example a layered metal oxide, carried through the electrolyte, and inserted (intercalated) between the graphene layers of the graphite anode. For a typical cell this means a voltage climbing from roughly 3.0 V to the upper limit of 4.2 V. The charger watches the voltage, and when it reaches that limit it stops regulating current and instead holds the voltage constant. This second stage is the constant-voltage phase, and it is where the slowdown happens.\n\nThe slowdown follows from the cell's electrical structure. You can model the cell as an open-circuit voltage source, which depends on how much lithium sits in each electrode, in series with an internal resistance. That resistance lumps together ohmic losses in the electrolyte and current collectors, charge-transfer kinetics at the electrode surfaces, and solid-state diffusion of lithium inside the particles. The terminal voltage during charging is the open-circuit voltage plus the current times the internal resistance. Once the terminal voltage is clamped at 4.2 V, any further rise in the open-circuit voltage as the cell fills leaves less headroom across the resistance. By Ohm's law the current must therefore fall, and it decays roughly exponentially, much like a capacitor charging through a resistor. The charge is considered complete when the current tapers to a small cutoff, commonly around 5 to 10 percent of the initial rate.\n\nThe clamp exists because pushing the terminal voltage higher would cause damage. Beyond about 4.2 V, electrolyte oxidises at the cathode and the cathode structure degrades. Worse, if the anode surface potential falls too close to that of lithium metal, lithium plates out as metallic deposits instead of intercalating, which cuts capacity and can form dendrites that short the cell. Pushing current at a nearly full cell raises the risk of plating, because the graphite surface is already crowded with lithium and ions pile up faster than they can diffuse inward. Diffusion inside solid particles is slow, so a concentration gradient builds from surface to core, and the surface reaches its limit before the interior does. Tapering the current lets that gradient relax.\n\nThe practical consequence is that the first stage restores perhaps 70 to 80 percent of capacity in well under an hour, while the final fraction takes a comparable time or longer. Fast-charging systems manage this tradeoff by raising current early, when the electrodes are empty and tolerant, and by limiting temperature, since both resistance and degradation rates vary strongly with heat."
+}

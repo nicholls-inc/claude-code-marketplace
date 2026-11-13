@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae463b4e5ee61a957",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73763,
+    "output_tokens": 2856,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:33:45.955Z",
+  "valid": true,
+  "text": "A lithium ion cell stores energy by moving lithium ions between two electrodes. During charging, ions leave the cathode, which is typically a lithium metal oxide, cross a liquid electrolyte, and insert themselves between the layers of graphite in the anode. Electrons take the external route through the charger. Cell voltage rises as the anode fills with lithium and the cathode empties.\n\nChargers follow a two stage method called constant current then constant voltage. In the first stage the charger forces a fixed current, usually set relative to capacity, so that a rate of one C would fill the cell in about an hour. The terminal voltage climbs steadily. Once it reaches the upper limit, commonly 4.2 volts for a typical cell, the charger holds the voltage there. Current is no longer imposed. The cell decides how much it will accept, and that amount falls over time. The process ends when the current drops to a small cutoff, often a few percent of the rated capacity.\n\nThe voltage ceiling exists because higher potentials damage the cell. The electrolyte oxidizes at the cathode surface, the cathode structure degrades, and at the anode lithium can plate as metal instead of entering the graphite. Plated lithium is a fire risk and permanently removes capacity. The limit is therefore a hard safety boundary, and the charger must respect it even when the cell is not yet full.\n\nCurrent tapers because of what the terminal voltage contains. It equals the open circuit voltage plus the current multiplied by the internal resistance. Open circuit voltage reflects how full the electrodes are. Early on, the resistive term can be large while the total stays under the limit, so the charger pushes at full rate. As the cell fills, open circuit voltage approaches the ceiling and leaves less headroom for the resistive term. With the terminal voltage clamped, the only way to balance the equation is for current to fall. Engineers will recognize the behavior of a capacitor charging through a resistor, where current decays roughly exponentially.\n\nDiffusion adds a second effect. Lithium must migrate into the graphite particles, and near full the surface sites are crowded while the interior is still catching up. Concentration gradients inside each particle relax slowly, which keeps the effective resistance high and stretches the taper.\n\nThe practical consequence is that the last portion of capacity takes disproportionately long. Fast charging systems often stop early or manage temperature closely, accepting a tradeoff between speed and cell lifetime."
+}

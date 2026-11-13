@@ -1,0 +1,35 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a80a8888a5f18eefc",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Bash",
+    "Bash",
+    "Bash"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 8,
+    "cache_creation_input_tokens": 44923,
+    "cache_read_input_tokens": 293918,
+    "output_tokens": 8776,
+    "api_messages": 4
+  },
+  "timestamp_utc": "2026-11-11T22:27:45.570Z",
+  "valid": true,
+  "text": "In the last days of August 1854, cholera struck Soho, a crowded district of London where tanners, brewers, tailors and street sellers lived in tenements pressed hard against one another, and within a week or so hundreds of people around Broad Street were dead or dying. Those who caught the disease were seized by violent vomiting and diarrhoea that drained the water from their bodies, so that their skin turned blue and wrinkled and their eyes sank, and a person who had been well at breakfast could be dead by the following morning. Most doctors and officials believed that such epidemics were caused by miasma, a poisonous bad air that rose from rotting waste and marshy ground, and the remedy that followed from this belief was to clear away smells and ventilate buildings.\n\nDr John Snow, who practised from Sackville Street a few minutes' walk away, had been developing a different opinion for years. He was a quiet, teetotal bachelor from a working family in York, celebrated for working out how to give anaesthetic gases in careful measured doses, and the same habit of measurement shaped his approach to cholera. In 1849 he had published a pamphlet arguing that the disease entered the body through the mouth, that it multiplied in the gut because the first symptoms appeared there and not in the lungs as a poison breathed in would suggest, and that it left the body in the waste of the sick, from which it could seep into drinking water and reach the next victims. Few found this convincing, even though he had gathered striking evidence in south London, where houses on the same streets were supplied by two competing water companies, one drawing its water from the Thames below the city's sewage and the other from a cleaner stretch upstream, and where deaths clustered among customers of the first.\n\nWhen the outbreak began on his own doorstep, Snow obtained the list of the dead from the registrar and went from door to door asking families what the victims had drunk, and he soon found that nearly all of them had lived close to the public pump on Broad Street and had taken their water from it. A microscope showed him nothing conclusive, so he turned to the pattern of the deaths, marking each on a map and seeing them gather around the pump like iron filings around a magnet. What made his case stronger was his attention to the cases that seemed not to fit, because an exception is where a theory either breaks or proves its worth. The workers at the Lion Brewery on Broad Street, who had their own well and were allowed beer, were almost untouched, the workhouse on Poland Street with its own supply and more than five hundred inmates lost only five, and a widow in Hampstead, miles from Soho, died after a cart brought her a bottle of water from the Broad Street pump each day because she liked its taste, and a niece who drank some of it died as well. Several people who lived nearer to other pumps had also died, and when Snow asked about them he learned that they, or their children on the way to school, had been drinking from the Broad Street pump.\n\nOn 7 September Snow presented what he had found to the Board of Guardians of St James's parish, and the next day the board had the handle taken off the pump so that nobody could draw water from it. The popular version of the story ends there, with one decisive act that stopped an epidemic, but deaths had already been falling for several days as frightened residents fled the district, and Snow himself acknowledged that removing the handle could not be shown to have caused the decline.\n\nThe missing link came from an unlikely colleague, the Reverend Henry Whitehead, a young curate who knew the neighbourhood and its families well and who began by doubting Snow's theory, then set out to disprove it and ended up supporting it. Whitehead traced the first case to a baby girl at 40 Broad Street who had fallen ill on 28 August and died on 2 September, and he learned that her mother had washed the child's soiled nappies and poured the water into a cesspool, a pit for household waste, a few feet from the well that fed the pump, and when the cesspool was examined its brickwork proved decayed, so that the path by which sickness reached the water was plain.\n\nThe authorities were not moved, and a committee of the General Board of Health concluded that there was no sufficient proof, after which the handle was put back on the pump. Snow set out his evidence and his map in a second edition of his book in 1855 and died in 1858 at forty-five after a stroke. Only in the following decades, as the bacterium that causes the disease was identified and as cities built sewers and supplied clean water that brought the epidemics to an end, did his reasoning come to be recognised as the beginning of modern epidemiology, the study of how disease moves through populations."
+}

@@ -1,0 +1,65 @@
+How Strangers Agree on a Secret in Public
+
+The puzzle
+
+Imagine you and a stranger want to share a secret code, but every message you send passes through a room full of people who can read it. Nothing is private. Yet by the end of the conversation, you and the stranger both know a number that nobody else in the room can work out. This sounds impossible, and for thousands of years it was assumed to be. Then, in the 1970s, researchers showed it can be done. The idea is called public-key cryptography, and it protects almost everything you do online, from banking to messaging.
+
+The trick rests on one idea: some jobs are easy to do but extremely hard to undo. Once you see that, the rest follows.
+
+The paint analogy
+
+Start with colours instead of numbers. Suppose you and a stranger, Alice and Bob, agree out loud on a shared starting colour, say yellow. Everyone in the room hears this. It is public.
+
+Each of you then secretly picks a private colour and mixes it with the yellow. Alice picks red and ends up with orange. Bob picks blue and ends up with green. You swap the mixed pots across the room, so everyone sees orange and green. But nobody can unmix paint to find the secret colour inside.
+
+Now Alice adds her private red to Bob's green pot. Bob adds his private blue to Alice's orange pot. Both pots contain yellow, red and blue, so both end up the same muddy brown. The watchers have only the yellow, the orange and the green. To make the brown they would need either red or blue, and those never left the owners' hands.
+
+Mixing paint is easy. Separating a mixture back into its ingredients is practically impossible. That gap is what makes the scheme work. Real cryptography needs a mathematical version of paint mixing, and school maths provides one.
+
+Clock arithmetic
+
+You already know a kind of arithmetic that wraps around: reading a clock. Four hours after 10 o'clock is 2 o'clock, not 14. We throw away full laps of the clock and keep the remainder. Mathematicians call this "mod". So 14 mod 12 equals 2.
+
+We will use a clock with 23 positions instead of 12. Then 30 mod 23 equals 7, because 30 is one full lap of 23 plus 7 left over.
+
+Next, recall powers. 5 to the power 3 means 5 times 5 times 5, which is 125. In clock arithmetic with 23 positions, we calculate the power and then keep only the remainder after full laps.
+
+Here is the key fact. If I give you a number like 5 and a power like 6, you can work out the result on the 23 clock quickly. But if I only give you the result and ask "what power of 5 produced this?", you have no shortcut. Because the clock wraps around, the answers jump about with no pattern. You would have to try the powers one by one. With a tiny clock of 23, that takes seconds. With a clock of several hundred digits, even the world's fastest computers working for longer than the age of the universe would not finish. Easy one way, hopeless the other. That is our paint mixing.
+
+The exchange, step by step
+
+Here is the full procedure with small numbers so you can check every step yourself.
+
+Step 1, public agreement. Alice and Bob announce two numbers to the whole room: the clock size 23, and a base number 5. These are like the yellow paint. Everyone can know them.
+
+Step 2, private choices. Alice secretly picks the number 6. Bob secretly picks 15. These are the red and the blue. They never get spoken aloud or sent anywhere.
+
+Step 3, mixing. Alice calculates 5 to the power 6 on the 23 clock. Working it out, 5 times 5 is 25, which is 2 on our clock. So 5 to the power 6 is 2 times 2 times 2, which is 8. Alice announces 8. Bob calculates 5 to the power 15 on the same clock and gets 19. Bob announces 19. These are the orange and green pots, and everyone in the room hears them.
+
+Step 4, the second mix. Alice takes Bob's announced number, 19, and raises it to her private power 6, still on the 23 clock. The result is 2. Bob takes Alice's announced number, 8, and raises it to his private power 15. The result is also 2.
+
+Both of them now hold the number 2, and neither ever said it aloud.
+
+Why they get the same answer
+
+This is not luck. Alice's final calculation amounts to 5 raised to the power (15 times 6). Bob's amounts to 5 raised to the power (6 times 15). Multiplication does not care about order, so 6 times 15 and 15 times 6 are both 90. Both of them have effectively computed 5 to the power 90 on the 23 clock, by two different routes, and each route used only one private number. That is the whole mathematical heart of it.
+
+Why the listener is stuck
+
+An eavesdropper, Eve, knows the clock size 23, the base 5, and the two announced numbers 8 and 19. To get the secret she needs either Alice's 6 or Bob's 15. Finding Alice's 6 means asking "5 to what power gives 8 on this clock?" That is the hard-to-undo problem. With a clock of 23 positions, Eve can just try powers one at a time and will succeed quickly, so this toy example is not secure. Real systems use clock sizes with hundreds of digits, where trying powers one by one is out of the question. Alice and Bob's own calculations stay fast, because computers can raise numbers to huge powers by repeated squaring, which needs only a few hundred steps.
+
+So why is it called public-key?
+
+The numbers 8 and 19 behave like a public key: something you can hand to anybody. The numbers 6 and 15 behave like private keys, which stay with their owners. A public key lets other people do something to your benefit, here, create a shared secret with you, without giving them the power to do what only you can do.
+
+Many modern systems use a close cousin of this idea for sending messages. You publish a number that anyone can use to lock a message, but only your private number can unlock it. Think of an open padlock. You can post thousands of open padlocks around the world. Anyone can snap one shut around a box for you, and nobody but you holds the key that opens it. The maths behind it differs, using the difficulty of splitting a huge number into its prime factors, but the principle is the same: easy in one direction, impractical in the other.
+
+What happens in real life
+
+When your phone connects to a website with the little padlock in the address bar, a version of this exchange takes place in a fraction of a second. Your device and the website each make private numbers, swap public ones, and end up with a shared secret. They then use that secret as the key for a faster, simpler scrambling method to protect everything else you send. Public-key maths is relatively slow, so it is used to agree the secret, and the faster method does the heavy lifting afterwards.
+
+One caution. The exchange above stops an eavesdropper who only listens. It does not by itself prove who you are talking to. If someone pretended to be Bob, Alice would happily agree a secret with the impostor. Real systems add certificates, which are like identity cards vouched for by trusted organisations, to deal with that.
+
+The big idea
+
+Strangers can build trust over an open line because some operations are one-way streets in practice. Mixing is easy and unmixing is not. By each keeping one ingredient private and sharing only the mixture, two people can arrive at the same final result while everyone watching is left with ingredients that cannot be separated. Remarkably, all it takes is the kind of arithmetic you meet at school, wrapped around a clock face and pushed to very large numbers.

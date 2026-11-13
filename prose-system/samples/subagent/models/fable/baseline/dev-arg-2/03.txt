@@ -1,0 +1,23 @@
+Keep Estimating. Fix What You Do With the Numbers.
+
+Every few years the argument comes back: estimates are always wrong, they eat hours of meetings, and they get turned into deadlines nobody agreed to. So stop producing them. Just work on the most valuable thing, ship it in small pieces, and let the delivery record speak.
+
+I understand the appeal, and I think it is the wrong conclusion. Teams should keep estimating, because the alternative is not a world without estimates. It is a world where someone else makes them for you.
+
+A business cannot run without guesses about time. Sales needs to know whether to promise the integration this quarter. Finance needs to know whether the project costs two engineers or six. A product manager choosing between two features is choosing on value per unit of effort, and the effort half of that ratio is an estimate whether anyone writes it down or not. When engineers refuse to supply the number, it does not disappear. It gets invented by the person with the least information, usually in a meeting the engineers were not in.
+
+Estimating also does work that has nothing to do with the number. When one engineer says a task is two days and another says two weeks, they are not disagreeing about arithmetic. One of them knows about the legacy auth path, or the other has assumed a migration nobody else thought was in scope. That gap is the cheapest moment you will ever get to discover a misunderstanding. Skip the conversation and you find it in week three instead.
+
+The real complaints about estimation are complaints about misuse, and they have specific fixes.
+
+First, estimates get treated as commitments. An estimate is a forecast and a commitment is a promise, and a manager who collapses the two teaches the team to pad everything. Give ranges instead of single dates: "three to six weeks, most likely four" tells the truth about uncertainty in a way "four weeks" cannot. If someone needs a promise, negotiate that separately, with scope as the variable.
+
+Second, estimates are made once and never revisited. A forecast from before the work started is the worst one you will ever have. Update it as you learn, and say out loud when it moves and why. A date that slips by a week in week two is a planning input. The same slip announced the day before launch is a failure of trust.
+
+Third, teams estimate at the wrong precision. Arguing over whether a ticket is three points or five is waste. For most tickets, "small enough to finish this week" or "not" is all the resolution anyone needs. Save the careful thinking for the big, expensive decisions where being off by a factor of two changes what you would choose to build.
+
+Finally, nobody checks. Few teams compare what they predicted against what happened, so they never get better. Ten minutes a month looking at the largest misses will improve your forecasts more than any technique.
+
+The no-estimates camp is right that small batches and steady delivery matter. A team that ships weekly has a track record, and a track record is the best basis for a forecast there is. That is an argument for estimating better.
+
+Forecasting is part of the job. Do it roughly, honestly, and often.

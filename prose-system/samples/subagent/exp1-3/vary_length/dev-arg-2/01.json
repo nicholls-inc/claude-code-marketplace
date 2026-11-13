@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a4fa5d245a5413496",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28198,
+    "cache_read_input_tokens": 44269,
+    "output_tokens": 992,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:39:31.284Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this scene. A manager asks how long a feature will take. You say \"three weeks, maybe four.\" That number gets written into a slide, repeated in a planning meeting, and promoted to a promise. Five weeks later, you are explaining a failure that was really a guess.\n\nSoftware teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because they are wrong in a way that cannot be fixed with more discipline.\n\nConsider what an estimate actually is. It is a prediction about work that has never been done, in a codebase whose quirks you have not yet met, depending on people who may be pulled onto an incident tomorrow. The unknowns are the job itself. If we knew exactly how to build the thing, we would have built it already, or copied it. Estimation asks us to price the part we understand least.\n\nThe research backs the experience. Studies of large IT projects keep finding overruns that are not random noise but systematic bias. Planning fallacy, optimism, and anchoring do the damage. Training does not remove them. Hours spent in planning poker produce a number that feels rigorous and predicts little.\n\nThen there is the cost of the ritual. Teams burn days a quarter sizing tickets, debating whether something is a five or an eight. That time buys false precision. Worse, the number changes behavior. Engineers pad. Managers shave. Everyone quietly learns that the estimate is a negotiation, not information.\n\nWorst of all, estimates turn into deadlines, and deadlines trade quality for speed. Tests get skipped. Shortcuts become permanent. The team \"hit the date\" and spent the next quarter paying for it.\n\nI know the objection. Businesses need to plan. Sales needs dates. Finance needs forecasts. Fair. But notice that this need is real and the estimate is a poor tool for meeting it.\n\nSo what should replace it? Slice work until each piece is small, a day or two at most. Then measure what actually happens. Count how many items the team finishes per week. Look at the cycle time from start to done. With a few months of data, you can say something honest: at this pace, a backlog of forty small items lands in roughly eight weeks, give or take. That forecast comes from evidence, not from anyone's mood on Tuesday.\n\nThis also changes the conversation with managers. Instead of \"when will it be done?\", the question becomes \"what is the most valuable thing we can ship this week, and what should we cut?\" Scope becomes the lever, which is where it should have been all along. Dates stay fixed. Features flex.\n\nSome work resists slicing, and a rough order of magnitude, days versus months, is still worth saying aloud. That is a sanity check, not a commitment.\n\nStop asking engineers to predict the unpredictable. Ask them to ship small, show progress, and let the data speak. Trust gets built by delivering, not by guessing right."
+}

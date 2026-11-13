@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7ebbeb696bb04c6a",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d015.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/05.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37319,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 1530,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:23:36.359Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, at least in the way most of them do it now, and I say so not because planning is pointless but because the thing we call estimating has quietly turned into a ritual that costs real time, produces numbers nobody trusts, and distracts from the decisions that actually matter.\n\nStart with the evidence from your own team by pulling up the last ten tickets that were pointed or sized in planning and comparing the guess with what happened. If your experience is like most, the correlation is weak, and the misses are not random. The work that blows up is exactly the work that nobody could have sized in advance, because the surprise is the point: the legacy module that turns out to have no tests, the API that behaves differently in production, the requirement that changes once someone sees a demo. Estimation is most confident where it matters least and most wrong where it matters most.\n\nThen count the cost, because planning poker, refinement meetings and re-estimation after scope shifts consume hours from your most expensive people every week. That time buys a number, and the number does not stay what it is. The moment an estimate leaves the team it hardens into a promise: a rough guess made on a Tuesday becomes a deadline in a slide deck on Friday, and when reality disagrees, engineers pay with overtime, cut corners, or a quiet loss of trust in management. People respond to this sensibly by padding, which makes the numbers even less informative, and the cycle continues.\n\nManagers will object that they need predictability, and they do, though predictability does not require per-task estimates. It requires knowing how fast the team actually delivers, and that can be measured directly. Break work into small pieces, make them roughly the same order of size, and count how many finish each week. That throughput is a far more honest forecast than any sum of guesses, because it includes all the interruptions, rework and sick days that individual estimates leave out. If you need to say when something will probably be done, you can give a range based on history, and you will be right far more often than the team that added up story points.\n\nThe deeper benefit is what you do instead. Rather than asking how long a big idea will take, ask how small you can make it and what you would learn by shipping the first slice. Rather than negotiating a date, negotiate scope: here is what we can deliver in the time you have, and here is what falls off if something goes wrong. That conversation is harder than quoting a number, which is precisely why it is better, since it forces product and engineering to share the real tradeoff instead of hiding it behind false precision.\n\nThere are exceptions: if a contract, a regulatory deadline or a hardware launch fixes a date, you do need a rough sense of whether the work fits, and a coarse, top-down judgment from experienced people will do. But that is a single conversation about a single large effort, not a weekly ceremony applied to every ticket.\n\nSo try an experiment for a quarter in which you drop the pointing, slice work small, track what finishes, and forecast from the data, then watch whether anyone misses the old numbers. I suspect your engineers will have gained back hours, your managers will have gained a more truthful forecast, and the argument about who promised what will quietly disappear."
+}

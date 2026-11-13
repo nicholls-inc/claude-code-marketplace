@@ -1,0 +1,15 @@
+Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV), and the slowdown near full charge comes directly from that structure.
+
+In the first stage, the charger forces a fixed current, commonly around 0.5 to 1 C (a current that would fill the cell in one to two hours). The cell voltage rises gradually as the cell fills. Physically, lithium ions leave the cathode (for example a nickel-manganese-cobalt oxide), travel through the electrolyte, and insert, or intercalate, into the graphite anode. The cell's open-circuit voltage depends on how full the electrodes are, so it climbs from roughly 3.0 V to 4.2 V as the state of charge rises.
+
+The measured terminal voltage is not just the open-circuit voltage. It also includes overpotentials: V = OCV + I x R, where R lumps together ohmic resistance, charge-transfer resistance at the particle surfaces, and the voltage penalty of ion concentration gradients. Charging at constant current therefore pushes the terminal voltage above the true equilibrium value. When the terminal voltage reaches the upper limit (about 4.2 V for a typical cell), the charger stops forcing current and switches modes.
+
+In the second stage, the charger holds the voltage at that limit and lets the current fall on its own. This limit exists for safety and lifespan. Above it, electrolyte oxidizes at the cathode, lithium can plate as metal on the anode, and the cathode structure degrades. The voltage cannot simply be raised to keep the current high.
+
+The current has to fall because of what holding the voltage means. The terminal voltage is fixed, but the open-circuit voltage keeps rising as the electrodes fill. The gap between them, which is the voltage available to drive current across the internal resistance, shrinks. By Ohm's law the current must shrink with it. In engineering terms, the cell behaves like a capacitor charging through a resistor, so the current decays roughly exponentially.
+
+Diffusion makes this worse. Lithium moves through the solid particles slowly. Near full charge, the particle surfaces are saturated while the interiors are not. Surface concentration sets the voltage, so the surface hits its limit before the bulk catches up. The cell must wait for lithium to diffuse inward, and that sets the pace.
+
+Charging ends when the current falls to a cutoff, typically 0.05 C. This tail can take 30 to 60 minutes and delivers the last 10 to 20 percent of capacity. This is why fast-charging systems quote the time to reach 80 percent, not 100.
+
+Temperature matters too. Cold cells have higher resistance and slower diffusion, so the charger must limit current to avoid plating.

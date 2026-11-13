@@ -1,0 +1,13 @@
+Every so often, the world's clocks have paused for a single extra second. It is called a leap second, and it exists because two ways of measuring time do not quite agree.
+
+The first way is astronomical. A day is the time Earth takes to spin once, and for most of history that was how we kept time. The second way is atomic. Since the 1960s the second has been defined by the vibrations of caesium atoms, which tick with astonishing regularity. Earth is a much less reliable timekeeper. Tides drag against the oceans and slow the planet's spin by a tiny amount, while earthquakes, shifting ice and movements deep inside the planet nudge it in both directions.
+
+The official world time, known as Coordinated Universal Time, follows the atomic clocks. To stop it drifting away from the sky, the international authorities began adding a leap second whenever the gap grew too large. Since 1972 this has happened 27 times, always at the end of June or December, and the most recent was on the last day of 2016. On those days a clock would read 23 hours, 59 minutes and 60 seconds before moving on to the new year.
+
+That sounds harmless, but computers hate it. Most software assumes every minute has exactly 60 seconds. When an extra one appears, systems can freeze, repeat tasks or record events in the wrong order. A leap second in 2012 knocked out websites and airline booking systems. Big technology companies now spend considerable effort inventing workarounds, such as smearing the extra second across a whole day, and each company does it differently. That inconsistency creates its own risk.
+
+There is also a new problem. In recent years Earth has started spinning slightly faster, which could one day call for a negative leap second, where a second is removed rather than added. That has never been tried, and engineers fear it would cause even more trouble than an extra one.
+
+For these reasons, the international body that sets measurement standards voted in 2022 to stop adding leap seconds by 2035. Time will keep following the atomic clocks, and the small gap with the planet's rotation will be allowed to grow. It is expected to reach about a minute, which will take decades to a century. Experts will then decide on a fix, perhaps a larger correction made far less often.
+
+For ordinary people nothing will change. Sunrise will not noticeably move. The decision simply accepts that the machines we depend on matter more than perfect agreement with a wobbling planet.

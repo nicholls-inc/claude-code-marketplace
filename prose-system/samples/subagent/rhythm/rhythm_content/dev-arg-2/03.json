@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a688e44467833bd53",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28239,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 985,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:39:53.433Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating the estimate as something a plan can stand on. The case against estimation is not that engineers are bad at it, though they are, in the way everyone is bad at predicting the duration of work whose hardest part is discovering what the work is. The case is that the estimate, once spoken aloud in a meeting with a manager nodding, stops being a forecast and becomes a promise, and from then on every discovery that should have changed the plan becomes instead a failure to be explained. Anyone who has watched a team spend the last week of a quarter shaving scope and skipping tests to land a number they guessed at in January has seen what the number actually bought.\n\nThe usual defence is that the business needs dates, and the business does need dates, since a launch has marketing behind it and a contract has a clause. But notice that the date in those cases comes from somewhere other than the estimate: it comes from a customer, a conference, a fiscal year. The honest conversation is about what can be delivered by that date, and that conversation is better served by slicing work into pieces small enough to finish in a day or two, shipping them in order of value, and showing the manager what has actually landed. A team that deploys something real every few days gives its manager far better information than a team that gives a confident figure in story points and then goes quiet for six weeks.\n\nEstimates also carry a cost that rarely appears on any ledger, which is the time spent producing them. Planning poker, refinement sessions, re-estimation after the requirements shift, and the retrospectives that ask why the estimates were wrong add up to a meaningful share of a team's week, and the output is a set of numbers that research on the planning fallacy has shown for decades to run optimistic by a large margin and to improve little with practice. Spending that time instead on cutting the work smaller, or on building the thing, would be a better trade even if estimates were free of other harm.\n\nThere is a fair objection that some estimation is unavoidable, because a team deciding between two projects has to compare their rough size. Agreed, and a coarse sort into days, weeks, and months, or a simple count of how many similar items the team finishes per week, answers that question without pretending to precision. Throughput measured from what the team has really done is a forecast of a different kind from a guess about work not yet understood, since it is built on evidence and carries its own error bars. Managers who want to know when something will be done can be given a range drawn from that history, with the plain statement that the range will tighten as the work progresses.\n\nWhat teams should drop is the ritual of attaching a figure to each ticket in advance and then judging people against it. Drop it, replace it with small batches, visible progress, and ranges derived from real delivery history, and the surprising result in most teams that try this is that managers get fewer unpleasant surprises, not more, because bad news arrives in days instead of at the deadline. Trust follows from that, and trust is the thing the estimate was always meant to supply and never did."
+}

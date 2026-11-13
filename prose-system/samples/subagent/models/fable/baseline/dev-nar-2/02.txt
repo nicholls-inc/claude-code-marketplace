@@ -1,0 +1,37 @@
+Apollo 13: The Long Way Home
+
+Apollo 13 left the Kennedy Space Center on April 11, 1970, bound for the hills of Fra Mauro on the Moon. It was to be the third lunar landing, and the public had already begun to treat such flights as routine. The commander was Jim Lovell, a veteran of three spaceflights. With him were Fred Haise, who would fly the lunar module, and Jack Swigert, the command module pilot, who had joined the crew only days before launch after the original pilot, Ken Mattingly, was exposed to German measles.
+
+For two days the flight went smoothly. On the evening of April 13, the crew gave a television tour of their spacecraft, which the major American networks did not bother to carry live. The ship was really two vehicles docked nose to nose. The command module, Odyssey, was the cone-shaped cabin that would carry the men home, and it was attached to a cylindrical service module holding its engine, oxygen, and power supply. The lunar module, Aquarius, was the spidery lander meant to take two of them to the surface.
+
+Minutes after the broadcast ended, Mission Control in Houston asked Swigert to do a routine chore: switch on the fans that stirred the tanks of super-cold liquid oxygen in the service module. He flipped the switches. Seconds later, about 200,000 miles from Earth, a loud bang shook the spacecraft.
+
+Warning lights came on across the instrument panel. "Okay, Houston, we've had a problem here," Swigert radioed. Asked to repeat, Lovell said it again: "Houston, we've had a problem."
+
+At first, controllers suspected faulty instruments, because so many readings had gone wrong at once. Then Lovell looked out a window and saw a cloud of gas streaming into space. It was oxygen. One of the service module's two oxygen tanks had burst, and the other was leaking. That oxygen was not only the air the crew breathed. It also fed the fuel cells that made Odyssey's electricity and water. Two of the three fuel cells were already dead, and the third was failing as the remaining tank drained.
+
+Within about an hour it was clear that the landing was lost and the command module was dying. The only refuge was Aquarius, which had its own oxygen, batteries, and engine. Under flight director Gene Kranz, and then Glynn Lunney's relief team, Houston talked the crew through powering up the lander far faster than any checklist intended. Swigert shut Odyssey down completely, to save its small re-entry batteries for the final hours of the flight. Its guidance settings were copied into the lander's computer by hand, with Houston checking Lovell's arithmetic.
+
+Aquarius had been built to keep two men alive for about two days on the Moon. Now it would have to keep three alive for about four days, and steer the whole crippled spacecraft besides.
+
+Nobody trusted the service module's main engine after the explosion, so turning straight around was ruled out. The crew would instead continue to the Moon and let its gravity swing them back toward Earth. A short burn of the lander's descent engine put them on a path that would return them home. On April 14 they passed behind the Moon, some 250,000 miles from Earth, farther than any humans had travelled. Swigert and Haise, who had never been there, photographed the surface. Lovell, who had orbited the Moon on Apollo 8, had to accept that he would never walk on it.
+
+Two hours after they rounded the Moon, a second and longer burn sped them up, cutting about ten hours from the journey and aiming them at the Pacific Ocean, where recovery ships could wait.
+
+Then came the hard part, which was to wait while using almost nothing. To stretch the lander's batteries, the crew switched off nearly everything, including the computer and the heaters. The temperature in the cabin fell to a few degrees above freezing. Moisture condensed on the walls and instrument panels. The men slept badly, in snatches, and had little to wear but their thin flight suits. Water was needed to cool the lander's electronics, so each man drank only about six ounces a day, a fraction of what he needed. They became dehydrated, and Haise developed a kidney infection and a fever.
+
+A more immediate danger was their own breath. The lander's chemical canisters, which scrubbed carbon dioxide from the air, were being overwhelmed by three men. Odyssey had plenty of spare canisters, but they were square, and the sockets in Aquarius were round. In Houston, a team led by engineer Ed Smylie gathered only the items known to be on board and built an adapter from plastic bags, a cardboard cover from the flight plan, a spacesuit hose, and grey duct tape. They read the instructions up to the crew, step by step. The astronauts assembled the device, which they called the mailbox, and the carbon dioxide level, which had been climbing toward dangerous levels, fell almost at once.
+
+The spacecraft was also drifting slightly off course, and with the computer switched off the crew had to correct it by hand. Lovell kept the Earth centred in his window with the hand controller while Haise watched for sideways drift and Swigert timed the engine burn with his wristwatch. They fired for fourteen seconds, and it was enough.
+
+Meanwhile, engineers in Houston faced a problem no one had planned for: how to wake a cold, damp command module that had been switched off for days, using batteries with almost no power to spare. Controller John Aaron worked out the strict power budget. Ken Mattingly, who never did catch the measles, spent hours in a simulator testing the order in which each switch should be thrown. The finished procedure ran to many pages, and Swigert copied it down by hand as it was read up to him.
+
+On the morning of April 17, with Earth filling the windows, the crew cast off the damaged service module and saw it for the first time. "There's one whole side of that spacecraft missing," Lovell reported. An entire panel had been blown away. This raised a new worry, because the heat shield that had to protect them during re-entry had been sitting right next to the blast. No one could say whether it had cracked.
+
+The crew climbed back into Odyssey and powered it up. Despite the condensation covering its wiring, nothing short-circuited. Then they released Aquarius, the lander that had saved their lives. "Farewell, Aquarius, and we thank you," Mission Control said.
+
+As Odyssey hit the atmosphere, the hot gas surrounding the capsule blocked radio signals, as it did on every flight. The blackout normally lasted about four minutes. This time four minutes passed in silence, and then five. Houston kept calling and got no answer. After about six minutes, Swigert's voice came through the static, and soon afterward television cameras found the capsule hanging beneath three orange-and-white parachutes. Odyssey splashed down in the South Pacific near Samoa, within a few miles of the recovery ship USS Iwo Jima. The three men were tired, thin, and cold, and they were alive.
+
+An investigation traced the explosion to a chain of small oversights years in the making. The oxygen tank had been dropped slightly during handling, and its heater switches had never been upgraded to handle the higher voltage used on the launch pad. During a ground test weeks before the flight, those switches fused shut, the heater overheated, and the insulation on the wiring inside the tank was baked away. When Swigert turned on the fans, the bare wires sparked.
+
+NASA came to call Apollo 13 a "successful failure." It never reached the Moon, but its crew came home.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af4e51954e0230d52",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72593,
+    "output_tokens": 1168,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:14:36.242Z",
+  "valid": true,
+  "text": "A heat pump does not make heat so much as move it. That single idea explains why it works on a cold day, and it also explains why it can be so much cheaper to run than a gas boiler.\n\nHeat is present in any air above absolute zero, which is about minus 273 degrees Celsius. On a freezing day the outdoor air still holds a large amount of thermal energy. The problem is that heat naturally flows from warm things to cold things, so it will not move into your house on its own. A heat pump uses a little electricity to push it the other way.\n\nHere is how. The outdoor unit contains a coil filled with a refrigerant, a fluid that boils at very low temperatures. A fan blows outside air across the coil. Even when the air is at minus 5 degrees, the refrigerant is colder still, perhaps minus 20, so heat flows from the air into the refrigerant and makes it evaporate into a gas.\n\nThat gas then passes through a compressor. When a gas is squeezed, its temperature rises sharply, in the same way a bicycle pump gets warm as you use it. The refrigerant leaves the compressor at perhaps 50 to 70 degrees, which is hotter than your radiators or underfloor heating need. It flows through a second coil inside the house, where it hands its heat to your heating water and condenses back into a liquid.\n\nThe liquid then passes through an expansion valve, which drops its pressure and temperature, and the cycle starts again. A fridge does exactly the same job in reverse, pulling heat out of the food and releasing it into your kitchen.\n\nThe compressor is the only part using much electricity, and it is mostly just moving heat. For each unit of electricity, a modern heat pump delivers roughly three to four units of heat. This ratio is called the coefficient of performance. A gas boiler, by contrast, can never exceed about 90 to 95 percent efficiency, because it burns fuel to make heat directly. Because electricity usually costs two to four times as much as gas per unit, a heat pump with a ratio of three often runs at a similar cost to a boiler, and better when it performs well or you use a cheaper tariff.\n\nPerformance does fall as it gets colder outside. At minus 10 degrees the ratio might drop to around two. The pump also has to work harder, and the outdoor unit occasionally runs a short defrost cycle to clear frost from the coil. Good modern units keep working down to minus 20 or lower, so a cold climate is rarely the barrier it is assumed to be.\n\nWhat matters more for your decision is the house itself. Heat pumps deliver water at lower temperatures than a boiler, so they work best with well insulated homes and larger radiators or underfloor heating. If your house loses heat quickly, you may need to add loft or wall insulation, or swap some radiators, to keep it comfortable and efficient. A heat loss survey from an installer will show what is needed.\n\nBefore you commit, consider these points.\nAsk for a survey and a quote that includes any radiator or insulation work.\nCheck what grants are available in your area, since these can cut the upfront price substantially.\nCompare your current gas and electricity prices, and ask about heat pump tariffs.\nCheck you have space outside for the unit and a hot water cylinder indoors.\n\nIf your home is reasonably insulated and your boiler is near the end of its life, a heat pump is usually a sound choice. If the house is draughty and poorly insulated, fix that first, and the case for switching becomes much stronger."
+}

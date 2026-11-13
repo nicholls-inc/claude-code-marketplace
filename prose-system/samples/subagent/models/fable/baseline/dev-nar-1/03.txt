@@ -1,0 +1,23 @@
+In the last days of August 1854, cholera struck the crowded streets of Soho in London with a violence that shocked even a city used to the disease. People who were well at breakfast were dead by nightfall. Within ten days, more than five hundred residents living within a few minutes' walk of one another had died. Families who could leave loaded carts and fled, and whole streets fell quiet.
+
+Most doctors of the day thought they knew the cause. Cholera, they believed, was spread by "miasma", the foul air rising from rotting waste, cesspools and the filthy Thames. The belief was reasonable enough: the poorest districts smelled worst and suffered most. Nobody yet understood that diseases could be caused by living things too small to see.
+
+John Snow, a physician who lived a short walk from the outbreak, doubted it. Snow was a quiet, methodical man, the son of a Yorkshire labourer, who had made his name as a pioneer of anaesthesia; he had given chloroform to Queen Victoria during childbirth the year before. His work with gases made him sceptical that bad air could explain cholera. The disease attacked the gut, not the lungs, which suggested to him that its cause was swallowed, not breathed. In 1849 he had argued in print that cholera spread through water contaminated by the waste of its victims. Few were persuaded.
+
+The Soho outbreak, on his own doorstep, gave him a chance to test the idea. His suspicion fell quickly on a public pump in Broad Street, a popular one whose water was thought to taste better than its neighbours'. He examined the water and found little to see. So he turned from the water to the people who had drunk it.
+
+Snow obtained a list of recent cholera deaths from the General Register Office and began walking the streets, knocking on doors and asking the bereaved one question: where did the household get its water? The pattern was striking. Nearly all the deaths had occurred in homes for which the Broad Street pump was the nearest source. Only ten were in houses closer to a different pump, and when he asked, five of those families told him they always sent to Broad Street because they preferred its water. Three more were children who went to school near it.
+
+The exceptions were as telling as the pattern. A workhouse around the corner housed more than five hundred people, surrounded by stricken houses, yet only five inmates died. It had its own well. At a brewery on Broad Street itself, none of the seventy or so workers died. The proprietor explained that the men were given an allowance of beer and never touched the pump; the brewery also had a well of its own.
+
+Then there was the strangest case of all. A widow living miles away in Hampstead, a leafy district untouched by cholera, had died of it, as had her niece who visited her. Snow learned that the widow had once lived in Broad Street and liked the water so much that she had a bottle of it brought to her by cart every day. If bad air were the cause, her death was inexplicable. If the water were the cause, it made perfect sense.
+
+On the evening of 7 September, Snow took his findings to the local parish officials. They were not convinced by his theory, but they had no better idea and agreed to act. The next day the handle of the pump was removed, so that no one could draw water from it.
+
+The story is often told as though that single act stopped the epidemic. Snow himself was more honest. The deaths were already falling, he noted, largely because so many residents had fled. What the removal of the handle may have done was prevent a second wave once they returned.
+
+Later, Snow drew the map for which he is now famous, marking each death as a small black bar at the address where it occurred. The bars pile up around the Broad Street pump and thin out with distance, an argument anyone could grasp at a glance.
+
+One question remained: how had the well been poisoned? The answer came from an unlikely ally. Henry Whitehead, a local clergyman, had set out to disprove Snow, and his knowledge of the neighbourhood instead led him to the first case, a baby at 40 Broad Street who fell ill just before the outbreak. Her mother had emptied the water used to wash her nappies into a cesspool at the front of the house. When it was dug up, its decayed brick lining was found to be leaking, less than three feet from the well.
+
+Officialdom still rejected Snow's conclusions, and he died in 1858, largely unvindicated. Only decades later, when the cholera bacterium was accepted as the cause, did his reputation catch up with his work. Today he is remembered as a founder of epidemiology, the study of how disease moves through populations, and a replica of the pump stands in Soho, without its handle.

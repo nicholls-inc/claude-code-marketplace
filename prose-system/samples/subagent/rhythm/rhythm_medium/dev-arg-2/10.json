@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad78ff3c4fa0f77fd",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28221,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 948,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:34:22.382Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating estimates as promises, and the sooner they do, the better their software and their working lives will be. The case rests on a simple observation that most engineers have already made privately: estimates are wrong, and they are wrong in a predictable direction. Studies of large projects, and the lived experience of nearly everyone who has shipped anything, show that tasks take longer than planned far more often than they finish early. We know this, we pad our numbers anyway, and we are still surprised when the date slips.\n\nThe deeper problem is not the inaccuracy but what the number does once it leaves the engineer's mouth. A rough guess offered in a planning meeting becomes a commitment by the time it reaches a roadmap, and a commitment becomes a deadline by the time it reaches a customer. At that point the team is no longer building the best thing it can; it is defending a figure it invented before it understood the problem. Corners get cut, tests get skipped, and the honest conversation about what we learned halfway through gets replaced by a quiet scramble to look on track.\n\nEstimation also consumes real time. Teams burn hours in planning poker, debating whether a ticket is a three or a five, when that debate produces nothing a customer will ever use. The people best placed to refine a plan, the ones doing the work, spend their energy defending a forecast instead of discovering what the work actually requires. Meanwhile the discovery is the point: most of what makes software hard is learning what you did not know, and by definition you cannot estimate the time it takes to learn it.\n\nThe alternative is not chaos. Teams can slice work into pieces small enough that their size barely matters, then simply count how many they finish each week. A steady flow of small changes, shipped continuously, tells a manager far more about progress than any story-point total ever could. When someone needs to know roughly when a large effort will land, the team can offer a range based on its actual throughput, and revise it openly as reality arrives. That is forecasting from evidence, not guessing from hope, and it asks nothing of anyone's optimism.\n\nManagers will object that the business needs dates, and they are right that it needs predictability. But predictability comes from small batches, short feedback loops, and a team trusted to say what it sees, not from a spreadsheet of numbers everyone privately distrusts. If a deadline is truly fixed, the honest response is to hold the date and negotiate scope, which is the only lever that has ever worked.\n\nNone of this requires a revolution. A team can begin by dropping point estimates for a quarter, cutting every ticket to a size that fits in a few days, and watching what happens to its meetings and its morale. I suspect the first thing they will notice is how much time they got back. The second will be how little they miss the numbers, because the numbers were never really measuring the work."
+}

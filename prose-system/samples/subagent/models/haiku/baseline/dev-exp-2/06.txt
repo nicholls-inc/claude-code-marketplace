@@ -1,0 +1,11 @@
+Why the World's Clocks Are About to Stop Catching Up With the Earth
+
+A leap second is a one-second pause added to the world's clocks to keep them in step with the planet. Most of the time, a second is a fixed unit, defined as 9,192,631,770 cycles of radiation from a caesium atom. The Earth, however, does not turn at a perfectly steady rate. Tides, earthquakes, shifts in the molten iron of the core and changes in the atmosphere all nudge the length of the day. Over the long run the day has tended to lengthen, while atomic clocks keep ticking at their fixed rate. The two slowly drift apart.
+
+Coordinated Universal Time, or UTC, is the standard that most computers, phones and power grids follow. To stop it drifting too far from solar time, the International Earth Rotation and Reference Systems Service announces an extra second when needed, usually at the end of June or December. Since the first in 1972, 27 have been added. The most recent came on 31 December 2016, when the clock showed 23:59:60 before rolling over to midnight.
+
+The practice has caused trouble. Many computer systems were never built for a minute with 61 seconds. When a leap second arrives, software can freeze, repeat a second or crash. Airlines, banks, telecoms firms and internet companies have all reported outages linked to them. Some engineers responded by "smearing" the extra second across a whole day. That works, but it leaves different systems disagreeing about the time for hours.
+
+These problems led the General Conference on Weights and Measures, the international body that oversees the SI system of units, to vote in November 2022 to stop adding leap seconds by 2035. The International Telecommunication Union later agreed to keep UTC unchanged until at least that date. Instead, the gap between atomic time and solar time will be allowed to grow. A future generation will decide how large that gap may become, possibly minutes or even hours.
+
+The reasoning is practical. The Earth's rotation is hard to predict far ahead, so leap seconds are announced only about six months in advance. Digital infrastructure, however, needs certainty years ahead. Scientists studying the planet will still have a fixed reference against which to measure its spin, while the technology running modern life no longer has to absorb a second that its calendars never planned for.

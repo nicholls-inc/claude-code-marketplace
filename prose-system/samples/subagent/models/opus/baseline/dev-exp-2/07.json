@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a5a32a4cd75850e1c",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73730,
+    "output_tokens": 1237,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:17:42.864Z",
+  "valid": true,
+  "text": "**The Second That Time Forgot: Why the World Is Giving Up on Leap Seconds**\n\nMost of us assume a day lasts exactly 24 hours. The Earth does not quite agree. For more than half a century, timekeepers have kept our clocks in step with the planet's spin by now and then adding one extra second, called a leap second. That practice is now coming to an end.\n\nThe problem comes from having two kinds of time. Since 1967 the official second has been defined by atomic clocks, which count the vibrations of caesium atoms and lose less than a second in millions of years. The Earth is far less regular. Tides gradually slow its rotation, and shifts in its molten core, its oceans and its atmosphere speed it up or slow it down by tiny, unpredictable amounts. Over time, a clock that runs perfectly drifts away from the sun.\n\nTo close the gap, the world's official time, Coordinated Universal Time (UTC), has been kept within 0.9 seconds of the Earth's actual rotation since 1972. Whenever the gap grew too large, the International Earth Rotation and Reference Systems Service announced a leap second, usually about six months in advance. On the chosen night, clocks read 23:59:60 before moving on to midnight. Twenty-seven leap seconds have been added this way. The most recent came on 31 December 2016.\n\nFor people, one extra second makes no difference. For computers it can cause real trouble. Software is usually written on the assumption that a minute always has 60 seconds, and an unexpected 61st second has crashed systems more than once. In 2012 a leap second disrupted websites including Reddit and knocked out airline booking systems in Australia. In 2017 one caused an outage at the internet company Cloudflare. Large technology firms have worked around the problem by \"smearing\" the extra second across many hours, but each firm does this in its own way, which undermines the idea of one shared standard. Because leap seconds are irregular, nobody can program them in years in advance.\n\nThere is a newer worry as well. The Earth has recently been spinning slightly faster, so the first ever negative leap second, where a second is removed, may eventually be needed. No one has tested that at scale.\n\nIn November 2022 the General Conference on Weights and Measures, the international body responsible for measurement standards, voted to allow atomic time and Earth time to drift much further apart, starting no later than 2035. The International Telecommunication Union endorsed the plan in 2023. In practice, this means no new leap seconds for at least a century. The sun will slowly drift out of step with our clocks, by perhaps a minute over a hundred years. Future generations can decide how, or whether, to correct it."
+}

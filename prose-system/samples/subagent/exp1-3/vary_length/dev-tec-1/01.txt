@@ -1,0 +1,56 @@
+Inside .git: How Git Stores a Commit
+
+You run git commit dozens of times a week, but the thing it creates is not a diff, a patch or a set of changes. It is a small graph of immutable objects sitting in a key-value store. Open the .git directory and the design turns out to be simple enough to hold in your head.
+
+The object database
+
+Everything lives in .git/objects. Git is, at heart, a content-addressable filesystem: you give it some content, it computes a SHA-1 hash of that content (newer repositories can use SHA-256), and it stores the content under that hash. The first two hex characters become a directory name and the remaining characters become the filename. An object with the hash e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 lives at .git/objects/e6/9de29bb2.... Each file is compressed with zlib, so you cannot read it with cat, but git cat-file -p <hash> will decode it for you.
+
+There are four object types. Three of them matter for a commit: blobs, trees and commits. (The fourth, the annotated tag, is a variation on the theme.)
+
+Blobs: file contents, nothing else
+
+A blob holds the bytes of one file. It does not hold the filename, the permissions or the path. Two files with identical contents, in different directories or even different repositories, produce the same blob with the same hash. Git stores it once.
+
+Change a single character in a 10,000-line file and you get a brand new blob containing the whole file. That surprises people. Git does not store deltas at this level; it snapshots. Later, git gc packs objects into packfiles and compresses similar ones against each other, but that is a storage optimisation, not part of the logical model.
+
+Trees: names and structure
+
+If blobs are file contents, trees are directories. A tree object is a list of entries, and each entry has a mode, a type, a hash and a name. Run git cat-file -p HEAD^{tree} in any repository and you will see something like this:
+
+100644 blob 8f3a1c2... README.md
+040000 tree 91be07d... src
+100755 blob 4d2e6a9... build.sh
+
+The mode records whether the entry is a regular file (100644), an executable (100755), a symlink (120000) or a subdirectory (040000). A subdirectory entry points at another tree, which lists its own blobs and trees, and so on down. The tree you reach from the top is called the root tree, and it describes your entire project at one moment.
+
+The tree's hash is computed from its entries. If any file anywhere underneath changes, its blob hash changes, so the parent tree's hash changes, so every tree up to the root changes. Directories you did not touch keep their old hashes and are reused as they are. This is why a commit in a huge monorepo does not copy the world: it creates new blobs for the edited files, new trees along the path to them, and points everything else at existing objects.
+
+Commits: a snapshot plus context
+
+A commit object is a short text record. Try git cat-file -p HEAD:
+
+tree 3c4e9cd789d88d8d89c1073707c3585e41b0e614
+parent 1f7a2b0e5d6c9a8b4e3d2c1b0a9f8e7d6c5b4a39
+author Ada Lovelace <ada@example.com> 1731300000 +0000
+committer Ada Lovelace <ada@example.com> 1731300000 +0000
+
+Fix off-by-one in pagination
+
+That is the whole thing. One tree line pointing at the root tree, zero or more parent lines pointing at earlier commits, an author, a committer, and the message. The first commit in a repository has no parent. An ordinary commit has one. A merge commit has two or more.
+
+Because the parent hash is part of the content, it is also part of the commit's own hash. Change an old commit in any way and its hash changes, which changes the hash of every descendant. This is what people mean when they say Git history is a Merkle DAG, and it is why rebase creates new commits rather than editing existing ones. The old ones still exist; they are simply no longer reachable from anything you care about.
+
+When you view a commit as a diff, Git is computing it on demand by comparing the commit's tree with its parent's tree. The diff was never stored.
+
+Refs: names for hashes
+
+Hashes are awkward to remember, so Git keeps human-friendly names called refs. A ref is just a file containing a commit hash. Look at .git/refs/heads/main and you will find forty hex characters and a newline. That is the branch. Creating a branch writes a 41-byte file. Making a commit moves the file's contents to point at the new commit. Tags live under .git/refs/tags, and remote-tracking branches under .git/refs/remotes. In large repositories, git pack-refs may fold many of these into a single .git/packed-refs file, but the meaning is unchanged.
+
+HEAD, at .git/HEAD, is a special ref that says where you are. Usually it holds a line like ref: refs/heads/main, a symbolic reference to the current branch. When you check out a specific commit, it holds a raw hash instead, which is the so-called detached HEAD state.
+
+Putting it together
+
+When you run git commit, roughly this happens. Git reads the index (.git/index), the staging area, which records the blob hash for each tracked path. It writes tree objects that mirror that structure, then writes a commit object naming the root tree and the current HEAD commit as parent. Finally it updates the branch ref that HEAD points to. Four steps, and the only mutable thing among them is the ref.
+
+That is the key insight. Objects never change; refs move. Branching, resetting, rebasing and cherry-picking are all ways of building new objects and repointing names at them. Once you can picture that, the commands stop feeling like magic. Open .git and look around.

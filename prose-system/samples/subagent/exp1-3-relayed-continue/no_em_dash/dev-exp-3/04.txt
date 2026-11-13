@@ -1,0 +1,77 @@
+Sharing a Secret in Public
+
+Imagine you want to agree on a secret with someone you have never met, and the only way to talk is by shouting across a crowded room. Everyone can hear every word. It sounds impossible. Yet this is what happens every time your phone connects to a shop's website or your bank. This explanation shows how it works, using nothing beyond school maths.
+
+The problem
+
+For most of history, secret messages needed a shared secret first. If you and a friend wanted to write in code, you had to meet beforehand and agree on the code. A spy who later saw your messages could not read them, but only because the agreement was made in private.
+
+Now suppose you want to talk to a stranger. There is no earlier private meeting, so any agreement has to happen out in the open. The question is whether two people can start with nothing shared and finish with a shared secret while an eavesdropper hears everything they say.
+
+The answer is yes, and the trick is to find a kind of calculation that is easy to do in one direction and very hard to undo.
+
+Easy one way, hard the other
+
+You already know some tasks like this. Mixing paint is easy, but separating a mixed pot back into its original colours is not. Multiplying is easy, too. Take 7919 and 7907. A patient person with pen and paper can multiply them and get 62,615,533. Now go the other way. If I hand you 62,615,533 and ask which two prime numbers multiply to give it, you would have to try dividing by many candidates. With numbers of a few digits this is tedious but possible. With numbers hundreds of digits long, even the fastest computers could not finish in the lifetime of the universe.
+
+Mathematicians call a calculation like this a one-way function. Public-key cryptography is built on them. We will use a close cousin of multiplication: clock arithmetic with powers.
+
+Clock arithmetic
+
+On a clock with 12 hours, 10 plus 5 gives 3, because you go past 12 and start again. We keep only the remainder after dividing by 12. This is called modular arithmetic, and the number you divide by is the modulus.
+
+We write 17 mod 5 = 2, because 17 divided by 5 is 3 with remainder 2. Any modulus works. Let us use 23 for our example.
+
+Now take powers. 5 to the power 2 is 25, and 25 mod 23 is 2. 5 to the power 3 is 125, and 125 mod 23 is 10 (since 23 times 5 is 115, leaving 10). Each result looks fairly random. Nothing obvious links the answer to the power you used.
+
+Here is the one-way part. Given 5, the power 6 and the modulus 23, finding the result is quick. But if I tell you the result is 8 and ask what power of 5 gives 8 mod 23, you have no shortcut. You must try powers one at a time: 1, 2, 3 and so on. With a modulus of 23 that is easy. With a modulus hundreds of digits long, the number of tries becomes astronomical.
+
+The colour-mixing picture
+
+Mathematicians often explain the scheme with paint, and it is a good picture.
+
+Alice and Bob want a shared secret colour. First they publicly agree on a common starting colour, say yellow. Everyone, including the eavesdropper Eve, knows this.
+
+Alice secretly picks a private colour, say red, and mixes it with the yellow. She sends the resulting orange to Bob. Bob secretly picks his own private colour, blue, mixes it with the yellow, and sends the green to Alice.
+
+Now each adds their own secret colour to what they received. Alice mixes her red into Bob's green. Bob mixes his blue into Alice's orange. Both end up with the same muddy brown, because the final mix contains yellow, red and blue either way. The order of mixing does not matter.
+
+Eve saw yellow, orange and green. To get the brown she would need either red or blue, and she cannot unmix orange or green to find them. That is the whole idea. The numbers do the same thing, with a one-way calculation standing in for the mixing.
+
+The same thing with numbers
+
+Alice and Bob publicly agree on two numbers. The modulus is 23, and the base is 5. Eve hears both.
+
+Alice secretly chooses a private number, 6. She calculates 5 to the power 6, mod 23. That is 15,625, and 15,625 mod 23 is 8. She sends 8 to Bob. This is her public value.
+
+Bob secretly chooses 15. He calculates 5 to the power 15, mod 23, which comes to 19. He sends 19 to Alice.
+
+Now each works out the shared secret. Alice takes Bob's public value 19 and raises it to her private power 6, mod 23. Bob takes Alice's public value 8 and raises it to his private power 15, mod 23. Both get 2.
+
+Why do they agree? Alice's result is (5 to the 15) to the 6, which equals 5 to the 90. Bob's result is (5 to the 6) to the 15, which is also 5 to the 90. Multiplying the powers in either order gives the same total, just as 6 times 15 equals 15 times 6. So both arrive at the same number, 5 to the power 90, mod 23, and that is 2.
+
+What Eve knows
+
+Eve heard 23, 5, 8 and 19. To find the secret she needs one of the private numbers, 6 or 15. To get Alice's 6 she must solve "5 to what power gives 8, mod 23", which is the hard problem from earlier. With these tiny numbers she can simply try every power and succeed in moments. That is why the example is only a demonstration.
+
+In real use the modulus is a number with hundreds of digits, and the private numbers are equally large. Alice and Bob's calculations remain fast, because computers can raise numbers to huge powers by repeated squaring. Eve's task, trying powers one by one, would take longer than the age of the universe. The gap between easy and hard is what protects the secret.
+
+Where the name comes from
+
+Each person ends up holding two linked pieces: a private number they never reveal, and a public value they share freely. The public value is derived from the private one by the one-way calculation. This pair is called a key pair, which is where the name public-key cryptography comes from. Anyone may see the public key. Only its owner knows the private one.
+
+The method above is called Diffie-Hellman key exchange, after the two researchers who published it in 1976. A related idea, RSA, uses the multiply-but-cannot-factor problem from earlier. In RSA, anyone can use your public key to lock a message, but only you, holding the private key, can unlock it. Both rest on the same principle: a task that is easy to do and practically impossible to undo.
+
+What happens next
+
+Once Alice and Bob share a secret number, they use it as the key for ordinary fast encryption, the sort that scrambles messages using a shared secret. Public-key methods are slower, so they are used only for this opening step. Then the conversation continues in code that Eve cannot read.
+
+An honest caveat
+
+There is a weakness the scheme does not fix on its own. Suppose Eve does not just listen but intercepts the messages and swaps in her own. She could do one exchange with Alice and another with Bob, and sit in the middle reading everything. Alice would think she was talking to Bob, and he to her. To stop this, real systems add a way to confirm who is on the other end, using certificates that vouch for a public key belonging to a particular person or website. The padlock in your browser reflects that check.
+
+Also, nobody has proved the hard problems are truly hard. We only know that no one has found a fast method despite decades of trying. If someone did, much of today's security would need replacing. Researchers are already preparing for that, including for the threat from quantum computers.
+
+The takeaway
+
+Two strangers can agree on a secret in public because some calculations are easy to perform and nearly impossible to reverse. Each person mixes a private number into a shared starting point, they swap the results, and each mixes their own secret in again. The order of mixing does not change the answer, so both arrive at the same secret. Anyone listening holds only the half-mixed values, and without a private number they cannot finish the job.

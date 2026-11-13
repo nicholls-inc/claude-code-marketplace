@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab9ec8fb9c5b543fe",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72593,
+    "output_tokens": 3647,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:17:58.698Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists, and that is why it can warm your home on a freezing day.\n\nThe key idea is that cold is a relative term. Air at minus five degrees Celsius still holds a great deal of thermal energy. Absolute zero sits far below that, at about minus 273 degrees. A heat pump takes advantage of this by pulling energy out of the outdoor air, the ground, or water, then delivering it indoors.\n\nThink of a fridge working in reverse. A fridge pulls heat out of its cold interior and dumps it into your kitchen through the coils on the back. A heat pump does the same job, but the space it empties is the outdoors and the space it warms is your home.\n\nHere is how it works. A sealed loop contains a refrigerant, a fluid that boils at very low temperatures. Outside, the refrigerant flows through a coil in the outdoor unit. Because the refrigerant is colder than the outdoor air, heat flows into it, and it evaporates into a gas. This is the same principle that makes a damp puddle cool the air around it as it dries.\n\nNext, a compressor squeezes that gas. Compressing a gas raises its temperature sharply, just as a bicycle pump gets warm when you use it. The gas can now be hotter than the water or air inside your house, perhaps 40 to 55 degrees. Heat flows from this hot gas into your heating system, and the refrigerant condenses back into a liquid, releasing yet more heat as it does so.\n\nFinally, an expansion valve releases the pressure. The liquid drops in temperature, becoming colder than the outdoor air once again, and the cycle repeats.\n\nThe compressor needs electricity, but the heat delivered is much larger than the electricity used. Engineers call this ratio the coefficient of performance. A typical modern unit achieves about 3, meaning every unit of electricity brings three units of heat into your home. A gas boiler, even a good condensing one, delivers less than one unit of heat per unit of gas burned. This efficiency is the heart of the case for switching.\n\nPerformance does fall as it gets colder, because the pump must lift heat across a bigger temperature gap. Many current models still work well at minus 15 degrees, though the ratio may drop closer to 2. Ground source systems stay steadier because soil stays at a near constant temperature all year, although they cost more to install.\n\nWhat should a homeowner weigh up? First, insulation matters. A heat pump suits a well insulated house best, since it runs gently and steadily at lower water temperatures than a boiler. Larger radiators or underfloor heating may help in older homes. Second, the upfront cost is higher. An air source installation often costs several times as much as a new boiler, though grants in many countries narrow the gap. Third, running costs depend on your local price of electricity compared with gas. If a unit of electricity costs more than about three times a unit of gas, your savings shrink or disappear. Fourth, you need outdoor space and some tolerance for a small amount of fan noise.\n\nReplacing a boiler also cuts carbon, especially as grids use more renewable power. A heat pump also removes the need for a gas connection and the annual boiler service that comes with it.\n\nBefore committing, ask installers for a heat loss survey of your home, a written estimate of seasonal efficiency, and a clear quote for any radiator changes. A good survey will tell you more about your own situation than any general rule can. If the numbers work, you will heat your home using mostly free outdoor energy, even in winter."
+}

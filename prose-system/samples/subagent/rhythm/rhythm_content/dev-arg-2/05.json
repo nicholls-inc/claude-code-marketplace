@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad16f5d363ec77df8",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28239,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 3129,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:56:00.133Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long individual pieces of work will take, because the practice rests on a quantity nobody can know in advance: the time it takes to discover what the work actually is. A story that looks like three days turns out to touch a module whose tests only pass on Tuesdays, or a product manager realises halfway through that the edge case they waved away is the main case, and the number written on the ticket becomes a fiction that everyone then spends weeks defending or explaining. Decades of evidence, from the planning fallacy research of Kahneman and Tversky to the long record of late government and corporate IT projects, say that people systematically underestimate tasks they are about to do, and no amount of planning poker, story-point calibration or Fibonacci ritual has been shown to fix that.\n\nThe cost of the ritual is easy to undercount because it hides in ordinary calendar time. A team that spends two hours a week arguing over whether something is a five or an eight is spending roughly five percent of its capacity to produce numbers that, when tested against actual cycle times, usually predict little better than counting the tickets would. Worse, the estimate quietly turns into a target as soon as a manager hears it, so engineers learn to pad, to cut corners on the quality nobody can see, or to hold back bad news until it can no longer be hidden.\n\nWhat a team can do instead is less glamorous and more reliable. Break work into pieces small enough that each fits in a day or two, stop debating their size, and count how many finish per week. Throughput measured over the last couple of months is a far better guide to the next couple of months than any bottom-up guess, and it answers the question managers actually have, which is roughly when this will be done and how sure you are, with a range drawn from real history instead of a single date drawn from hope. If the backlog holds forty items and the team finishes between six and ten a week, the honest answer is four to seven weeks, and that answer sharpens on its own each time the data updates.\n\nThe objection I hear most is that the business needs dates, and it does, for launches tied to conferences, regulations and contracts. But those are fixed-date problems, and the way to solve them is to decide what can be cut, sequence the riskiest work first, and look at the throughput range early enough to trim scope while trimming is still cheap. An estimate offered in month one of a six-month project does nothing for any of that, whereas a forecast refreshed every week does.\n\nSome will say that rough sizing still has value for deciding whether an idea is worth pursuing at all, and I agree, since a conversation about whether something is a week or a year of work is worth having. That conversation is about magnitude, held once, with no number retained and no one held to it afterwards. Teams that abandon task-level estimation tend to report the same surprise: planning meetings shrink, trust with management grows because the forecasts stop breaking, and the arguments move to the place they always belonged, which is what to build and what to leave out."
+}

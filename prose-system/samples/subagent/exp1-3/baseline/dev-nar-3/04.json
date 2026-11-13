@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a069c483448f5f14c",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72436,
+    "output_tokens": 1120,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:12:36.598Z",
+  "valid": true,
+  "text": "On January 15, 1919, a mild winter day in Boston's North End, the city witnessed one of the strangest disasters in American history: a wave of molasses.\n\nAt 529 Commercial Street, beside the harbor, stood a huge steel tank owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It was about fifty feet tall and ninety feet across, and it held roughly 2.3 million gallons of molasses, a raw material used to make industrial alcohol and munitions. The tank had been built quickly in 1915, and it had a troubled life. It leaked so badly that neighbors collected the seeping syrup in pots, and the company reportedly painted the tank brown to hide the stains rather than fix the problem. Workers heard groans from the steel whenever it was filled.\n\nThe tank had been filled again just days earlier. Temperatures had been bitterly cold but rose sharply to about 40 degrees Fahrenheit on the fifteenth, which likely thinned the molasses and increased the pressure and fermentation inside.\n\nShortly after noon, people nearby heard a low rumble, and then a sound some compared to a machine gun as rivets shot out of the tank. The seams burst. A wave of molasses, estimated at fifteen to twenty-five feet high at its crest, surged through the streets at about thirty-five miles per hour.\n\nThe force was devastating. The wave tore buildings from their foundations. It buckled the supports of the elevated railway, nearly toppling a train. It crushed a firehouse, where firefighters were trapped in the wreckage. Horses, wagons, and people were swept up and pinned in the thick, sticky flood. Children who had been playing nearby, gathering firewood, were caught in its path.\n\nRescuers rushed to the scene, including soldiers, sailors from a docked ship, Red Cross workers, and medical teams. They waded through waist-deep molasses, which grew stickier and slower as it cooled in the winter air. Finding survivors was agonizing work. Many victims were trapped, and the molasses clung to everything. In total, twenty-one people died and about 150 were injured.\n\nCleanup took weeks. Crews sprayed saltwater from fireboats and spread sand to break up the syrup. The harbor ran brown until summer, and people said the neighborhood smelled of molasses for decades afterward.\n\nThe aftermath mattered as much as the flood. Hundreds of residents sued the company in one of the first major class action lawsuits in Massachusetts. United States Industrial Alcohol argued that anarchists had bombed the tank, a plausible claim in a postwar period of political unrest. But an auditor, Hugh Ogden, spent years hearing testimony from experts and eyewitnesses, and he concluded that the tank was structurally flawed and the company was responsible, not any bomb. The company ultimately paid settlements to the victims' families, around a million dollars in total.\n\nThe disaster helped change how buildings are regulated. It contributed to stronger oversight of construction, including the requirement that engineers review and sign off on plans, and it showed how corporate neglect could carry a deadly cost. Today, a plaque in the North End marks the spot where Boston's sweet, slow catastrophe struck."
+}

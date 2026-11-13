@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a4cc3992f3519f5d7",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25361,
+    "cache_read_input_tokens": 48373,
+    "output_tokens": 2135,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:21:38.291Z",
+  "valid": true,
+  "text": "Keep Estimating. Stop Treating Estimates as Promises.\n\nThe #NoEstimates crowd has a point, and I've sat in the meetings that prove it. Two hours of planning poker to decide whether a ticket is a 5 or an 8. A quarterly roadmap built from those numbers. Then a VP asking why the team \"missed\" a date nobody believed in. If that's what estimation means where you work, I understand wanting to burn it down.\n\nBut stopping is the wrong fix. Teams should keep estimating. What they should stop doing is treating an estimate as a promise.\n\nEvery decision about what to build trades value against cost. A feature worth $200k that takes two weeks is a different bet from the same feature taking six months. If engineers refuse to say anything about cost, the decision still gets made. Someone else makes it, usually a product manager or director who knows less than the people who would do the work. Refusing to estimate doesn't get rid of the guess. It hands the guess to the person least equipped to make it.\n\nThe strongest #NoEstimates argument is that you can forecast from throughput instead: count how many items the team finishes each week, slice work small, and project forward. I agree, and that is estimation. It's a better method, built on data instead of gut feel, but it still answers \"roughly when?\" The movement's best ideas improve estimation. They're just sold under a name that suggests giving it up.\n\nThe real damage comes from three habits, and you can fix each one without giving up on forecasting.\n\nFirst, single-number estimates. \"Three weeks\" sounds precise and gets written down as a deadline. \"Two to six weeks, most likely three\" says what the team actually knows. A range also prompts the right follow-up question: what would narrow it? The answer is usually a spike, a prototype, or a conversation with the team that owns the API you depend on.\n\nSecond, estimating everything at the same level of detail. A bug fix doesn't need a number. A nine-month platform migration needs a careful one. Spend your estimation effort where the decision it informs is expensive to reverse.\n\nThird, and this one is for managers: punishing the miss. If a team gives an honest range and gets blamed when reality lands at the high end, they'll learn to pad. Padded estimates are worse than none, because they look like information and contain none. If you want honest numbers, treat a re-forecast as good news. It means the team spotted a problem early and told you.\n\nEngineers have an obligation too. \"It's done when it's done\" is not a professional answer when someone has to decide whether to hire, launch, or give a customer a date. You're the people best placed to see the risks. Say what you know and what you don't, and update the estimate when you learn more.\n\nEstimates aren't the problem. Treating them as contracts is. Keep forecasting, give ranges instead of single numbers, and stop blaming the team when the work takes longer than hoped."
+}

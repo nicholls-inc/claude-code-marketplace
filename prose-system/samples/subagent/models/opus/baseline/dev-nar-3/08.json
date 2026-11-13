@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8b0b0a54bf917282",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73711,
+    "output_tokens": 1627,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:22:59.976Z",
+  "valid": true,
+  "text": "The Great Molasses Flood\n\nJanuary 15, 1919, began as an ordinary Wednesday in Boston's North End. A cold snap had broken, and the air had climbed to an unusually mild forty degrees. Workers came out to eat lunch in the sun. Children played near the waterfront. Trains clattered along the elevated railway above Commercial Street.\n\nA huge steel tank stood over the neighborhood. It was fifty feet tall, ninety feet across, and owned by the Purity Distilling Company, part of United States Industrial Alcohol. It held about 2.3 million gallons of molasses, waiting to be turned into industrial alcohol, a key ingredient in munitions. The tank had leaked since it was built in 1915. Residents gathered the brown drips that ran down its sides and took them home. The company's answer was to paint the tank brown.\n\nJust before 12:30 p.m., people nearby heard a deep rumble and then a series of sharp cracks, like a machine gun firing, as the rivets gave way. The tank split open, and a wall of molasses as much as twenty-five feet high poured into the streets at about thirty-five miles an hour.\n\nNothing in its path survived intact. The wave tore buildings off their foundations and crushed houses. It buckled a steel girder of the elevated railway, and a train stopped just in time. A firehouse was shoved toward the harbor. Horses, wagons, and people were swept up and buried. Ten-year-old Pasquale Iantosca and Maria Distasio, who had been gathering firewood near the tank, were among those killed.\n\nThe cold made things worse. As the molasses spread and the winter air chilled it, it grew thick and sticky. Victims who could have swum through water were trapped like insects in syrup. Rescuers waded in up to their waists, and some had to cut away clothing to free the people they reached. Sailors from the training ship USS Nantucket, docked nearby, were among the first to help. Red Cross nurses, police, and doctors followed. The search lasted days, and some bodies were not found for months. In the end, 21 people died and about 150 were injured.\n\nCleanup took weeks. Crews hosed the streets with salt water from the harbor and scraped the sludge away with sand. Molasses was tracked across the city on boots, streetcar seats, and telephones. The harbor ran brown well into the summer.\n\nThe company claimed anarchists had bombed the tank. Survivors and families sued, and the case dragged on for years. The court-appointed auditor heard from about 3,000 witnesses before ruling in 1925 that the tank had been badly built and never properly tested. The man in charge of its construction had no engineering training, and the tank had not even been filled with water to check for leaks. The company paid about $628,000 in settlements.\n\nThe disaster led to new rules in Massachusetts and beyond requiring engineers to sign off on their calculations and certify building plans. Today, a small plaque in Langone Park marks the site. Some old North Enders insisted that on hot summer days, the neighborhood still smelled faintly of molasses."
+}

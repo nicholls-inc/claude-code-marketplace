@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a21dcb48cf59cc678",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28203,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 990,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:10:51.164Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). A charger forces current through the cell so that lithium ions leave the positive electrode (typically a layered metal oxide), cross the electrolyte, and insert between the graphene sheets of the graphite negative electrode, while electrons travel through the external circuit. The cell's terminal voltage is the open-circuit voltage, which rises with state of charge from about 3.0 V to 4.2 V for a common chemistry, plus the overpotential needed to drive current through internal resistance.\n\nIn the first stage the charger holds a fixed current, often set relative to capacity (1C means a full charge in one hour). Voltage climbs steadily as the electrodes fill with lithium. Because terminal voltage equals open-circuit voltage plus current times internal resistance, the terminal voltage reaches the upper limit, 4.2 V, before the cell is actually full. That limit is a safety boundary set by electrolyte stability and by the risk of plating metallic lithium on the graphite. Typically the cell is around 70 to 80 percent charged at this point.\n\nIn the second stage the charger holds the voltage at 4.2 V and lets the current fall on its own. The engineer can think of this as a resistor-capacitor circuit. As the open-circuit voltage creeps up toward the fixed terminal voltage, the gap available to drive current across the internal resistance shrinks, so the current decays roughly exponentially. The charge ends when the current drops to a small cutoff, commonly 3 to 5 percent of the rated current.\n\nSeveral physical effects deepen the slowdown. The gap is not just ohmic: charge-transfer kinetics at the electrode surfaces and the solid-state diffusion of lithium inside the particles also contribute, and both limit how fast lithium can be delivered. Near full charge the graphite surface is saturated, so the concentration gradient that drives lithium inward flattens and diffusion into the particle interior becomes slow. The positive electrode, in turn, has few sites left to give up ions without structural stress. Raising the voltage to compensate would accelerate electrolyte oxidation, lithium plating, and heat generation, shortening life or causing thermal runaway, so the controller must not do it.\n\nTemperature matters as well. Cold cells have higher resistance and slower diffusion, so the charger must derate current or risk plating. Hot cells age faster. A battery management system therefore monitors voltage, current, and temperature for every cell, and balances cells in a series pack so that none exceeds the limit.\n\nThe result is the familiar behavior of a phone or electric vehicle: the first 80 percent arrives quickly, while the last 20 percent takes disproportionately long. Fast chargers exploit this by delivering high current only in the first stage and tapering aggressively afterward."
+}

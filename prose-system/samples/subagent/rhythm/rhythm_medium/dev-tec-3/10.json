@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a36cab687c13eb25b",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28219,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 903,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:39:27.200Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged by forcing current through it in the direction opposite to discharge, which pushes lithium ions out of the positive electrode, across the electrolyte, and into the layered graphite of the negative electrode. Electrons travel the same route through the external circuit, so the charger is doing electrical work to move lithium from a low-energy home to a high-energy one. The standard method is constant-current, constant-voltage charging, usually abbreviated CC-CV. In the first stage the charger holds the current fixed, typically between 0.5 and 1 times the cell's capacity per hour, and lets the terminal voltage rise on its own. During this stage the cell accepts charge quickly and steadily, and it reaches roughly 70 to 80 percent of its capacity in a little over half an hour at the higher rates.\n\nThe terminal voltage is not the voltage of the electrodes alone. It equals the open-circuit voltage, which depends on how full the electrodes are, plus the current multiplied by the cell's internal resistance, plus extra terms for the slow transport of ions inside the electrode particles. As the cell fills, the open-circuit voltage climbs toward the upper limit, which is about 4.2 volts for common cobalt-based chemistries. Exceeding that limit risks plating metallic lithium on the graphite and oxidising the electrolyte, both of which shorten life and can be unsafe. So when the terminal voltage reaches the limit, the charger switches strategy.\n\nIn the second stage the charger holds the voltage constant and lets the current fall. This taper is the reason charging seems to slow near full. With the terminal voltage pinned, any rise in the open-circuit voltage as lithium accumulates leaves less of the fixed voltage available to drive current across the internal resistance, so the current must decrease. In addition, as the graphite surface becomes crowded with lithium, the concentration gradient that drives diffusion into the particle interior flattens, and the ions must move ever deeper into the solid to find empty sites. Diffusion in the solid is the slowest step in the whole process, and it becomes limiting when the surface is nearly saturated. The result is an approximately exponential decay of current.\n\nCharging is normally declared finished when the current has fallen to a small fraction of the original, often around 5 percent of the capacity rate, since the last few percent of charge would take a disproportionately long time. Fast-charging schemes therefore try to shorten the constant-voltage stage, for example by stepping the current down in stages, but they are bounded by the plating threshold, which becomes harder to avoid at low temperature and high state of charge."
+}

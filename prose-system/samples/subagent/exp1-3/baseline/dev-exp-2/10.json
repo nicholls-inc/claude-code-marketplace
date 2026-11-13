@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac0b7fd289a292a5c",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73741,
+    "output_tokens": 920,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:45:36.842Z",
+  "valid": true,
+  "text": "**Why the world's clocks are about to stop skipping a beat**\n\nA leap second is a single extra second slipped into the world's official time, usually at the end of June or December, so that clocks read 23:59:60 before rolling over to midnight. Since 1972, 27 of them have been added.\n\nThe reason lies in two competing ways of keeping time. For most of history, a day was defined by the Earth's spin: one full turn, 24 hours, 86,400 seconds. But the planet is a poor timekeeper. Tides drag on its rotation, slowing it by tiny amounts over centuries, and earthquakes, ice melt and shifting currents add irregular wobbles. Since the 1960s, atomic clocks have offered something far steadier. They count the vibrations of atoms, and the best of them would lose less than a second over hundreds of millions of years.\n\nOnce the two methods existed side by side, they began to drift apart. The leap second was the compromise, introduced in 1972 to keep the atomic-based Coordinated Universal Time, or UTC, within 0.9 seconds of the time implied by the Earth's rotation. An international body in Paris decides when one is needed, and announces it months ahead.\n\nFor astronomers and navigators, that tie to the sky mattered. For everyone else, it became a nuisance. Computers generally assume every minute has 60 seconds and every day has a fixed length. A sudden 61st second can confuse software, and it has. Leap seconds have contributed to crashes and outages at major websites, airline systems and data centres. Some technology firms invented workarounds, such as \"smearing\" the extra second across a day, which means that different systems may briefly disagree about the time. As finance, telecoms, power grids and satellite navigation depend on ever more precise timestamps, those disagreements carry real risk.\n\nA surprise has made the question less pressing. Since around 2020 the Earth has been spinning slightly faster, and for the first time a negative leap second, removing a second, looked possible. That would be riskier still, since almost no software has been tested for a minute that is shorter than normal.\n\nIn 2022, the General Conference on Weights and Measures, the international body that governs the definition of the second and the world's time standards, voted to stop adding leap seconds by or before 2035. After that, the gap between atomic time and the Earth's rotation will be allowed to grow, probably to a minute or more, before any new correction is considered, perhaps not for a century.\n\nOrdinary people will notice nothing. The Sun will still rise on schedule, give or take a fraction of a minute that no one can perceive. The change is for the machines, which will run more smoothly with a clock that never skips a beat.\n\n(About 400 words.)"
+}

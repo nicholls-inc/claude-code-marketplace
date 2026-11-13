@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0a53ead720a7aa82",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72482,
+    "output_tokens": 1528,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:00:44.376Z",
+  "valid": true,
+  "text": "In the late summer of 1854, a terrible sickness fell upon Soho, a crowded district of London. Cholera, a disease that causes violent vomiting and diarrhea and can kill a healthy person within a day or two, swept through the streets around Broad Street. Within about ten days, more than five hundred people had died. Families fled. Shops closed. Whole households vanished.\n\nJohn Snow was a physician who lived nearby. He was no stranger to cholera. He had seen earlier outbreaks and had come to believe something that almost nobody around him accepted. The accepted view of the day held that diseases like cholera spread through foul air, a poisonous mist called miasma that rose from rotting waste and filthy ground. Snow doubted this. Cholera, he noted, attacked the gut first, not the lungs. If people were breathing the sickness in, why did it begin in the stomach? He suspected that something was being swallowed, and that the something was carried in drinking water.\n\nSnow had already tested this idea in an earlier epidemic by comparing neighborhoods served by different water companies. Now he had a chance to test it again, close to home. He did not wait for officials. He walked the streets himself, knocked on doors, and asked a simple question of grieving families. Where did you get your water?\n\nHe began by getting a list of the dead from the local register of deaths. Then he marked each address on a map of the neighborhood. At each house where someone had died he drew a small bar. When several people died in the same house, the bars stacked up. As the map filled, a pattern emerged that no one could easily ignore. The deaths clustered thickly around one spot, a public water pump on Broad Street where residents came to fill their buckets and jugs.\n\nThe pattern was striking, but Snow knew a map alone could be explained away. So he dug deeper, and the details he found made his case stronger. Nearby there was a workhouse, a large institution housing hundreds of poor residents, and yet very few of its inmates had died. Snow learned that the workhouse had its own well inside its walls and did not use the Broad Street pump. A brewery on the same street also escaped almost untouched. The workers there were given free beer, and they also had their own water supply. They simply did not drink from the pump.\n\nThen there were the strange cases far from the pump. A widow living in a pleasant part of London, miles from Soho, died of cholera. So did her niece. Snow discovered that the widow had once lived on Broad Street and loved the taste of the pump's water so much that she had it delivered to her home each day. Her niece had drunk it too. Those who never touched the water stayed well. Those who did fell ill. It was precisely the kind of evidence that fit his theory and defied the idea of poisonous air.\n\nArmed with this, Snow went to the local board of guardians, the officials who governed the parish. On the seventh of September he presented his findings and urged them to act. They listened, though many remained skeptical. They agreed, nonetheless, to remove the handle from the Broad Street pump, which meant nobody could draw water from it. The handle came off the next day.\n\nIt is tempting to say the handle's removal ended the epidemic in a single stroke, but the truth is more careful. The outbreak had already been fading, since many residents had fled and many of the most vulnerable were already dead. Snow himself admitted that the decline might have happened anyway. Still, the removal of the handle was a bold and sensible step, and it showed that a theory could be turned into practical action.\n\nSnow's investigation did not end there. He and a local clergyman named Henry Whitehead kept digging. Whitehead knew the community well and was at first doubtful of Snow's idea. Yet he gathered his own accounts from residents and eventually traced the outbreak to a single source. A baby in a house on Broad Street had fallen ill with cholera just before the outbreak. Its mother had washed the baby's soiled cloths and thrown the dirty water into a leaking cesspool very close to the well that fed the pump. The contamination had seeped through the ground into the drinking water.\n\nEven so, the authorities were slow to change their minds. The official inquiry rejected Snow's conclusion, and miasma stayed in fashion for years. Snow died in 1858, never knowing how completely he would be vindicated. In time, as scientists learned that tiny living organisms cause disease, his work was recognized as a foundation of modern public health. His careful maps, his patient questions at every door, and his willingness to follow the evidence made him a pioneer. One man, a notebook, and a hunch about water had changed how the world thinks about sickness."
+}

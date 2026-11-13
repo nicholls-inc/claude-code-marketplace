@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac1438ec6391cd4cc",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72436,
+    "output_tokens": 1050,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:12:12.727Z",
+  "valid": true,
+  "text": "On a mild January afternoon in 1919, the North End of Boston was busy with lunchtime. Children played in the streets, dockworkers ate near the harbor, and firefighters rested at their station by Commercial Street. Looming over them stood a steel tank, fifty feet tall and about ninety feet across, owned by the Purity Distilling Company. It held more than two million gallons of molasses.\n\nThe tank had been built hastily in 1915 to store molasses for making industrial alcohol, a trade that was booming as the First World War demanded munitions. Its owners, eager to save time and money, skipped basic safety checks. The tank was never properly tested for leaks. Its walls were thinner than they should have been, and nobody involved had the engineering training to know it. It groaned and leaked so badly that residents collected the dripping syrup in cups. To hide the problem, the company simply painted the tank brown.\n\nThen the weather turned. Just a day earlier, a fresh shipment of warm molasses had been pumped in, and on January 15 the temperature climbed above forty degrees after days of bitter cold. The syrup inside expanded, and the strained steel finally gave way.\n\nWitnesses described a sound like a machine gun, the rapid popping of rivets shooting loose, followed by a low rumble. Then the tank burst. A wave of molasses roughly fifteen feet high, by some accounts, tore through the neighborhood at around thirty-five miles an hour. It was heavy and relentless, and it carried the force of a collapsing building.\n\nThe wave knocked the supports from under an elevated railway, and it shoved a firehouse off its foundation. Wagons, horses, and people were swept up and flung against walls. Buildings crumpled. Some victims were trapped, unable to move as the thick, cooling syrup closed around them like cement. Rescuers waded in to their knees, struggling even to pull people free. In the end, twenty-one people died, and about one hundred fifty were injured. Among the dead were children and city workers. The dying syrup was so deep that the harbor ran brown for months.\n\nCleanup took weeks. Crews sprayed seawater and sand on the streets and scrubbed the pavement, but the smell of molasses lingered for years, and locals claimed that on hot days the neighborhood still seemed faintly sweet.\n\nWhat followed mattered as much as the disaster itself. Residents sued the company, and the case became one of the first major class action suits in Massachusetts. Purity Distilling claimed that anarchists had bombed the tank, a convenient excuse in a year of political fear. But after years of testimony from hundreds of witnesses, an auditor ruled that the tank had simply been poorly built. The company paid damages, roughly the equivalent of several thousand dollars per victim's family.\n\nThe disaster helped push Massachusetts toward stricter rules. Engineers and architects now had to approve construction plans, and licensed professionals had to sign off on large structures. The strange, almost comic image of a flood of molasses concealed a plain lesson: cutting corners has human costs."
+}

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a42dc954f94ed64c2",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73755,
+    "output_tokens": 2182,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:12:02.800Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Measuring.\n\nEvery quarter the same ritual plays out. A product manager asks how long the new billing feature will take. An engineer thinks for a moment, says \"three weeks,\" and privately knows it will be five, or eight, or that it depends on an API nobody has read yet. The number goes into a roadmap, the roadmap goes to the board, and six weeks later everyone is surprised. Then the cycle restarts.\n\nSoftware teams should stop estimating how long work will take. Not because estimates are rude, and not because uncertainty is bad, but because the estimate is the wrong tool. It asks for a prediction the team cannot reliably make, and it spends real effort producing a number that everyone will later treat as a promise.\n\nConsider why estimates fail. Software work is mostly discovery. The hard part of a feature is rarely the typing. It is finding out what the existing system actually does, which edge cases the customer cares about, and which dependency is quietly broken. You cannot size a thing you have not yet understood. So estimates collapse into guesses dressed up in story points, and the points drift as teams learn to game their own velocity.\n\nEstimates also distort behavior. Once a date is attached to a task, people optimize for the date rather than the outcome. Corners get cut, quality is traded away without anyone deciding to trade it, and bad news is held back until the deadline forces it out. Managers ask for estimates to reduce risk, but the estimate hides the risk instead of exposing it.\n\nWhat should replace them? Measure throughput and flow. Track how many items the team finishes each week, how long items sit in progress, and how often work is blocked. Historical data gives you a forecast with honest ranges: \"Based on the last twelve weeks, there is an 85 percent chance this batch ships within six weeks.\" That is a probabilistic answer, and it is far more useful than a single date because it reflects how the team actually works.\n\nKeep the work small enough to finish. Slice features into pieces that land in days, not months. Small batches make forecasts tighter and failures cheaper. Ship something real early, then let feedback reshape the rest.\n\nThe skeptics have a fair point: some work has hard deadlines. A regulation takes effect on a fixed date. A conference demo is booked. In those cases the right move is not to estimate harder but to negotiate scope. Decide what must be true on the day, cut everything else, and track progress against that fixed commitment. The deadline is the constraint, not the estimate.\n\nManagers worry that dropping estimates means losing control. It means trading false precision for real visibility. A team that reports its throughput, its blockers, and its confidence range gives leaders more to act on than a stack of optimistic numbers.\n\nStop asking how long. Start asking what we have learned, what is blocking us, and what we will ship next. Those answers are more honest, and they are the ones that actually get software out the door."
+}

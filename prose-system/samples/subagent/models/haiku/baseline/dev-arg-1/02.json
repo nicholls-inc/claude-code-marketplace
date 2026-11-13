@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0ffa9e0e83a81e02",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "mcp__claude-code-remote__list_repos",
+    "mcp__claude-code-remote__SubagentHandback"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 40741,
+    "cache_read_input_tokens": 209979,
+    "output_tokens": 4537,
+    "api_messages": 3
+  },
+  "timestamp_utc": "2026-11-11T19:01:57.358Z",
+  "valid": true,
+  "text": "Let the Market Build the Parking\n\nEvery city that wants more housing, lively shops and an active sidewalk life is undercut by a rule that rarely makes the news: the minimum parking requirement. Zoning codes across the country tell developers how many spaces to build per apartment, per restaurant seat and per thousand square feet of office, whatever the project and whatever the neighborhood. Cities should scrap these minimums and let builders decide how much parking to provide.\n\nThe case starts with cost. A structured parking space can cost tens of thousands of dollars to build, and underground garages cost more. Those costs do not disappear when a developer is forced to build them. They are folded into rents and sale prices, and every tenant pays them, including the many who do not own a car. Donald Shoup's work, most fully in The High Cost of Free Parking, argues that required parking is one of the largest hidden subsidies in the built environment, and that it flows to drivers at everyone else's expense. A household that walks, bikes or takes the bus is paying for a space it never uses.\n\nMinimums also distort land use. A lot given over to a surface car park cannot hold a shop, a home or a park. When a parking rule doubles the footprint of a building, it pushes projects toward the edge of town and makes small infill lots unbuildable. Many of the main streets people now prize were built before modern codes, and their density and mix of uses could not be permitted under the rules on the books today. Cities that want walkable centers are writing rules that forbid them.\n\nThe usual objection is that without minimums, streets will fill with parked cars. This assumes developers are indifferent to whether their buildings can be rented. They are not. A landlord building apartments where tenants want parking will provide it, because parking is a feature people pay for. A developer near a rail station, or in a dense district where many residents do not drive, will build less, and that is the right outcome. Parking the market values gets built. Parking nobody wants does not, and a minimum forces that second case into existence.\n\nCities that have acted have not seen the predicted disaster. Buffalo removed its citywide parking minimums in 2017 as part of a broader zoning overhaul. Minneapolis dropped its minimums in 2021 and became one of the first large American cities to do so. California's AB 2097, signed in 2022, bars local governments from enforcing parking minimums on many projects near major transit stops. These places did not become unlivable. They gained flexibility, and developers there still build parking wherever the financing and the tenants support it.\n\nCritics also point to places with weak transit, where driving is the only real option. That is a fair point, but it argues for distinguishing between places, not for mandating parking everywhere. A city can keep its options open by pairing repeal with better tools. It can charge market-based prices for on-street parking so curb space is used efficiently, and spend the revenue on the streets where it is collected. It can manage residential permit zones where spillover is a real and local problem. These measures target the actual scarcity, which is curb space and the cost of driving, rather than forcing every building to carry a garage whether or not anyone needs one.\n\nFinally, the question is who decides. A minimum parking requirement is a forecast made years in advance by planners who will not live with the consequences. It removes the choice from the people with the best information: the developers, lenders and future residents who understand what a particular building needs. Cities already trust those people with the design of the building itself. They should trust them with the parking too."
+}

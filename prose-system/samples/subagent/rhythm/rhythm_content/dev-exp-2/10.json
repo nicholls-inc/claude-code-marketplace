@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0a34b000710f5b13",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28240,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1248,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:32:07.975Z",
+  "valid": true,
+  "text": "A leap second is a single extra second inserted into the world's official clock time, usually at the very end of June or December, so that the clocks we rely on stay in step with the actual turning of the Earth. The need for it arises because there are two ways of measuring time that no longer agree perfectly: the planet's rotation, which defined the day for most of human history, and the atomic clock, which since 1967 has defined the second as a fixed number of vibrations of a caesium atom and which keeps time far more steadily than the spinning Earth does. The Earth's rotation wobbles and drifts, slowed gradually by the tug of the tides and nudged by earthquakes, shifting ocean currents and movements of the molten core, so that over the years a day measured by the sun drifts away from a day counted by atoms. Since 1972 the international timekeepers have kept the two within 0.9 seconds of each other by occasionally adding a second to Coordinated Universal Time, which they have done 27 times, most recently at the end of 2016.\n\nThe practice was tolerable when clocks were mostly a matter for astronomers and the occasional wristwatch, but it has become a recurring headache in a world where computer networks, financial exchanges, telecommunications, satellite navigation and power grids all depend on timestamps agreeing to the millisecond. A minute that contains 61 seconds is something many systems are not built to handle, and because leap seconds arrive irregularly and are announced only a few months ahead, engineers cannot test for them as a routine matter. Past insertions have been followed by crashed servers and frozen websites, and large technology companies have developed their own workarounds, such as smearing the extra second across a day so that no single minute looks strange, which has the side effect of leaving different systems briefly disagreeing about the time. Complicating matters further, the Earth has lately been spinning slightly faster than expected, which raises the unprecedented prospect of a negative leap second, a second removed rather than added, and a kind of change that software has never had to deal with in the real world.\n\nIn 2022 the General Conference on Weights and Measures, the body that oversees the international system of units, voted to stop using leap seconds by 2035, and the decision was made with the backing of the standards organisations that look after the clocks. Rather than correcting the gap every few years, the plan is to let the difference between atomic time and solar time grow for a long period, possibly a minute or more, before anyone has to address it again, and the exact tolerance is still being settled. For almost everyone the change will pass unnoticed, since a gap of a few seconds has no bearing on when the sun rises or when the kettle goes on."
+}

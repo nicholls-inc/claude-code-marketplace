@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad295a3b3de702f0c",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28379,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 926,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:15:52.736Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a method called constant current followed by constant voltage, usually shortened to CC-CV. The charger is a current source first and a voltage source second, and the cell's own chemistry decides when it changes role.\n\nCharging pushes lithium ions out of the positive electrode, which is typically a metal oxide such as lithium cobalt oxide or a nickel-manganese-cobalt blend. The ions cross the electrolyte and the separator and settle between the layers of graphite in the negative electrode. Electrons take the external circuit in the same direction. The cell's open-circuit voltage rises as the graphite fills with lithium, from about 3.0 V when empty to about 4.2 V when full for a common cobalt-based cell.\n\nIn the first stage the charger holds the current fixed, commonly at 0.5C to 1C, where 1C is the current that would charge the cell in one hour. The terminal voltage is the open-circuit voltage plus the current multiplied by the cell's internal resistance, and so it climbs steadily. This stage delivers roughly 70 to 80 per cent of the capacity and takes up around half the time.\n\nWhen the terminal voltage reaches the upper limit, 4.2 V in this example, the charger stops forcing current and holds the voltage there. The limit is a safety boundary. Above it the electrolyte begins to oxidise at the positive electrode, and at the negative electrode lithium can plate as metal instead of entering the graphite, which shortens the life of the cell and can cause short circuits.\n\nIn the constant-voltage stage the current falls on its own. The voltage across the internal resistance is the fixed 4.2 V minus the open-circuit voltage, and that open-circuit voltage keeps rising as the cell fills. The gap shrinks, so the current shrinks with it, roughly exponentially. A second effect adds to this. Near full charge the graphite has few empty sites left, and lithium moves into the particles by diffusion, which is slow compared with the rate at which the charger can deliver ions to the surface. The surface fills first, the concentration difference between surface and core drives the diffusion, and the cell can accept less current without exceeding the voltage limit.\n\nThe charger ends the cycle when the current drops to a set cutoff, typically 0.05C to 0.1C. Continuing further would add very little charge and keep the cell at high voltage, which accelerates ageing. The last 20 to 30 per cent of capacity therefore takes about as long as the first 70 to 80 per cent. Fast chargers shorten the time by raising the current in the first stage, and they reduce it when the cell is cold, because lithium plating becomes more likely at low temperature."
+}

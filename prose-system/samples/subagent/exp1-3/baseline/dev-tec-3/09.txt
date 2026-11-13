@@ -1,0 +1,15 @@
+Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV). The cell's terminal voltage is the quantity that must be controlled, because exceeding the chemistry's upper limit (about 4.2 V for a typical graphite/NMC or graphite/LCO cell) causes lithium plating on the anode, electrolyte oxidation, and accelerated degradation or thermal runaway.
+
+Stage 1, constant current (CC): the charger forces a fixed current, commonly 0.5 to 1 C (a C-rate of 1 means the current that would fill the nominal capacity in one hour). Lithium ions de-intercalate from the cathode, diffuse through the electrolyte, and intercalate into the graphite anode. During this stage the terminal voltage rises steadily from roughly 3.0 to 3.7 V and then toward 4.2 V. Most of the charge, typically 70 to 80 percent, is delivered here.
+
+Stage 2, constant voltage (CV): once the terminal voltage reaches the 4.2 V limit, the charger holds that voltage and lets the current fall on its own. Charging ends when the current decays to a cutoff, typically 0.05 C to 0.1 C.
+
+Why the current tapers: the terminal voltage is not the cell's open-circuit voltage (OCV). It is approximately
+
+V_terminal = OCV(state of charge) + I x R_internal + diffusion and polarisation overpotentials.
+
+The OCV rises with state of charge. The I x R and polarisation terms are the voltage "lost" to driving current through the cell's internal resistance, ion transport limits, and charge-transfer kinetics. In the CC stage, the terminal voltage hits 4.2 V while the OCV is still below it, because the overpotential accounts for the difference. Holding the terminal voltage at 4.2 V while the OCV continues to climb leaves less and less voltage headroom for the overpotential, so the current must fall. In the limit, the OCV approaches 4.2 V and the current approaches zero, like a capacitor charging through a resistor, giving a roughly exponential decay.
+
+There is also a physical reason the tail is slow. As the graphite fills with lithium, the surface concentration of lithium saturates, so the concentration gradient that drives solid-state diffusion into the particle shrinks. The remaining capacity sits deep inside particles and must arrive by slow diffusion. Cold temperatures and aged cells raise the resistance further, which brings on the CV stage earlier.
+
+Practical consequences: the last 20 to 30 percent of capacity takes a disproportionate share of the charge time, and fast chargers often skip most of the CV stage, stopping at 80 percent. Battery management systems also monitor temperature and cell balance, and reduce the current limit when cells are cold or hot.

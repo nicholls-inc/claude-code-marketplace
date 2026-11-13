@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a93f02e52692e86f8",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28194,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 971,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:56:50.531Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a method called constant-current, constant-voltage, usually shortened to CC-CV. It has two phases, and the second one explains why the last part of a charge is slow.\n\nIn the first phase, the charger forces a fixed current into the cell, commonly between 0.5C and 1C. A 1C current would fill the nominal capacity in one hour. During this phase the cell voltage rises gradually as lithium is stored. The charger raises its own output voltage as needed to hold the current steady. This phase delivers roughly 70 to 80 percent of the capacity.\n\nDuring charging, lithium ions leave the cathode, typically a metal oxide, and travel through the electrolyte and a porous separator. They then insert themselves between the graphite layers of the anode, a process called intercalation. Electrons travel through the external circuit in the same direction. The cell's terminal voltage is the sum of two parts. One is the open-circuit voltage, which depends on how full the electrodes are. The other is an overpotential, which is current multiplied by the cell's internal resistance and which also includes kinetic and diffusion losses.\n\nWhen the terminal voltage reaches the upper limit, about 4.2 V for a common chemistry, the charger switches to the second phase. This limit is a hard ceiling. Exceeding it accelerates electrolyte decomposition, growth of the surface film on the anode, and metal plating, which degrades the cell and can be unsafe. The charger therefore holds the voltage constant and lets the current fall on its own.\n\nThe current falls because of the balance of voltages. As the electrodes fill, the open-circuit voltage climbs toward the fixed limit. With the terminal voltage pinned, the voltage left over to drive current across the internal resistance shrinks. Less driving voltage means less current, much like a capacitor charging through a resistor. The current decays roughly exponentially.\n\nTwo physical effects reinforce this. First, the concentration of lithium at the surface of the anode particles approaches saturation, so there are fewer empty sites for new ions. Second, lithium must diffuse from the particle surface into its interior, and that process is slow. The surface fills before the core does, so the cell needs time for the lithium to even out inside the particles.\n\nThe charge ends when the current drops to a cutoff, commonly 0.05C to 0.1C. The final 20 to 30 percent of capacity can take as long as the first 70 to 80 percent.\n\nIn short, the constant-current phase is limited by what the cell can accept in terms of current. The constant-voltage phase is limited by the voltage ceiling, which protects the cell, and by the slow diffusion of lithium inside the electrode particles. Faster charging in the final phase is possible only by accepting more degradation or by using materials and electrode designs with lower resistance and faster diffusion."
+}

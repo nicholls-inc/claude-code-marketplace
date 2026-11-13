@@ -1,0 +1,64 @@
+# From HTTPS address to first byte
+
+When you press Enter on `https://example.com/products?id=7`, the browser has a long way to go before any HTML arrives. This walk-through follows a typical connection using TLS 1.3 over HTTP/1.1 or HTTP/2, and notes where time is spent. Timings are rough. The order of the steps is what matters.
+
+## 1. Parse the URL and check local rules
+
+The browser splits the address into a scheme (`https`), a host (`example.com`), a port (443 by default), a path and a query string. It then checks whether it already knows that this host must only be reached over HTTPS. HSTS (HTTP Strict Transport Security) rules, stored from an earlier response, cause any `http://` request to be upgraded before it touches the network. The browser also checks its HTTP cache. A fresh cached copy of the response can be used with no network activity at all.
+
+## 2. Resolve the host name (DNS)
+
+Computers connect to IP addresses, so the host name must be turned into one. The lookup passes through several layers and stops at the first answer:
+
+1. The browser's own DNS cache.
+2. The operating system's resolver cache and its hosts file.
+3. A recursive resolver, usually supplied by the network or set to a public service. If DNS-over-HTTPS or DNS-over-TLS is enabled, the query travels inside an encrypted connection instead of plain UDP port 53.
+
+If the recursive resolver has no cached answer, it walks the hierarchy. A root server points to the `.com` servers, which point to the authoritative name servers for `example.com`, which return the A (IPv4) and/or AAAA (IPv6) records. Each answer carries a TTL, the number of seconds caches may keep it. Modern browsers may also request HTTPS DNS records at the same time. These can advertise HTTP/3 support and encryption keys for Encrypted Client Hello.
+
+A cold lookup typically costs tens of milliseconds, and sometimes more than 100 ms.
+
+## 3. Open a TCP connection
+
+With an IP address in hand, the browser asks the operating system for a TCP socket and sends a SYN to port 443 on the server. The server answers SYN-ACK, and the browser replies with ACK. This three-way handshake costs one full round trip before any application data can flow. If the browser already has an idle connection to the same host, it reuses that connection and skips steps 3 and 4. Browsers often race IPv6 and IPv4 attempts (Happy Eyeballs) and keep whichever connects first.
+
+## 4. Negotiate TLS
+
+TLS sets up encryption and proves the server's identity. In TLS 1.3 this takes one more round trip.
+
+1. **ClientHello.** The browser sends the TLS versions and cipher suites it supports, a random value, a key share (its public Diffie-Hellman value, typically X25519), the SNI extension naming `example.com` (so one IP address can host many sites), and ALPN values such as `h2` and `http/1.1`.
+2. **ServerHello.** The server picks a cipher suite and returns its own key share. Both sides combine the two key shares to compute the same shared secret, then derive the keys that encrypt everything after this message. The ServerHello itself is plaintext.
+3. **Certificate and proof.** The server sends its certificate chain, plus a CertificateVerify message signed with the certificate's private key over the handshake transcript. This proves the server holds the key for that certificate.
+4. **Finished.** Both sides send a Finished message containing a MAC over the handshake. From here on, application data is encrypted.
+
+The browser also checks the certificate. The chain must lead to a root in its trust store, the name must match `example.com` (including wildcards), the validity dates must include today, and the certificate must not be revoked. Revocation is checked through OCSP, CRLs, or an OCSP response that the server "staples" to the handshake. Many browsers also check Certificate Transparency logs. If any check fails, the browser shows an error page and stops here.
+
+## 5. Send the HTTP request
+
+The browser writes an HTTP request into the encrypted channel. Over HTTP/1.1 it looks like plain text:
+
+```
+GET /products?id=7 HTTP/1.1
+Host: example.com
+Accept: text/html
+Accept-Encoding: gzip, br, zstd
+Cookie: session=...
+```
+
+Over HTTP/2 the same information is sent as binary HEADERS frames, compressed with HPACK. Several requests can share one connection as separate streams. The Cookie header is added automatically from the browser's cookie store. The Accept-Encoding header tells the server which compression formats the browser can decode.
+
+If the server supports HTTP/3, the browser may use QUIC over UDP instead. QUIC combines the transport and TLS 1.3 handshakes, so the first request can go out after a single round trip. On a resumed session, the browser may even send early data (0-RTT). That data can be replayed by an attacker, so servers accept it only for safe, idempotent requests.
+
+## 6. The server does its work
+
+The request crosses the internet and may pass through a CDN edge node, a load balancer and a TLS terminator before it reaches an application server. A CDN that holds a fresh copy can answer from a nearby location and skip the origin. Otherwise the application may check a cache, query a database or run application code. This server-side time is often the largest part of the wait.
+
+## 7. The first byte returns
+
+The server sends the status line and headers first, such as `HTTP/1.1 200 OK`, `Content-Type` and `Cache-Control`. The arrival of the first byte of this response is what developers call Time To First Byte (TTFB). TTFB is measured from the start of navigation, so it includes any redirects, DNS, TCP, TLS and server time. Once the headers arrive, the browser decides how to handle the body. It may follow a redirect, store the response in cache, and start parsing HTML while the rest of the bytes are still arriving.
+
+## Summary
+
+On a cold connection, the first byte of the response takes roughly three round trips after DNS: one for TCP, one for TLS 1.3, and one for the request, plus server time. Reused connections, cached DNS records, session resumption and HTTP/3 each remove some of that cost.
+
+The browser DevTools Network panel and the Resource Timing API show these phases separately: DNS, Connect, SSL and Waiting (TTFB). Knowing which phase dominates tells you where to look. The cause might be DNS configuration, connection reuse, certificate chain length, or the server's code.

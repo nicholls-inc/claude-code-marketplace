@@ -1,0 +1,75 @@
+# How two strangers can agree on a secret while others listen
+
+Suppose Alice and Bob have never met and can only talk over a line that an eavesdropper, Eve, hears in full. They want to end up holding a secret number that Eve does not have, so that they can use it to scramble their later messages. It sounds impossible: anything Alice tells Bob, she also tells Eve.
+
+The way out, published by Whitfield Diffie and Martin Hellman in 1976, is that Alice and Bob never send the secret at all. Each sends the other a partial ingredient, and each finishes the job privately. Eve hears both ingredients, but they are not enough for her to finish it.
+
+## The idea in paint
+
+Picture mixing paint. Stirring two colours together is easy; separating a mixture back into its original colours is practically impossible.
+
+Alice and Bob agree openly on a common colour, say yellow. Eve hears this. Alice then picks a private colour that she tells no one, mixes it into her yellow, and posts the result to Bob. Bob does the same with his own private colour and posts his mixture to Alice. Eve sees both mixtures in transit, but she cannot un-mix either one to find the private colour inside.
+
+Now Alice takes Bob's mixture and stirs in her private colour. Bob takes Alice's mixture and stirs in his. Both pots now contain the same three things: yellow, Alice's colour and Bob's colour. They hold an identical final colour.
+
+Eve has yellow and the two mixtures. If she combines the mixtures she gets a pot with a double share of yellow, which is the wrong colour. To make the right one she needs a private colour on its own, and neither was ever sent.
+
+The real method replaces paint with arithmetic. It needs an operation that is easy to do and hard to undo, and one where the order of mixing does not matter.
+
+## Clock arithmetic
+
+The operation comes from the arithmetic of remainders. On a 12-hour clock, 5 hours after 10 o'clock is 3 o'clock, not 15: you add, then throw away complete laps of 12 and keep what is left. Mathematicians do the same with any clock size. In what follows the clock has 23 positions, so "reducing" a number means dividing it by 23 and keeping the remainder. For example, 25 reduces to 2, because 25 is one lap of 23 with 2 left over.
+
+The hard-to-undo operation is raising a number to a power on this clock. Take the number 5 and keep multiplying by 5, reducing each time:
+
+- 5 to the power 1 is 5
+- 5 to the power 2 is 25, which reduces to 2
+- 5 to the power 3 is 2 × 5 = 10
+- 5 to the power 4 is 10 × 5 = 50, which reduces to 4
+- 5 to the power 5 is 4 × 5 = 20
+- 5 to the power 6 is 20 × 5 = 100, which reduces to 8
+
+The results are 5, 2, 10, 4, 20, 8. They jump around with no visible pattern. In ordinary arithmetic powers of 5 simply grow, so if someone shows you 15,625 you can find the power by seeing how big it is. On the clock, size tells you nothing. If someone shows you 8 and asks which power of 5 gives it, you have no better method than trying powers one after another.
+
+Going forwards is a few multiplications. Going backwards is a search. That is the paint-mixing property.
+
+## The exchange, with real numbers
+
+Alice and Bob agree in the open on the clock size, 23, and the starting number, 5. Eve hears both.
+
+**Alice** privately chooses a secret number, 6. She works out 5 to the power 6 on the clock, which the list above shows is 8. She sends 8 to Bob.
+
+**Bob** privately chooses a secret number, 15. He works out 5 to the power 15 on the clock, which comes to 19. He sends 19 to Alice.
+
+Now each finishes the job:
+
+- Alice takes Bob's 19 and raises it to her secret power, 6. On the clock, the result is **2**.
+- Bob takes Alice's 8 and raises it to his secret power, 15. On the clock, the result is **2**.
+
+They have arrived at the same number without ever sending it. That shared number, 2, is their secret.
+
+## Why they get the same answer
+
+This is a rule from school algebra, not a coincidence. Raising a power to a power multiplies the exponents: (5⁶)¹⁵ and (5¹⁵)⁶ are both 5⁹⁰, because 6 × 15 and 15 × 6 are the same. Alice computes one, Bob computes the other. Reducing by 23 along the way does not disturb this, since throwing away whole laps early or late leaves the same remainder.
+
+So Alice's secret and Bob's secret both end up in the final number, as both private colours ended up in the final pot, and the order in which they were added makes no difference.
+
+## What Eve is left with
+
+Eve has heard four numbers: 23, 5, 8 and 19. To get the shared secret she needs Alice's 6 or Bob's 15. That means answering the question "which power of 5 gives 8 on a 23-clock?", and the only route is the backwards search.
+
+Multiplying the two numbers she overheard does not help her. 8 × 19 corresponds to 5 to the power 6 + 15, which is 5²¹, whereas the secret is 5 to the power 6 × 15. This is the paint pot with too much yellow.
+
+On a clock of 23, of course, Eve can just try every power and be done in moments. The protection comes entirely from scale. In practice the clock size is a prime number hundreds of digits long, and the secret powers are similarly enormous. Alice and Bob can still do their sums quickly, because there is a shortcut for going forwards: repeated squaring reaches a huge power in a few thousand multiplications rather than one at a time. No comparable shortcut is known for going backwards. With numbers of that size, the best known methods would take all the world's computers far longer than the age of the universe.
+
+Two honest qualifications belong here. First, nobody has proved that a fast backwards method cannot exist; it is only that decades of effort by many mathematicians have not found one. Second, a large enough quantum computer, a kind of machine that does not yet exist at the required scale, could do the backwards step quickly, which is why replacement methods built on different hard problems are now being introduced.
+
+## Where "public key" comes in
+
+The numbers Alice and Bob send, 8 and 19, are called their public keys: they can be shown to anyone. The numbers they keep, 6 and 15, are their private keys. Each public key is made from its private key by the easy forwards step, and cannot feasibly be turned back into it. This pairing of one number you publish with one you guard is what the name "public-key cryptography" refers to.
+
+## One gap remains
+
+The exchange keeps listeners out, but it does not tell Alice who is on the other end. If Eve can do more than listen, and can intercept and replace messages, she can run one exchange with Alice while posing as Bob, and another with Bob while posing as Alice, and read everything passing between them.
+
+Closing that gap takes a second use of the same public and private key idea, the digital signature, which lets Bob prove a message came from him, backed by trusted organisations that vouch for which public key belongs to whom. Your web browser does both steps each time it shows a padlock: it checks who it is talking to, then carries out an exchange much like the one above to agree a secret for that visit.

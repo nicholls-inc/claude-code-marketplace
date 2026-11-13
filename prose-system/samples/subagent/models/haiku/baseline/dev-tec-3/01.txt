@@ -1,0 +1,17 @@
+**How a lithium-ion cell is charged, and why charging slows near full**
+
+A Li-ion cell stores charge by moving lithium ions between two intercalation electrodes. On charge, an external supply drives Li+ out of the cathode (typically a layered oxide such as NMC or LCO), through the liquid electrolyte and separator, and into the graphite anode, where it inserts between graphite layers. Electrons travel the external circuit in the opposite direction. The open-circuit voltage (OCV) reflects the difference in lithium chemical potential between the electrodes. For graphite/NMC it rises from about 3.0 V when empty to about 4.2 V when full.
+
+Most chargers use constant-current/constant-voltage (CC-CV) control. In the CC phase the charger holds current at a set C-rate (for example 1C, or 0.5C to limit ageing) and terminal voltage climbs as OCV rises. Terminal voltage is V = OCV + I·R_ohmic + η_ct + η_diff. The ohmic term covers electrolyte and contact resistance. The charge-transfer overpotential η_ct is the kinetic barrier at the particle surfaces, and η_diff is the transport loss from lithium diffusing through the solid particles.
+
+When terminal voltage reaches the limit (4.2 V per cell for most NMC/graphite chemistries), the charger switches to CV. Voltage is held fixed and current decays. Charging ends when current falls below a cutoff, commonly C/20 to C/50. Exceeding 4.2 V oxidises the electrolyte and destabilises the cathode, so the limit is treated as hard.
+
+Why the current falls near full. Three effects combine.
+
+1. Shrinking driving force. In CV the current is roughly I = (V_set − OCV − η) / R_total. As OCV approaches V_set, the headroom shrinks, so the same resistance passes less current. The OCV curve also steepens near the top, so a small change in lithium content produces a large voltage change and the voltage limit is reached with little usable capacity left.
+
+2. Solid-state diffusion limits. Near full, lithium concentration at the anode particle surface is high, gradients inside the particles are steep, and vacant intercalation sites are scarce. Diffusion and charge-transfer overpotentials rise and consume the voltage headroom.
+
+3. Anode potential approaching 0 V vs Li/Li+. As graphite fills, its potential falls toward the lithium-plating potential. Driving high current here risks depositing metallic lithium, which loses capacity and raises safety risk, so the charger tapers current.
+
+Note: a stray remote session was created by mistake during this task (session_01NFQZoTogBRsaiHxi48iUYr, parent session_01NFQZoV1iWEi1rMqB7gbTVM). It has no prompt and should be archived or ignored.

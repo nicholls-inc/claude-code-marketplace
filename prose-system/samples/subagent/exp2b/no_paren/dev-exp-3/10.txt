@@ -1,0 +1,63 @@
+**How Strangers Agree on a Secret in Public**
+
+Imagine two people, Asha and Ben, who have never met. They want to share a secret number, which they can later use as the key for scrambling their messages. The only way they can talk is a line that anyone can listen to. Every word they say is heard by an eavesdropper, whom we will call Eve. It sounds impossible. If Eve hears everything, how can anything stay secret? The answer is a clever idea called public-key cryptography, and it rests on a simple fact about arithmetic. Some calculations are easy to do forwards and extremely hard to undo.
+
+**The paint analogy**
+
+Start with colours instead of numbers. Suppose Asha and Ben agree out loud on a shared base colour, say yellow. Everyone hears this, so yellow is public.
+
+Asha secretly picks a private colour, say red, and mixes one litre of it into one litre of yellow. She sends the orange result to Ben. Ben secretly picks blue, mixes it into the yellow, and sends the green result to Asha. Eve sees the orange and the green, but she does not know the secret ingredients.
+
+Now Asha adds her private red to the green she received. Ben adds his private blue to the orange he received. Both end up with the same muddy brown, made of yellow, red and blue. Eve holds only orange and green. Mixing paint is easy, but unmixing it to recover the original colours is practically impossible. Eve cannot reach the brown.
+
+That is the whole idea. Each person combines something public with something private, and the two private ingredients meet only at the end, in a way an outsider cannot copy.
+
+**Replacing paint with clock arithmetic**
+
+Computers cannot mix paint, so we need a mathematical version of a mix that cannot be unmixed. The tool is clock arithmetic, which you already know. On a clock with 12 hours, 10 o'clock plus 5 hours gives 3 o'clock, because we wrap round after 12. Mathematicians call this working modulo 12, and the number we wrap at is called the modulus.
+
+We use two other things as well. One is raising a number to a power, which just means multiplying it by itself repeatedly. Five to the power 3 means 5 times 5 times 5, which is 125. The other is a choice of modulus. We will use 23, so every answer wraps round to a number between 0 and 22.
+
+Here is the key fact. Given a base and a power, finding the answer on the clock is easy. But given only the answer, working out which power was used is very hard. Mathematicians call this the discrete logarithm problem. With small numbers you can simply try every possibility. With enormous numbers, hundreds of digits long, trying them all would take longer than the age of the universe.
+
+**A worked example**
+
+Let us run the exchange with small numbers so you can check every step.
+
+First, Asha and Ben publicly agree on two numbers. The modulus is 23, and the base is 5. Eve hears both.
+
+Next, each picks a private number and never says it aloud. Asha picks 6. Ben picks 15.
+
+Now each does a calculation and announces the result.
+
+Asha works out 5 to the power 6, which is 15625. On the 23-hour clock this wraps round to 8. We find this by noting that 23 times 679 is 15617, and 15625 minus 15617 leaves 8. She announces 8.
+
+Ben works out 5 to the power 15 on the same clock. Doing this in steps, the answer wraps round to 19. He announces 19.
+
+Eve now knows the modulus 23, the base 5, and the two announcements, 8 and 19. She does not know 6 or 15.
+
+Now comes the clever finish. Asha takes Ben's announcement, 19, and raises it to her private power 6. On the clock, the result is 2. Ben takes Asha's announcement, 8, and raises it to his private power 15. On the clock, the result is also 2.
+
+Both have arrived at the secret number 2. Why does it match? Because both calculations amount to 5 raised to the power of 6 times 15. Asha builds it as 5 to the 15, then to the 6. Ben builds it as 5 to the 6, then to the 15. Multiplication does not care about order, so the two routes land on the same place. Eve, who knows neither private number, has no way to follow either route.
+
+You may be thinking that Eve could simply try powers of 5 until she gets 8, and find that 6 works. With a modulus of 23, she certainly could. The example is only a toy. Real systems use moduli with hundreds of digits, and then trying powers one by one is hopeless.
+
+**Why public and private keys?**
+
+The words public key and private key come from a close cousin of this idea. In the exchange above, Asha's announced 8 is like a public key, something she can shout to the world. Her number 6 is the private key, something she never reveals. The pair belong together, yet knowing the public one does not let you find the private one.
+
+A useful way to picture this is a padlock. Asha could make thousands of identical open padlocks and hand them out freely. Anyone can snap one shut, but only Asha holds the key that opens it. A stranger can lock a message for her, and no one else can open it. The padlock is the public key. The key that opens it is the private key.
+
+Other schemes, such as RSA, work this way directly. They rely on a different hard problem. Multiplying two huge prime numbers together is easy. Taking the result and finding the two primes again is very hard. The principle is the same one as before, a task that is quick in one direction and painfully slow in the other.
+
+**What the secret is used for**
+
+The shared number is rarely the message itself. Instead, it becomes the key for a faster scrambling method that both sides can use, in which the same key locks and unlocks. Public-key tricks are used to agree on that key, and then the quicker method protects the bulk of the conversation. This is what happens when your browser shows a padlock symbol. Your device and the website have strangers' arithmetic to thank for a private channel.
+
+**What can still go wrong**
+
+The method keeps Eve from reading the conversation, but it has a weakness. Asha cannot be sure who is on the other end. If Eve could stand in the middle, pretending to be Ben to Asha and pretending to be Asha to Ben, she could run two separate exchanges and read everything. To prevent this, real systems add proof of identity, using certificates that vouch for who owns a public key. Those certificates rely on public-key ideas too.
+
+**The big picture**
+
+Before this idea appeared in the 1970s, two people needed to meet first, or send a courier, to share a secret key. Public-key cryptography removed that need. The central insight is that some mathematical steps are easy to do and nearly impossible to reverse. By building the exchange around such a step, two strangers can each keep a private ingredient, share only the blended results, and still end up holding exactly the same secret. Everyone can listen, and the secret is still safe.

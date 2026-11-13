@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7253e5deec9a74b2",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28198,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1005,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:29:47.410Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping in Slices.\n\nEvery software team knows the ritual. Someone asks how long a feature will take, the engineers pad their guess, the manager trims it, and the result goes on a roadmap that everyone privately expects to be wrong. We have done this for decades. The evidence that it works is thin. The evidence that it hurts is plentiful. Teams should stop estimating how long work will take.\n\nStart with accuracy. Studies of project outcomes keep finding the same thing: large overruns are normal, not exceptional. The reason is not laziness or bad arithmetic. Software work is mostly discovery. You do not know what you will find in the legacy module until you open it. An estimate made before that discovery is a guess dressed as a commitment.\n\nThen there is what the number does once it exists. An estimate becomes a target, and a target bends behavior. Engineers skip the refactor that would have paid off next quarter. Testing gets squeezed at the end because the date is fixed. Worse, people learn that honesty is punished. Say the work is bigger than expected and you face a negotiation. Say nothing and you hide the problem until it is too late to fix cheaply.\n\nThe cost is also real before any code is written. Planning poker, sizing meetings, and re-estimation after scope changes consume hours from your most expensive people. That time buys a figure nobody trusts.\n\nThe usual defense is that managers need dates to coordinate with sales, marketing, and customers. That need is legitimate. But a date guessed up front is a poor way to meet it. A better way exists.\n\nBreak work into thin slices that each deliver something usable, and keep them small enough that most finish in a few days. Then measure what actually happens. Count how many slices your team completes per week. After a month or two you have a throughput figure based on real history rather than hope. Forecast from that. If the backlog holds forty slices and you finish eight a week, you are looking at about five weeks, with a range that you can widen or narrow as data arrives. This is a forecast built from observation, and it updates itself every week.\n\nNotice what changes. The conversation moves from defending a number to cutting scope. When the forecast slips, nobody asks who guessed wrong. They ask which slice is least valuable and can wait. That is the decision managers actually want to make, and they get to make it early, with evidence.\n\nSome will object that this is just estimation by another name. It is not. Nobody sits in a room predicting effort for individual tasks. Nobody defends a figure created before the work was understood. The only input is what the team has demonstrably done.\n\nThere are narrow cases where a firm external deadline forces a rough sizing, such as a regulatory date. Even then, sizing the slices and trimming scope beats promising a single end date for the whole.\n\nFor everyone else, the practice has run its course. Drop the estimation meetings. Slice the work small, track what finishes, and forecast from real data. You will get dates that are more honest, and your engineers will get their time back."
+}

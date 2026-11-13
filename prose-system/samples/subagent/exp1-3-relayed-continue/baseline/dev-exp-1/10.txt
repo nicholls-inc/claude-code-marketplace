@@ -1,0 +1,40 @@
+**How a heat pump heats your house when it's colder outside**
+
+The puzzle goes away once you stop thinking of a heat pump as something that makes heat. It moves heat. Your gas boiler burns fuel to create heat. A heat pump carries heat that already exists from one place to another, in the same way a fridge does, only in the opposite direction.
+
+**Cold is not the same as no heat**
+
+Heat energy doesn't vanish at 0°C. Air at -5°C still holds a lot of thermal energy. Absolute zero is around -273°C, so on a freezing day the outdoor air is still hundreds of degrees above the point where it has nothing left to give. A heat pump extracts some of that energy and delivers it indoors.
+
+**The cycle, step by step**
+
+A sealed loop contains a refrigerant, a fluid that boils at very low temperatures (well below -20°C at normal pressure).
+
+1. **Outdoors, the refrigerant absorbs heat.** Air is blown across a coil of cold refrigerant. Even though the air is cold, it is warmer than the refrigerant, so heat flows into the fluid and it evaporates into a gas.
+2. **The compressor squeezes the gas.** Compressing a gas heats it up sharply, much as a bicycle pump gets warm. The refrigerant leaves the compressor much hotter, typically 40 to 60°C or more.
+3. **Indoors, the refrigerant releases heat.** The hot gas passes through a second coil, giving up its heat to your radiators, underfloor heating or hot water cylinder. As it loses heat it condenses back into a liquid.
+4. **An expansion valve drops the pressure.** The liquid cools to well below outdoor temperature, and the loop starts again.
+
+The compressor is the only major part that needs electricity. Its job is to raise the refrigerant's temperature above your indoor temperature, so heat can flow into the house. Heat naturally flows from hot to cold, and the compressor is what makes the refrigerant the hotter side.
+
+**Why it's cheaper to run than it sounds**
+
+Because most of the heat is collected rather than generated, you get more heat out than electricity in. This ratio is the coefficient of performance (COP). A COP of 3 means each 1 kWh of electricity delivers about 3 kWh of heat. A gas boiler can never exceed 100% efficiency, and modern ones achieve roughly 85 to 92%.
+
+**The catch: colder weather lowers efficiency**
+
+The colder it gets outside, the harder the compressor works to lift the temperature, so COP falls. A typical modern unit might reach 3.5 to 4 at 7°C and about 2 to 2.5 at -7°C. It still works well below freezing, since many models are rated to -15°C or lower, but it uses more electricity per unit of heat. Your running costs will be highest in the coldest weeks.
+
+**What this means for replacing your boiler**
+
+- **Running cost depends on the price gap.** Electricity usually costs more per kWh than gas. With a COP of about 3, a heat pump can match or beat gas running costs, but only if your tariff ratio is favourable. Check current prices, and consider a heat pump or time-of-use tariff.
+- **Your house matters a lot.** Heat pumps run most efficiently at lower flow temperatures (35 to 45°C) than boilers (60 to 70°C). Good insulation, draught-proofing and large or upgraded radiators or underfloor heating make a big difference. A poorly insulated house will cost more to heat and may need upgrades first.
+- **Expect different behaviour.** Heat pumps run for long periods at a steady, gentle output rather than firing hard and stopping. Radiators feel warm, not hot. Most people get used to this quickly.
+- **Space and installation.** You need outdoor space for the unit and usually an indoor hot water cylinder. Get a proper heat-loss survey from the installer rather than a rule-of-thumb quote.
+- **Upfront cost versus savings.** Installation is considerably more expensive than a new boiler, though grants may offset some of it. Over the long term, lower carbon emissions and potentially lower bills are the payoff.
+
+**Bottom line**
+
+A heat pump works in cold weather because it harvests heat that is still in the outside air and concentrates it indoors, using electricity only to move it. It is a strong option if your home is reasonably well insulated and you can pair it with a suitable tariff. Before deciding, ask for a survey and a quote that estimates your real annual running costs, not just the headline COP.
+
+(About 640 words.)

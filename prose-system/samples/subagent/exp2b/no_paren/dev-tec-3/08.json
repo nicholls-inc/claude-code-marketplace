@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a177a825b5778e2e9",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 917,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:45:19.633Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a protocol called constant current, constant voltage, usually shortened to CC-CV. It has two phases, and the second explains why the end of charging is slow.\n\nStart with what the cell is. Two electrodes, graphite on the negative side and a lithium metal oxide on the positive side, sit in a lithium salt electrolyte and are separated by a porous membrane. Charging forces lithium ions out of the oxide, across the electrolyte, and into the graphite lattice, a process called intercalation. Electrons travel the same route through the external circuit, which is where the charger does its work. The cell voltage rises as the graphite fills with lithium, because the electrode potentials move apart. This makes the terminal voltage a rough proxy for state of charge.\n\nIn the first phase, the charger holds the current constant, typically between 0.5 and 1 times the cell capacity per hour. The cell voltage climbs steadily from around 3.0 V toward the upper limit, which is 4.2 V for a common cobalt-based chemistry. This phase delivers most of the charge, often 70 to 80 percent, and it is fast because the lattices are mostly empty and ions move in easily.\n\nThe limit exists for a reason. Above it, the electrolyte oxidizes at the positive electrode and the oxide structure degrades. Charging with excess voltage also risks plating metallic lithium on the graphite, which shortens life and can create short circuits. So when the terminal voltage reaches the limit, the charger stops regulating current and starts regulating voltage.\n\nIn the second phase, the voltage is held at 4.2 V and the current is allowed to fall on its own. The decline is roughly exponential, as in an RC circuit. The reason is that the terminal voltage is the open-circuit voltage plus the current times the internal resistance. That resistance comes from ionic transport, charge transfer at the interfaces, and the surface film on the graphite. At the limit, the open-circuit voltage has to keep creeping upward as the cell fills, so the voltage left over to drive current shrinks. Current must therefore shrink with it.\n\nA second effect compounds this. Lithium concentration at the particle surface runs ahead of the concentration in the particle interior, because solid-state diffusion is slow. The surface looks full while the core is not. Holding the voltage lets the gradient relax, and the current falls as the interior fills.\n\nThe charger ends the cycle when the current drops to a cutoff, commonly 0.05 times capacity per hour. Chasing the last few percent would take a long time and add little, so manufacturers stop there. This is also why fast charging claims quote times to 80 percent."
+}

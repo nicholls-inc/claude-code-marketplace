@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2d0d0e4ac2ca1f99",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28224,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1547,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:33:30.590Z",
+  "valid": true,
+  "text": "In late August 1854, a terrible illness struck the crowded streets of Soho in London. The disease was cholera, which causes violent vomiting and diarrhea, drains the body of fluid, and can kill a healthy adult within a day or two. Within a few days of the first cases, hundreds of people living near Broad Street had fallen ill, and many of them died. Families fled the district, shops closed, and those who remained buried their neighbors in great numbers. Nobody understood what caused the disease, and that ignorance is what makes the story of John Snow so remarkable.\n\nSnow was a physician who had made his name in a different field, since he was one of the first doctors to give anesthesia reliably, and he had even attended Queen Victoria during childbirth. Most educated people of the time believed that cholera spread through bad air, which they called miasma, rising from rotting waste and filthy ground. The germ theory of disease had not yet been accepted, and microscopes were not yet able to show the public what lay in a glass of water. Snow doubted the miasma idea. He had studied earlier cholera epidemics and noticed that the illness began with stomach symptoms, not with trouble breathing, which suggested to him that people were swallowing something harmful instead of inhaling it. He had already published a short pamphlet in 1849 arguing that cholera was carried in contaminated water.\n\nWhen the Broad Street outbreak began, Snow lived only a short walk away, and he set out to test his idea in the streets themselves. He went door to door and asked about the sick and the dead, and he obtained the official records of deaths from the local registrar. He then marked each death on a map of the neighborhood, drawing a small bar at the address of every victim. As the bars accumulated, a pattern emerged, with the deaths clustering thickly around a public water pump on Broad Street. Residents drew their drinking water from that pump, and Snow suspected it was the source of the trouble.\n\nSnow was careful, however, not to rely on the map alone, because a cluster can mislead if one does not check the exceptions. He noticed that a nearby workhouse, home to hundreds of poor residents, had suffered remarkably few deaths. He learned that the workhouse had its own well and did not depend on the Broad Street pump. A brewery on the same street also escaped almost untouched, and the workers there were given beer to drink, and they had their own supply of water as well. These cases supported his view, since people who avoided the pump seemed to avoid the disease.\n\nHe also pursued the opposite kind of evidence, looking for victims who lived far from the pump and asking why they had been affected. One case involved a woman who lived in Hampstead, a considerable distance away, and who died of cholera after a stretch of illness. Snow discovered that she had once lived near Broad Street and liked the taste of the water so much that she had a bottle of it carried to her each day. A niece who visited her and drank the same water also became ill and died. For Snow, such cases were hard to explain by any theory based on local air, and they fit his own idea perfectly.\n\nOn the evening of 7 September, Snow presented his findings to the Board of Guardians of St. James's Parish, the local authority responsible for the area. The members were not easily convinced, but they agreed to act, and the next day the handle of the Broad Street pump was removed so that nobody could draw water from it. The outbreak was already declining by then, since many residents had fled and the worst of the deaths had passed, so the removal of the handle cannot fairly be said to have ended it. Still, the gesture became famous, and it showed that a public health measure could be based on careful evidence.\n\nThe final piece of the puzzle came from the Reverend Henry Whitehead, a local clergyman who at first doubted Snow's theory. Whitehead knew the community well, and he carried out his own investigation. He eventually traced the beginning of the outbreak to a baby who had fallen ill with diarrhea at a house on Broad Street, directly beside the pump. The family's waste had been emptied into a cesspool that was found to be leaking close to the well. Water seeping from the cesspool had polluted the supply, and so the pump had spread the infection through the neighborhood.\n\nOfficial bodies were slow to accept these conclusions, and for years many experts clung to the miasma theory. Yet Snow's method proved enduring. By counting cases, mapping them, and looking carefully at those who escaped as well as those who suffered, he had shown how to find the cause of a disease without knowing the organism responsible. That organism was not identified until later, and by then Snow had died in 1858. His work is now regarded as a founding moment of modern epidemiology."
+}

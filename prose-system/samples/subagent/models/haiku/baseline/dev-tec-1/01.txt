@@ -1,0 +1,47 @@
+How Git Stores a Commit
+
+Git is a content-addressed key-value store. Every object it saves is named by a hash of its contents, and a repository's history is a graph of those objects, with a small set of named refs pointing into it. You never need to open .git to use Git, but knowing the layout explains why branching is cheap, why identical files are stored once, and why history is hard to alter without leaving a trace.
+
+Objects
+
+Git has four object types: blob, tree, commit and tag. Each is stored as a loose file under .git/objects/. The path is derived from the hash: the first two hex characters name a subdirectory and the remaining 38 name the file. Before compression, the stored bytes start with a header such as "blob 12" followed by a NUL byte, then the payload. The object ID is the SHA-1 of that whole byte string (SHA-256 in SHA-256 repositories). Because the ID depends only on content, identical content anywhere in history yields the same object, and any change yields a different ID.
+
+You can inspect objects with git cat-file -t <id> (type) and git cat-file -p <id> (pretty-printed contents).
+
+Blobs
+
+A blob holds the raw bytes of a file and nothing else. It has no name, path, permissions or timestamp. Renaming a file without editing it creates no new blob, because Git only sees the bytes.
+
+Trees
+
+A tree represents a directory. Each entry records a mode (100644 for a regular file, 100755 for an executable, 040000 for a subdirectory), a type, the ID it points to, and a file name. A subdirectory entry points to another tree, so the working directory is mirrored as a tree of trees. The root tree describes the entire project snapshot.
+
+Changing one file deep in the project means writing a new blob for that file, a new tree for its directory, and new trees for each ancestor up to the root. Every unchanged subtree keeps its old ID and is shared with the previous snapshot.
+
+Commits
+
+A commit object is a small text record. It names exactly one root tree, zero or more parent commits, an author and a committer (each with name, email and timestamp), and a message. A commit does not store a diff. It stores a complete snapshot through its tree, and the parent links are what form history. Merge commits have two or more parents.
+
+Because each commit's ID hashes its tree and parents, the chain is tamper-evident. Altering an old file changes its blob ID, which changes every ancestor tree, which changes the commit ID, which changes every later commit.
+
+Refs
+
+Commit IDs are unmemorable, so Git uses refs: files that map a name to an ID. Branches live under .git/refs/heads/. A branch file such as main contains a 40-character hash and a newline. Tags live under refs/tags/, and remote-tracking branches under refs/remotes/. Many refs are consolidated into .git/packed-refs.
+
+HEAD is a special ref, usually symbolic: its contents are "ref: refs/heads/main", meaning the current branch is main. If HEAD holds a bare commit ID instead, you are in detached HEAD state.
+
+Making a commit writes the new commit object and then moves the current branch ref to its ID. Creating a branch just writes a small file containing an existing ID, which is why branching is nearly instant. Moving a branch with git reset changes one ref and deletes nothing.
+
+The Index
+
+The staging area is .git/index, a binary file holding a sorted list of paths with their modes and blob IDs. git add writes blobs and updates index entries. git commit builds trees from the index, writes the root tree and a commit that points to it, and advances HEAD's branch.
+
+Packfiles
+
+Loose objects are periodically consolidated into packfiles in .git/objects/pack/. Packs use delta compression, storing similar objects as deltas against a base. This changes only the storage format. Object IDs stay the same.
+
+Practical Consequences
+
+Objects are never edited in place. Rebase, amend and filter operations write new commits with new IDs and move refs to them. The old commits stay in the object store until garbage collection, and the reflog keeps recent ref positions reachable for a grace period, so mistakes are usually recoverable with git reflog. Objects that nothing reaches are pruned only after an expiry window.
+
+In short, a commit is a pointer to a tree snapshot plus parent pointers, a tree is a directory of blob and tree IDs, a blob is file contents, and a ref is a human-readable name for one commit ID.

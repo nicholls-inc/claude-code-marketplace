@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "adc2270924e7cfb36",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73732,
+    "output_tokens": 2386,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:22:42.962Z",
+  "valid": true,
+  "text": "The Pump on Broad Street\n\nOn the last night of August 1854, cholera broke out in Soho, a crowded district of London. People who had been well at supper were dead by morning. The disease emptied the body through violent diarrhoea and vomiting, leaving its victims shrunken, blue-lipped and cold. Within ten days, more than five hundred people living within a few minutes' walk of one street corner had died. Those who could leave did, and whole streets fell silent.\n\nMost doctors of the time thought they knew the cause. Cholera, they believed, was spread by \"miasma\": foul air rising from rotting waste, sewers and graveyards. It was a reasonable guess, since the disease flourished where the stink was worst. But John Snow, a physician who lived a short walk from the outbreak, had doubted it for years.\n\nSnow was a quiet, methodical man of forty-one, the son of a labourer from York, who had made his name giving anaesthetics; he had administered chloroform to Queen Victoria in childbirth. His reasoning about cholera was simple. A disease breathed in ought to attack the lungs. Cholera attacked the gut. That suggested its victims had swallowed something, and Snow suspected drinking water tainted by sewage. He had published this idea in 1849 and persuaded almost nobody.\n\nThe Soho outbreak, so sudden and so concentrated, looked to him like the work of a single poisoned source. His suspicion fell on a public pump in Broad Street, popular for its cool, good-tasting water. He examined a sample and saw little wrong with it. So he turned from the water to the people who had died.\n\nFrom the government registry office he obtained a list of eighty-three deaths recorded in the first days of the outbreak, with addresses. Then he walked the streets, knocking on doors and asking the bereaved where the family had fetched its water. A pattern emerged. Nearly all the dead had lived closer to the Broad Street pump than to any other. Of the ten who lived nearer a different pump, five came from families who preferred the Broad Street water and sent for it, and three were children who went to school near it.\n\nThe exceptions were more telling still. A workhouse around the corner housed more than five hundred paupers in grim conditions, yet only five had died. It had its own well. At a brewery on Broad Street itself, none of the seventy-odd workmen had died. The owner told Snow the men were given an allowance of beer and never drank from the pump. If bad air were the killer, these people, breathing the same air as their neighbours, should have died at the same rate.\n\nThen there was the widow of Hampstead, a leafy village miles away where there was no cholera at all. She died of it on 2 September. Snow learned that she had once lived in Broad Street and so liked the water that a cart brought her a large bottle of it every day. A niece who visited and drank from the same bottle died as well.\n\nOn the evening of 7 September, Snow put his evidence before the local parish officials. They were not convinced by his theory, but they had nothing better to try, and the next day they had the pump handle removed so that no one could draw water.\n\nThe story is often told as if the deaths stopped at that moment. Snow was too honest to claim so. The outbreak was already fading, he noted, largely because most of the population had fled. Removing the handle may have prevented a second wave, but it cannot be shown to have ended the first.\n\nTwo pieces of the puzzle came later. For his published account, Snow drew a map of the neighbourhood with a small black bar for every death at each address. The bars pile up thickly around the pump and thin out with distance. It remains one of the most famous images in medicine.\n\nThe other piece came from an unlikely ally. Henry Whitehead, a local clergyman, thought Snow was wrong and set out to prove it by interviewing residents himself. Instead, he found the beginning of the outbreak. In a house at 40 Broad Street, a baby girl had fallen ill with diarrhoea days before the epidemic. Her mother had washed the nappies and tipped the water into a cesspit at the front of the house. When the pit was dug up, its brickwork was found to be crumbling, less than three feet from the pump's well.\n\nEven then, officialdom was unpersuaded. A government inquiry dismissed Snow's conclusion and held to bad air. He died in 1858, aged forty-five, his theory still disputed. Only over the following decades, as London built its sewers and scientists identified the bacterium responsible, was he fully vindicated.\n\nHis lasting achievement was a method: count the cases, find where they fall, and ask what the sick share that the healthy do not. That is the foundation of epidemiology, the science of how disease moves through populations. A replica pump, without a handle, stands in Soho today."
+}

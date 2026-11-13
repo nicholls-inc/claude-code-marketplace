@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac3f4d058f8da5b6e",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d115.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/05.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "final_text",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37251,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 1662,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:36:13.604Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). In the first stage the charger forces a fixed current into the cell, commonly expressed as a C-rate, where 1C is the current that would fill the rated capacity in one hour. While this current flows, the cell's terminal voltage rises steadily from roughly 3.0 V toward a ceiling of about 4.2 V for a typical graphite and cobalt-oxide chemistry. When the terminal voltage reaches that ceiling, the charger switches to the second stage, which holds the voltage fixed and lets the current fall on its own, ending the charge when the current has decayed to a small fraction of the rate, often around 0.05C.\n\nThe reason for this shape lies in how the cell stores energy. Charging moves lithium ions from the cathode through the electrolyte and inserts them, or intercalates them, into the graphite anode, while electrons travel through the external circuit. The terminal voltage you measure is not the cell's equilibrium potential but the open-circuit voltage, which depends on how much lithium is stored, plus the voltage drop across the cell's internal resistance. That resistance has several parts: ohmic resistance in the electrodes and electrolyte, charge-transfer resistance at the particle surfaces, and a diffusion contribution as ions move through the solid particles and the electrolyte.\n\nDuring constant current, the resistive drop is roughly steady, so the terminal voltage tracks the slowly climbing open-circuit voltage. Near the end of charge, the open-circuit voltage is already close to its ceiling, and the resistive drop is added on top of it, so the terminal voltage hits the limit while the electrode particles are still not fully filled. Lithium concentrates near the particle surfaces, because diffusion into the interior is slow compared with the rate at which ions arrive, and continuing at full current would push the surface potential past safe limits.\n\nThe voltage limit exists because the anode would otherwise be driven toward the potential at which lithium plates as metal, forming dendrites that can short the cell, and because a high cathode potential oxidizes the electrolyte and damages the cathode. Holding the voltage constant is the safe way to keep delivering charge: as lithium accumulates, the open-circuit voltage creeps up toward the held value, which shrinks the driving voltage across the internal resistance, and by Ohm's law the current must fall in proportion. The decay is roughly exponential, governed by the same diffusion time constants that limit how fast the particle interiors equilibrate.\n\nThis is why the final 20 percent of capacity can take as long as the first 80, since it is a physical limit on how fast lithium can redistribute inside the electrode particles, not a software choice. Faster charging systems shorten the first stage with higher currents, and temperature control and cell design help, but the taper remains."
+}

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aaf0385c0ffe2fad2",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28182,
+    "cache_read_input_tokens": 45573,
+    "output_tokens": 2334,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:59:53.035Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Forecasting.\n\nEvery sprint planning meeting follows the same ritual. A ticket appears, someone asks how long it will take, and the room produces a number: three days, five points, \"probably a week.\" Everyone suspects the number is fiction. We make it anyway, and then we spend the next two weeks defending it.\n\nSoftware teams should stop estimating how long individual pieces of work will take. Planning still matters. Estimates are simply the wrong tool for the question we need answered.\n\nStart with the evidence. Software work is dominated by unknowns: the bug nobody has found yet, the API that behaves differently than its documentation says, the requirement that changes once a customer sees a prototype. Estimates assume the work is mostly understood and only its duration is uncertain. In practice, the duration is rarely the part we get most wrong. The scope is. Industry surveys and project data keep finding the same pattern: estimates miss by large factors, and the misses run late far more often than early.\n\nEstimates also distort behavior. Once a number is written down, it becomes a commitment. Engineers pad it, or they rush and skip tests to hit it. Managers treat a missed estimate as a personal failing rather than a feature of uncertain work. People learn to hide risk, because raising a risk sounds like asking for more time. The number meant to inform the plan ends up punishing honesty about the plan.\n\nWhat should replace it? Measure throughput. Track how many items the team actually finishes each week, and let that history forecast the future. A simple Monte Carlo simulation over past throughput can say \"there is an 85 percent chance we ship these twelve features by March,\" which is more useful than any single date a planner might guess. You do not need to know how long one ticket takes. You need to know how much the team reliably completes and how wide the spread is.\n\nMake the forecast work by cutting work into small, similar-sized pieces, so there is something stable to count. Treat scope as the lever. When the forecast says a date is too late, the conversation becomes which features to drop, not who should work faster.\n\nCritics will say that executives need dates. They do, but they need honest ranges with stated confidence, not point estimates dressed up as promises. \"Between late April and mid-June, with 85 percent confidence\" serves a stakeholder better than a precise date that was wrong before anyone wrote the code.\n\nStopping estimation does not mean stopping thinking. Teams should still discuss the work, slice it, and surface risks early. The difference is the output. Instead of a number to be held against us, the output is a shared understanding of what we are building and what could go wrong. Replace the guess with a measurement, the commitment with a forecast, and the blame with a conversation about scope. Managers get better information, and engineers stop spending Tuesday afternoons arguing about story points."
+}

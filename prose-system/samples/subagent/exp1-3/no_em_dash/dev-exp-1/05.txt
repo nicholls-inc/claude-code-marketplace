@@ -1,0 +1,27 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists outdoors into your home, and that works even when the outdoor air is colder than your living room.
+
+The key idea is that "cold" is relative. Air at 0°C still holds a great deal of thermal energy. It is only called cold because there is less of it than in a warm room. Absolute zero is around minus 273°C, so winter air is full of heat that can be collected.
+
+Heat naturally flows from warm to cold, so to pull heat out of cold air and push it into a warm house you need a machine that works against that flow. A heat pump does this with a refrigerant, a fluid that boils at a very low temperature. A fridge uses the same principle. A fridge pumps heat out of its interior into your kitchen. A heat pump does the same thing, but treats the whole outdoors as the inside of the fridge and your house as the kitchen.
+
+The cycle has four steps:
+
+1. Outdoors, the liquid refrigerant passes through a coil, the evaporator, while a fan blows outside air over it. The refrigerant boils at a temperature well below the outside air, even at minus 10°C, so it absorbs heat from the air and becomes a gas.
+2. A compressor squeezes that gas. Compressing a gas heats it sharply, so the refrigerant leaves the compressor much hotter than your house, typically 50 to 80°C.
+3. Indoors, this hot gas passes through a second coil, the condenser, and gives up its heat to your radiators, underfloor heating or hot water cylinder. As it loses heat it turns back into a liquid.
+4. An expansion valve drops the liquid's pressure, which makes it very cold again, and the cycle repeats.
+
+The compressor is driven by electricity, but it only moves heat rather than creating it. That is why heat pumps are so efficient. A gas boiler can at best turn all of its fuel energy into heat, and a good condensing model reaches about 90 to 95 percent. A heat pump typically delivers 2.5 to 4 units of heat for every unit of electricity it uses. This ratio is called the coefficient of performance, or COP. Over a full season the figure is called the seasonal COP, and 3 is a sensible planning number for a well-designed system.
+
+Performance does fall as it gets colder, because the pump has to lift heat across a bigger temperature gap. Modern cold-climate models keep working at minus 15°C or lower, though at a reduced COP, perhaps 2 rather than 4. On the coldest days the pump simply works harder and costs more to run, but it still delivers more heat than the electricity it consumes.
+
+For a homeowner weighing up a boiler replacement, several practical points matter:
+
+- **Insulation comes first.** A heat pump suits a house that holds its heat. Poor loft insulation, draughts and single glazing mean a larger, costlier unit. A heat loss survey will tell you what you need.
+- **Emitters matter.** Heat pumps run most efficiently at lower water temperatures, around 35 to 50°C, compared with 70°C or more for many boilers. Your existing radiators may be too small to do the job at that temperature. Larger radiators or underfloor heating often help.
+- **Running costs depend on prices.** Because electricity usually costs more per unit than gas, a COP of 3 may only roughly break even against gas, or save a little. Cheaper heat pump or time-of-use tariffs improve the case, as does solar generation.
+- **Upfront cost is higher.** Installation commonly costs several thousand pounds more than a new boiler, though grants and subsidies can narrow the gap. Check what is available where you live.
+- **Carbon savings are real and growing.** As the electricity grid gets cleaner, a heat pump's emissions fall, while a gas boiler's stay fixed.
+- **Space and noise.** You need room outside for the unit and, usually, a hot water cylinder indoors. Outdoor units hum quietly, so siting matters.
+
+In short, a heat pump heats a house from cold air by moving heat rather than making it, and it gets about three times as much heat out as the electricity it puts in. Whether it beats your gas boiler for you depends mainly on how well insulated your home is, what your radiators can do at lower temperatures, and your local energy prices. Get a survey and two or three installer quotes before deciding.

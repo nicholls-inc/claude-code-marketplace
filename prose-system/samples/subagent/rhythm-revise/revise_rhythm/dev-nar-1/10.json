@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aec2b95d4fe6f1541",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d070.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/10.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37807,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2297,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:30:34.248Z",
+  "valid": true,
+  "text": "In the late summer of 1854, a terrible illness called cholera descended on Soho, a crowded district of London, and it could kill a healthy adult within a day. Its victims suffered violent vomiting and diarrhoea, lost so much fluid that their skin turned blue and shrunken, and often died before a doctor could do much about it. Nobody at the time knew what caused it, and the prevailing belief was that disease spread through \"miasma\", foul-smelling air rising from rotting waste and filthy ground. Breathe bad air, the thinking went, and you fell ill.\n\nJohn Snow, a London physician, did not believe it, though he was a respected man who had pioneered the use of anaesthetic gases, even administering chloroform to Queen Victoria during childbirth. He had spent years thinking about cholera, and he had reached an unfashionable conclusion. Sufferers, he noticed, showed their symptoms in the gut, not the lungs. If the poison were inhaled, why would it attack the stomach and bowels first? He proposed that cholera was swallowed, carried in something people ate or drank, and that it multiplied inside the body before passing out again in the waste of the sick. Where that waste mixed with drinking water, he suspected, the disease spread.\n\nHe had already found some support, for during an earlier epidemic in 1849 he had noted that cholera struck hard in districts supplied by certain water companies, which drew from a stretch of the River Thames fouled by the city's sewage. But his argument remained a theory, and most of his colleagues were unmoved.\n\nThen, on the last days of August 1854, the outbreak around Broad Street began, and Snow, who lived nearby, was close enough to watch it unfold. Within about three days, more than a hundred people in a few streets had died. By the following week the death toll had climbed far higher, and many families had fled the area, leaving homes and shops empty.\n\nSnow set about gathering evidence the slow way, on foot, obtaining the official list of deaths from the registrar and visiting the homes of the dead and the neighbours of the dead to ask where each household had got its water. Most people in the area drew water from public pumps, and the pump in Broad Street was a popular one, praised for the clear, pleasant taste of its water. Snow marked each death on a map of the neighbourhood, a small black bar for every victim at their address, and the marks piled up thickly around the Broad Street pump and thinned as one moved away from it.\n\nA pattern on a map is suggestive but not proof, and Snow knew that skeptics could explain it away, so he dug into the exceptions, which proved more persuasive than the rule. A workhouse close to the pump housed hundreds of inmates, yet very few of them died, because, Snow discovered, it had its own well and its residents had no need to use the Broad Street pump. A brewery on the same street also saw no deaths among its workers, who were given free beer and, it seems, drank little water at all. Meanwhile, deaths turned up far from Soho in odd places. A woman who lived in Hampstead, miles away, died after her family sent a cart to collect bottled water from the Broad Street pump, because she had grown fond of its taste, and her niece, who drank the same water, died too. Neither had been anywhere near the epidemic.\n\nBy the 7th of September, Snow felt he had enough, and he took his findings to the local board of guardians, the officials responsible for the parish, and urged them to act. The next day, they ordered the handle removed from the Broad Street pump, so nobody could draw water from it. The outbreak was already in decline by then, since many residents had fled, so later critics argued that removing the handle made little difference. Yet Snow's wider case did not depend on that single act of prevention.\n\nAfterwards a local clergyman, the Reverend Henry Whitehead, who had at first doubted Snow's theory, began his own investigation and made a vital discovery: he traced the beginning of the outbreak to a baby girl who had fallen ill with diarrhoea at 40 Broad Street, just before the epidemic. Her family's waste had been emptied into a cesspool that, as inspection later showed, leaked close to the pump's well. The water had been contaminated at its source.\n\nSnow's work did not convert the establishment overnight, and the official inquiry rejected his water theory for years. But his careful mapping and door-to-door detective work became a founding example of epidemiology, the study of how disease moves through a population. Cholera was later shown to be caused by a microscopic organism, confirming that Snow had been right."
+}

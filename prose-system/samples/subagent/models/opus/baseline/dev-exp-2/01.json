@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad8667f9c2600d58d",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28185,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1298,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:59:17.605Z",
+  "valid": true,
+  "text": "**Why the World Is Giving Up the Leap Second**\n\nMost of us think of a day as exactly 24 hours long. The Earth sees it differently. Our planet's spin is slightly uneven. The pull of the Moon on the oceans slows it down. Movements of the molten core, melting ice caps and even large earthquakes nudge it one way or the other. So the day measured by the sun drifts slightly out of step with the day kept by our clocks.\n\nSince 1967 the official second has been defined by atomic clocks, which measure the vibrations of caesium atoms and stay steady to within a billionth of a second a day. That left two kinds of time: atomic time, which never wavers, and astronomical time, which follows the Earth. In 1972 timekeepers settled on a compromise. The world's civil time, called Coordinated Universal Time or UTC, would run on atomic clocks. Whenever it drifted close to 0.9 seconds away from the Earth's rotation, one extra second would be added to bring the two back together.\n\nThat extra second is the leap second. Clocks that follow the rule tick from 23:59:59 to 23:59:60 before reaching midnight, usually on 30 June or 31 December. An international scientific service in Paris watches the Earth's rotation and announces each one about six months ahead. Twenty-seven have been added so far. The last came on New Year's Eve 2016.\n\nTo a person, a second is nothing. To the computers that run the modern world, it is a nuisance. Most software assumes a minute always has 60 seconds. In 2012 a leap second crashed websites and disrupted an Australian airline's booking system. In 2017 one caused an outage at Cloudflare, a major internet company. Financial markets, power grids, telecoms networks and satellite navigation all depend on precise and consistent timing, and engineers have had to invent awkward workarounds, such as \"smearing\" the extra second across a whole day.\n\nA new problem has made things worse. In recent years the Earth has been spinning slightly faster, so the next correction might need to be a negative leap second, with a second taken away. That has never been done, and few computer systems have ever been tested for it.\n\nIn November 2022 the General Conference on Weights and Measures, the body that oversees the international system of units, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which coordinates radio and time signals, endorsed the move in 2023. Clocks and the sun will be allowed to drift further apart, probably by up to a minute, which could take a century or more to build up. Details of how any future gap will be handled are still being worked out. For anyone not running a computer network, the change will go unnoticed. The sun will still rise when it always has."
+}

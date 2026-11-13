@@ -1,0 +1,39 @@
+A heat pump does not make heat from scratch. It moves heat that already exists outside and delivers it indoors. That is why it can warm a house even when the air outside is colder than the air inside.
+
+The key idea is that "cold" is relative. Air at 0°C still holds a lot of thermal energy. It only feels cold because it is cooler than your skin. Heat flows from warmer things to cooler things, so a device that is colder than the outdoor air will draw heat out of it, however chilly that air is.
+
+A heat pump does this with a refrigerant, a fluid that boils at a very low temperature. The cycle has four steps.
+
+1. Evaporator (outside). The refrigerant circulates through a coil in the outdoor unit, where a fan blows outdoor air across it. The refrigerant is kept colder than the air, perhaps minus 10°C or lower, so heat flows into it from the outside air. This heat makes the refrigerant boil into a gas.
+
+2. Compressor. The gas is squeezed by an electric compressor. Compressing a gas raises its temperature sharply, just as a bicycle pump gets hot. The refrigerant might now be 50 to 70°C, well above room temperature.
+
+3. Condenser (inside). The hot gas passes through a coil connected to your radiators, underfloor heating or hot water tank. Because the refrigerant is hotter than that water, heat flows into your heating system. As it gives up heat, the refrigerant condenses back into a liquid.
+
+4. Expansion valve. The liquid is released through a narrow valve, its pressure drops, and it becomes very cold again. It returns to the outdoor coil and the cycle repeats.
+
+The electricity you pay for runs the compressor and fans. It does not create the heat. It pays for moving heat from a cold place to a warm one, which does not happen on its own.
+
+Why this beats a gas boiler on efficiency
+
+A gas boiler burns fuel and delivers at most about 90 to 95 percent of that energy as heat, and never more than 100. A heat pump delivers more heat than the electricity it uses, because most of the output is heat moved from outside. This ratio is called the coefficient of performance (COP). A typical COP of 3 means one unit of electricity produces three units of heat. Over a whole season, a well-designed system commonly achieves a seasonal figure of around 2.5 to 4.
+
+What happens in very cold weather
+
+Efficiency falls as the outdoor temperature drops, because the pump must lift heat across a bigger temperature gap. A COP of 4 on a mild day might become 2 to 2.5 at minus 5°C. Modern units still operate, and many keep working at minus 15°C or below, though output and efficiency are lower. Frost can form on the outdoor coil, so the unit periodically runs a short defrost cycle.
+
+What this means for your decision
+
+Several practical points matter more than the physics.
+
+Insulation and heat loss come first. A poorly insulated house needs more heat, so the pump works harder and costs more to run. Improving loft insulation and draught-proofing often pays off whichever system you choose.
+
+Flow temperature matters. Heat pumps are most efficient delivering water at 35 to 45°C, while gas boilers typically run at 60 to 80°C. Larger radiators or underfloor heating may be needed so the house stays warm at the lower temperature. Ask installers for a room-by-room heat loss calculation and a radiator check.
+
+Running costs depend on the price gap between electricity and gas. Electricity usually costs several times more per unit than gas, so a COP of around 3 or better is needed to break even, and more to save. Check current tariffs, and consider a heat pump tariff or time-of-use rate.
+
+Upfront cost is higher than for a boiler. Look for government grants or incentives in your area, which can cut the price substantially.
+
+Space and noise are needed for the outdoor unit, and a hot water cylinder is usually required indoors.
+
+A sensible next step is to get two or three quotes that include a heat loss survey and an estimated seasonal COP for your home. If the installer can show a figure of 3 or higher for your house, a heat pump is likely to be a sound, lower-carbon replacement.

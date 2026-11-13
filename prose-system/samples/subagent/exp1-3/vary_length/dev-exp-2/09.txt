@@ -1,0 +1,15 @@
+The Earth does not keep perfect time. Our clocks do.
+
+A leap second is a one-second adjustment added to official world time, now and then, to keep the two in step. The trouble starts with how time is measured. For centuries, a day was defined by the planet's spin: one full turn, 24 hours, 86,400 seconds. Then, in the 1950s, scientists built atomic clocks, which count the vibrations of atoms and tick with astonishing steadiness. The atomic second is the same today as it was yesterday, and it will be the same tomorrow.
+
+The Earth, by contrast, is a wobbler. Tides drag on its rotation and slow it by a sliver. Earthquakes, shifting ice sheets and the churning of its molten core nudge the pace up and down. Over the long run the spin has been slowing, so a true day is, on average, a touch longer than 86,400 atomic seconds. The gap is tiny, a few thousandths of a second per day. But it piles up.
+
+Since 1972, the answer has been Coordinated Universal Time, or UTC, the standard behind the clocks on your phone, your bank's servers and the world's air traffic systems. When atomic time and the Earth's rotation drift roughly a second apart, the International Earth Rotation and Reference Systems Service announces a leap second. On the chosen night, usually the end of June or December, clocks read 23:59:59, then 23:59:60, and only then roll over to midnight. Twenty-seven have been added so far.
+
+So why stop? Because computers hate them.
+
+Software generally assumes every minute has exactly 60 seconds. An extra one can confuse systems into repeating a timestamp, running backwards or crashing outright. Outages linked to leap seconds have hit major websites and data centres, and the problem is getting worse as financial trading, telecoms and satellite navigation demand ever finer precision. Some tech giants now dodge the problem by "smearing" the extra second across a whole day, but each firm does it differently, which creates its own muddle.
+
+In 2022, the General Conference on Weights and Measures, the international body that defines the units of measurement, voted to retire the leap second by 2035. After that date, UTC will be allowed to drift further from the Earth's rotation before any correction is made, probably a full minute or more, and the details are still being worked out.
+
+For most of us, nothing will change. The Sun will still rise on schedule, give or take a moment. Only the clocks will stop pretending the planet keeps perfect time.

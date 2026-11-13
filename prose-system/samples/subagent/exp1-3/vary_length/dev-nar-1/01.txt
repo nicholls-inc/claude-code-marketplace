@@ -1,0 +1,31 @@
+In the late summer of 1854, a terror settled over Soho, a crowded, noisy district of London. Within days, hundreds of people were dead. The cause was cholera, and nobody knew where it came from.
+
+The leading medical opinion held that the disease spread through "miasma," a poisonous vapour rising from rotting waste and foul air. It seemed sensible. London stank, and the people who suffered most lived in the stinkiest places. A local physician named John Snow was not convinced.
+
+Snow was an unusual man. The son of a labourer, he had worked his way up to become one of the best-known doctors in the city, famous for giving chloroform to Queen Victoria during childbirth. He did not drink alcohol. He was methodical to the point of stubbornness. And he had been turning over an idea for years: that cholera did not travel through the air at all, but through water.
+
+His reasoning was grounded in how the illness behaved. Cholera attacks the gut, not the lungs. Victims suffer violent diarrhoea and vomiting, and can lose so much fluid that they die within a day. If the poison were something breathed in, Snow asked, why did it strike the stomach and bowels first? Far more likely, he thought, that people were swallowing something, and that it came from the waste of earlier victims.
+
+The Broad Street outbreak gave him the chance to prove it.
+
+It began on the last day of August. Within three days, around 127 people living near the junction of Broad Street and Cambridge Street had died. By the end of the first week of September, the death toll in the neighbourhood approached 500. Many families fled. Shops closed. Snow, who lived nearby, went to work.
+
+He did something that sounds simple now but was strikingly original then. He walked the streets, knocked on doors, and asked questions. Where did the dead live? Where did they get their drinking water? He wrote down every address, and as he did, a pattern emerged. The deaths clustered tightly around a single public water pump on Broad Street.
+
+Snow drew a map. Each death was marked with a small black bar stacked against the house where it occurred. The bars piled up thickly near the pump and thinned out with distance. A picture that would have taken pages to describe could be understood in a glance.
+
+But a map alone can mislead, and Snow knew it. The exceptions were what truly convinced him.
+
+Close to the pump stood a workhouse housing more than 500 poor residents. Remarkably, only five of them died. Snow discovered why: the workhouse had its own well, and its inmates did not need the Broad Street pump. A brewery nearby also escaped almost untouched. Its workers drank the beer they were given, and the brewery had its own well too.
+
+Then there were the strange cases from far away. A woman in Hampstead, miles to the north, died of cholera after the outbreak was underway. Snow tracked down her story. She had once lived in Soho and liked the taste of the Broad Street water so much that she had it carried to her home each day. Her niece, who drank the same water, died too. Nobody else in their neighbourhood fell ill.
+
+Armed with this evidence, Snow went to the local board of guardians on 7 September and urged them to act. The next day, the handle of the Broad Street pump was removed. No one could draw water from it any more.
+
+Here the story is often told too neatly. The outbreak had in fact already been declining as people fled the area or died, so it is hard to say how much the removal of the handle changed things. Snow himself admitted as much. But his case never rested on that single act. It rested on the careful accumulation of facts.
+
+Later inquiry added a final piece. A local clergyman, Henry Whitehead, who had begun as a sceptic, joined the search for the origin. Together they found that a baby girl living at 40 Broad Street had died of cholera days before the outbreak exploded. Her mother had washed the child's soiled nappies, and the waste had drained into a cesspool only a few feet from the well. The old brick lining was cracked. The deadly leakage had been seeping into the water for weeks.
+
+Officials were slow to accept the conclusion. A committee investigated and decided there was not enough proof, and the miasma theory lingered for years. Snow died in 1858, aged just 45, never knowing how thoroughly he would be vindicated. The microbe itself had in fact been glimpsed by an Italian scientist that very year of 1854, but its significance went unnoticed.
+
+Today Snow is remembered as a founder of modern epidemiology, the science of how disease spreads through populations. His method was nothing mysterious: count carefully, map honestly, look hardest at the exceptions, and follow the evidence where it leads. In a city that blamed the air, he looked at the water, and he was right.

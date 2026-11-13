@@ -38,6 +38,14 @@ Feedback loops for coding agents, ported from [github/lever](https://github.com/
 - **Automations** (`lever/automations/`): recipes as `prompt.md` + GitHub Actions `workflow.yml` running `anthropics/claude-code-action@v1`, installed paused.
 - **Scripts**: stdlib Python under `skills/*/scripts/`; skills reference plugin files via `${CLAUDE_PLUGIN_ROOT}`, never `../../`.
 
+### prose (`prose/`)
+
+Writing and checking non-fiction prose against a measured reference of human text. The experiments behind it are in `prose-system/`.
+
+- **Skills** (`prose/skills/`): `/prose:write` (material, five candidate drafts under a voice file, pick by measured profile, specifics check), `/prose:check` (profile a text against the human reference; reports, does not rewrite)
+- **Script** (`prose/scripts/prose_profile.py`): stdlib Python; `check`, `rank` and `specifics` commands. Test with `python3 prose/scripts/test_prose_profile.py`.
+- **Reference** (`prose/reference/human_reference.json`): figures only, built by `prose-system/scripts/human_reference.py`.
+
 ## Tools
 
 ### claude-github-app (`tools/claude-github-app/`)

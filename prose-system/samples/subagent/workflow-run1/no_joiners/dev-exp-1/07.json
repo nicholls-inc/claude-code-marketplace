@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7ffea088b6d5aa9a",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What’s wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is.",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72665,
+    "output_tokens": 3942,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:41:23.496Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists. That sounds odd when the air outside is colder than your living room, but cold is a relative idea. Air at zero degrees Celsius still holds a great deal of thermal energy, because absolute zero is around minus 273 degrees. A heat pump pulls some of that energy out of the outdoor air and delivers it indoors.\n\nThe trick is a sealed loop containing a refrigerant, a fluid that boils at very low temperatures. The loop has four main parts. Outside sits an evaporator coil with a fan. The refrigerant passing through it is kept colder than the outdoor air, perhaps minus ten degrees. Heat always flows from warmer to cooler, so the outdoor air warms the refrigerant and the refrigerant boils into a gas. This is the same physics that lets a puddle dry on a cool day.\n\nNext comes the compressor, which is the part that uses electricity. It squeezes the gas, and squeezing a gas makes it much hotter, just as a bicycle pump warms up when you use it. The gas might now reach 50 or 60 degrees. That is hotter than your radiators or underfloor pipes need to be, so heat flows from the refrigerant into your home's water circuit. As it gives up heat, the refrigerant condenses back into a liquid.\n\nFinally an expansion valve lets the pressure drop. The liquid cools sharply and is ready to go round again and absorb more heat from outside. The cycle repeats continuously.\n\nThe key figure is the coefficient of performance. A gas boiler turns one unit of gas into at most about 0.9 units of heat. A heat pump uses one unit of electricity to move roughly three or four units of heat. An efficiency of 300 to 400 percent is not magic, because most of the energy is carried in from outdoors rather than created. Performance does fall as it gets colder, since the pump must lift heat across a larger temperature gap. Modern models still work down to minus 15 or even minus 20 degrees, though they may then deliver nearer two units per unit of electricity.\n\nWhat does this mean if you are weighing up a boiler replacement? Several practical points matter.\n\nFirst, your house needs to hold heat. Good loft insulation, sealed draughts and decent glazing let the heat pump run gently at lower temperatures, which is where it is most efficient. A poorly insulated house can still work but may need larger emitters or fabric upgrades.\n\nSecond, heat pumps like to run at lower flow temperatures, often 35 to 50 degrees, compared with 70 or more from a typical boiler. Radiators may need to be bigger, or you may want to add underfloor heating. A proper room by room heat loss survey is worth paying for before you accept any quote.\n\nThird, running costs depend on the ratio between your electricity and gas prices. If electricity costs more than about three times as much as gas per unit, savings shrink. Time of use tariffs, solar panels and batteries can tip the balance in favour of the heat pump.\n\nFourth, installation costs more up front. Quotes often run from eight thousand to fifteen thousand pounds before any government grant. Check what support is available where you live, since grants can cover a meaningful share. You will also need space outside for the unit and usually a hot water cylinder indoors.\n\nFinally, think about carbon. A heat pump running on an increasingly clean grid produces far less carbon than a gas boiler, and the gap widens each year.\n\nIf your boiler is near the end of its life and your home is reasonably well insulated, a heat pump is usually a strong choice. Ask installers for a heat loss calculation and an estimate of seasonal efficiency before you decide."
+}

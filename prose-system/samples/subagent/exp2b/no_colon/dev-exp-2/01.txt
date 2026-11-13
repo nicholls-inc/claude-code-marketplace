@@ -1,0 +1,13 @@
+A leap second is a one-second adjustment added to official world time every so often, so that our clocks stay in step with the spinning Earth.
+
+To understand why, you need to know that there are two ways of keeping time. The first is astronomical. A day is the time the Earth takes to turn once, and that turning is not perfectly steady. Tides, shifting ice, ocean currents and the sloshing of the planet's molten core all nudge its rotation. Over the long run the Earth has been slowing down, so the average day is a little longer than it used to be.
+
+The second way is atomic. Since the 1950s, scientists have counted time using the vibrations of atoms, which tick with astonishing regularity. A second today is defined by these vibrations, and atomic clocks in laboratories around the world agree to within billionths of a second.
+
+The trouble is that the two systems drift apart. The atomic second does not care how fast the Earth is turning. By the early 1970s, officials wanted the clocks that run the modern world to stay within a second of the time you would read from the position of the Sun. So in 1972 they introduced the leap second. When the gap grew too wide, an extra second was slipped in at the end of June or December, so that the clock read 23:59:60 before rolling over to midnight. Twenty-seven of them have been added, the most recent at the end of 2016.
+
+It sounds harmless, but computers hate it. Most software assumes every minute has exactly sixty seconds. When an unexpected sixty-first arrives, systems can freeze, repeat events or record them out of order. Leap seconds have been blamed for crashes at major websites, airline systems and data centres. Technology companies have coped by inventing their own workarounds, such as spreading the extra second across the whole day, but these methods differ and can cause confusion of their own. In a world of financial trading, satellite navigation and power grids that depend on precise timing, an irregular second has become a real risk.
+
+In 2022, the international body that sets the measurement standards voted to stop using leap seconds by 2035. The reasoning is that the cost of the occasional adjustment now outweighs the benefit. Few people need clocks to match the Sun to the second, and astronomers and navigators who do can make their own corrections.
+
+There is another twist. In recent years the Earth has been spinning slightly faster, which might one day require a rarely discussed negative leap second, removing a second instead of adding one. That would be even more disruptive for software, and it strengthens the case for abandoning the practice. Clocks will simply drift gently away from the Sun, and a fix can wait for centuries.

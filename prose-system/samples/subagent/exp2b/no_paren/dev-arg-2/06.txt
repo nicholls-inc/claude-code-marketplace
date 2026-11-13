@@ -1,0 +1,21 @@
+Stop Estimating. Start Shipping in Slices.
+
+Every software team knows the ritual. Someone asks how long a feature will take, the engineers pad their guess, the manager trims it, and the result goes on a roadmap that everyone privately expects to be wrong. We have done this for decades. The evidence that it works is thin. The evidence that it hurts is plentiful. Teams should stop estimating how long work will take.
+
+Start with accuracy. Studies of project outcomes keep finding the same thing: large overruns are normal, not exceptional. The reason is not laziness or bad arithmetic. Software work is mostly discovery. You do not know what you will find in the legacy module until you open it. An estimate made before that discovery is a guess dressed as a commitment.
+
+Then there is what the number does once it exists. An estimate becomes a target, and a target bends behavior. Engineers skip the refactor that would have paid off next quarter. Testing gets squeezed at the end because the date is fixed. Worse, people learn that honesty is punished. Say the work is bigger than expected and you face a negotiation. Say nothing and you hide the problem until it is too late to fix cheaply.
+
+The cost is also real before any code is written. Planning poker, sizing meetings, and re-estimation after scope changes consume hours from your most expensive people. That time buys a figure nobody trusts.
+
+The usual defense is that managers need dates to coordinate with sales, marketing, and customers. That need is legitimate. But a date guessed up front is a poor way to meet it. A better way exists.
+
+Break work into thin slices that each deliver something usable, and keep them small enough that most finish in a few days. Then measure what actually happens. Count how many slices your team completes per week. After a month or two you have a throughput figure based on real history rather than hope. Forecast from that. If the backlog holds forty slices and you finish eight a week, you are looking at about five weeks, with a range that you can widen or narrow as data arrives. This is a forecast built from observation, and it updates itself every week.
+
+Notice what changes. The conversation moves from defending a number to cutting scope. When the forecast slips, nobody asks who guessed wrong. They ask which slice is least valuable and can wait. That is the decision managers actually want to make, and they get to make it early, with evidence.
+
+Some will object that this is just estimation by another name. It is not. Nobody sits in a room predicting effort for individual tasks. Nobody defends a figure created before the work was understood. The only input is what the team has demonstrably done.
+
+There are narrow cases where a firm external deadline forces a rough sizing, such as a regulatory date. Even then, sizing the slices and trimming scope beats promising a single end date for the whole.
+
+For everyone else, the practice has run its course. Drop the estimation meetings. Slice the work small, track what finishes, and forecast from real data. You will get dates that are more honest, and your engineers will get their time back.

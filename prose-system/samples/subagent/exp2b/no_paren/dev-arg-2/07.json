@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a473c7144ff5f4fef",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28198,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 982,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:35:28.923Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Forecasting From What You Have Shipped.\n\nEvery engineering team has lived this scene. A manager asks how long the new billing flow will take. The engineers look at the ceiling, say three weeks, and everyone writes it down. Seven weeks later the flow ships, and nobody is surprised, because nobody believed the number in the first place.\n\nEstimating how long work will take is a ritual we keep performing long after it has stopped serving us. Teams should drop it.\n\nStart with the honest record. Software tasks are novel by definition, since anything repeatable has already been automated or copied. Novel work hides its hardest problems until you are inside it. The migration that looked like a day turns out to touch a legacy service nobody owns. The estimate was never a measurement. It was a guess made at the point of maximum ignorance, then treated as a promise.\n\nThe damage goes beyond bad numbers. Once an estimate exists, it becomes a target, and targets bend behavior. Engineers pad. Managers shave the padding. Engineers pad harder next time. Meanwhile the real discussion, whether this work is worth doing at all, gets replaced by an argument about whether it fits in the sprint. A team that spends two hours estimating a ticket has spent two hours not building it, and not questioning it.\n\nEstimates also punish the wrong thing. When a task blows its estimate, the team learns to be defensive, not curious. People hide surprises because surprises look like failure. Yet surprises are exactly what managers most need to hear early.\n\nThe usual defense is that the business needs dates. It does, and that need is legitimate. But a date does not require an estimate. It requires a forecast, and a forecast can be built from evidence instead of opinion.\n\nHere is the alternative. Break work into slices small enough that each fits in a day or two. Do not size them, only cut them. Then count how many slices your team actually finishes each week. That throughput number, drawn from your real history, tells you more than any planning poker session. If you finish about eight slices a week and the project is forty slices, you have a range of roughly five to seven weeks, and you will refine it every Friday as the data improves. The forecast gets better as work proceeds, which no upfront estimate ever does.\n\nThis also forces the conversation that matters. When the forecast says seven weeks and the business needs four, the question becomes what to cut, not who to blame. Scope is the only lever that works, and a throughput chart makes that visible.\n\nSkeptics will say this just renames estimating. It does not. Estimating asks people to predict the unknowable. Forecasting asks the system to report what it has already done. One relies on confidence, the other on counting.\n\nEngineers, you will lose a ritual you probably dislike. Managers, you will lose a number you never trusted. In exchange you get earlier warnings, calmer planning, and more time spent building. That is a trade worth making this quarter."
+}

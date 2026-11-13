@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0605c0a019670dc3",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28239,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 2085,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:18:21.555Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, and they should do it because the estimates do not survive contact with the thing they are meant to predict. Most of the work worth doing in software is work nobody has done before in this codebase, with these dependencies, against this particular tangle of legacy decisions, and a number produced before the work begins is a guess dressed in the clothing of a measurement. Studies of project outcomes going back decades find the same pattern: the spread between estimate and actual is wide, the errors skew late, and the people making the estimates do not get meaningfully better at it with practice, because the surprises that blow a schedule are by definition the ones nobody anticipated.\n\nThe usual defence is that estimates are not predictions but planning tools, a way to start a conversation about scope, and if that were how they were used I would have little quarrel with them. In practice a number said aloud in a planning meeting becomes a date in a slide, the date becomes a promise to another team or a customer, and by the time the engineer discovers that the payment provider's sandbox behaves differently from production, the estimate has stopped being a guess and become a debt. Engineers learn quickly what to do about debt: they pad. Padding is rational, and it means every estimate in the system carries a hidden margin that nobody can see or audit, while Parkinson's law ensures the margin gets consumed anyway.\n\nTeams also burn hours each sprint arguing whether a ticket is a three or a five, then spend more hours explaining in retrospectives why the fives turned out to be thirteens, and none of that argument ships anything. The ritual rewards the wrong behaviour as well, since a team measured against its estimates will avoid the risky, ambiguous task that might change the product and favour the well-understood one it can size confidently, and it will cut corners on testing or design in the last days to make the number come true.\n\nWhat replaces estimation is less exotic than it sounds: break work into pieces small enough that each can be finished in a day or two, which is a discipline of slicing and not of forecasting, and then watch how many pieces actually complete per week. That throughput, drawn from your own history, tells a manager far more about when a body of work will land than any sum of individual guesses, and it can be given as a range with honest odds attached. When the range is too wide to plan around, the right response is to cut scope or learn more early, not to demand a more precise number from people who cannot have one.\n\nManagers who fear that dropping estimates means dropping accountability have it backwards, because a team that ships small increments every few days, shows working software, and says plainly what it has learned about the remaining unknowns is more accountable than one that hits a sprint commitment by quietly deferring the hard parts. The hard parts are the whole job, and a process that cannot talk about them honestly should not be the one steering the work."
+}

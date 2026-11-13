@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7e7a5f174d584574",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72446,
+    "output_tokens": 1469,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:37:22.161Z",
+  "valid": true,
+  "text": "**Scrap the Parking Mandate**\n\nEvery city has a quiet rule that shapes it more than most zoning maps do: if you want to build something, you must also build somewhere to put the cars. Minimum parking requirements tell a developer how many spaces to provide per apartment, per square foot of retail, per restaurant seat. Cities should repeal them. Not tweak them, not reduce them by a third, but remove them from the code and let builders and lenders decide how much parking a project needs.\n\nStart with what the rules actually do. Parking requirements are not a measurement of demand. They are a formula, often borrowed from a handbook compiled decades ago from suburban sites with free parking and little transit. Donald Shoup, the UCLA planner who spent a career on this subject, showed that the numbers in these handbooks rest on thin samples and that cities copy them from each other without checking. The result is a mandate set by guesswork and enforced by law.\n\nThe cost of that guesswork is concrete. A surface space takes roughly 300 square feet once you count aisles and ramps. A structured space can cost tens of thousands of dollars to build, and an underground one considerably more. Those costs do not vanish. They are folded into rents and purchase prices, so a tenant who owns no car still pays for the space they never use. Studies of apartment buildings consistently find that required parking raises the cost per unit and that the burden falls hardest on the cheapest homes, where a few thousand dollars can decide whether a project pencils at all.\n\nHousing is where this matters most. Cities across the country are short of homes, and many of them also hold on to parking minimums. These two facts are connected. A small lot that could hold eight apartments might hold only five once the required spaces take up the ground or force an expensive garage. Some projects are never proposed. Others are built with fewer homes than the site could carry. Old buildings face the same trap: a corner shop or a converted warehouse cannot change use because the new use triggers a parking requirement the lot cannot meet. Much of what we love about older neighborhoods, the mixed streets of small buildings built close together, would be illegal to build today largely because of this one rule.\n\nThere is also a fairness problem. Mandates force everyone to subsidize driving, including people who walk, cycle, or ride transit. Free parking is not free. Someone pays for the land and concrete, and under a mandate it is spread across everything else a customer buys or a tenant rents. Households without cars, who tend to be poorer, pay to store the cars of those who have them.\n\nThe usual objection is that without mandates, developers will build too little parking and cars will spill onto neighborhood streets. This deserves a real answer. First, repeal does not ban parking. It removes the floor. Developers who want to attract tenants or shoppers who drive will keep building spaces, because lenders and customers expect them. Suburban strip malls and car-oriented projects will keep their lots. What changes is that a downtown apartment near a rail line can be built with the amount of parking its residents will use, rather than the amount a spreadsheet from 1970 predicts.\n\nSecond, spillover is a pricing problem, not a supply problem. If curb space on a residential street is free, it will fill. Cities can manage that with permit programs and metered rates that keep a space or two open on every block. That is a far better tool than forcing every private building to oversupply.\n\nThird, we now have evidence. Buffalo repealed its citywide minimums in 2017. Minneapolis, Anchorage, and a growing list of other cities have followed, and state governments in places like California have restricted mandates near transit. Early results suggest builders do not abandon parking; they simply tailor it. Where projects have gone ahead with fewer spaces, the sky has not fallen, and neighborhoods have gained housing that would not have existed.\n\nNothing here requires believing that cars are bad. People will keep driving, and many need to. The point is that a city should not decide, building by building and decades in advance, how many spaces each one must hold. That is a decision for owners, lenders, and the market, with the public curb managed sensibly.\n\nRepealing minimums is one of the cheapest reforms available. It costs the treasury nothing, it needs no subsidy, and it unlocks homes and businesses that current rules quietly block. Cities that say they want affordable housing, walkable streets, and lively commercial districts should start by deleting the rule that works against all three."
+}

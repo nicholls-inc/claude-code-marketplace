@@ -1,0 +1,17 @@
+**Stop Promising Dates You Cannot Know**
+
+Software teams should stop estimating how long individual pieces of work will take. Planning is not the problem. The ritual we call estimation produces confidence without producing accuracy, and we pay a steep price for the difference.
+
+Start with the evidence. Studies of software projects, and the lived experience of nearly every engineer, show the same pattern. Estimates miss, and they miss in one direction. The distribution of actual task durations has a long tail, so the work that goes wrong goes very wrong. A task estimated at three days can take two, but it can also take three weeks when a dependency turns out to be broken or a requirement turns out to be misunderstood. Averaging over that tail is hard enough for a statistician. Asking a room of people to guess it with planning poker is theatre.
+
+The cost shows up in three places. First, time. Teams burn hours every sprint debating whether a story is a five or an eight, and those hours buy nothing. Second, behavior. Once an estimate exists it turns into a commitment, and commitments change how people work. Engineers pad their numbers, cut corners to hit them, or hide surprises until they are too large to hide. Third, trust. Every blown estimate becomes a small betrayal between engineering and the business, and managers respond with more process, which means more estimating.
+
+Defenders say the business needs dates, and they are right. But estimation is not the only way to get them, and it is not the best way. Teams can break work into small slices, ship each one, and count what actually finishes each week. That throughput is real data about your system rather than a guess about your future. Divide the backlog by observed throughput and you get a forecast with honest error bars. It takes minutes, not meetings, and it improves automatically as the team learns.
+
+Small slices also change the conversation. If every item is a day or two of work, the size differences stop mattering, and the real question becomes whether this is the most valuable thing to build next. That is a better use of a planning meeting than arguing over points.
+
+Some will object that deadlines are sometimes fixed, such as a regulatory date or a conference launch. Fine. In that case the useful move is to fix the date, vary the scope, and cut ruthlessly as you learn. That is what actually happens anyway once the estimate proves wrong. Better to design for it up front.
+
+Managers worry that dropping estimates means losing control. The opposite is true. A manager who watches throughput, cycle time, and the age of work in progress sees trouble early, while a manager who trusts a story point total sees trouble when the deadline arrives.
+
+So stop estimating individual tasks. Slice work thin, measure what flows, forecast from the data, and negotiate scope instead of pretending to know the future. You will spend less time in meetings, hear bad news sooner, and make promises you can keep.

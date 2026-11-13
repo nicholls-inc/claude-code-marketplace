@@ -1,0 +1,15 @@
+A lithium-ion cell is usually charged with a constant-current, constant-voltage (CC-CV) profile. In the constant-current stage, the charger forces a set current into the cell, typically 0.5 to 1C, where 1C is the current that would fully charge the cell in one hour. Inside the cell, that current drives lithium ions out of the layered metal-oxide cathode (such as NMC or LCO), through the liquid electrolyte, and into the graphite anode, where they intercalate between graphite layers. Electrons move through the external circuit in the opposite direction. Terminal voltage rises throughout this stage because the potential difference between the electrodes grows as lithium leaves the cathode and enters the anode. Terminal voltage equals the open-circuit voltage (OCV, a function of state of charge) plus the ohmic drop (I x R) plus the polarization overpotentials from charge transfer and diffusion.
+
+When the terminal voltage reaches the limit, typically 4.2 V per cell for conventional chemistries, the charger switches to constant voltage. Holding the voltage fixed forces the current to decline, because the driving term, the limit voltage minus OCV minus the IR drop, shrinks as the cell fills. Charging ends when the current falls below a threshold such as C/20 or C/50.
+
+The current falls sharply near full for several compounding reasons.
+
+First, OCV rises steeply at high state of charge. Both electrodes are approaching their most extreme lithiation states, so small changes in lithium content cause large potential changes. The headroom between OCV and the voltage limit collapses quickly.
+
+Second, solid-state kinetics slow down. Lithium must diffuse through the active particles, and as host sites become scarce, concentration gradients steepen and diffusion-limited overpotential grows. Charge-transfer resistance at the particle surface also rises, because the exchange current depends on the remaining available sites on both electrodes.
+
+Third, the anode potential approaches 0 V versus Li/Li+. If it drops below that, lithium plates as metal on the graphite surface instead of intercalating. Plating causes irreversible capacity loss and a safety hazard. Holding the anode above plating conditions requires the charger to reduce current as sites fill.
+
+Fourth, cathode resistance increases as lithium is removed, which lowers electronic and ionic conductivity in the electrode.
+
+The practical consequence is that the CV phase often takes a large share of total charge time, even though it delivers a small fraction of the capacity. Engineers manage this with CV tapering, temperature limits, and cell balancing in packs.

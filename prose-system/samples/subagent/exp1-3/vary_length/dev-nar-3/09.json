@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a18901497e59bb834",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72449,
+    "output_tokens": 1097,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:14:58.064Z",
+  "valid": true,
+  "text": "On January 15, 1919, the North End of Boston was enjoying an unusually warm winter afternoon. The temperature had climbed to about 40 degrees Fahrenheit, well above the freezing cold of the days before. Workers ate lunch. Children played near the waterfront. Horses stood in the streets. At Commercial Street, a huge steel tank owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol, held more than two million gallons of molasses.\n\nThe tank was new, built in 1915, and it had never been trusted. It leaked so badly that neighborhood children collected the brown syrup that oozed down its sides, carrying it home in tin cans. Rather than repair the seams, the company painted the tank brown to hide the stains. Nobody had run a proper structural test. The engineer who approved the design was not a licensed engineer at all. And only the day before, a fresh shipment of warm molasses had been pumped in, stressing the walls further.\n\nAt about 12:30 in the afternoon, the tank gave way.\n\nSurvivors described a sound like a machine gun, the rapid popping of rivets shooting loose, followed by a low rumble. Then the tank burst open, and a wave of molasses roughly 25 feet high, by some accounts, surged outward at around 35 miles per hour. It weighed millions of pounds. It crushed everything in its path.\n\nThe wave tore the nearby elevated railway from its supports, leaving a train car teetering. It smashed warehouses and homes, lifting buildings off their foundations. A firehouse collapsed. Horses, wagons, and people were swept along or buried in a sticky tide that was sometimes waist deep. Victims who had survived the initial blow found themselves trapped, unable to move, as the molasses cooled in the winter air and thickened around them.\n\nRescuers rushed in: sailors from a docked ship, police officers, Red Cross workers, and cadets. They waded into the muck, wrestling with a substance that clung to every surface. Doctors found it hard to tell where injured people ended and the syrup began. Searchers kept digging for days. In all, 21 people died and about 150 were injured. Some bodies were so coated that identifying them took considerable time.\n\nThe cleanup was a slow, miserable affair. Crews sprayed salt water from fireboats, then covered the streets with sand and sawdust. The harbor ran brown well into the summer. For decades, residents swore that on hot days the neighborhood still smelled faintly sweet.\n\nThen came the question of blame. The company first suggested that anarchists had bombed the tank, hoping to shift responsibility. It did not work. In one of the earliest large class action suits in Massachusetts, residents sued, and after years of hearings, an auditor concluded that the tank had been structurally unsound. The company paid out roughly 600,000 dollars in settlements, a sum divided among the families of the dead and the injured.\n\nThe disaster had lasting effects. It helped push Massachusetts, and eventually the rest of the country, toward stricter building codes and requirements that engineers actually be licensed and that their calculations be reviewed. A strange accident, it turned out, had taught a very serious lesson."
+}

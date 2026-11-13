@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2b71731f6a840950",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72459,
+    "output_tokens": 1475,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:35:11.731Z",
+  "valid": true,
+  "text": "**Scrap the Parking Minimums**\n\nWalk through almost any American suburb and you will find a monument to bad planning. It is a parking lot, sized for the busiest shopping day of the year and empty the other 364. Nobody chose that waste. A formula did.\n\nMinimum parking requirements tell developers how many spaces they must build, regardless of what they think their customers want. A restaurant might need one space per 100 square feet. An apartment building might need two per unit. The numbers came from a handful of traffic engineering surveys, often taken at suburban sites with no transit and plenty of cheap land, and cities copied them from one another. The rules look technical. They are really a decision about what kind of city we get to have. Cities should remove them.\n\nStart with cost. A surface space takes up around 300 square feet once you count the lanes needed to reach it. A space in a garage can cost tens of thousands of dollars to build, and underground ones cost more. Those costs do not vanish. They are folded into rents, menu prices and the price of a home. Renters who own no car still pay for the spaces, because the building could not be approved without them. Housing is already scarce and expensive in most growing cities. Requiring a costly amenity that many residents do not want is a strange way to fix that.\n\nThen consider what the rules do to the land itself. Parking eats lots that could hold homes, shops and offices. A small developer looking at a narrow downtown parcel often finds that the required spaces leave no room for the building. The project dies, or shrinks, or never gets proposed. Old neighborhoods built before the rules existed, with corner stores, apartments over shops and tight walkable blocks, are often illegal to build again. We forbid the very places people pay a premium to visit.\n\nDefenders raise a fair worry. If a new building has too few spaces, won't its residents and customers crowd the nearby streets? Sometimes, yes. But notice what this objection assumes. It treats free curb parking as a right and developers as the people who must guarantee it. A better answer is to manage the street. Charge a fair price for curb spaces at busy times, offer residential permits where needed, and spend the revenue on the neighborhood. Donald Shoup, the UCLA scholar who made this case famous, has argued for years that properly priced parking pays for itself and keeps a few spaces open on every block. Drivers who can always find a spot, for a price, are better off than drivers who circle endlessly for a free one.\n\nAnother objection is that developers will build too little parking and ruin their own projects. That gets the incentives backwards. A lender will not finance an apartment complex nobody can reach, and a shop owner knows whether customers arrive by car. Removing the minimum does not ban parking. It lets the person who bears the cost make the choice. Many will still build plenty of spaces, especially in car-dependent areas. Some will build fewer and rent the savings out as lower prices. A few will skip them altogether. That range is the point.\n\nThe evidence is arriving. Buffalo became the first large American city to scrap its citywide minimums in 2017. Since then, Minneapolis, Austin, Anchorage and a growing list of cities and even whole states have followed. Early studies find that developers in these places often still build parking, but fewer spaces per unit, and that more small projects get proposed. The sky has not fallen. Streets have not turned into parking wars. What has changed is that builders now argue with the market rather than with a code book.\n\nThere is an environmental argument too. When we mandate abundant free parking, we subsidize driving every day. Each trip starts and ends with a guaranteed space, so choosing a bus, bike or train is a harder bet. Flip that, and the math shifts at the margins. Not everyone will give up their car, and nobody has to. But a city that stops forcing cars into every plan is a city that makes other choices possible.\n\nNone of this means parking is evil. People need to store cars, and many always will. The question is who decides how much. Right now a municipal formula decides, and that formula is a guess made decades ago and copied ever since. Developers, lenders, business owners and residents know far more about local demand than a table in a zoning code.\n\nCities that keep parking minimums are choosing, whether they say so or not, higher housing costs, emptier downtowns and more pavement. Cities that drop them are choosing to trust people and prices. That is the better bet. Repeal the rules, price the curb, and let the buildings follow the need."
+}

@@ -1,0 +1,79 @@
+# Agreeing on a Secret in Public
+
+Suppose you want to share a secret with someone you have never met. The only way to reach them is a loud, crowded room where everyone can hear every word you say. It sounds impossible. Yet this is what happens each time your phone connects to a website, and the trick behind it is one of the cleverest ideas in modern mathematics.
+
+## The problem
+
+For most of history, secret messages needed a shared secret to begin with. You and your friend agreed on a code beforehand, perhaps while standing together in private. If a spy overheard that meeting, the code was ruined. Every secret needed an earlier secret, and the chain had to start somewhere safe.
+
+Now picture two strangers, Alice and Bob. They have never met and cannot meet. Everything they say passes through a channel that an eavesdropper, Eve, can hear in full. Alice and Bob want to end up with the same secret number, and Eve must not be able to work it out, even though she heard everything.
+
+## Mixing paint
+
+The easiest way to see the idea is with paint.
+
+Alice and Bob agree out loud on a common colour, say yellow. Eve hears this, and that is fine. Each of them now picks a private colour and tells nobody. Alice picks red. Bob picks blue.
+
+Alice mixes her red into the yellow and sends the resulting orange mixture to Bob. Bob mixes his blue into the yellow and sends the green mixture to Alice. Eve sees both mixtures travel past her.
+
+Now each of them adds their own private colour to what they received. Alice adds her red to Bob's green. Bob adds his blue to Alice's orange. Both end up with the same muddy brown, because both mixed in yellow, red and blue. Eve holds yellow, orange and green. To reach the brown she would need either red or blue, and she has neither.
+
+The key is that mixing paint is easy but unmixing it is close to impossible. You cannot look at orange paint and pull the red back out. Mathematicians call an operation like this a one-way street: simple to travel in one direction, brutally hard to travel back.
+
+Paint is only a picture, of course. Computers need numbers, so we need a mathematical version of the one-way street.
+
+## The clock trick
+
+You already know the number that works, though you may not have noticed. It is the clock.
+
+On a clock face, 10 o'clock plus 5 hours is 3 o'clock, not 15. We wrap around after 12. Mathematicians call this "arithmetic modulo 12", and the answer after wrapping is called the remainder. We can use any size of clock. A clock with 23 hours on its face is handy for our example, and we write "mod 23" to say that numbers wrap at 23.
+
+Now take powers. The power 5³ means 5 × 5 × 5, which is 125. On our 23-hour clock, 125 wraps around like this: 23 goes into 125 five times (that is 115), leaving a remainder of 10. So 5³ lands on 10.
+
+Here is the one-way street. If I tell you I raised 5 to some secret power and landed on 10, can you tell me the power? With a clock this small, you could just try 1, 2, 3 and so on until you hit it. But the answers jump around in a way that has no pattern to spot, and when the clock has several hundred digits instead of two, trying every power would take longer than the age of the universe. Going forward is quick. Going backward is not.
+
+## The exchange, with real numbers
+
+Here is the whole thing with small numbers. Real systems use enormous ones, but the steps are identical.
+
+**Step one: agree on public numbers.** Alice and Bob say aloud: "We will use a 23-hour clock, and the base number 5." Eve hears this. It does not matter.
+
+**Step two: pick private numbers.** Alice secretly picks 6. Bob secretly picks 15. They never say these aloud.
+
+**Step three: send the mixtures.** Alice works out 5 to the power 6, wrapped on the 23-hour clock. That comes to 15,625, and after wrapping the answer is 8. She sends 8 to Bob. Bob works out 5 to the power 15, wrapped the same way, and gets 19. He sends 19 to Alice. Eve hears 8 and 19.
+
+**Step four: mix in the private number.** Alice takes Bob's 19 and raises it to her private power, 6, wrapping on the clock. The result is 2. Bob takes Alice's 8 and raises it to his private power, 15, and he also gets 2.
+
+Both now hold the number 2. They never said it aloud. They never met.
+
+## Why the two answers match
+
+This is not luck. Alice's final number is really 5 raised to (15 × 6), because her private 6 is applied on top of Bob's 15. Bob's final number is 5 raised to (6 × 15). Multiplication does not care about order, so 15 × 6 and 6 × 15 are the same number, 90. Both people have computed 5 to the power 90 on the clock, just by different routes.
+
+That is the whole secret. Each of them built half of the journey in private and handed over only the middle stage. The order of the private steps does not change where you arrive.
+
+## What Eve is stuck with
+
+Eve knows the clock size (23), the base (5), and the two mixtures (8 and 19). To find the shared number she needs Alice's 6 or Bob's 15. Recovering either one means asking: "5 to what power gives 8 on this clock?" That is the one-way street again, and we have no fast method for climbing back along it.
+
+With a clock this tiny, Eve would crack it in seconds. So real systems use numbers that run to hundreds of digits, or use a cousin of the same idea built on curves rather than clocks. At that scale, forward is a blink and backward is hopeless.
+
+## Where "public key" comes in
+
+The name needs a word of explanation. In the exchange above, the mixtures 8 and 19 are called **public keys**. Anyone may see them. The private numbers 6 and 15 are the **private keys**. Each person keeps theirs locked away.
+
+The pairing is the point. A public key is made from a private key by the easy direction of the one-way street, so the two are linked. But the link cannot be followed backwards. You can hand out your public key to the whole world and your private key stays safe.
+
+Other schemes use the same pairing differently. In one, anyone can lock a message using your public key, and only your private key can unlock it. In another, you can stamp a message with your private key, and anyone can use your public key to check that the stamp is genuine. These tricks are how websites prove who they are and how your messages stay private.
+
+## The shared number becomes a lock
+
+What do Alice and Bob do with their number 2? In real life, the shared secret becomes the key to a much faster everyday code, which both sides use to scramble the rest of their conversation. The slow, clever mathematics is used once, at the start, to get the fast and ordinary lock into both pairs of hands without anyone carrying it across the room.
+
+## A caution
+
+Eve cannot read the exchange, but she could try a different trick. She could pretend to be Bob when Alice speaks, and pretend to be Alice when Bob speaks, passing her own numbers along. Alice would then share a secret with Eve, not with Bob. This is why real systems also use the signature trick above: a trusted authority vouches that a public key really belongs to the person claiming it.
+
+## The takeaway
+
+Two strangers can agree on a secret in public because some mathematical steps are easy to do and nearly impossible to undo. Each person keeps one private ingredient, shares only a blended result, and the order of mixing does not change the final answer. The paint, the clock and the powers are all the same idea in different clothes. It is a small piece of arithmetic that holds up a large share of the modern world.

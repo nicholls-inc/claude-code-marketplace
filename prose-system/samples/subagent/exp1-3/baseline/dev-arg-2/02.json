@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a91bc952922dae28f",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72454,
+    "output_tokens": 1089,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:39:42.032Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineering team knows the ritual. A product manager asks how long something will take. Engineers shrug, add a buffer, and say \"about six weeks.\" Six weeks later, the work is at 70 percent, the date has been renegotiated twice, and everyone is quietly annoyed. We keep doing this because we believe estimates are a necessary evil. They are mostly just evil.\n\nMy claim is simple: teams should stop estimating how long work will take, at least in the form most of us practice it. Not because planning is bad, but because the estimate is the wrong tool for the job.\n\nStart with the evidence. Software work is dominated by unknowns: the legacy module nobody has touched in three years, the vendor API that behaves differently from its docs, the requirement that changes when a customer sees a demo. Estimates are guesses made at the moment we know least. Decades of project data, from the Standish reports to Bent Flyvbjerg's work on overruns, point the same way: the errors are large, skewed toward the late side, and stubbornly resistant to better technique. If a forecasting method fails this reliably, the rational response is to stop leaning on it.\n\nWorse, estimates do damage even when they are wrong. They turn into commitments the moment they leave the engineer's mouth. A guess becomes a deadline, a deadline becomes a promise to a customer, and now the team is optimizing for hitting the number rather than for building the right thing. Engineers cut corners on testing. They hide bad news. They pad. Managers, who know about the padding, trim it. Nobody is being dishonest; the system simply rewards theater over truth.\n\nAnd the time spent is real. Planning poker, story point debates, re-estimation after every surprise: add it up across a team and a year, and you have bought a lot of meetings that produced numbers nobody trusts.\n\nSo what replaces it? Three habits.\n\nFirst, slice work until it is small, roughly a day or two each. Small items are easier to reason about, and the act of slicing forces the conversations about scope that estimation pretends to have.\n\nSecond, measure throughput instead of predicting effort. Count how many items finish per week. That number comes from reality, not hope, and it supports forecasts like \"at our current pace, this batch lands in about five to eight weeks\" with honest ranges.\n\nThird, manage scope against a fixed time box. If the date matters, decide what you will cut when you run short, and decide early. This is the conversation managers actually need, and estimates tend to postpone it.\n\nThe objection is predictable: \"But the business needs dates.\" Sometimes it does. External launches, regulatory deadlines, and contracts are real. But notice that those dates are almost always set by the outside world, not by an engineer's estimate. The right response is to fix the date and flex the scope, which needs no estimate at all. For everything else, a throughput-based forecast gives managers more reliable information than story points ever did.\n\nStopping estimation is uncomfortable because it removes a ritual that feels like control. But the control was always an illusion. Teams that drop it tend to find the same thing: fewer meetings, earlier bad news, and conversations about what to build rather than how long it will take. That is a trade worth making."
+}

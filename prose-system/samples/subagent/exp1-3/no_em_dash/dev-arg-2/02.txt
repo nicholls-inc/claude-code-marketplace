@@ -1,0 +1,19 @@
+**Stop Estimating. Start Forecasting.**
+
+Every engineering team knows the ritual. Someone asks how long the work will take, the room goes quiet, and a number gets produced that nobody believes. Three weeks becomes six. The number gets quoted in a roadmap, repeated in a status meeting, and eventually used as evidence that the team is slow. I think teams should stop doing this.
+
+The case against estimating starts with an uncomfortable fact: we are bad at it, and not because we lack discipline. Software work is mostly discovery. The part you can predict is the part you already understand, and that part is rarely where the time goes. The time goes to the unfamiliar API, the migration that touches six services, the test that only fails on Tuesdays. An estimate asks you to price the things you do not yet know exist.
+
+Worse, the estimate does not stay an estimate. Once spoken, it hardens into a commitment. Managers plan around it, other teams depend on it, and the engineer who gave it carries it like a debt. People respond rationally. They pad the number, or they cut corners to hit it, or they stop surfacing bad news because the date is already public. A tool meant to create clarity ends up creating defensiveness.
+
+The usual reply is that the business needs dates. It does, and that is the right thing to take seriously. But the need for predictability does not require per-task guesses. It requires a credible answer to "when will this be done?" and there are better ways to get one.
+
+Count finished work instead of guessing at future work. If your team ships roughly eight items a week, and the backlog for a project holds forty, you have a forecast built from evidence. Slice the work small, track cycle time, and the distribution of past outcomes tells you more than any planning poker session. You can say "eighty-five percent of the time, work like this lands within five weeks" and be right far more often than a confident single date ever is.
+
+This also changes the conversation with managers for the better. Instead of arguing about whether a story is a three or a five, you argue about scope: what can we cut, what can we split, what matters most. That is where managers and engineers should be spending their energy anyway.
+
+Some will object that small, well-understood tasks are estimable, and that is true. But if the work is that well understood, it is also small, and small work does not need a ceremony. Just do it and let the throughput numbers speak.
+
+None of this means refusing to talk about time. External deadlines are real, and a team facing a launch date should work backward from it, deciding honestly what fits. The point is to treat the date as a constraint to manage with scope, not as a prediction to defend.
+
+So here is the proposal. Drop story points. Drop the per-ticket guessing. Keep a simple record of what you finish and how long it took, cut work into small pieces, and give stakeholders ranges grounded in that history. You will be wrong less often, argue less, and spend your meetings on the decisions that actually move a project. The estimate was never the goal. A trustworthy answer was, and we can get one without pretending to see the future.

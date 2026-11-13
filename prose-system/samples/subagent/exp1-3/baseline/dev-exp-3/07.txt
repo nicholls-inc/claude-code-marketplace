@@ -1,0 +1,95 @@
+# How Strangers Agree on a Secret in Public
+
+## The problem
+
+Suppose Alice and Bob have never met. They want to talk privately, but the only line between them is one that Eve, an eavesdropper, can listen to. Every word they say, Eve hears.
+
+For centuries this seemed impossible. Secret messages needed a shared key, a code both sides knew in advance. To share a key you had to meet in private, or send it by a trusted courier. If you could already talk privately, you did not need the key.
+
+In the 1970s mathematicians found a way out. Alice and Bob can swap messages in the open, and at the end they both hold a secret number that Eve cannot work out. It sounds like a magic trick, so here is how it works.
+
+## The paint analogy
+
+Start with colours. Alice and Bob agree out loud on a common starting colour, say yellow. Eve hears this, and that is fine.
+
+Each of them also picks a private colour and tells no one. Alice picks red. Bob picks blue.
+
+- Alice mixes her red into the yellow and sends the mixture to Bob.
+- Bob mixes his blue into the yellow and sends the mixture to Alice.
+
+Eve sees both mixtures travel past. Now each person adds their own private colour to the mixture they received:
+
+- Alice takes Bob's yellow-and-blue mixture and adds her red.
+- Bob takes Alice's yellow-and-red mixture and adds his blue.
+
+Both end up with yellow, red and blue combined, the same final shade. Eve has the yellow and the two partial mixtures. To get the final shade she would need to add red or blue, and she has neither.
+
+The key fact is that mixing paint is easy but unmixing it is practically impossible. You cannot look at orange and work out exactly which reds and yellows went in.
+
+Maths needs the same kind of one-way process. We need an operation that is quick to do and very hard to undo.
+
+## The maths version: clock arithmetic
+
+Think of a clock with 23 hours instead of 12. If it is 20 o'clock and 5 hours pass, you do not get 25 o'clock. You wrap round and get 2. Writing this as "mod 23" means "keep only the remainder after dividing by 23". So 25 mod 23 = 2.
+
+Our one-way process uses powers. "5 to the power of 3" means 5 × 5 × 5 = 125. On the 23-hour clock, 125 mod 23 is 10, since 23 × 5 = 115 and 125 − 115 = 10.
+
+Going forward is easy: pick a power, calculate, wrap round. Going backward is the hard part. Suppose I tell you that 5 to some power gives 8 on the 23-hour clock, and ask which power. You would have to try 5^1, 5^2, 5^3 and so on until you hit 8. With a clock this small, that takes a minute. The wrapping scrambles the answers so that they jump around with no pattern, so there is no shortcut to guessing the power.
+
+## The exchange, step by step
+
+**Step 1: public choices.** Alice and Bob agree on two numbers and say them aloud: the clock size, 23, and a base number, 5. This is the "yellow paint". Eve hears both.
+
+**Step 2: private choices.** Alice secretly picks the number 6. Bob secretly picks 15. They never say these aloud.
+
+**Step 3: public mixtures.**
+
+- Alice calculates 5^6 mod 23. That is 15,625, which leaves remainder 8 after wrapping round the clock. She sends Bob the number **8**.
+- Bob calculates 5^15 mod 23. The answer is **19**. He sends Alice that number.
+
+Eve hears 8 and 19. These are the "mixtures".
+
+**Step 4: the shared secret.**
+
+- Alice takes Bob's 19 and raises it to her private power 6: 19^6 mod 23. The answer is **2**.
+- Bob takes Alice's 8 and raises it to his private power 15: 8^15 mod 23. The answer is also **2**.
+
+Both now hold the secret number 2. Neither ever sent it over the line.
+
+## Why do both get the same answer?
+
+This is the step that feels like a trick, but it is just a fact about powers. Raising a power to a power multiplies the exponents. Alice ends up with 5 to the power of (15 × 6), because Bob's 19 was 5^15 and she raised it to the 6th power. Bob ends up with 5 to the power of (6 × 15), because Alice's 8 was 5^6 and he raised it to the 15th power.
+
+Since 15 × 6 and 6 × 15 are the same number, both land in the same place. It is the same as saying that adding red then blue gives the same result as adding blue then red. The order does not matter, and the wrapping round the clock does not disturb this.
+
+You can check it yourself: 5^90 on the 23-hour clock is 2.
+
+## What does Eve know?
+
+Eve has heard the clock size 23, the base 5, and the two mixtures 8 and 19. To find the secret, she needs one of the private numbers, 6 or 15. To get Alice's number, she must solve "5 to what power leaves 8 on the clock?".
+
+With a clock of 23 she can find it by trial and error in moments. This is why real systems do not use small numbers.
+
+## Making it safe
+
+Real versions of this exchange use a clock with a number of hours that is hundreds of digits long, and private numbers of similar size. Two things then happen.
+
+First, the forward direction stays fast. Computers have short-cut methods for raising a number to a huge power while wrapping round the clock, and the whole exchange takes a fraction of a second.
+
+Second, the backward direction becomes hopeless. With a clock this big, trying every possible power would take longer than the age of the universe, even using every computer on Earth. Nobody has found a general shortcut that gets round this, although no one has proved that none exists. Security rests on that long record of failed attempts.
+
+## What happens next
+
+The shared number is not the message itself. Alice and Bob use it as a key for an ordinary fast scrambling method, one that needs both sides to hold the same secret. This is why the exchange is so useful: it solves the one hard bit, getting a shared key to two strangers, and then lets the quick everyday methods take over.
+
+This is what happens when you visit a secure website. Your browser and the site's server do a version of this exchange in the first fraction of a second, then use the shared key to scramble everything else.
+
+## The catch, and the fix
+
+The exchange as described has one weakness. It stops Eve from listening, but it does not prove who Alice and Bob are. If Eve could actively intercept the line, she could pretend to be Bob to Alice and Alice to Bob, running two separate exchanges and passing messages between them while reading everything.
+
+The fix is a second use of public-key ideas, which is where the name "public key" comes from. Each person has a pair of linked numbers, one public and one private. Whatever the private one does, only the public one can check. A person can use their private number to "sign" their half of the exchange, and anyone can verify the signature using their public number. This proves that the mixture really came from the claimed sender and was not swapped on the way.
+
+## The idea in one paragraph
+
+Alice and Bob each combine a public number with a private one using an operation that is easy to do but nearly impossible to reverse. They swap the results in the open. Then each combines the other's result with their own private number. Because of how powers behave, both arrive at the same final number. Eve, who saw only the in-between results, cannot undo the one-way step to recover either private number, so she cannot reach the secret. Strangers have agreed a secret in plain sight, using nothing more than clock arithmetic and a lot of very large numbers.

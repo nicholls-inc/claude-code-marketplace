@@ -1,0 +1,69 @@
+# From HTTPS address to first byte: what happens in a browser
+
+This describes one page load, such as typing `https://shop.example.com/products?id=42` into the address bar. The main cost at each stage is latency. A round trip time (RTT) is the time for a packet to reach the server and return, so most of the delay comes from how many round trips the browser needs before it can send a request.
+
+## 1. Parsing the URL
+
+The browser splits the address into a scheme (`https`), a host (`shop.example.com`), a port (443 by default for HTTPS), a path (`/products`) and a query (`?id=42`). The fragment after `#` is never sent to the server. The browser also checks its HSTS list (HTTP Strict Transport Security). If the host is on that list, a plain `http://` address is rewritten to `https://` before anything is sent.
+
+## 2. Checking caches
+
+Before using the network, the browser looks for a stored response that is still fresh. On a first visit there is nothing stored, so the request goes out. A service worker installed by the site can also answer the request itself. Cookies for the host are attached later, when the request is built.
+
+## 3. DNS resolution
+
+The browser needs an IP address. It checks its own DNS cache, then asks the operating system, which checks its cache and hosts file. If there is no answer, the query goes to a recursive resolver, usually run by the ISP or a public service.
+
+If the resolver has no cached answer, it walks the DNS hierarchy:
+
+1. It asks a root server which servers handle `.com`.
+2. It asks the `.com` server which name servers handle `example.com`.
+3. It asks the `example.com` name server for `shop.example.com`.
+
+The answer may be a CNAME (an alias, often pointing at a CDN) followed by an A record (IPv4) or AAAA record (IPv6). Each record has a TTL that says how long it may be cached. DNS is the only stage that can cost zero round trips, when the answer is already cached.
+
+## 4. TCP connection
+
+With an IP address and port 443, the operating system opens a socket and sends a TCP SYN. The server replies with SYN-ACK, and the client answers with ACK. This three-way handshake costs one RTT, and no application data can flow until it finishes.
+
+TCP also provides reliable, in-order delivery. Lost packets are retransmitted, and congestion control limits how fast data is sent. This is why a new connection is slow at first. If the server has both IPv4 and IPv6 addresses, the browser may start both connections and keep whichever completes first.
+
+## 5. TLS handshake
+
+HTTPS adds TLS on top of TCP. In TLS 1.3, the client sends a ClientHello containing:
+
+- the TLS versions and cipher suites it supports
+- a key share, an ephemeral public key used for forward secrecy
+- SNI (Server Name Indication), the host name, so the server can choose the right certificate
+- ALPN (Application-Layer Protocol Negotiation), listing protocols such as `h2` (HTTP/2) and `http/1.1`
+
+The server replies with a ServerHello containing its own key share and its chosen cipher. It then sends its certificate and a signature made with the certificate's private key, which proves it controls that certificate. Both sides combine the key shares to derive the same symmetric session keys, and nothing sent after this point can be read by a passive observer.
+
+The client checks several things. The certificate chain must lead to a root certificate in its trust store. The certificate must cover `shop.example.com` and must not be expired. The browser may also check revocation status, using OCSP data that the server may staple to the handshake. Both sides then send a Finished message. The whole handshake takes one RTT in TLS 1.3, and the client can send its HTTP request in the same flight as its Finished message.
+
+## 6. Sending the HTTP request
+
+The browser builds a request. Over HTTP/1.1 it is plain text:
+
+```
+GET /products?id=42 HTTP/1.1
+Host: shop.example.com
+Accept: text/html,...
+Accept-Encoding: gzip, br
+Cookie: session=...
+If-None-Match: "abc123"
+```
+
+The `Host` header is required because one IP address can serve many sites. `If-None-Match` appears only when a stale cached copy exists. Over HTTP/2, the same information is sent as a binary HEADERS frame compressed with HPACK, and many requests can share one connection. Over HTTP/3, the request runs over QUIC on UDP. The browser learns about HTTP/3 from an `Alt-Svc` header in an earlier response.
+
+## 7. Server-side work
+
+The first machine to receive the request is often a CDN edge or load balancer. It usually terminates TLS, may answer from its own cache, and otherwise forwards the request to the origin server. The origin routes the request to application code, which may query a database, call other services or render a template. The browser cannot see any of this. It all counts toward time to first byte (TTFB).
+
+## 8. The first byte arrives
+
+The server sends a status line such as `HTTP/1.1 200 OK`, followed by headers such as `Content-Type`, `Cache-Control`, `Set-Cookie` and `Content-Encoding`, and then the body. The first byte reaches the browser after about one more RTT plus server processing time. TTFB is measured from the start of navigation to that first byte.
+
+## Putting the numbers together
+
+On a cold load, the sequence is DNS (variable, possibly zero), then 1 RTT for TCP, 1 RTT for TLS 1.3, and 1 RTT for the request and first response, plus server time. On a link with a 50 ms RTT, that is about 150 ms before the server does any work. This is why connection reuse (keep-alive), HTTP/2 or HTTP/3, session resumption and CDNs matter. Each one removes one or more of those round trips from the path to the first byte.

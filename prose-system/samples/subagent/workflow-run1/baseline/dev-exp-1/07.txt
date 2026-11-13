@@ -1,0 +1,37 @@
+A heat pump can heat a house when it is colder outside than inside because it does not make heat by burning anything. It moves heat that already exists outdoors into your home, using a refrigeration cycle like the one in your fridge, run in reverse.
+
+**Cold air still contains heat**
+
+Temperature is a measure of how much thermal energy is present, and "cold" is relative. Air at 0°C holds a great deal of energy. Even at -15°C it is well above absolute zero (-273°C), so there is still heat to extract. The job of a heat pump is to collect that low-grade heat and deliver it indoors at a useful temperature.
+
+**The cycle, step by step**
+
+A sealed loop holds a refrigerant, a fluid that boils at very low temperatures, often well below -20°C.
+
+1. **Evaporator (outdoor unit).** Liquid refrigerant flows through a coil. A fan blows outdoor air across it. Because the refrigerant is colder than the air, even on a freezing day, heat flows into it and it boils into a gas.
+2. **Compressor.** This is the part that makes it work. It squeezes the gas, which raises its pressure and temperature sharply, typically to 50-70°C or more. Compressing a gas heats it, as you notice when pumping up a bike tyre.
+3. **Condenser (indoor side).** The hot gas passes through a coil connected to your radiators, underfloor heating or hot water cylinder. It is hotter than the water, so it releases heat and condenses back to liquid.
+4. **Expansion valve.** The liquid's pressure drops, which cools it well below the outdoor temperature, and the loop starts again.
+
+Heat naturally flows from hot to cold. The compressor and expansion valve let the system arrange things so that the refrigerant is colder than outside at one point and hotter than your radiators at another. The electricity powers the compressor. It does not create the heat, it lifts the heat to a higher temperature.
+
+**Why it beats a gas boiler on efficiency**
+
+A gas boiler converts fuel to heat at up to about 90-95% efficiency, so each unit of gas gives you less than one unit of heat. A heat pump delivers more heat than the electricity it uses. The ratio is called the coefficient of performance (COP). A COP of 3 means 1 kWh of electricity moves 2 kWh of outdoor heat indoors and delivers 3 kWh in total. Over a full winter, a well-installed system typically averages a seasonal COP of roughly 2.5 to 4, which means 250-400% efficiency.
+
+**The catch: it works harder when it is colder**
+
+COP falls as the outdoor temperature drops, and also as the temperature your system must deliver rises. At 7°C outside you might see a COP of 4. At -7°C it may be nearer 2.5. Modern cold-climate models keep working at -20°C or below, but with lower efficiency and reduced capacity. Frost can also form on the outdoor coil, so the unit periodically runs a short defrost cycle.
+
+**What this means for your decision**
+
+- **Heat loss matters most.** A poorly insulated house needs more heat and higher flow temperatures, which lowers efficiency. Loft and wall insulation and draught-proofing often pay for themselves and let you use a smaller, cheaper unit.
+- **Emitters matter.** Heat pumps run most efficiently with lower flow temperatures (35-45°C). Underfloor heating suits them well. Existing radiators may be too small and may need upsizing in some rooms.
+- **Running costs depend on prices.** Electricity costs more per kWh than gas. With a COP of 3, a heat pump can still be cheaper or roughly equal to gas, but the outcome depends on your tariff. Time-of-use tariffs help.
+- **Upfront cost is higher.** Installation typically costs more than a boiler swap, though grants or subsidies may cover part of it where available.
+- **Space and noise.** You need room outside for the unit and often an indoor hot water cylinder. Units are fairly quiet but should be sited sensibly.
+- **Carbon.** Heat pumps cut emissions substantially, and more so as the grid decarbonises.
+
+**Practical next step**
+
+Ask for a heat-loss survey from a certified installer. It will size the system for your home and give a realistic estimate of running costs against your current boiler, which is the figure you need to decide.

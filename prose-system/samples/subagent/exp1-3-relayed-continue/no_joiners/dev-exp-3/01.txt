@@ -1,0 +1,69 @@
+How Strangers Can Share a Secret in Public
+
+Imagine you want to agree a secret with someone you have never met. The only way to talk is by shouting across a crowded room, and everyone can hear every word. It sounds impossible. If the secret is spoken aloud, the crowd knows it. Yet this is exactly what happens every time your phone connects safely to a website. The trick is called public key cryptography, and the core idea is surprisingly gentle once you see it.
+
+The problem with the old way
+
+For most of history, secret messages relied on a shared code. You and a friend would agree on a rule, perhaps shifting every letter three places along the alphabet, and then you could write notes nobody else could read. The weakness is obvious. Before you can use the code, you must both know the rule, and you had to agree it somewhere private. If you have never met, there is no private place. Sending the rule across the room just hands it to the crowd.
+
+For centuries this looked like a hard limit. You needed a secret to make a secret. Then, in the 1970s, mathematicians realised that some jobs are easy to do in one direction and extremely hard to undo. That lopsidedness is the whole key.
+
+Easy one way, hard the other
+
+Think of mixing paint. If you stir a tin of yellow into a tin of blue, you get green in seconds. But if I hand you the green and ask which exact shades went in, you cannot unmix it. Mixing is easy and unmixing is practically impossible.
+
+Here is how paint could solve our shouting problem. You and a stranger, call them Bea, publicly agree on a shared starting colour, say yellow. Everyone hears this and that is fine. You each secretly choose your own private colour. You choose red. Bea chooses blue. You each mix your private colour into the public yellow and swap the results across the room. The crowd sees both mixtures but cannot unmix them to find your private colours.
+
+Now comes the clever part. You take the mixture Bea sent and add your own private red. Bea takes the mixture you sent and adds her private blue. Both of you have now added yellow, red and blue in total, so you both hold exactly the same final colour. The crowd never had a private colour to add, so they cannot reach it.
+
+Real computers do not mix paint. They use arithmetic that behaves the same way, and you already know enough maths to follow it.
+
+A clock that wraps around
+
+The special arithmetic is about remainders. When you divide one whole number by another, whatever is left over is the remainder. Dividing 17 by 5 gives 3 with a remainder of 2. We write this as 17 leaves remainder 2 when divided by 5.
+
+Think of a clock with 23 hours instead of 12. Once you pass 23 you wrap back round to the start. Counting on a clock like this, the numbers stay small no matter how large the sum gets. That is handy, because it keeps everything manageable.
+
+Now consider powers. The power of a number means multiplying it by itself repeatedly, so 5 to the power 3 is 5 times 5 times 5, which is 125. Working out a power and then taking the remainder is easy for a computer, even for enormous numbers. But going backwards is the hard part. If I tell you that 5 to the power of some secret number leaves remainder 8 on the 23 hour clock, finding that secret number means trying possibilities until one fits. With small numbers you could do it in a minute. With numbers hundreds of digits long, all the computers on Earth working for the age of the universe would not finish.
+
+This is our paint mixing. Taking the power is the stirring. Finding the original number is the unmixing.
+
+A worked example with small numbers
+
+Let us run it with tiny figures so you can check every step with a calculator.
+
+You and Bea publicly agree on two numbers. The first is 23, which sets the size of our clock. The second is 5, our starting colour. The crowd hears both.
+
+Now each of you picks a private number. You choose 6. Bea chooses 15. You never say these aloud.
+
+You work out 5 to the power 6 on the 23 hour clock. That is 15625. Dividing by 23 gives 679 with a remainder of 8. So you shout the number 8 across the room.
+
+Bea works out 5 to the power 15 on the same clock. The number is huge, but the remainder comes out as 19. She shouts the number 19.
+
+The crowd now knows 23, 5, 8 and 19. They do not know 6 or 15.
+
+Next, you take Bea's public number 19 and raise it to the power of your private number 6. The result, on the 23 hour clock, leaves remainder 2.
+
+Bea takes your public number 8 and raises it to the power of her private number 15. Her result also leaves remainder 2.
+
+You both arrived at 2. This is your shared secret, and it was never spoken aloud. Why does it work? You each effectively computed 5 to the power of 6 times 15, just in a different order. Multiplication does not care which order you do it in, so both routes land on the same answer.
+
+Why the crowd cannot copy it
+
+An eavesdropper sees 23, 5, 8 and 19. To get the secret 2 they would need your private 6 or Bea's private 15. Finding either means working backwards from the remainder, which is the unmixing problem. In our toy example that is easy, because the numbers are tiny. In real use the clock has hundreds of digits and the private numbers are just as long. At that size there is no known quick shortcut, and trying every possibility would take longer than anyone could wait.
+
+This is the point to notice. The security does not come from hiding the method. The method is published in textbooks. It comes from the fact that one direction is cheap and the other is brutally expensive.
+
+Where the name public key comes from
+
+The numbers you shout, like 8 and 19, are called public keys, because they are safe to show to anyone. The private numbers, 6 and 15, are called private keys. Each person holds a matched pair. The public half can be handed out freely, and the private half never leaves its owner.
+
+A close cousin of this idea works for sending messages directly, and it is known as RSA after its three inventors. Instead of agreeing a secret together, Bea publishes a public key that acts like an open padlock. Anyone can snap that padlock shut on a message, but only Bea holds the private key that opens it. The maths behind it relies on a different lopsided problem. Multiplying two huge prime numbers together is easy, but taking the answer and finding the two original primes is extraordinarily hard.
+
+What happens in real life
+
+When your device connects to a secure website, something very like our example happens in a fraction of a second. The two sides swap public numbers and each computes the same shared secret. They then use that secret as the rule for a fast, ordinary shared code, the kind our alphabet shifting hinted at, only vastly stronger. The slow clever maths solves the first hard problem of agreeing a secret, and the fast simple code does the heavy work of protecting the conversation.
+
+The big idea
+
+Public key cryptography shows that you do not need a secret to make a secret. You need a calculation that is easy to do and nearly impossible to undo, and a way for each person to mix in something private that the other can mirror. Two strangers shout numbers across a crowded room, and walk away holding a treasure that nobody else in the room can find.

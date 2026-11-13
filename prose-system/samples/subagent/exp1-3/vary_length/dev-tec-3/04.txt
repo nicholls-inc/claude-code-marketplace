@@ -1,0 +1,13 @@
+Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV). Understanding why it works means understanding what the voltage terminal reading actually represents.
+
+In the first stage, a charger forces a fixed current into the cell, typically between 0.5C and 1C, where 1C is the current that would fill the nominal capacity in one hour. Lithium ions leave the cathode (often a layered metal oxide), cross the electrolyte, and insert themselves between the graphene layers of the graphite anode. This is intercalation. Meanwhile electrons travel through the external circuit. The terminal voltage rises gradually from about 3.0 V toward 4.2 V, the usual upper limit for a cobalt-based cell. For most of this stage the charger does little but hold the current steady while the cell voltage climbs.
+
+The terminal voltage is not the open-circuit voltage. It is the open-circuit voltage plus losses: the current multiplied by the cell's internal resistance, plus extra polarisation terms. Resistance comes from the electrolyte, the interface films on the electrodes, and the slow diffusion of lithium within solid particles. These losses add to the measured voltage during charging.
+
+That is the root of the slowdown. As the cell fills, the terminal voltage reaches the 4.2 V ceiling well before the electrodes are truly full. Pushing past that limit would drive electrolyte oxidation at the cathode and lithium plating, a metallic deposit on the anode that permanently destroys capacity and can create short circuits, which is a safety hazard. So the charger switches modes. It now holds the voltage at 4.2 V and lets the current fall on its own.
+
+In this constant-voltage stage the current decays roughly exponentially. The reason is simple. With voltage fixed, the driving force is the gap between the 4.2 V limit and the cell's rising open-circuit voltage. As the cell charges, that gap shrinks, and the current it can drive through the internal resistance shrinks with it. Diffusion matters too. Lithium concentration at the particle surfaces is already high, and ions must work their way into the particle interior, a process limited by diffusion rather than by applied force.
+
+Charging ends when the current drops to a small cutoff, often 0.05C to 0.1C. The last 20 percent of capacity can easily take as long as the first 80.
+
+This is why fast-charging products advertise reaching 80 percent quickly. The remainder is governed by chemistry, not by the charger.

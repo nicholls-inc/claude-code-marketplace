@@ -1,0 +1,32 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a063a1bc31207d7c0",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "mcp__ccd_session__spawn_task"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 11116,
+    "cache_read_input_tokens": 147494,
+    "output_tokens": 4284,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T19:04:51.439Z",
+  "valid": true,
+  "text": "**Cities Should Stop Requiring Parking**\n\nFor most of the twentieth century, American zoning treated a parking space as a basic entitlement of every building. A restaurant, apartment block, or dental office could not open until it had built a set number of spaces, usually calculated from floor area or seat count. The rule looked harmless. It is now one of the most expensive and least examined pieces of urban policy on the books, and cities should remove minimum parking requirements from their planning codes.\n\nThe costs are real, and they fall on people who never chose them. A space in a structured garage can cost tens of thousands of dollars to build, and surface lots, though cheaper, consume land that could hold homes or shops. Those costs do not disappear. They are folded into rents, purchase prices, and the price of groceries. Donald Shoup's *The High Cost of Free Parking* made the central point: parking is never free, it is simply bundled into everything else. The driver pays nothing at the curb, but the tenant who never owns a car pays for the garage beneath her building anyway. Minimums turn a private choice into a shared bill.\n\nThey also lock in a particular kind of city. When every building must carry its own parking, development spreads outward and density becomes hard to reach. A small corner shop on a walkable block cannot reopen after a fire if the lot will not fit the required spaces. Older buildings, the ones residents most value, are often legally non-conforming because they predate the car. Converting a vacant warehouse into apartments can trigger a demand for spaces the building physically cannot provide, so the project dies and the warehouse stays empty.\n\nCritics argue that removing requirements will flood neighborhood streets with parked cars and leave residents fighting for curb space. That worry deserves a serious answer. But minimums do not guarantee that parking is available. They guarantee only that parking is built, at the developer's expense, whether or not anyone needs it. A building with 200 spaces and 50 occupied is a sunk cost, not a solution. Where street parking is scarce, the better tools are the ones that price it: metered curbs, residential permits, and market-rate garage fees. Those tools tell drivers that a space has value and encourage them to use it efficiently. Minimums send the opposite signal, that the space is free and someone else will pay for it.\n\nCities that have already acted offer some reassurance. Buffalo and Minneapolis have removed parking minimums across most of their codes, and both have continued to see housing construction. Early reports from these places have not shown the parking crises that opponents predicted, though it is still too soon for firm conclusions. Other cities have trimmed requirements near transit or in downtown cores. The pattern so far is that buildings still include parking where the market wants it, and fewer are forced to include it where it makes no sense.\n\nRemoving minimums does not ban parking. A developer who believes a grocery store or a family-oriented apartment building needs spaces will still build them, and lenders and tenants will demand them where the demand is real. What changes is who makes the decision. It returns to the people who bear the financial risk, instead of being fixed in advance by a formula written decades ago. Cities can keep maximums in sensitive areas, require accessible spaces for people with disabilities, and manage curb use directly. The principle is simple: a building should not be required to subsidize a parking space that its occupants may never use.\n\nCities now say they want more housing, lower emissions, and safer streets for people who walk, bike, and ride transit. Each of those goals runs into minimum parking rules. Eliminating them is not a radical act. It is retiring a rule written for a city that no longer exists, and trusting builders and residents to decide what they actually need."
+}

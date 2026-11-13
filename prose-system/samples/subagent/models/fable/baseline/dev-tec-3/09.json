@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7b75d2fac9be410f",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25356,
+    "cache_read_input_tokens": 48371,
+    "output_tokens": 978,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:23:58.902Z",
+  "valid": true,
+  "text": "A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a metal oxide or phosphate, and the negative electrode is usually graphite. Both are porous coatings soaked in a liquid electrolyte that conducts ions but not electrons. During charging, an external supply pulls electrons out of the positive electrode and pushes them into the negative one. To keep charge balanced, lithium ions leave the positive electrode, cross the electrolyte, and insert themselves between the graphite layers, a process called intercalation.\n\nChargers almost universally use a two-stage profile called constant current, constant voltage (CC-CV).\n\nIn the first stage, the charger holds a fixed current, typically 0.5 to 1 times the cell's capacity per hour. The cell's voltage rises as it fills, from roughly 3.0 V when empty towards an upper limit of about 4.2 V for common chemistries. This stage delivers most of the charge, usually 70 to 80 percent.\n\nIn the second stage, the charger holds the cell at the limit voltage and lets the current fall as it will. Charging ends when the current has decayed to a small fraction of its initial value, often 5 to 10 percent.\n\nThe slowdown comes from that voltage ceiling. The voltage at the terminals is the sum of two parts: the cell's equilibrium voltage, which depends on state of charge, and an overpotential, which is the extra voltage needed to drive current through the cell's internal resistances. Those resistances include ion transport in the electrolyte, the reaction at each particle surface, and the slow solid-state diffusion of lithium into the particles.\n\nAs the cell fills, its equilibrium voltage climbs towards the limit, so the headroom left for overpotential shrinks. Since current is roughly proportional to overpotential, it has to fall. The result is an approximately exponential decay, much like charging a capacitor through a resistor as it nears the supply voltage.\n\nTwo effects make it worse near full:\n\n- **Fewer vacant sites:** the graphite has few empty positions left, so lithium accumulates at the particle surfaces faster than it can diffuse inward.\n- **Rising resistance:** the surface reaction and diffusion both become slower at high states of charge, so each amp costs more overpotential.\n\nThe ceiling can't simply be raised to compensate. Above it, the electrolyte oxidises at the positive electrode and the oxide structure degrades. At the negative electrode, forcing current faster than the graphite can absorb it drives the local potential below that of lithium metal, and the lithium plates onto the surface as metal instead of intercalating. Plating permanently consumes capacity and can grow dendrites that short the cell internally.\n\nThis is why fast-charging figures are usually quoted to 80 percent: the final fifth takes about as long as the rest."
+}

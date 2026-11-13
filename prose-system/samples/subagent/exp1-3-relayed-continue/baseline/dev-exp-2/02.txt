@@ -1,0 +1,15 @@
+**What a leap second is, and why it is being retired**
+
+The Earth is a poor timekeeper. For centuries, a day was defined by the planet's spin: one full turn, 24 hours, 86,400 seconds. But since 1967, the official second has been defined by atomic clocks, which count the vibrations of caesium atoms and are accurate to within a second over hundreds of millions of years. The trouble is that the two measures do not quite agree.
+
+The Earth's rotation is slightly irregular. Tides tug at it, the molten core sloshes, glaciers melt and earthquakes shift mass around. Over the long run, the spin has tended to slow, so a day is usually a hair longer than 86,400 atomic seconds. Left alone, atomic time would slowly pull ahead of the sun in the sky.
+
+The leap second was the fix. Starting in 1972, whenever the gap between the two approached 0.9 of a second, international timekeepers inserted one extra second into Coordinated Universal Time, usually on 30 June or 31 December. On those occasions the clock ran 23:59:59, then 23:59:60, then midnight. Twenty-seven have been added, the most recent at the end of 2016.
+
+For most people this meant nothing. For computers, it has been a headache. Software generally assumes every minute has 60 seconds, so an unexpected 61st can crash systems, corrupt timestamps or leave servers disagreeing about the time. Outages have been blamed on leap seconds at major websites and airlines. Financial markets, telecoms, satellite navigation and power grids all depend on precisely synchronised clocks, and engineers have to handle each leap second as a special case, sometimes by "smearing" it across many hours. Because Earth's spin is unpredictable, leap seconds cannot be scheduled years ahead, which makes the problem worse.
+
+There is a new twist as well. In recent years the Earth has been spinning slightly faster than expected, which raised the prospect of a first-ever negative leap second, in which a second would be removed. Almost no software has been tested for that, and many engineers fear it could cause more trouble than the additions did.
+
+In 2022, the General Conference on Weights and Measures, the international body that governs the definition of units, voted to stop. Under the plan, leap seconds will be abandoned by 2035. The gap between atomic time and the sun will be allowed to grow, and the tolerance will be widened to be much larger than a second. Officials have suggested the difference might one day be corrected by a leap minute, but not for a century or so.
+
+In practice, the sun and the clock will drift apart by about a minute over a century. Few people will notice. The computers, at least, will be spared.

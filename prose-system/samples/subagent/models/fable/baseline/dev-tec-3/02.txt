@@ -1,0 +1,15 @@
+A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a lithium metal oxide (or lithium iron phosphate); the negative electrode is graphite. Both are porous layered or framework solids that can accept and release lithium without changing structure, a process called intercalation. Between them sits a liquid electrolyte that conducts ions but not electrons, and a porous separator that prevents the electrodes from touching.
+
+During charging, an external supply pulls electrons out of the positive electrode and pushes them into the negative electrode. To keep each electrode electrically neutral, lithium ions leave the oxide, cross the electrolyte, and insert between the graphite layers. Discharge is the same process in reverse, driven by the cell's own voltage.
+
+The standard charging method has two stages: constant current, then constant voltage (CC-CV).
+
+In the constant-current stage, the charger supplies a fixed current, typically 0.5 to 1 times the cell's rated capacity per hour. The terminal voltage rises as the cell fills, from roughly 3.0 V when empty to a limit of about 4.2 V for common chemistries. This stage delivers most of the charge, typically 70 to 80 percent.
+
+The voltage limit is a hard one. Above it, the electrolyte oxidises at the positive electrode and the oxide itself becomes structurally unstable, both of which permanently degrade the cell and can lead to thermal runaway. So once the terminal voltage reaches the limit, the charger holds it there and lets the current fall. This is the constant-voltage stage, and it ends when the current has decayed to a few percent of its initial value.
+
+Charging slows in this second stage because the terminal voltage the charger sees is not the cell's equilibrium voltage. It is the equilibrium voltage plus an overpotential: the extra voltage needed to drive current through the electrolyte's resistance, across the electrode surfaces, and into the solid particles. When the terminal voltage first hits 4.2 V, the cell's internal equilibrium voltage is still lower, and the cell is not yet full. With the terminal voltage now fixed, the only way to keep charging is for the overpotential to shrink as the equilibrium voltage rises, which means the current must fall. The decay is roughly exponential, much like a capacitor charging through a resistor.
+
+A second limit acts at the graphite. Ions must diffuse from the surface of each particle into its interior, and diffusion slows as the available sites fill. If ions arrive faster than they can insert, they deposit as metallic lithium on the surface instead. This plating permanently consumes capacity and can grow dendrites that short the cell. The risk is highest near full charge and at low temperature, which is why fast chargers taper early and cold batteries charge slowly.
+
+The practical consequence is that the last 20 percent of charge takes about as long as the first 80.

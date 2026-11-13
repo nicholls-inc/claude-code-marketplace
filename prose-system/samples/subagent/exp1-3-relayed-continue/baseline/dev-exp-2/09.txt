@@ -1,0 +1,13 @@
+**What a leap second is, and why it is being retired**
+
+The Earth is a poor timekeeper. For most of history, a day was defined by the planet's spin: one full turn, 24 hours, 86,400 seconds. But since 1967 the second has been defined differently, by the vibrations of caesium atoms, which tick with a steadiness no spinning planet can match. The trouble is that the two clocks drift apart. Tides, shifting oceans and the slosh of molten metal in the Earth's core gently speed up and slow down our rotation, and over the long run the planet has tended to lose time against the atoms.
+
+A leap second is the patch. When the gap between atomic time and the Earth's real rotation grows to nearly a second, international timekeepers add one extra second to the last minute of a day, usually on 30 June or 31 December. That minute runs to 61 seconds, so that clocks read 23:59:60 before rolling into the new day. Since the system began in 1972, 27 leap seconds have been added, the most recent at the end of 2016.
+
+For decades this was a harmless curiosity. Then computers took over. Most software assumes a minute has exactly 60 seconds, and a 61st can confuse it. Leap seconds have been blamed for crashes and outages at major websites, and for glitches in financial trading, telecommunications and navigation systems, where timestamps must be exact and in the right order. Because leap seconds are announced only months ahead and cannot be predicted far in advance, engineers cannot simply build them in. Some large technology companies cope by "smearing" the extra second across a whole day, but different firms smear differently, creating small disagreements between systems.
+
+In 2022 the General Conference on Weights and Measures, the body that governs the world's measurement standards, voted to abandon the leap second by 2035. The case rested on a risk that has grown with our reliance on digital infrastructure: fixing a clock should not break the machines that depend on it.
+
+The Earth has also complicated matters. In recent years its rotation has sped up slightly, raising the odd prospect of a "negative" leap second, in which a second is removed. That has never been tried, and software engineers dread it even more.
+
+Dropping leap seconds means civil time will slowly drift from the sun's position in the sky, by about a minute per century or more. The expectation is that this will be handled much later, perhaps by a larger correction, at a time when nobody is likely to notice.

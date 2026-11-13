@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af588a0d5be4af8af",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "final_text",
+  "wrapper": "workflow",
+  "relayed_user_request": "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What’s wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is.",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28401,
+    "cache_read_input_tokens": 44269,
+    "output_tokens": 2577,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:38:02.598Z",
+  "valid": true,
+  "text": "A heat pump does not make heat so much as move it. That single idea answers your question. Cold is not the absence of heat. Outdoor air at minus five degrees Celsius still holds a great deal of thermal energy, because the real floor is absolute zero, which sits far below anything you will see in a British winter. A heat pump captures some of that energy and carries it indoors.\n\nThe trick is a refrigerant, a fluid that boils at very low temperatures. Outside, a fan blows air across a coil filled with cold liquid refrigerant. Even a freezing day is warmer than the refrigerant, so heat flows from the air into the fluid and the fluid boils into a gas. Nothing exotic happens here. Heat simply moves from warmer to cooler, and the refrigerant is kept colder than the air on purpose.\n\nNext comes the compressor, which is the heart of the machine. It squeezes the gas, and squeezing a gas raises its temperature sharply, much as a bicycle pump warms up as you use it. The refrigerant leaves the compressor hotter than your radiators need to be, typically around 60 to 70 degrees. It then passes through a heat exchanger where it gives that heat to your central heating water. As it loses heat it condenses back into a liquid.\n\nFinally an expansion valve drops the pressure, which chills the liquid far below the outdoor temperature, and the cycle begins again. A fridge works the same way in reverse. Your fridge pulls heat out of the food and dumps it into your kitchen. A heat pump pulls heat out of the outdoors and dumps it into your home.\n\nWhy this beats a boiler on efficiency\n\nA gas boiler burns fuel and turns it into heat at best around 90 to 94 percent efficiency. You can never get more heat out than the chemical energy you put in. A heat pump is different because most of the heat is moved rather than created. For each unit of electricity it uses to run the compressor and fans, it delivers roughly three units of heat across a typical winter. Engineers call this the coefficient of performance. A figure of 3 means 300 percent efficiency in plain terms. On a mild day it can be higher, and on a bitterly cold night it dips, perhaps to 2 or a little more. Modern units keep working down to minus 15 or even minus 25 degrees.\n\nWhat this means for your decision\n\nHeat pumps like to run gently and for long periods at lower water temperatures. A boiler typically sends water out at 70 degrees or more, while a heat pump is most efficient at 35 to 45. That makes your house matter a great deal. A well insulated home with larger radiators or underfloor heating suits a heat pump well. A draughty house with small radiators may need upgrades first, and those costs can change the sums.\n\nConsider also the running cost. Electricity usually costs more per unit than gas, so the efficiency advantage has to overcome that price gap. With a seasonal figure near 3 and a price ratio below about 3 to 1, running costs are often similar or lower. Time of use tariffs, solar panels and a hot water cylinder that stores cheap overnight energy can improve things further.\n\nPractical points include outdoor space for the unit, which is about the size of a large suitcase standing on end, and a little noise comparable to a quiet fridge. Grants may offset the upfront price, which is often several thousand pounds more than a new boiler.\n\nMy suggestion is to ask an installer for a proper heat loss survey of your home before deciding. It will show the radiator sizes, the expected efficiency and the true cost, so you are comparing real numbers and not general claims."
+}

@@ -1,0 +1,29 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists outside and brings it indoors. That is why it can warm your house even when the air outside is far colder than the air inside.
+
+The key idea is that cold is not the absence of heat. Outdoor air at 0 degrees Celsius still holds a great deal of thermal energy. Absolute zero is around minus 273 degrees, so a freezing winter day is still warm in physical terms. A heat pump extracts some of that energy, concentrates it, and releases it inside.
+
+It works the same way as a fridge, run in the opposite direction. A sealed loop of refrigerant circulates through four main parts.
+
+First, the refrigerant passes through the outdoor unit's evaporator coil. The refrigerant is chosen so that it boils at a very low temperature, well below freezing. Even cold outdoor air is warmer than the refrigerant, so heat flows from the air into the liquid, which boils into a gas.
+
+Second, a compressor squeezes that gas. Compressing a gas raises its temperature sharply, just as a bicycle pump gets warm when you use it. The gas leaves the compressor much hotter than your living room, perhaps 50 to 70 degrees.
+
+Third, this hot gas flows through a condenser inside the house. Because it is hotter than the water in your radiators or the air in your rooms, heat flows from the refrigerant into your heating system. As it gives up heat, the refrigerant condenses back into a liquid.
+
+Fourth, an expansion valve releases the pressure. The liquid cools dramatically and returns to the outdoor coil, ready to absorb more heat. The cycle repeats continuously.
+
+The compressor needs electricity, but it uses far less energy than the heat it delivers. Engineers measure this with the coefficient of performance. A typical modern heat pump achieves about 3 on a mild day, meaning that one unit of electricity produces three units of heat. Two of those come free from the outside air. A gas boiler, by comparison, converts at best about 90 to 95 percent of its fuel into heat, so it can never beat one unit of heat per unit of energy. In deep cold the heat pump works harder and its efficiency falls, often to around 2 or 2.5, but it still comfortably outperforms a boiler on energy efficiency.
+
+What does this mean for your decision? There are several points to weigh.
+
+Running costs depend on your electricity and gas prices. Electricity usually costs more per unit than gas, so a heat pump with a coefficient of performance of 3 might only be a little cheaper than a boiler, or roughly equal, depending on your tariff. Time-of-use tariffs and solar panels improve the case considerably. Check current prices locally before assuming savings.
+
+Your home matters. Heat pumps deliver heat at lower temperatures than a boiler, typically 35 to 55 degrees rather than 70 or more. They work best with good insulation and either underfloor heating or radiators large enough to emit adequate heat at those lower temperatures. In a draughty, poorly insulated house, you may need upgrades first, and these add to the cost. A heat loss survey from a qualified installer will tell you.
+
+Cold climates are manageable. Modern units are rated to operate down to minus 15 or even minus 25 degrees, though output and efficiency decline as it gets colder. Make sure the system is sized for your coldest expected days, and ask the installer about backup heating for extreme conditions.
+
+Upfront cost is higher. Installation commonly costs several times that of a new boiler, though government grants and incentives may offset much of it depending on where you live. Heat pumps also tend to need less maintenance and often last 15 to 20 years.
+
+Finally, there is the environmental benefit. Because a heat pump uses electricity, its carbon footprint falls as the grid gets cleaner, whereas a gas boiler will always burn fossil fuel.
+
+If your boiler is near the end of its life, your home is reasonably well insulated, and grants are available, a heat pump is worth serious consideration. Get at least two or three quotes and a proper heat loss calculation before you decide.

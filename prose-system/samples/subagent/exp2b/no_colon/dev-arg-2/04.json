@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a78cfaebce4d810ad",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1026,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:18:35.049Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping Small.\n\nEvery engineer has lived this scene. A manager asks how long a feature will take. You squint at a vague ticket, say three weeks, and watch that number get written on a slide. Six weeks later you are still working, the slide has become a promise, and everyone is quietly unhappy. The estimate was never knowledge. It was a guess that got promoted to a commitment.\n\nSoftware teams should stop estimating how long work will take, at least in the form most of them practice it, which is sizing individual tasks in points or days and then summing them into a date.\n\nThe core problem is that the work is novel by definition. If we had done the exact thing before, we would reuse it. Because we have not, the biggest drivers of duration are the things we cannot see yet, such as a flaky dependency, a misunderstood requirement, or a migration that turns out to touch forty services. Studies of project overruns keep finding the same pattern. Estimates cluster around the optimistic case, and the tail of the distribution is long and fat. A single number cannot describe that shape, and we pretend it can.\n\nThen there is the cost of the ritual itself. Planning poker sessions eat hours that could have gone into building. Teams argue over whether something is a five or an eight, a debate that produces no customer value. Worse, estimates change behavior. Engineers pad them, managers trim them, and both sides learn that the number is a negotiating position rather than information. Trust erodes in the gap between what was said and what happened.\n\nThe usual defense is that managers need dates to coordinate sales, launches, and hiring. That is true, and it is exactly why the alternative must be better, not merely absent. Here is what works instead.\n\nFirst, slice work until each piece is small, a day or two at most. Small pieces have narrow error bars, and you no longer need to guess because you can see.\n\nSecond, measure rather than predict. Track how many small items your team actually finishes per week. That throughput is real data about your real system, including the meetings, incidents, and interruptions that no estimate ever accounts for. Forecast from it with a range, saying something like \"most likely done in four to six weeks,\" and update as you learn.\n\nThird, make scope the lever. If a date is fixed, the honest conversation is about what fits, not how fast people can type. Ship the core, then extend. This turns a deadline from a prediction into a decision, which is where it belonged all along.\n\nFourth, keep the conversation about risk. Spend the saved planning hours on the scariest unknowns, with spikes and prototypes that convert uncertainty into knowledge early.\n\nCritics will say this is just estimation by another name. Partly, yes. Forecasting from observed throughput is still looking ahead. But the difference matters. It rests on evidence instead of opinion, it carries honest uncertainty, and it costs minutes rather than meetings.\n\nTeams that drop task-level estimates tend to discover something surprising. Their predictability improves, their planning meetings shrink, and their managers get better answers. The guess was never the point. Delivering was."
+}

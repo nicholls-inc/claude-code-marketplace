@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a6f1d46ed81bd82c8",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73751,
+    "output_tokens": 996,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:34:28.419Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV). The charger is a controlled source, and the cell's own electrochemistry dictates how it behaves.\n\nIn the first stage, the charger forces a fixed current, often around 0.5 to 1 C (a C-rate of 1 means the current that would fill the nominal capacity in one hour). Lithium ions leave the cathode, for example a layered metal oxide, travel through the electrolyte, and insert (intercalate) between graphene layers in the graphite anode. The cell's terminal voltage rises steadily from about 3.0 V toward 4.2 V, the usual upper limit for a cobalt-based cell. Most of the capacity, roughly 70 to 80 percent, is delivered here at full power.\n\nVoltage during charging is not just the cell's open-circuit voltage. It is the sum of three terms: the open-circuit voltage, which rises with state of charge; an ohmic drop (current times internal resistance); and overpotentials from charge-transfer kinetics and from ion concentration gradients. The relation is approximately V_terminal = V_oc(SoC) + I(R_ohmic + R_ct) + V_diffusion. As the cell fills, V_oc climbs, and the overpotential terms push the terminal voltage up faster than the real state of charge has advanced.\n\nWhen the terminal voltage reaches the 4.2 V limit, the charger switches to the second stage and holds voltage constant. Holding it higher would plate metallic lithium on the anode and oxidise the electrolyte, both damaging and unsafe. With voltage clamped, current is no longer controlled. It decays on its own, because the driving term (applied voltage minus V_oc, minus the internal drops) shrinks as V_oc approaches 4.2 V. Mathematically this resembles an RC circuit relaxing toward equilibrium, so current falls roughly exponentially.\n\nTwo physical effects make the tail slow. First, the driving voltage margin vanishes as V_oc nears the clamp. Second, the graphite particles are nearly full, so lithium must diffuse deeper into the solid particles, and solid-state diffusion is slow. Surface concentration saturates while the interior lags, so the cell can accept lithium only as fast as it diffuses inward. This diffusion limit is why the final 20 to 30 percent takes a large share of the total time.\n\nCharging terminates when current drops to a cutoff, typically 0.02 to 0.05 C. Pushing current higher near full would require exceeding the voltage limit, which is why fast chargers taper power so sharply above about 80 percent. Temperature matters too. Cold cells have slower kinetics and diffusion, so protocols reduce current or pause until the cell warms. The battery management system monitors voltage, current and temperature for each cell throughout."
+}

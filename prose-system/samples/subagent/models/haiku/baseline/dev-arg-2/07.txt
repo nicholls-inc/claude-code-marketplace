@@ -1,0 +1,17 @@
+Stop Estimating. Start Slicing.
+
+Every quarter the same ritual plays out. A product manager asks how long the new billing flow will take. Engineers huddle, someone says "three weeks," someone else says "maybe five," and the number lands on the roadmap as a promise. Six weeks later the flow ships in nine, the team takes the blame, and everyone agrees to estimate more carefully next time. We should stop doing this.
+
+The problem is not that software is mysterious. The problem is that our estimates are bad and the process that produces them is expensive. Researchers have documented the same pattern for decades: developers are poor at predicting how long work will take, and they are consistently optimistic. The planning fallacy is how people reason about unfamiliar work, and most software work is unfamiliar by definition. If we already knew how to build it, we would have less need to build it at all.
+
+Estimation also costs more than it appears to. Each estimate invites a negotiation, a padding exercise, and a meeting about the meeting. Engineers inflate tickets so they will not be punished for overruns. Managers quietly discount the inflated numbers. The estimate stops measuring the work and starts measuring politics.
+
+Worse, the estimate shapes what gets built. When a feature is "three weeks," people cut scope to hit the date, cut quality, or stop investigating the parts of the problem that might reveal it is harder than expected. The date becomes the goal, when the goal was supposed to be the outcome.
+
+So what replaces it? Not chaos. Teams can cut work into slices that ship in days, and then track how many slices they finish. Throughput is a fact you measure, not a forecast you invent. If a team finishes about eight slices a fortnight, you can answer "when will this be done?" by counting the slices the work contains. That answer is a range, it updates every week, and it rests on what the team actually did rather than what it imagined in a meeting.
+
+Managers will object that they need dates for budgets, contracts and launches. They do. But a date drawn from recent throughput, with an honest range attached, is more useful than a point estimate everyone privately knows is fiction. You can plan around a range. You cannot plan around a number you already suspect is wrong.
+
+Engineers gain too. When nobody grades them against a figure they gave in a planning session, they can say "this is harder than I thought" on day two instead of day twenty-nine. That early signal is what we actually need, and estimation trains people to hide it.
+
+Stop estimating how long work will take. Make the work small enough that the question matters less, and measure what you deliver.

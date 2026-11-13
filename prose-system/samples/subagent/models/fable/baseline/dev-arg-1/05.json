@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af84ab96442496932",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73721,
+    "output_tokens": 1544,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:10:42.218Z",
+  "valid": true,
+  "text": "Stop Making Cities Build Parking Nobody Asked For\n\nSomewhere in your city's zoning code there is a table. It says a restaurant must provide one parking space for every hundred square feet of dining room, a bowling alley four spaces per lane, an apartment two spaces per unit regardless of whether the tenants own a car. The numbers look scientific. They are not. Most were copied decades ago from a neighbouring town's code, which copied them from another, which took them from surveys of suburban sites with free parking and no bus service. Cities should delete the table. Minimum parking requirements are among the most expensive and least examined rules in urban planning, and the case for scrapping them is strong.\n\nStart with cost. A surface parking space consumes roughly 300 square feet once you count the aisles, which is larger than many bedrooms. A space in a structured garage commonly costs tens of thousands of dollars to build, and underground it costs more still. That money does not vanish. It is folded into rents, into the price of a meal, into the cost of groceries. Everyone pays it, including the people who walked, cycled, took the bus, or are too poor, too young or too old to drive. A mandate that forces a non-driving renter to subsidise her neighbour's second car is a regressive transfer, and we would never tolerate it if it appeared as a line item on the lease.\n\nThen consider what the mandates prevent. Housing is the obvious casualty. On a small urban lot, the parking requirement often determines how many homes can be built, not the height limit or the density cap. A developer who could fit twelve apartments finds that the lot only holds parking for six, so six get built, or none. The modest forms of housing that cities claim to want, such as triplexes, apartments above shops and conversions of old buildings, are exactly those that cannot absorb a parking quota. Old main streets that people love and travel to visit would be illegal to build today in most of the places that have them, because their shops have no parking lots attached.\n\nThe mandates also strangle small business. When a vacant storefront changes use from a shop to a cafe, many codes demand additional spaces the site physically cannot hold. The entrepreneur either buys and demolishes the building next door or gives up. The storefront stays empty, and the city wonders why its downtown is struggling.\n\nThe land itself is the third cost. In many American downtowns, parking occupies a fifth or more of all land, and in some it is far higher. That is land paying little tax, generating no jobs, housing no one, and pushing everything else further apart. Distance makes walking impractical, which makes driving necessary, which makes more parking seem essential. The requirement manufactures the demand it claims to be responding to. Asphalt also sheds stormwater into overloaded drains and bakes neighbourhoods in summer.\n\nThe strongest objection is spillover. If a new building has too little parking, residents will park on nearby streets, and existing neighbours will pay the price. This is a real concern, and it has a real answer: manage the curb. Cities can price street parking, issue residential permits, and set time limits. The problem of spillover exists because street parking is given away free, and the solution to an underpriced public resource is to price it, not to force private landowners to oversupply a substitute. Donald Shoup, the economist who did more than anyone to expose this system, proposed returning meter revenue to the block where it is collected, so that residents see cleaner pavements and better lighting in exchange. That turns opponents into beneficiaries.\n\nIt is important to be clear about what abolition means. Removing a minimum is not imposing a maximum. Nobody is banning parking. Developers will still build it, because buyers and tenants will still want it and lenders will still ask about it. What changes is who decides how much: the person with money at stake and knowledge of the site, in place of a table written in 1962. A senior housing complex near a rail station and a big-box store on a highway will reach different answers, as they should.\n\nWe also have evidence. Buffalo abolished its minimums citywide in 2017, and subsequent research found that many new mixed-use projects provided substantially less parking than the old code would have required, while others chose to build more. Minneapolis, Austin, San Jose and dozens of others have followed, and Minneapolis has seen strong apartment construction and rents that held steadier than in comparable cities. None of these places has collapsed into gridlock. The sky stayed up.\n\nCities face a housing shortage, strained budgets and climate targets they are missing. Few reforms address all three at no cost to the public purse. This one does. It requires no new spending, no new agency, only the courage to strike out a table of numbers nobody can justify. Strike it out."
+}

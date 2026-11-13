@@ -1,0 +1,15 @@
+A leap second is a one-second adjustment added to official world time every so often, to keep our clocks in step with the turning of the Earth.
+
+Two clocks are at work here. The first is astronomical. It measures time by the planet's rotation, so a day is the time it takes the Earth to spin once relative to the sun. The second is atomic. It counts the vibrations of atoms, which tick with extraordinary steadiness. Since 1967, the official definition of a second has come from this atomic count, not from the sky.
+
+The trouble is that the Earth is not a perfect timekeeper. Tides, the movement of molten rock in its core, and shifting ice and ocean all nudge its spin. Over the long run the rotation has tended to slow, so the astronomical day drifts away from the atomic one. Left alone, the gap would grow, and eventually noon on the clock would not match noon in the sky.
+
+In 1972 the world adopted a fix. Coordinated Universal Time, the standard that civil clocks follow, would be kept within a second of the Earth's rotation. Whenever the gap threatened to exceed that, an extra second would be inserted at the end of a June or December day, so that the clock read 23:59:60 before rolling over to midnight. Between 1972 and 2016 this was done 27 times.
+
+For most people the extra second was invisible. For computers it was a recurring headache. Software generally assumes every minute has 60 seconds, and a minute with 61 can confuse systems that log events, trade shares, run telecommunications networks or coordinate satellites. Leap seconds have been blamed for crashes and outages at major internet companies. Engineers have devised workarounds, such as spreading the extra second across several hours, but these differ from one system to the next, which creates its own inconsistencies.
+
+There is also a newer wrinkle. In recent years the Earth has been spinning slightly faster than expected, which raises the possibility of a negative leap second, where a second is removed. That has never been tried, and the risk of software failing is considered greater still.
+
+In 2022 the General Conference on Weights and Measures, the international body that oversees the definition of units, voted to retire the leap second by 2035. After that date, the gap between atomic time and the Earth's rotation will be allowed to grow well beyond one second, and may eventually be corrected by some less disruptive method, perhaps decades or even a century from now.
+
+The reasoning is practical. The mismatch is far too small for anyone to notice in daily life, while the cost to the digital systems we depend on is real. The decision accepts that the sky and the clock will slowly part ways.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa6b81891d6118248",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "final_text",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73759,
+    "output_tokens": 3215,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:11:27.058Z",
+  "valid": true,
+  "text": "**How a Heat Pump Heats a Cold House**\n\nA heat pump does not create heat. It moves heat from one place to another, which is why it can warm a house when the outside air feels cold. Cold air still contains heat, because heat is the energy of moving molecules and everything above absolute zero (about -273 °C) holds some. The task is to collect that heat and concentrate it indoors.\n\nIt does this with a refrigerant, a fluid that boils at very low temperatures. The cycle has four steps.\n\n1. **Absorb.** Outside air is blown across a coil in the outdoor unit that contains low-pressure refrigerant. At low pressure, the refrigerant boils far below freezing, so even chilly air is warm enough to make it evaporate into a gas.\n\n2. **Compress.** A compressor squeezes the gas. Compressing a gas raises its temperature, the same reason a bicycle pump gets warm. The refrigerant leaves the compressor much hotter than the house.\n\n3. **Release.** The hot refrigerant flows through a heat exchanger indoors. It warms room air or the water in radiators or underfloor pipes, and it condenses back into a liquid as it cools.\n\n4. **Expand.** The liquid passes through a valve that sharply drops its pressure and temperature. It is now colder than the outside air, and the cycle repeats.\n\nA fridge works on the same principle. It pulls heat out of its interior and releases it into your kitchen. A heat pump runs the process so that it pulls heat from outside and releases it inside.\n\nEfficiency is why this matters. A modern condensing gas boiler converts fuel to heat at roughly 90 to 95 percent efficiency, and it cannot do better than the fuel it burns. A heat pump uses electricity to run the compressor and fans, but the heat it delivers includes the heat it moved. Installers often quote a seasonal performance figure of around 2 to 4 units of heat for each unit of electricity. Treat that as a rough guide, not a guarantee.\n\nPerformance drops as the outside temperature falls. The system has to bridge a bigger temperature gap, so the compressor works harder and produces less heat per unit of electricity. Cold-climate models still operate in severe cold, but the margin narrows. Many installations include an electric backup element, or keep an existing boiler for the coldest days.\n\nFrost is another practical point. In heating mode, the outdoor coil can ice over, so the unit periodically reverses briefly to melt it. You may see steam or notice a short pause in heat output. This is normal.\n\nFor your decision, three questions matter most.\n\n- **Running cost.** The bill depends on the ratio of electricity price to gas price where you live, as much as on efficiency. Compare your actual tariffs.\n- **Insulation.** A well-insulated house needs less heat, which makes a heat pump cheaper to run and easier to size.\n- **Emitters.** Heat pumps work best at lower water temperatures than boilers use. Older radiators may need upgrading or resizing.\n\nInstallation usually costs more than a boiler replacement, though government grants or incentives may offset part of it. Ask an installer for a heat-loss calculation for your house before you decide. That figure, not a generic rule of thumb, will show whether a heat pump suits your home."
+}

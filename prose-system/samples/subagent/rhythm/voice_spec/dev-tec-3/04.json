@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a3d1353837ff6cde8",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28379,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 819,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:53:30.797Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a method called constant current, constant voltage, usually shortened to CC-CV. The charger first pushes a fixed current into the cell. For a typical 3 Ah cell at a 1C rate this is 3 A. As lithium ions move out of the cathode, through the electrolyte and into the graphite anode, the cell voltage rises from about 3.0 V when empty towards 4.2 V when full. This first stage is the constant current phase. It stores roughly 70 to 80 per cent of the cell's capacity and takes a little under an hour at 1C.\n\nWhen the terminal voltage reaches the upper limit, the charger stops holding the current and holds the voltage at 4.2 V instead. This is the constant voltage phase. The current is now whatever the cell will accept at that voltage, and it falls steadily. Charging is normally ended when the current has dropped to about 5 per cent of the 1C value, which here is 0.15 A. The constant voltage phase can take another hour or more, and it adds only the last 20 to 30 per cent of the charge.\n\nThe voltage limit is the reason for the taper. The terminal voltage is the sum of the cell's open-circuit voltage and the drop across its internal resistance, which is the current multiplied by that resistance. Early in charging the open-circuit voltage is well below 4.2 V, so there is room for a large current. As the cell fills, the open-circuit voltage climbs towards the limit and the room for a voltage drop shrinks. To keep the terminal voltage at 4.2 V, the current must fall.\n\nThe cell's internals add to this. Near full charge the graphite anode has few empty sites left, so lithium concentrates at its surface and diffuses only slowly into the particles. The anode potential also gets close to that of metallic lithium, and a high current at this point can plate lithium onto the surface instead of inserting it. Plated lithium is permanent capacity loss and can form dendrites that short the cell. Limiting the voltage and letting the current decay protects against this.\n\nThe 4.2 V ceiling is itself a safety and lifetime limit. Above it, the electrolyte oxidises at the cathode and the cathode material degrades faster. Charging to 4.1 V instead gives up some capacity, but it noticeably extends cycle life, which is why some devices charge to a lower limit by default."
+}

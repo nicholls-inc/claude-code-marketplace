@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a086db59de2f3d5f9",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73754,
+    "output_tokens": 896,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:42:44.812Z",
+  "valid": true,
+  "text": "The Earth does not keep perfect time. For most of history that did not matter, because clocks were not precise enough to notice. Then came atomic clocks.\n\nAn atomic clock counts the vibrations of caesium atoms, and it ticks with a steadiness no planet can match. Since 1972, the world's official time, known as Coordinated Universal Time, has been built on those atomic ticks. The planet itself, however, is a wobbly timekeeper. Tides drag against its spin, slowing it by a sliver. Earthquakes, shifting ice and the churning of its molten core nudge it this way and that. Over years, the day drifts away from the exact 86,400 seconds that atomic clocks count.\n\nA leap second is the fix. When the gap between atomic time and the Earth's rotation threatens to exceed 0.9 of a second, international timekeepers add one extra second to the last minute of a day, usually on 30 June or 31 December. That minute then runs to 61 seconds, and the clock reads 23:59:60 before rolling over to midnight. Between 1972 and 2016, 27 of these were added. The most recent came at the end of 2016.\n\nThe trouble is that the modern world runs on computers, and computers dislike a minute with 61 seconds. Most systems assume every minute has exactly 60. When an extra second arrives, some software freezes, some records events out of order, and some simply gets confused. Leap seconds have contributed to outages at major websites and have been a persistent headache for the operators of financial markets, telecoms networks, satellite navigation systems and power grids. Because the Earth's spin is unpredictable, leap seconds cannot be scheduled years ahead. They are announced only months before, which leaves engineers little time to prepare.\n\nIn 2022, the General Conference on Weights and Measures, the body that sets the world's measurement standards, voted to abandon the practice. The decision will take effect by 2035. After that, the gap between clock time and the Sun is to be allowed to grow, with no leap seconds added, for a century or more. Eventually, some larger correction may be needed, but nothing is planned yet.\n\nNot everyone is thrilled. Astronomers worry about the loss of a link between clocks and the sky. Yet for most people, the change will be invisible. Dawn and dusk will not shift in any way you could detect. Your phone will keep showing the right time. The difference is that, behind the scenes, engineers will no longer have to brace for a second that is not supposed to exist.\n\nIn short, the world has decided that a smoother-running machine matters more than keeping the clock in lockstep with a wobbling planet."
+}

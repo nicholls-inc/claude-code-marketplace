@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a37b53f9f125ccc7a",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73721,
+    "output_tokens": 1530,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:07:44.479Z",
+  "valid": true,
+  "text": "Scrap the Parking Minimums\n\nMost cities in the English-speaking world have a rule buried in their planning codes that says how many parking spaces every new building must provide. Two per house. One per 300 square feet of shop floor. One per three seats in a restaurant, or four, or five, depending on which town you happen to be standing in. These numbers look like engineering. They are closer to folklore, and cities should delete them.\n\nStart with where the figures come from. Planners often copy them from neighbouring towns or lift them from handbooks based on a handful of surveys taken at suburban sites with free parking and no bus service. The result measures peak demand for a free good in a place where driving is the only option, then imposes that as a legal floor everywhere else. A funeral home, a bowling alley and a convent each get a ratio, as if anyone knew the right one. Donald Shoup, the economist who spent a career on this subject, called it pseudoscience, and nobody has produced a better defence of the numbers since.\n\nThe costs of that guesswork are real. A space in a surface lot costs thousands of dollars to build; a space in a structured or underground garage costs tens of thousands. That money does not vanish. It is folded into rents, home prices, restaurant bills and grocery prices, and it is paid by everyone, including the people who arrived on foot, by bus, or who do not own a car at all. Those people are disproportionately poor, young, old or disabled. A parking mandate is a transfer from them to drivers, and it is hidden well enough that almost nobody votes on it.\n\nThe mandates also quietly kill buildings that would otherwise exist. A small apartment block on a narrow urban lot often cannot physically fit the required stalls, so it does not get built. An old shopfront cannot become a cafe because the change of use triggers a parking requirement that the site, built in 1920, could never meet. The handsome main streets that tourists photograph and residents pay a premium to live near are, in many cities, illegal to build again. That is a strange thing for a planning code to achieve.\n\nThen there is the land. Parking consumes an astonishing share of urban area, and in some American downtowns the lots take up more ground than the buildings they serve. Asphalt pays little property tax, generates no jobs, sheds stormwater into drains and soaks up summer heat. It also pushes destinations further apart, which makes walking unpleasant and transit unviable, which makes driving more necessary, which appears to justify more parking. The mandate manufactures the demand it claims to be responding to.\n\nThe usual objection is that without minimums, developers will build nothing and residents will flood the surrounding streets with their cars. It is a reasonable worry, and it has an answer. Removing a minimum is not a ban. Developers still have to sell or lease what they build, and lenders still want to see a marketable product, so most projects continue to include parking. What changes is that the amount is set by someone with money at stake, site by site, instead of by a table. Buffalo dropped its requirements citywide in 2017, and the studies that followed found that many projects, particularly mixed-use ones, built fewer spaces than the old code demanded while others built as many or more. Minneapolis and Seattle saw similar patterns, along with a surge of smaller, cheaper apartment buildings that the old rules had made impossible. In none of these places did parking disappear.\n\nThe spillover problem is real but belongs to the kerb, not the building. If street parking is free and unmanaged, it will be overused whatever the zoning code says. The fix is to manage it directly: permits where residents want them, meters priced so a space or two stays open on each block, and the revenue spent visibly in the neighbourhood that generates it. That is a more honest tool than forcing every new building to bury a garage on the off chance its tenants would otherwise park on the street.\n\nI will concede that reform is not painless. In car-dependent suburbs with no transit, the market will keep delivering plenty of parking and the reform will change little in the short run. Some neighbours will be annoyed by a tighter street. And abolishing minimums does nothing on its own to provide the buses, footpaths and bike lanes that make owning fewer cars practical. It is a necessary step, not a sufficient one.\n\nBut the case for the status quo requires believing that a city clerk's table knows better than the owner how many cars a given building needs, and that everyone should pay for the answer whether or not they drive. Hundreds of cities, from Auckland to Austin, have decided they no longer believe it. The rest should follow. Let people build parking where they judge it worth the cost, and stop making it compulsory."
+}

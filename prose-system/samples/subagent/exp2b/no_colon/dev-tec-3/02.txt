@@ -1,0 +1,13 @@
+A lithium-ion cell is charged with a method called constant-current, constant-voltage (CC-CV). It works in two stages, and the second stage is where charging slows down.
+
+In the first stage, the charger forces a fixed current into the cell, commonly around 0.5C to 1C. A 1C current would fill the nominal capacity in one hour. The cell's terminal voltage rises steadily during this stage, from roughly 3.0 V toward 4.2 V for a typical graphite and cobalt-oxide chemistry. Most of the capacity, often 70 to 80 percent, goes in here at full speed.
+
+Charging moves lithium ions from the cathode, through the electrolyte, and into the graphite anode. Electrons travel through the external circuit to balance the charge. The terminal voltage you measure is not the same as the cell's equilibrium voltage. It equals the open-circuit voltage plus the drop across the cell's internal resistance, which is the current times that resistance. The open-circuit voltage rises as the anode fills with lithium. The resistive drop adds on top of it.
+
+When the terminal voltage reaches the upper limit, the charger switches modes and holds the voltage constant. This limit cannot be exceeded. Higher voltages drive electrolyte decomposition, cathode damage and, most seriously, lithium plating on the anode. Plating makes metallic lithium deposit on the graphite surface, which cuts capacity and can create internal short circuits.
+
+With the voltage clamped, the current is no longer set by the charger. It falls on its own, and the reason is a simple feedback. As charge accumulates, the open-circuit voltage climbs closer to the clamp value. The remaining gap between the clamp and the open-circuit voltage is what drives current through the internal resistance, so a shrinking gap means a shrinking current. The behaviour resembles a capacitor charging through a resistor, with an exponential-like decay toward zero.
+
+Physical limits add to the effect. As the anode nears full, there are fewer empty sites in the graphite for incoming lithium, and ions must diffuse deeper into the particles to find them. Concentration gradients inside the electrode particles flatten, which reduces the diffusion driving force. Internal resistance also tends to rise at high states of charge.
+
+Charging typically ends when the current decays to a cutoff, often 0.05C to 0.1C. The last 20 to 30 percent of capacity can take as long as the first 70 to 80 percent. Chargers accept this because pushing harder at high states of charge risks plating and accelerates ageing. Heat is another concern, since resistive heating scales with current squared. Fast-charging systems therefore taper current in steps and monitor temperature to protect the cell.

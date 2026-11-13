@@ -1,0 +1,68 @@
+Two people, call them Asha and Ben, have never met. They want to share a secret number so they can lock their messages, but every word they send to each other can be heard by an eavesdropper, Eve. This sounds impossible, because a secret agreed in the open seems no longer secret. Yet it can be done, and the idea behind it is surprisingly friendly. It rests on one fact about arithmetic: some calculations are easy to do and very hard to undo.
+
+**The paint analogy**
+
+Imagine that Asha and Ben each have a tin of paint, and they start by publicly agreeing on a common colour, say yellow. Everyone, including Eve, knows it is yellow.
+
+Asha secretly picks a private colour, say red, and mixes it into the yellow. She posts the mixture to Ben. Ben secretly picks his own private colour, say blue, mixes it into the yellow, and posts that to Asha. Eve sees both mixtures travel past.
+
+Now Asha takes Ben's mixture (yellow plus blue) and adds her private red. Ben takes Asha's mixture (yellow plus red) and adds his private blue. Both end up with yellow plus red plus blue, the same final colour. Eve has the two half-mixtures but not the private colours. Unmixing paint is very hard, so she cannot work out the final shade.
+
+The trick is that mixing is easy, order does not matter, and separating a mixture is nearly impossible. Mathematics has an exact version of this.
+
+**Clock arithmetic**
+
+You may already know clock arithmetic. On a 12-hour clock, 9 hours after 5 o'clock is 2 o'clock, because 14 wraps around to 2. Mathematicians call this working "modulo 12". We can use any size of clock, not only 12. Let us use a clock with 23 positions, numbered 0 to 22. Whenever a number goes past 22, we wrap around and keep only the remainder after dividing by 23.
+
+Next we need powers. Three to the power of four means 3 x 3 x 3 x 3, which is 81. On our 23-position clock, 81 wraps around like this. 23 goes into 81 three times, which uses up 69, and 12 is left over. So 3 to the power of 4 lands on position 12.
+
+Here is the important property. Going forwards is easy. If I tell you to raise 5 to the power of 6 and wrap around a 23-position clock, you can do it with a patient pencil. Going backwards is much harder. If I tell you that some power of 5 landed on position 8, and ask which power it was, you have no shortcut. You would have to try 5 to the power of 1, then 2, then 3, and so on, until you hit 8. With a clock of 23 positions that takes moments. With a clock of several hundred digits, even the fastest computers on Earth would need longer than the age of the universe.
+
+This one-way quality is the lock that protects the secret.
+
+**The agreement, step by step**
+
+Asha and Ben publicly choose two numbers. The first is the clock size, 23. The second is a "base" number, 5. This is the yellow paint. Eve hears both and that is fine.
+
+1. Asha secretly picks a private number, 6. She never tells anyone, not even Ben.
+2. Ben secretly picks his own private number, 15.
+
+Now each of them mixes their private number with the public paint.
+
+3. Asha computes 5 to the power of 6 on the 23-clock. That is 15,625, and after wrapping around, it lands on 8. She sends the number 8 to Ben, openly.
+4. Ben computes 5 to the power of 15 on the 23-clock. After wrapping around, it lands on 19. He sends the number 19 to Asha, openly.
+
+Eve now knows the clock size 23, the base 5, and the two messages 8 and 19. She does not know 6 or 15.
+
+Now comes the final mixing.
+
+5. Asha takes Ben's message, 19, and raises it to her private power, 6. On the 23-clock, 19 to the power of 6 lands on 2.
+6. Ben takes Asha's message, 8, and raises it to his private power, 15. On the 23-clock, 8 to the power of 15 also lands on 2.
+
+Both of them hold the number 2. They never sent it to each other, and it never travelled over the line. It is their shared secret, and they can use it as the key to lock and unlock their messages.
+
+**Why they always match**
+
+The matching result is not luck. A power of a power simply multiplies the exponents. When Asha raised Ben's message to her private number, she was in effect computing 5 to the power of (15 x 6). When Ben raised Asha's message to his private number, he was computing 5 to the power of (6 x 15). Since 15 x 6 equals 6 x 15, they arrive at the same place. The order of mixing does not matter, just like the paint.
+
+**Why Eve is stuck**
+
+Eve wants the number 2. To get it she needs either Asha's private number or Ben's. Asha's message was 8, so Eve needs to find the power of 5 that lands on 8 on the 23-clock. That is the hard backwards problem. For our tiny clock she could simply try every power and find that 6 works. Real systems use clocks so enormous that trying every power is out of the question. Even though Eve has all the public information, she has no efficient way to work backwards from it.
+
+It is worth noticing what Eve could try instead. She might multiply 8 and 19 together, or add them, but nothing she does with the public numbers gives 2. The secret is built from a private number that only one side holds, combined with a message that only the other side could produce.
+
+**Where the "public key" comes in**
+
+The word "key" can confuse people, so here is the link. The message Asha sends openly, the 8, works like a public key. It is safe to shout from the rooftops. Her private number, 6, is her private key. A public key and private key are a matched pair. Anyone can use the public half to do something with Asha, but only Asha holds the half that completes the job. Ben's pair works the same way. The shared secret appears only when one person's private half meets the other person's public half.
+
+Later systems extended this idea so that a stranger can use your public key to lock a message that only your private key can open. That is how a web browser can send your password to a shop it has never dealt with before. The ingredients are the same. There is a public piece, a private piece, and a calculation that is easy forwards and impractical backwards.
+
+**What could go wrong**
+
+This method protects against someone who only listens. It does not by itself prove who you are talking to. If Eve could cut the line and pretend to be Ben, Asha would happily agree a secret with Eve instead. Real systems therefore add checks, such as certificates, that confirm the identity of the other side. The secret-sharing trick and the identity check work as a team.
+
+Also, the numbers must be huge. Our clock of 23 positions was only for demonstration. In practice the clock has hundreds of digits, and the private numbers are equally large.
+
+**The big idea**
+
+Two strangers can agree on a secret in public because some operations are like mixing paint. Anyone can mix quickly and in either order, but nobody can cheaply separate the result. Each person keeps one private ingredient, shares only the mixture, and the order of mixing makes no difference. Eve sees every message and still learns nothing she can use.

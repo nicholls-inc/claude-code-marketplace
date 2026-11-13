@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a844a033477f94253",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72449,
+    "output_tokens": 1050,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:13:08.440Z",
+  "valid": true,
+  "text": "On a mild January day in 1919, the North End of Boston was busy with ordinary life. It was January 15, a few minutes past noon. Dock workers ate lunch, children played in the streets, and horses and wagons rattled along Commercial Street under the elevated railway. Looming over the neighborhood stood a huge steel tank, fifty feet tall and nearly 90 feet across, owned by the Purity Distilling Company. It held more than two million gallons of molasses.\n\nThe tank had never been trusted by those who lived beside it. It leaked so badly that residents collected the brown syrup in cups and pails, and children scooped it from the base. Rather than fix the flaws, the company had painted the tank brown to hide the stains. It had never been properly tested, and the walls were thinner than they should have been. Just two days earlier, a fresh shipment of warm molasses had been pumped in, and the unusually mild weather after a bitter cold snap added to the strain.\n\nAt about 12:30, witnesses heard a low rumble, followed by sounds like machine-gun fire as rivets shot out of the steel. Then the tank burst. A wave of molasses, estimated at around 25 feet high at its crest, surged out at roughly 35 miles an hour. It was not a trickle but a wall, heavy and dense, carrying the force of a collapsing building.\n\nThe wave crushed everything in its path. It tore a section of the elevated railway from its supports and pushed a train car to the edge. It flattened a firehouse, whose firefighters were among the dead and injured, and smashed homes and warehouses into splinters. People and horses were swept off their feet and caught in the thick, sticky flood. A strange sweet smell filled the air as the cold syrup began to set.\n\nRescuers rushed in, but the work was brutal. Molasses clung to everything, and it grew stiffer in the winter air. Soldiers, sailors, Red Cross workers, and police waded through knee-deep muck to reach the trapped. Many victims were pinned beneath debris, and some drowned in the syrup. In the end, 21 people died and about 150 were injured. Cleanup took weeks. Crews used saltwater from fire boats and sand to cut the stickiness, and the harbor ran brown well into the summer. The neighborhood reportedly smelled of molasses for decades.\n\nThe aftermath mattered as much as the disaster. Residents filed one of the earliest major class-action lawsuits in Massachusetts. The company claimed that anarchists had bombed the tank, hoping to avoid blame. But after years of hearings and hundreds of witnesses, an auditor found the tank had been poorly built and inadequately tested, and the company was held responsible. It paid roughly 600,000 dollars in settlements.\n\nThe case helped change how engineers and regulators worked. Building plans now needed review by qualified professionals, and standards for materials and structural safety became stricter. A disaster that sounds almost comic, a flood of sweet syrup, became a lasting lesson in what happens when profit is allowed to outrun safety."
+}

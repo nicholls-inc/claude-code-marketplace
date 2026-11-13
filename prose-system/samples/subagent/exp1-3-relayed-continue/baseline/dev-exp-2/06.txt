@@ -1,0 +1,15 @@
+**Why the World Is Retiring the Leap Second**
+
+A leap second is a single extra second occasionally added to the world's official clocks so that they stay in step with the turning of the Earth. Since 1972, 27 have been added, the most recent at the end of 2016.
+
+The need for them comes from two different ways of measuring time. For most of history, a second was defined as a fraction of the day, based on how long the Earth takes to spin once. But the planet is an imperfect timekeeper. Tides, shifting ice and ocean currents, and movements deep in the Earth's core all nudge its rotation, and over the long run the spin has been slowing slightly. Meanwhile, since 1967, the second has been defined using atomic clocks, which count the vibrations of caesium atoms and are astonishingly steady.
+
+Atomic time and Earth time therefore drift apart. To keep the gap below one second, international authorities began inserting leap seconds, usually on 30 June or 31 December. On those days the last minute lasts 61 seconds, and clocks read 23:59:60 before rolling over to midnight.
+
+For ordinary people this made little difference. For computers, it has been a headache. Most software assumes every minute has exactly 60 seconds. A sudden 61st second can confuse programs, and it has been blamed for outages at major internet companies and for glitches in systems that depend on precise timestamps, such as financial trading, telecommunications and satellite navigation. Different companies have handled the extra second in different ways, some by "smearing" it across many hours, which means that clocks around the world do not always agree with one another.
+
+There is also a new complication. In recent years the Earth has been spinning slightly faster than expected, which raises the possibility of a "negative" leap second, in which a second is removed. That has never been tried, and engineers worry it would be even more disruptive than adding one.
+
+In 2022, the General Conference on Weights and Measures, the international body that oversees the definition of units, voted to stop using leap seconds by 2035. Time will instead be allowed to drift away from the Earth's rotation by a larger margin, perhaps a minute or more, before any correction is made. The details of how and when that will be done have yet to be settled.
+
+The practical effect should be invisible to most people. Noon will still be roughly when the sun is highest. But over centuries, clock time will slowly part ways with the sky, a small price, supporters argue, for a simpler and more reliable system.

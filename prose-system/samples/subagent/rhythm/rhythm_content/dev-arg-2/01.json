@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae8987664eeafb10a",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28247,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1088,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:24:16.390Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating those estimates as promises, because the practice costs more than it returns and the evidence that it works is thin. Anyone who has spent an afternoon in a planning meeting watching eight people argue over whether a ticket is a three or a five knows the ritual consumes real hours, and anyone who has looked back at a quarter's worth of those numbers knows how weakly they predicted what happened. The trouble is structural: the work that is easy to estimate is the work that is already well understood, and well understood work is the least interesting part of building software, while the parts that sink schedules are the unknowns, the integration that behaves differently than the documentation claimed, the requirement that turns out to contradict another requirement, the production incident that eats a week. An estimate is a guess about exactly the things you do not yet know, and we then ask people to commit to it in public.\n\nWhat makes this worse is what happens next, because an estimate rarely stays an estimate for long. It is repeated upward by a manager who needs a date for a roadmap, it is rounded off to something that sounds firm, and by the time it reaches a stakeholder it has become a deadline that the team agreed to even though the team merely hazarded a number on a Tuesday with half the information. When the work runs long, as it usually does, engineers learn to pad, to cut corners on testing to hit the date, or to quietly stop reporting how things are really going, and managers learn that the numbers cannot be trusted and begin to add their own padding on top, so the whole apparatus drifts into a negotiation between two sets of inflated figures that tells nobody anything true.\n\nThe better alternative is not chaos but a different kind of attention. Break work into pieces small enough that each one can ship in a day or two, and then measure how many pieces actually finish in a given week, which gives you a throughput figure drawn from what the team did rather than from what it hoped to do. That figure is far more honest than any story point total, and it lets a manager say something useful, such as that the team has been finishing roughly six to ten items a week for the last two months and that the backlog holds about sixty. This is a forecast with a range and a visible basis, and it updates itself every week without anyone convening a meeting to vote on numbers. Where a hard date truly exists, a regulatory deadline or a conference launch, the right response is to fix the date and negotiate scope, shipping the most valuable slice that fits and cutting the rest as the calendar demands, rather than pretending an estimate made months earlier can bear that weight.\n\nManagers will object that they need predictability to plan, and they do, but predictability that comes from fiction is worse than uncertainty that is stated plainly. A team that says it does not know, and shows its recent record and its current risks, gives its leadership a better basis for decisions than one that produces a confident date it privately doubts. Some rough sizing is still worth doing, since a quick sense of whether something is a day, a week, or a quarter helps decide whether to do it at all, but that is a conversation about value and risk, not an exercise in precision. Stop spending the hours, stop holding people to the numbers, and put the saved time into shipping smaller things more often, which is the only thing that has ever made delivery dates reliable."
+}

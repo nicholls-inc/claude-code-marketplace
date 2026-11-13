@@ -1,0 +1,66 @@
+How Strangers Agree on a Secret in Public
+
+Imagine you want to share a secret with someone you have never met. You cannot whisper, because the only way to talk is a loud line that anyone can hear. It sounds impossible, yet it happens millions of times every second when computers set up a private connection. The trick is a piece of mathematics called public key cryptography. This explanation walks through the idea using paint first, and then using the arithmetic of a clock, which you already know from school.
+
+The paint picture
+
+Suppose Alice and Bob want to end up with the same secret colour of paint. They start by agreeing out loud on a common colour, say yellow. Everyone can hear this, including a spy called Eve.
+
+Alice secretly picks a private colour, say red, and mixes it into the yellow. She sends the resulting orange mixture to Bob. Bob secretly picks his own private colour, say blue, mixes it into the yellow, and sends the green mixture to Alice. Eve sees both mixtures travel past her.
+
+Now Alice takes the green mixture from Bob and adds her private red. Bob takes the orange mixture from Alice and adds his private blue. Both of them end up with yellow plus red plus blue, the same muddy brown. Eve has the yellow, the orange and the green, but she cannot get the brown. Separating paint is practically impossible. She cannot pull the red out of the orange to add it to the green.
+
+That is the whole idea. Mixing is easy and separating is hard, and the order of mixing does not matter. Now we swap the paint for numbers.
+
+The clock idea
+
+You know that on a clock, 10 hours after 5 o'clock is 3 o'clock, because the numbers wrap around after 12. In maths this wrapping is called working with a remainder. We say 15 becomes 3 on a 12 hour clock because 15 divided by 12 leaves a remainder of 3.
+
+Our clock will have 23 positions, numbered 0 up to 22. Whenever a calculation goes past 22 we divide by 23 and keep only the remainder. For example 30 becomes 7, since 23 goes into 30 once with 7 left over.
+
+We also need powers. Writing 5 to the power of 3 means 5 times 5 times 5, which is 125. On our 23 position clock, 125 becomes 10, because 23 times 5 is 115 and the remainder is 10.
+
+Here is the key observation. Going forward is easy. If I tell you to work out 5 to the power of 6 on this clock, you can do it in a few seconds. But going backward is hard. If I tell you that some power of 5 landed on 8 and ask which power it was, you have to try them one by one. On our small clock that is easy. But real systems use a clock with hundreds of digits in its size, and then trying every possibility would take longer than the age of the universe, even for the fastest computers.
+
+So the clock gives us our one way operation. Forward is quick. Backward is a nightmare.
+
+The exchange step by step
+
+Alice and Bob agree publicly on two numbers. The first is the size of the clock, which is 23. The second is a starting number, which is 5. Eve hears both and that is fine.
+
+Next, each person picks a private number and tells nobody.
+
+Alice picks 6.
+Bob picks 15.
+
+Alice now calculates 5 to the power of 6 on the clock. First, 5 times 5 is 25, which wraps to 2. So 5 squared is 2 on our clock. The power of 6 is 5 squared, cubed, which means 2 times 2 times 2, giving 8. Alice sends the number 8 to Bob. This is her public key. It is the orange paint.
+
+Bob calculates 5 to the power of 15. He can use the same shortcut. Fifteen is 14 plus 1, and 5 to the power of 14 is 5 squared, taken to the power of 7, which is 2 to the power of 7, or 128. Dividing 128 by 23 leaves a remainder of 13. Then he multiplies by one more 5 to get 65, which wraps to 19. Bob sends the number 19 to Alice. This is his public key, the green paint.
+
+Eve now knows 23, 5, 8 and 19, but not 6 or 15.
+
+Now comes the step that replaces adding the private colour. Alice takes Bob's number 19 and raises it to the power of her private number 6. Bob takes Alice's number 8 and raises it to the power of his private number 15.
+
+Alice works out 19 to the power of 6 on the clock. Nineteen is 4 less than 23, and a short calculation shows that this comes to 2.
+
+Bob works out 8 to the power of 15 on the clock. Since 8 is 2 times 2 times 2, this is the same as 2 multiplied by itself 45 times. A handy fact is that 2 to the power of 11 comes to exactly 1 on this clock, so 45 splits into four blocks of 11 plus 1 extra, and the answer is 2.
+
+Both of them arrive at 2. That is their shared secret, the muddy brown.
+
+Why do they match
+
+It is not luck. Alice computed 5 to the power of 6, and then raised that to the power of 15. Bob computed 5 to the power of 15, and then raised that to the power of 6. Either way the final answer is 5 raised to the power of 6 times 15, which is 90. The order of multiplication does not matter, just as the order of mixing paint does not matter. Both roads lead to 5 to the power of 90, and on our clock that is 2.
+
+Why Eve is stuck
+
+To find the secret Eve needs one of the private numbers. She could look at Alice's public number 8 and ask which power of 5 gives 8. On a tiny clock she simply tries them all and discovers it is 6. Then she repeats Alice's last step and she has the secret.
+
+Real systems scale up. The clock is enormous, with a size of hundreds of digits, and the private numbers are equally large. Calculating forward still takes a fraction of a second, thanks to the squaring shortcut used above. Working backward needs a number of tries so vast that no one can finish. The security rests on that gap in effort.
+
+What the secret is used for
+
+Once Alice and Bob share the number 2, or in real life a number with hundreds of digits, they use it as the key for a fast ordinary scrambling method, and then they chat in code. The slow clever maths is used only to get started. Whenever your phone connects to a bank or shop, this ceremony happens in a blink.
+
+One honest limit remains. The method stops Eve listening, but it does not prove who is on the other end. Eve could stand in the middle, pretending to be Bob to Alice and Alice to Bob. Real systems therefore add certificates, which are like signed identity cards, to confirm who is who.
+
+The takeaway is simple. By choosing a task that is easy to do and hard to undo, two strangers can build a shared secret out of messages that were never secret at all.

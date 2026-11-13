@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a618ca6dc21faa49f",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1040,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:29:47.409Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping Small.\n\nEvery engineer has lived this scene. A manager asks how long a feature will take. You hesitate, then say six weeks, knowing the number is a guess dressed up as a commitment. Twelve weeks later the feature ships, and everyone agrees the estimate was \"off.\" The estimate was never going to be right. Teams should stop producing them.\n\nThe case against estimating begins with the quality of the numbers. Software work is dominated by unknowns that only reveal themselves once you are inside the code. The hidden coupling, the flaky dependency and the requirement that turns out to be two requirements are invisible at planning time. Decades of project data show the same pattern. Estimates cluster around optimism, and the errors are not random. They skew late, and they skew badly on exactly the work that matters most, which is the novel work.\n\nMeanwhile the estimate itself does damage. Once a number exists, it becomes a target. Engineers feel pressure to hit it, so they cut corners on tests, skip the refactor and quietly stop mentioning surprises. Managers anchor on it, repeat it upward, and promise it to customers. When reality diverges, the conversation turns into a negotiation about blame instead of a conversation about the work. We spend hours in planning meetings generating figures that we then spend more hours defending.\n\nDefenders of estimation say the number is not the point, the thinking is. Fair enough. Breaking work into pieces and surfacing risks is valuable. But you can do that without attaching durations. Ask what could go wrong, what we do not know, and what the smallest useful slice looks like. Keep the discussion, drop the arithmetic.\n\nWhat replaces estimates is flow. Cut work into small pieces, each shippable in a few days. Measure how many pieces actually finish per week. That throughput is an observed fact rather than a prediction, and it forecasts far better than any planning poker session. If a manager needs to know when something will land, count the remaining slices and look at the historical rate. The answer comes with honest error bars, and it costs minutes instead of days.\n\nSmall slices also change behavior. When the unit of work is two days, there is little room for a nasty surprise to hide. Problems surface early, scope gets negotiated while it is still cheap, and the team can reorder priorities without a ceremony about re-baselining the plan.\n\nThe objection from the business side is that planning requires dates. It does, but dates should come from commitments to scope and appetite, not from forecasts of effort. Say we will spend four weeks on this problem and ship whatever is best at that point. That is a decision, and it is something a team can actually keep. An estimate is a prediction nobody can.\n\nSome contexts, like fixed contracts or regulated launches, will still demand a number. Give them a range based on throughput and be candid about the uncertainty. But for most teams, most of the time, estimating is ritual. It consumes energy, corrodes trust, and produces data worse than what the team's own history would give for free.\n\nStop estimating. Slice thin, ship often, and let the record speak."
+}

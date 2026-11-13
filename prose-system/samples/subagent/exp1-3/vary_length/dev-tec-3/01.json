@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a55bd4c5116061288",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28201,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 935,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:32:31.991Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant current, constant voltage (CC-CV). The logic is simple. Lithium is shuttled between two host lattices, and the charger must push it along without damaging either one.\n\nDuring charging, the charger forces electrons through the external circuit from the cathode to the anode. To keep charge balanced, lithium ions leave the cathode (commonly a layered metal oxide), travel through the electrolyte and separator, and insert themselves between the graphite layers of the anode. This insertion is called intercalation. The cell stores energy because lithium sitting in graphite is at a much lower chemical potential than lithium in the oxide.\n\nIn stage one, the charger holds a fixed current, typically 0.5 to 1 C, meaning a current that would fill the cell in one to two hours. The cell voltage rises steadily as the lithium concentration in each electrode shifts. Voltage here is an open-circuit voltage, set by the electrode chemistry, plus an overpotential. That overpotential is the current times the cell's internal resistance, plus extra terms from slow ion transport and reaction kinetics. When the terminal voltage reaches a ceiling, usually 4.2 V for a standard cobalt-based cell, stage one ends.\n\nStage two holds that voltage constant. The ceiling is a hard limit. Go higher and the electrolyte oxidizes at the cathode, the oxide structure degrades, and at the anode the potential approaches that of lithium plating, where metallic lithium deposits instead of intercalating. Plating shortens life and can cause internal shorts.\n\nNow the slowing. With voltage clamped, the charger can only supply whatever current the cell will accept. As the cell fills, its open-circuit voltage climbs toward the clamp, so the gap between the clamp and the cell's own voltage shrinks. That gap drives the current. Current therefore decays roughly exponentially, much like a capacitor charging through a resistor.\n\nPhysical limits reinforce this. Near full charge, the graphite surface is saturated with lithium, so vacancies are scarce and ions must diffuse slowly inward through the particles. Concentration gradients inside the particles steepen, which raises the diffusion overpotential. The cell is full at the surface but not at the core.\n\nCharging is declared complete when current falls to a small cutoff, often 0.05 C. Stopping there wastes little capacity. Pushing on would add heat and wear for almost no stored energy.\n\nPractical chargers also limit current when the cell is cold, since plating risk rises sharply at low temperature. Many fast-charge systems taper current in several steps rather than a single CV phase, but the principle is the same."
+}

@@ -1,0 +1,37 @@
+How two strangers agree on a secret in public
+
+Imagine you want to agree on a secret password with someone you have never met. The only channel you have is a telephone line, and someone is listening to every word. Anything you say aloud, that listener hears. For most of history this made secret agreement impossible between people who had never shared one in person. Then, in 1976, Whitfield Diffie and Martin Hellman published a method that solves exactly this problem. It is the basis of the key exchange that protects most of the internet traffic you use every day.
+
+The trick is not hiding the method. Everything in the method can be public. What stays private is a number each person picks and never says aloud.
+
+Start with a paint analogy. Alice and Bob agree in public on a starting colour, yellow. Each secretly picks a private colour: Alice picks red, Bob picks blue. Alice mixes her red into the yellow and sends the result to Bob. Bob mixes his blue into the yellow and sends his result to Alice. Each then adds their own private colour to the mixture they received. Alice adds red to the yellow-and-blue mix. Bob adds blue to the yellow-and-red mix. Both end up with the same brownish colour, made of yellow, red and blue, but neither of them ever sent the full mixture.
+
+The eavesdropper, Eve, sees yellow, the yellow-red mix and the yellow-blue mix. She knows the starting colour, but she cannot separate the red from the mix. Paint is a loose analogy, because real paint can in principle be unmixed and the analogy has no maths behind it. The idea that matters is the asymmetry: combining is easy, and undoing the combination is very hard. Public-key cryptography needs an operation with exactly that property, and arithmetic can supply one.
+
+Arithmetic with remainders. Most people know clock arithmetic. If it is 10 o'clock and you wait five hours, it is 3 o'clock, because 15 leaves a remainder of 3 when divided by 12. Mathematicians write this as 15 mod 12 = 3. Choose a fixed number, call it the modulus, and keep only remainders. The modulus used here is a prime number, and we will use 23 for illustration.
+
+Powers are repeated multiplication. Five to the power six means 5 times 5 times 5 times 5 times 5 times 5. When working modulo 23, you can drop the remainder at each step, which keeps the numbers small. Here is 5 to the sixth power modulo 23. Since 5 times 5 is 25, and 25 leaves remainder 2, we have 5 squared equal to 2 (mod 23). Then 5 to the sixth is 5 squared cubed, which is 2 cubed, which is 8. So 5 to the sixth equals 8 (mod 23).
+
+The key property is this. If Alice raises 5 to the power a, and then raises the result to the power b, she gets 5 to the power a times b. If Bob raises 5 to the power b, then raises the result to the power a, he gets 5 to the power b times a. Multiplication does not care about order, so both get the same answer. This is the heart of the method. Each side combines their secret with the public number in a way that the other side can finish, and the two finishes agree.
+
+Now the full protocol with numbers. Publicly agree on the modulus p = 23 and the base g = 5. Alice secretly chooses a = 6. Bob secretly chooses b = 15.
+
+Alice computes A = g to the power a, modulo p. That is 5 to the 6th, which we found is 8. She sends 8 to Bob.
+
+Bob computes B = g to the power b, modulo p. That is 5 to the 15th. Working through: 5 to the 4th is 2 squared, which is 4. 5 to the 8th is 4 squared, which is 16. 5 to the 15th is 5 to the 8th times 5 to the 4th times 5 squared times 5, which is 16 times 4 times 2 times 5, which is 640. Dividing 640 by 23 gives 27 with remainder 19. So B = 19. He sends 19 to Alice.
+
+Alice now raises Bob's number to her secret power: B to the 6th, modulo 23. Since 19 is the same as negative 4 modulo 23, this is (-4) to the 6th, which is 4 to the 6th, which is 4096. Dividing 4096 by 23 gives remainder 2. So Alice's secret is 2.
+
+Bob raises Alice's number to his secret power: A to the 15th, modulo 23. That is 8 to the 15th. The working gives 2. So Bob's secret is also 2.
+
+They now share the secret number 2, and neither sent it. Eve has seen only the modulus 23, the base 5, and the numbers 8 and 19. To recover the secret she needs either Alice's exponent 6 or Bob's exponent 15. Finding the exponent from 5 to the power of it, modulo 23, is the discrete logarithm problem. With 23 there are only 22 possible exponents, so Eve could try them all in a moment. That is why this example is for illustration only.
+
+Real systems use numbers hundreds of digits long. A common group size is 2048 bits, which is a number with about 617 decimal digits. Computing a power of such a number takes a fraction of a millisecond on a normal computer, because the repeated squaring trick needs only about 2048 squarings. Reversing the process, finding the exponent, has no known method that runs in a reasonable time on classical computers. The best known methods would take far longer than the age of the universe. Modern systems often use elliptic curves instead, which give the same security with numbers of about 256 bits, but the principle is the same.
+
+The name public-key cryptography comes from what is published. Each person's public value, A or B, is public and can be shared with anyone. The private value, a or b, is never revealed. In this exchange the public values are used only for agreement, but the same principle lets anyone encrypt a message to you using a public key that only you can open with your private key.
+
+The method has a serious weakness, and it is important to be honest about it. The protocol does not prove who you are talking to. An attacker, Mallory, can sit in the middle. She runs one exchange with Alice, pretending to be Bob, and another with Bob, pretending to be Alice. Alice and Bob each end up with a shared secret, but it is a different secret for each of them, and Mallory holds both. She can read and alter everything passing between them. The fix is authentication. Each side signs their public value with a long-term key whose owner is confirmed, usually through a certificate issued by a trusted authority. When Alice receives Bob's value, she checks that it is signed by the Bob she expects.
+
+Finally, the exchange is slow compared with ordinary encryption, so in practice it is used only to agree on a key. The shared number, here 2, is hashed or otherwise processed into a key for a fast symmetric cipher such as AES, and that cipher carries the rest of the conversation.
+
+To summarise: two people publish a starting number and an operation that is easy to perform but hard to reverse. Each keeps a secret exponent, sends the public result, and combines the other's result with their own secret. Because exponents multiply in either order, both arrive at the same value. The eavesdropper sees all the public steps and still cannot reverse them. The method needs authentication to stop an active interceptor, but as a way to agree on a secret over a line anyone can hear, it works, and it is why the modern internet can be used safely by strangers.

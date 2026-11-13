@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a63d8dfbcdffe7821",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28381,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 2229,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:31:54.958Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long individual pieces of work will take, and should measure how long work has taken instead. I hold this as a view about practice, not a law, and I expect some teams with unusual circumstances to need estimates. Most do not.\n\nThe case begins with how poor the estimates are. In a 1994 study by Roger Buehler, Dale Griffin and Michael Ross, psychology students were asked when they would finish their thesis. The average prediction was about 34 days. The average actual time was about 55 days, and roughly three in ten finished by the date they had named. Software work has the same shape, with the added problem that much of the effort goes into finding out what the task is. A ticket that reads \"add export to CSV\" can take an afternoon or three weeks, depending on what the data model turns out to hold. Nobody can see which until the work is underway.\n\nThe cost of producing these numbers is also real. A team of eight that spends two hours on pointing each fortnight uses sixteen person-hours, or about two working days, before any code is written. Those hours produce a figure that the team already knows to be unreliable. The figure then tends to be treated as a commitment by people outside the team, which turns a guess into a deadline. Engineers learn that an honest large number draws pressure and a small number draws praise, so estimates drift toward what is welcome.\n\nManagers need to answer questions about dates, and I do not dismiss that. The alternative is to answer them from records. A team that has closed 200 items over the past six months knows its median cycle time and how widely it varies. If the median is four days and nine in ten items finish within eleven, that is a more truthful basis for a forecast than a sum of guesses. With a backlog of 60 items, a simple simulation that draws from those past times gives a range of dates with probabilities attached. It takes minutes, and it improves as data accumulates. It also does not require anyone to argue about whether a story is a three or a five.\n\nThe second part of the practice is cutting work into pieces small enough that their sizes stop mattering. When most items take between one and five days, the difference between them is noise next to the variation in the team's week. Teams that do this tend to find that the conversation they needed was about scope, which is what the estimate was standing in for. Asking what the smallest shippable version of a feature is produces a better plan than asking how long the large version will take.\n\nSome objections are fair. Fixed-price contracts, regulatory dates and work with no history, such as a first migration of a particular kind, all need a number from somebody. In those cases a rough estimate of the whole, stated as a range with its uncertainty, is reasonable. That is a different thing from estimating every ticket every sprint.\n\nTeams should try a quarter without it. Keep the cycle time data, forecast from it, and see whether anyone misses the pointing sessions."
+}

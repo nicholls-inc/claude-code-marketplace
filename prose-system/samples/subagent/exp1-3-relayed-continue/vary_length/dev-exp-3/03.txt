@@ -1,0 +1,75 @@
+**Sharing a Secret in Public**
+
+Imagine two people, Alice and Bob, who have never met. They want to agree on a secret number, something only the two of them know, so they can lock their later messages. But the only way they can talk is a line that anyone can listen to. Everything they say, an eavesdropper called Eve will hear.
+
+It sounds impossible. If Eve hears every word, how can any word stay hidden? Yet it can be done, and it is happening on your phone right now whenever you open a secure website. The trick rests on one idea: some jobs are easy to do and brutally hard to undo.
+
+**Easy one way, hard the other way**
+
+Think about mixing paint. Stir yellow and blue together and you get green in seconds. Now hand someone the green and ask for the exact yellow and blue you started with. That is far harder. Mixing is a one-way street.
+
+Cryptographers use the same kind of one-way street, but made from numbers instead of paint. Multiplying two large primes is quick. Taking the result and finding the two primes is, for big enough numbers, hopeless. The method below uses a cousin of that idea, built from something you already know: clock arithmetic.
+
+**Clock arithmetic**
+
+On a 12-hour clock, 10 o'clock plus 5 hours is 3 o'clock, not 15. You wrap around. Mathematicians call this "working modulo 12", and they write 15 mod 12 = 3. The number you wrap around at, here 12, is called the modulus. We will use a prime modulus, 23, so the clock has 23 hours.
+
+Now take powers. Suppose we work modulo 23 and ask: what is 5 multiplied by itself 6 times, wrapped around the 23-hour clock? Plain arithmetic gives 5⁶ = 15,625. Divide by 23: 23 goes into 15,625 exactly 679 times, leaving 8. So 5⁶ mod 23 = 8.
+
+Going forward is easy, even for enormous numbers, because there are shortcuts. Going backward is the hard part. If I tell you "5 to some power, mod 23, gives 8", you could find the power by trying 1, 2, 3 and so on. With a clock of 23 hours that takes moments. With a clock of several hundred digits, all the computers on Earth could not finish before the sun burns out. This is the one-way street we need.
+
+**The exchange**
+
+Here is the whole procedure, using small numbers so you can follow it. In real life they are vastly larger.
+
+First, Alice and Bob agree, openly, on two numbers: the modulus 23 and a "base" 5. Eve hears both. That is fine. They are not secrets.
+
+Second, each person invents a private number and tells nobody. Alice picks 6. Bob picks 15. These never travel along the line.
+
+Third, each person raises the base to their private number, wrapped around the clock, and sends the result.
+
+Alice computes 5⁶ mod 23, which we found is 8. She sends 8 to Bob.
+
+Bob computes 5¹⁵ mod 23. That works out to 19. He sends 19 to Alice.
+
+Eve now knows 23, 5, 8 and 19. She has heard everything said on the line.
+
+Fourth comes the clever part. Alice takes the number Bob sent and raises it to her private number: 19⁶ mod 23. Bob takes the number Alice sent and raises it to his private number: 8¹⁵ mod 23.
+
+Both calculations give 2.
+
+Alice and Bob now share the number 2, and neither of them ever sent it.
+
+**Why do they get the same answer?**
+
+Look at what each person actually computed. Alice's final number is (5¹⁵)⁶. Bob's is (5⁶)¹⁵. Powers of powers multiply: both come to 5 raised to 15 × 6, which is 5⁹⁰. The order of multiplication does not matter. Six times fifteen equals fifteen times six.
+
+So each of them reached 5⁹⁰ mod 23 by a different route. Alice used her secret together with Bob's public number. Bob used his secret together with Alice's. Each route needs one private number, and only one of them holds each.
+
+**Why Eve is stuck**
+
+What does Eve have? She knows the base 5, the modulus 23, Alice's 8 and Bob's 19. To get the shared secret she would need either Alice's 6 or Bob's 15. Finding Alice's 6 means answering: "5 to what power, mod 23, gives 8?" That is the hard backward question.
+
+With our tiny clock she can simply try every power, and she will find the answer in seconds. That is why real systems use a modulus hundreds of digits long. Then the forward calculation, which Alice and Bob perform, still takes a computer a fraction of a second. The backward search, which Eve must perform, is beyond any machine anyone can build.
+
+Notice what makes this safe. It is not that the method is hidden. The method is published in textbooks. Everyone knows it. What protects Alice and Bob is the gap in effort between doing the sum forwards and undoing it.
+
+**Why it is called "public-key"**
+
+Each person ends up with a pair of numbers. One is private, never shared: Alice's 6, Bob's 15. The other is public, safe to shout across a crowded room: Alice's 8, Bob's 19. The public number is made from the private one by the easy direction of the one-way street. That pairing of a secret half and a shareable half is the "key pair" that gives the field its name.
+
+The scheme above is called Diffie-Hellman, after the two researchers who published it in 1976. Before that, the standard assumption was that two people needed to meet first, or trust a courier, to swap a secret. Their idea showed that a conversation in the open could build a secret from nothing.
+
+A relative of this idea, called RSA, uses the multiply-primes-easily, factor-them-never trick mentioned earlier. It lets you publish a number that anyone can use to lock a message to you, while only you hold the matching number that unlocks it. Think of a padlock: you hand out thousands of open padlocks to strangers. Anyone can snap one shut on a box. Only you own the key that opens it.
+
+**What the secret is for**
+
+The shared number is rarely the message itself. Instead, both sides use it as the key for a fast, ordinary scrambling method, one where the same secret locks and unlocks. Public-key maths is slow, so it does the small job it is uniquely good at, agreeing on the secret, and then steps aside. Every message after that is scrambled with the shared key.
+
+**An honest warning**
+
+There is one weakness the clock arithmetic cannot fix. Suppose Eve does not merely listen but sits in the middle, pretending to be Bob when she talks to Alice and pretending to be Alice when she talks to Bob. Each victim would agree a secret with Eve, not with each other. So real systems add a way to prove who you are talking to. Websites use certificates, which are signed statements from trusted organisations saying "this public number really belongs to this site". Without that proof, the exchange protects against listeners but not against impostors.
+
+**The short version**
+
+Two strangers each keep one private number and publish one number made from it. Each then combines the other's public number with their own private one. Because of the way powers multiply, both arrive at the same answer. An eavesdropper sees only the public numbers, and recovering a private number from them means running a calculation backwards that is far too slow to finish. The secret is never sent. It is built, separately, at both ends.

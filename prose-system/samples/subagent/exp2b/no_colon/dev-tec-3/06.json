@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a875238e19fa4ad8e",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28194,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 986,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:33:27.767Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a method called constant current, constant voltage (CC-CV). It is easiest to think of the cell as a voltage source whose value depends on how full it is, in series with an internal resistance, with a diffusion process behind it.\n\nCharging pushes lithium ions out of the cathode, across the electrolyte, and into the graphite anode. The open-circuit voltage (OCV) is set by how much lithium sits in each electrode. It rises from roughly 3.0 V when empty to about 4.2 V when full, for a typical cobalt or nickel-based chemistry. The terminal voltage during charging is the OCV plus the current times the internal resistance, plus extra terms for the slower kinetics.\n\nPhase one is constant current. The charger holds the current at a set rate, often 0.5C to 1C, where 1C would fill the nominal capacity in one hour. The cell voltage climbs steadily as the state of charge (SOC) rises. This phase delivers roughly 70 to 80 percent of the capacity. Heat is generated at a rate of I squared times R, so higher rates mean more warming.\n\nPhase two begins when the terminal voltage reaches the upper limit, typically 4.2 V. This ceiling exists for safety and lifetime. Above it, the electrolyte oxidises, the cathode degrades, and lithium metal can plate onto the anode, which can form dendrites and cause shorts. The charger now holds voltage fixed and lets the current fall on its own. This is the constant voltage phase. It ends when the current decays to a cutoff, commonly 0.05C to 0.1C.\n\nThe tapering current follows directly from the circuit picture. With terminal voltage fixed, the current equals the terminal voltage minus the OCV, divided by the effective resistance. As the cell fills, the OCV creeps up toward the fixed limit, so the voltage headroom shrinks and the current must shrink with it. Charging slows because the driving force is vanishing, not because the charger chooses to throttle.\n\nDiffusion makes this worse. Lithium must migrate inward through the solid particles of graphite. At high current the particle surfaces fill faster than the interior can accept lithium, so the surface is nearly full while the core is not. The terminal voltage reflects the surface state, so the limit is reached early, and the remaining charge needs time for lithium to redistribute inward. The slow tail of the CV phase is largely this relaxation, with a time scale set by particle size and the solid-state diffusion coefficient. That coefficient also falls at low temperature, which is why cold cells charge slowly.\n\nIn practice, the last 20 percent of capacity can take as long as the first 80 percent. Fast chargers exploit this by stopping early, and some use staged currents or temperature-aware limits to push the first phase harder without breaching the voltage ceiling."
+}

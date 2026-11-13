@@ -1,0 +1,27 @@
+The Ghost Map of Broad Street
+
+At the end of August 1854, Soho was one of the most crowded corners of London. Tailors, shopkeepers, servants and labourers packed into narrow houses, often a family to a room. Beneath the streets, old brick cesspools held the waste of thousands of people. On the night of 31 August, people in the streets around Broad Street began to fall violently ill. The disease was cholera, and it moved with terrifying speed. A healthy person could be dead within a day. Within three days, 127 people had died. By the time the outbreak was over, the toll was more than 600.
+
+Most Victorians, including most doctors, thought they knew what caused cholera. They blamed "miasma", a poisonous bad air that rose from rotting rubbish and filth. In a city that stank as badly as London did, the idea seemed obvious. If you could smell the danger, you could avoid it by escaping the smell.
+
+John Snow was not convinced. He was a physician who had grown up modestly in York, and he was best known as a pioneer of anaesthesia; he would later give chloroform to Queen Victoria during childbirth. He had studied cholera in earlier epidemics and had come to a different view. The disease attacked the gut, not the lungs, so he reasoned that it must be swallowed rather than breathed in. Something in the waste of sick people, he believed, was getting into what other people ate and drank, especially water. In 1849 he had published this argument, and almost nobody had accepted it.
+
+Snow lived only a short walk from Broad Street. When the outbreak struck, he saw his chance to test his theory. In the middle of Broad Street stood a public water pump, and much of the neighbourhood drew its drinking water there. Snow suspected it at once.
+
+His first check was disappointing. He looked at the pump's water and found that it seemed fairly clean. A simple inspection could not show him the danger. So he turned to a different kind of evidence: people. He got a list of the dead from the government office that recorded deaths, and he went door to door in the streets around the pump, asking families where their dead relatives had got their water.
+
+The pattern was striking. Nearly all of the deaths had happened close to the Broad Street pump. Where a death happened nearer another pump, Snow often found an explanation: the family had preferred the taste of the Broad Street water and walked the extra distance to get it, or children had drunk from it on their way to school.
+
+Just as telling were the people who did not get sick. A workhouse, a home for the poor, stood nearby with more than 500 residents. If cholera had struck it as hard as the streets around it, around a hundred might have died. Only five did. The workhouse had its own well. A brewery on Broad Street employed about seventy men, and not one died. They were given a daily allowance of beer, and the brewery had its own water supply too. Bad air, if that had been the cause, would have entered these buildings like any other.
+
+The most remarkable clue came from far away. A widow living in Hampstead, miles from Soho, died of cholera, as did her niece who had been visiting. No one else in the area was ill. Snow learned that the widow had once lived on Broad Street and liked its water so much that she had a cart bring her a large bottle of it every day. She had drunk it on 31 August.
+
+On the evening of 7 September, Snow presented his evidence to the local parish officials. They were doubtful, but they agreed to act. The next day, the handle of the Broad Street pump was removed, so no one could draw water from it.
+
+This moment is often told as the instant the epidemic stopped, but Snow himself was more honest. Deaths were already falling by then, partly because so many residents had fled the neighbourhood. Removing the handle may have prevented a second wave, but it was not a miracle cure. Snow's real achievement was the reasoning that led to it.
+
+One more piece of the puzzle was found by Henry Whitehead, a local clergyman who at first set out to prove Snow wrong. Knowing his parishioners personally, Whitehead traced the outbreak back to a baby girl at 40 Broad Street, who had fallen ill just before the epidemic began. Her mother had washed the baby's soiled nappies and poured the water into a cesspool in front of the house. That cesspool was only a few feet from the pump's well, and its walls were crumbling. The waste had been leaking straight into the neighbourhood's drinking water.
+
+Snow later drew a map marking each death with a small black bar, and the bars piled up around the pump. It became one of the most famous images in the history of medicine. Yet an official inquiry at the time rejected his conclusion, and Snow died in 1858, before his ideas were widely accepted. It was not until the 1880s that scientists firmly established that cholera is caused by a germ that lives in contaminated water.
+
+Today Snow is remembered as a founder of epidemiology, the study of how diseases spread through populations. His tools were ordinary ones: questions, records, careful counting, and attention to the cases that did not fit. With them he showed that a mystery could be solved by following where people had been and what they had drunk.

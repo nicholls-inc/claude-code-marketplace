@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a954e319fc3babf30",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28219,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 959,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:00:53.352Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage procedure called constant-current, constant-voltage, usually abbreviated CC-CV. In the first stage a charger forces a fixed current into the cell, typically between half and one times the cell's capacity per hour, while the terminal voltage is allowed to rise freely. During this phase the cell behaves roughly like a large capacitor in series with a small resistance, and the voltage climbs gradually from around 3.0 volts toward 4.2 volts for a common graphite and metal-oxide chemistry. Once the terminal voltage reaches that upper limit, the charger switches to the second stage, in which it holds the voltage constant and lets the current fall on its own. The cell is considered full when the current has decayed to a small fraction of the original, often around five percent of the initial value.\n\nThe reason for the taper lies in what the terminal voltage actually measures. It is the sum of the cell's open-circuit voltage, which depends on how much lithium has been stored in the electrodes, and the voltage drop across the cell's internal resistance, which equals the current multiplied by that resistance. At the start of charging the open-circuit voltage is well below the limit, so a large current can flow while the total still stays within bounds. As lithium accumulates in the graphite anode, the open-circuit voltage rises, and the resistive drop eventually pushes the terminal voltage to its ceiling. That ceiling exists because higher voltages accelerate electrolyte decomposition and can cause metallic lithium to plate onto the anode, both of which shorten life and create safety hazards.\n\nOnce the voltage is clamped, the only way to keep the terminal value fixed while the open-circuit voltage continues to creep upward is to reduce the current. Two effects reinforce this. The first is simple Ohmic arithmetic, since the headroom between the open-circuit voltage and the limit shrinks, and so does the current that headroom can drive through the resistance. The second is diffusion. Lithium ions must travel into the solid particles of the electrode, and the concentration gradient that drives them flattens as the surface of each particle fills up. Near full charge the surface is nearly saturated, so the remaining empty sites deep inside each particle can be reached only slowly, and the current that the particle can accept falls toward zero.\n\nFor an engineer from another field, a useful analogy is filling a rigid tank through a restrictive pipe from a regulated pressure source. Early on the pressure difference is large and the flow is brisk, but as the tank pressure approaches the supply pressure the flow dwindles asymptotically. The practical consequence is that the first eighty percent of the energy goes in quickly, while the last twenty percent takes a disproportionate share of the time, which is why fast chargers advertise times to eighty percent."
+}

@@ -1,0 +1,33 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists outside and delivers it indoors. That is why it can warm your house even when the air outside is far colder than the air inside.
+
+Start with a misunderstanding. Cold is not the absence of heat in any absolute sense. Air at minus 5 degrees Celsius still holds a large amount of thermal energy, because absolute zero is about minus 273. A heat pump extracts some of that energy, concentrates it, and releases it inside your home.
+
+The trick is a sealed loop of refrigerant, a fluid that boils at very low temperatures. The loop has four main parts, and the cycle runs continuously.
+
+First, the outdoor unit. Refrigerant flows through a coil with a fan blowing outdoor air across it. The refrigerant is colder than the air, even on a freezing day, so heat flows from the air into the fluid. This heat is enough to make the refrigerant boil into a gas.
+
+Second, the compressor. This is the electrically powered heart of the system. It squeezes the gas, which raises its pressure and, as a direct result, its temperature. Think of how a bicycle pump gets warm as you use it. The gas may now be 50 to 60 degrees or more, well above room temperature.
+
+Third, the indoor heat exchanger. The hot gas passes through a coil connected to your radiators, underfloor heating, or a hot water cylinder. Because the gas is hotter than the water or air it meets, heat flows out of the refrigerant and into your home. The refrigerant cools and condenses back into a liquid.
+
+Fourth, the expansion valve. The liquid passes through a narrow valve, its pressure drops sharply, and it becomes very cold, colder than the outdoor air. It returns to the outdoor coil and the cycle starts again.
+
+The key point is that heat only ever flows from hot to cold by itself. The compressor is what lets the system cheat, by pushing the refrigerant's temperature above that of your house so heat can flow the right way.
+
+Why this matters for your wallet
+
+A gas boiler converts fuel into heat, and a good modern one is about 90 percent efficient. It can never deliver more heat than the energy in the gas. A heat pump uses electricity only to run the compressor and fans, and most of the heat it delivers was collected from outside. Typically it delivers three to four units of heat for every unit of electricity. This ratio is called the coefficient of performance, or COP.
+
+Efficiency falls as it gets colder, because the compressor has to lift the heat further. At 7 degrees outside a COP of 3.5 to 4 is common. At minus 5 it might drop to around 2.5. That is still well above what any boiler can achieve. Most modern units keep working down to minus 15 or lower, though they work harder and cost more to run.
+
+What to check before you decide
+
+Heat pumps deliver water at lower temperatures than boilers, often 35 to 50 degrees rather than 70 or more. They run longer and more gently. This works best in a well insulated house with larger radiators or underfloor heating. If your home is draughty or has small radiators, you may need insulation upgrades or some radiator replacements first, and these costs belong in your budget.
+
+Compare the electricity and gas prices where you live. The heat pump's advantage depends on the ratio between them. If electricity costs more than three times as much per unit as gas, the saving shrinks or disappears. Check whether grants or subsidies are available, because installation typically costs several times more than a boiler replacement.
+
+You also need space for an outdoor unit, usually about the size of a large suitcase on its side, and often a hot water cylinder indoors. A good installer should survey your home, calculate the heat loss room by room, and size the system to match.
+
+Finally, ask any installer for the expected seasonal efficiency of their proposed system in your house, not the headline figure. A figure above 3 means you are getting a strong result.
+
+In short, a heat pump works in the cold because it borrows heat rather than creating it. Whether it suits your home depends mainly on insulation, emitter size, and energy prices.

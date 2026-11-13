@@ -1,0 +1,13 @@
+Software teams should stop estimating how long individual pieces of work will take. This is my view, and my reason is narrow. Estimates cost real time, and the people who receive them treat them as promises.
+
+Take a team of eight that spends an hour every fortnight pointing tickets. That is sixty-four hours a year per person across the team, or roughly two hundred person-hours in total, and it is spent producing numbers that are rarely checked against what happened. A ticket marked as three points can take a day or three weeks, depending on what the developer finds when they open the code. The uncertainty sits in the parts nobody can see until work starts.
+
+This is an old finding. Daniel Kahneman and Amos Tversky described the planning fallacy in 1979: people predict how long a task will take from the best case and ignore their own history. The Sydney Opera House was estimated at 7 million Australian dollars in 1957 and cost 102 million when it opened in 1973. Software is not an exception, and a planning meeting does not remove the bias.
+
+The usual reply is that the business needs estimates in order to plan. I agree that the business needs to plan. The question is whether estimates are the best way to supply that, and I think the team's own record is better. Suppose a team finished forty tickets last quarter, the median took four days, and nine in ten took under eleven. That is a forecast built from what happened. It needs no meeting, and it improves each week as more tickets finish. Counting tickets of roughly similar size is also cheaper than arguing over whether something is a five or an eight.
+
+A second cost is harder to measure. Once a number is written down, managers repeat it and the developers who gave it are held to it. People then protect the number instead of the product. They pad the estimate, drop the refactor that would break the budget, or call work done when it is nearly done. I think this does more damage than the lost hours.
+
+There are fair objections. Fixed-price contracts, regulatory deadlines and launches tied to a date all require a view of total scope and finish date. For those, a rough estimate at project level is still worth making. It should be given as a range and revised as work completes. My claim concerns the ticket-by-ticket estimating that many agile teams carry out from habit.
+
+A team that wants to change can start with a short list of steps. Keep work items small. Record how long each one takes from start to finish. Publish the range, and tell stakeholders plainly what is likely and what is not. Spend the saved two hundred hours on the work itself. Such a team will still be wrong about dates now and then. It will be wrong with less ceremony, and it will have a better record of why.

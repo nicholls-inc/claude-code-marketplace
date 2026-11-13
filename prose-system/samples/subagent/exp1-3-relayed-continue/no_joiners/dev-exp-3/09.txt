@@ -1,0 +1,55 @@
+Sharing a Secret in Public
+
+The puzzle
+
+Imagine two people, Asha and Ben, who have never met. They want to talk privately, but the only way to reach each other is a line that anyone can listen to. Every word they say will be heard by a stranger called Eve. For most of history this problem looked impossible. To keep a message secret you needed a shared secret, such as a codebook, and to share a codebook you needed a safe meeting first. Asha and Ben have no such meeting. Yet there is a way for them to end up with a shared secret that Eve, hearing everything, cannot work out. The idea behind it is called public key cryptography, and it rests on a simple fact about arithmetic. Some sums are easy to do forwards and extremely hard to undo.
+
+The paint analogy
+
+Start with a picture. Suppose Asha and Ben each have a tin of paint in a secret colour. They also agree out loud on a common colour, say yellow. Asha mixes her secret colour into a big pot of yellow and sends the mixture to Ben. Ben does the same and sends his mixture to Asha. Eve sees both pots of mixed paint and knows the yellow they began with.
+
+Now Asha takes the pot she received from Ben and adds her own secret colour. Ben takes the pot he received from Asha and adds his own secret colour. Both pots now contain yellow plus Asha's secret plus Ben's secret. The final colour is the same for both of them.
+
+Eve is stuck. She has the two mixed pots, but she cannot unmix paint to pull out the secret colours. If she adds her own colour she gets something different. The trick is that mixing is easy and unmixing is nearly impossible. Real cryptography swaps the paint for numbers, and we need one tool from school maths to do it.
+
+Clock arithmetic
+
+You have already met this tool without knowing it. On a clock with twelve hours, if it is ten o'clock and you wait five hours, the time is three o'clock. You added 10 and 5 to get 15, then threw away complete laps of twelve and kept the remainder, which is 3. Mathematicians call this working modulo 12, and we write "mod" for short.
+
+We can use any clock size. Let us use a clock with 23 hours. Counting mod 23 means you divide by 23 and keep only the remainder. So 30 becomes 7, and 46 becomes 0.
+
+We also need powers. Three to the power of four means 3 times 3 times 3 times 3, which is 81. Put the two ideas together and you get the key operation. Take a number, raise it to a power, then keep the remainder after dividing by 23.
+
+Here is why it works like paint. Suppose I tell you that 5 raised to some secret power gives a remainder of 8 when divided by 23. Can you find the power? With a clock this small you could just try them all. But the remainders jump around in a way that looks random. Powers of 5 on this clock go 5, 2, 10, 4, 20, 8 and so on, with no pattern you can easily spot. Working forwards is quick. Working backwards means guessing and checking.
+
+The exchange with real numbers
+
+Now let us run the whole exchange. Asha and Ben publicly agree on two numbers. The clock size is 23 and the base number is 5. Eve hears both. These are like the yellow paint.
+
+Asha picks a secret number, 6. She never tells anyone. She works out 5 to the power of 6, which is 15,625, and divides by 23. The answer is 679 with remainder 8. She sends 8 down the line.
+
+Ben picks his own secret number, 15. He works out 5 to the power of 15 and keeps the remainder after dividing by 23. That remainder is 19. He sends 19 down the line.
+
+Eve now knows 23, 5, 8 and 19. Those are the mixed pots of paint. She does not know 6 or 15.
+
+Next Asha takes Ben's public number, 19, and raises it to her secret power of 6. After dividing by 23 the remainder is 2. Ben takes Asha's public number, 8, and raises it to his secret power of 15. After dividing by 23 the remainder is also 2.
+
+Both of them now hold the number 2. Neither ever sent it. Why does it agree? Asha's calculation amounts to 5 to the power of 15, raised again to the power of 6. Ben's amounts to 5 to the power of 6, raised again to the power of 15. Both come to 5 to the power of 90, and the order of multiplying the powers does not matter. That is just the school rule that a power of a power multiplies the two little numbers together, and 6 times 15 equals 15 times 6.
+
+Why Eve cannot copy them
+
+Could Eve find the number 2? She would need one of the secret numbers. To find Asha's secret she must answer this question. Which power of 5 leaves a remainder of 8 on the 23 clock? With such small numbers she can simply test them, and she would succeed within minutes. So the example above is only a toy.
+
+Real systems use a clock with a size of hundreds of digits and a secret power that is also hundreds of digits long. Then testing all the possibilities would take longer than the age of the universe, even with every computer on Earth working together. There are clever shortcuts, but none that make the problem easy. Nobody has ever found a fast method, and many of the best mathematicians have tried. This is called the discrete logarithm problem, and the whole security of the exchange sits on it.
+
+Notice also that doing the forward calculation stays cheap even with huge numbers. There is a trick of repeated squaring that lets a computer raise a number to an enormous power in a few hundred steps. So Asha and Ben find the work easy while Eve finds it impossible. That gap is the entire point.
+
+Public and private keys
+
+The exchange above gives a shared secret, and the numbers 8 and 19 that travel down the line are called public keys. The numbers 6 and 15 that stay at home are private keys. Public means anyone may see it. Private means it never leaves its owner.
+
+What happens next
+
+Once Asha and Ben share a secret number, they use it as the key for a fast ordinary code, which scrambles their messages in a way that only someone holding that number can undo. Public key methods are slower, so they are mainly used for this opening handshake. Each time you see a padlock symbol in your web browser, a handshake like this has taken place between your device and a website in a fraction of a second. You never met the website, and the line between you passes through many strangers, yet your card details stay private.
+
+The main lesson is that secrecy does not need a secret meeting. It needs a calculation that is easy to do and hard to reverse, and a little care in who holds which number.

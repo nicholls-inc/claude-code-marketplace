@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a495f239f9dcc2822",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28179,
+    "cache_read_input_tokens": 45573,
+    "output_tokens": 2991,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:59:35.646Z",
+  "valid": true,
+  "text": "Cities Should Stop Mandating Parking\n\nFor most of the last century, American cities required builders to provide a set number of parking spaces before they could build anything else. A three-bedroom apartment needed two spaces. A restaurant needed one for every few seats. A church needed one for every handful of pews. These minimums sit in zoning codes as if they were engineering facts, but they are really forecasts: guesses about how many people will drive, made in advance and frozen into law. Cities should remove them.\n\nThe first problem is cost. Structured parking is expensive. Depending on the market and whether the garage is above or below ground, each space can add tens of thousands of dollars to a project. Those costs do not disappear. Builders pass them to renters and buyers, who pay for spaces whether they own a car or not. A household that gives up its second car should not be subsidizing the one next door, yet minimums force that subsidy on everyone. When cities have unbundled parking from rent, residents who do not drive can choose to skip the space and the charge that comes with it.\n\nSecond, minimums consume land. A surface lot in a dense neighborhood holds nothing but cars, and it breaks up the street wall that makes a block pleasant to walk. Every stall required by code is a stall that cannot be a home, a shop, or a patch of shade. Blocks of asphalt around single-story buildings are not an accident of the market. They are what happens when the rules are followed to the letter.\n\nThird, minimums do not reliably achieve their stated goal. The rationale is to stop overflow onto residential streets. But a fixed number cannot respond to context. A building beside a rail station and a building at the edge of a town get the same arithmetic. Where demand is low, the requirement produces empty pavement. Where demand is high, a minimum rarely solves the shortage. It simply moves the cost into the building and locks in a layout that makes transit and cycling harder to justify later. Developers who want to serve drivers will still build parking, because tenants will demand it. The real question is whether government should make that call for every site in advance.\n\nFourth, the policy falls hardest on people with the least. Households without cars are disproportionately low income, elderly, disabled, or young. A rule that raises rents for people who do not drive works as a regressive charge with a planning label on it.\n\nThe critics raise fair concerns. Some neighborhoods already struggle with parking, and residents will feel it when a new building brings cars but few spaces. Removing minimums where transit is weak could leave people circling blocks. Some shop owners worry that customers will stay away. These worries deserve answers, not dismissal, and the answers do not require minimums. Cities can price curb parking so spaces turn over. They can invest in frequent buses and protected bike lanes so that driving is one option instead of the only one. They can create residential permit zones where overflow is a documented problem. They can let developers decide how much parking to build and require them to disclose the number to buyers and renters. Each of these tools responds to actual conditions rather than assuming them.\n\nSome cities have already moved. Buffalo dropped citywide parking minimums in 2017, and Minneapolis followed in 2021 as part of a broader housing reform. Both cities have since seen housing built on lots that would otherwise have gone to parking, and neither has descended into gridlock. The predicted disaster has not arrived, which is what one would expect if the old rules were guessing wrong.\n\nZoning should set outcomes: enough homes, walkable streets, cleaner air, and sites that can be used for what people need. Prescribing a number of cars for every building fails at all of these. Cities that remove minimums will still see parking built where it makes sense, because the market supplies what people will pay for. The difference is that the decision moves to the people who know the site, the budget, and the tenants, and away from a table of numbers written decades earlier."
+}

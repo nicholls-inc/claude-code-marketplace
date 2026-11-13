@@ -1,0 +1,29 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists. That single idea explains why it can warm your home on a freezing day.
+
+Cold is only a matter of degree. Air at minus five Celsius still holds a great deal of thermal energy, because it is far above absolute zero. A heat pump pulls some of that energy out of the outdoor air and delivers it indoors, in the same way a fridge pulls warmth out of its interior and releases it into your kitchen. A heat pump is simply a fridge run in reverse, with your house as the thing being warmed.
+
+How it works
+
+Inside the outdoor unit runs a sealed loop of refrigerant, a fluid that boils at a very low temperature. Outdoor air is blown across a coil holding this liquid. Even cold air is warmer than the refrigerant's boiling point, so the liquid absorbs heat and turns to gas. A compressor then squeezes that gas. Compressing a gas makes it much hotter, often well above sixty degrees. The hot gas flows to a second coil indoors, where it gives up its heat to your radiators, underfloor pipes or warm air, and condenses back to liquid. An expansion valve then drops its pressure, it becomes very cold again, and the cycle repeats.
+
+The compressor needs electricity, but far less than the heat it delivers. For every unit of electricity, a good modern heat pump delivers around three to four units of heat. Engineers call this the coefficient of performance. A gas boiler, by contrast, can never beat about ninety percent efficiency, meaning ninety units of heat for every hundred units of gas. That gap is the heart of the case for switching.
+
+Does it work when it is really cold
+
+Yes, though efficiency dips as the gap between outside and inside widens. Modern units keep working down to minus fifteen or lower, and Nordic countries with harsh winters have some of the highest heat pump adoption in the world. On a very cold day you might see a performance figure nearer two than four, which is still better than any boiler.
+
+What to check before you switch
+
+Your house matters more than the weather. Heat pumps deliver water at a lower temperature than a boiler, so they work best in a home with decent insulation, draught proofing and radiators large enough to heat the rooms. An assessor can calculate your heat loss room by room and tell you whether you need bigger radiators or extra loft insulation. Skipping this step is the most common cause of disappointing results.
+
+Think about the practicalities too. You need outdoor space for the unit, which is roughly the size of a large suitcase on its side, and you may need a hot water cylinder if you do not already have one. The unit makes a low hum, so placement relative to bedrooms and neighbours is worth planning.
+
+Costs and savings
+
+Installation usually costs more than a new gas boiler, though grants in many countries cut the difference substantially. Running costs depend on the price ratio between electricity and gas where you live. Where electricity costs less than about three times as much as gas per unit, a heat pump with a strong efficiency figure will usually be cheaper to run. If you have solar panels or a time of use tariff, the savings improve further.
+
+Reliability is good, with typical lifespans of fifteen to twenty years and an annual service similar to a boiler's.
+
+The verdict
+
+If your home is reasonably insulated, you have space outside, and you plan to stay for several years, a heat pump is a sound replacement for an ageing gas boiler. It cuts carbon, often cuts bills, and removes the need for a gas supply. Get a proper heat loss survey and at least two quotes before you commit. If the survey shows major upgrades are needed, fix the insulation first and fit the heat pump afterward.

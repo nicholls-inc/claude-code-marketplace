@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a1c1c28d43b0053b8",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Go ahead with the 480 runs but batch or stagger them so we can spread usage out. Use a workflow or multiple workflows. What’s wrong with using tools? Agents will do that IRL. Fine with leaving baseline prompt as is.",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72640,
+    "output_tokens": 1379,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T16:42:24.020Z",
+  "valid": true,
+  "text": "A heat pump can heat your house on a cold day because it does not make heat. It moves heat. A gas boiler burns fuel to create warmth. A heat pump uses a little electricity to carry warmth that already exists outside into your home.\n\nThe idea that sounds wrong is that there is warmth outside at all. There is. Heat is the motion of molecules, and that motion only stops at absolute zero, about minus 273 degrees Celsius. Air at minus 5 still holds a lot of thermal energy. It is just spread thin and sits below the temperature you want indoors, so it will not flow into your house by itself. Heat naturally flows from hot to cold, never the other way. A heat pump uses a machine to push it the wrong way.\n\nYour fridge works the same way. It pulls heat out of the food compartment and dumps it into your kitchen through the coils on the back. A heat pump is a fridge pointed outward: it cools the outdoors a little and warms your home.\n\nHere is the cycle. A sealed loop holds a refrigerant, a fluid that boils at very low temperatures, far below freezing. The loop has four main parts.\n\n1. Evaporator (outside). The refrigerant is a cold, low-pressure liquid, colder than the outdoor air. Heat flows from the air into it, and it boils into a gas. The air can be freezing and still warmer than the refrigerant.\n\n2. Compressor. This is the part that uses electricity. It squeezes the gas, which raises its pressure and its temperature sharply, to perhaps 50 to 60 degrees Celsius. Compressing a gas heats it, as a bicycle pump warms up when you use it.\n\n3. Condenser (inside). The hot gas passes through a heat exchanger connected to your radiators, underfloor heating or hot water cylinder. It is hotter than the water there, so it gives up its heat and turns back into a liquid.\n\n4. Expansion valve. The liquid is released through a small restriction. Its pressure and temperature drop, it is cold again, and the loop restarts.\n\nThe reason this beats a boiler is efficiency. A gas boiler turns about 90 to 95 percent of the energy in the gas into heat, so you get just under one unit of heat per unit of fuel. A heat pump delivers roughly 2.5 to 4 units of heat per unit of electricity. This ratio is the coefficient of performance, or COP. The electricity is only paying to move heat, not to create it, and moving heat takes far less energy than making it. A COP of 3 means one kilowatt-hour of electricity delivers three kilowatt-hours of heat, with two of those pulled free from outside.\n\nThere are limits you should weigh.\n\nEfficiency falls as it gets colder outside, and as the water temperature you ask for goes up. On a very cold day a heat pump might manage a COP of 2 instead of 4. Modern models still work well below minus 10, but they work harder. Cold climates need a well-sized unit and sometimes a backup heater.\n\nHeat pumps give their best results at lower flow temperatures, around 35 to 50 degrees, against a boiler's 70 or more. That suits underfloor heating and large radiators. A house with small old radiators may need some of them replaced, which adds to the cost. Good insulation and draught-proofing matter even more, because they cut how much heat you need at all.\n\nUpfront cost is higher than a boiler, often several thousand pounds after any grants. Running cost depends on the price gap between electricity and gas. If electricity costs more than about three times as much per unit as gas, a COP of 3 only roughly breaks even. A time-of-use tariff or solar panels improve the sums.\n\nFor your decision, ask four questions. How well insulated is the house? Can your radiators run at lower temperatures? What do you pay per unit for gas and for electricity? Is there outdoor space for the unit? If the answers are favourable, a heat pump can cut energy use sharply and remove your home's direct gas emissions. A heating engineer can survey the house, size the system and give you a realistic running-cost estimate before you commit."
+}

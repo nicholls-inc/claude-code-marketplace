@@ -1,0 +1,45 @@
+When you type an HTTPS address into a browser and press enter, a lot happens before the first byte of the response shows up. Most of it takes only milliseconds, but knowing the steps helps you understand why pages feel slow and where to look when they do.
+
+Parsing the address
+
+The browser starts by splitting the address into parts. Take a page at example.com with the path /products. The scheme is https, the host is example.com, the port is implied as 443, and the path is /products. The browser also checks whether the host is on its HSTS list, which tells it to only ever use HTTPS for that site. If you typed a plain http address for such a host, the browser quietly upgrades it before sending anything.
+
+Checking caches and service workers
+
+Before touching the network, the browser asks whether it already has what it needs. A service worker registered for that site may intercept the request and answer from its own storage. The HTTP cache may hold a fresh copy of the page, in which case the request ends right there with no network use at all. If the copy is stale, the browser may keep it and ask the server to confirm it is still valid. That is called a conditional request.
+
+Resolving the name with DNS
+
+Computers connect using IP addresses, not names, so the browser needs to turn example.com into a number. It looks in its own DNS cache first, then asks the operating system, which checks its cache and the hosts file. If nobody knows the answer, the request goes to a recursive resolver, usually run by your internet provider or a public service. That resolver may also have the answer cached. If not, it walks the hierarchy. It asks a root server which servers handle the com zone, asks those which servers handle example.com, and finally asks the authoritative server for the address. The answer comes back with a time to live that says how long it may be cached. Modern browsers can also use encrypted DNS and can fetch HTTPS records that advertise support for newer protocols. A cold lookup can take tens of milliseconds, and a cached one takes almost none.
+
+Opening a connection
+
+With an IP address in hand, the browser must reach the server. Traditionally this uses TCP. The browser sends a SYN packet, the server replies with SYN and ACK, and the browser answers with an ACK. This three step handshake costs one round trip, which is the time for a message to travel to the server and back. If the server is far away, this adds up. Browsers reuse existing connections whenever they can, so a second request to the same host often skips this work completely.
+
+HTTP/3 works differently. It runs over QUIC, which uses UDP and folds the transport and encryption handshakes together. A browser usually learns about HTTP/3 from an earlier visit or from DNS, so the first visit to a site often still uses TCP.
+
+Negotiating encryption with TLS
+
+Over TCP, the browser now starts a TLS handshake to make the connection private and to confirm the server is who it claims to be. In TLS 1.3 the browser sends a ClientHello message listing the encryption methods it supports, a random value, a key share for key exchange, and the server name it wants through an extension called SNI. SNI matters because one IP address can host many sites, and the server needs to know which certificate to present. The message also lists supported application protocols, so that HTTP/2 can be chosen through ALPN.
+
+The server answers with its choices, its own key share, and its certificate. Both sides now combine key shares to compute the same secret keys without ever sending the secret itself. The rest of the handshake is already encrypted. TLS 1.3 needs one round trip. Older TLS 1.2 needed two. A returning visitor may resume a previous session and send data even sooner.
+
+Verifying the certificate
+
+The certificate is a signed statement that a public key belongs to a particular domain. The browser checks several things. The name on the certificate must match example.com. The dates must be valid. The signature chain must lead through intermediate certificates to a root authority that the browser or operating system already trusts. The browser may also check that the certificate has not been revoked, and it looks for evidence that the certificate was logged in public transparency logs. If any check fails, you see a full page warning and the request stops. This is the step that prevents someone on a coffee shop network from impersonating your bank.
+
+Sending the request
+
+The secure channel is ready, so the browser finally sends the HTTP request. With HTTP/2 or HTTP/3 it is a set of binary frames, but the content is the same idea as plain text. It has a method such as GET, the path, and headers. Important headers include the host, the content types the browser accepts, the preferred language, the user agent and any cookies stored for that domain. Cookies are why logged in users get personalised pages. If the browser holds a stale cached copy, it also adds a conditional header carrying the stored ETag value so the server can answer with a short not modified reply.
+
+Waiting for the server
+
+Now the request crosses the network and reaches the server, though often it first meets a load balancer or a CDN edge node. A CDN may answer from its own cache, close to you. Otherwise the request is passed to an origin server. There a web server or application framework routes the path to code, which may check your session, query a database, render a template, and build a response. This waiting time is often called time to first byte, and slow backend work shows up directly here.
+
+First byte arrives
+
+The server writes a status line or status frame such as 200, then headers that describe the content type and caching rules, and then the start of the body. The moment the first byte of that response reaches the browser is the end of the journey described here. Developer tools label this as Waiting or TTFB in the network panel, and it sits beside the DNS, connection and TLS timings you just read about.
+
+Why this matters
+
+Each stage is a chance to save time. Long cache lifetimes avoid the network entirely. DNS prefetching and preconnect hints let the browser do lookups and handshakes early. Connection reuse, HTTP/2 and HTTP/3 reduce handshakes. A CDN shortens the distance. Caching and efficient queries trim server time. When a page feels slow, open the network panel and see which of these steps is eating the clock.

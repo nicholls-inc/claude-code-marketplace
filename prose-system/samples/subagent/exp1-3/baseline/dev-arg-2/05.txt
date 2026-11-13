@@ -1,0 +1,21 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this meeting. Someone asks how long a feature will take. You say three weeks, because two sounds reckless and four sounds lazy. That number gets written on a roadmap, repeated to a customer, and defended for the next two months, long after everyone knows it was a guess.
+
+Software teams should stop estimating how long work will take. Not because estimation is hard, but because the effort buys almost nothing and costs a great deal.
+
+Start with accuracy. Decades of evidence say we are bad at this. Studies of software projects keep finding that large efforts overrun their estimates by wide margins, and the errors are not random noise that averages out. They lean one way: late. The reason is structural. The work that sinks a schedule is the work nobody knew existed: the undocumented dependency, the migration that turns out to be three migrations, the requirement that changes once someone sees the first draft. You cannot estimate what you have not discovered, and in software, discovery is most of the job.
+
+Then consider what estimates do once they exist. They stop being predictions and become promises. A manager who hears "three weeks" plans around it. The engineer who knows it will be five has two options: cut corners, or deliver bad news late. Both are worse outcomes than the one the estimate was meant to prevent. Teams start padding, then managers start discounting the padding, and the whole exchange becomes a negotiation dressed up as engineering.
+
+And the time itself is not free. Planning poker, story point calibration, and estimation retrospectives eat hours every sprint. That is time spent producing a number that will be wrong, in order to argue about a number that will be ignored.
+
+The reasonable objection is that the business needs dates. Customers have launches, finance has budgets, and sales has commitments. That is true, and it is an argument for something different from estimating.
+
+Break work into slices small enough that each one ships in a day or two. Then measure how many slices your team actually finishes per week. That throughput is real data about your real team, not a guess about an imagined one. When someone asks when a body of work will be done, count the slices left and divide by the observed rate. The answer comes with honest error bars, and it improves as the work proceeds rather than hardening around a number picked on day one.
+
+Where a deadline is fixed, flip the question. Do not ask how long the scope will take. Ask what fits before the date, then cut scope as you go. Ship the most valuable slices first, so that whenever the clock runs out, something useful is already in customers' hands.
+
+This takes discipline, and it will not suit every context. A team bidding fixed-price contracts, or coordinating hardware with a factory, may need forecasts it cannot avoid. But most product teams are not in that position. They are estimating out of habit.
+
+Managers lose nothing here except false comfort. Engineers gain permission to say "we don't know yet" and then go find out. Drop the estimates, shrink the work, and let the evidence do the forecasting.

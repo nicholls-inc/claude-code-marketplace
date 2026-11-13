@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8ab15b7929c03fad",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28363,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 958,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:22:13.524Z",
+  "valid": true,
+  "text": "On 15 January 1919, at about half past noon, a steel tank holding more than 2 million gallons of molasses burst in the North End of Boston. The tank stood at 529 Commercial Street, beside the harbour, and belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. The molasses was waiting to be turned into industrial alcohol, a good part of which would go to make munitions. The tank was about 50 feet high and 90 feet across, and it had been finished only in late 1915.\n\nIt had never been trusted by the people who worked near it. It leaked at the seams, and the leaks were so common that neighbours collected the drips in cans. The company's response was to paint the tank brown, which hid the stains. It was never properly tested by filling it with water, and the engineer who approved it was not a trained structural designer. The weather made matters worse. A few days before the failure, a fresh shipment of warm molasses had been pumped in on top of the cold contents, and the temperature that January morning had risen sharply after a cold snap.\n\nWhen the tank gave way, witnesses described a rumble and a noise like machine-gun fire, which was probably rivets popping out of the steel. A wave of molasses perhaps 25 feet high at first, and moving at an estimated 35 miles an hour, spread through the streets. It tore a section from the elevated railway on Atlantic Avenue, knocked a firehouse off its foundations, and pushed buildings from their footings. Horses, wagons and people were caught in it. The cold air thickened the molasses as it spread, which made it harder for anyone caught inside it to move.\n\nTwenty-one people died and about 150 were injured. Among the dead were children, dock workers, and firemen from the damaged station. Rescuers waded in to reach the trapped, and the work was slow because the molasses clung to everything. The sticky mass took days to clear. The harbour ran brown, and the smell of molasses was reported in the area for months. Crews used salt water from fireboats and covered the ground with sand to break it up.\n\nLawsuits followed. United States Industrial Alcohol argued that anarchists had blown up the tank, a claim that fitted the fears of the time. A court-appointed auditor, Hugh W. Ogden, heard testimony for several years and decided that the tank had not been built safely. The company was found liable, and it paid roughly 600,000 dollars in settlements, with the families of the dead receiving about 7,000 dollars each.\n\nThe case is often cited as an early example of the engineering and regulatory changes that followed. Massachusetts, and later other states, moved toward requiring that architects and engineers sign off on large structures, and toward stronger safety rules for building. The tank was never replaced on that site, and a plaque now marks the place where it stood."
+}

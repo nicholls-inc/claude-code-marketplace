@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae7dc8a7c59adbfbb",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28199,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 946,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:11:23.536Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment added to the world's official clocks to keep them in step with the turning of the Earth.\n\nTo see why it exists, consider that there are two ways to measure time. The first is astronomical. A day is the time it takes the Earth to spin once, and we divide it into 86,400 seconds. The second is atomic. Since the 1960s, clocks that count the vibrations of caesium atoms have kept time far more steadily than any planet can. The second is now defined by those vibrations, not by the sky.\n\nThe trouble is that the Earth is a poor timekeeper. Tides, shifting oceans, movements of the planet's molten core and the melting of ice all nudge its rotation. Over the long run the spin has been slowing, so days are gradually getting a little longer than the atomic clocks assume. Left alone, the two systems would drift apart, and noon on the clock would slowly stop matching noon in the sky.\n\nIn 1972, international authorities introduced a compromise. Official civil time, known as Coordinated Universal Time, would run on atomic clocks but be nudged by a whole second whenever the gap with the Earth's rotation approached 0.9 seconds. On the last day of June or December, the final minute would be stretched to 61 seconds. Since then, 27 leap seconds have been added, the most recent at the end of 2016.\n\nFor astronomers and navigators this was tidy. For the computer age it has been a headache. Modern systems, from banks and stock exchanges to mobile networks and power grids, depend on timestamps that agree to a tiny fraction of a second. A minute with 61 seconds breaks the assumption that every minute has 60. Software has to handle a clock that reads 23:59:60, which many programs were never designed for. Some companies spread the extra second across a whole day instead, and different firms do it differently, which creates its own mismatches. Leap seconds have caused outages and glitches at major websites and in other systems. Because they cannot be predicted far ahead, only announced a few months in advance, engineers cannot test for them easily.\n\nThere is a twist. In recent years the Earth has been spinning slightly faster, so the day is shorter. That raises the prospect of a negative leap second, in which a second is removed. Almost no software has been written to cope with that, and experts fear it could be even more disruptive.\n\nIn 2022, the General Conference on Weights and Measures, the body that oversees the international system of units, voted to stop adding leap seconds by 2035. Until then, the gap between atomic time and Earth time will be allowed to grow well beyond one second. A later decision will determine how, and eventually whether, the difference is corrected, possibly in larger steps such as a whole minute many decades from now. For most people, the change will go unnoticed. That is rather the point."
+}

@@ -1,0 +1,72 @@
+# How two strangers can agree on a secret while others listen
+
+Suppose Alice and Bob have never met, and every word they exchange can be overheard by an eavesdropper, Eve. They want to end up with a number that both of them know and Eve does not. Once they have it, they can use it as the key to scramble everything else they say.
+
+For most of history this was assumed to be impossible. If Alice tells Bob the secret, Eve hears it too. If Alice scrambles the secret first, Bob needs to know how to unscramble it, and telling him that is the same problem again. The way out, published in 1976 by Whitfield Diffie and Martin Hellman, is that Alice and Bob never send the secret at all. Each sends the other a piece of a puzzle, and each piece is useless without something that its sender keeps private.
+
+## The idea, with paint
+
+Mixing paint is easy, and unmixing it is practically impossible. Given a pot of muddy green, you cannot recover the exact blue and yellow that went into it.
+
+Alice and Bob agree, out loud, on a common colour, say yellow. Eve hears this. Alice then secretly picks a private colour, red, and Bob secretly picks his own, blue. Neither ever reveals it.
+
+Alice mixes yellow with her red and sends the resulting orange to Bob. Bob mixes yellow with his blue and sends the resulting green to Alice. Eve sees both pots go past.
+
+Now Alice adds her private red to the green she received. Bob adds his private blue to the orange he received. Both pots now contain yellow, red and blue in the same proportions, so they are exactly the same colour. That colour is the shared secret.
+
+Eve knows yellow, orange and green. To make the final colour she would need pure red or pure blue, and she cannot extract either one from a mixture. Mixing the orange and the green together does not help her, because that contains a double dose of yellow and comes out a different shade.
+
+The whole method rests on having an operation that is easy to do and hard to undo, and on the order of mixing not mattering.
+
+## The same thing with numbers
+
+Real systems send numbers, not paint, so we need an arithmetic operation with the same two properties. It is built from two pieces of school maths: powers and remainders.
+
+A remainder is what is left over after division. 100 divided by 23 is 4, with 8 left over, so the remainder is 8. A clock works this way: five hours after ten o'clock is three o'clock, because the hours wrap around at 12. Here we will wrap around at 23 instead, so every result is a number from 0 to 22.
+
+Now take the number 5 and raise it to successive powers, keeping only the remainder after dividing by 23 each time:
+
+- 5 to the power 1 gives 5
+- 5 to the power 2 is 25, which leaves 2
+- 5 to the power 3 leaves 10
+- 5 to the power 4 leaves 4
+- 5 to the power 5 leaves 20
+- 5 to the power 6 leaves 8
+
+The results jump around with no visible pattern. Going forwards is easy: give me a power and I can work out the remainder. Going backwards is hard: if I tell you only that the remainder is 8, the list gives you no clue that the power was 6, and the only obvious way to find it is to try powers one after another.
+
+This is our paint mixing. Raising to a power and taking the remainder is the easy mixing step. Recovering the power from the result is the unmixing, which is practically impossible once the numbers are big.
+
+## A worked exchange
+
+Alice and Bob agree openly on two numbers: the wrap-around number 23 and the starting number 5. These are the yellow paint, and Eve hears both.
+
+Alice privately picks 6. She works out 5 to the power 6, takes the remainder after dividing by 23, and gets 8. She sends 8 to Bob.
+
+Bob privately picks 15. He works out 5 to the power 15, takes the remainder, and gets 19. He sends 19 to Alice.
+
+Alice takes the 19 she received and raises it to her private power, 6. The remainder after dividing by 23 is 2.
+
+Bob takes the 8 he received and raises it to his private power, 15. The remainder after dividing by 23 is also 2.
+
+They have both arrived at 2, and neither of them ever sent it.
+
+## Why they get the same answer
+
+Alice's 8 is really "5 to the power 6" in disguise, and Bob's 19 is "5 to the power 15". When Bob raises Alice's number to the power 15, he is working out 5 to the power 6, all to the power 15. When Alice raises Bob's number to the power 6, she is working out 5 to the power 15, all to the power 6.
+
+A rule from school says that a power of a power multiplies the two: both of these are 5 to the power 90. The order does not matter, just as it did not matter which paint went into the pot first. Taking remainders along the way does not disturb this, because throwing away multiples of 23 early or late leaves the same final remainder.
+
+## Why Eve is stuck
+
+Eve has heard four numbers: 23, 5, 8 and 19. To get the secret she needs either Alice's 6 or Bob's 15. That means solving "5 to which power leaves 8?", the backwards problem.
+
+With numbers this small she simply tries each power in turn and finds the answer in seconds. So in practice the numbers are enormous. The wrap-around number is typically over 600 digits long, and the private numbers are similarly vast. Alice and Bob can still do their sums quickly, because there is a shortcut for raising to large powers: square the number repeatedly, so that a few hundred steps reach a power with hundreds of digits. No comparable shortcut is known for going backwards. The best methods anyone has found would take the fastest computers far longer than the age of the universe.
+
+No one has proved that a fast backwards method cannot exist. The security rests on the fact that decades of effort by mathematicians have not found one.
+
+## What happens next, and one catch
+
+The shared number becomes the key for an ordinary scrambling method, which Alice and Bob use for the rest of the conversation. This happens automatically, in a fraction of a second, whenever your phone or computer opens a secure connection to a website.
+
+The catch is that the exchange keeps the secret from a listener, but it does not tell Alice who she is talking to. If Eve can intercept and replace messages, not just listen, she can run one exchange with Alice while pretending to be Bob, and another with Bob while pretending to be Alice. Each would then share a secret with Eve without knowing it. Real systems close this gap with a further step, in which each side proves its identity using a kind of digital signature built on the same easy-forwards, hard-backwards idea.

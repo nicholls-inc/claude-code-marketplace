@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "abda6a99063d873f8",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73753,
+    "output_tokens": 3646,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:16:11.381Z",
+  "valid": true,
+  "text": "**How a lithium-ion cell is charged, and why current falls near full**\n\nA lithium-ion cell is charged with a constant-current, constant-voltage (CC-CV) profile. The charger drives lithium ions out of the positive electrode (typically a layered oxide such as NMC or LCO, or LFP) through the electrolyte and into the graphite negative electrode, where they intercalate between carbon layers. Electrons move through the external circuit in the opposite direction. The open-circuit voltage (OCV) is the difference between the two electrode potentials, and it rises as lithium moves across.\n\nIn the CC stage, the charger holds current at a set C-rate (1C fills nominal capacity in one hour; 0.5C to 1C is common). Terminal voltage climbs toward the limit, typically 4.2 V for NMC/graphite:\n\nV_terminal = OCV(SOC) + I·R + η_ct + η_conc\n\nR is the ohmic resistance (electrolyte, electrodes, contacts, SEI). η_ct is the charge-transfer overpotential and η_conc the concentration overpotential. Reaching the voltage limit ends the CC stage.\n\nIn the CV stage, the charger holds terminal voltage at the limit and lets current decay. Rearranging the same equation:\n\nI = (V_limit − OCV(SOC) − η) / R\n\nAs the cell fills, OCV approaches V_limit, so the driving term shrinks and current falls roughly exponentially. Charging ends when current drops to a cutoff, commonly C/20 to C/10.\n\n**Why charging slows near full**\n\nSeveral effects combine.\n\n- Shrinking driving voltage. The gap between V_limit and OCV narrows, so the same voltage pushes less current through a fixed resistance. This is the dominant effect in the CV stage.\n- Rising overpotentials. Near full, the cathode has few lithium atoms left to release and the graphite is nearly saturated, so the remaining host sites are scarce and hard to reach. Solid-state diffusion inside the particles limits how fast lithium can be delivered to the surface, and charge-transfer resistance increases. Both raise η and reduce the current the voltage budget can support.\n- Resistance is not constant. It varies with state of charge, temperature and age, because the SEI and electrode surfaces change over the cell's life.\n- Plating protection. If the anode potential falls below 0 V versus Li/Li+, metallic lithium can deposit on the graphite. That causes capacity loss and raises the risk of internal shorts. Tapering the current keeps the anode potential above that threshold.\n\nThe taper also protects thermal margins. Joule heating scales with I²R, so the battery management system (BMS) limits current as the cell nears its voltage ceiling. In series packs, the cell that reaches the limit first governs the taper, which is why balancing matters in the final phase."
+}

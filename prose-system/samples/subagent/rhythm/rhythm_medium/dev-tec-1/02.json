@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af0b344b42faa34d7",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 800 words of how Git stores a commit, covering blobs, trees, commit objects and refs. The reader is a developer who uses Git every day and has never looked inside the .git directory.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28232,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1498,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:35:54.602Z",
+  "valid": true,
+  "text": "When you run git commit, you create a small graph of immutable objects inside the .git directory, and understanding that graph explains most of Git's behaviour. Everything Git stores lives in the object database under .git/objects, and every object is addressed by a hash of its contents, traditionally SHA-1 and increasingly SHA-256. The hash is computed over a short header containing the object type and size, followed by the raw data, and the result is used as the object's name. The first two hex characters become a subdirectory and the remainder becomes the file name, so an object might live at .git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391. The file itself is compressed with zlib, which is why you cannot simply open it in an editor, although git cat-file -p followed by the hash will print it in readable form. Because the name is derived from the content, two identical pieces of data always map to the same object, and changing a single byte produces a completely different name.\n\nThe simplest object is the blob, which holds the contents of one file and nothing else. It stores no file name, no permissions and no timestamps, only the bytes. If you have the same file in ten directories, or the same content appears in a hundred commits, Git keeps exactly one blob for it. This is the first place where Git's design differs from what most people picture, since many developers assume a commit stores a list of changes. In fact Git stores whole snapshots of file contents, and it relies on content addressing to avoid duplicating anything that has not changed.\n\nNames and structure come from the second kind of object, the tree. A tree represents a single directory and is essentially a sorted list of entries, where each entry records a file mode, a name, and the hash of either a blob or another tree. The mode tells Git whether the entry is a regular file, an executable, a symbolic link or a subdirectory. A tree for a project root might therefore point to a blob for README.md, a blob for a build script, and a subtree for the src directory, which in turn points to its own blobs and subtrees. Since a tree's hash depends on the hashes of everything beneath it, the hash of the root tree acts as a fingerprint of the entire project at one moment. If you edit one file deep in the hierarchy, Git writes a new blob for that file, new trees for each directory along the path up to the root, and reuses every other object unchanged. This is why snapshots are cheap even though they are conceptually complete.\n\nThe commit object ties a snapshot to history. It is a short text record containing the hash of the root tree, the hashes of zero or more parent commits, an author line and a committer line with names, email addresses, timestamps and time zones, and finally the commit message. The first commit in a repository has no parent, an ordinary commit has one, and a merge commit has two or more. These parent pointers are what turn isolated snapshots into a history, and since each commit's hash covers its parents' hashes, altering any past commit would change the identity of every commit that follows it. That property is why history rewriting commands such as rebase and amend actually create new commits instead of modifying old ones. The old objects remain in the database until garbage collection eventually removes those that nothing refers to.\n\nSo far everything has been addressed by hash, which is not something people want to remember, and this is where refs come in. A ref is simply a named pointer to a commit hash, stored as a tiny text file. Your local branches live under .git/refs/heads, so the file .git/refs/heads/main contains forty hexadecimal characters and a newline. Tags live under .git/refs/tags, and remote-tracking branches live under .git/refs/remotes. Creating a branch is therefore almost free, since Git only writes one small file. Making a commit moves the current branch forward by writing the new commit's hash into that file. Repositories with many refs may pack them into a single .git/packed-refs file to save space, but the idea is unchanged.\n\nThe final piece is HEAD, a file at .git/HEAD that tells Git what you currently have checked out. Normally it holds a symbolic reference such as ref: refs/heads/main, meaning you are on that branch and new commits should advance it. If you check out a specific commit directly, HEAD instead contains a raw hash, which is the detached state that Git warns you about.\n\nPutting it all together, running git commit first turns the staged contents of the index into trees and blobs, then writes a commit object pointing at the new root tree and at the previous commit, and finally updates the branch file that HEAD refers to. Nothing existing is modified in the process, and each step only adds objects or moves a pointer."
+}

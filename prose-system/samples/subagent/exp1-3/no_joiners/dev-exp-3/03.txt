@@ -1,0 +1,57 @@
+How Strangers Can Agree on a Secret in Public
+
+Imagine two people, Alice and Bob, who have never met. They want to share a secret code, perhaps to lock a box or to scramble their messages. The trouble is that every word they say to each other can be overheard by a nosy person called Eve. It sounds impossible. If Eve hears everything, surely she knows everything. Yet this is exactly what happens millions of times a day whenever your phone connects to a bank or a shop. The trick is a piece of maths that is easy to do in one direction and extremely hard to undo.
+
+The paint analogy
+
+Start with paint. Suppose Alice and Bob agree out loud on a common colour, say yellow. Everyone can hear this, including Eve. Alice secretly picks a private colour, red, and mixes it with the yellow. Bob secretly picks his own private colour, blue, and does the same. They swap the mixed pots in public. Eve can see both pots, but she cannot unmix paint to find out what was added.
+
+Now Alice takes Bob's pot and adds her private red. Bob takes Alice's pot and adds his private blue. Both pots now hold the same final mixture, yellow plus red plus blue. Eve has only the two half mixed pots. To get the final colour she would need one of the private colours, and those never left the owners.
+
+The paint example works because mixing is easy and unmixing is nearly impossible. Mathematics gives us the same property using numbers, and it is much more reliable than paint.
+
+Clock arithmetic
+
+The first tool we need is clock arithmetic. On a normal clock, if it is 10 o'clock and you wait 5 hours, you do not get 15 o'clock. You get 3 o'clock, because the numbers wrap around after 12. You simply divide by 12 and keep the remainder.
+
+We can do the same with any number, not just 12. Let us use 23. Whenever a result passes 23, we divide by 23 and keep only the remainder. So 30 becomes 7 and 50 becomes 4. Mathematicians call this working modulo 23, but it is just a clock with 23 hours.
+
+The second tool is repeated multiplication, also called powers. Five to the power 3 means 5 times 5 times 5, which is 125. In clock arithmetic with 23 hours, we divide 125 by 23, which gives 5 with a remainder of 10. So five to the power 3 on this clock is 10.
+
+Here is the key fact. If I tell you the starting number is 5, the clock size is 23 and the power is 3, you can find the answer easily. But if I tell you only the starting number, the clock size and the final answer, and ask what power was used, you have to try the powers one at a time. With a tiny clock like 23 that takes seconds. With a clock of several hundred digits, even the fastest computers on Earth would need longer than the age of the universe. Easy to do, hopeless to undo. That is our paint mixing.
+
+The exchange in numbers
+
+Alice and Bob openly agree on two public numbers. The clock size is 23 and the starting number is 5. Eve hears both and that is fine.
+
+Alice secretly chooses the number 6 and tells nobody. She works out 5 to the power 6, which is 15,625. Dividing by 23 leaves a remainder of 8. She announces 8 to the world. This is her mixed pot.
+
+Bob secretly chooses 15. He works out 5 to the power 15 on the 23 hour clock and gets 19. He announces 19.
+
+Now the swap has happened. Eve has heard 23, 5, 8 and 19. Alice and Bob each hold one private number she has never heard.
+
+Alice takes Bob's announced number, 19, and raises it to her private power of 6. That gives 19 to the power 6, which is 47,045,881. Dividing by 23 leaves a remainder of 2.
+
+Bob takes Alice's announced number, 8, and raises it to his private power of 15. On the 23 hour clock this also comes out as 2.
+
+They both arrive at 2, and neither ever said it aloud. That shared number is their secret.
+
+Why do they always get the same answer
+
+This is not luck. Alice's final number is 5 to the power 15 then to the power 6. Bob's is 5 to the power 6 then to the power 15. Multiplying the powers together gives 5 to the power 90 either way, because 6 times 15 is the same as 15 times 6. The order of multiplication does not matter, and the clock wrapping does not disturb that. It is the same idea as both of them ending up with yellow plus red plus blue, whichever order the colours went in.
+
+Why Eve is stuck
+
+To find the secret, Eve needs either 6 or 15. She knows that 5 to some power gives 8 on the 23 hour clock, and she can find 6 by trial. With our toy numbers this is trivial, and real attackers would break our example in a blink. Real systems use clocks with numbers more than six hundred digits long. On a clock that large, the list of possible powers is so enormous that checking them is physically impossible. Nobody knows a fast shortcut. Despite decades of effort by gifted mathematicians, no one has found one for the standard version of this problem.
+
+From shared secret to locked messages
+
+Once Alice and Bob share a secret number, they can use it as the key for an ordinary scrambling method. Think of it as a very good lock that both can open with the same key. Their shared number becomes that key. Everything they send afterwards looks like random noise to Eve.
+
+You may also hear the phrase public key and private key. That comes from a close cousin of this idea. Here each person makes a pair of numbers that are linked by maths. One half, the public key, is handed out to everyone and can only lock a message. The other half, the private key, stays at home and is the only thing that can unlock it. It is like a letterbox. Anyone can post a letter through the slot, but only the owner holds the key to open the box. This pairing also works backwards to prove who you are. If you scramble something with your private key, anyone can check it with your public key, and only you could have made it.
+
+What this achieves
+
+Before this idea was published in the 1970s, anyone wanting a secret code had to meet in person first or send the key by trusted courier. That cannot work for a shop on the internet that has to talk to millions of strangers. Public key methods removed the need to meet. Two people can start with nothing in common except a public conversation and end with a shared secret that nobody else holds.
+
+The essential idea is simple enough to remember. Some jobs are easy to do and nearly impossible to reverse. Alice and Bob each do the easy part using a private number, show only the result, and then combine what they have heard with what they kept hidden. Eve, who has only seen the results, cannot get to the middle of the process. The secret is born in the gap between what is easy to compute and what is hard to untangle.

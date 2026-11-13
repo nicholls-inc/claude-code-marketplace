@@ -1,0 +1,65 @@
+**How Strangers Can Share a Secret in Public**
+
+Imagine you want to whisper something to a stranger, but the only way to reach them is a long corridor lined with people who can hear every word you shout. It seems hopeless. Any secret you could use to lock a message would first have to travel down that same corridor, and the listeners would catch it. For most of history, people believed two parties had to meet in private first, perhaps to swap a codebook, before they could talk safely at a distance.
+
+In the 1970s, mathematicians showed this belief was wrong. Two people can agree on a shared secret entirely in public, while everyone else hears every single message, and the listeners still end up knowing nothing useful. The idea is called public-key cryptography. It sounds like magic, but the core of it fits in a few paragraphs and needs only the arithmetic you learned at school.
+
+**The paint analogy**
+
+Start with colours. Suppose Alice and Bob each have a tub of paint, and they agree openly on a starting colour, say yellow. Everyone can see the yellow. Alice secretly picks a colour of her own, perhaps red, and Bob secretly picks his, perhaps blue.
+
+Alice mixes her red into the yellow and sends the resulting orange tub to Bob. Bob mixes his blue into the yellow and sends the resulting green tub to Alice. The eavesdroppers see yellow, orange and green go past.
+
+Now Alice takes Bob's green tub and adds her secret red. Bob takes Alice's orange tub and adds his secret blue. Both end up with the same muddy brown, because each has combined yellow, red and blue. The order of mixing does not change the result.
+
+The eavesdropper has a problem. They have the orange and the green, but they cannot unmix paint. They cannot subtract the yellow and pull out the red or the blue. Adding paint is easy, and separating it again is practically impossible. That gap between easy and hard is the whole trick.
+
+Real computers cannot mix paint, so mathematicians needed an operation with the same character. It should be quick to do forwards, with the order of combining not mattering, but painfully slow to undo.
+
+**Clock arithmetic**
+
+The tool they chose is arithmetic on a clock face. Think of a clock with only 23 hours instead of 12. When you count past 23, you wrap round to the start. So 24 becomes 1, 25 becomes 2, and 46 becomes 0. Mathematicians call this "working modulo 23", but all it means is "keep only the remainder after dividing by 23".
+
+Now take a starting number, call it 5, and multiply it by itself several times, wrapping round each time. Multiplying 5 by itself 6 times gives 15,625, and the remainder after dividing by 23 is 8. This is the "mixing" step.
+
+Going forwards is easy. But suppose someone tells you the answer is 8 and asks how many times 5 was multiplied by itself. Because of the wrapping, the numbers jump around with no obvious pattern. You cannot tell whether the answer was close or far from the target, so you have to try the possibilities one at a time. With a clock of 23 hours, that takes a minute. With a clock of several hundred digits, all the computers on Earth working for the age of the universe would not finish.
+
+The other thing we need is that order does not matter. Multiplying 5 by itself 6 times and then 15 times is the same as 15 times and then 6 times. Both give 5 multiplied by itself 21 times in total, and this is what makes the two people's results match, as in the paint.
+
+**A worked example**
+
+Here is the whole exchange with small numbers. Alice and Bob openly agree on a clock of 23 hours and a starting number of 5. Everyone can hear this.
+
+Alice secretly picks 6. She multiplies 5 by itself 6 times, wrapping at 23, and gets 8. She sends 8 to Bob, openly.
+
+Bob secretly picks 15. He multiplies 5 by itself 15 times, wrapping at 23, and gets 19. He sends 19 to Alice, openly.
+
+Now each of them does one more step using their own secret. Alice takes Bob's 19 and multiplies it by itself 6 times, wrapping at 23. The answer is 2. Bob takes Alice's 8 and multiplies it by itself 15 times, wrapping at 23. The answer is also 2.
+
+Both of them now hold the number 2, and neither ever sent it. It is as if they had each multiplied 5 by itself 90 times, because 6 times 15 is 90. Alice reached 90 by doing 6 and then 15, and Bob by doing 15 and then 6.
+
+The eavesdropper heard 23, 5, 8 and 19. To find the secret, they would need to work out Alice's 6 or Bob's 15, which means undoing the multiplication. With numbers this small, they could simply try every option, so this example is only for learning. But the method is identical when the numbers are enormous.
+
+**Why the listener is stuck**
+
+It helps to be clear about what the eavesdropper can and cannot do. They can see everything on the line. They can multiply numbers and wrap them around the clock just as quickly as Alice and Bob can. What they cannot do is run the process backwards from 8 to find 6.
+
+Their other idea might be to combine the two public numbers, 8 and 19, directly. But combining them in any obvious way gives the wrong answer. The secret needs one of the private numbers, 6 or 15, as an ingredient, and those never leave their owners' heads.
+
+So security rests on a belief rather than a proof. Nobody has found a fast way to undo the wrapping multiplication when the clock is huge, and mathematicians have tried hard for decades. If someone did find one, this scheme would break.
+
+**Why it is called public-key**
+
+In the version above, each person has two numbers. The private one, like Alice's 6, never leaves their possession. The public one, like Alice's 8, is made from the private one and is safe to publish to the world. Because the public number can be created from the private one but not the reverse, publishing it costs nothing.
+
+That pairing is where the name comes from. Later inventions built on the same principle let you do more than agree on a secret. You can publish a public number so that anyone can send you a locked message that only you can open, or so that you can prove a message really came from you. But the core idea starts with the shared secret.
+
+**What goes wrong, and what happens next**
+
+The scheme has one real weakness. It protects against someone who only listens, but not against someone who can intercept and replace messages. Suppose a villain sits in the middle of the corridor. They could do the exchange with Alice pretending to be Bob, and separately with Bob pretending to be Alice. Each victim would think they had a private line, while the villain reads and forwards everything.
+
+To prevent this, real systems add a way of proving who you are, such as certificates that vouch for a website's identity. So the secret agreement protects against listeners, and the identity checks protect against impostors. You need both.
+
+Once the two people hold the same secret number, they use it as the key for an ordinary fast lock, where one shared key both locks and unlocks. The slow, clever public-key step is used only briefly at the start.
+
+Every time you see a padlock in your web browser's address bar, a process very like this one has just happened. Your computer and the website, strangers to each other, shouted numbers across the open internet and quietly arrived at a secret that nobody else knows.

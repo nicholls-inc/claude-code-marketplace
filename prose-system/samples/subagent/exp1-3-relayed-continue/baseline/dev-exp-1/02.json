@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab5cd5bacae853d9e",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72568,
+    "output_tokens": 1390,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:14:24.454Z",
+  "valid": true,
+  "text": "**How a heat pump heats a house when it is colder outside than inside**\n\nIt sounds like it should be impossible. Heat flows from warm to cold, so how can a machine warm your living room using air that is freezing? The answer is that a heat pump does not make heat by burning anything. It moves heat that already exists, and there is far more of it outdoors than most people expect.\n\n**Cold is relative**\n\nAir at -5C feels bitterly cold, but it is still about 268 degrees above absolute zero, which is the point where no heat energy remains. That air holds a large amount of thermal energy. The trick is extracting it.\n\n**The mechanism**\n\nA heat pump works like a refrigerator running in reverse. A sealed loop carries a refrigerant, a fluid that boils at very low temperatures, around -30C or colder.\n\n1. Outside, the refrigerant passes through a coil. Because it is colder than the outdoor air, heat flows into it, even on a frosty day. This heat makes the refrigerant evaporate into a gas.\n2. A compressor squeezes that gas. Compressing a gas raises its temperature sharply, as you notice when a bicycle pump warms up. The refrigerant might now be 50 to 60C.\n3. Inside, this hot gas passes through a second coil connected to your radiators, underfloor heating or hot water cylinder. Now the refrigerant is hotter than the water, so heat flows out of it and into your home. The refrigerant condenses back to a liquid.\n4. An expansion valve drops the pressure, the liquid becomes very cold again, and the cycle repeats.\n\nThe compressor is what makes the difference. It lets the machine collect heat at a low temperature and deliver it at a higher one. Heat still flows from hot to cold at each coil. The compressor simply makes sure the refrigerant is colder than outside at one end and hotter than your radiators at the other.\n\n**Why it is efficient**\n\nElectricity is only used to run the compressor and fans, not to create the heat itself. A modern air-source heat pump typically delivers three to four units of heat for each unit of electricity, a coefficient of performance (COP) of 3 to 4. A gas boiler, even a good condensing one, cannot exceed about 90 to 95 percent efficiency, meaning less than one unit of heat per unit of fuel. Efficiency falls as it gets colder, because the compressor has to work harder, but good units still manage a COP above 2 at -10C.\n\n**What this means for your decision**\n\n- **Your home matters.** Heat pumps deliver water at lower temperatures than boilers, typically 35 to 55C rather than 70C or more. They work best in well-insulated homes with larger radiators or underfloor heating. A leaky house with small radiators may need upgrades first.\n- **Running costs depend on prices.** Because the heat pump is roughly three times as efficient, it can cost less to run than gas even though electricity costs more per unit, but this depends on your local tariff. Time-of-use tariffs can help further.\n- **Upfront cost is higher.** Installation typically costs more than a boiler replacement, and you may need a hot water cylinder and radiator upgrades. Check for grants or subsidies in your area, which can narrow the gap considerably.\n- **Cold climates are workable.** Cold-climate models are designed for temperatures well below freezing. Some have backup electric heating for extreme days.\n- **Carbon.** A heat pump removes on-site gas burning and gets cleaner as the electricity grid decarbonises.\n\n**Questions to ask an installer**\n\nRequest a heat loss calculation for your home, the expected seasonal COP (often called SCOP), which radiators would need changing, and a projected annual running cost compared with your current boiler. A good installer will survey the property rather than quote from a catalogue.\n\nThe short version: a heat pump works in the cold because it borrows heat from outside rather than generating it, and it uses a compressor to lift that heat to a useful temperature. If your home is reasonably insulated and you can fund the upfront cost, it is often a sound replacement for an ageing gas boiler."
+}

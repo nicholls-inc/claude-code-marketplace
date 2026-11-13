@@ -1,0 +1,102 @@
+# How strangers can agree on a secret in public
+
+## The problem
+
+Suppose Alice and Bob have never met. They want to share a secret number, which they will later use as a key to scramble their messages. But the only way to talk is a line that anyone can listen to: a shared wire, a crowded room, the internet.
+
+This looks impossible. If every word they say is overheard, how can anything stay secret? The old answer was that they must first meet in private and swap a key. Public-key cryptography removes that requirement. It works because some kinds of maths are easy to do in one direction and extremely hard to undo.
+
+## Easy one way, hard the other
+
+Here are two jobs.
+
+1. Multiply 7,919 by 104,729.
+2. Someone hands you 829,348,151 and says it is the product of two prime numbers. Find them.
+
+The first job takes a minute with pen and paper. The second, with no hint, means trying candidate after candidate. With numbers hundreds of digits long, even the world's fastest computers would take longer than the age of the universe.
+
+The same lopsidedness appears in many places. Mixing paint is easy, and un-mixing it is nearly impossible. Public-key cryptography is built on this kind of one-way street.
+
+## The paint analogy
+
+Here is the idea with paint instead of numbers.
+
+Alice and Bob publicly agree on a starting colour, say yellow. Everyone can see it.
+
+- Alice secretly picks a private colour, say red. She mixes it into the yellow and sends the resulting orange across the line.
+- Bob secretly picks a private colour, say blue. He mixes it into the yellow and sends the resulting green across the line.
+
+Now Alice takes Bob's green and adds her own private red. Bob takes Alice's orange and adds his own private blue. Both end up with yellow + red + blue, the same muddy brown. The order of mixing does not matter.
+
+An eavesdropper saw yellow, orange and green. To get the brown she would need red or blue, and she cannot subtract paint from the mixtures she overheard. Alice and Bob now share a colour that no one else has.
+
+Real cryptography replaces paint with a kind of arithmetic that behaves the same way.
+
+## The maths: clock arithmetic
+
+You already know the key tool. On a clock, 10 o'clock plus 5 hours is 3 o'clock, because after 12 you wrap around. Mathematicians call this "arithmetic modulo 12". We write it as "mod", and it means "keep only the remainder after dividing".
+
+We will use a clock with 23 hours instead of 12. So 30 mod 23 = 7, because 30 = 23 + 7.
+
+The second ingredient is repeated multiplication, or powers. 5³ means 5 × 5 × 5 = 125. On our 23-hour clock, 125 mod 23 = 10, because 23 × 5 = 115 and 125 − 115 = 10.
+
+Now the one-way street. Going forward is easy. Take 5 and raise it to some power, then wrap around the clock. Going backward is hard. If I tell you that 5 to some power lands on 8 on the clock, which power was it? With a small clock you can just try them all. With a clock of several hundred digits, you cannot.
+
+## The agreement, step by step
+
+**Step 1: public choices.** Alice and Bob agree on two numbers, and everyone can see them.
+
+- The clock size: 23.
+- A base number: 5.
+
+These play the role of the yellow paint.
+
+**Step 2: private choices.** Each picks a secret number and tells no one.
+
+- Alice picks 6.
+- Bob picks 15.
+
+These are the red and the blue.
+
+**Step 3: mix and send.** Each raises the base to their secret power, wraps around the clock, and sends the result.
+
+- Alice computes 5⁶ mod 23. Now 5⁶ = 15,625, and 15,625 = 23 × 679 + 8, so the answer is **8**. She sends 8.
+- Bob computes 5¹⁵ mod 23. This comes out to **19**. He sends 19.
+
+The line carries 8 and 19. Everyone hears them. These are the orange and the green.
+
+**Step 4: add your own secret.** Each takes the other's number and raises it to their own secret power.
+
+- Alice computes 19⁶ mod 23. Since 19 is 4 less than 23, this is the same as (−4)⁶ = 4,096, and 4,096 mod 23 = **2**.
+- Bob computes 8¹⁵ mod 23, which also comes out to **2**.
+
+Both now hold the number 2, and neither ever sent it across the line. That is the shared secret, the muddy brown.
+
+## Why do they get the same answer?
+
+Alice's final number is (5¹⁵)⁶. Bob's is (5⁶)¹⁵. Raising a power to a power just multiplies the exponents, so both equal 5 raised to the power 6 × 15 = 90. Multiplication does not care about order, so 6 × 15 and 15 × 6 agree. That is the whole trick, and it is the same fact as "the order of mixing paint doesn't matter".
+
+## What the eavesdropper sees
+
+The listener Eve knows the clock (23), the base (5), and the two numbers on the line (8 and 19). To find the secret she needs Alice's 6 or Bob's 15. That means asking: "5 to what power gives 8 on the clock?"
+
+With a 23-hour clock she can just try powers one by one and find 6 in seconds. That is why our example is only a demonstration. Real systems use clocks with a number of hours that has hundreds of digits. Then there are far more possible powers than there are atoms in the Earth, and trying them all is hopeless. Nobody has found a fast shortcut for this "which power?" problem, and that unsolved difficulty is what protects the secret.
+
+## From shared secret to private messages
+
+The agreed number is then used as a key for an ordinary fast scrambling method, in which both sides use the same key to lock and unlock messages. Public-key maths is slow, so it is used only for the opening handshake. After that, the scrambling does the heavy lifting.
+
+## A second approach: public locks
+
+The method above, named after Whitfield Diffie and Martin Hellman, who published it in 1976, is one way to do it. Another famous one, RSA, uses the first one-way street we met: multiplying two huge primes is easy, and splitting the result back apart is not.
+
+In RSA, Bob publishes a "public key", which is a big number built from two secret primes. Think of it as an open padlock that anyone may snap shut. Alice uses it to lock a message, and only Bob, who knows the secret primes, holds the key that opens it. Alice can use this to send Bob a freshly invented secret number. Again, strangers share a secret over a line anyone can hear.
+
+## What to remember
+
+- Some calculations are easy to do and practically impossible to reverse.
+- Alice and Bob each mix a private number into a public one and swap the results.
+- Because the order of mixing does not matter, they reach the same final number.
+- An eavesdropper sees only the mixed results, and recovering the private numbers from them is the hard, unreversible step.
+
+The result is a shared secret between two people who never met, built from maths a school student can follow, and made safe by the size of the numbers.

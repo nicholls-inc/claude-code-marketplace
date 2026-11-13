@@ -1,0 +1,91 @@
+**Sharing a Secret in Public**
+
+Suppose you and a stranger want to agree on a secret number. The trouble is that you can only talk through a loudspeaker, and everyone in the room hears every word. It sounds impossible. Yet this is exactly what happens each time your phone connects to a bank, and the trick behind it is surprisingly gentle on the maths. Nothing beyond school arithmetic is needed to see how it works.
+
+**The old problem**
+
+For most of history, secret messages needed a shared secret first. You and your friend agreed on a code, perhaps shifting every letter three places along the alphabet, and then you could write to each other privately. The weak point was the agreement itself. To set up the code, you had to meet, or send a courier, or trust some channel. If a spy overheard that first exchange, everything afterwards was open to them.
+
+Now imagine this on the internet, where you are talking to a shop you have never visited, in a country you have never seen. There is no courier. Everything passes through dozens of machines you do not control, any of which might be listening. So we need a way to build a secret out of thin air, in public.
+
+**One-way streets**
+
+The idea that makes it possible is a one-way operation: something easy to do but extremely hard to undo.
+
+Think of mixing paint. Stir yellow into blue and you get green in seconds. Hand someone the green and ask them to separate it back into the exact yellow and blue you started with, and they are stuck.
+
+Mathematics has its own version of this, and the one we will use is built from nothing more than multiplying and taking remainders.
+
+**Clock arithmetic**
+
+You already know remainders. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. You have divided 15 by 12 and kept the remainder, which is 3. Mathematicians call this "mod": we write 15 mod 12 = 3.
+
+We will use a clock with 23 positions instead of 12, so numbers wrap around after 22. Take any number, divide by 23, and keep what is left over. So 30 mod 23 = 7, and 46 mod 23 = 0.
+
+Next we need powers. Writing 5^3 means 5 × 5 × 5 = 125. On our 23-hour clock, 125 mod 23 is 10, because 23 × 5 = 115 and 125 − 115 = 10. Go through that once more slowly, because this is the whole engine: raise to a power, then keep the remainder.
+
+**The one-way part**
+
+Here is the key observation. Computing 5^6 mod 23 is easy: you just do the sum. But suppose I told you only that 5 to some secret power, mod 23, gives 8, and asked what the power was. You would have to try 1, then 2, then 3, and so on until one fits.
+
+With a clock of 23 positions, that takes moments. With a clock of positions measured in hundreds of digits, it would take every computer on Earth longer than the age of the universe. Going forward is quick. Going backward is hopeless. That asymmetry is the one-way street.
+
+**The exchange, step by step**
+
+Let us meet our two people, Asha and Ben. They have never met. Everything they say is overheard by a listener we will call Eve.
+
+First, they agree openly on two numbers. These are not secret. Let them be 23 (the clock size) and 5 (called the base). Eve hears both, and that is fine.
+
+Second, each person privately picks a secret number. Asha chooses 6. Ben chooses 15. They tell no one, not even each other.
+
+Third, each computes a public number from their secret.
+
+Asha works out 5^6 mod 23. Now 5^6 is 15,625, and dividing by 23 leaves a remainder of 8. So Asha announces: "8."
+
+Ben works out 5^15 mod 23. That is a large number, but patient remainder arithmetic gives 19. So Ben announces: "19."
+
+Eve now knows 23, 5, 8 and 19. Remember these four numbers, because they are everything she has.
+
+Fourth comes the clever step. Asha takes Ben's public number and raises it to her own secret power. She computes 19^6 mod 23, which comes to 2.
+
+Ben takes Asha's public number and raises it to his secret power. He computes 8^15 mod 23, which also comes to 2.
+
+They have arrived at the same number. Their shared secret is 2.
+
+**Why it matches**
+
+This is not luck. Look at what each person really computed.
+
+Asha's final answer is (5^15)^6, because Ben's public number came from 5^15. Ben's final answer is (5^6)^15, because Asha's public number came from 5^6.
+
+Now recall a rule from school: raising a power to a power means multiplying the exponents. So both results equal 5^(15 × 6), which is 5^90. Since 15 × 6 and 6 × 15 are the same, the two routes land in the same place. The remainders agree too, because taking remainders at each stage does not change the final answer on the clock.
+
+In short, each person has combined their own secret with the other's public number, and multiplication does not care about order.
+
+**What Eve cannot do**
+
+Eve saw 8 and 19. To get the secret 2, she would need either Asha's 6 or Ben's 15. Finding those means solving the backward problem: "5 to what power gives 8 on a 23-hour clock?"
+
+With a clock this small, she could simply try every power and succeed in seconds. That is why real systems use enormous numbers, hundreds of digits long. With those, the forward steps still take a computer a fraction of a second, but the backward search becomes unthinkable.
+
+Notice also what Eve cannot do by combining what she hears. Multiplying 8 and 19, or adding them, does not give 2. The secret is built from private numbers that never travelled down the line.
+
+**Where the "public key" comes in**
+
+Asha's announced number, 8, plays the role of a public key. It is safe to shout across a crowded room. Her secret number, 6, is her private key, and it never leaves her head.
+
+Other systems use the same family of ideas in a slightly different way. In those, anyone can lock a message using your public key, but only your private key unlocks it. Picture a padlock that you hand out freely to everyone. Anyone can snap it shut, but only you hold the key to open it.
+
+Either way, the principle is identical: a pair of linked numbers, one you may share and one you must guard, tied together by a one-way street.
+
+**A caveat worth knowing**
+
+There is one danger the maths alone does not solve. Suppose Eve does more than listen. Suppose she intercepts Asha's call and pretends to be Ben, while also pretending to be Asha to Ben. Each person would then be agreeing a secret with Eve, not with each other.
+
+To prevent this, real systems add proof of identity, using certificates that vouch for who owns a public key. That is a separate layer, and it matters just as much. But the secret-sharing trick itself is the beautiful core.
+
+**The takeaway**
+
+Two strangers, in full view of the world, can build a shared secret, because some calculations are easy forwards and ruinous backwards. Each person mixes a private number into something public. The listener sees only the mixtures. And just as you cannot unmix green paint, the listener cannot peel the secrets back out.
+
+Next time you see a padlock in your browser's address bar, you can think of Asha and Ben, a 23-hour clock, and the number 2.

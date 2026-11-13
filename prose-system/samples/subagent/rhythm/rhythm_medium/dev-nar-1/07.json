@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a91dc9769d0b535fa",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28224,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1567,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:12:44.141Z",
+  "valid": true,
+  "text": "In late August 1854, cholera struck the crowded London district of Soho with terrifying speed. Within about ten days, more than five hundred people living near Broad Street had died. Cholera is a disease that causes violent diarrhea and rapid dehydration, and in those days it could kill a healthy adult within a day or two. Nobody knew what caused it. The prevailing belief, held by most doctors and officials, was that it spread through miasma, a foul-smelling \"bad air\" rising from rotting waste and filthy ground. Germs had not yet been shown to cause disease, and the idea that a microscopic organism could make people ill was still a fringe notion.\n\nJohn Snow was a physician who lived and worked a short walk from the outbreak. He had made his name pioneering the use of anaesthesia, and he had given chloroform to Queen Victoria during childbirth. He had also been thinking about cholera for years. After the epidemic of 1848 and 1849, he had published a short pamphlet arguing that the disease was not carried on the air but was swallowed, passing from the sick to the healthy through contaminated water or food. His reasoning was that cholera first attacked the gut, not the lungs, which seemed odd if people were simply breathing in poison. Few people had been persuaded, and the Broad Street outbreak gave him a chance to test his idea.\n\nSnow began by doing something that seems obvious today but was unusual then: he went door to door. He obtained the official records of deaths from the local registrar and visited the homes of the dead, asking families what they had eaten and, above all, where they had gotten their water. In that part of London, most households had no running water. People carried what they needed from public pumps in the street, and Snow soon noticed that the deaths clustered heavily around the pump on Broad Street.\n\nHe drew a map to make the pattern plain. On a street plan of the district, he marked each death with a small black bar at the address where it had happened. The bars piled up thickest around the Broad Street pump and thinned out with distance. Snow was careful, though, and he did not treat the map as proof by itself. A cluster could mean many things, so he looked hard for the exceptions, since exceptions can break a theory or strengthen it.\n\nThe exceptions turned out to be the most persuasive part of his case. Near the pump stood a workhouse housing about five hundred people, yet only a handful of them died. Snow discovered that the workhouse had its own well and did not use the Broad Street pump. A brewery on the same street had no deaths at all among its workers, who were given free beer and who also drank from a private supply. On the other side of the story, Snow found people who lived far from Broad Street but had died anyway. One was a woman in Hampstead, miles to the north, who had once lived in Soho. Her family had a cart bring bottles of water from the Broad Street pump every day, because she liked its taste. She and her niece, who had drunk the same water, both died of cholera, while no one else in their neighbourhood did.\n\nOn the evening of 7 September, Snow took his evidence to the Board of Guardians of St James's Parish, the local authority responsible for the area. He urged them to act. Their response was to remove the handle from the pump, which made it impossible to draw water. Whether this ended the epidemic is a point that historians still debate, because the outbreak was already declining by then. Many residents had fled the district, and some of the infected had already died. Snow himself later acknowledged that the numbers had been falling, though he believed that disabling the pump had still prevented further harm.\n\nThe final piece of the puzzle came from a local clergyman, Henry Whitehead, who had at first been sceptical of Snow's theory. Whitehead knew the neighbourhood well and carried out his own inquiries among residents. He traced the start of the outbreak to a baby girl who had fallen ill with cholera at 40 Broad Street, and whose mother had washed soiled nappies in a bucket and emptied the water into a cesspool. That cesspool, Whitehead and Snow found, sat very close to the pump's well, and the brickwork lining the well was cracked and leaking. Waste from the infant's illness had seeped into the water that hundreds of people were drinking.\n\nOfficial bodies were slow to accept the conclusion. A committee investigating the outbreak decided that there was not enough evidence for Snow's water theory. Snow died in 1858, still largely unvindicated. It was only later, as germ theory took hold and bacteria were identified as the true cause of cholera, that his work came to be recognised as a founding achievement of modern epidemiology. His method of collecting data, mapping it, and reasoning carefully from patterns and exceptions became a model for tracing the sources of disease."
+}

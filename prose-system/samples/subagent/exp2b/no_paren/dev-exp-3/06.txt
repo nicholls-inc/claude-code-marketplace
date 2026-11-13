@@ -1,0 +1,74 @@
+Here is the explanation, about 1,200 words.
+
+**How two strangers can agree on a secret in public**
+
+**The problem**
+
+Imagine Alice and Bob have never met. They want to share a secret number, which they can later use as the key to lock their messages. The only way they can talk is a line that anyone can listen to. Eve, a third person, hears every word they say. How can Alice and Bob end up with a secret that Eve does not know?
+
+At first this sounds impossible. If everything Alice and Bob say is heard by Eve, surely Eve knows everything they know. The trick is that knowing what was said is not the same as being able to work out what it means. Some jobs are easy to do forwards and very hard to undo. Public-key cryptography is built on those jobs.
+
+**A paint-mixing picture**
+
+Start with paint. Suppose Alice and Bob agree out loud on a common starting colour, say yellow. Everyone hears this, including Eve.
+
+Alice secretly picks a private colour, say red, and mixes it with the yellow. She sends the resulting orange mixture to Bob. Bob secretly picks his own private colour, say blue, mixes it with the yellow, and sends the green mixture to Alice. Eve sees both mixtures travel past.
+
+Now Alice takes Bob's green mixture and adds her own secret red. Bob takes Alice's orange mixture and adds his own secret blue. Both end up with the same muddy brown, because each has combined yellow, red and blue. Eve holds only the yellow, the orange and the green. Unmixing paint is hard, so she cannot pull out the red or the blue, and she cannot make the brown.
+
+Real mixing of paint is only a picture. What we need is something with numbers that behaves the same way: easy to mix, hopelessly hard to unmix. School maths has exactly that.
+
+**Clock arithmetic**
+
+You have met remainders when you divide. Seventeen divided by five gives 3 with a remainder of 2. Clock arithmetic simply keeps the remainder. On a clock with 12 hours, 9 o'clock plus 5 hours is 14, and we call that 2 o'clock, because 14 leaves a remainder of 2 when divided by 12.
+
+We can do the same with any size of clock. We will use a clock with 23 positions, numbered 0 to 22. Whenever a calculation goes past 22, we divide by 23 and keep only the remainder. Mathematicians call this working modulo 23, but the idea is only remainders.
+
+Now take a number and multiply it by itself repeatedly, keeping the remainder each time. Start with 5.
+
+5 to the power of 1 is 5.
+5 to the power of 2 is 25, which leaves remainder 2.
+5 to the power of 3 is 2 times 5, which is 10.
+5 to the power of 4 is 10 times 5, which is 50, leaving remainder 4.
+
+The remainders bounce around the clock in a way that looks random. Going forwards is easy: give me the power and I can work out the remainder quickly. Going backwards is the hard part. If I tell you that some power of 5 leaves remainder 8 and ask which power it was, you have no shortcut. With a tiny clock you can just try every power, but with a clock of hundreds of digits there are more possibilities than could ever be tried. This one-way behaviour is our paint mixing.
+
+**The agreement, step by step**
+
+Alice and Bob openly agree on two public numbers. The first is the size of the clock, 23. The second is the base, 5. Eve hears both. They play the role of the yellow paint.
+
+Alice picks a secret number, 6. She tells nobody. She works out 5 to the power of 6, which is 15,625. Dividing by 23 gives 679 with a remainder of 8. She sends Bob the number 8. This is her orange mixture.
+
+Bob picks his own secret number, 15. He works out 5 to the power of 15 on the 23 clock, which leaves remainder 19. He sends Alice the number 19. This is his green mixture.
+
+Eve has now heard 23, 5, 8 and 19. She does not know 6 or 15.
+
+Next, Alice takes Bob's number, 19, and raises it to the power of her secret, 6. On the 23 clock the answer is 2. Bob takes Alice's number, 8, and raises it to the power of his secret, 15. On the 23 clock the answer is also 2.
+
+Both now hold the number 2. That is the shared secret, the muddy brown. It was never sent along the line.
+
+**Why they always match**
+
+The reason is a plain fact about powers. Raising 5 to the power of 6 and then raising that result to the power of 15 is the same as raising 5 to the power of 6 times 15, which is 90. The order of the two steps does not matter, because 6 times 15 equals 15 times 6.
+
+Alice effectively computes 5 to the power of 15, then to the power of 6. Bob computes 5 to the power of 6, then to the power of 15. Both routes lead to 5 to the power of 90, and on the 23 clock that leaves remainder 2. Each person used their own secret and the other person's public number, and the maths guarantees the same answer.
+
+**Why Eve is stuck**
+
+To get the secret, Eve would have to find 6 from the number 8, or find 15 from the number 19. That means undoing the bouncing-around step, the hard direction. With a clock of 23 she could manage it in seconds by trying every power. But real systems use clocks with hundreds of digits. Then the number of powers to try is so enormous that all the computers on Earth, working for longer than the age of the universe, would not finish. Meanwhile Alice and Bob each do only a modest amount of arithmetic, because there are quick ways to calculate huge powers.
+
+That gap between the easy job and the impossible job is the whole security of the system.
+
+**Public keys and private keys**
+
+The word key now makes sense. Each person holds a private number that never leaves their head, and publishes a public number made from it. Anyone may see the public number. Only the owner knows the private one. Knowing the public number does not reveal the private one, because that is the hard direction.
+
+A close relative of this idea lets you do more. Some systems let a stranger lock a message using your public number, so that only your private number can unlock it. Think of a padlock you leave open on a table. Anyone can snap it shut, but only you hold the key. Strangers can send you secrets without ever meeting you first.
+
+**What this does not solve**
+
+The method protects against someone who only listens. It does not protect against someone who can interfere. If Eve could cut the line and pretend to be Bob to Alice, and pretend to be Alice to Bob, she could agree a separate secret with each of them and read everything in the middle. To stop this, people need a way to check that a public number really belongs to the person claiming it. Websites handle this with certificates, which are statements vouched for by organisations that browsers already trust.
+
+**Where you meet it**
+
+Every time your phone connects to a secure website, a handshake like this one takes place in a fraction of a second. The two machines agree on a shared secret over an open network, then use it to scramble everything else. You never see it happen, but the idea is the one you have just followed: easy forwards, hard backwards, and a lucky fact about powers that lets two strangers end up holding the same number.

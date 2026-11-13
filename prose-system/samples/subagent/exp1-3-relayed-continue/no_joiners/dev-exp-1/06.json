@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a155294ddf45ddf84",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72593,
+    "output_tokens": 1180,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:16:27.013Z",
+  "valid": true,
+  "text": "A heat pump does not make heat so much as move it. Even on a cold day, the air outside holds a great deal of thermal energy. Air at minus 5 degrees Celsius is far above absolute zero, and its molecules are still moving and carrying energy. A heat pump collects some of that energy and delivers it indoors, which is why it can warm a room that is already warmer than the outdoors.\n\nThe trick is the same one your fridge uses, run in the opposite direction. A sealed loop contains a refrigerant, a fluid that boils at a very low temperature. Outside, a fan pushes air across a coil carrying cold refrigerant. The refrigerant is colder than the air, so heat flows into it naturally and it evaporates into a gas. Nothing unusual has happened yet, because heat is simply flowing from warmer to colder.\n\nNext comes the compressor, which is the key step. It squeezes the gas, and squeezing a gas raises its temperature sharply, much as a bicycle pump warms up when you use it. The refrigerant leaves the compressor much hotter than your living room, perhaps 50 degrees Celsius or more. Now heat flows the useful way. The hot gas passes through a coil inside your home, or into water that feeds your radiators or underfloor heating, and gives up its heat. As it does so, it condenses back into a liquid.\n\nFinally an expansion valve releases the pressure, the liquid becomes very cold again, and the loop starts over. The electricity you pay for runs the compressor and fans. It does not create the heat. It moves heat that was already there.\n\nThis is why heat pumps are so efficient. A gas boiler can at best turn all its fuel energy into heat, and real boilers manage roughly 85 to 95 percent. A heat pump typically delivers three to four units of heat for every unit of electricity. This ratio is called the coefficient of performance. Two thirds or more of the heat comes free from the outside air, ground or water.\n\nThere are limits, and they matter for your decision. The colder it gets, the harder the compressor must work, and efficiency drops. At minus 10 degrees Celsius a good modern unit may deliver closer to two units of heat per unit of electricity, which still beats electric resistance heating. Many current models keep working at minus 15 or even lower. Ice can form on the outdoor coil, so the unit periodically runs a defrost cycle.\n\nSeveral practical points decide whether a replacement makes sense. Insulation comes first. A heat pump delivers water at lower temperatures than a boiler, so a draughty house with small radiators may struggle, and you may need larger radiators or fabric improvements. Sizing also matters, and a proper heat loss survey from your installer is worth insisting on. Running costs depend on the price gap between electricity and gas in your area. A heat pump uses so little electricity per unit of heat that it can still come out ahead, and a time of use tariff can improve the saving further.\n\nUpfront cost is the main barrier. Installation is typically several times the price of a new boiler, though grants and subsidies in many places narrow the gap. You also need outdoor space for the unit, and possibly a hot water cylinder.\n\nIf your boiler is near the end of its life, your home is reasonably well insulated, and a grant is available, a heat pump is a strong choice. If your home is old and leaky, start by improving insulation, then reassess. Ask for at least three quotes, each with a heat loss calculation and an estimate of seasonal efficiency."
+}

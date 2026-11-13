@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a32c6ddc671371daf",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25356,
+    "cache_read_input_tokens": 48377,
+    "output_tokens": 1317,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:01:50.492Z",
+  "valid": true,
+  "text": "How a heat pump heats your house when it is colder outside\n\nA gas boiler makes heat by burning fuel. A heat pump does not make heat at all: it moves heat that already exists from outdoors to indoors. That is why it can deliver more heat than the electricity it uses, and why it keeps working in freezing weather.\n\nCold air still contains heat\n\n\"Cold\" is relative. Air at 0°C feels cold to us, but it is 273 degrees above absolute zero, the point at which there is no heat energy left. Outdoor air at -5°C holds only slightly less heat than air at 20°C. The energy is there; the difficulty is that heat naturally flows from warm to cold, so it will not drift into your warm house on its own. A heat pump uses electricity to push it uphill.\n\nThe trick: make something colder than the outdoors\n\nYour fridge already does this. It pulls heat out of the cold compartment and dumps it from the warm grille at the back. A heat pump is the same machine with your garden as the inside of the fridge and your radiators as the grille.\n\nIt works by circulating a refrigerant, a fluid that boils at a very low temperature, around a sealed loop in four steps:\n\n1. Absorb. In the outdoor unit, the refrigerant is a liquid at low pressure, at perhaps -15°C. Outdoor air at -5°C is warmer than that, so heat flows from the air into the refrigerant, which boils into a gas. A fan keeps fresh air moving across it.\n2. Compress. An electric compressor squeezes the gas. Compressing a gas heats it, as a bicycle pump warms when you use it. The refrigerant leaves at 60°C or more.\n3. Release. The hot gas passes through a heat exchanger and gives its heat to the water in your radiators or underfloor pipes. As it cools it condenses back into a liquid.\n4. Expand. The liquid passes through a valve that drops its pressure, which makes it very cold again, ready to return outdoors.\n\nAt no point does heat flow from cold to hot. The refrigerant is simply made colder than the outdoor air at one end and hotter than your radiator water at the other. The electricity only runs the compressor and fan; the heat itself comes from outside.\n\nWhy this matters for your bills\n\nBecause it moves heat instead of generating it, a heat pump typically delivers about three to four units of heat for each unit of electricity over a year. A new gas boiler delivers about 0.9 units per unit of gas. Whether that saves you money depends on the price of electricity relative to gas where you live: if electricity costs more than three or four times as much per unit, running costs will be similar or higher; if less, lower. Check your own tariffs before deciding.\n\nWhat changes when it gets very cold\n\nEfficiency falls as the outdoor temperature drops, because the compressor has to lift the heat across a bigger gap. On a mild day you may get four or five units of heat per unit of electricity; at -10°C, closer to two or two and a half. Modern cold-climate models keep working at -20°C and below, and they are common in Norway, Sweden and Finland. In damp, near-freezing weather the outdoor unit periodically frosts and briefly reverses to defrost itself, which is normal.\n\nWhat it means for your house\n\nThe same gap rule applies indoors: the cooler the water in your radiators, the more efficient the system. Heat pumps work best at 35 to 50°C, where a boiler often runs at 60 to 75°C. Cooler water needs more surface to give out the same heat, so you may need some larger radiators or underfloor heating, and good insulation helps. The house is heated gently and steadily, not in short bursts. You will also need space for an outdoor unit and usually a hot water cylinder.\n\nAn installer's room-by-room heat loss calculation will tell you what size of unit and which radiator changes your house needs; that survey is the basis for any quote worth comparing."
+}

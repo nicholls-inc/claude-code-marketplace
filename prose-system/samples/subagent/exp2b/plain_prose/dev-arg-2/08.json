@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a1ae67c436109f111",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28205,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1050,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:42:02.762Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating estimates as commitments, and the sooner engineers and managers admit this, the better their software will get.\n\nStart with the evidence everyone already knows. Estimates are wrong, and not randomly wrong. They are wrong in one direction, with a long tail of disasters. Fred Brooks wrote about this in the seventies, Hofstadter gave it a law, and every engineer has lived it: the task that was supposed to take three days takes three weeks because of a migration nobody knew existed. We have fifty years of data and the conclusion is the same each time. Software work is discovery, and you cannot schedule discovery.\n\nThe standard reply is that estimates are not predictions, they are planning tools. In practice that distinction evaporates the moment a number is written down. A story point becomes a day count in someone's head, the day count becomes a date on a roadmap, and the date becomes a promise made to a customer or an executive. When the work slips, as it will, the team does not hear \"our model of the world was incomplete.\" It hears \"you were slow.\" So engineers learn to pad, managers learn to discount the padding, and both sides spend hours of planning poker negotiating a fiction.\n\nThat cost is the part people undercount. Estimation meetings eat real time. Worse, they distort the work. Teams pick the safe, well-understood task over the valuable, uncertain one because the first is easier to size. They cut corners on tests and cleanup to hit a number they never believed. They hide the discovery that the plan was wrong, because bad news is expensive when a date is attached.\n\nManagers worry that without estimates there is no planning. But the alternative is not chaos. It is smaller batches and honest measurement. Break work into pieces small enough that nobody argues about their size, ship them continuously, and watch your actual throughput. If your team merges around eight changes a week, that number, observed rather than guessed, tells you more about next quarter than any sprint-planning spreadsheet. Forecasting from real flow data is cheap, it is usually more accurate than human guessing, and it does not require anyone to pretend.\n\nFor decisions about what to build, replace \"how long will this take\" with \"how much are we willing to spend on this.\" Set an appetite. If a feature is worth two weeks, the team's job is to find a version that fits in two weeks, cutting scope rather than extending the deadline. This flips the incentive. Instead of defending a guess, people negotiate the thing that is actually negotiable.\n\nThere are fair exceptions. If you have a hard external deadline, such as a regulatory date or a conference launch, you do need a rough sense of feasibility, and a quick order-of-magnitude judgment (days, weeks, or quarters) is enough. Nobody needs it to the half-day.\n\nSo stop the ritual. Slice work small, measure what ships, set budgets instead of predictions, and tell stakeholders the truth: we can tell you what we will have in two weeks, but not what we will have in six months. That honesty is uncomfortable for about a quarter, and then it becomes the best trust-building tool a team has."
+}

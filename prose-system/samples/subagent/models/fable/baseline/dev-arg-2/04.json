@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a6bfc592b2d361fce",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 990,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:08:17.050Z",
+  "valid": true,
+  "text": "Keep Estimating. Fix What You Estimate For.\n\nEvery few years the argument returns: estimates are always wrong, they turn into deadlines, and the hours spent in planning poker could have gone into shipping. So stop estimating. Work on the most valuable thing, in small pieces, and tell people it will be done when it is done.\n\nI think this is half right, and the wrong half matters more.\n\nThe right half first. Most teams estimate badly and for bad reasons. A number given in a hallway becomes a commitment in a slide deck. Story points get summed across teams and used to compare people. Engineers learn to pad, managers learn to discount the padding, and both sides end up negotiating over a fiction. If that is what estimation means in your organisation, quitting it would be an improvement.\n\nBut the people who ask \"how long will it take?\" are rarely asking out of idle curiosity. They are deciding something. Should we build this or buy it? Can we promise it to the customer whose contract renews in March? Do we hire now or after the launch? Is this feature worth three weeks, given that it would not be worth three months? Each of those is a question about cost, and in software cost is mostly time. Refusing to answer does not make the decision go away. It means someone with less information makes it, usually by guessing a number themselves and not telling you.\n\nDropping estimates also throws away the cheapest design review a team has. When two engineers size the same task at two days and two weeks, one of them knows something the other does not: a migration nobody mentioned, an API that does not do what its name suggests. That disagreement, found in ten minutes of conversation, is worth more than the number that comes out of it.\n\nSo the fix is to estimate differently, in three ways.\n\nGive ranges. \"Three to six weeks, and the spread is mostly the vendor integration\" is honest and useful. \"Four weeks\" is neither, because it hides the uncertainty that the person deciding most needs to see.\n\nMatch the precision to the decision. Build-or-buy needs an order of magnitude: days, weeks or quarters. A launch date coordinated with marketing needs more. Spending an afternoon refining an estimate that would not change any decision is the waste the critics are right about.\n\nTreat an estimate as a forecast that updates. Weather forecasters are not accused of lying when Thursday's prediction for Saturday changes on Friday. When you learn the migration is harder than expected, say so that day, with a new range. Managers have the harder half of this bargain: if the first revised estimate is met with punishment, there will not be a second honest one.\n\nTeams that work in small, similar-sized pieces can often replace task-level estimates with throughput counts, and they should. That is still estimation. It is just done with data instead of gut feel.\n\nThe engineers who want to stop estimating are reacting to real abuse. The remedy is to end the abuse. A team that cannot say roughly what its work costs has given up its seat in the conversation about what work is worth doing."
+}

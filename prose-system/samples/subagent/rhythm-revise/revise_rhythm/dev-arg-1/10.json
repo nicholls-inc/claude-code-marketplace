@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab3a2031859f5ba9a",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d010.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/10.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37821,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2490,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:23:00.004Z",
+  "valid": true,
+  "text": "Cities should scrap their minimum parking requirements, and they should do it soon.\n\nStart with what a parking mandate actually is: a rule that says no one may build an apartment, a restaurant, a clinic or a corner shop unless they also build a fixed number of car spaces, whether or not anyone wants them. The numbers are rarely grounded in evidence, since many codes borrow ratios from a manual that derived them from a handful of suburban sites, often measured at peak demand with free parking on offer. Planners then treat the figures as settled science when they are guesses, and we have all been paying for them.\n\nThe first cost is housing, because a surface space takes up roughly the area of a small studio apartment, and a space in a structured garage can cost tens of thousands of dollars to build, far more underground. Developers do not absorb that cost out of generosity. They pass it on in rents and sale prices, or they decide the project does not pencil out and build nothing. Research on cities that have loosened their rules, including Buffalo, which abolished its mandates citywide in 2017, suggests that when builders are free to choose, they often provide fewer spaces than the code demanded. That tells you the mandate was binding, because it forced construction that the market, left alone, would have skipped. Those extra spaces make the unit that does get built more expensive, and they make marginal projects disappear.\n\nThe second cost is the shape of the city itself, since every required space pushes buildings apart. Lots that could hold a three-story building with a ground-floor shop instead hold a one-story box surrounded by asphalt. Walking distances grow, transit stops lose their riders, and the street goes quiet because the frontage is a parking lot. Older neighborhoods that people love and pay a premium to live in, with their narrow lots and buildings that touch the sidewalk, would be illegal to build today in most American cities. We have criminalized the template for the places we claim to admire.\n\nThe third cost falls on people who do not drive, and roughly one in ten American households has no car at all, a share that is far higher in dense urban areas and among the poor, the elderly and the disabled. A parking mandate forces these households to subsidize storage for other people's vehicles, because the cost is folded into everything they buy and rent. It is a regressive tax collected by zoning. Donald Shoup, whose work on this subject is the starting point for most serious discussion, called it a minimum-parking-requirements subsidy for cars, and he was right to frame it as a subsidy. Nobody voted for it.\n\nThe usual objection is that without mandates, developers will build no parking and the streets will fill with spillover cars, a worry that deserves a real answer. First, removing a minimum is not the same as banning parking, since lenders, tenants and buyers still want it in many places, and developers will provide what the market asks for. Second, where spillover does arise, the right tool is to manage the curb, not to force every new building to over-supply: residential permit programs, performance-priced meters and revenue that returns to the neighborhood turn scarce street space into a resource that is allocated sensibly rather than given away, and cities that fear a crunch can adopt these measures at the same moment they lift the mandates. Third, the existing mandates have failed on their own terms, because plenty of cities with strict requirements still have hard-to-find parking in busy districts, where free or underpriced space is always oversubscribed.\n\nA second objection is that cities differ, and a rule that suits a dense downtown may not suit a car-dependent suburb. That is true, and it is an argument for removing the mandate, not keeping it, because a shop owner in a suburb who knows her customers all drive will build plenty of spaces without needing a bureaucrat to tell her. The cases where a minimum helps are precisely the cases where it is unnecessary, and the cases where it binds are the ones where it does damage.\n\nSome cities are moving. Minneapolis, Seattle, San Francisco, Austin and others have eliminated or sharply reduced minimums, and California and several other states have passed laws limiting them near transit. The sky has not fallen: housing proposals that were once unbuildable have been filed, small businesses have reopened old storefronts without having to pave the neighbor's yard, and no city has reported a catastrophe it could pin on the change.\n\nNone of this means cars are the enemy, for people will keep driving, and good cities will keep providing places for them to park. The question is who decides how much parking a building needs. Right now a formula written decades ago decides, and it pushes up rents, spreads out our towns and taxes the people least able to pay. Let the people who build, finance and use the buildings make that call. Repeal the minimums."
+}

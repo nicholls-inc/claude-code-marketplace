@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab8ac57105c27b3b1",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28385,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1222,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:24:06.665Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists outside and delivers it indoors, and it can do this even when the air outside is well below the temperature inside. The reason is that cold is a relative idea. Air at 0°C still holds a great deal of thermal energy, because the energy only runs out at absolute zero, which is about minus 273°C. A heat pump takes some of that energy from the outside air, or from the ground in the case of a ground source system, and brings it into the house.\n\nThe working parts are the same as those in a fridge, run in the other direction. A sealed circuit contains a refrigerant, a fluid chosen because it boils at a very low temperature, well below minus 20°C at normal pressure. In the outdoor unit, a fan pushes air across a coil of cold refrigerant. Even on a frosty day the air is warmer than the refrigerant, so heat flows from the air into the fluid and the fluid boils into a gas. A compressor then squeezes that gas. Compressing a gas raises its temperature, and the refrigerant leaves the compressor at somewhere around 50 to 70°C. It passes through a second coil inside the house, which is connected to your radiators, underfloor heating or hot water cylinder. The refrigerant is now hotter than the water in that circuit, so heat flows into the water and the refrigerant condenses back to a liquid. A valve then lets the pressure drop, the liquid cools sharply, and it returns to the outdoor coil to start again.\n\nThe result is that the electricity you pay for runs the compressor and the fans, and most of the heat delivered comes from outside. The ratio of heat delivered to electricity used is called the coefficient of performance, or COP. A typical air source heat pump manages a COP of about 3 at 7°C outside, which means one unit of electricity gives three units of heat. When it falls to minus 5°C the COP drops, commonly to around 2 to 2.5, because the compressor has to work harder across a bigger temperature gap. Over a full year, installers usually quote a seasonal figure of 3 to 4. A gas boiler, by comparison, converts 85 to 94 per cent of its fuel into heat, so it can never deliver more than one unit of heat per unit of gas.\n\nFor a homeowner, the point that matters most is the cost of each fuel. In Great Britain in recent years electricity has cost roughly three to four times as much per kilowatt hour as gas. A heat pump with a seasonal COP of 3 therefore costs about the same to run as a modern gas boiler, a little more or a little less depending on tariffs. A heat pump tariff or time-of-use tariff can improve that. Some of the difference comes from policy choices about how energy bills are structured, and the balance could change, so it is worth checking current prices before you decide.\n\nThe house matters as much as the machine. A heat pump works best when it supplies water at 35 to 45°C, compared with 60 to 75°C from many boilers. Lower flow temperatures give a higher COP, but they need larger radiators or underfloor heating to give out the same heat. A poorly insulated house with small radiators may need upgrades before a heat pump will keep it comfortable on the coldest days. A heat loss survey from an installer will show what your house needs.\n\nInstalled cost is the other factor. Air source systems commonly cost between £8,000 and £15,000 before grants, and the government's Boiler Upgrade Scheme currently offers £7,500 towards that in England and Wales. My view is that the decision is easiest when your boiler is near the end of its life and your house is already reasonably insulated."
+}

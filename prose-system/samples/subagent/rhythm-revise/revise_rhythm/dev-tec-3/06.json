@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a5d8ccfefb0d7297f",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d116.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/06.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37256,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2115,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:36:16.805Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). In the first stage, the charger forces a fixed current into the cell, typically between 0.5C and 1C, where 1C is the current that would fill the nominal capacity in one hour. The cell's terminal voltage is not controlled during this stage but rises on its own, from roughly 3.0 V when the cell is nearly empty to the upper limit, commonly 4.2 V for a graphite and cobalt-oxide chemistry. The charger holds that current until the terminal voltage reaches the limit, at which point the cell has usually taken on about 70 to 80 percent of its capacity.\n\nIn the second stage, the charger holds the voltage at the limit and lets the current fall to whatever the cell will accept. The cell is not allowed to exceed this voltage because the electrodes become chemically unstable beyond it: cathode materials start to degrade, the electrolyte oxidizes, and metallic lithium can plate onto the anode, which shortens life and creates a safety hazard. Charging ends when the current decays to a small cutoff, often 0.05C to 0.1C.\n\nThe slowdown has a clear explanation if you model the cell as an equivalent circuit. Its terminal voltage equals the open-circuit voltage, which depends on state of charge, plus the current times the internal resistance. Internal resistance has contributions from ohmic losses in the electrodes and electrolyte, charge-transfer kinetics at the particle surfaces, and the slow diffusion of lithium ions through the electrode material. During constant current the resistive term is substantial, so the terminal voltage reaches the limit while the open-circuit voltage is still well below it. Once the terminal voltage is clamped, the resistive drop is the only thing left to adjust, and as the cell charges and its open-circuit voltage climbs toward the limit, the allowed voltage drop across the internal resistance shrinks, so by Ohm's law the current must shrink with it, and it does so roughly exponentially.\n\nDiffusion makes this worse, because lithium accumulates near the surface of each graphite particle faster than it can migrate inward, so the surface reaches a high concentration while the particle core is still depleted. The voltage the cell reports reflects the surface condition, which is why the cell appears full before it actually is. During the constant-voltage stage the concentration gradients gradually relax, and a trickle of current continues to fill the interior. Charging speed falls off in the final stretch because the cell is limited by transport and by the voltage ceiling, not by the power the charger could deliver.\n\nFast chargers shorten the first stage and accept that the final 20 to 30 percent takes disproportionately long. Higher temperature lowers internal resistance and speeds the final stage, but it also accelerates degradation, so the real limit is chemical, not electrical."
+}

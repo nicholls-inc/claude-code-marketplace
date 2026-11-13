@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a90f8daf5194c7ba8",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73753,
+    "output_tokens": 3933,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:08:37.519Z",
+  "valid": true,
+  "text": "**How a lithium-ion cell is charged, and why charging slows near full**\n\nCharging drives lithium ions out of the positive electrode and into the negative electrode, while electrons flow through the external circuit in the opposite direction. The positive electrode is typically a lithiated metal oxide (NMC or LCO) or lithium iron phosphate (LFP). The negative electrode is usually graphite, which takes up lithium by intercalating it between its carbon layers. The terminal voltage is the difference between the two electrode potentials, so it rises as lithium moves across.\n\nMost cells charge with a constant-current, constant-voltage (CC-CV) protocol. In the constant-current stage, the charger supplies a fixed rate, often 0.5 to 1C, and the voltage climbs toward a limit: typically 4.2 V per cell for NMC and LCO, or about 3.65 V for LFP. This stage delivers most of the capacity.\n\nAt the voltage limit, the charger switches to constant voltage and the current decays. The current follows a simple circuit relationship:\n\nI ≈ (V_charger − V_OCV) / R_total\n\nHere V_OCV is the cell's open-circuit voltage, and R_total is the combined ohmic, charge-transfer and diffusion impedance. The charger holds V_charger fixed, so the driving term shrinks as V_OCV catches up. Charging terminates when the current falls to roughly C/20 to C/10, or after a timer.\n\nWhy does V_OCV rise so steeply near full? Several effects combine:\n\n- **Electrode potentials are nonlinear in state of charge.** Near full, the positive electrode has little lithium left and its potential climbs quickly. The graphite's intercalation sites fill, and its potential falls toward 0 V versus Li/Li⁺.\n- **Solid-state diffusion limits.** Lithium moves through the active particles by diffusion. At high current, particle surfaces saturate and concentration gradients build up, adding overpotential. Near full, less vacant host space remains, so surface concentration responds more strongly to any current.\n- **Polarisation grows.** Electrolyte concentration gradients across the electrode thickness, plus rising charge-transfer resistance, increase R_total. The same voltage margin then drives less current.\n\nThe taper also protects the cell. Holding the voltage at the limit prevents electrolyte oxidation and cathode degradation. A falling current keeps the anode potential above 0 V versus Li/Li⁺, so lithium does not plate onto the graphite surface. Plating at high state of charge is a major ageing and safety mechanism. Battery management systems also monitor cell temperature and individual cell voltages, and may reduce the current further."
+}

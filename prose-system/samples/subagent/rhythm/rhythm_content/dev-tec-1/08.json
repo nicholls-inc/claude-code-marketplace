@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a481e999b75627a70",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 800 words of how Git stores a commit, covering blobs, trees, commit objects and refs. The reader is a developer who uses Git every day and has never looked inside the .git directory.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "final_text",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28250,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 3637,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:22:14.691Z",
+  "valid": true,
+  "text": "Git keeps everything it knows about your project in the .git directory, and most of that sits in a subdirectory called objects, which works as a key-value database where each key is the SHA-1 hash of the value (repositories can instead be configured for SHA-256, with the same design). To store something, Git prepends a small header giving the object's type and byte length, hashes header and content together, compresses the result with zlib, and writes it to a file named after the hash, with the first two hex characters as a directory, so an object hashing to 3b18e512dba7... lands in objects/3b/18e512dba7.... Because the name is derived from the content, identical content is stored once however many files or commits contain it, and any change produces a different name, so an object cannot be quietly altered without its address changing.\n\nA blob holds the bytes of one file and nothing else, with no name, location, permissions or modification time, which means that two identical files in different directories, or one file across a hundred commits in which it never changed, all resolve to a single blob. Running git hash-object on a file and then git cat-file -p on the resulting hash prints the file back to you, and git cat-file -t confirms the type is blob.\n\nNames and structure belong to trees. A tree is a directory listing in which each entry carries a mode, a name and the hash of the object it points to, with the mode distinguishing regular files (100644), executables (100755), symbolic links (120000), subdirectories (040000) and submodule pointers (160000). A file entry points at a blob and a subdirectory entry points at another tree, so the root tree describes every file and folder in the project at one moment. Since a tree's hash covers the hashes of its children, changing one line in a deeply nested file produces a new blob, a new tree for each directory on the path up to the root and a new root tree, while every sibling that did not change keeps pointing at the same objects as before. This sharing is why every commit can hold a complete snapshot without the repository growing by the size of the working copy each time, and why Git is said to store snapshots rather than diffs, a diff being computed on demand by comparing two trees.\n\nA commit ties a tree to its history and is itself a small piece of text. It names the root tree for the snapshot, lists zero or more parent commits by hash, records an author and a committer, each with a name, email address, timestamp and timezone, and after a blank line it contains the message. A repository's first commit has no parent line, an ordinary commit has one and a merge commit has two or more, and because each commit's hash is computed over text that includes its parents' hashes, history forms a chain in which altering any ancestor would change the hash of every descendant. This is what happens when you amend or rebase, since the old commits are never edited but replaced by new objects with new hashes, and the originals linger unreachable until garbage collection removes them, which is also how a rebase can keep the original author while stamping a new committer and date.\n\nHashes are unfriendly to humans, so refs give commits names, and a ref is simply a file under .git/refs containing a commit hash in hex. The file .git/refs/heads/main holds the tip of your main branch, files under refs/tags name tags, and refs/remotes records where a remote's branches stood at your last fetch, so creating a branch writes a forty-character file and committing on a branch writes the new commit object and then overwrites that file with the new hash, which is why branches are cheap and why moving or deleting one never touches the commits themselves. The file .git/HEAD is normally a symbolic ref containing text like ref: refs/heads/main, meaning that main is the current branch and the next commit should advance it, whereas a detached HEAD is the state in which the file holds a raw commit hash instead, and the reflog under .git/logs records where each ref has pointed, which lets you recover a commit that no branch names any longer.\n\nThe loose object files are not the whole picture, because git gc and the network protocol bundle objects into packfiles in which similar objects are stored as deltas against one another, shrinking the repository without changing any hash or any of the model above. Between your working directory and the next commit sits the index, a binary file at .git/index listing the paths, modes and blob hashes that will form the next root tree, so that git commit amounts to building trees from the index, writing a commit object that points at the top one, and moving the current branch's ref to it."
+}

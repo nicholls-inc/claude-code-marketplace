@@ -1,0 +1,17 @@
+**How a Lithium-Ion Cell Charges, and Why It Slows Near Full**
+
+A lithium-ion cell stores energy by moving lithium between two host materials. The positive electrode is usually a layered metal oxide (NMC, for example) or iron phosphate (LFP). The negative electrode is usually graphite. During charging, an external source pulls electrons out of the positive electrode and pushes them through the external circuit into the graphite. To keep both electrodes charge-neutral, lithium ions leave the oxide, cross the liquid electrolyte and a porous separator, and slot in between the graphite layers. This is called intercalation. Discharge runs the same process in reverse.
+
+Almost all chargers use a constant-current, constant-voltage (CC-CV) profile. In the CC phase, the charger drives a fixed current, usually between 0.5C and 1C. The C-rate is current relative to capacity, so 1C would nominally fill the cell in one hour. The terminal voltage rises as the cell fills. When it reaches the chemistry's upper limit (typically 4.2 V for NMC, 3.65 V for LFP), the charger switches to CV mode. It holds that voltage fixed and lets the current fall. Charging ends when the current drops to a cutoff, commonly C/20 to C/10.
+
+The taper follows from a simple decomposition. Terminal voltage equals the open-circuit voltage (OCV), which depends on state of charge, plus an overpotential that scales with current. The overpotential comes from three sources:
+
+- ohmic resistance in the electrolyte and contacts
+- charge-transfer kinetics at the particle surfaces
+- concentration gradients, because lithium diffuses slowly into the electrode particles
+
+The charger regulates terminal voltage, not OCV. When the cell first hits 4.2 V, at perhaps 70–80% state of charge, its OCV is still well below 4.2 V, and the difference is the overpotential. As charge accumulates and OCV rises, the headroom left for overpotential shrinks, so the current must fall. This behaves much like a capacitor charging through a resistor toward a fixed source voltage, with a roughly exponential current decay. The CC phase delivers most of the charge quickly, and the CV phase spends a comparable or longer time on the last 20–30%.
+
+Why not raise the voltage to keep the current high? The limits are set by the materials. Above about 4.2–4.3 V, NMC cathodes become structurally unstable and the electrolyte begins to oxidize. The bigger constraint is at the anode. Lithiated graphite sits only about 0.1 V above lithium metal. High current, low temperature, or a nearly full anode can push the local potential below zero. Lithium then deposits as metal on the surface instead of intercalating. This plating permanently reduces capacity and can grow dendrites that pierce the separator. The risk peaks near full charge, when the graphite surface is saturated and diffusion into the particle interiors cannot keep up.
+
+The CV phase therefore lets diffusion catch up, so the particle interiors fill without exceeding surface limits. Modern battery management systems refine this with multi-stage current steps that depend on temperature and state of charge. That is why an electric vehicle can charge from 10% to 80% in about 25 minutes but needs much longer for the rest.

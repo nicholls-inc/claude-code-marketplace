@@ -1,0 +1,39 @@
+A heat pump does not make heat by burning anything. It moves heat that already exists outside and delivers it indoors. That is why it can warm a house on a day when the air outside is colder than the rooms inside.
+
+**Cold is not the absence of heat**
+
+"Cold" only means "less thermal energy than somewhere else." Air at 0°C still holds a lot of heat energy. Physics says heat flows from hot to cold on its own, but a machine can push it the other way if you supply some work. Your fridge does this all the time. It pulls heat out of the cold box and dumps it into your kitchen. A heat pump is a fridge pointed the other way: it chills the outdoors a little and warms your house.
+
+**How it works**
+
+A sealed loop of refrigerant circulates through four parts.
+
+1. **Outdoor coil (evaporator).** The refrigerant is kept at a very low pressure, which makes it boil at a very low temperature, around minus 20°C or lower. Outside air at 2°C is therefore warmer than the refrigerant, so heat flows from the air into the liquid, which evaporates into a gas.
+2. **Compressor.** This is the part that uses electricity. It squeezes the gas, which raises its pressure and its temperature sharply, to perhaps 50 to 60°C. Compressing a gas heats it, like a bicycle pump warming up.
+3. **Indoor coil (condenser).** The now-hot gas passes through a coil connected to your radiators, underfloor heating or hot water cylinder. The water or air there is cooler than the gas, so heat flows into your home and the refrigerant condenses back to liquid.
+4. **Expansion valve.** The liquid's pressure drops suddenly, which cools it well below the outdoor temperature, and the cycle repeats.
+
+So the compressor is not creating the heat. It is lifting heat from a low temperature to a useful one, the way a pump lifts water uphill.
+
+**Why this beats a boiler on efficiency**
+
+A modern gas boiler converts about 85 to 95 percent of the fuel's energy into heat. It can never beat 100 percent. A heat pump delivers roughly three to four units of heat for every unit of electricity it uses. This ratio is called the coefficient of performance (COP), or seasonal COP (SCOP) over a year. Most of the output is heat borrowed from outside, and only a fraction is the electricity you pay for.
+
+**The catch: it gets harder as it gets colder**
+
+The bigger the gap between outdoor temperature and the temperature you need to deliver, the harder the compressor works and the lower the COP. On a mild 7°C day you might see a COP of 4. At minus 5°C it might fall to around 2.5 to 3. It is still more efficient than a boiler, but the advantage narrows. Modern units keep working down to minus 15 to minus 25°C, though capacity drops. Frost can also build up on the outdoor coil, and the unit periodically runs a short defrost cycle.
+
+Delivery temperature matters just as much. Heat pumps are most efficient when they send water at 35 to 45°C, not the 60 to 70°C typical of old boiler systems. That favours underfloor heating and larger radiators.
+
+**What this means for your decision**
+
+- **Insulation first.** A well-insulated house needs less heat, so a smaller, cheaper, more efficient heat pump will do. A draughty house with small radiators may need upgrades to get the full benefit.
+- **Radiators.** You may need some larger ones, or a lower-temperature system design. Ask installers to do a room-by-room heat loss calculation, not a rule-of-thumb estimate.
+- **Running costs.** Electricity costs more per kWh than gas, so the saving depends on the price ratio. A COP of 3 or more usually brings running costs close to or below gas, and a time-of-use tariff can help further. Check current prices where you live.
+- **Upfront cost.** Installation costs more than a replacement boiler. Look for grants or subsidies, which can cover a large share in some countries.
+- **Space and noise.** You need room for an outdoor unit and usually a hot water cylinder indoors. Units are quiet but not silent, so placement matters.
+- **Future-proofing.** Heat pumps get cleaner as the grid decarbonises, whereas a gas boiler stays tied to fossil fuel and its price.
+
+**Bottom line**
+
+It works in the cold because the outdoor air still contains heat, and a compressor-driven refrigerant loop can extract it and upgrade it to a useful temperature. Whether it makes sense for you depends mainly on your home's insulation, your radiators, and local energy prices and grants. Ask two or three installers for a proper heat loss survey and a quote that states the expected SCOP, and compare the predicted annual running cost against your current gas bill.

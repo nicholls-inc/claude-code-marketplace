@@ -1,0 +1,13 @@
+A lithium-ion cell is charged with a protocol called constant current, constant voltage, usually shortened to CC-CV. It works in two phases, and the second is where the slowdown happens.
+
+In the first phase, the charger forces a fixed current into the cell, commonly between 0.5 and 1 times the cell's capacity per hour. Lithium ions leave the cathode, which is typically a layered metal oxide, and travel through the electrolyte to the graphite anode. They slot between the graphite layers in a process called intercalation. Electrons travel the same way through the external circuit. As the anode fills with lithium, the cell voltage climbs steadily. A charger that regulates current simply lets the voltage rise to whatever value that current demands.
+
+When the terminal voltage reaches a ceiling, around 4.2 V for common chemistries, the charger switches to the second phase. It holds the voltage constant and lets the current decay on its own. This is the slowdown. The cell is declared full when the current falls to a small cutoff, often 5 to 10 percent of the original charging current.
+
+The ceiling exists because higher voltages damage the cell. Beyond it, the electrolyte oxidises at the cathode and the cathode structure degrades. Any lithium that cannot enter the graphite quickly enough plates onto its surface as metal, which shortens life and creates a safety hazard.
+
+The decay has a simple electrical explanation. The cell behaves like an ideal voltage source in series with an internal resistance. The source voltage is the open-circuit voltage, which rises as the cell fills. The terminal voltage is the open-circuit voltage plus the current times the internal resistance. With the terminal voltage clamped, any rise in open-circuit voltage must be paid for by a fall in current. Near full charge the open-circuit voltage approaches the clamp value, so the remaining headroom shrinks and the current drops roughly exponentially.
+
+There is also a physical limit behind the resistance. Lithium must diffuse into the solid graphite particles, and diffusion is slow. As the particle surfaces fill, the concentration gradient driving ions inward flattens, so the cell can accept lithium only as fast as it spreads toward the particle core. The cell is partly limited by transport and partly by the voltage clamp, and both effects push the same way.
+
+For an engineer, the analogy is charging a capacitor through a resistor, with the added constraint that the voltage limit is a hard safety boundary rather than a convenience. Fast-charging designs therefore try to shorten or reshape the second phase. They use stepped currents, temperature control, and cell designs with lower resistance and smaller particles.

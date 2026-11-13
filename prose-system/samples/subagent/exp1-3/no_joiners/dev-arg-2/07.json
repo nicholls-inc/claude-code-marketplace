@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a6b8427e9a4493860",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72479,
+    "output_tokens": 986,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:42:08.258Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping Small.\n\nEvery engineer has lived this meeting. Someone asks how long a feature will take, and you give a number you do not believe. The number gets written down. Three weeks later it becomes a promise, and the promise becomes a grievance. I think teams should stop producing these estimates, and I think they would be better off for it.\n\nStart with the evidence. Decades of project data show that software estimates miss badly, and they miss in one direction. Work takes longer than predicted, and the errors are not small. The cause is not laziness or poor technique. Software work is mostly discovery. You cannot size a task whose hard part is something you have not met yet. The unknowns are the work, so an estimate is a guess about the part you cannot see.\n\nNow look at what the estimate does once it exists. It anchors everyone. Managers plan around it, sales quotes against it, and the team starts defending it instead of questioning it. When reality diverges, engineers face a bad choice. They can admit the number was wrong, or they can cut corners to hit it. Too often they cut corners. Tests get skipped and shortcuts become permanent. The estimate does not predict quality problems. It creates them.\n\nThen there is the cost of the ritual itself. Planning poker, story point debates and re-estimation sessions eat hours every sprint. Those hours buy a figure with almost no predictive value. A team that spends a tenth of its time on estimating and gets it wrong anyway has paid a real tax for a false comfort.\n\nManagers will object that they need dates. They do, but a date is not the same as an estimate. What they need is a way to make decisions under uncertainty, and there are better tools. Cut work into slices small enough that each fits in a day or two. Track how many slices the team finishes each week. That throughput is measured, not imagined, and it forecasts far better than any number a developer invents in a meeting. When a slice turns out bigger than expected, you split it and carry on. No one lost face, because no one made a promise.\n\nPair that with a fixed budget of time. Instead of asking how long a feature will take, ask how much it is worth. If it is worth two weeks, work on it for two weeks, ship the best version that fits, and decide what comes next. The scope flexes and the schedule does not. This turns an unanswerable question into a business decision that managers are qualified to make.\n\nSome will say this is reckless, that organizations cannot run without forecasts. They can, and many already do. Teams that ship in small increments and watch their own flow data give leaders something more honest than a Gantt chart. They give a running record of what actually got done.\n\nThe practical step is modest. Next planning meeting, skip the sizing. Break the work down, take the top items, and see what finishes. Measure that for a quarter. If your forecasts are no worse than before, you have just gotten hours of your life back, and you have stopped lying to each other with numbers. I would bet they get better."
+}

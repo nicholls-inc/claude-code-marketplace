@@ -1,0 +1,59 @@
+How Git Stores a Commit
+
+Most of the time Git hides its storage behind commands like add, commit and checkout. Underneath, the .git directory is a small content-addressed database. Objects are stored under the hash of their contents, and a handful of plain-text files called refs point into that database. Once you see these layers, operations that seem magical become predictable.
+
+Objects and hashing
+
+Every object has a type, a size and content. Git prepends a header of the form "<type> <size>\0" to the content and hashes the result with SHA-1 (newer repositories can use SHA-256). The hex digest is the object's name, and you can reproduce it yourself:
+
+    echo hello | git hash-object --stdin
+    ce013625030ba8dba906f756967f9e9ca394464a
+
+Objects are zlib-compressed and stored in .git/objects/, in a directory named for the first two hex characters of the hash, with the remaining characters as the filename. Because names come from content, identical content always gets the same name and is stored once. Objects are never modified in place. There are four types: blob, tree, commit and tag.
+
+Blobs
+
+A blob holds the bytes of one file. It has no filename, no permissions and no timestamp. Two files with identical contents, in one commit or many, point at the same blob. Renames cost almost nothing for the same reason: moving a file changes the tree that names it, not the blob.
+
+Trees
+
+A tree represents one directory. Each entry has a mode, a type, a hash and a name:
+
+    100644 blob ce01362...    README.md
+    100755 blob 9b1f2a0...    build.sh
+    040000 tree 4c8d7e1...    src
+
+Mode 100644 is a regular file, 100755 is executable, 120000 is a symlink (its blob holds the target path), 040000 is a subdirectory and 160000 is a submodule pointer. Entries are sorted by name. A subdirectory is simply another tree referenced from its parent, so the whole project forms a tree of trees, and the root tree describes the complete snapshot. git ls-tree HEAD and git ls-tree -r HEAD show this directly.
+
+Commits
+
+A commit object is readable text:
+
+    tree 4c8d7e1...
+    parent 7a2e9f0...
+    author Jane Doe <jane@example.com> 1731300000 +0000
+    committer Jane Doe <jane@example.com> 1731300000 +0000
+
+    Fix config loader
+
+A commit points to exactly one root tree, which is the full snapshot, and to zero or more parents. A normal commit has one parent, a merge has two or more, and the first commit in a repository has none. Git does not store diffs. When you ask for a diff between two commits, Git compares their trees. History is a directed acyclic graph in which each commit points backward to its parents.
+
+Because a commit's hash covers its tree, its parents and its message, changing any file or the message produces a new commit hash, and every descendant changes too. This is why amend and rebase create new commits rather than editing old ones.
+
+Storage stays small because unchanged content is reused. Editing one file deep in src/ writes one new blob, one new tree for each directory on the path, one new root tree and one new commit. Everything else is shared with the previous commit.
+
+Annotated tags are also objects, containing the target hash, its type, a name, a tagger and a message. Lightweight tags are just refs.
+
+Refs
+
+A ref is a name for a hash. The simplest form is a file under .git/refs/heads/ containing a hash and a newline. A branch is exactly that: refs/heads/main holds the hash of the latest commit on it. Committing writes a new commit object and then overwrites that file with the new hash. Nothing else moves. The old commits remain in the object store until garbage collection finds them unreachable.
+
+HEAD is usually a symbolic ref, a file containing "ref: refs/heads/main" rather than a hash. That is why HEAD follows the branch as you commit. If HEAD holds a bare hash instead, you are in detached HEAD state. Tags live under refs/tags/ and remote-tracking branches under refs/remotes/. Git may gather refs into a single .git/packed-refs file for efficiency, and git show-ref reads both forms.
+
+Reachability decides what survives. An object is kept as long as some ref reaches it through parent and tree links. Deleting a branch does not delete commits; it removes one ref that pointed into the graph. Commits that no ref reaches become garbage and are removed after a grace period.
+
+Putting it together
+
+When you run git commit after git add, Git reads the index (.git/index), which records the path, mode and blob hash for each staged file. It writes any new blobs, builds trees from the index, writes a commit that points at the root tree and the current HEAD, and then updates the branch ref that HEAD names.
+
+To check this yourself, run git cat-file -p HEAD to see the commit, git cat-file -p HEAD^{tree} to see its root tree, and git cat-file -t followed by a hash to report an object's type. The tools handle decompression, so you do not need to read the raw files.

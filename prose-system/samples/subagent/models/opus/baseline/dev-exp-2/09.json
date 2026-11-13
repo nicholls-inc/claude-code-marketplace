@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8c0f0da492671eed",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73730,
+    "output_tokens": 1133,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:23:47.884Z",
+  "valid": true,
+  "text": "**Why the world's clocks are giving up on the leap second**\n\nThe time on your phone comes from two sources that do not quite agree. One is the Earth itself: a day is one turn of the planet, and for most of history that was the only clock there was. The other is the atomic clock. Since the 1960s, a second has been defined by the steady vibration of caesium atoms. That makes it far more regular than any spinning planet.\n\nThe trouble is that the Earth is a poor timekeeper. Tides drag on it and slow it down a little over the centuries. Earthquakes, melting ice and the churning of the planet's molten core speed it up or slow it down by a few thousandths of a second from one year to the next. So a clock that counts perfect atomic seconds slowly drifts away from the time set by the sun.\n\nThe leap second was the fix. Starting in 1972, whenever the gap between atomic time and the Earth's rotation neared nine-tenths of a second, the scientists who track the planet's spin announced an extra second, usually six months ahead. Clocks around the world then read 23:59:60 before rolling over to midnight. Twenty-seven leap seconds have been added so far. The most recent came on New Year's Eve in 2016.\n\nFor most people, a single extra second goes unnoticed. For computers, it is a headache. Many systems assume a minute always has 60 seconds, and some handled the extra one badly. In 2012 a leap second helped crash websites including Reddit and disrupted the Qantas airline's booking system. In 2017 it briefly knocked part of the internet company Cloudflare offline. Because leap seconds arrive irregularly, they cannot be planned for years ahead, and every one is a small risk to banks, telecoms networks, satellite navigation and power grids that depend on precise timing.\n\nThere is a newer worry too. In recent years the Earth has been spinning slightly faster. For the first time, a \"negative\" leap second, where a second is removed, may be needed. That has never been done, and engineers fear much of the world's software has never been tested for it.\n\nIn November 2022, the international body responsible for weights and measures voted to stop adding leap seconds by 2035. The UN agency that oversees radio and telecommunications backed the decision the following year. Atomic time and solar time will be allowed to drift further apart, probably by up to a minute, before any correction is made. Officials are still working out how and when that correction would happen. Over a lifetime, the drift will be far too small for anyone to notice. The sun will still be overhead at noon, give or take a second or two."
+}

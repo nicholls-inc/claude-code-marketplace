@@ -1,0 +1,35 @@
+How two strangers agree on a secret in public
+
+Imagine you and a stranger need to agree on a secret password, and every word you say is overheard by a third person, Eve. It sounds impossible. If you say the password aloud, Eve hears it. If you each pick one, one of you has to reveal it first. For most of history, secret agreements needed a courier, a meeting, or a shared key delivered in advance. In 1976, Whitfield Diffie and Martin Hellman showed that two people could build a shared secret entirely in view of an eavesdropper. Their method, now called Diffie-Hellman key exchange, depends on a kind of arithmetic that is easy to do in one direction and very hard to undo.
+
+Start with a paint analogy. Suppose you and your partner agree on a yellow paint that everyone can see. You each secretly add a private colour, your own mixture, to a portion of the yellow. Then you mix each portion with the other person's public mixture. Mixing is easy. Separating paint is hard. Eve can see the yellow and the two mixtures you have sent, but she cannot pull them apart to recover your private colours. Yet when you each add your private colour to the mixture you received, you both end up with the same final shade. The colour is the shared secret. Nobody ever sent it across the line.
+
+The paint analogy captures the logic, but the real method uses numbers and a clock.
+
+Think of clock arithmetic. On a 12-hour clock, 9 plus 5 is 2, because you wrap around after 12. Mathematicians call this arithmetic "modulo 12." Diffie-Hellman uses the same wrapping, but with a much larger number in place of 12. Call it p, a prime number. Every result is the remainder after dividing by p.
+
+Here is a small example with p = 23. Both of you agree on a public base number, g = 5. Anyone may know these. Now each of you picks a private number and keeps it to yourself.
+
+You pick a = 6. Your partner picks b = 15.
+
+You compute your public value: 5 multiplied by itself 6 times, then take the remainder after dividing by 23. Working it through, 5 to the power 6 is 15,625, and the remainder after dividing by 23 is 8. So you send 8 to your partner.
+
+Your partner computes 5 to the power 15, which leaves a remainder of 19. They send 19 to you.
+
+Now the secret step. You take the number you received, 19, and raise it to your private power, 6. The remainder after dividing by 23 is 2.
+
+Your partner takes the number you sent, 8, and raises it to their private power, 15. The remainder is also 2.
+
+You now share the number 2, and nobody else has been told it.
+
+Why does this work? Multiplying powers in this way follows a rule. Your result equals 5 to the power of (6 times 15), and so does theirs. The exponents commute, so both sides arrive at the same place. Each of you did a small amount of work. The shared result came from combining your private number with the other person's public one.
+
+Now consider Eve. She knows p = 23, g = 5, your public value 8, and your partner's public value 19. To find the secret, she needs one of the private numbers, either 6 or 15. Finding the exponent that produces 8 when 5 is raised to it, modulo 23, is called the discrete logarithm problem. With numbers this small she can simply try 5, 25 and so on until she finds the match. She would find your 6 in a few seconds with pencil and paper.
+
+This is why real systems use enormous numbers. Modern implementations often use primes hundreds of digits long, and the private numbers are of similar size. Trying each possible exponent is no longer feasible. The fastest known classical methods for the discrete logarithm problem still take an unmanageable amount of time at these sizes. Computing the shared value from the public values is quick, and recovering the private exponent from them is not. That imbalance is the foundation of the whole scheme.
+
+It is worth noticing what the scheme does not do. Diffie-Hellman creates a shared secret between two parties, but it does not prove who they are. Eve could sit in the middle. She could run one exchange with you and another with your partner, appearing as the other person to each of you. You would then share one secret with Eve and another with your partner, and she could read everything passing between you. Real secure connections prevent this by adding authentication. Each side signs its public value with a long-term key, and a trusted certificate confirms that the key belongs to the right party. Modern protocols such as TLS, the protocol behind HTTPS, combine this signed exchange with the key agreement.
+
+Once the shared secret exists, both sides use it to derive a symmetric key, a single key used for fast encryption of the messages that follow. Symmetric encryption is cheap, which is why the expensive public-key step is only used once at the start of a conversation.
+
+The result is a surprising piece of practical mathematics. Two people with no prior contact, using only a public channel that they assume is monitored, can agree on a value that the observer cannot compute. The secret is never transmitted. It is produced by both parties independently, from private numbers that never leave their hands, combined with public values that reveal nothing useful about those private numbers. Every time you load a secure web page, this same idea runs in the background, usually with elliptic-curve variants that achieve similar security with smaller numbers, but the core principle remains the one shown in the paint and the clock.

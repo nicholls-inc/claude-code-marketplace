@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af270ffe0127dfa9a",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73763,
+    "output_tokens": 3015,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:35:05.457Z",
+  "valid": true,
+  "text": "A lithium ion cell stores energy by holding lithium ions in the graphite anode at a lower electrochemical potential than in the metal oxide cathode. Charging forces ions from cathode to anode through the electrolyte while electrons travel through the external circuit. The charger therefore has to push the cell voltage above its resting open circuit voltage. That voltage rises from about 3.0 V when empty to about 4.2 V when full for a typical cell.\n\nStandard practice is a two stage profile called constant current then constant voltage. In the first stage the charger holds current at a fixed value, often 0.5 to 1 C, where 1 C is the current that would fill the nominal capacity in one hour. Terminal voltage climbs steadily as the state of charge rises. It equals the open circuit voltage plus the current times the internal resistance, plus extra polarization terms. Once the terminal voltage reaches the upper limit, the charger switches to the second stage and holds that voltage fixed. The limit is a hard ceiling. Exceeding it by even tens of millivolts accelerates electrolyte oxidation at the cathode and risks lithium plating on the anode, which degrades capacity and can create a safety hazard.\n\nThe slowing in the second stage follows from simple circuit behaviour. With the terminal voltage clamped, the available driving voltage is the clamp minus the open circuit voltage. As the cell fills, the open circuit voltage approaches the clamp, so that difference shrinks and the current falls. The result resembles an exponential decay, much like a capacitor charging through a resistor. Charging is normally terminated when the current drops to about 0.05 C, because the last few percent would take disproportionately long.\n\nPhysical processes reinforce this. Lithium must diffuse within solid particles, and solid state diffusion is slow. During fast charging the particle surface fills before the interior does, so the surface reaches a high concentration while the core lags. The measured voltage reflects the surface, so the limit is hit early even though the bulk is not full. Holding the voltage lets the concentration gradient relax, which takes time and appears as the tapering current. As the graphite approaches full lithiation, fewer vacant sites remain and the anode potential falls toward that of lithium metal. Plating becomes a growing risk, so the charger must not push harder.\n\nTemperature matters too. Cold cells have higher resistance and slower diffusion, so the charger must reduce current or refuse to charge below freezing.\n\nFor an engineer from another field, the useful picture is a large capacitor like energy store with a nonlinear voltage curve, a series resistance, and a slow diffusive reservoir behind it. The taper is the cost of safely letting that reservoir equalize before the cell is called full."
+}

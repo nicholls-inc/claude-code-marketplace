@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab887312baf15bdd5",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28180,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1060,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:44:06.031Z",
+  "valid": true,
+  "text": "On the afternoon of January 15, 1919, the North End of Boston was enjoying an unusual warmth. After days of bitter cold, the temperature had climbed to about forty degrees, and the neighborhood's mix of Italian immigrants, dockworkers, and children on winter break were out in the streets. Looming over them was a huge steel tank, fifty feet tall and nearly ninety feet across, owned by the Purity Distilling Company. It held more than two million gallons of molasses.\n\nThe tank had been built in a hurry in 1915 by a company eager to profit from wartime demand. Molasses was fermented into industrial alcohol, which was used to make munitions. The construction was shoddy. No one calculated the stresses on the walls, and the steel was thinner than it should have been. The tank was never properly tested. When workers filled it with water to check for leaks, they stopped before it was full. Residents noticed the tank groaned and leaked brown syrup down its sides. Instead of repairing it, the company painted it brown to hide the stains.\n\nOnly a day earlier, a fresh shipment of warm molasses had been pumped in from a tanker. The sudden warmth of that afternoon, combined with fermentation and the new load, built pressure inside.\n\nAt about 12:30, a sound like a machine gun rang out as rivets shot from the tank. Then the walls split open. A wave of molasses, estimated at twenty-five feet high at its crest, surged outward at around thirty-five miles an hour. It swept through the streets with the force of a landslide. A section of tank wall flew through the supports of the elevated railway, and the structure buckled. Buildings were knocked from their foundations. Wagons, horses, and people were caught up in the brown flood. Those who lived through it later said the wave made a hissing, rumbling roar as it came.\n\nRescuers rushed to the scene, including sailors from a nearby navy ship, firefighters, police, and Red Cross workers. They waded into a sticky mass that was knee deep in places. The cold air made the molasses thicker and harder to escape from, and it clung to everything. Trapped victims struggled to breathe as it hardened around them. Rescuers worked for days, and the search for bodies went on for months. The disaster killed twenty-one people and injured about one hundred fifty. The youngest victim was ten years old.\n\nThe cleanup took weeks. Crews used salt water from fireboats and sprinkled sand and sawdust over the streets. The harbor ran brown until summer. Residents claimed that on hot days the neighborhood smelled of molasses for decades afterward.\n\nThe legal aftermath proved just as significant. Residents filed one of the first major class action lawsuits in Massachusetts. The company argued that anarchists had sabotaged the tank, but an auditor appointed by the court heard years of testimony and concluded the structure had simply failed. In 1925, the company agreed to pay damages, roughly seven thousand dollars to each victim's family. The case helped push states to require that engineers and architects approve and sign off on construction plans, which changed how large structures are built across the country."
+}

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a278a56bf0565efcb",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73759,
+    "output_tokens": 3441,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:04:34.595Z",
+  "valid": true,
+  "text": "How a heat pump heats a home when it is colder outside than inside\n\nA heat pump does not create heat. It moves heat that already exists in the outside air into your house, using the same basic cycle as a refrigerator running in reverse. The key fact is that cold air still contains a lot of thermal energy. Even at -5°C, the air holds heat. The challenge is collecting it and raising its temperature to something useful.\n\nThat job is done by a refrigerant, a fluid chosen because it boils at a very low temperature when its pressure is low. It circulates continuously through four main parts.\n\n1. Evaporation (outside). Liquid refrigerant passes through an expansion valve into the outdoor coil. Its pressure drops sharply, so it boils at a temperature far below the outside air, often well below freezing. As it boils it absorbs heat from the air a fan blows across the coil. This keeps working in cold weather because the refrigerant is much colder than the air.\n\n2. Compression. The refrigerant, now a cold vapor, enters a compressor. Squeezing a gas raises both its pressure and its temperature, much as a bicycle pump warms as you use it. The compressor can push the refrigerant well above 60°C, hotter than your radiators need.\n\n3. Condensation (inside). The hot vapor flows through an indoor coil. Room air or water passes over it, the refrigerant gives up its heat, and it condenses back into a liquid. That released heat warms your home.\n\n4. Expansion. The liquid passes through a valve that drops its pressure, and it returns to the outdoor coil to repeat the cycle.\n\nWhy this can beat burning fuel: a heat pump delivers more heat than the electricity it consumes. The ratio is called the coefficient of performance (COP). Typical air-source units deliver roughly 2.5 to 4 units of heat per unit of electricity at moderate outdoor temperatures. A gas boiler, even a high-efficiency condensing model, converts fuel to heat at no more than about 90 to 98 percent, and can never exceed 100 percent. The heat pump can exceed the equivalent figure because it collects free heat from outside.\n\nThe COP falls as the weather gets colder. The outdoor temperature is then further from the refrigerant's boiling point, so the compressor works harder for less heat. Modern cold-climate heat pumps keep operating at -15°C or below, but their output drops in deep cold. Units are usually sized for the design temperature of your location, often with a backup heater for the few coldest days.\n\nWinter operation also includes defrosting. When the outdoor coil runs below freezing, frost builds up, so the system briefly reverses to melt it. You may see steam from the unit and notice short pauses in heating. This is normal.\n\nWhat this means for your decision:\n\n- Running cost depends mainly on the ratio of your electricity price to your gas price. Where electricity is much more expensive than gas, running costs can be higher despite the efficiency. Compare current local tariffs.\n- Radiator temperature matters. Heat pumps work best with flow temperatures of roughly 35 to 50°C, while many older boilers run radiators at 70 to 80°C. Existing radiators may need upgrading, or the house may not feel warm enough without changes. A heat loss survey will show what your home needs.\n- Insulation and drafts affect performance. A well-insulated home needs a smaller, cheaper unit and runs more efficiently.\n- Most heat pumps can also cool the home in summer, which may be a useful extra.\n\nIn short, a heat pump extracts heat from cold outdoor air, raises its temperature with a compressor, and releases it indoors. Its efficiency is why it can outperform a boiler, but your actual savings depend on local energy prices, your home's insulation, and whether your heating system can run at lower temperatures."
+}

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a430daed5e5d01279",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28199,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1584,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:43:01.375Z",
+  "valid": true,
+  "text": "In the late summer of 1854, a terrible illness struck the crowded streets of Soho, in London. Cholera, a disease that causes violent vomiting and diarrhea and can kill a healthy person within a day or two, had visited England before. Within days of the first cases on 31 August, hundreds of people living near Broad Street were dead. Families fled the area. Shops closed. Those who stayed buried neighbors and waited to see who would be next.\n\nNobody knew what caused cholera. The reigning belief, held by most doctors and officials, was the miasma theory. This held that diseases spread through bad air, the foul smell rising from rotting waste, sewers and graveyards. London in the 1850s certainly stank. The Thames was an open drain, and cesspits overflowed beneath crowded houses. It was easy to believe that the stench itself was poisonous.\n\nOne physician doubted this. John Snow, a doctor who lived a short walk from Broad Street, had been thinking about cholera for years. He was a careful, sober man who did not drink alcohol, and he was already well known for his work in anesthesia, having given chloroform to Queen Victoria during childbirth. Snow noticed something about cholera that the bad air theory could not explain. The disease attacked the gut first, not the lungs. If people were breathing in a poison, why did it begin in the stomach? He suspected that cholera was swallowed, carried in something people ate or drank, and that it multiplied inside the body before passing out again in the waste of the sick.\n\nSnow had tested this idea in an earlier outbreak. During the epidemic of 1849 he had noted that deaths clustered among customers of certain water companies. The germ theory of disease, the idea that tiny living organisms cause illness, had not yet won acceptance, so Snow could not point to a culprit he could see. But he trusted patterns, and when the outbreak erupted almost on his doorstep, he went looking for one.\n\nHe began with the simplest method available, which was to knock on doors. Working from the official lists of the dead, he visited homes and asked where the victims had gotten their drinking water. He mapped the deaths street by street, marking each one with a small bar. The bars piled up around a single spot, the public water pump on Broad Street. Nearly everyone who had died lived closer to that pump than to any other.\n\nThe exceptions mattered just as much as the rule. Snow found that a workhouse near the pump, home to more than five hundred people, had suffered very few deaths. Its managers explained that it had its own well inside the building. A brewery on the same street had lost no workers at all. The men there were given free beer, and they never drank from the pump. Meanwhile, a woman living far away in Hampstead had died of cholera. Her family told Snow that she liked the taste of the Broad Street water so much that she had it carried to her by cart. A niece who drank the same water also fell ill and died.\n\nBy 7 September Snow felt he had enough. He took his evidence to the local board of guardians, the officials who ran the parish. He did not have proof that would satisfy a scientist, but he asked them to remove the pump handle, which would make the pump useless. The officials were skeptical, yet they agreed. The handle came off the next day.\n\nThe outbreak was already fading by then, though. Many residents had fled, and the number of new cases had been dropping before the handle was removed. For this reason, historians still debate how much the removal actually saved. Snow himself admitted that the epidemic might have ended by itself.\n\nWhat turned his case from suggestive to powerful was the follow-up. Together with a local clergyman, Henry Whitehead, who knew the neighborhood and was at first a skeptic, Snow dug further. Whitehead found what may have been the source. A baby living at 40 Broad Street had died of a diarrheal illness just before the outbreak, and the mother had washed the infant's soiled cloths into a cesspit only a few feet from the pump's well. Examination showed that the well's brick lining was cracked, allowing seepage from the filth to reach the water.\n\nSnow published his map and his argument, but the authorities were not persuaded. An official inquiry concluded that the miasma theory still held, and Snow died in 1858, never knowing that he would be proved right. Only later, as germ theory took hold and the cholera bacterium was identified, did his work come to be seen as a founding moment in epidemiology, the science of how disease spreads through populations. London eventually built proper sewers, and cholera never returned.\n\nSnow's lasting lesson was less about one pump than about a method. He counted, he mapped, he asked questions of ordinary people, and he took seriously the cases that did not fit. Long before anyone could see the germ, patient attention to patterns pointed to the cause."
+}

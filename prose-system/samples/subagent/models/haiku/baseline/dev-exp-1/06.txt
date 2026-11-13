@@ -1,0 +1,29 @@
+**How a Heat Pump Heats a Cold House**
+
+A heat pump does not create heat. It moves heat from one place to another, which is why it can warm a house when the outside air feels cold. Cold air still contains heat, because heat is the energy of moving molecules and everything above absolute zero (about -273 °C) holds some. The task is to collect that heat and concentrate it indoors.
+
+It does this with a refrigerant, a fluid that boils at very low temperatures. The cycle has four steps.
+
+1. **Absorb.** Outside air is blown across a coil in the outdoor unit that contains low-pressure refrigerant. At low pressure, the refrigerant boils far below freezing, so even chilly air is warm enough to make it evaporate into a gas.
+
+2. **Compress.** A compressor squeezes the gas. Compressing a gas raises its temperature, the same reason a bicycle pump gets warm. The refrigerant leaves the compressor much hotter than the house.
+
+3. **Release.** The hot refrigerant flows through a heat exchanger indoors. It warms room air or the water in radiators or underfloor pipes, and it condenses back into a liquid as it cools.
+
+4. **Expand.** The liquid passes through a valve that sharply drops its pressure and temperature. It is now colder than the outside air, and the cycle repeats.
+
+A fridge works on the same principle. It pulls heat out of its interior and releases it into your kitchen. A heat pump runs the process so that it pulls heat from outside and releases it inside.
+
+Efficiency is why this matters. A modern condensing gas boiler converts fuel to heat at roughly 90 to 95 percent efficiency, and it cannot do better than the fuel it burns. A heat pump uses electricity to run the compressor and fans, but the heat it delivers includes the heat it moved. Installers often quote a seasonal performance figure of around 2 to 4 units of heat for each unit of electricity. Treat that as a rough guide, not a guarantee.
+
+Performance drops as the outside temperature falls. The system has to bridge a bigger temperature gap, so the compressor works harder and produces less heat per unit of electricity. Cold-climate models still operate in severe cold, but the margin narrows. Many installations include an electric backup element, or keep an existing boiler for the coldest days.
+
+Frost is another practical point. In heating mode, the outdoor coil can ice over, so the unit periodically reverses briefly to melt it. You may see steam or notice a short pause in heat output. This is normal.
+
+For your decision, three questions matter most.
+
+- **Running cost.** The bill depends on the ratio of electricity price to gas price where you live, as much as on efficiency. Compare your actual tariffs.
+- **Insulation.** A well-insulated house needs less heat, which makes a heat pump cheaper to run and easier to size.
+- **Emitters.** Heat pumps work best at lower water temperatures than boilers use. Older radiators may need upgrading or resizing.
+
+Installation usually costs more than a boiler replacement, though government grants or incentives may offset part of it. Ask an installer for a heat-loss calculation for your house before you decide. That figure, not a generic rule of thumb, will show whether a heat pump suits your home.

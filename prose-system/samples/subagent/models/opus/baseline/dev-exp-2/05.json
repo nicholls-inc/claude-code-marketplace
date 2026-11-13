@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9be3e17f43ca13e2",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73730,
+    "output_tokens": 1313,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:11:31.540Z",
+  "valid": true,
+  "text": "**Time's Awkward Extra Second, and Why It Is Going Away**\n\nFor most of human history, the day was set by the sun. Noon was when the sun stood highest, and the hours were simply fractions of one turn of the Earth. That changed in the middle of the twentieth century, when scientists built atomic clocks. These clocks measure time by the steady vibrations of atoms and are accurate to within a second over millions of years.\n\nThe trouble is that the Earth is not that accurate. The planet's spin wanders a little. The tides act as a slow brake. Earthquakes, melting ice sheets and movements deep in the planet's molten core can speed it up or slow it down by tiny amounts. As a result, a day measured by the Earth's rotation doesn't line up exactly with a day measured by atoms.\n\nThe leap second was the compromise. Since 1972, the world's official time, Coordinated Universal Time (UTC), has followed the atomic clocks. Whenever the gap between atomic time and the Earth's rotation got close to nine-tenths of a second, the scientists who monitor the planet's spin told the world to add one extra second. Clocks would read 23:59:60 before rolling over to midnight. Twenty-seven leap seconds have been added in all, the most recent on New Year's Eve 2016.\n\nFor astronomers and navigators, that one second kept clock time tied to the sky. For the computers that now run much of modern life, it was a headache. A minute with 61 seconds is something many systems were never built to expect. Leap seconds have crashed websites, disrupted airline booking systems and caused outages at internet companies. Because leap seconds come at irregular intervals, announced only about six months ahead, software can't be prepared for them in advance. Some tech firms stopped adding the second all at once and instead \"smeared\" it across a whole day, so different organisations ended up with slightly different times.\n\nIn November 2022, the General Conference on Weights and Measures, the international body that oversees units of measurement, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which manages global radio and timing signals, endorsed the change the following year. The gap between atomic time and the Earth's rotation will be allowed to grow much larger, probably to around a minute, which could take a century or more. Scientists are still working out how and when that larger gap would eventually be corrected.\n\nThe change also avoids a newer problem. The Earth has recently been spinning slightly faster, which raised the prospect of the first-ever \"negative\" leap second: a second removed from the clock. No computer system has ever had to handle that.\n\nYou won't notice any of this. The sun will drift by less than a second each year, and by the time the difference is noticeable, today's clocks will be long gone."
+}

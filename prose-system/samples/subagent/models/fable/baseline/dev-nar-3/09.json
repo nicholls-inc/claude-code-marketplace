@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a841abfb48315c03b",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25356,
+    "cache_read_input_tokens": 48355,
+    "output_tokens": 1112,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:23:34.356Z",
+  "valid": true,
+  "text": "Shortly after half past noon on January 15, 1919, the North End of Boston was enjoying an unseasonably mild day. The temperature had climbed above 40 degrees Fahrenheit after a bitter cold snap, and along Commercial Street workers sat outside eating lunch, children gathered firewood, and freight wagons rattled past the waterfront. Towering over them was a steel tank fifty feet tall and ninety feet across, owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It held about 2.3 million gallons of molasses, destined to be distilled into industrial alcohol.\n\nThe tank had been troubled from the start. Built in haste in 1915 to meet wartime demand, it was never properly tested by being filled with water. It leaked so badly that neighborhood children collected the drippings in pails, and the company's response was reportedly to paint it brown so the streaks would not show. Residents said they heard it groan when it was filled.\n\nThat afternoon it failed. Witnesses described a deep rumble and a rapid series of sharp reports, like machine-gun fire, as the rivets shot out of the seams. The steel walls tore apart and a wave of molasses, estimated at twenty-five feet high at its peak, surged outward at around thirty-five miles an hour.\n\nNothing in its path stood. The wave crushed wooden houses, swept a firehouse off its foundation, and buckled the steel supports of the elevated railway on Atlantic Avenue, where a train had passed only moments before. Wagons, horses, and people were picked up and hurled along. Those who were not killed by the impact or by flying debris found themselves trapped in a thick brown mass that cooled and stiffened in the winter air, making it harder with every minute to move or breathe.\n\nRescuers arrived quickly. Cadets from the training ship Nantucket, docked nearby, ran into the wreckage, followed by police, firefighters, Red Cross nurses, and soldiers. They waded waist-deep through the syrup, pulling out survivors and struggling to tell the living from the dead. The search went on for days. In the end 21 people died and about 150 were injured. The victims included laborers, teamsters, a firefighter, and two ten-year-old children. Many horses were also killed.\n\nCleaning up took weeks. Crews washed down the streets with salt water pumped from the harbor, which stayed brown until summer. Rescuers and sightseers tracked the residue across the city, onto streetcars, into homes and offices. Bostonians claimed for decades that on hot days the North End still smelled of molasses.\n\nThe company blamed anarchist saboteurs, pointing to bombings of the period. The victims and their families sued, and the hearings that followed ran for years, with testimony from hundreds of witnesses. In 1925 the court-appointed auditor concluded that the tank had been structurally unsound: its walls were too thin and its design inadequate for the load. The company paid out roughly $628,000 in settlements.\n\nThe disaster had a lasting effect. Massachusetts, and later other states, tightened the rules on construction, requiring that engineers certify plans and that building inspections be taken seriously. A small plaque near the site today marks where the tank stood."
+}

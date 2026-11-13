@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a981feb2dec475cd0",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28219,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 905,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:15:44.629Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged by forcing current through it in the direction opposite to discharge, which pushes lithium ions out of the positive electrode, across an electrolyte-soaked separator, and into the graphite of the negative electrode. The cell behaves roughly like a voltage source in series with a small resistance, so the terminal voltage during charging equals the open-circuit voltage plus the current times the internal resistance. The open-circuit voltage rises as the negative electrode fills with lithium, from about 3.0 V when empty to about 4.2 V when full for a typical cobalt-based cell. Because this rise is what the charger must work against, the voltage limit is the real boundary on how far charging can go.\n\nPractical chargers use a constant-current, constant-voltage profile. In the first phase the charger holds the current fixed, often between 0.5 and 1 times the cell capacity per hour, and lets the terminal voltage climb. This phase delivers most of the charge, typically 70 to 80 percent, and the cell voltage rises slowly through the middle of the range because the electrode materials hold their potential fairly flat while lithium is inserted. When the terminal voltage reaches the upper limit, the charger stops regulating current and instead holds the voltage at that limit. This second phase is where charging visibly slows, and the current decays roughly exponentially toward a small cutoff value, commonly about a tenth or less of the original current.\n\nThe slowdown has two linked causes. The first is the voltage arithmetic. Once the terminal voltage is clamped, any rise in the open-circuit voltage as the cell fills reduces the difference left over to drive current across the internal resistance. As the cell approaches full, that difference shrinks toward zero, and the current falls with it. Holding a higher voltage would speed this up, but it would overcharge the surface of the electrode and drive damaging side reactions.\n\nThe second cause is that the cell is not uniform inside. Lithium must diffuse through the solid graphite particles, which is slow, so at high current the particle surfaces fill before the interiors do. The terminal voltage reflects the surface state, so it reaches the limit while the bulk is still partly empty. During the constant-voltage phase the surfaces stay near full and lithium gradually diffuses inward, which lets more charge be accepted, but only at a rate set by diffusion. A related hazard is lithium plating, where metal deposits on the graphite surface instead of inserting into it when the surface potential drops too low, which is most likely at high rates, at low temperature, and near full charge. The tapering current therefore protects the cell as well as reflecting its physics."
+}

@@ -1,0 +1,19 @@
+Stop Estimating. Start Shipping Small.
+
+Every engineer has lived this scene. A manager asks how long a feature will take. You hesitate, then say six weeks, knowing the number is a guess dressed up as a commitment. Twelve weeks later the feature ships, and everyone agrees the estimate was "off." The estimate was never going to be right. Teams should stop producing them.
+
+The case against estimating begins with the quality of the numbers. Software work is dominated by unknowns that only reveal themselves once you are inside the code. The hidden coupling, the flaky dependency and the requirement that turns out to be two requirements are invisible at planning time. Decades of project data show the same pattern. Estimates cluster around optimism, and the errors are not random. They skew late, and they skew badly on exactly the work that matters most, which is the novel work.
+
+Meanwhile the estimate itself does damage. Once a number exists, it becomes a target. Engineers feel pressure to hit it, so they cut corners on tests, skip the refactor and quietly stop mentioning surprises. Managers anchor on it, repeat it upward, and promise it to customers. When reality diverges, the conversation turns into a negotiation about blame instead of a conversation about the work. We spend hours in planning meetings generating figures that we then spend more hours defending.
+
+Defenders of estimation say the number is not the point, the thinking is. Fair enough. Breaking work into pieces and surfacing risks is valuable. But you can do that without attaching durations. Ask what could go wrong, what we do not know, and what the smallest useful slice looks like. Keep the discussion, drop the arithmetic.
+
+What replaces estimates is flow. Cut work into small pieces, each shippable in a few days. Measure how many pieces actually finish per week. That throughput is an observed fact rather than a prediction, and it forecasts far better than any planning poker session. If a manager needs to know when something will land, count the remaining slices and look at the historical rate. The answer comes with honest error bars, and it costs minutes instead of days.
+
+Small slices also change behavior. When the unit of work is two days, there is little room for a nasty surprise to hide. Problems surface early, scope gets negotiated while it is still cheap, and the team can reorder priorities without a ceremony about re-baselining the plan.
+
+The objection from the business side is that planning requires dates. It does, but dates should come from commitments to scope and appetite, not from forecasts of effort. Say we will spend four weeks on this problem and ship whatever is best at that point. That is a decision, and it is something a team can actually keep. An estimate is a prediction nobody can.
+
+Some contexts, like fixed contracts or regulated launches, will still demand a number. Give them a range based on throughput and be candid about the uncertainty. But for most teams, most of the time, estimating is ritual. It consumes energy, corrodes trust, and produces data worse than what the team's own history would give for free.
+
+Stop estimating. Slice thin, ship often, and let the record speak.

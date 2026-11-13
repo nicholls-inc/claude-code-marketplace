@@ -1,0 +1,13 @@
+**Why the World Is Giving Up the Leap Second**
+
+Most of us think of a day as exactly 24 hours long. The Earth sees it differently. Our planet's spin is slightly uneven. The pull of the Moon on the oceans slows it down. Movements of the molten core, melting ice caps and even large earthquakes nudge it one way or the other. So the day measured by the sun drifts slightly out of step with the day kept by our clocks.
+
+Since 1967 the official second has been defined by atomic clocks, which measure the vibrations of caesium atoms and stay steady to within a billionth of a second a day. That left two kinds of time: atomic time, which never wavers, and astronomical time, which follows the Earth. In 1972 timekeepers settled on a compromise. The world's civil time, called Coordinated Universal Time or UTC, would run on atomic clocks. Whenever it drifted close to 0.9 seconds away from the Earth's rotation, one extra second would be added to bring the two back together.
+
+That extra second is the leap second. Clocks that follow the rule tick from 23:59:59 to 23:59:60 before reaching midnight, usually on 30 June or 31 December. An international scientific service in Paris watches the Earth's rotation and announces each one about six months ahead. Twenty-seven have been added so far. The last came on New Year's Eve 2016.
+
+To a person, a second is nothing. To the computers that run the modern world, it is a nuisance. Most software assumes a minute always has 60 seconds. In 2012 a leap second crashed websites and disrupted an Australian airline's booking system. In 2017 one caused an outage at Cloudflare, a major internet company. Financial markets, power grids, telecoms networks and satellite navigation all depend on precise and consistent timing, and engineers have had to invent awkward workarounds, such as "smearing" the extra second across a whole day.
+
+A new problem has made things worse. In recent years the Earth has been spinning slightly faster, so the next correction might need to be a negative leap second, with a second taken away. That has never been done, and few computer systems have ever been tested for it.
+
+In November 2022 the General Conference on Weights and Measures, the body that oversees the international system of units, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which coordinates radio and time signals, endorsed the move in 2023. Clocks and the sun will be allowed to drift further apart, probably by up to a minute, which could take a century or more to build up. Details of how any future gap will be handled are still being worked out. For anyone not running a computer network, the change will go unnoticed. The sun will still rise when it always has.

@@ -1,0 +1,77 @@
+SubagentHandback({message: `# How Strangers Agree on a Secret in Public
+
+## The problem
+
+Imagine you want to send a private message to someone you have never met. You can't whisper, because you're not in the same room. Everything you say travels along a line that anyone can tap, and you have no password you both already know. It sounds impossible. How can two people agree on a secret when every word they exchange is overheard?
+
+For most of history, the answer was that they couldn't. Secret codes needed a shared key, such as a codebook or a password, and that key had to be handed over in person first. In the 1970s a few mathematicians found a way around this. The result is called public-key cryptography, and it protects almost everything you do online, from banking to messaging.
+
+The trick rests on one idea. Some mathematical jobs are easy to do and nearly impossible to undo. Once you see that, the rest follows.
+
+## Easy one way, hard the other
+
+Here is a small example. Take two large prime numbers, say 7,919 and 7,927, and multiply them. With a calculator, you get 62,771,... well, a definite answer, in a second. Now suppose I give you only the answer and ask which two primes produced it. You would have to guess and test, and keep going until you got lucky. Multiplying is quick. Un-multiplying is slow, and the gap widens enormously as the numbers grow.
+
+Mathematicians call this a one-way function. The cryptography we'll look at uses a close cousin, built on clock arithmetic.
+
+## Clock arithmetic
+
+On a clock, 10 o'clock plus 5 hours is 3 o'clock, not 15. When you pass 12, you wrap around to the start. Mathematicians call this "modular arithmetic" and write it as "mod". On a 12-hour clock, 15 mod 12 = 3.
+
+We can use any clock size. Let's use a clock with 23 positions. Then 30 mod 23 = 7, because 30 is one full lap of 23 plus 7 more.
+
+Now consider powers. 5 to the power of 3 means 5 x 5 x 5 = 125. On our 23-position clock, 125 mod 23 = 10, since 23 x 5 = 115 and 125 - 115 = 10.
+
+Going forward is simple: pick a power, work out the answer. But going backward is hard. If I tell you that 5 raised to some secret power gives 8 on a 23-clock, can you find the power? With a clock this small, yes, you can try them all in a minute. But when the clock has hundreds of digits, the answers jump around so unpredictably that no known shortcut exists. Trying every possibility would take longer than the age of the universe.
+
+## The paint analogy
+
+Before the numbers, here is a picture. Suppose Alice and Bob each have a private colour, and they also share one public colour, yellow, which everyone can see.
+
+Alice mixes her private colour (red) with the yellow and sends the result across the line. Bob mixes his private colour (blue) with the yellow and sends that across. A spy sees both mixtures and the yellow.
+
+Now Alice takes Bob's mixture and adds her private red. Bob takes Alice's mixture and adds his private blue. Both end up with the same final colour: yellow, red and blue all together. The spy can't get there, because un-mixing paint to recover the separate private colours is practically impossible. The spy would need red or blue, and neither was ever sent.
+
+That is the whole idea. The numbers just make it precise.
+
+## The same idea with numbers
+
+This method is called Diffie-Hellman key exchange, after two of its inventors. We'll use small numbers so you can check the arithmetic yourself.
+
+**Step 1: public choices.** Alice and Bob openly agree on a clock size, 23, and a base number, 5. The spy hears this. It doesn't matter.
+
+**Step 2: private choices.** Alice picks a secret number, 6. She tells nobody. Bob picks his own secret, 15, and keeps it to himself as well.
+
+**Step 3: mix and send.** Alice computes 5 to the power 6 on the 23-clock. That is 15,625, and 15,625 mod 23 = 8. She sends 8 to Bob. Bob computes 5 to the power 15 on the same clock and gets 19. He sends 19 to Alice. The spy hears both 8 and 19.
+
+**Step 4: mix again.** Alice takes Bob's 19 and raises it to her secret power, 6. She gets 19^6 mod 23 = 2. Bob takes Alice's 8 and raises it to his secret power, 15. He gets 8^15 mod 23 = 2.
+
+They have both arrived at 2. Neither ever transmitted it.
+
+Why does it work? Because raising a power to a power just multiplies the exponents. Alice's final number is 5 raised to (15 x 6), and Bob's is 5 raised to (6 x 15). Multiplication doesn't care about order, so the two results are the same.
+
+## What the spy has, and hasn't
+
+The spy knows the clock size (23), the base (5), Alice's message (8) and Bob's message (19). To find the shared secret, the spy needs one of the private numbers, 6 or 15. To get one, the spy must work backward from "5 to some power gives 8 on a 23-clock". With a clock this small, that's trivial. Real systems use clocks with more than six hundred digits. The spy would face a search space so vast that all the computers on Earth, running for millennia, would make no useful dent in it.
+
+So Alice and Bob, who have never met, now share a number the spy cannot work out. They can use it as the key for an ordinary fast code, scrambling every later message with it.
+
+## The lock-and-key version
+
+Diffie-Hellman agrees a secret between two people. A second approach, called RSA after its inventors, works more like a padlock.
+
+Picture Bob making thousands of identical open padlocks and leaving them in a public place. Only Bob has the key that opens them. Alice takes one, puts her message in a box, snaps the padlock shut, and sends the box. Even Alice cannot reopen it. Nor can the spy. Only Bob, with his private key, can.
+
+In mathematical terms, the padlock is Bob's public key and the key is his private key. They're a matched pair, built from those two large primes we met earlier. Anyone can use the public half to lock a message. Only the holder of the private half, who knows the primes, can unlock it. The whole scheme depends on the fact that multiplying primes is easy, and splitting the product back into primes is not.
+
+## An honest caveat
+
+There is one real weakness, and it's worth being straight about. Public-key methods guarantee that nobody listening in can read the secret. They don't, on their own, prove who you are talking to. If a spy sat in the middle, pretending to be Bob to Alice and pretending to be Alice to Bob, each would agree a secret with the spy rather than with each other.
+
+The fix is for Bob's public key to be vouched for by someone trusted, in a certificate signed by an authority that your browser already knows. That is what the padlock symbol in your address bar represents.
+
+## Why it matters
+
+Next time you buy something online, your device and the shop's server run an exchange very like the one above, in a fraction of a second. They agree a secret through a line that anyone could tap, then use it to lock everything that follows. No meeting, no handover, no shared password.
+
+The idea is surprisingly simple. Do something easy in public, keep the hard-to-undo part private, and let arithmetic make sure that two people end up with the same answer while everyone else is left with nothing useful.`})

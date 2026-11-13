@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8a346a38a38cd42b",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28161,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1141,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:01:09.210Z",
+  "valid": true,
+  "text": "Shortly after half past noon on January 15, 1919, the North End of Boston was enjoying an unseasonably mild day. The temperature had climbed above 40 degrees Fahrenheit after a bitter cold snap, and workers along Commercial Street were eating lunch outdoors. Above them loomed a steel tank fifty feet tall and ninety feet across, owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It held about 2.3 million gallons of molasses, destined to be distilled into industrial alcohol.\n\nThe tank had been troubled from the start. Built in haste in 1915 to meet wartime demand for munitions-grade alcohol, it was never properly tested by filling it with water. It leaked so persistently that neighborhood children collected the drippings in pails, and the company is said to have painted it brown to disguise the streaks. Residents reported that it groaned whenever it was filled.\n\nThat afternoon, it failed. Witnesses described a deep rumble and a rapid series of sharp cracks, like machine-gun fire, as the rivets shot out of the steel plates. The walls split apart and a wave of molasses, estimated at twenty-five feet high at its peak, burst into the streets at roughly thirty-five miles an hour.\n\nNothing in its path held. The wave crushed buildings, knocked a firehouse off its foundation, and buckled a steel support of the elevated railway on Atlantic Avenue, where a train had passed only moments earlier. Freight cars, wagons, and horses were swept along. People were thrown against walls or carried off and buried. As the molasses spread and cooled in the winter air, it thickened, trapping those caught in it and making every movement a struggle.\n\nRescuers arrived within minutes. Cadets from the training ship USS Nantucket, docked nearby, ran into the waist-deep muck, followed by police, firefighters, Red Cross nurses, and Army and Navy personnel. They worked through the night and for days afterward, pulling survivors and bodies from the wreckage. The search was agonizingly slow; some victims were not found for days, and one was recovered from the harbor months later. In all, twenty-one people died, among them laborers, teamsters, a firefighter, and two ten-year-old children. About 150 were injured. Many horses were so hopelessly mired that they had to be shot.\n\nCleanup took weeks. Crews used salt water pumped from fireboats, along with sand, to cut through the hardened syrup. Rescuers and curious onlookers tracked the residue across the city, onto streetcars, into homes and offices. Boston Harbor ran brown until summer, and for decades residents claimed that on hot days the North End still smelled sweet.\n\nThe company blamed anarchist saboteurs. Victims' families brought suit, and after years of hearings and testimony from hundreds of witnesses, a court-appointed auditor concluded in 1925 that the tank was structurally unsound: its steel walls were too thin and its design had never been reviewed by a qualified engineer. The company paid roughly $628,000 in settlements.\n\nThe disaster left a lasting mark. Massachusetts, and later other states, began requiring that engineers certify plans for major structures and that those plans be filed with authorities. Today a small plaque near Langone Park marks the site."
+}

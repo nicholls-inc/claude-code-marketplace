@@ -1,0 +1,19 @@
+Lithium-ion cells are charged with a two-stage protocol called constant-current/constant-voltage (CC-CV). The slowdown near full is a consequence of that protocol and of the physics behind it.
+
+**Stage 1: constant current (CC).** The charger forces a fixed current, typically 0.5 to 1 C (C is the current that would charge the cell in one hour). Current drives lithium ions out of the cathode, for example a layered oxide, across the electrolyte and into the graphite anode. This is called intercalation. Electrons travel through the external circuit. During this stage the terminal voltage rises gradually from about 3.0 V toward 4.2 V. The charger raises its output voltage as needed to hold the current steady. Most of the capacity, roughly 70 to 80 percent, goes in during this stage.
+
+**Stage 2: constant voltage (CV).** When the terminal voltage reaches the upper limit (about 4.2 V for common chemistries), the charger holds that voltage and lets the current fall on its own. Charging ends when the current drops to a cutoff, usually 0.05 to 0.1 C. Current tapers in a roughly exponential decay, so the last 20 percent of capacity can take as long as the first 80 percent.
+
+**Why the current has to fall.** The voltage limit is a safety boundary. If the charger pushed full current past it, the anode potential would fall close to the potential at which lithium metal plates out (0 V versus Li/Li+). Plated lithium is dendritic, consumes cyclable lithium, and can cause internal short circuits. High cathode potential also accelerates electrolyte oxidation and structural damage.
+
+The measured terminal voltage is not the electrode voltage. It is the open-circuit voltage (OCV, set by state of charge) plus the current times the internal resistance. That resistance has several parts:
+
+- ohmic resistance of the electrolyte and current collectors
+- charge-transfer resistance at the electrode surfaces
+- diffusion limits, because lithium must migrate through solid particles slowly
+
+As the cell fills, OCV climbs toward 4.2 V. Holding terminal voltage at 4.2 V then leaves a shrinking voltage margin, V_limit - OCV, to drive current through the resistance. By Ohm's law the current must fall as that margin shrinks, so the taper is automatic.
+
+Diffusion makes it worse. Near full, the graphite surface is saturated and the remaining sites are deep inside the particles. Lithium must diffuse inward through a concentration gradient. The surface reaches its limit before the particle interior does, and the CV phase gives time for the gradient to relax. Forcing more current would only push the surface potential into the plating regime.
+
+**Practical consequences.** Fast chargers deliver most of their energy in the CC stage, which is why a car may reach 80 percent quickly and then slow sharply. Lower temperature raises resistance and slows diffusion, so charging is further limited or derated in the cold. Stopping at a lower voltage, such as 4.1 V, shortens the CV phase and extends cell life at the cost of some capacity.

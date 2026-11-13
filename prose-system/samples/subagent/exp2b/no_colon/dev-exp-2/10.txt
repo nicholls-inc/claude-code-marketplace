@@ -1,0 +1,15 @@
+A leap second is a one-second adjustment added to official clock time every so often, so that our clocks stay in step with the spinning Earth.
+
+To see why it exists, you need to know that there are two ways of measuring time. The first is astronomical. A day is the time it takes Earth to rotate once, and for most of history that was how we kept the clock. The second is atomic. Since the 1950s, scientists have counted time using the vibrations of caesium atoms, which tick with astonishing regularity. A second is now defined by those ticks, not by the planet.
+
+The trouble is that Earth is a poor timekeeper by comparison. Tides, the churning of the molten core, the movement of ice and ocean, and even earthquakes nudge its rotation. Over the long run the planet has been slowing, so days have grown slightly longer than the atomic clocks assume. Left alone, the two systems would drift apart.
+
+In 1972 the world adopted a compromise. Civil time, known as Coordinated Universal Time, would follow the atomic clocks but be nudged by a whole second whenever it strayed too far from the Sun. Usually this meant adding a second at the end of June or December, so that a clock would run from 23:59:59 to 23:59:60 before ticking over to midnight. Twenty-seven have been added since 1972, the most recent at the end of 2016.
+
+For ordinary people, one extra second is trivial. For computers, it can be a nightmare. Many systems assume every minute has exactly 60 seconds, and a sixty-first can cause software to crash, freeze or record events in the wrong order. Outages at major websites and data centres have been traced to leap seconds. Banks, telecom networks, satellite navigation and power grids all depend on precisely synchronised clocks, and engineers have spent years writing special workarounds.
+
+That is the heart of why timekeepers want to stop. In 2022 the General Conference on Weights and Measures, the international body that governs the definition of units, voted to abandon leap seconds by 2035. The decision reflects a view that the benefits no longer justify the risks. Few people need civil time to match the Sun to the second, while a great many systems need smooth, predictable time.
+
+Earth has also complicated matters. In recent years its rotation has been speeding up slightly, which raised the odd prospect of a negative leap second, removing a second instead. That had never been tried and could be even more disruptive to software.
+
+After 2035, the gap between clock time and the Sun will be allowed to grow, and a fix will be considered only once it approaches a minute or more, perhaps a century away.

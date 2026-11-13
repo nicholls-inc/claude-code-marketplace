@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "afa009e3a487456af",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72590,
+    "output_tokens": 1181,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:20:00.165Z",
+  "valid": true,
+  "text": "For most of history, people kept time by the sun. A day was the time it took Earth to turn once, and a second was a tiny slice of that. Then scientists built atomic clocks, which count seconds with astonishing steadiness, drifting by less than a second over many millions of years. The trouble is that Earth is a much worse timekeeper. Its spin wobbles and slows a little as the moon's pull drags on the oceans, and storms, melting ice and movements deep inside the planet nudge it too.\n\nThat left two clocks that slowly disagreed. One was the steady atomic clock. The other was the turning planet. To keep them roughly in step, the world agreed in 1972 on a system called Coordinated Universal Time. Whenever the gap threatened to grow beyond about nine tenths of a second, officials would add one extra second to the end of a chosen day. That is a leap second. It works like a leap day in the calendar, only far smaller. Since 1972 there have been 27 of them, the last arriving at the end of 2016.\n\nFor ordinary people a leap second is almost invisible. For computers it is a headache. Most software assumes every minute has exactly 60 seconds, so an extra one can confuse systems that must agree on the exact order of events. Leap seconds have been blamed for crashes and outages at websites, airline booking systems and other services. Big technology firms have invented workarounds, such as stretching the extra second thinly across a whole day, but each company does it differently, which creates new risks of its own. Because leap seconds arrive without any predictable pattern, nobody can program for them years ahead.\n\nIn 2022 the international body that sets the world's measurement standards voted to stop the practice by 2035. Timekeepers will let the gap between atomic time and the sun's time grow far larger than before, likely for at least a century, before anyone needs to correct it. Whatever fix eventually comes, it may be handled in some other way that does not require a sudden jump.\n\nThere is another reason for the change. In recent years Earth has been spinning slightly faster, and some days have been the shortest on record. If that continued, clocks might need a negative leap second, where a second is removed rather than added. That has never been tried, and engineers fear it could cause far more trouble than an added one.\n\nScientists, navigators and astronomers who rely on the sun's position will have to adjust. For everyone else, noon will keep falling at noon for generations to come."
+}

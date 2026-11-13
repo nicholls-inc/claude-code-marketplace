@@ -1,0 +1,15 @@
+**The Last Leap Second? Why the World's Timekeepers Are Letting the Clocks Drift**
+
+Most of us never notice it. Every so often, though, the world's official clocks have paused for one extra second. Instead of rolling from 23:59:59 to midnight, they read 23:59:60. That extra tick is a leap second, and it is on its way out.
+
+Leap seconds exist because humanity keeps time in two ways that don't quite agree. The first is the Earth itself. For most of history a day was one turn of the planet, with the sun as the clock. The second is the atomic clock. Since the 1960s the second has been defined by the very steady vibrations of caesium atoms, and hundreds of these clocks around the world together produce Coordinated Universal Time (UTC). That is the time your phone, your bank and the internet run on.
+
+The trouble is that the Earth is an unreliable timepiece. Tides, shifting ice, earthquakes and movements in the planet's molten core all make it speed up or slow down slightly. Over months and years, the time told by the Earth's rotation drifts away from atomic time. In 1972 scientists agreed to stop the gap from passing nine-tenths of a second. Whenever it got close, they would add a leap second to UTC so the Earth could catch up. Twenty-seven have been added since then. The most recent came on 31 December 2016.
+
+That neat compromise has become a headache in a world run by computers. Leap seconds can't be predicted years in advance. They are announced only about six months ahead, and plenty of software was never built to handle a minute with 61 seconds. In 2012 a leap second helped knock out websites including Reddit and disrupted the booking systems of the airline Qantas. In 2017 one caused an outage at the internet company Cloudflare. Some big tech firms got around the problem by quietly "smearing" the extra second across a whole day. As a result, different systems ended up keeping slightly different time, which is the very thing a global standard is supposed to prevent.
+
+So in November 2022 the General Conference on Weights and Measures, the international body that oversees units of measurement, voted to stop adding leap seconds by 2035. The UN's telecommunications agency, the ITU, agreed in 2023. Atomic time and the Earth's rotation will be allowed to drift further apart, probably by as much as a minute, before any correction is made. That could take a century or more.
+
+There is a new twist, too. In recent years the Earth has been spinning slightly faster. If that continues, timekeepers may one day face something never tried before: taking a second away. Engineers would rather not find out what that would break.
+
+For ordinary people, very little will change. The sun will still rise at about the time your clock says it should. A slip of a few seconds a decade is far too small for anyone to notice in daily life. What changes is that the clocks inside our computers will finally get the steady, predictable timescale they need.

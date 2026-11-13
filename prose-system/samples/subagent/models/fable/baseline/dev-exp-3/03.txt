@@ -1,0 +1,65 @@
+How two strangers can agree on a secret while everyone listens
+
+Suppose Alice and Bob have never met, and every word they exchange can be overheard by a third person, Eve. They want to end up with a number that both of them know and Eve does not. They can then use that number as the key to scramble everything else they say.
+
+This sounds impossible. If Eve hears everything Bob hears, surely she can work out everything Bob can work out. For most of history people assumed so, and secret keys were delivered by trusted couriers. In 1976 Whitfield Diffie and Martin Hellman published a way to do without the courier. Their method is still in use: something very like it runs each time your browser shows a padlock.
+
+The trick is that Bob does not rely only on what he hears. He also has a number of his own that he never says aloud. Eve hears the whole conversation, but that number is never in it.
+
+The idea in paint
+
+Start with a picture rather than numbers. Mixing paint is easy to do and practically impossible to undo: given a pot of brownish green, you cannot separate it back into the colours that made it.
+
+Alice and Bob agree, openly, on a common colour, say yellow. Eve hears this. Each of them then picks a private colour and tells no one: Alice picks red, Bob picks blue.
+
+Alice mixes her red into yellow and sends the resulting orange to Bob. Bob mixes his blue into yellow and sends the resulting green to Alice. Eve sees both pots go past.
+
+Now Alice adds her private red to the green she received, and Bob adds his private blue to the orange he received. Both pots now contain yellow, red and blue, so they are the same colour. That colour is the shared secret.
+
+Eve has yellow, orange and green. To make the final colour she needs to add pure red or pure blue, and she has neither; she has them only already mixed, and cannot unmix them. If she combines the orange and the green she gets a pot with a double share of yellow, which is the wrong colour.
+
+So the method needs an operation with two properties: it is easy to do and hard to undo, and doing it in either order gives the same result. Arithmetic has one.
+
+The same thing with numbers
+
+The operation is built from two pieces of school maths: powers and remainders.
+
+A power is repeated multiplication: 5 to the power 6 means 5 x 5 x 5 x 5 x 5 x 5, which is 15,625.
+
+A remainder is what is left over after division. A 12-hour clock works this way: four hours after 10 o'clock is 2 o'clock, because 14 divided by 12 leaves 2. We will do the same with a clock of 23 hours, keeping only the remainder after dividing by 23. For example, 15,625 divided by 23 goes 679 times with 8 left over, so on this clock 5 to the power 6 is 8.
+
+Here is the exchange, with numbers small enough to check on a calculator.
+
+1. Alice and Bob agree openly on two numbers: the clock size, 23, and a base, 5. Eve hears both. These are the yellow paint.
+
+2. Alice picks a private number, 6. Bob picks a private number, 15. Neither is ever sent.
+
+3. Alice works out 5 to the power 6 on the 23-clock and gets 8. She sends 8 to Bob. Bob works out 5 to the power 15 on the 23-clock and gets 19. He sends 19 to Alice. Eve hears 8 and 19. These are the mixed pots.
+
+4. Alice takes the 19 she received and raises it to her private number: 19 to the power 6 on the 23-clock comes to 2. Bob takes the 8 he received and raises it to his private number: 8 to the power 15 on the 23-clock also comes to 2.
+
+Both now hold the number 2, and it was never transmitted.
+
+Why they get the same answer
+
+This is not a coincidence. Alice computed (5 to the power 15) to the power 6. Bob computed (5 to the power 6) to the power 15. A power of a power multiplies the exponents, so both are 5 to the power 90: fifteen sixes and six fifteens are the same thing. Taking remainders along the way does not disturb this, because a remainder taken early gives the same final remainder as one taken at the end. This is the "either order" property, the arithmetic version of red-then-blue giving the same colour as blue-then-red.
+
+Why Eve is stuck
+
+Eve knows 23, 5, 8 and 19. To get the secret she needs one of the private numbers. That means answering: 5 to what power leaves remainder 8 on a 23-clock?
+
+Without the clock this would be easy. Ordinary powers grow steadily, so you can home in on the answer: too small, too big, a bit lower. On the clock that guidance is gone. The successive powers of 5 on the 23-clock run 5, 2, 10, 4, 20, 8, 17, 16, ... and jump about with no visible pattern. Knowing that the answer you want is 8 tells you nothing about how far along the list to look.
+
+With a clock of 23 hours, Eve simply tries every power in turn and finds the answer in moments. The example is a toy. In practice the clock size is a number hundreds of digits long, and the private numbers are similarly huge. Alice and Bob are not slowed down much, because there is a shortcut for computing powers: square repeatedly, so that a power of a million takes about twenty steps and not a million. Each extra digit adds only a little work for them.
+
+For Eve, going backwards, no comparable shortcut is known. The best published methods would take the world's computers far longer than the age of the universe at the sizes actually used. That is the paint that will not unmix: forwards takes a fraction of a second, backwards is beyond reach.
+
+Two caveats
+
+First, nobody has proved that the backward problem is hard. It is a belief, based on decades of failed attempts by able mathematicians. A sufficiently large quantum computer, a kind of machine that does not yet exist at the needed scale, could solve it quickly, which is why replacement methods built on different hard problems are now being introduced.
+
+Second, the method protects against a listener, not an impostor. If Eve can intercept and replace messages, she can run one exchange with Alice while pretending to be Bob, and another with Bob while pretending to be Alice, and sit in the middle reading everything. So real systems add a second step in which each side proves who it is. That step uses related mathematics, and it is what the certificates behind the browser padlock are for.
+
+What it achieves
+
+The agreed number becomes the key for an ordinary, fast scrambling method, and the conversation proceeds in private. Each side combined a number it kept private with one it received in the open, by an operation that works in either order and is easy forwards and infeasible backwards. Eve heard every number that was sent and still cannot compute the one that Alice and Bob now share.

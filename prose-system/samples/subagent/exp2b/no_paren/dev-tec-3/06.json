@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a4ae10244a9dd0ecc",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 943,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:33:37.351Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a protocol called constant current followed by constant voltage, usually shortened to CC-CV. It is a controlled two-stage process, and the slowdown near full charge is a consequence of the cell's physics and of the limits the charger must respect.\n\nIn the first stage the charger forces a fixed current into the cell, commonly between 0.5 and 1 times the cell's capacity per hour. Lithium ions leave the cathode, which is typically a metal oxide, travel through the electrolyte and a porous separator, and insert themselves between the layers of graphite in the anode. This process is called intercalation. Electrons travel through the external circuit to balance the charge. As lithium accumulates in the anode, the cell's terminal voltage climbs steadily from about 3.0 volts toward 4.2 volts. A cell stays safely at 4.2 volts, and charging beyond that point risks lithium metal plating onto the anode and accelerated electrolyte decomposition. Plated lithium can form dendrites, which can short the cell, so the voltage ceiling is a hard safety limit.\n\nWhen the terminal voltage reaches the ceiling, the charger switches to the second stage. It holds the voltage constant and lets the current fall on its own. The charge ends when the current decays to a small cutoff, often around 5 percent of the initial value. The cell reaches roughly 70 to 80 percent of its capacity during the first stage, and the remainder takes a comparable amount of time in the second.\n\nThe current falls because the terminal voltage is not the same as the cell's internal equilibrium voltage. The terminal voltage equals the open-circuit voltage plus the current multiplied by the internal resistance, plus polarization terms from slow processes inside the cell. Internal resistance and diffusion lag make the terminal voltage overshoot the true equilibrium value while current flows. As the cell fills, its open-circuit voltage rises toward the 4.2 volt ceiling. With the terminal voltage clamped, the gap that drives current shrinks, so by Ohm's law the current must shrink too. It behaves much like a capacitor charging through a resistor, with an exponential-like decay.\n\nA second reason is solid-state diffusion. Lithium must diffuse into the bulk of the graphite particles. Near full charge the surface of each particle is already crowded, and the concentration gradient driving further diffusion is weak. Ions arrive at the surface faster than they can migrate inward. Pushing harder would only pile lithium at the surface, where it can plate as metal.\n\nCharging therefore slows down because the charger is holding the cell below a damaging voltage while the cell's own resistance and diffusion limits throttle how much current that voltage can drive."
+}

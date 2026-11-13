@@ -1,0 +1,57 @@
+# From an HTTPS Address to the First Byte
+
+When you press Enter on an https:// address, the first byte of the response can arrive in tens of milliseconds or over a second. Most of that time goes to setup work that happens before any of your application code runs. Here is the sequence, in order.
+
+## 1. The browser parses the URL
+
+The browser splits the address into a scheme (https), a host (example.com), a port (443 when omitted, the HTTPS default), a path and a query string. It then checks whether the host is on its HSTS list, either from an earlier visit or the built-in preload list. If it is, any http:// request is upgraded to https:// before it leaves the machine. The browser also checks its cache. A fresh cached response can be used with no network activity at all.
+
+## 2. DNS: name to address
+
+Packets are routed to IP addresses, not names. The browser asks, in order, its own DNS cache, the operating system's resolver cache, and then the configured recursive resolver. That resolver is usually run by the ISP or a public provider, and the query may travel over DNS-over-HTTPS. If nothing is cached, the resolver walks the hierarchy. A root server points to the .com servers, which point to example.com's authoritative name servers, which return the answer. Every answer carries a TTL, which says how long it may be cached. If the name is a CNAME alias, for example to a CDN, the chain is followed. The answer may contain several IPv4 and IPv6 addresses. Browsers usually race IPv6 and IPv4 connections in parallel (Happy Eyeballs, RFC 8305) and keep whichever connects first.
+
+## 3. TCP: the three-way handshake
+
+With an IP address and port 443, the client sends a SYN, the server replies SYN-ACK, and the client answers with ACK. This costs one round trip (RTT). On a link with a 50 ms RTT, the handshake alone adds 50 ms, and no application data can flow until it completes.
+
+## 4. TLS: encryption and identity
+
+Over the new TCP connection, TLS 1.3 completes in one round trip.
+
+- **ClientHello.** The client lists the TLS versions and cipher suites it supports, sends a random value and an ephemeral key share for Diffie-Hellman, and includes the Server Name Indication (SNI) field, which says "example.com". SNI lets one IP address host many sites. ALPN values such as h2 or http/1.1 request a protocol.
+- **ServerHello.** The server picks a cipher suite and returns its own key share. Both sides now compute the same shared secret and derive session keys. Everything after this point is encrypted.
+- **Certificate and signature.** The server sends its certificate chain (the site certificate plus intermediate CA certificates). It also signs the handshake transcript with its private key, which proves it holds the key the certificate names.
+- **Finished.** Both sides send a message that authenticates the handshake.
+
+The client then checks the certificate. The chain must lead to a root CA in its trust store. The hostname must match a Subject Alternative Name. The date must fall within the validity period. Revocation is usually checked through OCSP stapling, where the server supplies a signed status so the client needs no extra lookup. If any check fails, the browser shows a warning and stops.
+
+If the client has connected before, it may resume using a session ticket and send early data (0-RTT). This saves a round trip but carries replay risk, so servers limit it to requests that are safe to repeat. TLS 1.2 needs two round trips for a full handshake, which is why 1.3 is faster.
+
+## 5. The HTTP request
+
+Only now does the request go out, inside the encrypted channel. In HTTP/1.1 it is plain text:
+
+    GET /products?id=5 HTTP/1.1
+    Host: example.com
+    Accept-Encoding: gzip, br
+    Cookie: session=...
+
+The Host header is required because one server may serve many sites. The browser attaches any cookies that match the domain and path. With HTTP/2, the same information is sent as binary frames with compressed headers (HPACK), and many requests share one connection. HTTP/3 runs over QUIC on UDP. QUIC merges the transport and TLS handshakes, which can save a round trip. A server advertises it through an Alt-Svc header, and the browser switches on later visits.
+
+## 6. Server side: from packet to your code
+
+The packets reach the server's edge, which is often a CDN or load balancer. That layer usually terminates TLS, decrypting the request, and picks a backend. The request then passes through a reverse proxy such as nginx or Envoy, then to your application server (Node, Gunicorn, Rails and so on). A router selects a handler, which may query a database or cache and render a template. Each hop adds latency. The server writes the status line and headers first, then the body.
+
+## 7. The first byte travels back
+
+The first byte of the response is what engineers call time to first byte (TTFB). It goes back through the same layers, across the network, and is decrypted by the browser's TLS session. The browser reads the status line and headers, then starts processing the body as it streams in.
+
+## What this means for you
+
+Roughly, time to first byte equals DNS lookup, plus one TCP round trip, plus one TLS round trip (two on TLS 1.2), plus one request trip, plus server processing time. Practical consequences follow:
+
+- Reuse connections (keep-alive, HTTP/2 multiplexing) so you pay for setup once.
+- Serve static assets from a CDN close to users.
+- Enable TLS session resumption and keep certificate chains complete, since a missing intermediate certificate breaks some clients.
+- Use DNS TTLs that balance caching against how quickly you can change records.
+- Measure TTFB separately from download time. The browser DevTools Network panel's timing breakdown shows DNS lookup, initial connection, SSL and "Waiting (TTFB)" for each request, which tells you which stage is slow.

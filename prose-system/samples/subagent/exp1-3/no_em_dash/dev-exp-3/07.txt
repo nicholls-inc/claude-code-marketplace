@@ -1,0 +1,93 @@
+SubagentHandback({message: `# Sharing a Secret in Public: How Strangers Agree on a Key
+
+## The problem
+
+Imagine you want to agree on a secret number with someone you have never met. Maybe you want to use it as a password for a private conversation. The only way to talk is a line that anyone can listen to. Every word you say, the eavesdropper hears.
+
+This sounds impossible. If everything is overheard, how can anything stay secret? For most of history, it really was impossible. Two people had to meet first, in private, and agree on a code. Armies and spies carried codebooks around for that reason.
+
+In the 1970s, mathematicians found a way around it. The trick is a kind of maths where some jobs are easy to do but extremely hard to undo. This is the idea behind public-key cryptography, and it protects almost everything you do online, from banking to messaging.
+
+## A paint-mixing picture
+
+Start with paint rather than numbers, because the idea is easier to see.
+
+Alice and Bob agree out loud on a common colour, say yellow. Everyone hears this, including the eavesdropper, Eve.
+
+Each of them then secretly picks a private colour. Alice picks red and Bob picks blue. They never say these out loud.
+
+Alice mixes her red into the yellow and gets orange. Bob mixes his blue into the yellow and gets green. They send these mixtures to each other across the open line. Eve sees the orange and the green.
+
+Now Alice adds her secret red to Bob's green. Bob adds his secret blue to Alice's orange. Both end up with exactly the same murky brown, because both contain yellow, red and blue. The order of mixing does not matter.
+
+Eve has the yellow, the orange and the green. But she cannot take colours out of a mixture. Unmixing paint is hard. She cannot get to the brown without knowing one of the secret colours.
+
+That is the whole structure. Mixing is easy. Unmixing is hard. The shared secret comes from combining your private piece with the other person's public mixture.
+
+## Swapping paint for numbers
+
+Computers cannot mix paint, so we need a mathematical operation that behaves the same way: easy one way, very hard to reverse.
+
+Here is one, and you already know the ingredients. It uses **powers** (like 5 x 5 x 5 = 5 cubed) and **clock arithmetic**.
+
+Clock arithmetic works like this. On a 12-hour clock, 10 o'clock plus 5 hours is 3 o'clock, not 15. You wrap around. Mathematicians call this "mod". So 15 mod 12 = 3, because 3 is what is left over after taking away as many whole 12s as you can.
+
+We do the same with a bigger clock. Suppose the clock has 23 hours on it, so we write "mod 23". Then 25 mod 23 = 2, and 46 mod 23 = 0.
+
+Now the key ingredient. Take a number, raise it to a power, then wrap around the clock. For example, 5 to the power 6 is 15,625. Divide by 23 and keep the remainder, and you get 8. So we say 5^6 mod 23 = 8.
+
+Doing this forwards is easy. Give me 5, the power 6 and the clock size 23, and I get 8 quickly.
+
+Going backwards is the hard bit. If I tell you "5 to some power, wrapped around a clock of 23, gives 8", can you tell me the power? With a clock this small, you can just try every power until you hit 8. But the wrapping scrambles the answers so they look random. There is no pattern that lets you jump to the right power. When the clock is enormous, with hundreds of digits, trying every power would take longer than the age of the universe. That is our "unmixing is hard" step.
+
+## The exchange, step by step
+
+This method is called Diffie-Hellman key exchange, after the two researchers who published it in 1976. Here it is with small numbers so you can check every step with a calculator.
+
+**Step 1: agree on public numbers.** Alice and Bob say out loud: "Let's use a clock of 23, and the base number 5." Eve hears this. It does not matter. These are like the shared yellow paint.
+
+**Step 2: each picks a private number.** Alice secretly picks 6. Bob secretly picks 15. These never travel along the line.
+
+**Step 3: each computes a public mixture.**
+
+Alice computes 5^6 mod 23 = 8. She sends 8 to Bob.
+
+Bob computes 5^15 mod 23 = 19. He sends 19 to Alice.
+
+Eve hears 8 and 19. These are the orange and the green.
+
+**Step 4: each combines the other's mixture with their own secret.**
+
+Alice takes Bob's 19 and raises it to her secret power 6: 19^6 mod 23 = 2.
+
+Bob takes Alice's 8 and raises it to his secret power 15: 8^15 mod 23 = 2.
+
+Both get **2**. That is the shared secret, the murky brown.
+
+## Why do both get the same answer?
+
+This is the part that feels like a magic trick, but there is a simple reason. Alice's final number is really 5 raised to the power (15 x 6), because Bob's mixture already contained his 15 and she added her 6. Bob's final number is 5 raised to the power (6 x 15), because Alice's mixture already contained her 6 and he added his 15.
+
+Multiplication does not care about order, so 15 x 6 and 6 x 15 are both 90. Both of them have computed 5^90 mod 23, by different routes. They land on the same place.
+
+## Why Eve cannot follow
+
+Eve knows the clock (23), the base (5), and the two mixtures (8 and 19). To find the secret she needs one of the private numbers, 6 or 15. To find those she must work backwards from "5 to some power gives 8 on this clock", which is the hard unmixing problem.
+
+In our toy example she could crack it in seconds by trying every power. That is why the numbers above are only for learning. Real systems use clocks with more than 600 digits. At that size, the forward direction still takes a computer a fraction of a second, but the backward direction is out of reach for every computer on Earth, with the best known methods.
+
+## Where the "public key" comes in
+
+So far we have an agreed secret number. The name "public-key cryptography" comes from a closely related idea. Each person has a pair of numbers: a **public key** they can shout to the world, and a **private key** they keep to themselves. The two are linked by the same sort of easy-forwards, hard-backwards maths.
+
+In our example, Alice's 8 acts like a public key, and her 6 is the private key. Anyone can use the public one. Only she holds the private one.
+
+Other schemes, such as RSA, use a different hard problem: multiplying two huge prime numbers together is easy, but taking the answer and finding the two primes is very hard. With those, someone can lock a message using your public key and only your private key can open it, a bit like a postbox. Anyone can drop a letter through the slot, but only the owner has the key to take letters out.
+
+## What the secret is used for
+
+Once Alice and Bob share the secret number, they use it as the password for a fast, ordinary scrambling method, and then chat privately. Public-key maths is slow, so it is used only to set up the shared secret at the start. Your browser does exactly this when you see the padlock symbol on a website: it agrees a secret with the site over an open line, then uses it to scramble everything that follows.
+
+## A caution
+
+The scheme shown here defeats someone who only listens. It does not on its own stop someone who pretends to be Bob, answering Alice with their own numbers. Real systems add extra checks, such as certificates, to prove who is on the other end. But the core achievement stands. Two strangers, in full view of everyone, can end up holding a secret that nobody else can work out. It rests on one simple fact about numbers: some things are easy to do and nearly impossible to undo.`})

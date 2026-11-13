@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a278b9421cd33f454",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 1472,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:11:15.895Z",
+  "valid": true,
+  "text": "**How a Lithium-Ion Cell Charges, and Why It Slows Near Full**\n\nA lithium-ion cell stores energy by moving lithium between two host materials. When the cell is charged, lithium ions leave the cathode, a layered metal oxide such as NMC or an iron phosphate (LFP). They cross a liquid electrolyte and insert themselves between the graphene layers of the graphite anode, a process called intercalation. At the same time, electrons flow through the external circuit from cathode to anode. The cell's open-circuit voltage (OCV) is the difference in chemical potential of lithium between the two electrodes. It rises steadily with state of charge (SoC), from about 3.0 V empty to 4.2 V full for typical NMC/graphite cells.\n\nWhen current flows, the terminal voltage is higher than the OCV. In electrical terms:\n\nV_terminal = OCV(SoC) + I·R_ohmic + η_kinetic + η_diffusion\n\nR_ohmic comes from the electrolyte, current collectors and contacts. η_kinetic is the overpotential needed to drive the charge-transfer reaction at each particle surface. η_diffusion arises because lithium must diffuse into the solid particles, which is slow. Lithium piles up at particle surfaces faster than it spreads inward, so the surface \"looks\" more charged than the bulk.\n\nChargers use a constant-current/constant-voltage (CC-CV) profile:\n\n1. **Constant current.** The charger pushes a fixed current, often 0.5–1C, where 1C is the current that would fill the cell in one hour. Terminal voltage climbs as the OCV rises.\n2. **Constant voltage.** When the terminal voltage reaches the upper limit (for example 4.2 V), the charger holds it there. Because V_terminal is fixed while the OCV keeps rising, the room left for the I·R and overpotential terms shrinks, so the current has to fall. The decay looks roughly like a capacitor charging through a resistor. Charging ends when the current drops to a cutoff, typically C/20.\n\nThe voltage ceiling exists for two reasons:\n\n- **Cathode and electrolyte.** Above the limit, the cathode becomes structurally unstable and the electrolyte oxidizes, which causes permanent capacity loss and heat.\n- **Anode.** Fully lithiated graphite sits only about 80–100 mV above the potential of lithium metal. Kinetic and concentration overpotentials push the local anode surface potential further down. If it falls below 0 V versus Li/Li⁺, metallic lithium plates onto the surface instead of intercalating. Plating removes lithium permanently and can grow dendrites that short the cell. The risk is highest at high SoC, high current and low temperature, which is exactly why current must taper near full.\n\nAs a result, the last 20% of capacity often takes about as long as the first 80%. Fast-charge protocols do not remove this limit. They manage it with multi-stage current steps, temperature control and model-based estimates of anode potential, so that current stays as high as possible without crossing the plating threshold."
+}

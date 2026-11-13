@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a3bb612bac773d642",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72593,
+    "output_tokens": 1216,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:14:58.767Z",
+  "valid": true,
+  "text": "A heat pump does not make heat. It moves heat, and that is why it can warm your home even when the air outside feels bitterly cold.\n\nStart with a misunderstanding. Cold is not the absence of heat in any absolute sense. Air at minus five degrees Celsius still holds a great deal of thermal energy, because absolute zero sits far below at minus 273. A heat pump pulls some of that energy out of the outdoor air, concentrates it, and releases it indoors.\n\nThe trick is the refrigerant, a fluid that boils at very low temperatures, well below minus 20 in many systems. Outside, the refrigerant circulates through a coil with a fan blowing air across it. Even a freezing day is warmer than the refrigerant, so heat flows from the air into the fluid and it evaporates into a gas.\n\nNext comes the compressor, which is the heart of the machine. It squeezes the gas, and squeezing a gas makes it hot, much as a bicycle pump warms up when you use it. The gas can now reach 50 or 60 degrees, far hotter than your living room. Because it is hotter than the house, heat flows from it into your radiators, underfloor loops or hot water cylinder. The gas cools and turns back into a liquid.\n\nFinally the liquid passes through an expansion valve. Pressure drops, the fluid becomes very cold again, and it returns to the outdoor coil to collect more heat. The cycle repeats continuously.\n\nThink of a fridge working in reverse. A fridge pulls heat out of the food and dumps it into your kitchen. A heat pump pulls heat out of the garden and dumps it into your house.\n\nWhy does this matter for your wallet? A gas boiler turns fuel into heat at roughly 85 to 92 percent efficiency, so you never get more heat out than the energy you put in. A heat pump uses electricity mainly to run the compressor and fans, and it delivers far more heat than the electricity it consumes. This ratio is called the coefficient of performance. A typical figure is three, meaning one unit of electricity brings three units of heat into the house. Averaged over a season, the figure is often a little lower, and in milder weather it can climb higher.\n\nThere are honest limits. Efficiency falls as the weather gets colder, because the machine must lift heat across a bigger temperature gap. Modern units still work down to minus 15 or lower, but they use more electricity on the coldest days. Outdoor coils can also frost up, so the unit periodically runs a short defrost cycle.\n\nSeveral practical points should shape your decision.\n\nFirst, insulation. A heat pump delivers its best efficiency when it runs gently for long periods at lower flow temperatures. A draughty, poorly insulated home may need upgrades first, or larger radiators.\n\nSecond, running costs. Electricity usually costs more per unit than gas, so the efficiency advantage must outweigh that price gap. With a coefficient of performance near three, many households come out level or ahead, especially on a time of use tariff, or if they have solar panels.\n\nThird, upfront cost. Installation is considerably more expensive than a new boiler, though grants in many countries narrow the difference.\n\nFourth, space. You need room outside for the unit and usually a hot water cylinder indoors.\n\nFinally, think about the future. Gas prices are exposed to global shocks, and a heat pump lets you use electricity that is becoming steadily cleaner.\n\nAsk an installer for a heat loss survey of your house. It will tell you the right size, the likely running cost, and whether your radiators will cope. That evidence is what should drive your decision."
+}

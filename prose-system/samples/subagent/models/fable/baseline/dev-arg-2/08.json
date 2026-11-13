@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aafd2a17f737d547f",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 958,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:19:46.544Z",
+  "valid": true,
+  "text": "Keep Estimating. Just Stop Lying About What an Estimate Is.\n\nEvery few years the argument comes round again: estimates are always wrong, they eat time, they turn into deadlines the moment they leave the room, so let's stop making them. I understand the appeal. I have sat in the planning meetings where six people debate whether a ticket is a five or an eight. But the conclusion is wrong. Teams should keep estimating, and they should get better at it.\n\nStart with why anyone asks. A sales lead needs to know whether to promise a feature to a customer this quarter. A manager has to choose between two projects and can only staff one. A product owner wants to know if the cheap version is a week and the full version is three months, because that changes which one she wants. None of these people are asking out of idle curiosity or a desire to control you. They are making decisions, and cost is half of every decision. Refuse to estimate and the decision still gets made, by someone who knows less than you do.\n\nThe usual reply is that you can replace estimates with throughput: slice work small, count what ships each week, project forward. That is a good technique, and it is estimating. Deciding that a piece of work is small enough to count as one item is a judgment about size. Projecting twelve items at four a week is a forecast. What these teams have dropped is the ritual, not the activity.\n\nEstimating also does a job that has nothing to do with the number. Ask an engineer how long a migration will take and she has to think through it: which tables, which consumers, what happens to writes during the cutover. Two engineers who answer \"three days\" and \"three weeks\" have just discovered they understand the task differently, and that disagreement was far cheaper to find in a meeting than in week two. The disagreement is the valuable output.\n\nSo what is actually broken? Three things, and all of them can be fixed without abandoning the practice.\n\nThe first is false precision. \"March 14th\" is a guess stated as a fact. \"Four to seven weeks, and the vendor API is the main unknown\" is information a manager can plan around. Give ranges, and say what drives the width.\n\nThe second is the silent conversion of estimates into commitments. This one belongs to managers. If a number offered in good faith on Monday is used as a stick in April, your engineers will learn to pad, and then you will have neither honesty nor accuracy. An estimate is a forecast, and it should change as the team learns more. A commitment is a separate thing, made deliberately, with a margin.\n\nThe third is never checking. Most teams estimate constantly and never compare the guess with the outcome. Spend ten minutes at the end of a project looking at what you predicted and what happened. People who do this get noticeably better within a few months.\n\nEstimates are uncomfortable because they expose what we don't know. That is the reason to keep making them. A team that cannot say roughly how long its work takes is asking everyone around it to plan blind."
+}

@@ -1,0 +1,15 @@
+A leap second is an extra second added to the world's official clock time to keep it in step with the rotation of the Earth. The bodies that govern timekeeping have decided to stop adding them by 2035, because the disruption they cause to computer systems now outweighs the benefit.
+
+The need arises because we keep time in two ways. Traditionally, a day was one turn of the planet. Since the 1960s, the second has been defined by atomic clocks, which are accurate to within a billionth of a second a day. The Earth is far less reliable. Its spin is gradually slowing, mainly because of the drag of the Moon's tides, and it also speeds up and slows down unpredictably as the planet's molten core, oceans and atmosphere shift.
+
+As a result, atomic time and Earth time drift apart. Since 1972, whenever the gap has approached nine-tenths of a second, the scientists who monitor the Earth's rotation have ordered an extra second to be inserted, at midnight Greenwich time on either 30 June or 31 December. On those nights, official clocks read 23:59:60 before rolling over. This has happened 27 times, most recently at the end of 2016.
+
+Almost nobody notices the extra second, but computers do. Much of modern life depends on machines agreeing on the time to within a fraction of a second, including financial trading, telecommunications networks, satellite navigation and power grids. Software generally assumes that every minute has 60 seconds, and a minute with 61 can make it fail. The leap second in 2012 knocked out several large websites and delayed flights in Australia when an airline booking system crashed.
+
+Leap seconds also cannot be scheduled far ahead. Because the Earth's rotation is irregular, each one is announced only about six months in advance. Technology companies have invented their own workarounds, such as "smearing" the extra second across several hours, but they do so in different ways, so their clocks briefly disagree.
+
+A newer worry is that the Earth has recently been spinning slightly faster. That raises the prospect of a second having to be removed rather than added, which has never been tried and which engineers fear could cause worse failures.
+
+In November 2022, the General Conference on Weights and Measures, the body of member governments that oversees international standards of measurement, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which regulates the broadcasting of time signals, backed the decision the following year.
+
+Clock time will then be allowed to drift away from the Earth's rotation, probably by about a minute over the next century. How large the gap may eventually grow, and how it will be corrected, has yet to be decided.

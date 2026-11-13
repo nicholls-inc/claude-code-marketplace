@@ -1,0 +1,13 @@
+A leap second is a one-second adjustment added to official world time, usually on 30 June or 31 December, so that the clocks we use stay in step with the spinning Earth.
+
+Why would the two ever drift apart? Since 1967, the world's official time has been set by atomic clocks, which count the vibrations of atoms and keep extraordinarily steady time. The Earth is a far less reliable timekeeper. Its rotation wobbles and, over the long run, slows, because of tidal friction from the Moon, shifts in the planet's molten core, melting ice and the movement of the oceans and atmosphere. A day is not exactly 86,400 seconds long, and the difference adds up.
+
+To stop atomic time and the solar day drifting apart, international timekeepers began inserting leap seconds in 1972. Clocks would run 23:59:59, then 23:59:60, then roll over to midnight. In total, 27 have been added, the most recent at the end of 2016. The practice kept official time within a second of the Earth's actual position, which mattered mainly to astronomers and some navigation systems.
+
+The trouble is that the rest of the digital world hates the extra second. Computers generally assume every minute has 60 seconds. When a minute suddenly has 61, software can crash, miscalculate or record events out of order. Leap seconds have been blamed for outages at major websites and airlines, and for glitches in financial trading, telecoms and power systems, where precise timestamps matter. Big technology companies developed workarounds, such as "smearing" the extra second across a whole day, but different firms smear in different ways, which creates its own inconsistencies.
+
+There is also an awkward quirk of the Earth itself. In recent years its rotation has been speeding up slightly, and 2022 saw the shortest day on record. That raised the prospect of a negative leap second, in which a second is removed. Engineers have never tried one, and many fear it would cause worse failures than adding one.
+
+In November 2022, the General Conference on Weights and Measures, the international body that governs the definition of the second, voted to abandon leap seconds by or before 2035. In practice, the gap between atomic time and Earth time will be allowed to grow, with a larger correction made far in the future, perhaps decades or even a century away. The International Telecommunication Union and other timekeeping bodies have been working on the details.
+
+The change will make little difference to anyone's daily life. Noon will still be roughly noon. But for the machines that run modern society, time will finally become simpler and more predictable.

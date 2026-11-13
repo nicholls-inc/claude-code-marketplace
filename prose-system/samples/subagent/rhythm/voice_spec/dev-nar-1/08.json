@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a821c0ec08457a37a",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28384,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1429,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:20:47.902Z",
+  "valid": true,
+  "text": "In August 1854 London was a crowded city with no reliable way of getting rid of its own sewage. Most houses had a cesspool beneath them, and many of these overflowed into the street drains or into the River Thames. Drinking water was drawn from the river and from wells dug among the houses. Cholera had reached Britain in the 1830s and had returned several times, killing tens of thousands of people. It causes severe vomiting and diarrhoea, and a person can die of the loss of fluid within a day or two. Nobody knew what caused it. The common belief among doctors was that disease spread through bad air, which they called miasma, rising from rotting waste and damp ground.\n\nJohn Snow was a physician in Soho who had made his name giving chloroform to patients during operations, and he had attended Queen Victoria at the birth of two of her children. He also doubted the miasma theory. After the cholera outbreak of 1848 and 1849 he had written that the illness acted first on the stomach and bowels, which suggested to him that it was swallowed, not breathed in. In 1853 and 1854 he studied south London, where two water companies supplied the same streets. The Southwark and Vauxhall company took its water from a stretch of the Thames polluted by sewage, while the Lambeth company had moved its intake upriver to a cleaner place. Snow found that households supplied by the first company suffered many times more deaths from cholera than those supplied by the second. This was evidence for his view, though it was not yet accepted.\n\nThe outbreak around Broad Street began on the night of 31 August 1854. Within three days, about 127 people living near the street had died, and by the middle of September the death toll in the neighbourhood was more than 500. Snow lived a short distance away, on Sackville Street, and knew the area. Many residents fled. He set out to learn who had fallen ill and where they had been getting their water.\n\nHe went from door to door and he consulted the death records kept by the General Register Office. He marked the deaths on a map of the district, one bar for each, stacked at the address of the house. The marks gathered around a public water pump on Broad Street, near the corner with Cambridge Street. Most of the people who had died lived closer to that pump than to any other. Snow also noted that the pump was not the nearest source of water for a few of the dead, and he asked about these cases. A woman in Hampstead who had died had no connection to the neighbourhood except that she had once lived there. Her son told Snow that she liked the taste of the Broad Street water and that a servant brought a bottle of it to her each day. She and a niece who visited her both died.\n\nSnow also looked for people near the pump who had stayed well. A workhouse on nearby Poland Street housed more than 500 people, yet only five of them died. The workhouse had its own well. Workers at a brewery on Broad Street were also spared. They were given malt liquor to drink and, it seems, had their own well as well. Together these cases fitted his view that the water was the source of the disease.\n\nOn 7 September Snow presented his findings to the Board of Guardians of St James's parish, which was responsible for the area. He asked that the handle be taken off the pump so that nobody could draw water from it. The guardians agreed, and the handle was removed the next day. It is often said that this ended the epidemic, but the number of new cases had already been falling, probably because so many people had left the district. Snow himself acknowledged this in his later writing. The removal of the handle is better seen as a sensible step than as a clear proof.\n\nA further clue came from the Reverend Henry Whitehead, a local curate who had at first doubted Snow's theory. Whitehead looked into the earliest cases and found a baby girl who lived at 40 Broad Street and had died of diarrhoea in early September. Her mother had washed the child's soiled nappies and thrown the water into a cesspool a few feet from the well. Later inspection showed that the brickwork of the well was cracked and that sewage could seep into it. The official inquiry did not accept Snow's view, and the authorities went on supporting the miasma theory for some years. Snow died in 1858, before it was widely accepted. By the 1860s and 1870s, as microscopes improved and Robert Koch identified the cholera bacterium in 1883, his reasoning came to be seen as correct."
+}

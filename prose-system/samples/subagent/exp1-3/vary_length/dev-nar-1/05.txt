@@ -1,0 +1,23 @@
+In the late summer of 1854, a terrible sickness fell on Soho, a crowded district of London. The disease was cholera. It begins with violent vomiting and diarrhea, and it can drain a healthy person of so much fluid that they die within a day. Within three days of the first cases appearing at the end of August, more than a hundred people living near Broad Street were dead. Within a week, many of the survivors had fled the area. Shops closed. Houses stood empty.
+
+At that time, almost every educated person in Britain believed that cholera was caused by "miasma," a poisonous vapor rising from rotting waste and foul ground. The idea was reasonable. The sickest districts did smell dreadful. London was packed with people, and its cesspools, which were pits under the floors of houses, overflowed into the streets.
+
+John Snow disagreed. He was a physician who lived and worked only a few streets away from the outbreak, and he had been thinking about cholera for years. He had pioneered the use of anesthesia, even giving chloroform to Queen Victoria during childbirth, so he was no outsider to medicine. But on this subject he stood nearly alone. Snow noticed that cholera attacked the bowels, not the lungs. If the cause were something people breathed in, he reasoned, why would the illness begin in the gut? Something must be swallowed. In 1849 he had published a short pamphlet arguing that cholera spread through contaminated water. Almost nobody was persuaded.
+
+Now he had a chance to test his idea. The outbreak was small enough to study, and it was happening on his doorstep.
+
+Snow began with the simplest method he could think of. He went door to door, and he learned who had died and where they had lived. He obtained the official list of deaths from the local registrar, and then he did something that proved crucial. He marked each death on a map of the neighborhood, a small black bar at the address of every victim. As the bars accumulated, a pattern emerged. They clustered thickly around one spot, the water pump on Broad Street.
+
+At that time, most Londoners had no water pipes in their homes. They carried water from public pumps, and each pump drew from a well. The Broad Street pump was popular, and its water looked clear and tasted fine.
+
+Snow checked the outliers, because they were where a theory would break. A few deaths had occurred well away from the pump. Were they a problem? He investigated each one, and the answer, again and again, was no. A widow who lived in Hampstead, miles from Soho, had died after drinking from the Broad Street pump. Her son had been bringing her bottles of its water, because she preferred the taste. A nearby workhouse housed hundreds of people, yet very few had fallen ill. Snow discovered that it had its own private well. A brewery on Broad Street also escaped. Its workers drank the beer they made, and had their own well as well.
+
+The evidence was building, but Snow knew that a skeptical official would need more. On 7 September 1854, he took his findings to the board of guardians of St James's parish, the local authority. He asked them to remove the handle of the Broad Street pump, so that nobody could draw water from it. The guardians were doubtful. Yet the case was strong enough to act on, and the handle came off the next day.
+
+Here a caution is needed. The outbreak was already fading by then. Many residents had fled, and the number of new cases had been falling for several days. So the removal of the handle did not end the epidemic, however often the story is told that way. It simply removed a continuing danger.
+
+The final piece came from a local clergyman, Henry Whitehead. He began as a skeptic and distrusted Snow's theory. But he knew the neighborhood and its people far better than any outsider. Whitehead dug deeper, and found the origin of the outbreak: a baby girl living at 40 Broad Street, who had fallen ill with cholera just before the epidemic. Her mother had washed the child's soiled diapers and thrown the water into a cesspool just a few feet from the well. Inspection revealed that the brickwork of the well was cracked, and that sewage was leaking in.
+
+Whitehead was converted. The official inquiry, though, was not. Its report concluded there was no proof, and the miasma theory remained the establishment view for years.
+
+Snow died in 1858, at only forty-five, still largely unrecognized. Only later did Britain's authorities accept his argument, and the sewers and clean water supplies that followed saved countless lives. Today he is remembered as a founder of modern epidemiology. His method was ordinary and powerful: count the cases, map them, and follow the evidence wherever it led.

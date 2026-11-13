@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a58a58f8a4c8a3d2e",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72454,
+    "output_tokens": 997,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:42:20.322Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Forecasting.**\n\nEvery engineer has lived this meeting. Someone asks how long a feature will take. You say three weeks, because two sounds reckless and four sounds lazy. That number gets written down, repeated upward, and turned into a date. Six weeks later you are explaining a miss that was baked in from the start.\n\nTeams should stop producing estimates of how long individual pieces of work will take. Not because planning is bad, but because estimates are bad at the one job we hand them.\n\nStart with the evidence. Software work is dominated by discovery. The tasks we can predict well are the ones we automate or have done a dozen times. What remains is, by construction, the part nobody has done before, and we are asking people to put a number on it. Studies of project overruns keep finding the same thing: errors are large, skewed toward the late side, and resistant to training. Fifteen years of practice makes people more confident, not more accurate.\n\nWorse, the estimate does not stay an estimate. It hardens into a commitment the moment it leaves the room. Managers need to coordinate with sales, support and other teams, so they quote it onward as a date. Engineers learn this and pad. Managers learn that, and trim. Both sides are now negotiating a fiction. The time spent on planning poker, story points and re-estimation is real; the accuracy gained is not.\n\nThe honest objection is that the business needs dates. It does. But you can get them without asking anyone to guess at each ticket. Break work into pieces small enough to be roughly comparable, count how many items your team finishes per week, and forecast from that history. If you have shipped eight to fourteen items a week for the last quarter, and there are sixty items left, you can say with real confidence that it lands in roughly five to eight weeks. That range comes from what your team actually did, not from what anyone hoped. A Monte Carlo run over your throughput data takes an afternoon to set up and beats any estimation ritual I have seen.\n\nThis approach also changes the conversation in a useful way. Instead of \"why did it take longer than you said,\" the question becomes \"is this slice small enough, and is scope growing?\" Those are things a team can control. Slicing work thinly forces clarity about what is actually being built. Watching the count of remaining items tells you about scope creep far earlier than a burndown of inflated points.\n\nSome work will not fit. A genuinely novel research spike, a migration with unknown dependencies: for these, timebox the exploration and decide what you will do when the box closes. That is a budget, not an estimate. You are saying how much you are willing to spend, then learning what you can.\n\nManagers, the hard part is yours. You must be willing to hear a range instead of a date, and to treat a missed forecast as new information rather than a failure of character. Engineers, your part is to keep work small and flowing.\n\nStop asking people to predict the unpredictable. Measure what happened, forecast from it, and spend the saved hours building the thing."
+}

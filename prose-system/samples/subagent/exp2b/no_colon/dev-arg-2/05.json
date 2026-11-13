@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a21749a50d174aae5",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1013,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:24:24.669Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping Small.\n\nEvery engineer has lived this scene. A manager asks how long a feature will take. You say three weeks, because two feels reckless and six feels lazy. That number is written down, repeated in meetings, and treated as a promise. Five weeks later, everyone is unhappy, and the number was never more than a guess dressed up as a fact.\n\nSoftware teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because they are wrong in a systematic way, and the cost of producing them is real.\n\nConsider what an estimate asks of you. It asks you to predict the unknown. Most software work is novel by definition, since anything repeatable would already be automated. The hard parts are the ones you cannot see until you are inside them, such as the undocumented service, the migration that touches forty tables, or the library that does not behave as advertised. Decades of project data tell the same story. Estimates cluster around the optimistic case, and actual durations have a long tail that no amount of planning poker can tame.\n\nThen there is the behavioral damage. An estimate becomes a target, and targets bend behavior. Engineers pad numbers, so the estimate stops meaning anything. Or they cut corners to hit the date, and the cost shows up later as bugs and rework. Managers learn to discount whatever they hear, so everyone is now negotiating with fiction. Hours go into the ritual itself, in refinement meetings, story pointing, and arguments over whether something is a five or an eight. That time buys no working software.\n\nThe objection is predictable. Businesses need dates. Sales has customers waiting, and finance plans quarters. That is true, and it is exactly why we should stop pretending that task-level estimates deliver dates. What delivers dates is flow.\n\nBreak work into small pieces, ideally a day or two each. Ship them continuously. Then measure how many pieces actually finish per week. That throughput is observed fact rather than opinion, and it forecasts far better than any estimate. If your team finishes roughly eight items a week and the backlog for a release holds forty, you have a five week forecast with honest error bars. Nobody had to guess anything. When scope changes, you recount and the forecast updates.\n\nThis approach also changes the conversation with the business. Instead of asking how long something takes, the useful questions become what is the smallest version worth shipping, and what can we cut if the date matters more than the scope. Those are product decisions, and they are the ones managers are actually good at making.\n\nSmall slices also expose problems early. If a piece of work cannot be cut down to a few days, that is a signal you do not understand it yet, which is worth knowing before a deadline is attached to it.\n\nNone of this means working without planning. It means swapping a prediction for a measurement. Teams that try it usually report the same surprise. The meetings shrink, the trust grows, and the dates get more reliable, not less.\n\nStop asking engineers to guess. Ask them to ship small, and read the numbers they produce."
+}

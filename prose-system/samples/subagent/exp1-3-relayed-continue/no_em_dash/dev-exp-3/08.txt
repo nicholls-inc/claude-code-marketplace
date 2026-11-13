@@ -1,0 +1,74 @@
+**How two strangers can agree on a secret while everyone listens**
+
+*The problem*
+
+Imagine two people, Alice and Bob, who have never met. They want to share a secret code so they can send private messages. The only way to talk is a public line, like shouting across a crowded room. Anyone can hear every word. It sounds impossible. If the whole conversation is overheard, how can anything stay secret?
+
+For most of history the answer was that it could not be done. Secret codes needed a shared key, like a password both sides already knew. You had to meet first, or send the key by a trusted courier. In the 1970s, researchers showed there is a way around this. The trick is to use a kind of maths that is easy to do in one direction and extremely hard to undo.
+
+*The paint analogy*
+
+Start with colours instead of numbers. Alice and Bob publicly agree on a common starting colour, say yellow. Everyone hears this.
+
+Each of them then picks a private colour and tells no one. Alice picks red. Bob picks blue.
+
+Alice mixes her red into a big tub of the yellow and sends the resulting orange tub to Bob. Bob mixes his blue into yellow and sends the green tub to Alice. An eavesdropper sees both tubs travel across the room.
+
+Now Alice takes Bob's green tub and adds her private red. Bob takes Alice's orange tub and adds his private blue. Both tubs now contain yellow, red and blue, so both end up the same muddy brown. The shared colour is the secret.
+
+The eavesdropper has the yellow, the orange and the green. But mixing paint cannot be undone. Looking at orange, you cannot easily separate out exactly which red went into the yellow. To get the brown, the eavesdropper would need one of the private colours, and those never left their owners.
+
+That is the whole idea. The rest is finding a mathematical version of "mixing" that really cannot be unmixed.
+
+*Clock arithmetic*
+
+Our mixing operation will use a kind of counting you may have met already: clock arithmetic. On a 12-hour clock, 10 o'clock plus 4 hours is 2 o'clock, not 14. You count up and wrap around when you pass the top. Mathematicians call this "working modulo 12". The word "mod" just means "the remainder after dividing". So 14 mod 12 is 2, because 14 divided by 12 leaves 2.
+
+We will use a clock with 23 positions instead of 12, so we work "mod 23". Any number you calculate gets replaced by its remainder after dividing by 23. For example, 50 mod 23 is 4, because 23 goes into 50 twice (making 46) and leaves 4.
+
+*The one-way operation*
+
+Here is the operation we will use. Take a number g and multiply it by itself a certain number of times, then take the remainder mod 23. We write this g^n, meaning g multiplied by itself n times. For instance, 5^3 is 5 x 5 x 5 = 125, and 125 mod 23 is 10, since 23 x 5 = 115 and 125 minus 115 leaves 10.
+
+Going forward is easy. Give me 5 and a power, and I can calculate the result. Going backward is hard. Suppose I tell you that 5 raised to some mystery power gives 8 mod 23, and ask what the power was. You would have to try powers one by one until something matched. With a clock of 23 positions that takes a few minutes. This is the "unmixing" problem.
+
+*A worked example*
+
+Alice and Bob publicly agree on two numbers: the clock size 23 and a base number 5. These are the yellow paint. Everyone hears them.
+
+Alice secretly picks the number 6. She calculates 5^6 mod 23. That is 15,625, and dividing by 23 leaves a remainder of 8. She announces 8 publicly. This is her orange tub.
+
+Bob secretly picks 15. He calculates 5^15 mod 23, which comes out to 19. He announces 19 publicly. This is his green tub.
+
+Now each combines the other's public number with their own secret:
+
+- Alice takes Bob's 19 and raises it to her secret power 6, working mod 23. The answer is 2.
+- Bob takes Alice's 8 and raises it to his secret power 15, working mod 23. The answer is also 2.
+
+Both now hold the number 2, and neither ever transmitted it. The reason they match is that both calculations are really the same thing in disguise. Each ends up as 5 multiplied by itself (6 x 15) times, just grouped in a different order. Order of multiplication does not change the result, just as 2 x 3 x 4 equals 4 x 3 x 2.
+
+An eavesdropper heard 23, 5, 8 and 19. To find the secret, they would need Alice's 6 or Bob's 15. Recovering either means solving the "unmixing" problem: what power of 5 gives 8, mod 23? With such small numbers, a patient person could find it by trial. But that is only because the example is tiny.
+
+*Why real versions are safe*
+
+Real systems use the same recipe with enormous numbers. The clock has not 23 positions but a number hundreds of digits long, and the secret powers are similarly huge. Calculating the forward direction stays quick, because computers have clever shortcuts for repeated multiplication. But trying every possible power to undo it would take far longer than the age of the universe, even with every computer on Earth working together.
+
+So the security rests on a gap in difficulty. Mixing is quick. Unmixing is hopeless. Alice and Bob exploit the gap, and the eavesdropper is stuck on the wrong side of it.
+
+*Why it is called "public-key"*
+
+In this scheme each person has a pair of numbers. The private one (Alice's 6) stays hidden. The public one (Alice's 8) is derived from it and is safe to shout across the room. Because the public number is made by a one-way process, publishing it gives away nothing useful about the private one. That pairing of a shareable public number and a guarded private number is what gives public-key cryptography its name.
+
+The method described here is called Diffie-Hellman key exchange, after two of the researchers who published it in 1976. Related ideas, such as the RSA system, use a different one-way problem (breaking a large number into its prime factors) but follow the same philosophy.
+
+*What it does and does not do*
+
+It is worth being clear about what this achieves. After the exchange, Alice and Bob share a secret number. They then use it as an ordinary shared password with a conventional fast code to scramble their messages. The clever maths is used once, at the start, to get the password across safely.
+
+One weakness remains. The method as described protects against someone who only listens. It does not protect against someone who actively interferes, such as a person who intercepts the line and pretends to be Bob to Alice and Alice to Bob. To defend against that, real systems add a way to prove identity, using digital signatures built from the same kind of public and private pairs. That is a story for another time.
+
+*Where you meet it*
+
+You use this every day. When your browser shows a padlock, your device and the website have just done something very like Alice and Bob's exchange, in a fraction of a second, with strangers over a line anyone could tap. Online shopping, banking and messaging all depend on it.
+
+The central lesson is a surprising one. Secrecy does not always require hiding everything. You can do most of your talking in the open, as long as the one piece that matters is made of something that cannot be unmixed.

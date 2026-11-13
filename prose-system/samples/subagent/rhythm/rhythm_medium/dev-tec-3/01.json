@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a15d47a588f1315c4",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28219,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 886,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:28:59.003Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged by pushing current through it in the direction opposite to discharge, which drives lithium ions out of the positive electrode, across the electrolyte, and into the graphite of the negative electrode. Electrons travel through the external circuit to balance the ions, so the charger is in effect moving charge and storing it as lithium sitting in a different place. The voltage across the terminals rises as the negative electrode fills with lithium, because the electrode potentials depend on how much lithium each one holds. A fully charged cell sits at about 4.2 V for common chemistries, and exceeding that voltage accelerates electrolyte decomposition and can plate metallic lithium, which damages the cell and creates a safety hazard.\n\nBecause of this limit, chargers use a two-stage method called constant-current followed by constant-voltage. In the first stage the charger holds the current fixed, typically around one times the cell's capacity per hour, and lets the terminal voltage climb. This stage delivers roughly 70 to 80 percent of the total charge. Once the voltage reaches the upper limit, the charger switches to the second stage and holds the voltage constant while the current is allowed to fall by itself. The charge is considered complete when the current decays to a small cutoff, often a few percent of the initial value.\n\nThe current falls in the second stage because of how the cell's internal resistance and concentration gradients behave. The terminal voltage equals the open-circuit voltage plus the current times the internal resistance, plus additional polarization terms. As the cell fills, its open-circuit voltage approaches the fixed ceiling, so the headroom available to drive current shrinks, and Ohm's law then forces the current down. Meanwhile, lithium builds up near the surface of the graphite particles faster than it can diffuse into their interior, and this solid-state diffusion is slow. The surface therefore looks nearly full long before the particle cores are, and the remaining capacity can only be reached as lithium gradually spreads inward. The result is a roughly exponential decay of current with time, much like a capacitor charging through a resistor, though with a much longer tail.\n\nHolding the voltage at the limit rather than raising it is a deliberate trade. Pushing harder would speed up the tail but would drive the surface potential of the graphite toward the point where lithium plates out instead of intercalating. Temperature matters too, since cold cells have slower diffusion and higher resistance and so must be charged more gently. This is why the last 20 percent of a charge takes disproportionately long, and why fast-charging schemes often stop short of full."
+}

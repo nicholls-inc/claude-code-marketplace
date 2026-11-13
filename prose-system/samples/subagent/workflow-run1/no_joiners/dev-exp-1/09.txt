@@ -1,0 +1,41 @@
+Heat pumps and cold weather
+
+A heat pump does not make heat by burning something. It moves heat that already exists. This is the key idea, and it explains why a heat pump can warm your home even when the air outside feels freezing.
+
+Cold is a matter of degree. Absolute zero is around minus 273 degrees Celsius, so outdoor air at minus five still holds a large amount of thermal energy. It is simply spread too thinly to be useful. A heat pump collects that heat and concentrates it.
+
+How it works
+
+Your fridge does the same trick in reverse. It pulls heat from the food inside and pushes it out of the back into your kitchen. A heat pump is a fridge turned inside out. It pulls heat from outdoors and releases it indoors.
+
+Inside the unit a sealed loop carries a refrigerant. This fluid boils at a very low temperature, far below zero. The process runs in four steps.
+
+First, the outdoor unit passes the refrigerant through a coil while a fan blows outside air over it. Even cold air is warmer than the refrigerant, so heat flows into the fluid and it boils into a gas.
+
+Second, a compressor squeezes that gas. Squeezing a gas raises its temperature sharply, in the same way a bicycle pump gets hot when you use it. The gas may now reach fifty or sixty degrees, which is hot enough for your heating system.
+
+Third, the hot gas flows through a heat exchanger indoors, where it gives up its heat to your heating water or to the air in your rooms. As it loses heat it turns back into a liquid.
+
+Fourth, the liquid passes through an expansion valve. Its pressure drops, it becomes very cold, and the loop starts again.
+
+Why this saves money
+
+The compressor needs electricity, but it moves far more heat than the electricity it uses. Engineers measure this with the coefficient of performance. A typical modern heat pump achieves a figure of around three in mild weather and often above two in hard frost. That means every unit of electricity delivers two to three units of heat. A gas boiler, even a very good one, delivers less than one unit of heat for each unit of gas, because some is lost up the flue. A plain electric heater delivers exactly one.
+
+What happens in a deep freeze
+
+Efficiency does fall as the outside gets colder, because the pump has to lift heat across a bigger temperature gap. Modern units are designed for this, and many keep working at minus fifteen or even minus twenty five degrees. Scandinavian countries have some of the highest heat pump adoption in the world, which shows the technology copes with serious winters. In very cold spells the outdoor coil can ice up, and the unit runs a short defrost cycle. This is normal.
+
+What to consider before replacing your boiler
+
+Insulation matters most. A heat pump delivers warmth at lower water temperatures than a boiler, so it works best in a home that holds heat well. Loft insulation and draught proofing often pay off before or alongside installation. Ask your installer for a room by room heat loss calculation rather than accepting a rule of thumb.
+
+Radiators may need checking. Because the water runs cooler, some rooms might need larger radiators or underfloor heating to reach the same comfort.
+
+Space and noise also count. The outdoor unit needs clear airflow and sits against an outside wall, with a hum about like a fridge. A hot water cylinder is usually needed too, so check you have room for one indoors.
+
+Then there is cost. Installation costs more than a gas boiler, although grants are available in many countries. Running costs depend on the relative price of electricity and gas where you live. A smart tariff with cheaper off peak power can improve the savings. Ask for quotes that show the expected seasonal efficiency.
+
+Bottom line
+
+A heat pump works in cold weather because it moves heat instead of making it. If your home is reasonably insulated and your installer sizes the system properly, it can cut your energy use sharply and your carbon emissions even more. Get at least three quotes and ask each installer to explain their heat loss figures.

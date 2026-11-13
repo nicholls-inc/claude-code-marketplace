@@ -1,0 +1,50 @@
+How Git Stores a Commit
+
+Most developers think of a commit as a set of changes. Git does not store it that way. Each commit is a snapshot of the whole project, and the .git directory is a content-addressed key-value store that holds those snapshots. Four kinds of object make this work: blobs, trees, commits and refs.
+
+The object store
+
+Every object lives in .git/objects. Its name is a hash of its contents, computed over a short header: the object type, a space, the byte length, and a NUL byte, followed by the content. SHA-1 is the default, and repositories created with the SHA-256 format use SHA-256 instead. Loose objects are zlib-compressed and stored at objects/ab/cdef..., where the first two hex digits form the directory name. git gc later packs many objects into packfiles, storing some as deltas against similar objects.
+
+Two consequences follow. Identical content always has the same name, so it is stored once. And an object cannot change without its name changing, so the name doubles as a checksum. You can inspect any object with git cat-file -t <sha> for its type and git cat-file -p <sha> for its contents.
+
+Blobs
+
+A blob holds the bytes of one version of one file, and nothing else. It has no filename, permissions or timestamp. Two files with identical content in different directories, or at different points in history, share one blob.
+
+Trees
+
+A tree represents one directory. Each entry has a mode, a type, an object name and a filename. Typical modes are 100644 for a regular file, 100755 for an executable, 120000 for a symlink, 040000 for a subdirectory (which points to another tree), and 160000 for a submodule commit. Entries are sorted by name.
+
+Because subdirectories are trees that point to trees, one root tree describes the entire project. Run git ls-tree HEAD to see the root tree's entries, and git ls-tree -r HEAD for every file in the commit.
+
+Trees are also content-addressed, which makes unchanged parts of the project free to share. If you edit one file in src/, its blob gets a new name, so the src tree gets a new name, and so does the root tree. Every other subtree and blob keeps its existing name and is reused by the new snapshot.
+
+Commit objects
+
+A commit is a short text object with a fixed header format:
+
+tree <sha of root tree>
+parent <sha of previous commit>
+author Name <email> <unix time> <timezone>
+committer Name <email> <unix time> <timezone>
+
+<commit message>
+
+A normal commit has one parent line. A merge has two or more. The root commit has none. The author is the person who wrote the change, and the committer is the person who recorded it, which differ after rebase, cherry-pick or amend.
+
+The commit's hash covers its tree, its parents, its metadata and its message. History is therefore a hash chain: change any ancestor and every descendant gets a new name. This is why rewriting history produces new commits rather than editing old ones.
+
+Refs
+
+A ref is a human-readable name for an object ID. Branches live in .git/refs/heads/ and tags in .git/refs/tags/. Each ref is a file containing a 40-character SHA and a newline. A branch is just a file that holds a commit ID, so creating one writes about 41 bytes. When refs are packed, as during gc, they move into .git/packed-refs.
+
+HEAD is a symbolic ref. The file .git/HEAD usually contains ref: refs/heads/main, which means "the current branch is whatever main points to." In a detached HEAD state, the file contains a commit SHA directly.
+
+Putting it together
+
+When you run git commit, Git does three things. It writes blobs for the staged file contents and a tree for the staging area (the index) state. It writes a commit object whose tree is that root tree and whose parent is the commit HEAD currently resolves to. Then it overwrites the file for the current branch so it points at the new commit. No existing object is modified or deleted.
+
+Diffs are computed on demand by comparing two trees, so git show and git diff never need a stored patch. Objects that no ref or reflog entry reaches, such as the old tip after an amend, remain on disk until garbage collection removes them.
+
+Next time you are unsure about a repository, try git cat-file -p HEAD, git cat-file -p HEAD^{tree}, and cat .git/HEAD. You will see the structure described here directly.

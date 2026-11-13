@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a790cd0c3d4a8bf25",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72449,
+    "output_tokens": 1014,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:12:12.729Z",
+  "valid": true,
+  "text": "On a mild January day in 1919, the North End of Boston was busy with the noise of ordinary life. Workers hauled goods along the waterfront, children played in the streets, and firefighters ate lunch at a nearby station. Looming over it all, at the edge of Commercial Street, stood a steel tank fifty feet tall and nearly 90 feet wide. It held about 2.3 million gallons of molasses.\n\nThe tank belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. The molasses, shipped up from the Caribbean, would be turned into industrial alcohol and, with Prohibition looming, into rum and munitions. The tank had been built quickly and cheaply. Its walls were thinner than they should have been, and nobody had properly tested it. When it was first filled in 1915, it leaked so badly that residents collected the seeping syrup in cups. The company's answer was to paint the tank brown to hide the stains.\n\nOn January 15, a fresh shipment had arrived, and the temperature had jumped from well below freezing to about 40 degrees. Warmer molasses expands and ferments, and the pressure inside the tank grew. Around half past noon, witnesses heard a low rumble and a sound like machine gun fire, which was the rivets popping out of the steel.\n\nThen the tank burst. A wave of molasses perhaps 25 feet high, by some accounts, surged outward at roughly 35 miles an hour. It was heavy, about 1,000 pounds per cubic foot more than a cubic foot of water would suggest, and it moved with terrible force. It tore the elevated railway from its supports, knocked a firehouse off its foundation, and flattened buildings and freight cars. Horses, wagons and people were swept up and pinned.\n\nRescuers rushed in, but the syrup was a trap. It clung to skin and clothing and made every step a struggle. Sailors from a nearby ship, medical students and police officers waded into the mess to search for survivors. In the cold, the molasses began to thicken, and some victims could not be freed in time. Twenty one people died and about 150 were injured. Rescue workers kept digging for days. The harbor ran brown well into the summer, and the neighborhood smelled of sweetness for decades.\n\nThe aftermath mattered as much as the disaster. The company blamed anarchists, claiming the tank had been bombed. But a lawsuit, one of the first big class actions in Massachusetts, dragged on for years. An auditor took testimony from hundreds of witnesses, and engineers showed the tank had been poorly designed and never safely inspected. In 1925 the company was found liable and paid out roughly 600,000 dollars in settlements.\n\nThe flood changed how buildings were regulated. Engineers were now required to sign off on structural plans, and the idea that a company could not simply claim innocence without proof took firmer hold. A strange, almost comic disaster left a serious legacy."
+}

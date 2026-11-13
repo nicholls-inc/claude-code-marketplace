@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a3c4374475968c0e8",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73753,
+    "output_tokens": 2540,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:06:34.739Z",
+  "valid": true,
+  "text": "**How a lithium-ion cell is charged, and why it slows near full**\n\nA lithium-ion cell stores charge as lithium ions moved between two intercalation electrodes. During charging, an external supply drives Li+ out of the cathode (typically a layered oxide such as NMC or LCO), through the electrolyte, and into the graphite anode, where the ions insert between carbon layers. Electrons travel the opposite way through the external circuit. The cell voltage reflects the difference in lithium chemical potential between the two electrodes, so it rises as the cathode empties and the anode fills.\n\nMost chargers use constant-current/constant-voltage (CC-CV) control. In the CC phase, the charger holds current at a set rate, commonly 0.5C to 1C, while the terminal voltage climbs toward the upper limit, typically 4.1 to 4.25 V depending on chemistry. The terminal voltage is the open-circuit potential plus polarization: an ohmic (IR) drop across the electrolyte, separator, tabs and contacts; charge-transfer overpotential at each particle surface; and concentration overpotential from lithium transport within the solid particles. When the voltage reaches the limit, the charger switches to CV, holds the voltage fixed, and lets the current decay. Charging terminates when the current falls to about C/20 to C/10.\n\nCharging slows near full for several reasons:\n\n1. **Steep electrode potentials.** As the anode fills, its potential falls toward the lithium plating potential, and as the cathode empties, its open-circuit voltage rises steeply. Less voltage headroom remains before the limit, so polarization consumes it quickly.\n\n2. **Solid-state diffusion limits.** Lithium must diffuse from particle surfaces into their interiors. At high state of charge, surface concentrations approach saturation, so a given current requires a larger driving force. The overpotential grows.\n\n3. **Fewer vacant sites.** Fewer empty host sites remain, which lowers the intercalation rate at a given overpotential.\n\n4. **Lithium plating.** If the anode is driven below about 0 V versus Li/Li+ at high current, lithium metal can deposit on its surface instead of intercalating. This causes capacity loss and a safety risk, so near full the charger must limit current.\n\nIn CV mode, the current is whatever the cell can accept at the held voltage. It decays roughly exponentially as polarization relaxes and the cell approaches equilibrium. The charger therefore trades time for safety and cell life, and the final few percent of capacity can take a substantial share of total charge time."
+}

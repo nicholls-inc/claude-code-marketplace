@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a16ab0a2a9e7a936b",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73754,
+    "output_tokens": 904,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:44:22.931Z",
+  "valid": true,
+  "text": "Every so often, the world's clocks pause for a single second. That pause is a leap second, and it has been part of civil timekeeping since 1972.\n\nTo see why, you need to know that there are two ways to measure time. One is astronomical: a day is the time it takes Earth to spin once, and the Sun crosses the sky accordingly. The other is atomic. Since the 1950s, scientists have counted time by the vibrations of atoms, mostly caesium, which are steady to a degree no planet can match. Atomic clocks lose perhaps a second in hundreds of millions of years.\n\nEarth, by comparison, is a sloppy timekeeper. Tides drag on its rotation and slow it by tiny amounts over the centuries. Earthquakes, shifting ice, and movements of molten rock deep inside the planet nudge the spin this way and that. So the two kinds of time slowly drift apart.\n\nThe leap second was the fix. Coordinated Universal Time, the standard that civil clocks follow, ticks at the atomic rate. Whenever it ran about a second ahead of the planet's rotation, international authorities inserted an extra second, usually at the end of June or December, so that clocks showed 23:59:60 before rolling over to midnight. Between 1972 and 2016, this happened 27 times. The point was to keep noon roughly aligned with the Sun, mainly for the benefit of astronomers and navigators.\n\nFor ordinary people, a single second hardly matters. For computers, it has been a headache. Most software assumes every minute has 60 seconds. A minute with 61 can make programs crash, freeze, or record events out of order. Several well-known outages, at companies running huge data centres, have been blamed on leap seconds. Banks, telecoms firms, satellite navigation systems, and power grids all depend on precise, synchronised time, and each has had to find its own awkward workaround. Some spread the extra second across a whole day. Others simply stop the clock briefly.\n\nThere is a further twist. In recent years Earth has been spinning slightly faster than expected, which raises the odd prospect of a negative leap second, where a second would be removed. Software has never been tested against that, and nobody wants to find out the hard way.\n\nSo in 2022, the international body that sets measurement standards voted to retire the practice by 2035. After that date, the gap between atomic and astronomical time will be allowed to grow, to about a minute or more, before anyone decides how to handle it. The reasoning is plain: the astronomical benefit is tiny, while the cost in technical risk is real. In a world run by software, a smooth clock matters more than a perfectly aligned Sun."
+}

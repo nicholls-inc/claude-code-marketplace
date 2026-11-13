@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad3f05c9ad0761e03",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73741,
+    "output_tokens": 880,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:44:51.768Z",
+  "valid": true,
+  "text": "**What a leap second is, and why it is being dropped**\n\nThe Earth is a poor timekeeper. For most of history, we defined the second as a fraction of the day: the time the planet takes to spin once, divided into 86,400 parts. Then, in 1967, scientists redefined it using atomic clocks, which count the vibrations of caesium atoms with extraordinary steadiness. The new second was precise, but it no longer matched the planet beneath our feet.\n\nThe Earth's rotation is slightly irregular. Tides, the movement of molten rock in the core, shifting ice and even large earthquakes nudge it, and over the long run tidal friction slows it by a tiny amount. The mismatch is small, but it accumulates. Left alone, atomic time would drift away from the cycle of day and night, and eventually noon would no longer fall when the sun is highest.\n\nThe fix, introduced in 1972, was the leap second. When the gap between atomic time and the planet's rotation approached nine-tenths of a second, a body in Paris called the International Earth Rotation and Reference Systems Service told the world to add one second to Coordinated Universal Time, the global civil standard. Clocks read 23:59:59, then 23:59:60, then midnight. Twenty-seven have been added, the most recent at the end of 2016.\n\nThe trouble is that the modern world runs on computers, and computers dislike a minute with 61 seconds. Most software assumes every minute has exactly 60. A leap second can cause systems to crash, freeze, record events out of order or repeat them. Flight-booking systems, data centres and online services have all stumbled over them. In 2012, several well-known websites went down after one. Because there is no standard way of handling the extra second, technology companies invented their own, including \"smearing\" it by stretching it across many hours, which means different systems can briefly disagree about the time.\n\nMeanwhile, the Earth has complicated matters. In recent years it has been spinning slightly faster, not slower, which raises the unprecedented possibility of a negative leap second, in which a second is removed. Engineers say that is even riskier, because software has barely been tested for it.\n\nSo in 2022 the General Conference on Weights and Measures, the international body that oversees the definition of units, voted to abandon leap seconds by or before 2035. The plan is to let the gap between atomic and Earth time grow far larger than one second, to perhaps a minute, before any correction is made, probably not for a century or so, using a method yet to be agreed. For ordinary people nothing will change. The sun will still rise on time, near enough."
+}

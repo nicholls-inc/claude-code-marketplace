@@ -1,0 +1,67 @@
+How Git Stores a Commit
+
+Every time you run `git commit`, Git writes a few small files into the `.git` directory and updates one pointer. There are only four ideas to learn: blobs, trees, commits and refs. The first three are "objects" and live in `.git/objects`. Refs are names that point at objects and live mostly in `.git/refs`.
+
+The object store
+
+Git's object store is a content-addressed database. You never give an object a name. Git names it by hashing its contents. To store an object, Git builds a short header made of the object type, a space, the content length in bytes and a null byte, and puts it in front of the content. It hashes the result with SHA-1, which gives a 40-character hex ID. Newer repositories can use SHA-256 instead, with 64-character IDs. Git then compresses the header and content with zlib and writes them to a file named after the hash. The first two hex characters become a subdirectory, so object `ce013625...` is stored at `.git/objects/ce/013625...`.
+
+Content addressing has three useful consequences. Identical content is stored once, however many files or commits contain it. An object can never change, because changed content would have a different hash and so would be a different object. And the hash works as a checksum: if a stored object is corrupted, its contents no longer match its name.
+
+You can see this for yourself:
+
+    $ echo 'hello' | git hash-object --stdin
+    ce013625030ba8dba906f756967f9e9ca394464a
+
+Any Git installation using SHA-1 gives this same ID for the string "hello" followed by a newline.
+
+Blobs: file contents
+
+A blob holds the bytes of one file and nothing else. It has no filename, no permissions and no timestamp. If two files in your project have identical contents, or a file is unchanged across a hundred commits, Git stores a single blob. When you run `git add`, Git hashes the file and writes the blob straight away. That is why staged content stays safe even if you go on to edit the working copy.
+
+Trees: directories
+
+A tree object stands for one directory. It is a sorted list of entries, and each entry has three parts:
+
+- a mode: `100644` for a normal file, `100755` for an executable, `120000` for a symlink, `40000` for a subdirectory, or `160000` for a submodule commit
+- a name
+- the hash of the object the entry points to
+
+Filenames and permissions live here, not in the blob. A subdirectory is just an entry that points to another tree, so a whole project snapshot is a tree of trees that ends in blobs. You can inspect one with `git ls-tree HEAD` or `git cat-file -p <tree-hash>`:
+
+    100644 blob a1b2c3...    README.md
+    040000 tree d4e5f6...    src
+
+Because trees are content-addressed too, an unchanged directory produces the same tree hash. A new commit that touches one file in `src/utils/` creates new blobs and trees only along the path from that file up to the root. Every other subtree is shared with the previous commit by hash. This is how Git can store full snapshots, not diffs, without the repository growing out of control.
+
+Commits: snapshots with history
+
+A commit object is a short block of text. Run `git cat-file -p HEAD` and you'll see something like this:
+
+    tree 9f8e7d...
+    parent 3c2b1a...
+    author Ada Lovelace <ada@example.com> 1731340800 +0000
+    committer Ada Lovelace <ada@example.com> 1731340800 +0000
+
+    Fix off-by-one in pagination
+
+The `tree` line points to the root tree of the snapshot. Each `parent` line points to an earlier commit. A root commit has no parent lines, a normal commit has one, and a merge commit has two or more. The author and committer lines record who did the work and when, as a Unix timestamp with a time-zone offset. The two differ when one person writes a patch and someone else applies it, for example during a rebase or cherry-pick. A blank line then separates the headers from the message. A signed commit also has a `gpgsig` header.
+
+The commit's hash covers all of this: the tree hash, the parent hashes, the metadata and the message. The parent hashes in turn cover their own trees and parents. So one commit ID fixes the entire history behind it, and changing anything in the past, even a single byte of an old file, gives every later commit a different ID. This is why rebasing "rewrites" commits. Git cannot edit them, so it creates new ones.
+
+Refs: names for commits
+
+Objects are named only by hashes, so Git needs a way to give them readable names. That is what refs are for. A branch is a plain text file whose only content is a commit hash followed by a newline:
+
+    $ cat .git/refs/heads/main
+    3c2b1a...
+
+When you commit on `main`, Git writes the new objects first, then overwrites this file with the new commit's hash. Creating a branch just writes one more small file, which is why branches are so cheap.
+
+`HEAD` is usually a symbolic ref. `.git/HEAD` contains `ref: refs/heads/main`, meaning "the current branch is main". When you check out a specific commit, `HEAD` holds a raw hash instead, which is the "detached HEAD" state. Remote-tracking branches live under `refs/remotes/origin/`. Tags live under `refs/tags/`. A lightweight tag is just a ref that points at a commit. An annotated tag points at a fourth kind of object, a tag object, which stores the tagger, a date, a message and an optional signature, and in turn points at the commit.
+
+Refs are not always loose files. Git may combine them into a single `.git/packed-refs` file, and newer versions can use the "reftable" format. Objects likewise start as individual "loose" files but are later compressed into packfiles under `.git/objects/pack/`, which store similar objects as deltas. These are storage optimizations only: the object model and the hashes stay exactly the same.
+
+Putting it together
+
+A commit therefore goes like this: Git writes a blob for each changed file, a tree for each changed directory up to the root, and a commit object that points to the root tree and to its parent. Then it moves the current branch ref to the new commit. Nothing that already existed is modified. The only thing that changes in place is the ref.

@@ -1,0 +1,13 @@
+A lithium-ion cell stores energy by holding lithium at different electrochemical potentials in two electrodes. During charging, lithium leaves the cathode, a layered metal oxide, travels through the electrolyte as an ion, and inserts between graphene layers in the graphite anode. Electrons take the external path through the charger. Cell voltage rises as the anode fills with lithium and the cathode empties, because the open-circuit voltage is a function of how full each electrode is.
+
+Almost all chargers use constant current followed by constant voltage. In the first stage the charger forces a fixed current, commonly between 0.5 and 1 C, where 1 C would fill the nominal capacity in an hour. The terminal voltage climbs steadily toward a limit, typically 4.2 V for a graphite and cobalt-based cell. The charger controls current and the cell dictates voltage. This stage delivers roughly 70 to 80 percent of the capacity.
+
+The second stage holds the voltage at the limit and lets current fall on its own. Charging ends when current decays to a small cutoff, often 0.05 C. This tail is why the last fraction of charge takes so long.
+
+The slowdown has a clear cause. The terminal voltage is the open-circuit voltage plus the current times the internal resistance, and that resistance sums ohmic drops, charge-transfer kinetics at the particle surfaces, and slow solid-state diffusion of lithium inside the particles. Late in charge the open-circuit voltage is already close to the 4.2 V ceiling, so little headroom remains for the resistive term. Holding the terminal voltage fixed therefore forces the current down, in roughly exponential decay, as the open-circuit voltage creeps upward.
+
+Diffusion makes this worse. Lithium arrives at the particle surface faster than it can spread inward, so the surface fills before the core. The surface then reads as nearly full and sets the voltage, even though the interior still has room. The constant-voltage tail gives time for concentration gradients to relax, which is a diffusion process with a time scale that grows with the square of particle size.
+
+The voltage ceiling cannot simply be raised. Above about 4.2 V the electrolyte oxidises at the cathode and the cathode structure degrades. Near full charge, the graphite potential also falls close to that of lithium metal, so fast charging risks plating metallic lithium on the anode surface. Plating consumes lithium, forms dendrites, and creates a short-circuit hazard. Lowering current at high state of charge keeps the anode potential safely above zero.
+
+Cold temperatures slow kinetics and diffusion further, so many systems derate charge current when the cell is cold. Fast charging protocols therefore trade time against lifetime and safety.

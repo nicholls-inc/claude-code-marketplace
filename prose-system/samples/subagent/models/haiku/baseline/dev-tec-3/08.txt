@@ -1,0 +1,15 @@
+How a Lithium-Ion Cell Charges, and Why It Slows Near Full
+
+A lithium-ion cell stores energy by moving lithium ions between two intercalation electrodes. When charging, an external supply drives Li+ out of the cathode (typically a layered oxide such as NMC or LCO, or LiFePO4 in LFP cells), through the liquid electrolyte, and into the graphite anode, where it inserts between graphite layers. The terminal voltage is the open-circuit voltage (OCV), set by the difference in lithium chemical potential between the electrodes, plus the losses that appear once current flows: V = OCV + I·R + η_anode + η_cathode. R is the ohmic resistance, and the η terms are the electrode polarization overpotentials.
+
+Charging normally follows constant-current/constant-voltage (CC-CV) control. In the CC phase, the charger holds current at a fixed rate, often 0.5 to 1 C (1 C fills the rated capacity in one hour). Voltage rises as OCV rises. When the terminal voltage reaches its limit, typically 4.2 V per cell for NMC and LCO and about 3.6 V for LFP, the charger switches to CV mode, holds voltage constant, and lets current decay. Charging ends when current falls to a cutoff, commonly C/20 to C/10.
+
+In CV mode, current is set by the remaining voltage headroom divided by the total impedance: I ≈ (V_limit − OCV − η) / R. Three effects make that headroom shrink quickly near full.
+
+First, the OCV curve steepens. When the cathode has few vacant lithium sites left, its potential rises sharply with each increment of lithium removed. A small additional charge therefore produces a large voltage change, and the headroom closes fast.
+
+Second, the anode approaches its limit. Near full, graphite has few free sites and its potential falls toward 0 V versus Li/Li+. If the anode potential reaches 0 V, metallic lithium can plate on the surface. Plating is irreversible and a safety hazard, so the charger must keep overpotential small, which means lower current.
+
+Third, transport limits tighten. Lithium must diffuse through solid particles, and concentration gradients grow with current. Near full, particle surfaces saturate and diffusion resistance rises, which raises polarization and further reduces the current the cell accepts at a fixed voltage.
+
+The voltage limit is itself a trade-off. A higher limit stores more energy but accelerates electrolyte oxidation and cathode structural breakdown, so 4.2 V is a compromise between capacity and cycle life.

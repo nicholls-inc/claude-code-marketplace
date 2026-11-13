@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aee125838e381f0cb",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73755,
+    "output_tokens": 3268,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:07:33.782Z",
+  "valid": true,
+  "text": "Stop Estimating How Long Work Will Take\n\nEvery quarter the same ritual plays out. A team gathers, someone says \"three days,\" someone else says \"more like a week,\" and a number lands on a card. Six weeks later that number is in the roadmap, the sales deck and a customer email. When the work slips, the team gets blamed for a promise it never meant to make.\n\nSoftware teams should stop doing this. Planning still matters. The estimate is just the wrong tool.\n\nEstimates fail for predictable reasons. Engineers size the work they can see, but most delay lives in the work they can't: the vague requirement, the flaky staging environment, the review that sits for three days, the release that waits on another team. Individuals are optimistic about their own tasks, and that optimism compounds across a plan. Padding follows, and padding makes the next estimate less honest.\n\nEstimates also distort behavior. Once a number becomes a commitment, people protect it. They cut testing, avoid the awkward scope conversation, and start the next ticket before the last one is done. The estimate ends up measuring how well a team can defend its number, not how fast it ships.\n\nThree things work better.\n\nForecast from history. If the team finished 40 items over the last eight weeks, it already has a throughput distribution. A simple Monte Carlo simulation over that data answers the question managers actually ask: \"What is the chance we finish these 25 items by March?\" The answer is a range with probabilities, which is what a planning decision needs.\n\nShrink batches and limit work in progress. Small, finished items are far more predictable than large, half-done ones. When items are roughly similar in size and the team finishes before starting, cycle time settles enough to forecast without sizing every ticket.\n\nFix the window and let scope flex. Agree on a deadline, deliver the most valuable subset, and treat the remainder as the thing that gets cut. This turns \"when will it be done?\" into \"what do we get by the deadline?\", which is usually the question the business is really asking.\n\nThe strongest objection is that the business needs dates. It does, but it needs honest dates with ranges, and a single guess made on day one is neither. A forecast built from real throughput shows its uncertainty openly, so nobody is blindsided when the range turns out wide.\n\nStop estimating. Measure what you finish, limit what you start, and decide in advance what you will cut. The calendar will still move, but you will see it coming."
+}

@@ -1,0 +1,35 @@
+{
+  "set": "dev",
+  "version": "1",
+  "frozen": true,
+  "note": "Approved by the owner and frozen on 11 November 2026. 12 briefs, 3 of each kind. Used for experiments 1 to 3 and for all tuning. Each prompt is the plain request sent in the baseline condition and carries no style instruction. No brief has a human reference text yet.",
+  "briefs": [
+    {"id": "dev-exp-1", "kind": "explanation", "words": 600, "human_reference": null,
+     "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler."},
+    {"id": "dev-exp-2", "kind": "explanation", "words": 400, "human_reference": null,
+     "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader."},
+    {"id": "dev-exp-3", "kind": "explanation", "words": 1200, "human_reference": null,
+     "prompt": "Write an explanation of about 1,200 words of how public-key cryptography lets two people who have never met agree on a secret over a line that others can listen to. The reader has school-level maths and no computing background."},
+
+    {"id": "dev-arg-1", "kind": "argument", "words": 800, "human_reference": null,
+     "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it."},
+    {"id": "dev-arg-2", "kind": "argument", "words": 500, "human_reference": null,
+     "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers."},
+    {"id": "dev-arg-3", "kind": "argument", "words": 1500, "human_reference": null,
+     "prompt": "Write an essay of about 1,500 words on whether primary schools should still teach joined-up handwriting. Take a side and argue for it."},
+
+    {"id": "dev-nar-1", "kind": "narrative non-fiction", "words": 800, "human_reference": null,
+     "prompt": "Write a narrative account of about 800 words of John Snow's investigation of the 1854 cholera outbreak around Broad Street in London. The reader is a general reader with no medical background."},
+    {"id": "dev-nar-2", "kind": "narrative non-fiction", "words": 1200, "human_reference": null,
+     "prompt": "Write a narrative account of about 1,200 words of the Apollo 13 accident and the crew's return to Earth. The reader is a general reader."},
+    {"id": "dev-nar-3", "kind": "narrative non-fiction", "words": 500, "human_reference": null,
+     "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader."},
+
+    {"id": "dev-tec-1", "kind": "technical description", "words": 800, "human_reference": null,
+     "prompt": "Write a technical description of about 800 words of how Git stores a commit, covering blobs, trees, commit objects and refs. The reader is a developer who uses Git every day and has never looked inside the .git directory."},
+    {"id": "dev-tec-2", "kind": "technical description", "words": 1000, "human_reference": null,
+     "prompt": "Write a technical description of about 1,000 words of what happens between a browser being given an HTTPS address and the first byte of the response arriving. The reader is a junior web developer."},
+    {"id": "dev-tec-3", "kind": "technical description", "words": 400, "human_reference": null,
+     "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field."}
+  ]
+}

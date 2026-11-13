@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a10af807ba370bf13",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25361,
+    "cache_read_input_tokens": 48371,
+    "output_tokens": 964,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:21:22.641Z",
+  "valid": true,
+  "text": "A lithium-ion cell stores energy by moving lithium ions between two host materials. On charge, an external supply pulls electrons out of the positive electrode (a metal oxide or phosphate) and pushes them into the negative electrode (graphite). To balance the charge, lithium ions leave the positive electrode, cross the liquid electrolyte, and slot between the graphite layers, a process called intercalation. Nothing is plated or consumed in normal operation; the ions are moved from one crystal lattice to another.\n\nThe charger runs in two phases, known as constant current, constant voltage (CC-CV).\n\nIn the constant-current phase the charger holds a fixed current, typically 0.5 to 1 times the cell's amp-hour capacity per hour, and lets the terminal voltage rise as the cell fills. For the common chemistries this runs from about 3.0 V to a limit of 4.2 V per cell (3.65 V for lithium iron phosphate). This phase delivers most of the charge, roughly 70 to 80 percent.\n\nIn the constant-voltage phase the charger holds the terminal voltage at the limit and the current falls away on its own, roughly exponentially. The charger stops when the current drops below a threshold, usually 3 to 5 percent of rated capacity. This phase adds the last 20 to 30 percent and often takes as long as the first.\n\nThe slowdown follows from the voltage limit. The terminal voltage is the cell's equilibrium voltage plus an overpotential, the extra voltage needed to drive current through it. The overpotential has three sources: ohmic resistance, the kinetics of the reaction at the electrode surface, and the slow diffusion of lithium into the solid particles. As the cell fills, its equilibrium voltage climbs towards the limit, so the headroom left for overpotential shrinks. Less overpotential means less current. The charger is not choosing to slow down; holding the voltage fixed forces it.\n\nDiffusion makes this worse near full. Ions arrive at the surface of a graphite particle faster than they can move inward, so the surface saturates while the core still has room. The remaining capacity can only be filled at the rate the solid allows.\n\nThe limit exists because exceeding it damages the cell. If the graphite surface potential falls below that of lithium metal, ions deposit as metal on the surface instead of intercalating. This plating permanently consumes lithium and can grow dendrites that short the cell internally. At the other electrode, excess voltage oxidises the electrolyte and destabilises the oxide structure, releasing heat and gas. Cold makes plating more likely, because diffusion slows, which is why chargers reduce current at low temperature.\n\nThis is why fast-charging figures are quoted to 80 percent: the constant-current phase scales with charger power, and the taper does not."
+}

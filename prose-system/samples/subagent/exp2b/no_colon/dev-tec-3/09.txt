@@ -1,0 +1,15 @@
+A lithium-ion cell is charged with a protocol called constant current, constant voltage (CC-CV). It behaves much like filling a vessel through a valve whose opening shrinks as the level rises.
+
+In the first phase, the charger acts as a current source. It forces a fixed current into the cell, commonly between 0.5 and 1 times the cell's capacity per hour (0.5C to 1C). Lithium ions leave the cathode, cross the electrolyte, and insert into graphite at the anode, while electrons travel through the external circuit. The terminal voltage rises steadily from roughly 3.0 V toward 4.2 V for a typical cell. This phase delivers about 70 to 80 percent of the capacity.
+
+The terminal voltage is not the true open-circuit voltage. It equals the open-circuit voltage plus the current multiplied by the cell's internal resistance, plus polarization terms. The open-circuit voltage is set by the state of charge, because it reflects the difference in chemical potential between the two electrodes. When the terminal voltage reaches the upper limit, the charger switches roles. It now holds the voltage constant at 4.2 V and lets the current fall. This is the constant-voltage phase.
+
+The slowdown follows from that voltage clamp. As charge accumulates, the open-circuit voltage climbs closer to the clamped value. The gap that drives current across the internal resistance shrinks, so by Ohm's law the current must shrink too. The decay is roughly exponential. The charge is declared complete when the current drops to a cutoff, typically around 0.05C to 0.1C.
+
+Two physical effects deepen the taper. First, the voltage clamp exists for safety. Pushing the terminal voltage higher would drive electrolyte oxidation at the cathode and, more seriously, lithium plating at the anode. Near full charge the graphite surface is crowded with lithium, and its potential approaches that of metallic lithium. Plated lithium is metallic and can grow into dendrites, which degrade capacity and can cause short circuits. Holding the voltage limits this risk.
+
+Second, solid-state diffusion becomes limiting. Lithium must diffuse inward through the electrode particles. As the surface fills, the concentration gradient that drives inward diffusion flattens, and the interior fills slowly. The surface can look full while the core is not, so the cell keeps absorbing charge at a diminishing rate.
+
+Temperature and age matter as well. Cold cells have higher resistance and diffuse more slowly, so they reach the voltage clamp sooner and spend longer in the taper. Aged cells have higher resistance for the same reason.
+
+Fast-charging systems work around this by shaping the current profile in steps, accepting the taper as the cost of safety and longevity. The final few percent of capacity therefore take disproportionately long.

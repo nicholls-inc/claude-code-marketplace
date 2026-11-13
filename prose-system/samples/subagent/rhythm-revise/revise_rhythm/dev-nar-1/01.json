@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9b673d733fe9eac5",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d061.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/01.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37856,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 3203,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:29:28.904Z",
+  "valid": true,
+  "text": "In late August 1854, cholera arrived in Soho, a crowded and poor district of London, and struck with terrible speed; it is a disease of violent diarrhea and vomiting that can kill a healthy adult within a day or two by draining the body of water. Within about ten days, more than five hundred people living within a few streets of one another had died, and many families were wiped out. Shops closed, carts took the dead away, and those who could afford to leave fled the neighborhood.\n\nAt the time, almost everyone of standing believed that cholera spread through bad air. The theory held that foul smells rising from rotting waste, graveyards and sewers carried a poisonous vapor, called a miasma, that sickened anyone who breathed it. The idea had a certain logic, since the filthiest parts of London were often the unhealthiest. But it was wrong, and it left the city helpless, since cleaning the air did nothing to stop the dying.\n\nJohn Snow, a physician living and working in Soho, thought otherwise, and he was an unusual man: born into a laboring family in York, he had risen to become one of the most skilled anesthetists in England, and he had given chloroform to Queen Victoria during childbirth, yet he did not drink alcohol and lived plainly. Years earlier, during the cholera epidemic of 1848 and 1849, he had reasoned that the disease must enter the body by mouth. Victims suffered first in the gut, not the lungs, and that suggested to him that something swallowed, rather than something breathed, was the cause. He suspected that an invisible poison in contaminated water carried it from one person to the next. In 1849 he had published his argument, but few people paid attention.\n\nThe Soho outbreak gave him a chance to test the idea, and he lived only a short walk from its center, so he set out to learn exactly where the dead had lived. He walked the streets, knocked on doors and questioned grieving relatives and neighbors. He also obtained the official death records from the registrar and compared them with what he found on the ground. As he gathered addresses, a pattern emerged: the deaths clustered tightly around a public water pump on Broad Street, where residents came with buckets to draw water for drinking and cooking.\n\nSnow drew a map, marking each death on a street plan of the district with a short black bar at the house where it had occurred, and the bars piled up thickly around the Broad Street pump and thinned out with distance. Maps of this kind were not entirely new, but Snow used his to make an argument, and the picture was hard to dismiss.\n\nHe then tackled the cases that seemed not to fit. A workhouse near the pump housed over five hundred people, yet only a handful died, and Snow discovered that the workhouse had its own well and did not use the pump. A brewery on Broad Street had no deaths among its workers at all, because the men were given free beer and drank little water, and the brewery also had its own supply. In contrast, he found a woman who lived far away in Hampstead and had died of cholera. Her family told him that she had always liked the taste of the Broad Street water, and her son had a bottle of it brought to her each day. She had drunk from it shortly before she fell ill, and so had her niece, who also died. Each exception, when examined, strengthened his case.\n\nSnow presented his findings to the local board of guardians, who ran the parish. On the evening of September 7th, they agreed to act, and the next day the handle was removed from the pump so that no one could draw water from it. The outbreak was already declining by then, as many survivors had fled and the sick had mostly either recovered or died, so the removal of the handle cannot be said to have ended the epidemic by itself. Still, the gesture became famous, and it marked the moment when evidence overcame habit.\n\nLater inquiry added a grim detail when a local clergyman, Henry Whitehead, who had at first doubted Snow's theory, investigated further and eventually identified the likely origin. A baby had died of diarrhea in a house at 40 Broad Street, and its mother had washed the soiled cloths in a bucket and emptied it into a cesspool. The cesspool was leaking close to the well that fed the pump. Overcrowded homes in the area had old, decaying drains, and waste could seep into the ground water.\n\nOfficials were not persuaded at once. A committee investigating the outbreak concluded that it could find no proof, and the miasma theory remained popular for years. Snow died in 1858, aged forty-five, without seeing his view accepted. Yet his method endured, for by counting cases, mapping them and tracing the exceptions, he showed how to find the cause of an epidemic without even knowing what the germ was. Today he is regarded as a founder of modern epidemiology, the study of how disease spreads through populations."
+}

@@ -1,0 +1,25 @@
+How a heat pump heats a house that is colder outside than inside
+
+A heat pump does not create heat from fuel. It moves heat that already exists in the outside air into your home. That sounds impossible in winter, but air at 5°C still holds a lot of thermal energy, and the heat pump's job is to collect it and concentrate it.
+
+The mechanism relies on a refrigerant, a fluid that boils at very low temperatures. It runs through four steps.
+
+1. Absorb. Inside the outdoor unit, a coil carries refrigerant at a pressure low enough that it boils at around -10°C. Outside air blown across the coil is warmer than that, so heat flows into the refrigerant, which evaporates into a gas. Even when the air is near freezing, the refrigerant is colder than the air, so it still picks up heat.
+
+2. Compress. A compressor squeezes the gas. Compressing any gas raises its temperature, which is why a bicycle pump warms as you use it. The refrigerant leaves the compressor hot, often above 60°C.
+
+3. Release. The hot gas flows through a coil indoors. The refrigerant is hotter than your room, so heat flows out of it into the air or water in your home. As it gives up heat, it condenses back into a liquid.
+
+4. Expand. The liquid passes through a valve that drops its pressure and temperature sharply, and it returns to the outdoor coil to repeat the cycle.
+
+The key point is that the system lifts heat from a low temperature to a higher one. The compressor needs electricity to do that lifting, and the outside air supplies the heat for free. In mild weather a typical unit delivers two to four units of heat for each unit of electricity. Engineers call this ratio the coefficient of performance (COP).
+
+The COP falls as the weather gets colder. The lower the outside temperature, the harder the compressor must work to reach the same indoor temperature. Cold-climate heat pumps are designed to keep running down to about -15°C to -25°C, but their output shrinks as temperatures drop. Installers usually size a system to meet your home's heat loss on the coldest day you expect. Some keep a backup heater for the few hours a year the pump cannot fully cover.
+
+A gas boiler works differently. It burns gas and converts the energy to heat. A modern condensing boiler reaches roughly 90 to 95 percent efficiency, so it wastes little, but it cannot deliver more heat than the fuel contains. Its output does not drop in cold weather.
+
+For your decision, three practical points matter more than the physics.
+
+- Running cost depends on the price of electricity relative to gas where you live, multiplied by the efficiency your system actually achieves. Ask installers for an estimate of seasonal performance for your home, and compare the resulting bill with your current gas bills.
+- A heat pump supplies water at lower temperatures, typically 35 to 50°C, compared with 60 to 80°C from a boiler. Radiators may need to be enlarged, and the system works best in a well-insulated house.
+- Installation quality decides the outcome. Correct sizing, a properly designed heating circuit and balanced flow are what turn the theoretical efficiency into real savings.

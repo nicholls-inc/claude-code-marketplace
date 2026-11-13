@@ -1,0 +1,61 @@
+**How Strangers Can Share a Secret in Public**
+
+Imagine you want to agree a secret number with someone you have never met. The only way to talk is by shouting across a crowded room, so everyone hears every word. It sounds impossible, because anything you say to your partner, the eavesdroppers hear as well. Yet this is what happens every time your phone connects to a shop's website or your bank. The trick is called public key cryptography, and the core idea needs nothing more than school maths.
+
+**The paint analogy**
+
+Start with paint. Mixing two colours is easy, but unmixing them is nearly impossible. Suppose Alice and Bob agree out loud on a common starting colour, say yellow. Everyone hears this, and that is fine.
+
+Alice secretly picks a colour of her own, say red, and mixes it into the yellow. She sends the orange result across the room. Bob secretly picks blue, mixes it into the yellow, and sends his green result. The eavesdropper sees yellow, orange and green. None of that reveals the red or the blue, because nobody can unmix paint.
+
+Now Alice adds her secret red to Bob's green. Bob adds his secret blue to Alice's orange. Both end up with exactly the same muddy brown, since each mixture contains yellow, red and blue. The eavesdropper cannot make it, because it needs one of the two secret colours.
+
+Computers cannot mix paint, so we need a mathematical version of the same trick. We need an operation that is easy to do in one direction and very hard to undo.
+
+**Clock arithmetic**
+
+The operation comes from clock arithmetic. On a clock with 12 hours, 9 o'clock plus 5 hours gives 2 o'clock, because you go past 12 and start again. You keep only the remainder after dividing by 12. Mathematicians call this working modulo 12. We will use a bigger clock with 23 hours, which is a prime number. A prime has no factors except 1 and itself, and this gives the clock arithmetic useful properties.
+
+Now consider repeated multiplication. Take the number 5 and multiply it by itself six times. That gives 15,625. Divide by 23 and the remainder is 8. We say that 5 to the power 6 on the 23 hour clock gives 8.
+
+Going forward is easy. Suppose someone tells you only that 5 raised to some mystery power gives 8 on the 23 hour clock. Can you find the power? With a clock this small you can simply try every power until one matches. Nothing is stopping you, which is why real systems use a clock with hundreds of digits. In that case the powers of 5 jump around the clock in what looks like a random order. There is no shortcut, and the guessing would take longer than the age of the universe. Forward is quick, backward is hopeless. This is our unmixable paint.
+
+**The exchange step by step**
+
+Here is the whole conversation with small numbers. Alice and Bob announce publicly that they will use the 23 hour clock and the starting number 5. These are like the yellow paint.
+
+Alice picks a secret number, 6, and tells no one. She works out 5 to the power 6 on the clock, which we saw is 8. She shouts out 8. This is her orange.
+
+Bob picks a secret number, 15. He works out 5 to the power 15 on the clock. Doing this in stages, he finds the answer is 19. He shouts out 19. This is his green.
+
+Everyone now knows 23, 5, 8 and 19. Only Alice knows 6, and only Bob knows 15.
+
+Now Alice takes Bob's public number 19 and raises it to her secret power of 6 on the clock. Bob takes Alice's public number 8 and raises it to his secret power of 15 on the clock. Both calculations land on the same number, which is 2.
+
+**Why the answers match**
+
+This is not luck. Look at what each person really computed. Alice's answer is 5 raised to the power 15, then raised to the power 6. Bob's answer is 5 raised to the power 6, then raised to the power 15. Raising a number to a power and then raising the result to another power is the same as raising it once to the two powers multiplied together. Since 6 times 15 equals 15 times 6, both reach 5 raised to the power 90, which on our clock is 2.
+
+So the shared secret is the number 5 raised to the product of both private numbers. Each person holds one half of that product, and the public numbers let each of them complete the job without ever learning the other half.
+
+**What the eavesdropper faces**
+
+Eve has heard 23, 5, 8 and 19. To find the secret she needs one of the private numbers. To find Alice's 6 she must work out what power of 5 gives 8 on the clock, and as we said, going backward is the hard direction. On this tiny clock she could try every power and succeed in seconds. Bob and Alice in real life would use a clock with a number about 600 digits long, and then the search is out of reach for every computer on Earth working together.
+
+Eve could try combining the public numbers in other ways, such as multiplying 8 and 19. That gives 152, which is 14 on the clock, and it is not the secret. The secret needs a private power, and the private powers never travelled across the room.
+
+**Locks and keys**
+
+The name public key cryptography comes from a close cousin of this idea. Instead of agreeing a shared secret, each person makes a pair of linked numbers called keys. One is public and is handed out freely. The other is private and never leaves its owner. The public key works like an open padlock. Anyone can snap it shut around a message, but only the owner of the private key can open it again. Strangers can send secrets to you without ever having met you, because the padlock is useless for unlocking.
+
+The mathematics behind this version often uses a different hard problem. Multiplying two huge primes is quick, but taking the answer and finding the two primes is brutally slow. The pattern is the same as before. An easy forward step and a nearly impossible backward step.
+
+**What happens in practice**
+
+When your browser shows a padlock symbol, a conversation like Alice and Bob's has just taken place in a fraction of a second. Your device and the website agreed a shared secret number over an open connection. They then use that number as the key for a fast scrambling method, so everything else you send is unreadable to anyone listening in.
+
+The public part is only used to start things off, because those calculations are slow. The shared secret does the heavy lifting afterwards.
+
+**The takeaway**
+
+The whole scheme rests on one lopsided fact about numbers. Some calculations are simple to perform and almost impossible to reverse. By building a conversation around such a calculation, two strangers can each keep a private number, publish a disguised version of it, and still end up with the same secret. Nobody listening can reconstruct it, because the missing ingredient was never spoken aloud.

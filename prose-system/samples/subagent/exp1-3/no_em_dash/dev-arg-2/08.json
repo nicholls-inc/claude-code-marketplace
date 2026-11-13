@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0829fb4d6721d42e",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 1018,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:42:20.323Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this meeting. A manager asks how long the feature will take. You say three weeks, because two feels reckless and four feels lazy. Everyone nods. Six weeks later, you are explaining the gap.\n\nThe estimate was never really a prediction. It was a negotiation dressed up as one, and teams should stop doing it.\n\nStart with the evidence. Decades of research on software projects, from the planning fallacy to countless post-mortems, show that estimates of novel work miss by large margins, and the misses skew late. This is not because engineers are bad at math. Software work is mostly discovery. You find out what the task is by doing it. The unknown unknowns, the legacy module nobody documented, the vendor API that behaves differently from its docs, do not show up until you are inside the work. Asking for a precise number before that discovery is asking for fiction.\n\nThen there is what the number does once it exists. It stops being an estimate and becomes a commitment. Managers repeat it upward. Roadmaps get built on it. When reality diverges, the team faces a choice between cutting corners and delivering bad news. Most choose the corners. Tests get skipped, shortcuts get taken, and the debt arrives later with interest. Estimation does not just fail to predict the work. It distorts the work.\n\nIt also eats time. Planning poker, story point calibration, and re-estimation after scope shifts can swallow hours every sprint. That is time spent producing a number that, by most teams' own admission, nobody trusts.\n\nThe usual objection is that the business needs dates. It does, but the question is how to get them. The better answer is to slice work into pieces small enough that each takes a day or two, then watch how many ship per week. That throughput is an empirical measurement, not a guess. Forecast from it the way a weather service forecasts from history: with a range, and with honesty that the range widens the further out you look. Teams that do this often find their forecasts beat their estimates, because real data beats optimism every time.\n\nNotice what changes in the conversation. Instead of asking \"how long will this take,\" the manager asks \"what is the smallest version worth shipping, and what can we cut if we need it sooner?\" That is a better question. It treats scope as the lever and quality as fixed, which is the opposite of what estimate-driven planning does.\n\nA fair caveat: some contexts need firm dates, such as regulatory deadlines, hardware launches, and contractual commitments. Work backward from those, fix the date, and flex the scope. That is still not estimation. It is prioritization.\n\nFor managers, the shift takes courage. A number feels like control, and giving it up feels like flying blind. But the control was always an illusion. What you get in exchange is real visibility: working software shipped in small increments, and honest forecasts grounded in what the team actually does.\n\nSo cancel the next estimation session. Cut the work smaller, ship it sooner, and let the data speak. Your team will tell you the truth when the truth stops being punished."
+}

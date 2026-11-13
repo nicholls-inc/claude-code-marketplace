@@ -1,0 +1,68 @@
+# How two strangers can agree on a secret in public
+
+Suppose Alice and Bob have never met, and everything they say to each other travels over a line that an eavesdropper, Eve, can hear in full. They want to end up with a number that both of them know and Eve does not. Once they have it, they can use it as the key to scramble all their later messages.
+
+This sounds impossible. If Eve hears every word, then whatever Alice tells Bob, Eve learns too. For most of history people assumed the only answer was to meet in advance, or to send a trusted courier with the key.
+
+In 1976 Whitfield Diffie and Martin Hellman published a way round the problem. It rests on one idea: some sums are easy to do and extremely hard to undo.
+
+## A sum that only goes one way
+
+Mixing paint is a good picture of this. Stirring yellow and blue together to make green takes seconds. Given a pot of green, separating it back into the exact yellow and blue that went in is hopeless.
+
+Cryptography needs a version of this in numbers, and it gets it from "clock arithmetic". On an ordinary clock, 5 hours after 10 o'clock is 3 o'clock, not 15 o'clock: when you pass 12 you start again. In other words, you keep only the remainder after dividing by 12.
+
+We can do the same with any size of clock. Take one with 23 hours. To work out a number "on the 23-clock", divide by 23 and keep the remainder. So 25 becomes 2, because 25 is one full lap of 23 with 2 left over.
+
+Now raise numbers to powers on this clock. Take 5 and multiply it by itself repeatedly, reducing on the 23-clock each time:
+
+- 5¹ = 5
+- 5² = 25, which is 2
+- 5³ = 2 × 5 = 10
+- 5⁴ = 10 × 5 = 50, which is 4
+- 5⁵ = 4 × 5 = 20
+- 5⁶ = 20 × 5 = 100, which is 8
+
+The results (5, 2, 10, 4, 20, 8) jump about with no visible pattern. That is the one-way property. Going forwards is easy: tell me the power, and I can work out the result with a few multiplications. Going backwards is hard: if I tell you only that the result is 8, there is no neat way to find that the power was 6. You have to try powers one by one until you hit it.
+
+With a clock of 23 hours, trying them all takes a minute. With a clock whose size is a number hundreds of digits long, trying them all would take every computer on Earth far longer than the age of the universe. Yet the forward sum remains quick even then, because there are shortcuts for raising to a power (repeated squaring) and no comparable shortcut is known for going back.
+
+## The exchange, step by step
+
+Here is how Alice and Bob use this. We will keep the 23-clock and the starting number 5 so that you can check every step yourself.
+
+**Step 1: agree the public numbers.** Alice and Bob agree, openly, to use the clock size 23 and the starting number 5. Eve hears both. That is fine.
+
+**Step 2: each picks a private number.** Alice chooses 6 and tells nobody. Bob chooses 15 and tells nobody. These numbers never travel over the line.
+
+**Step 3: each sends a scrambled version.** Alice works out 5⁶ on the 23-clock, which we saw is 8, and sends 8 to Bob. Bob works out 5¹⁵ on the 23-clock, which comes to 19, and sends 19 to Alice. Eve hears 8 and 19.
+
+**Step 4: each combines what they received with their own private number.** Alice takes Bob's 19 and raises it to her private power, 6. On the 23-clock, 19⁶ comes to 2. Bob takes Alice's 8 and raises it to his private power, 15. On the 23-clock, 8¹⁵ also comes to 2.
+
+Both now hold the number 2, and neither ever sent it.
+
+## Why they land on the same number
+
+This is not a coincidence. Alice's 8 is really "5 multiplied by itself 6 times". When Bob raises that to the 15th power, he is taking 5 multiplied by itself 6 × 15 = 90 times. Bob's 19 is really "5 multiplied by itself 15 times". When Alice raises that to the 6th power, she gets 5 multiplied by itself 15 × 6 = 90 times.
+
+Six lots of fifteen is the same as fifteen lots of six. Both of them have calculated 5⁹⁰ on the 23-clock, by different routes. Throwing away full laps of 23 along the way does not change the final remainder, so the routes agree.
+
+In paint terms: Alice and Bob start with the same public colour. Each stirs in a private colour and posts the resulting pot to the other. Each then stirs their own private colour into the pot they received. Both pots now contain the public colour plus both private colours, so they match. Eve has seen the two posted pots, but each of those contains only one private colour, and she cannot separate either out.
+
+## What Eve is left with
+
+Eve knows the clock size 23, the starting number 5, and the two messages 8 and 19. To get the secret she needs either Alice's 6 or Bob's 15. That means solving "5 to what power gives 8 on the 23-clock?", which is exactly the backwards sum that has no shortcut.
+
+She cannot get there by combining what she heard, either. Multiplying 8 by 19 gives her 5 to the power 6 + 15, which is 5²¹, not 5⁹⁰. Nobody has found a way to turn the two public messages into the shared secret without first recovering one of the private numbers.
+
+On our toy clock Eve would simply try all the powers and win in moments. The protection comes entirely from size. Real systems use clock sizes of 600 digits or more, and private numbers of similar scale. Alice and Bob's computers do their forward sums in a fraction of a second. Eve's backward sum is out of reach.
+
+A caution: nobody has proved that the backward sum is hard. It is only that decades of effort by mathematicians have failed to find a fast method for ordinary computers. Large quantum computers, if they are built, would be able to do it, which is why replacement methods based on different hard problems are now being introduced.
+
+## Using the secret, and one gap
+
+The shared number is not itself the message. It is a key. Alice and Bob feed it into a conventional scrambling method, where the same key locks and unlocks, and use that for the conversation. Something like this happens each time your browser shows a padlock: your device and the website, which have never met, agree a fresh key in public and then talk privately.
+
+There is one gap the exchange does not close. It guarantees that Alice shares a secret with whoever is at the other end, but not that this person is Bob. If Eve can intercept and replace messages rather than merely listen, she can run one exchange with Alice while posing as Bob and another with Bob while posing as Alice, and read everything as it passes through her. So in practice the exchange is paired with a way of proving identity, called a digital signature, which is built from the same kind of one-way mathematics.
+
+The core result still holds. Two people who share nothing in advance can speak entirely in the open and finish with a number that only the two of them know.

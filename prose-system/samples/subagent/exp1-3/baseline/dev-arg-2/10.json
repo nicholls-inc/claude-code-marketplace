@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a03d4545379a1007a",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72454,
+    "output_tokens": 1056,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:43:21.937Z",
+  "valid": true,
+  "text": "Stop Estimating (Mostly): The Case for Dropping the Date Game\n\nEvery engineering team knows the ritual. A manager asks how long something will take. An engineer, who has never seen the code path in question, produces a number. The number becomes a commitment. Three weeks later, the number is wrong, and everyone acts surprised. Teams should stop producing these estimates.\n\nStart with the evidence. Software estimates are bad, and they are bad in a predictable way. Fred Brooks wrote about this in 1975, and Kahneman gave the pattern a name: the planning fallacy. People forecast from the best case, not from the distribution of what has actually happened. Decades of project data show overruns are the norm, with a fat tail. The tail is what hurts. A task estimated at three days that takes thirty is not an error of degree. It is a different kind of event, and no amount of planning poker prevents it.\n\nThe problem is not that engineers are bad at math. The work is novel by construction. If we had done the exact thing before, we would reuse it. Estimating novel work means predicting what you will discover, which is a contradiction.\n\nWorse, estimates do damage after they are made. They harden into deadlines. They teach engineers to pad, which teaches managers to cut, which teaches engineers to pad more. They tempt teams to skip the tests and refactoring that would have kept the next estimate honest. And they consume real time: the hours spent in refinement meetings arguing over whether a story is a five or an eight are hours not spent building.\n\nThe objection is obvious. The business needs to plan. Sales promises dates, finance budgets headcount, and other teams depend on ours. Fair. But look at what planning actually requires. It requires knowing roughly how much the team ships and in what order the work matters. It does not require a per-task prediction.\n\nSo replace estimates with three cheaper practices.\n\nFirst, slice work small. If every item is a day or two of effort, you no longer need to guess its size, because you can count items. Throughput, meaning how many items finish per week, is measured, not guessed. A team's last twelve weeks of throughput forecast the next twelve far better than any sum of story points.\n\nSecond, forecast with ranges from real data. Monte Carlo simulation over your own cycle times takes minutes and yields statements like \"85 percent chance we finish by the end of March.\" That is more honest than a single date, and managers can actually plan around it.\n\nThird, put the hard conversation where it belongs: scope. When a date is fixed, the lever is what ships, not how long it takes. Order the work by value, ship continuously, and let stakeholders watch real progress instead of trusting a prediction.\n\nEstimating small, well-understood tasks is fine; a quick \"that's an afternoon\" costs nothing. The target is the large, ritualized, number-for-a-commitment kind of estimate, because that is the kind that fails and the kind that costs the most.\n\nTeams that drop it report the same thing: fewer meetings, fewer arguments about blame, and plans that survive contact with reality. Stop asking engineers to predict the unpredictable. Measure what you ship, and plan from that."
+}

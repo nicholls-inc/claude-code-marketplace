@@ -1,0 +1,23 @@
+The Pump on Broad Street
+
+On the last night of August 1854, cholera broke out in Soho, a crowded and poor district of London. People who had been well at supper were dead by morning. The disease emptied the body of fluid with frightening speed: violent diarrhoea, cramps, a shrunken, bluish face, and often death within a day. Within ten days more than five hundred people living within a few minutes' walk of one another had died. Carts carried the bodies away, and most of those who could leave did.
+
+Almost everyone at the time believed they knew the cause. Cholera, like most epidemic disease, was blamed on "miasma": bad air rising from filth, sewers and rotting matter. Soho smelled terrible, so the explanation seemed obvious.
+
+John Snow, a doctor who lived a short walk away, did not believe it. Snow was the son of a labourer from York and had made his name as a pioneer of anaesthesia; the year before, he had given chloroform to Queen Victoria during childbirth. For five years he had also been arguing an unpopular idea about cholera. The disease attacked the gut, not the lungs, so he reasoned that it must be swallowed rather than breathed. He suspected that it spread when water was contaminated by the waste of people already ill. Nobody had yet shown that germs caused disease, and Snow could not say what the poison was. He could only try to show how it travelled.
+
+The Soho outbreak, so sudden and so concentrated, looked to him like the work of a single source. His suspicion fell at once on a public pump on Broad Street, a popular well whose water was thought to be better than most. He examined the water and found little to see. So he turned from the water to the dead.
+
+Snow obtained from the registry office a list of cholera deaths in the district and went to each address. Walking door to door through the half-deserted streets, he asked the survivors one question: where did the household get its drinking water? The answers piled up. Nearly all the deaths had taken place closer to the Broad Street pump than to any other. Of the few who had died nearer a different pump, several families told him they always sent to Broad Street because they preferred the water, and some of the dead were children who passed the pump on their way to school.
+
+The exceptions were just as telling. A workhouse around the corner housed more than five hundred people, yet only a handful died. It had its own well. At a brewery on Broad Street itself, none of the seventy-odd workers died. They were given beer as part of their pay, and the brewery too had its own well. Then there was the strangest case of all: a widow in Hampstead, miles away in clean country air, who died of cholera along with a visiting niece. Snow learned that she had once lived on Broad Street, liked the taste of the pump water, and had a large bottle of it brought to her by cart every day.
+
+On the evening of 7 September, Snow took his findings to the parish officials responsible for the district. They were not convinced by his theory, but they had no better idea. The next day they ordered the handle taken off the pump so that no one could draw from it.
+
+The story is often told as if the outbreak stopped at that moment. It did not, and Snow never claimed so. Deaths were already falling, largely because so many residents had fled. Snow said plainly that he could not tell whether the well still held the poison when the handle came off.
+
+The firmest proof came from an unexpected ally. Henry Whitehead, a local clergyman, thought Snow was wrong and set out to disprove him. He knew his parishioners well, and his own patient questioning brought him around. It also led him to the beginning. A baby at 40 Broad Street, the house beside the pump, had fallen ill with diarrhoea just before the outbreak, and her mother had emptied the water from washing her nappies into a cesspit at the front of the house. When the pit was dug up, it was found to lie less than three feet from the well, its brick lining decayed and leaking.
+
+Snow later drew a map of the district, marking each death as a small black bar at the address where it occurred. The bars cluster thickly around the pump and thin out with distance. It has become one of the most famous pictures in the history of medicine.
+
+The authorities were not persuaded. An official inquiry dismissed his conclusion and kept faith with bad air. Snow died in 1858, aged forty-five, before opinion turned. Within a few decades the cholera germ had been identified, London had built new sewers, and his method of tracing a disease by patiently counting who fell ill, where, and what they had in common, had become the foundation of public health.

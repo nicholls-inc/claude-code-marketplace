@@ -1,0 +1,65 @@
+How Strangers Share a Secret in Public
+
+The puzzle
+
+Imagine two people, Alice and Bob, who have never met. They want to talk privately, but the only way to reach each other is a line that anyone can listen to. Whatever they say, an eavesdropper called Eve hears every word. It sounds impossible to agree on a secret under those conditions. If Eve hears everything, surely she knows everything.
+
+For most of history, that was true. Secret messages needed a shared key, such as a code book, and the two sides had to swap it in person beforehand. Then, in the 1970s, mathematicians found a way around the problem. The idea is called public-key cryptography, and it rests on a simple observation: some jobs are easy to do and very hard to undo.
+
+Easy to do, hard to undo
+
+Think about mixing paint. If you stir yellow and blue together, you get green in seconds. But hand someone a pot of green and ask for the exact yellow and blue that went in, and they are stuck. Mixing is a one-way street.
+
+Mathematics has its own one-way streets. Multiplying two large prime numbers is quick. Taking the answer and finding the two primes is painfully slow when the numbers are large. A second one-way street, which we will use here, involves clock arithmetic and repeated multiplication.
+
+Clock arithmetic
+
+You already know clock arithmetic. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. You wrap around after 12. Mathematicians call this working modulo 12, and it works with any number, not just 12.
+
+We will use a clock with 23 positions, numbered 0 to 22. When a result goes past 22, you divide by 23 and keep only the remainder. So 25 becomes 2, because 25 is one full lap of 23 plus 2 left over. And 46 becomes 0, because it is exactly two laps.
+
+Now the one-way street. Take a base number, say 5, and a power, say 6. Raising 5 to the power of 6 means multiplying six fives together, which gives 15,625. On our 23-position clock, 15,625 is 679 laps plus 8 left over. So we say 5 to the power of 6 lands on 8.
+
+Going forward is easy: pick a power, compute the result. Going backward is the hard part. If I tell you that 5 raised to some unknown power lands on 8, and ask for the power, you have to try the powers one at a time. With a clock of 23 positions that takes a minute. With a clock of several hundred digits, the number of powers to try is so enormous that all the computers on Earth could not finish before the Sun burns out.
+
+The recipe
+
+Here is how Alice and Bob use this. First, they agree out loud on two public numbers. Eve can hear them, and that is fine. Let us say the clock size is 23 and the base is 5.
+
+Next, each of them chooses a private number and tells nobody. Alice picks 6. Bob picks 15. These are their secrets, and they never leave their own heads.
+
+Then each computes a public number. Alice takes 5 to the power of her secret 6, which we already found lands on 8. Bob takes 5 to the power of his secret 15, which lands on 19. You can check this with a calculator if you like, wrapping around the 23-position clock at the end.
+
+Now they swap. Alice announces 8 over the open line. Bob announces 19. Eve hears both numbers, and she also knows the clock size 23 and the base 5.
+
+Finally, each combines what they received with their own secret. Alice takes Bob's number 19 and raises it to her secret power of 6. Bob takes Alice's number 8 and raises it to his secret power of 15. After wrapping around the clock, both arrive at the same answer: 2.
+
+Why they agree
+
+This is the part that feels like a magic trick, so it is worth seeing why it works.
+
+Alice's public number is 5 raised to her secret power. Bob's is 5 raised to his secret power. When Alice raises Bob's number to her own secret power, she ends up with 5 raised to Bob's secret times Alice's secret. When Bob raises Alice's number to his own secret power, he ends up with 5 raised to Alice's secret times Bob's secret.
+
+Multiplication does not care about order. Six times fifteen is the same as fifteen times six. So both of them have computed 5 raised to the same total power, and since they used the same clock, they land on the same spot. That shared spot, 2, is their secret key. Neither of them ever sent it. They each built it privately at their own end.
+
+Why Eve is stuck
+
+Eve knows 23, 5, 8 and 19. To build the secret, she would need either Alice's private 6 or Bob's private 15. To get Alice's, she must work backward from the fact that 5 raised to some power lands on 8. That is exactly the hard backward step described earlier.
+
+With our tiny clock she could simply try every power from 1 upward and find the answer in seconds. That is why this example is only a toy. Real systems use a clock with more than six hundred digits in its size. Then trying powers one at a time is hopeless, and no known shortcut exists for the general problem. Alice and Bob can still do their forward calculations quickly, because there are clever ways to compute huge powers without multiplying one at a time. The honest side does easy work. The attacker faces the hard work.
+
+Back to the paint
+
+The paint picture matches the numbers closely. Suppose Alice and Bob start with a public pot of yellow paint. Alice secretly adds a shade of her own choosing, and Bob secretly adds his. They send each other the mixed pots. Eve can see both pots but cannot separate out the secret shades. Then Alice adds her secret shade to Bob's pot, and Bob adds his secret shade to Alice's. Both pots now contain yellow plus Alice's shade plus Bob's shade, so both are the same colour. Eve has seen only pots that are missing one of the two secret shades, and she cannot unmix them.
+
+Public keys and private keys
+
+The word key in public-key cryptography comes from a related use of the same idea. In that version, each person has a matched pair. The public key can be handed to the whole world, and anyone can use it to lock a message. The private key never leaves its owner, and only it can unlock what the public key locked. Think of a padlock that you give out freely. Anyone can snap it shut, but only you hold the key that opens it.
+
+The best-known system of this kind is called RSA, and its hard problem is the prime-number one mentioned earlier. Your phone and computer use these methods every time you see a padlock symbol in your web browser. Typically the public-key step is used just once, at the start, so that the two sides can agree on a shared secret. After that, they switch to faster methods that use the shared secret to scramble everything else.
+
+What to remember
+
+Nothing in this scheme depends on hiding the method. Every step is published, and the whole world can study it. The safety comes entirely from the gap between easy and hard: raising a number to a power is quick, but finding the power from the result is not, as long as the numbers are big enough.
+
+That is how two strangers on a public line can end up holding the same secret while a listener hears everything and still learns nothing useful. The secret was never sent. It was built twice, once at each end, from private ingredients that were never spoken aloud.

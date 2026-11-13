@@ -1,0 +1,78 @@
+# Agreeing on a Secret in Public
+
+## The problem
+
+Imagine Alice and Bob have never met. They want to share a secret number, which they can then use as the key to scramble their messages. The trouble is that every word they exchange can be heard by an eavesdropper, Eve. For thousands of years this seemed impossible. If a key must be agreed before secret messages can be sent, how can you agree it without already having a secret channel?
+
+The answer, found in the 1970s, is one of the cleverest ideas in mathematics. It depends on a simple fact. Some calculations are easy to do forwards and extremely hard to undo.
+
+## Easy one way, hard the other way
+
+Multiplying is easy. Multiply 7,919 by 7,927 with pen and paper and you get 62,771,… well, a few minutes' work. Now go backwards: someone gives you 62,775,… a large number and asks which two primes multiplied to make it. You would have to try divisor after divisor. For numbers with hundreds of digits, even the fastest computers would take longer than the age of the universe.
+
+Mathematicians call this a one-way function. It is like mixing paint. Mixing yellow and blue to get green takes a second. Looking at green paint and working out exactly which yellow and blue went in is far harder.
+
+That paint picture is the classic way to understand the trick, so let's use it first.
+
+## The paint analogy
+
+Alice and Bob publicly agree on a common colour, say yellow. Everyone, including Eve, knows this.
+
+1. Alice secretly picks a private colour, red. She mixes it with the common yellow to make orange, and sends the orange to Bob. Eve sees the orange.
+2. Bob secretly picks his own private colour, blue. He mixes it with the common yellow to make green, and sends the green to Alice. Eve sees the green.
+3. Alice takes Bob's green and adds her own secret red. Bob takes Alice's orange and adds his own secret blue.
+
+Both end up with yellow + red + blue, the same muddy brown. Eve has only seen yellow, orange and green. She cannot "unmix" the paints to recover red or blue, and if she adds orange to green she gets a different mixture, with too much yellow.
+
+The secret colour was never sent. Each person built it from something public plus something that never left their own hands. The real method works the same way, using numbers instead of paint.
+
+## The number version: clock arithmetic
+
+We need a mixing operation that is easy to do and hard to reverse. We use clock arithmetic, which you may know as remainders. On a 12-hour clock, 10 o'clock plus 5 hours is 3 o'clock, because 15 divided by 12 leaves remainder 3. Mathematicians write this as 15 mod 12 = 3.
+
+Alice and Bob use a clock with a prime number of hours. Prime means it has no divisors except 1 and itself. They also use powers, such as 5^3 = 5 × 5 × 5 = 125.
+
+Here is the exchange with small numbers so you can check every step.
+
+**Public agreement.** Alice and Bob announce two numbers for everyone to hear: a clock size of 23 and a base number of 5. These are the "common yellow."
+
+**Alice's private choice.** She picks the secret number 6 and tells no one. She computes 5^6 mod 23. Working it step by step:
+- 5^2 = 25, which is 2 on a 23-hour clock
+- 5^4 = 2 × 2 = 4
+- 5^6 = 5^4 × 5^2 = 4 × 2 = 8
+
+She sends **8** to Bob. This is her "orange."
+
+**Bob's private choice.** He picks the secret number 15. He computes 5^15 mod 23 and gets **19**. (Using the same method: 5^8 is 16, then 16 × 4 × 2 × 5 = 640, and 640 leaves remainder 19 on a 23-hour clock.) He sends **19** to Alice. This is his "green."
+
+**The shared secret.** Alice takes Bob's 19 and raises it to her secret power 6, working on the 23-hour clock. Since 19 is the same as −4 on this clock, 19^6 is (−4)^6 = 4096, and 4096 leaves remainder **2**.
+
+Bob takes Alice's 8 and raises it to his secret power 15. Since 8 = 2^3, we get 8^15 = 2^45. A quick check shows 2^11 = 2048, which is one more than 89 × 23, so 2^11 is 1 on this clock. Then 2^45 = (2^11)^4 × 2 = 1 × 2 = **2**.
+
+Both arrive at 2. That is their shared secret.
+
+## Why it works
+
+The reason is a rule of powers you learned at school: (5^6)^15 equals (5^15)^6, because both equal 5^(6×15), which is 5^90. The order in which you apply the two secret powers does not matter. Alice computes it one way round and Bob the other, and they land on the same answer.
+
+Eve knows 23, 5, 8 and 19. To get the secret she needs Alice's 6 or Bob's 15. That means asking "5 to what power gives 8 on a 23-hour clock?" With a clock this small, she can simply try every power and find the answer in seconds. But the real systems use clocks with hundreds of digits. Working out 5^x on that clock is quick for the person who knows x. Going from the result back to x has no known fast method. Powers on a clock jump around unpredictably, so there is no neat way to home in on the answer. Eve would have to try an astronomical number of possibilities.
+
+This method is called Diffie-Hellman key exchange, after Whitfield Diffie and Martin Hellman, who published it in 1976.
+
+## Where "public key" comes from
+
+The same one-way idea lets you build something even more useful: a pair of linked keys.
+
+Imagine a padlock. Bob makes thousands of identical open padlocks and hands them out freely. This is his **public key**. He keeps the only key that opens them, his **private key**. Anyone, including Alice, can snap a padlock onto a message, but only Bob can open it. Alice and Eve may handle the padlocks all day, and neither learns how to unlock one.
+
+The best-known system of this kind, RSA, builds its padlock from the multiplication problem we met at the start. Bob's public key is a huge number made by multiplying two enormous primes. Anyone can use it to lock a message. Unlocking requires knowing the two primes, and only Bob knows those. Everyone else would have to factor a number with hundreds of digits.
+
+In practice, when your browser connects to a website, a key exchange like the one above sets up a shared secret, and that secret then locks all the traffic with a fast ordinary scrambler. The slow, clever maths is used only to get started.
+
+## What it does not do
+
+There is one weakness. Alice must be sure the orange she receives really came from Bob and not from Eve pretending to be Bob. If Eve sits in the middle, swapping in her own paint to each of them, she can read everything. So real systems add certificates, which are signed statements from trusted organisations saying "this public key belongs to this website." That is a separate problem, and it is solved with the same family of ideas.
+
+## The big idea
+
+Public-key cryptography does not hide the method, and it does not hide the messages sent in the open. It relies on a gap in difficulty: some calculations take a second to perform and a lifetime to reverse. Alice and Bob each do the easy direction with a private number, share only the results, and combine them into something Eve, who can only attempt the hard direction, cannot reproduce. Two strangers share a secret without ever having whispered it.

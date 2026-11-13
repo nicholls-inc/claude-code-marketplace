@@ -1,0 +1,64 @@
+From HTTPS Address to First Byte: What the Browser Does
+
+When you type https://www.example.com/products into a browser and press Enter, a lot happens before the first byte of the response arrives. Most of it is invisible, but knowing the sequence helps you reason about slow pages, certificate errors, and caching bugs. The steps are: parse the URL, check caches, resolve the name to an IP address, open a TCP connection, set up TLS, send the request, and wait for the server. Each step costs time, and each can fail in its own way.
+
+1. Parsing the URL
+
+The browser first splits the address into parts. The scheme is https, the host is www.example.com, the port is implied to be 443 because HTTPS was specified, the path is /products, and there may also be a query string or fragment. The fragment (the part after #) is never sent to the server; the browser keeps it for itself.
+
+The browser also checks its HSTS list. HSTS (HTTP Strict Transport Security) is a policy that tells browsers a site must only be reached over HTTPS. If the site is on the list, the browser refuses to downgrade to plain HTTP. If you typed only "example.com", the browser decides at this point whether to try HTTPS first.
+
+2. Checking caches and service workers
+
+Before going to the network, the browser asks whether it already has what it needs. If a service worker controls this page, it gets the first chance to answer the request, possibly from its own cache. Otherwise the browser checks its HTTP cache. A cached response that is still fresh, based on headers such as Cache-Control: max-age, can be used immediately, and nothing below happens. A stale response may still be reused after a quick check with the server, called revalidation, which uses headers like ETag and If-None-Match. For this article, assume nothing is cached.
+
+3. DNS resolution
+
+Networks route by IP address, not by name, so the browser must turn www.example.com into an address such as 93.184.216.34 (IPv4) or a longer IPv6 address. This is DNS, the Domain Name System.
+
+The lookup checks several layers in turn: the browser's own DNS cache, the operating system's cache and hosts file, and then a recursive resolver, usually run by your ISP or a public provider. If the resolver does not have the answer cached, it queries the DNS hierarchy: a root server points it to the .com servers, which point it to the authoritative servers for example.com, which finally return the address. Each answer carries a TTL (time to live) that says how long it may be cached.
+
+DNS usually takes from under a millisecond (cached) to tens or hundreds of milliseconds (uncached). Modern browsers may also query for HTTPS records, which can advertise support for HTTP/3 and other connection hints, and they may try IPv6 and IPv4 at nearly the same time, preferring whichever connects first.
+
+4. Opening a TCP connection
+
+With an IP address, the browser needs a reliable channel to the server. For HTTP/1.1 and HTTP/2, that channel is TCP. The client and server perform a three-way handshake: the client sends SYN, the server replies SYN-ACK, and the client answers ACK. This costs one network round trip. If the browser already has an open connection to that host, for example from an earlier request, it can reuse it and skip this step and the next.
+
+HTTP/3 works differently. It runs over QUIC, which uses UDP and folds the transport and encryption handshakes together. The browser typically learns it can use HTTP/3 from a previous response header (Alt-Svc) or a DNS record, so a first visit often starts with TCP anyway.
+
+5. The TLS handshake
+
+The "S" in HTTPS means the connection is encrypted with TLS (Transport Layer Security). Before any HTTP data is sent, the two sides negotiate how to protect it. In TLS 1.3, the common modern version, the flow is roughly this:
+
+- The client sends a ClientHello listing the TLS versions and cipher suites it supports, a random value, a key share for key exchange, and the SNI (Server Name Indication) extension containing the hostname. SNI matters because one IP address may host many sites, and the server needs to know which certificate to present. It may also list supported application protocols (ALPN), such as h2 and http/1.1.
+- The server replies with a ServerHello choosing the parameters, plus its own key share. From this point both sides can derive shared secret keys, and the rest of the handshake is encrypted.
+- The server sends its certificate, a proof that it holds the private key matching that certificate, and a Finished message.
+- The client verifies everything and sends its own Finished message.
+
+Certificate verification is the part most visible to developers. The browser checks that the certificate is signed by a chain of authorities leading to a root it trusts, that the dates are valid, that the hostname matches one of the names in the certificate, and that the certificate has not been revoked. If any check fails, you get the familiar full-page warning. A common cause in development is an expired certificate or one issued for a different hostname.
+
+TLS 1.3 needs one round trip after TCP is established. TLS 1.2 needs two. Session resumption can shorten repeat visits, and 0-RTT lets a returning client send data in its first flight, with some replay-risk tradeoffs. The ALPN extension also settles the HTTP version here, so no extra round trip is needed to learn that the server speaks HTTP/2.
+
+6. Sending the request
+
+The channel is now secure, so the browser sends the HTTP request. In HTTP/1.1 it looks like text:
+
+GET /products HTTP/1.1
+Host: www.example.com
+Accept: text/html
+Accept-Encoding: gzip, br
+Cookie: session=abc123
+
+In HTTP/2 and HTTP/3 the same information is sent in a compressed binary format, but the meaning is identical: a method, a path, and headers. The browser attaches cookies that match the domain and path, and it adds headers describing what it accepts. Any proxies or CDN edge servers along the way may see only the encrypted bytes unless they terminate TLS themselves, which a CDN commonly does on the site's behalf.
+
+7. Waiting for the server
+
+The request travels to the server, which may be a CDN edge node close to you or the origin machine. A load balancer picks a backend. The application then does its work: routing the path, checking authentication, querying a database, rendering a template, or reading from an internal cache. All of that is the server think time.
+
+The time from sending the request to receiving the first byte of the response is called TTFB, time to first byte. The browser's developer tools show it in the Network panel as "Waiting". Strictly speaking, TTFB measured by many tools includes DNS, TCP, and TLS time as well, so check which definition your tool uses.
+
+When the server finishes enough work, it sends the status line and headers, for example HTTP/2 200 with Content-Type: text/html, and then the body begins to stream. The arrival of that first byte is where this story ends. Everything after it, parsing HTML, fetching CSS and scripts, and rendering, is a separate process.
+
+Why this matters in practice
+
+Each stage tells you where to look when a page feels slow. Slow DNS suggests resolver or TTL issues. A long connect time suggests distance to the server, which a CDN can reduce. A long TLS phase points to old protocol versions or large certificate chains. A long wait with fast connection setup means the server itself is slow, and the fix is in your application, database, or caching layer. Open the Network panel, select a request, and look at the Timing tab: it breaks these exact stages into labelled bars, so you can see which one is costing you time.

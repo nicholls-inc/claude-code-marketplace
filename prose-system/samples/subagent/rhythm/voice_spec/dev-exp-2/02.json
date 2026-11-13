@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a4cd1255e9e36f37f",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28382,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 2336,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:29:55.792Z",
+  "valid": true,
+  "text": "A leap second is one extra second added to the world's official time, so that clocks kept by atomic physics stay in step with the turning of the Earth. Two kinds of time are involved. Since 1967 the second has been defined by caesium atoms, which give off radiation at 9,192,631,770 cycles per second, and clocks built on that standard lose less than a second in many millions of years. The Earth is a much less steady timekeeper. Tides drag on its rotation and slow it, so that a day grows longer by roughly two thousandths of a second each century, and earthquakes, melting ice and movements in the planet's core add smaller changes.\n\nCoordinated Universal Time, the basis of civil time around the world, was set up in 1972 to follow the atomic clocks while staying within 0.9 of a second of time measured by the Earth's rotation. When the gap approached that limit, the International Earth Rotation and Reference Systems Service announced a leap second, normally for the end of June or December. Clocks then showed 23:59:60 before moving on to midnight. There have been 27 of them, and the last came on 31 December 2016.\n\nThe trouble lies mostly with computers. Most software assumes that a minute has 60 seconds and that time only moves forward, and a 61-second minute breaks both ideas. The leap second of 2012 was followed by outages at several websites and at the airline Qantas, and a bug in the Linux kernel was blamed for some of them. Large companies such as Google now spread the extra second across a day rather than inserting it at once, but each firm does this in its own way, which leaves their clocks slightly out of agreement for a while. The opposite case, a negative leap second that removes a second, has never been used, and software for it has never been properly tested. That case became more likely after about 2020, when the Earth began turning slightly faster and set records for short days in 2022.\n\nIn November 2022 the General Conference on Weights and Measures, the body that governs the units of measurement, voted to stop using leap seconds by 2035. The difference between atomic time and Earth time will be allowed to grow beyond 0.9 seconds, and the size of the new limit has still to be agreed. Some estimates put the gap at about a minute within a century or so. Supporters of the change say that few people would notice such a gap, and that a rare correction of a minute or more could be prepared for far more safely than a second added every few years. Astronomers who point telescopes by the Earth's rotation will have to apply the correction themselves."
+}

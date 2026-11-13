@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab8beb5348b73ba5f",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 1067,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:40:11.081Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Forecasting.**\n\nEvery engineering team knows the ritual. A product manager asks how long something will take. Engineers shrug, pad the number, and say three weeks. Three weeks becomes a date, the date becomes a commitment, and the commitment becomes a source of blame when reality shows up late. We have run this ritual for decades, and it has never worked. Teams should stop estimating individual pieces of work.\n\nStart with the evidence. Studies of software projects keep finding the same thing: estimates miss, and they miss in one direction. The Standish reports, the Sapient and McKinsey studies of large IT projects, and plain anecdote agree that overruns are the norm. This is not because engineers are bad at their jobs. It is because the work is mostly discovery. You cannot accurately size a task whose hard part you will only find once you are inside it.\n\nThe cost of the ritual is also higher than it looks. Estimation meetings eat hours that could produce code. Story point debates consume entire planning sessions over whether something is a five or an eight. Worse, estimates change behavior. Once a number exists, people defend it. Engineers cut corners to hit it, or quietly sandbag to beat it. Managers treat it as a promise, and the next conversation is about why the team slipped instead of whether the work is still the right work.\n\nThe usual defense is that organizations need predictability. They do, but estimates are a poor way to get it. A better way is to count. Track how many items your team actually finishes each week, keep the items small, and look at the history. If you finish six to ten items a week, and the backlog holds forty, you have a forecast with a range, built from what happened rather than from what people hoped. This is the idea behind throughput-based forecasting, and it consistently performs as well as story points while costing a fraction of the effort. It works because the errors in individual tasks wash out across many of them.\n\nNotice what this changes. You stop asking engineers to predict the unknowable and start asking them to slice work into pieces small enough to ship in a few days. That is a skill worth the time, and it improves the work itself, because small slices expose risk early. The honest answer to a stakeholder becomes \"probably between five and eight weeks, and we will tell you sooner if that moves.\" That is more truthful than a single date, and leaders who hear it tend to trust the team more, not less.\n\nThere are fair objections. Some work has hard external deadlines, such as a regulatory change or a conference launch. Fine. Then the conversation is about scope: what can we ship by that date, and what do we cut? Estimation does not solve that problem either. A fixed date with flexible scope is manageable. A fixed date with a made-up estimate is a lie everyone agreed to tell.\n\nTeams also fear that dropping estimates means dropping accountability. The opposite is true. Accountability to a number nobody believed was always theatre. Accountability to a steady flow of shipped, working software is real, and anyone can see it.\n\nSo retire the planning poker deck. Slice the work thin, measure what you finish, and forecast from the data. You will spend less time guessing and more time building, and your forecasts will finally have something solid behind them."
+}

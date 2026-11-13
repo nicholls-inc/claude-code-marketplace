@@ -1,0 +1,15 @@
+A leap second is a one-second adjustment added to the world's clocks to keep them in step with the Earth.
+
+For most of history, time was set by the sky. A day was the interval between one noon and the next. Then, in the 1950s, scientists built atomic clocks, which count the vibrations of atoms and keep time with astonishing steadiness. They lose perhaps a second in hundreds of millions of years.
+
+The Earth is not so reliable. Its rotation wobbles and, on average, slows slightly, thanks to tidal friction from the Moon, shifts in the planet's molten core, and even the movement of ice and oceans. So a day measured by the planet drifts away from a day measured by atoms. The gap is tiny, but it accumulates.
+
+In 1972, the international community found a compromise. Coordinated Universal Time, the standard that civil clocks around the world follow, would tick at the pace of atomic clocks. But whenever it fell nearly a second out of line with the Earth's rotation, a leap second would be inserted, usually on the last day of June or December. The clock would read 23:59:59, then 23:59:60, then midnight. Between 1972 and 2016, 27 were added.
+
+The trouble is that computers dislike a minute with 61 seconds. Most software assumes every minute has exactly 60. When an extra second arrives, systems may freeze, repeat timestamps or disagree with one another about what time it is. Leap seconds have been blamed for outages at major websites and airlines. Financial markets, telecoms, power grids and satellite navigation all depend on precisely synchronised clocks, and engineers must write special code, and test it, for an event that happens only every year or two, and at irregular intervals nobody can predict far ahead.
+
+In 2022, the General Conference on Weights and Measures, the international body that oversees measurement standards, voted to retire the leap second by 2035. After that date, the gap between atomic and astronomical time will be allowed to grow far larger, probably to a minute, before any correction is considered. That might not happen for a century or more.
+
+Interestingly, the Earth has recently been spinning slightly faster, which has raised the odd prospect of a "negative" leap second, one removed rather than added. That would be even riskier for software, and it strengthened the case for scrapping the practice.
+
+For ordinary people, nothing will change. Noon will still be roughly noon. The sun will simply be, very slowly, a little less punctual.

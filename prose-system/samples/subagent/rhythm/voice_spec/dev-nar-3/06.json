@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa493fffe178a4db3",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28363,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 999,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:06:48.905Z",
+  "valid": true,
+  "text": "On 15 January 1919, a storage tank in the North End of Boston burst and released about 2.3 million gallons of molasses into the streets. The tank belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol, and stood on Commercial Street near the harbour. It was 50 feet high and 90 feet across. The molasses was kept there to be made into industrial alcohol, which was used in the manufacture of munitions and, with Prohibition about to take effect, in the production of rum before the ban.\n\nThe tank had been built in 1915, in a hurry, and it leaked from the start. Residents of the neighbourhood collected molasses from the seams in cups and pails. The company's response was to paint the tank brown, which hid the stains. No engineer had checked the design, and the steel walls were thinner than they should have been for the load they carried. The tank was never tested by filling it with water, which would have shown the weaknesses. A fresh shipment had been pumped in the day before the accident, and the weather had turned warm after several cold days, which may have affected the pressure inside.\n\nAt about 12.40 in the afternoon, people nearby heard a rumbling and a sound some described as like a machine gun, which was probably rivets popping out of the steel. The tank then split open. A wave of molasses, reported to be around 25 feet high at its front, moved down the street at an estimated 35 miles an hour. It knocked a firehouse off its foundations, tore a section from the elevated railway on Atlantic Avenue, and crushed or swept away wagons, horses and the people who were working or eating lunch in the area. Buildings were flattened. The wave then slowed and spread across the lower streets.\n\nTwenty-one people died and about 150 were injured. Some were killed by the initial impact and others drowned or suffocated in the syrup. Rescuers found it hard to reach victims because the molasses was thick and cold, and it clung to anyone who tried to wade in. Boston police, firefighters, Red Cross workers and sailors from a nearby ship searched through it for survivors. It took several days to find all of the bodies. Cleanup took weeks. Crews washed the streets with salt water from fire boats and spread sand and sawdust, and the harbour stayed brown into the summer.\n\nA class action suit followed, one of the first of its kind in Massachusetts. United States Industrial Alcohol argued that anarchists had blown up the tank, a claim that fitted the fears of the period. The court appointed an auditor, Hugh Ogden, who heard testimony for several years. In 1925 he found that the tank had been structurally unsound and that the company was responsible. The company paid out roughly 600,000 dollars in settlements, and families of the dead received about 7,000 dollars each.\n\nThe case is also seen as having helped change building practice. Massachusetts moved towards requiring that architects and engineers sign off on plans, and other states followed."
+}

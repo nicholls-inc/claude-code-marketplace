@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a1b6106f1958ce018",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28239,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1057,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:47:34.215Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, or at least stop treating those estimates as commitments, because the practice survives on habit and not on evidence. Every working engineer has watched a two-week task take two months and a three-day task take an afternoon, and the reason is not that the engineers were careless. Estimating asks a person to predict the unknown parts of a problem, and the unknown parts are exactly where the time goes. We can size the work we already understand, which is the part that rarely causes trouble, and we cannot size the discovery, the surprise dependency, the flaky test environment and the requirement that changes after the first demo. The research on planning has said the same for decades: people are optimistic about their own projects, and they stay optimistic after being burned.\n\nThe deeper cost is what happens to an estimate once it leaves the engineer's mouth. A rough guess offered in a planning meeting becomes a date on a slide, the date becomes a promise to a customer, and the promise becomes the thing the team is judged against. From that point the estimate shapes the work instead of describing it. Engineers pad, which wastes capacity on easy tasks, or they cut corners on hard ones to hit the number, which leaves the debt for a later quarter. Managers who see padding respond by pressing for lower numbers, engineers who see pressure pad more, and an hour of every sprint disappears into a negotiation that neither side believes in.\n\nThe usual defence is that the business needs dates, and that is true, but the business needs dates it can rely on, and estimates do not supply them. What does supply them is observed flow. A team that tracks how many items it finishes in a typical week, and how long items take from start to finish, can say with honest error bars that most work of this kind lands within three weeks and nearly all of it within six. That forecast comes from what happened and not from what anyone hoped would happen, it costs almost nothing to maintain, and it improves automatically as the data accumulates. Pair it with a habit of slicing work small enough that the slices are roughly alike, and the argument about whether something is a five or an eight stops mattering, because nobody is counting.\n\nThere is also the matter of what teams could do with the hours. Planning poker, re-estimation after scope changes and the retrospectives about why we missed are all effort spent on a number whose accuracy we have already agreed is poor. Redirect that effort to cutting scope, shipping the smallest useful piece first and learning from users, and the team gets something an estimate never gives it, which is the ability to change course when the first guess proves wrong.\n\nSome will object that without estimates there is no way to decide what to build first. But prioritisation depends on value and on rough relative cost, and a manager can tell a week-sized idea from a quarter-sized one without a spreadsheet. If an item cannot be cut down into something that fits in a few weeks, that is the finding worth discussing, and it is more useful than a fabricated figure of forty-two points.\n\nSo drop the story points, drop the date-by-date commitments, and keep the conversation about size and risk that honest planning needs. Forecast from your own history, tell stakeholders the range, and spend the saved hours building the thing."
+}

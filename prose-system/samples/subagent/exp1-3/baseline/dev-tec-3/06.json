@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a355b0fdb9d79a6cf",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73738,
+    "output_tokens": 1126,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:34:28.418Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). The reason for this shape is that the cell's terminal voltage is both the quantity you want to control and the quantity you must not exceed.\n\nThink of the cell as an ideal voltage source in series with a resistance. The source is the open-circuit voltage (OCV), which rises monotonically with state of charge, from about 3.0 V empty to about 4.2 V full for a typical graphite/NMC cell. The series resistance lumps together ohmic losses, charge-transfer kinetics at the electrodes, and slower solid-state and electrolyte diffusion effects. During charging, the terminal voltage is approximately V = OCV + I x R.\n\nStage 1, constant current. The charger holds a fixed current, commonly 0.5C to 1C (C being the current that would fill the nominal capacity in one hour). Because current is fixed, power delivery is steady and state of charge rises roughly linearly. Terminal voltage climbs as OCV rises and as the I x R term adds on top. This stage delivers roughly 70 to 80 percent of the capacity.\n\nStage 2, constant voltage. When terminal voltage reaches the upper limit (4.2 V here), the charger stops regulating current and instead clamps the voltage. That limit is a hard safety and longevity boundary: above it, electrolyte oxidation accelerates, cathode structures degrade, and at the anode, lithium can plate as metal instead of intercalating into graphite. Plating is dangerous because it consumes cyclable lithium and can grow dendrites.\n\nWhy current must then taper. With V held at the limit, the equation rearranges to I = (V_limit - OCV) / R. As the cell fills, OCV approaches V_limit, so the driving term shrinks and the current decays, roughly exponentially. The charger simply lets it fall. Charging is terminated when current drops to a cutoff, typically 0.02C to 0.05C. The tail is long: the final 20 percent can take as long as the first 80.\n\nTwo effects make the tail slower than this simple model suggests. First, the usable overpotential is the difference between the clamp and the internal state of the electrode surface, not just the bulk OCV. Lithium arrives at the graphite surface faster than it can diffuse inward, so the surface fills before the particle interior does. The surface potential therefore hits the limit early, and the current must fall to let diffusion catch up. Second, resistance often rises near full charge because the graphite's lithium-rich phases have lower diffusivity and the kinetics become less favorable.\n\nPractical consequences. Fast-charging schemes push the CC stage hard, and good battery management systems taper the current earlier based on temperature and estimated anode potential. Cold cells have higher R and a greater plating risk, so charge current is reduced. Holding the cell at 100 percent also accelerates ageing, which is why many devices stop at 80 to 90 percent or terminate promptly once the cutoff current is reached.\n\nIn short, the slowdown is not an inefficiency to be engineered away. It is the voltage limit, which protects the cell, combined with a falling driving voltage across a fixed resistance and limited lithium diffusion in the electrode."
+}

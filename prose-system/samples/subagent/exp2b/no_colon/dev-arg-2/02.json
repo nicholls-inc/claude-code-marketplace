@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a51777a5fc78dadec",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1004,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:06:54.708Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Shipping Small.\n\nEvery engineer has lived this scene. A manager asks how long the feature will take. You squint at a problem you have not yet understood, say \"about three weeks,\" and watch that number get written on a roadmap in permanent ink. Six weeks later you are late, the manager is disappointed, and everyone agrees that next time the estimate should be more careful. It never works, because the problem was never carefulness.\n\nSoftware estimation fails for a structural reason. The work that fills our days is the work nobody has done before. If we had done it before, we would have automated it or reused it. Novel work hides its difficulty until you are inside it, so the estimate is most confident exactly when it is least informed. Decades of project data tell the same story. Large overruns are normal, and they are not evenly distributed. A task estimated at two days might take one, but it might also take twenty, and the long tail dominates.\n\nTeams respond by adding ceremony. Planning poker, story points, velocity charts, confidence intervals. These rituals consume real hours and produce numbers that look scientific. Then the numbers become commitments, and commitments change behavior. Engineers pad. Managers shave the padding. Quality slips as the deadline nears, because the date has become more real than the product. Worse, people stop surfacing bad news, since bad news now means admitting the number was wrong.\n\nThe strongest objection is that businesses need dates. Sales has customers waiting. Finance has budgets. That is true, and it is an argument for forecasting, not for estimating. The difference matters. An estimate is a guess about one piece of work, made before you know much. A forecast comes from observed flow, such as how many small items your team actually finishes per week. If you slice work into pieces that each take a few days at most, count what ships, and look at the trend, you get a range that is more honest than any story point total. It costs almost no meeting time, and it improves automatically as you gather data.\n\nNotice what this changes. Instead of debating whether a ticket is a five or an eight, the team spends that energy asking whether the ticket can be made smaller. Smaller work reveals risk sooner, gets reviewed faster, and can be cut or reordered without drama. When a manager asks \"when will it be done,\" the honest answer becomes \"here is what is shipping weekly, and here is the range for the rest,\" and that answer survives contact with reality.\n\nSome estimation survives in this world. A rough sense of whether something is days, weeks, or quarters helps with prioritization, and nobody objects to a quick sanity check before taking on a big bet. What should go is the pretense of precision, the per-ticket pointing, and the habit of treating a guess as a promise.\n\nManagers worry that dropping estimates means losing control. The opposite is true. Control comes from short feedback loops, visible progress, and the freedom to change course. A date invented in week one gives you none of those. Stop estimating. Cut the work small, ship it often, and let the evidence do the talking."
+}

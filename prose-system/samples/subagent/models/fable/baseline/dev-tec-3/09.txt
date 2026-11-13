@@ -1,0 +1,20 @@
+A lithium-ion cell stores energy by moving lithium ions between two host materials. The positive electrode is a metal oxide or phosphate, and the negative electrode is usually graphite. Both are porous coatings soaked in a liquid electrolyte that conducts ions but not electrons. During charging, an external supply pulls electrons out of the positive electrode and pushes them into the negative one. To keep charge balanced, lithium ions leave the positive electrode, cross the electrolyte, and insert themselves between the graphite layers, a process called intercalation.
+
+Chargers almost universally use a two-stage profile called constant current, constant voltage (CC-CV).
+
+In the first stage, the charger holds a fixed current, typically 0.5 to 1 times the cell's capacity per hour. The cell's voltage rises as it fills, from roughly 3.0 V when empty towards an upper limit of about 4.2 V for common chemistries. This stage delivers most of the charge, usually 70 to 80 percent.
+
+In the second stage, the charger holds the cell at the limit voltage and lets the current fall as it will. Charging ends when the current has decayed to a small fraction of its initial value, often 5 to 10 percent.
+
+The slowdown comes from that voltage ceiling. The voltage at the terminals is the sum of two parts: the cell's equilibrium voltage, which depends on state of charge, and an overpotential, which is the extra voltage needed to drive current through the cell's internal resistances. Those resistances include ion transport in the electrolyte, the reaction at each particle surface, and the slow solid-state diffusion of lithium into the particles.
+
+As the cell fills, its equilibrium voltage climbs towards the limit, so the headroom left for overpotential shrinks. Since current is roughly proportional to overpotential, it has to fall. The result is an approximately exponential decay, much like charging a capacitor through a resistor as it nears the supply voltage.
+
+Two effects make it worse near full:
+
+- **Fewer vacant sites:** the graphite has few empty positions left, so lithium accumulates at the particle surfaces faster than it can diffuse inward.
+- **Rising resistance:** the surface reaction and diffusion both become slower at high states of charge, so each amp costs more overpotential.
+
+The ceiling can't simply be raised to compensate. Above it, the electrolyte oxidises at the positive electrode and the oxide structure degrades. At the negative electrode, forcing current faster than the graphite can absorb it drives the local potential below that of lithium metal, and the lithium plates onto the surface as metal instead of intercalating. Plating permanently consumes capacity and can grow dendrites that short the cell internally.
+
+This is why fast-charging figures are usually quoted to 80 percent: the final fifth takes about as long as the rest.

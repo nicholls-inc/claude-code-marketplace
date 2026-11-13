@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa36d0e633100d034",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73757,
+    "output_tokens": 1165,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:39:39.433Z",
+  "valid": true,
+  "text": "A heat pump does not make heat so much as move it. Your gas boiler burns fuel and converts the energy into heat, and that conversion can never deliver more than 100 percent of the fuel's energy. A heat pump uses a little electricity to carry heat from one place to another, so it can deliver three or four times as much heat as the electricity it consumes.\n\nThe obvious objection is that heat flows from hot to cold, not the other way round. That is true on its own. A heat pump forces the reverse by using a refrigerant, a fluid that boils at extremely low temperatures. Even air at minus 5 degrees Celsius contains plenty of thermal energy, and the refrigerant is colder still, so it absorbs that energy and boils into a gas.\n\nHere is the cycle. Outside, a fan blows air across a coil of cold refrigerant. The refrigerant soaks up heat and evaporates. A compressor then squeezes the gas, which raises its temperature sharply, often to 60 or 70 degrees Celsius, well above anything in your house. Inside, that hot gas passes through another coil, where it gives up its heat to your radiators, underfloor pipes or hot water cylinder, and condenses back into a liquid. An expansion valve drops the pressure, the liquid turns very cold, and the loop begins again.\n\nThink of a fridge running in reverse. A fridge pulls heat out of its interior and dumps it into your kitchen. A heat pump pulls heat out of the garden and dumps it into your living room.\n\nThe compressor is the only part that needs significant electricity, and its job is to raise the temperature of heat that already exists. The measure of efficiency is the coefficient of performance, or COP. A COP of 3 means one unit of electricity produces three units of heat. Two of those three came from the outdoor air, free of charge.\n\nCold weather does make the job harder. The colder it gets outside, the harder the compressor works, and the COP falls. A modern unit might manage a COP of 4 on a mild day and around 2.5 at minus 10. That is still far better than a boiler, but it explains why performance claims should be checked against your local winters. Look for the seasonal figure (SCOP), which averages the whole year, rather than the best-case number on the brochure.\n\nWhat does this mean for your decision? There are four things to weigh.\n\nFirst, running costs. Electricity usually costs more per unit than gas, so a heat pump only wins if its COP is high enough to offset the price gap. At a COP of 3 and an electricity price three times the gas price, you roughly break even. Check your own tariffs, and consider a time-of-use tariff if you have one.\n\nSecond, your house. Heat pumps run most efficiently at lower flow temperatures than boilers, so they suit well-insulated homes with large radiators or underfloor heating. A draughty house with small radiators may need insulation upgrades or bigger emitters first. Otherwise the pump works harder and costs more to run.\n\nThird, upfront cost. Installation usually costs several thousand pounds more than a new boiler, though grants may close much of the gap. Ask installers for a room-by-room heat loss calculation. A quote without one is a warning sign.\n\nFourth, space and noise. You need room outside for the unit, and probably a hot water cylinder indoors.\n\nThe physics is sound. Whether the economics work for you depends on your insulation, your emitters and your electricity price. Get two or three surveys before you commit."
+}

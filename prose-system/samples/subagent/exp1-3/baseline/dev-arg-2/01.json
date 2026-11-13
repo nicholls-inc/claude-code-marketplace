@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a40271684855d5cb9",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28185,
+    "cache_read_input_tokens": 44269,
+    "output_tokens": 1017,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:39:19.930Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this meeting. Someone asks how long a feature will take. You say three weeks, knowing it could be one or it could be ten. The number gets written down, repeated upward, and turned into a date. Six weeks later, you are explaining a \"slip\" that was never a failure of work, only a failure of prophecy.\n\nSoftware teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because the practice is built on a false premise: that the unknown can be priced in advance.\n\nConsider what an estimate really measures. Software work is mostly discovery. The parts we can predict, like wiring up a form or adding a column, are the parts we increasingly automate or copy. What remains is the part where we find out what the system actually does, what the requirement actually meant, and which dependency will bite us. You cannot size what you have not yet learned. The research on this is old and consistent. Projects overrun, and the overruns come from the tail: the occasional task that takes ten times longer than guessed, which no average can absorb.\n\nEstimates also do damage beyond being wrong. They become commitments the moment a manager repeats them. Engineers learn to pad, so estimates inflate. Managers learn to discount, so deadlines shrink. Both sides end up negotiating a fiction, and the negotiation eats hours that could have gone to the work. Worse, once a number exists, it anchors decisions. Teams cut tests, skip the cleanup, and ship the half-understood thing, all to protect a guess made before anyone knew anything.\n\nThe usual defence is that businesses need predictability. They do. But notice what actually gives it. A team that ships small changes every few days, with a visible queue, gives you far better forecasting than any planning poker session. Count how many items finish per week. Watch the trend. Say \"at this pace, the top ten items land in about a month.\" That is a forecast built from evidence, not opinion, and it corrects itself weekly.\n\nThe practical shift is modest. Break work into pieces small enough that size debates are pointless, roughly a day or two each. Track throughput rather than points. When leadership needs a date, give a range with the reasoning visible, and revisit it as items complete. When a piece is genuinely large and murky, do not estimate it. Spend a short, time-boxed spike to turn it into smaller pieces, then forecast those.\n\nThe objection I hear most is that this just hides the problem. It does the opposite. Estimation hides risk behind a confident number. Small slices expose it early, when changing course is cheap.\n\nNone of this means refusing to talk about time. Managers have real deadlines and real budgets, and engineers should engage with them honestly. The honest answer is rarely \"three weeks.\" It is \"here is what we can ship by then, here is what we will know next Friday, and here is what might change the picture.\"\n\nStop asking for numbers nobody can supply. Ask for small, finished work, delivered steadily, and let the pace tell you the rest."
+}

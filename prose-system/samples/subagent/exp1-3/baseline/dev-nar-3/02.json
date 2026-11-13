@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a42995739615d2101",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72436,
+    "output_tokens": 1113,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:11:49.367Z",
+  "valid": true,
+  "text": "On January 15, 1919, the North End of Boston was enjoying an unseasonably warm day. Temperatures had climbed above 40 degrees Fahrenheit after a bitter cold snap, and around noon, workers, children, and neighbors went about their business near Commercial Street, beside the harbor.\n\nLooming over the neighborhood stood a steel tank, 50 feet tall and about 90 feet across, owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It held roughly 2.3 million gallons of molasses, a thick syrup shipped up from the Caribbean and used to make industrial alcohol and, with Prohibition looming, rum. The tank had been built quickly, in 1915, to capitalize on wartime demand. Its walls were thinner than they should have been, and no one had checked the design carefully. It leaked so badly that residents collected the drips in pails, and the company's answer was to paint the tank brown to hide the stains. Only days earlier, a fresh shipment had been pumped in, and the warm weather expanded the already strained contents.\n\nAt about 12:30 p.m., witnesses heard a low rumble, followed by a sound some compared to a machine gun as rivets shot from the tank like bullets. Then the steel gave way.\n\nA wave of molasses, estimated at 15 feet high at its crest and moving at roughly 35 miles per hour, surged through the streets. It carried enough force to knock buildings off their foundations and buckle the girders of the elevated railway, where a train narrowly escaped. A firehouse was shoved aside, trapping men inside. Horses, wagons, and people were swept along. Those caught in the flow found the syrup clinging to their bodies like glue, growing stiffer as it cooled in the winter air.\n\nRescuers, among them police officers, sailors from the nearby USS Nantucket, Red Cross workers, and boys from the Boys' Club, waded into the sticky mess. They found it nearly impossible to pull anyone free. In all, 21 people were killed and about 150 were injured. Victims included children who had been playing in the street and a teenager sent to gather firewood. The recovery took days, and the last body was found months later.\n\nThe cleanup stretched on for weeks. Crews sprayed salt water and sand over the streets, and the harbor ran brown until summer. Locals insisted that on hot days the neighborhood smelled of molasses for decades.\n\nThe aftermath mattered more than the spectacle. United States Industrial Alcohol blamed anarchists, claiming the tank had been bombed, a plausible story in a year of Red Scare fear. But a lengthy civil trial, one of the first major class actions in Massachusetts, told a different story. The auditor, Hugh Ogden, heard hundreds of witnesses and in 1925 concluded that the tank had been structurally unsound. The company paid roughly $600,000 in settlements, a sum that translated to about $7,000 for each death.\n\nThe disaster pushed the state to change how buildings were designed. Engineers now needed licensed approval, and architects and engineers had to sign off on plans, which established a model for building codes across the country. A tragedy that sounds almost comic became a quiet turning point in public safety."
+}

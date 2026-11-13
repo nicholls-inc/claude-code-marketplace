@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a24dceb0bfe87ddaf",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28222,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 933,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:45:57.118Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment occasionally added to the world's official clocks so that they stay in step with the rotation of the Earth. The need for it arises because there are two ways of measuring time that do not quite agree. One is astronomical: a day is the time the planet takes to spin once, and the sun's position in the sky marks noon. The other is atomic: since the 1960s, clocks based on the vibrations of caesium atoms have kept time with extraordinary steadiness, drifting by less than a second over many millions of years. The Earth, by comparison, is a poor timekeeper. Tides, shifting ocean currents, movements in the planet's molten core and even melting ice all nudge its spin, and over the long run friction from the tides has been slowing it down.\n\nBecause of this, a day measured by the Earth gradually becomes slightly longer than a day measured by atomic clocks. In 1972 the international community adopted Coordinated Universal Time, which runs on atomic time but is meant to stay within a second of the Earth's own rotation. To achieve that, officials at the International Earth Rotation and Reference Systems Service would announce, usually about six months ahead, that an extra second would be inserted at the end of June or December. Clocks would then count 23:59:60 before rolling over to midnight. Twenty-seven of these seconds were added between 1972 and the end of 2016, the most recent one.\n\nThe trouble is that modern technology dislikes surprises. Computers, financial exchanges, telecommunications networks and satellite navigation systems depend on timestamps that move forward in an orderly way, and a minute with sixty-one seconds breaks many of their assumptions. Software has crashed, servers have been thrown into confusion, and engineers at large technology companies have resorted to awkward workarounds, such as smearing the extra second across a whole day. Because leap seconds arrive irregularly and cannot be predicted far in advance, they are hard to test for, and every one carries a small risk of disruption.\n\nThere is also a recent twist. Since about 2020 the Earth has been spinning slightly faster than expected, which raises the prospect of a negative leap second, in which a second would be removed. That has never been tried, and experts worry it would be even more hazardous for software.\n\nFor these reasons, in 2022 the General Conference on Weights and Measures, the international body that oversees the definition of time, voted to stop adding leap seconds by 2035. After that date the gap between atomic time and the Earth's rotation will be allowed to grow much larger, perhaps to a minute, before any correction is considered, probably many decades from now. For most people nothing will change, since the difference is invisible in daily life, and astronomers who need precise Earth orientation will use separate corrections."
+}

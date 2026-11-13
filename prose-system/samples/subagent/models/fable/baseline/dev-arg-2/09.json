@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a28eeff09627d1803",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 1006,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:22:27.302Z",
+  "valid": true,
+  "text": "Keep Estimating. Fix What You Do With the Numbers.\n\nEvery few years the argument comes around again: estimates are always wrong, they eat hours of meeting time, and they get turned into deadlines nobody agreed to. So stop producing them. Pull the next most important thing, ship it, repeat.\n\nI think this is the wrong fix for a real problem. Teams should keep estimating, and they should change almost everything about how they do it.\n\nStart with what an estimate is for. It does not exist to predict a date. It exists to inform a decision: whether to build this feature or that one, whether to hire, whether to tell the customer March or June, whether a project is worth doing at all. A feature worth doing at two weeks may be a bad idea at four months. Someone has to make that call, and if engineers refuse to supply a number, the call still gets made. It gets made by someone who knows less, and the number they invent will be worse than yours.\n\nThat is the weakness in the no-estimates position. Declining to estimate does not remove the estimate. It moves it out of the room where the knowledge is.\n\nThe second reason is that estimating is a cheap way to find out what you do not understand. When two engineers size the same piece of work at three days and three weeks, the gap is the useful output. One of them knows about the legacy billing table, or one of them has assumed a scope the other has not. Ten minutes of that disagreement saves a fortnight of discovering it in code. Teams that skip estimation tend to skip this conversation too.\n\nThe complaints about estimation are still accurate. They describe misuse:\n\n- A single number is treated as a commitment. An estimate is a range with a confidence level. \"Three to six weeks, most likely four\" is honest. \"Four weeks\" is a promise the engineer never made.\n- Estimates are produced once and never revised. The best information arrives after work starts. A team that re-estimates at the end of week one and says so out loud is more useful than a team that hits its original date by cutting corners no one hears about.\n- Precision is demanded where none exists. Sizing every ticket in hours is theatre. For small, similar work, count the items and use your historical throughput. Save deliberate estimation for the large, novel, or expensive bets.\n- Misses are punished. If a missed estimate costs an engineer standing, every future estimate will be padded, and the padding will be invisible. Managers who want accurate numbers must make it safe to give them.\n\nThe managers' side of the bargain matters most. If you ask for a number, say which decision depends on it and how precise it needs to be. \"Is this closer to a week or a quarter?\" is often all you need, and it takes two minutes to answer.\n\nEngineers have a side too. \"I don't know\" is not an answer; \"between two and eight weeks, and a two-day spike would narrow that\" is. Uncertainty is information, and stating it is part of the job.\n\nEstimation done badly is waste. Abandoning it gives up the cheapest planning tool a team has, and leaves the decisions to people with less information."
+}

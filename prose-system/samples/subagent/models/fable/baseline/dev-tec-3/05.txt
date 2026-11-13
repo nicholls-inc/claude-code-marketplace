@@ -1,0 +1,17 @@
+How a lithium-ion cell is charged, and why charging slows near full
+
+A lithium-ion cell stores energy by moving lithium between two host materials. The positive electrode is a metal oxide or phosphate; the negative electrode is usually graphite. Both are porous coatings of micron-scale particles soaked in a liquid electrolyte, with a thin separator between them. Charging forces electrons through the external circuit from positive to negative electrode, while lithium ions leave the positive electrode's particles, cross the electrolyte and insert between the graphite layers (intercalation). Discharge is the same process in reverse.
+
+The charger controls this with a two-stage profile called constant current, constant voltage (CC-CV).
+
+In the constant-current stage the charger pushes a fixed current, typically 0.5 to 1 times the cell's amp-hour capacity per hour. The terminal voltage rises as the cell fills, from roughly 3.0 V when empty to a ceiling of about 4.2 V for common chemistries. This stage delivers most of the charge, usually 70 to 80 percent, at a steady rate.
+
+When the terminal voltage reaches the ceiling, the charger holds the voltage there and lets the current fall. This is the constant-voltage stage. Charging ends when the current has decayed to a small fraction of its initial value, commonly 3 to 5 percent.
+
+The slowdown comes from that voltage ceiling. The terminal voltage is the cell's equilibrium (open-circuit) voltage plus an overpotential, the extra voltage needed to drive current through it. The overpotential has three parts: ohmic resistance, the kinetics of the reaction at the particle surfaces, and concentration gradients in the electrolyte and inside the particles. It grows with current.
+
+The equilibrium voltage rises as the cell fills, so the gap between it and the ceiling shrinks. The current that fits in that gap shrinks with it, much like a capacitor charged through a resistor from a fixed source. The decay is roughly exponential, so the last 20 percent can take as long as the first 80.
+
+Solid-state diffusion makes this worse. Lithium enters each graphite particle at its surface and must diffuse inward. Near full, the surface saturates before the interior, and the surface concentration sets the voltage the charger sees. The current has to drop to the rate at which lithium can diffuse inward.
+
+The ceiling is a hard limit for two reasons. Above it, the electrolyte oxidises at the positive electrode and the electrode's structure degrades. At the negative electrode, if the graphite surface is driven below the potential of lithium metal, lithium plates onto the surface as metal instead of intercalating. Plating permanently consumes capacity and can grow dendrites that short the cell. It is most likely at high state of charge, high current and low temperature, which is why fast chargers taper early and cold cells charge slowly.

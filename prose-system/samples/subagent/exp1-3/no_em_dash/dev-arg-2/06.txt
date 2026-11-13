@@ -1,0 +1,21 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this moment. A manager asks how long the feature will take. You say three weeks, because you have to say something. Everyone writes it down. Five weeks later, the number is still on the roadmap, a slide has been built on it, and the actual work has long since stopped resembling the thing you estimated.
+
+Software teams should stop estimating how long work will take. Not because estimation is hard, but because the number does almost nothing useful and quietly does real harm.
+
+Start with accuracy. Decades of project data, and most engineers' own memories, say the same thing: estimates of novel work are wrong, often by multiples. The reason is structural. Software work is mostly discovery. If we knew exactly what the task involved, we would have automated it already. The unknowns are the work, and you cannot price an unknown. Planning poker and story points dress this up with ceremony, but a precise-looking guess is still a guess.
+
+Then there is what the number does once it exists. An estimate stops being a forecast the moment someone else hears it. It becomes a commitment, then a deadline, then a performance measure. Engineers respond rationally. They pad the figure, cut corners on quality to hit it, or stop raising the discovery that would blow it up. The team spends energy defending a number instead of improving the product. We have traded honest information for a promise nobody could responsibly make.
+
+Estimation also costs real time. Add up the hours in refinement meetings, sizing sessions, and the arguments about whether something is a three or a five. That time buys a figure that will be revised, ignored, or weaponized.
+
+The usual objection is that the business needs predictability. It does. But predictability does not require estimates. It requires small work and honest data. Break work into slices that ship in a day or two. Track how many slices actually finish each week. That throughput is measured from what your team really does, not from what it hoped to do, and it holds up far better than any individual guess. A manager who knows the team finishes roughly eight items a week, and sees a backlog of forty, can give leadership a range grounded in evidence.
+
+When a date truly is fixed, such as a regulatory deadline or a launch tied to an event, the conversation changes. You do not ask how long the work takes. You ask what can be delivered by that date, and you cut scope to fit. That is a more honest negotiation than pretending the scope and the date can both be held.
+
+None of this means working without direction. Teams still need priorities, a sense of size, and regular check-ins on progress. A rough conversation about whether something is small, medium, or alarmingly large is cheap and worthwhile. What should go is the false precision and the promises built on it.
+
+So try it for a quarter. Cut the sizing meetings. Slice work thin, ship continuously, and report on what actually finished. You will likely find that your forecasts get better, your engineers get more candid, and your managers get something they have never had from estimates: numbers they can trust.
+
+(Word count: about 480)

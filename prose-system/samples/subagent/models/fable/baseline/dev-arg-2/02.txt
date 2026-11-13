@@ -1,0 +1,20 @@
+Keep Estimating. Fix What You Do With the Numbers.
+
+Every few years the argument returns: estimates are always wrong, they eat time, they get turned into deadlines, so stop producing them. I understand the appeal. I have sat through planning meetings where six engineers debated whether a ticket was a three or a five, and nobody could say what would change if the answer were different. But the conclusion is wrong. Teams should keep estimating, because the alternative is worse for the people who dislike estimates most.
+
+Start with what an estimate is for. It is an input to a decision, and the decision is rarely "when will this ship?" It is usually "should we build this at all?" A feature worth two weeks of effort may not be worth two quarters. If engineers decline to say which one it is, the decision still gets made. It gets made by someone with less information, or by whoever argues loudest, and the engineers inherit the result.
+
+The same goes for dates. Sales needs to know whether to promise a customer the integration this year. Marketing books a launch. Another team is waiting on your API. These people need some number, and if you refuse to supply one they will invent it. An invented date, set by someone who has never seen the codebase, is the deadline you were trying to avoid, minus your input.
+
+The strongest case for abandoning estimates is that you can forecast from throughput instead: count the items finished per week and project forward. That works well for a steady stream of similar-sized work, and teams in that position should use it. But notice that it is an estimate. It is a better method, and it only holds when someone has already sliced the work into comparable pieces, which requires judging size. It also says nothing about the project that has not been broken down yet, which is exactly when the business most needs an answer.
+
+There is a benefit that has nothing to do with the number. Asking "how long would this take?" forces a team to look at the work. The engineer who says two days and the one who says two weeks have understood the task differently, and finding that out before the work starts is cheap. Finding it out in week three is not.
+
+What deserves to be abolished is the abuse. Managers who treat an estimate as a commitment teach engineers to pad, and padded numbers are useless to everyone. So the obligations run both ways:
+
+- Engineers give ranges and say what the range depends on. "Three to six weeks, and the long end is if the vendor's sandbox is as flaky as last time."
+- Managers treat a commitment as a separate, explicit negotiation, and never punish a missed estimate that was given honestly.
+- Both sides update the number when the facts change, and say so early.
+- The effort spent estimating stays proportional to the decision. A rough size takes five minutes, and a decision that turns on the number deserves an afternoon.
+
+Estimating is a skill, and teams get better at it only by doing it and comparing the guess with the outcome. A team that stops loses that feedback and its say in the plan.

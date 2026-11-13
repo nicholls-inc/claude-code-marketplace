@@ -1,0 +1,21 @@
+**Stop Estimating. Start Forecasting From What You've Shipped.**
+
+Every engineer has lived this scene. A manager asks how long a feature will take. You squint at a vague ticket, mumble "three weeks," and watch the number get written on a slide. Six weeks later, everyone is unhappy, and nobody is surprised. The estimate was never a measurement. It was a guess that hardened into a promise.
+
+I think teams should stop producing task-level estimates. Not because planning is bad, but because estimating is a poor way to plan.
+
+Start with the evidence. Software work is dominated by unknowns: the legacy module nobody understood, the API that behaves differently in production, the requirement that changes after the first demo. The things that blow up a schedule are exactly the things you could not see when you estimated. A more careful estimating ritual does not fix that. It only produces a more confident wrong number.
+
+Then consider what estimates do to behavior. Once a number exists, it becomes a target. Engineers pad to protect themselves. Managers cut the padding to protect the deadline. Both sides know the game, so the number drifts away from anything real. Worse, the team starts optimizing for hitting the estimate instead of building the right thing. Quality gets squeezed, corners get cut, and the honest conversation about scope gets postponed until it is too late to have.
+
+There is also the plain cost. Planning poker, refinement meetings and re-estimation after every surprise eat hours that could go into building. Studies and experience agree that the accuracy gained from all that debate is small. Teams that spend two hours estimating a sprint are rarely more accurate than teams that spend ten minutes.
+
+What should replace it? Measure flow instead. Break work into pieces small enough that they all take roughly a day or two, then track how many you finish per week. That throughput is a real number drawn from your real system, not from anyone's optimism. Want to know when a backlog of forty items will land? Look at your last twelve weeks and run the simple math, ranges included. This is forecasting, and it is honest about uncertainty in a way a single date never is.
+
+Managers worry that without estimates they cannot commit to anything. In practice, the opposite holds. A forecast like "we are 85 percent likely to finish between mid-March and early April" gives stakeholders what they actually need: a range they can plan around and a signal when reality drifts. And when the date matters most, the conversation shifts to the lever you really control, which is scope. Cut it, sequence it, ship the valuable slice first.
+
+The objection I hear most is that this just renames estimation. It does not. Estimation asks people to predict the unknowable. Forecasting asks the data what already happened and extends it modestly. One relies on confidence, the other on history.
+
+Some work genuinely needs a rough size up front, like deciding whether a project is a week or a year. Fine. Make that coarse call and move on. What teams should drop is the false precision of per-ticket numbers.
+
+Stop asking engineers to be fortune tellers. Slice small, ship steadily, count what you finish, and let the numbers speak. You will be wrong less often, and you will argue less about why.

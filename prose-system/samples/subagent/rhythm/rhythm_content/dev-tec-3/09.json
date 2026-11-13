@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ad5646810fd4c3342",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28237,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 941,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:31:30.849Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage, and the reason it slows near full follows directly from what each stage controls. In the first stage the charger forces a fixed current into the cell, typically between half and one times the cell's capacity per hour, and lets the terminal voltage float upward. Lithium ions leave the cathode (commonly a layered metal oxide), cross the electrolyte and separator, and insert themselves between the graphene layers of the graphite anode, while electrons travel through the external circuit to balance the charge. The terminal voltage is the sum of the open-circuit voltage, which rises with the anode's lithium content, and an overpotential equal to the current times the cell's internal resistance, so the voltage climbs both because the cell is filling and because current is being pushed through resistance. That resistance has several parts: ohmic drop in the electrolyte and current collectors, charge-transfer resistance at the electrode surfaces, and a diffusion term, because lithium must migrate through solid particles at a finite rate and builds up a concentration gradient with the surface fuller than the core.\n\nThe charger cannot raise the voltage without limit, because above roughly 4.2 volts for a typical cell the electrolyte begins to oxidize at the cathode and, more seriously, the anode surface potential can fall to the point where lithium plates as metal rather than intercalating, which shortens life and creates a short-circuit hazard. Once the terminal voltage reaches this ceiling the charger therefore holds it constant and the second stage begins. Because the voltage is now fixed while the open-circuit voltage continues to rise as the cell fills, the difference between them, which is what drives current through the internal resistance, steadily shrinks, and the current decays roughly exponentially. The tail looks like a capacitor charging through a resistor, though the time constant is set by solid-state diffusion and is not a simple fixed value. Surface concentrations are near saturation in this stage, so the remaining capacity is stored in the particle interiors and can only be reached as fast as lithium diffuses inward, which is slow.\n\nCharging is usually terminated when the current has fallen to a small fraction of the initial rate, often a twentieth to a tenth of capacity per hour, since the last few percent of capacity would cost a disproportionate amount of time and each additional minute at high voltage accelerates degradation. The first stage delivers most of the charge, commonly around seventy to eighty percent, and the second stage trades a long time for the remainder. Thermal management and temperature limits add further constraints, since cold cells have higher resistance and greater plating risk, and warm cells age faster, so real chargers adjust the current limit with temperature and state of charge."
+}

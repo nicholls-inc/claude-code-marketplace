@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a2725bc59a5d37095",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73747,
+    "output_tokens": 4354,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:19:39.611Z",
+  "valid": true,
+  "text": "# Stop Making Developers Build Parking\n\nEvery zoning code contains a small table that does a lot of work. It says a new apartment needs one parking space, a restaurant needs one for every four seats, and an office needs three per thousand square feet. Nobody votes on those numbers, and few residents read them. Yet they decide how much housing costs, how much of a city's land goes to cars, and who can afford to live near jobs. Cities should delete them.\n\nStart with cost. A structured parking space in an urban garage can run tens of thousands of dollars to build. Surface parking is cheaper per space but consumes land that could hold homes or shops. None of that cost disappears once the building opens. Developers fold it into rents and sale prices, so the renter who never owns a car still pays for the storage of the neighbor who does. Donald Shoup, the UCLA planner who spent decades on this question, calls required parking a hidden subsidy. The label is accurate. Minimums move money from people who do not drive to people who do, and they do it through the price of everything else.\n\nNext, consider what the minimum is supposed to do. It is a forecast, made in advance and applied the same way to a corner bakery in a dense district and a suburban medical office. When the forecast runs high, the city gets empty asphalt that someone paid to build. When it runs low, neighbors fight over curb space, which shows that the market has been prevented from pricing parking at all. A developer who can see real demand will build what tenants will pay for. Some projects will still include a lot of parking, because a supermarket in a car-dependent area needs it. Others will include very little, and that is information the city has been suppressing.\n\nOpponents raise a fair worry: without minimums, cars will spill onto nearby streets. This is the strongest objection, and it deserves a direct answer. Buffalo removed citywide parking minimums in 2017, and Minneapolis did the same in 2021. As far as the available studies show, neither city has produced the parking crisis critics predicted. Most new buildings there still include some parking, because lenders and tenants want it. The evidence is young and the studies are few, so the question is not closed. But the burden should sit with the people demanding a mandate, and so far the mandate has shown little benefit.\n\nIf spillover does appear, cities have better tools than a mandate. They can price on-street spaces so they turn over, issue permits in neighborhoods where spillover is a real problem, and separate parking from rent in new buildings so tenants who do not need a space are not charged for one. Those tools respond to conditions on each block. A minimum responds to a number written decades ago.\n\nThe mandate also works against goals most cities say they hold. Climate plans call for fewer car trips. Housing plans call for more homes near transit. Parking minimums push against both. Every required space makes driving feel cheaper and walking less practical, and every lot is land a building could have used. A city serious about transit cannot also require every new office to bring its own garage.\n\nRemoving minimums is not the same as banning parking. Accessible spaces for people with disabilities are governed by federal rules, and cities should keep them. Developers who want a garage can still build one. Cities also keep the power to regulate the design and location of parking, require screening, and set maximums near transit if they choose. What they should stop doing is compelling every project to buy the same amount of car storage regardless of who lives there.\n\nThe underlying question is simple. Should a city tell a builder that before a home can be built, its owner must also pre-purchase a car space for every resident, whether or not they own a car? The answer should be no. Let the market decide how much parking to build, and let the city decide how to manage its streets. Those are two separate jobs. The minimum has been doing the first one badly while blocking the second."
+}

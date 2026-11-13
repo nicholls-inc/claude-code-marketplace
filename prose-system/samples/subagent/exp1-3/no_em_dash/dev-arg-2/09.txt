@@ -1,0 +1,23 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this scene. A manager asks how long the feature will take. You say three weeks, knowing you mean "somewhere between one and nine." The number goes on a slide. Six weeks later, someone asks why you are late.
+
+Software teams should stop estimating how long work will take. Not because estimation is hard, but because the numbers do far more harm than good.
+
+Start with the plain fact that estimates are mostly fiction. Work in software is novel by definition. If we had done the task before, we would reuse the result. The unknowns are exactly what make the estimate worthless: the legacy module nobody understands, the API that behaves differently from its docs, the requirement that changes in week two. Decades of project data tell the same story. Large efforts routinely overrun, and the errors are not random noise that averages out. They skew late, every time.
+
+Then there is what an estimate becomes the moment it is spoken. It turns into a commitment, then a deadline, then a performance metric. Engineers learn quickly to pad. Managers learn quickly to discount the padding. Both sides spend energy negotiating a number instead of discussing the problem. Worse, when a date is fixed, quality is what gives. Tests get skipped and corners get cut, because the date cannot move and the scope is already promised.
+
+The time spent is also real. Planning poker sessions, story-point calibration, re-estimation after scope shifts: add up the hours across a team and a year. That is capacity not spent building anything.
+
+"But the business needs predictability," goes the objection, and it is fair. Managers have customers, launches, and budgets. The answer is that you can get predictability without estimating individual tasks.
+
+Slice work into small pieces, each a day or two at most. Then measure what actually happens: how many pieces finish per week. That throughput is a real observation, not a guess, and it forecasts far better than any sum of hand-waved estimates. Pair it with a visible, prioritized backlog and a habit of shipping continuously, and you can tell stakeholders honestly: at our current pace, this set of work lands in roughly this window, and we will update you as we learn.
+
+That last part matters. A forecast built from observed data can be revised without embarrassment. An estimate made up front feels like a promise being broken every time reality intrudes.
+
+Stopping also forces better conversations. When you cannot hide behind a number, you must ask what is the smallest useful version, what can be cut, and what is the real deadline and why. Those questions are about value and scope, which is where managers and engineers should have been talking all along.
+
+Some teams will need to keep rough sizing for contracts or regulatory commitments. Fine. Treat it as a narrow exception, not the default operating system of the team.
+
+Try it for a quarter. Cut the work small, track what finishes, and forecast from the evidence. You will likely find that nobody misses the estimates, and that you ship more.

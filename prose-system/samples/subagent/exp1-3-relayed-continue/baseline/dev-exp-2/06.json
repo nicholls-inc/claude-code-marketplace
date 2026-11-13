@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ae71d97fd3b03e160",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72565,
+    "output_tokens": 833,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:20:35.578Z",
+  "valid": true,
+  "text": "**Why the World Is Retiring the Leap Second**\n\nA leap second is a single extra second occasionally added to the world's official clocks so that they stay in step with the turning of the Earth. Since 1972, 27 have been added, the most recent at the end of 2016.\n\nThe need for them comes from two different ways of measuring time. For most of history, a second was defined as a fraction of the day, based on how long the Earth takes to spin once. But the planet is an imperfect timekeeper. Tides, shifting ice and ocean currents, and movements deep in the Earth's core all nudge its rotation, and over the long run the spin has been slowing slightly. Meanwhile, since 1967, the second has been defined using atomic clocks, which count the vibrations of caesium atoms and are astonishingly steady.\n\nAtomic time and Earth time therefore drift apart. To keep the gap below one second, international authorities began inserting leap seconds, usually on 30 June or 31 December. On those days the last minute lasts 61 seconds, and clocks read 23:59:60 before rolling over to midnight.\n\nFor ordinary people this made little difference. For computers, it has been a headache. Most software assumes every minute has exactly 60 seconds. A sudden 61st second can confuse programs, and it has been blamed for outages at major internet companies and for glitches in systems that depend on precise timestamps, such as financial trading, telecommunications and satellite navigation. Different companies have handled the extra second in different ways, some by \"smearing\" it across many hours, which means that clocks around the world do not always agree with one another.\n\nThere is also a new complication. In recent years the Earth has been spinning slightly faster than expected, which raises the possibility of a \"negative\" leap second, in which a second is removed. That has never been tried, and engineers worry it would be even more disruptive than adding one.\n\nIn 2022, the General Conference on Weights and Measures, the international body that oversees the definition of units, voted to stop using leap seconds by 2035. Time will instead be allowed to drift away from the Earth's rotation by a larger margin, perhaps a minute or more, before any correction is made. The details of how and when that will be done have yet to be settled.\n\nThe practical effect should be invisible to most people. Noon will still be roughly when the sun is highest. But over centuries, clock time will slowly part ways with the sky, a small price, supporters argue, for a simpler and more reliable system."
+}

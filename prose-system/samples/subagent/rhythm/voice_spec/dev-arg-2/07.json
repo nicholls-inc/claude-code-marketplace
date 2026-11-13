@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a53e7d93f6260875d",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "final_text",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28381,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 2310,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:11:24.093Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long individual pieces of work will take. They should keep forecasting, which is a different activity, and the difference is the argument of this piece.\n\nThe case against estimating starts with the record. In a study published in 1994, Roger Buehler and colleagues asked psychology students to predict when they would finish their honours theses. The average prediction was 33.9 days and the average actual time was 55.5 days. About 30 per cent of the students finished by the date they had given. Those students knew the task well and had a strong reason to be accurate. Engineers estimating a feature in a codebase they only partly know are in a harder position, and there is little reason to expect them to do better.\n\nThe cost of an estimate is also easy to overlook. If ten people spend two hours a week sizing stories, that is twenty person-hours, or half of one working week, every week. The numbers they produce are rarely compared with the actual results. When they are compared, the gap is put down to unexpected complications, and unexpected complications are the normal condition of the work.\n\nA worse effect is that estimates turn into commitments. Someone says three weeks in a meeting, a manager writes it on a roadmap, and from then on the number is a promise the engineer did not mean to make. People respond in predictable ways. They pad the figure, they cut tests to meet it, or they stop mentioning that the problem turned out to be larger than it looked. In my view this is the main reason to drop the practice, because it damages the information a manager most needs, which is how the work is going.\n\nThe alternative is to count finished work and use the counts. Suppose a team has completed between six and nine items a week for the last twelve weeks, and the backlog for a release holds forty-five items of similar size. The team can say the release will probably take between five and eight weeks. That forecast comes from what the team has done and not from what anyone hopes. It takes a few minutes to produce and can be updated each week without a meeting. It does require the work to be cut into pieces of roughly similar size, which is a useful discipline in its own right.\n\nThere are fair objections. Some work has a hard date, such as a regulatory deadline or a contract, and the team needs to know early whether the date is reachable. Forecasting covers this, and it gives a range and a probability where an estimate gives a single figure. Some work is new enough that no history exists. In that case a rough size is still worth stating, and a team can state it in a sentence without a ceremony.\n\nManagers sometimes worry that without estimates they cannot plan. They can plan, using throughput and ranges, and they will be surprised less often than they are now. A team that stops estimating will still be asked when something will be done. The better answer is a range based on the last quarter, together with an agreement to revise it as the data changes."
+}

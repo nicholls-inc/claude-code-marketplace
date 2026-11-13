@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aeaa5bcc5fe1a2c78",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73763,
+    "output_tokens": 2835,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:33:18.984Z",
+  "valid": true,
+  "text": "A lithium ion cell stores energy by holding lithium ions in the graphite anode at a high chemical potential, and charging is the act of pushing them there against that potential. Because the cell behaves like a battery and not a simple capacitor, its terminal voltage rises as it fills, and charging is controlled around that rising voltage. The standard method is called constant current followed by constant voltage.\n\nIn the first phase, a charger forces a fixed current into the cell, commonly between half and one times the cell capacity per hour. The cell voltage climbs gradually from roughly 3.0 volts toward the upper limit, which for a typical cobalt or nickel based cell is about 4.2 volts. During this phase the charger regulates current and lets voltage float. Most of the energy, often around 70 to 80 percent, goes in here, so charging is fast and nearly linear.\n\nOnce the terminal voltage reaches the limit, the charger switches to the second phase and holds voltage fixed. The limit cannot be exceeded because higher voltage drives electrolyte oxidation at the cathode and lithium metal plating at the anode, both of which destroy capacity and create safety hazards. With voltage pinned, current is no longer chosen by the charger. It is set by Ohm's law, in which the current equals the gap between the applied voltage and the cell's open circuit voltage, divided by the cell's internal resistance. As lithium accumulates, the open circuit voltage rises toward the applied value, so the gap shrinks and the current decays roughly exponentially. The charger ends the process when current falls to a small cutoff, often five to ten percent of the initial rate.\n\nThe terminal voltage is the sum of the open circuit voltage and the drop across internal resistance. That resistance includes the electrolyte, the interface film on the electrodes, and charge transfer at the particle surfaces. Early in charging the current is large and so is the resistive drop, which means the voltage limit is reached while the cell is still far from full. The constant voltage phase then lets the remaining lithium diffuse into the particle interiors. Solid state diffusion in graphite is slow, so surface concentration saturates before the core fills, and a concentration gradient must relax over time.\n\nSlowing at the end is therefore the combined result of a protective voltage ceiling, a shrinking driving potential, and the finite speed of diffusion inside the electrode particles. Charging harder at the end would only increase the plating risk, so the taper is a deliberate safeguard and not a flaw. Temperature matters too, since cold cells have higher resistance and diffusion lags."
+}

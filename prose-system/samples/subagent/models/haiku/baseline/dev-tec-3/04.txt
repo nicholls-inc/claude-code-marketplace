@@ -1,0 +1,19 @@
+**How a lithium-ion cell is charged, and why charging slows near full**
+
+Charging drives lithium ions out of the positive electrode and into the negative electrode, while electrons flow through the external circuit in the opposite direction. The positive electrode is typically a lithiated metal oxide (NMC or LCO) or lithium iron phosphate (LFP). The negative electrode is usually graphite, which takes up lithium by intercalating it between its carbon layers. The terminal voltage is the difference between the two electrode potentials, so it rises as lithium moves across.
+
+Most cells charge with a constant-current, constant-voltage (CC-CV) protocol. In the constant-current stage, the charger supplies a fixed rate, often 0.5 to 1C, and the voltage climbs toward a limit: typically 4.2 V per cell for NMC and LCO, or about 3.65 V for LFP. This stage delivers most of the capacity.
+
+At the voltage limit, the charger switches to constant voltage and the current decays. The current follows a simple circuit relationship:
+
+I ≈ (V_charger − V_OCV) / R_total
+
+Here V_OCV is the cell's open-circuit voltage, and R_total is the combined ohmic, charge-transfer and diffusion impedance. The charger holds V_charger fixed, so the driving term shrinks as V_OCV catches up. Charging terminates when the current falls to roughly C/20 to C/10, or after a timer.
+
+Why does V_OCV rise so steeply near full? Several effects combine:
+
+- **Electrode potentials are nonlinear in state of charge.** Near full, the positive electrode has little lithium left and its potential climbs quickly. The graphite's intercalation sites fill, and its potential falls toward 0 V versus Li/Li⁺.
+- **Solid-state diffusion limits.** Lithium moves through the active particles by diffusion. At high current, particle surfaces saturate and concentration gradients build up, adding overpotential. Near full, less vacant host space remains, so surface concentration responds more strongly to any current.
+- **Polarisation grows.** Electrolyte concentration gradients across the electrode thickness, plus rising charge-transfer resistance, increase R_total. The same voltage margin then drives less current.
+
+The taper also protects the cell. Holding the voltage at the limit prevents electrolyte oxidation and cathode degradation. A falling current keeps the anode potential above 0 V versus Li/Li⁺, so lithium does not plate onto the graphite surface. Plating at high state of charge is a major ageing and safety mechanism. Battery management systems also monitor cell temperature and individual cell voltages, and may reduce the current further.

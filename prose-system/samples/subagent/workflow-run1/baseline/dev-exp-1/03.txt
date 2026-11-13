@@ -1,0 +1,31 @@
+A heat pump can warm your house on a cold day because it moves heat instead of making it. A gas boiler burns fuel to create heat. A heat pump uses electricity to carry heat that already exists outdoors to the inside of your home.
+
+**Cold air still contains heat.**
+"Cold" is relative. Heat is the energy in the motion of molecules, and that motion only stops at absolute zero, about minus 273 degrees Celsius. Air at 0 C, or even minus 10 C, holds a lot of thermal energy. The heat pump's job is to collect some of it and deliver it indoors.
+
+**How the cycle works.**
+A heat pump works like a refrigerator running in reverse. It has a sealed loop of refrigerant, a fluid that boils at very low temperatures, with four main parts:
+
+1. **Evaporator (outdoor unit).** A fan blows outdoor air across a coil of cold liquid refrigerant. The refrigerant is colder than the air, even on a freezing day, so heat flows into it. That heat makes the refrigerant boil into a gas.
+2. **Compressor.** This electric pump squeezes the gas. Compressing a gas heats it sharply, so the refrigerant leaves the compressor much hotter than your living room, often 50 to 70 C.
+3. **Condenser (indoor side).** The hot gas passes through a coil that transfers heat to your radiators, underfloor heating, or hot water cylinder. As it gives up heat, the refrigerant turns back into a liquid.
+4. **Expansion valve.** The liquid's pressure drops suddenly, which cools it well below outdoor temperature, and the loop starts again.
+
+The key is that the compressor lets heat travel "uphill" from cold to warm. Heat naturally flows only from hot to cold, so this takes work, and the compressor supplies it.
+
+**Why this is efficient.**
+The compressor's electricity is not turned directly into heat. It only powers the movement of heat. A good heat pump delivers about three units of heat for every one unit of electricity. This ratio is the coefficient of performance (COP). A gas boiler, even a modern condensing one, delivers a bit under one unit of heat per unit of gas burned. Efficiency over a whole season is called SCOP, and 3 to 4 is typical for well-installed systems.
+
+**What happens in a really cold spell.**
+Efficiency drops as the outdoor temperature falls, because the compressor has to lift heat across a bigger temperature gap. At 7 C you might see a COP of 4. At minus 10 C it may fall to around 2. That is still better than a boiler, but running costs rise. Modern cold-climate units keep working to minus 15 C or lower. Outdoor units also frost up in damp, cold weather, so they run short defrost cycles, which you may notice as a brief burst of steam.
+
+**What this means for your decision.**
+- **Insulation matters most.** Heat pumps work best delivering steady, moderate warmth. A well-insulated home needs less heat, so a smaller, cheaper unit does the job. Poor insulation means a bigger system and higher bills.
+- **Emitters matter.** Heat pumps run at lower water temperatures (35 to 55 C) than boilers (60 to 80 C). Your existing radiators may be too small to emit enough heat at that temperature. Some may need upsizing, or you may add underfloor heating.
+- **Running costs depend on prices.** Electricity usually costs more per unit than gas. A COP of 3 offsets that, but the savings depend on your local tariff. A time-of-use tariff, solar panels, or a home battery can improve the economics a lot.
+- **Upfront cost is higher.** Installation commonly costs several thousand pounds or dollars more than a boiler swap. Check for government grants, which can cover much of the gap in many countries.
+- **Carbon.** As the grid gets cleaner, a heat pump's emissions keep falling. A gas boiler's emissions stay fixed.
+- **Space.** You need room outdoors for the unit, usually with some clearance around it, and often a hot water cylinder indoors.
+
+**Practical next step.**
+Ask two or three accredited installers for a heat-loss survey of your home. It will show your real heat demand, whether your radiators are adequate, what the system would cost to run at your tariff, and what grants apply. With that information, the comparison with a new gas boiler becomes a calculation instead of a guess.

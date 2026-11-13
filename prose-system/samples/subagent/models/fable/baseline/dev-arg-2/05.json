@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aec94d85eb5e279aa",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73729,
+    "output_tokens": 986,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:11:14.549Z",
+  "valid": true,
+  "text": "Keep Estimating. Fix What You Do With the Number.\n\nEvery few years the argument returns: estimates are always wrong, they take hours to produce, and they turn into deadlines the moment they leave the room, so teams should stop producing them. I think this is the wrong conclusion from accurate observations. Software teams should keep estimating, because the alternative is worse for the engineers it claims to protect.\n\nStart with why anyone asks. A company has to decide whether a feature is worth building, and that depends on cost. A two-week integration and a five-month integration are different bets, even if the feature is identical. Sales needs to know whether to promise a customer something this quarter. Another team needs to know when your API will exist so they can schedule their own work. None of these questions go away when a team declines to answer them. Someone else answers instead, usually someone with less information, and the engineers inherit a date they had no part in setting.\n\nThe strongest version of the no-estimates case says to slice work small, ship continuously, and let throughput speak for itself. That is good practice, and it is also estimation. Counting how many items a team finishes per week and projecting forward is a forecast. Deciding that a piece of work is small enough to count as one item is a judgement about size. The practice has removed the planning-poker meeting, which may well deserve removing, but it has kept the forecast.\n\nWhat actually damages teams is three habits that travel with estimates.\n\nThe first is the single number. \"Six weeks\" hides whether the engineer means \"six, and I have done this before\" or \"six, if the vendor's documentation is accurate\". A range carries that information: \"four to ten weeks, and the spread is mostly the data migration\" tells a manager where the risk sits and what would reduce it.\n\nThe second is treating an estimate as a promise. An estimate is a statement about what is likely, made with what was known that day. A commitment is a decision to hit a date, usually by cutting scope when things slip. Both are useful, and a manager who wants a commitment should ask for one openly and accept the padding or scope flexibility it requires.\n\nThe third is never updating. An estimate made before the work starts is the least informed one the team will ever produce. Teams that revise it every week or two, and say so out loud, give their managers time to react. Teams that hold the original number until the last week give them a surprise.\n\nThere is also a benefit engineers tend to undercount. The act of estimating forces a design conversation. When two people on the same team say three days and three weeks for the same ticket, one of them knows something the other does not, and finding that out before the work starts is cheap.\n\nSo the practical advice is narrow. Give ranges. Say what drives the uncertainty. Revise as you learn. Keep the estimate and the commitment as two separate conversations. Spend minutes per item, and stop when more discussion is not changing the answer.\n\nRefusing to estimate feels like protection from bad deadlines. In practice it removes engineers from the conversation in which those deadlines are set."
+}

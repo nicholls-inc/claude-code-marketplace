@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a02007f4186c8abf1",
+  "condition": "rhythm_content",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 8,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nWrite it as plain prose with no headings or lists. Let the length of each sentence follow what it has to say. Do not use a short sentence to set up a longer one.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28240,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 855,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:16:13.196Z",
+  "valid": true,
+  "text": "The Earth does not spin at a perfectly steady rate, and a leap second is the small patch that has been used to reconcile two different ways of telling the time. For most of history the day was defined by the planet itself, with noon falling when the sun stood highest, but in 1967 the world's official second was redefined by the vibrations of caesium atoms, which keep a rhythm so regular that the best clocks would drift by less than a second over hundreds of millions of years. The rotating Earth is a far less dependable timekeeper, because tides drag at it, earthquakes and shifting ice nudge it, and its molten core sloshes beneath the crust, so that on average the day has been running slightly longer than the 86,400 atomic seconds that a day is supposed to contain. Left alone, the gap between atomic time and the sun in the sky would widen, and so from 1972 the international bodies responsible for timekeeping began inserting an extra second into Coordinated Universal Time, usually at the end of June or December, so that the clocks on our walls never wandered far from the sky overhead. There have been 27 of them, the most recent at the end of 2016.\n\nThe trouble is that the people who most need exact time are the ones the leap second hurts most. A computer that is told a minute has 61 seconds can crash, repeat a timestamp or record events out of order, and past leap seconds have knocked out websites and disrupted airline systems, while financial exchanges, mobile networks, satellite navigation and power grids all depend on machines agreeing to the millisecond about what time it is. Large technology companies have taken to spreading the extra second across a whole day in tiny increments, a workaround that each of them has done slightly differently and that adds its own risk of disagreement. Because the second is only ever added and never removed, the arrangement has also run into a surprise, since the Earth has lately been spinning a little faster than expected and a first negative leap second, in which a second is deleted, might one day be needed, which engineers fear is something almost no software has ever been tested against.\n\nIn 2022 the General Conference on Weights and Measures, the body that oversees the international system of units, voted to stop the practice by or before 2035. Under the plan the gap between atomic time and the sun will be allowed to grow, to perhaps a minute, before anyone has to act, and the decision on how to correct it has been left to a future generation. For ordinary people nothing will visibly change, since a single second is far below anything we notice, and the sun will still rise when the clocks say it should for many centuries to come."
+}

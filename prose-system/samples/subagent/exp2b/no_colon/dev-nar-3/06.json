@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "af96925931c963a56",
+  "condition": "no_colon",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.\n\nDo not use colons.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28178,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1121,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:32:24.033Z",
+  "valid": true,
+  "text": "On January 15, 1919, the North End of Boston was enjoying an unusually warm winter afternoon. Temperatures had climbed above forty degrees after a bitter cold snap, and people were out along the waterfront. Dockworkers ate lunch near the harbor. Children played in the streets. Rising above them at Commercial Street stood a steel tank as tall as a four-story building and wide enough to hold more than two million gallons of molasses.\n\nThe tank belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. The molasses was destined to become industrial alcohol, a material in high demand as Prohibition approached and as munitions makers sought it for the war. The tank had been built quickly and cheaply in 1915. Its walls were thinner than they should have been, and no one had performed proper engineering calculations or load tests. When it was first filled, it leaked so badly that neighbors collected the seeping syrup in buckets. The company's response was to paint the tank brown, which hid the stains rather than the problem.\n\nA shipment of warm molasses had arrived from the Caribbean just days earlier and was poured into a tank still holding cold syrup. The mixture fermented and built pressure inside. Around 12:30 in the afternoon, residents heard a low rumble and a sound some compared to a machine gun, as rivets began to shoot out of the steel. Then the tank gave way.\n\nA wave of molasses roughly fifteen feet high surged outward at an estimated thirty-five miles an hour. It carried a force that knocked buildings from their foundations and bent the girders of the elevated railway. A firehouse was shoved aside, and a wagon and its horses were swept away. Some victims were crushed by wreckage and others were trapped in the syrup, which was heavy and sticky and grew harder to escape as it cooled in the winter air. Twenty-one people died and about a hundred and fifty were injured. Among the dead were children and a number of workers who had simply been on their lunch break.\n\nRescuers arrived quickly, including sailors from the nearby USS Nantucket, but the work was agonizing. Molasses coated everything, and it took days to recover all the bodies. Firefighters used salt water, and later sand, to break down the sticky mess. The harbor ran brown well into the summer. Residents claimed that on hot days the neighborhood smelled of molasses for decades.\n\nThe aftermath proved just as significant as the disaster itself. Hundreds of residents sued the company in one of the first major class action lawsuits in Massachusetts. U.S. Industrial Alcohol insisted the tank had been blown up by anarchists, pointing to the unrest of the period. But an auditor appointed by the court, along with engineering testimony, showed that the tank was structurally unsound and had never been properly designed. After years of hearings, the company was found liable and paid damages, with settlements that averaged around seven thousand dollars per death.\n\nThe flood changed how buildings were regulated. Massachusetts and other states tightened requirements that engineers and architects review and sign off on plans, and public skepticism toward corporate claims of safety grew. What looks like a comic curiosity was a preventable tragedy, and a reminder of what happens when speed and thrift are allowed to outrun caution."
+}

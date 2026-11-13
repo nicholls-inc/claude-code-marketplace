@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a287ff70d888b3a6c",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 800 words of how Git stores a commit, covering blobs, trees, commit objects and refs. The reader is a developer who uses Git every day and has never looked inside the .git directory.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28232,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1548,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:28:07.866Z",
+  "valid": true,
+  "text": "When you run git commit, the change you see as a tidy diff is stored as a small web of immutable objects inside the .git directory, and understanding that web explains most of Git's behavior. Everything lives in .git/objects, a content-addressable database in which each object is stored under a name derived from a hash of its own contents. Historically that hash was SHA-1, giving a 40-character hexadecimal name, though newer repositories can use SHA-256. The first two characters of the name become a subdirectory and the rest become the filename, so an object might sit at .git/objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391. Because the name is computed from the content, identical content always yields the identical object, and changing even one byte produces a completely different one. Git compresses each object with zlib before writing it, which is why you cannot simply open these files in an editor, but the command git cat-file -p followed by a hash will print any object in readable form.\n\nThe simplest kind of object is the blob, which holds the raw bytes of a single file and nothing else. A blob has no filename, no permissions and no timestamp, only content. If two files in your project have exactly the same text, Git stores one blob and points to it twice. If you edit a large file and change one line, Git stores a complete new blob for the new version rather than a diff, and it relies on a later packing step, which stores similar objects as deltas inside pack files, to keep the repository small. This design means a blob is purely a snapshot of bytes, and the question of what that file is called, and where it lives, has to be answered somewhere else.\n\nThat somewhere else is the tree object, which represents a directory. A tree is a list of entries, and each entry records a file mode, a type, a name and the hash of the thing it refers to. The mode distinguishes regular files, executable files, symbolic links and subdirectories, so the executable bit you toggle with chmod is tracked here rather than in the blob. An entry that points to a blob names a file in that directory, while an entry that points to another tree names a subdirectory, and so a project with nested folders becomes a tree of trees with blobs at the leaves. Because a tree's hash is computed from its entries, and those entries contain the hashes of their children, changing a single file changes its blob hash, which changes the hash of its parent tree, which changes the hash of every tree above it up to the root. The root tree therefore acts as a fingerprint of the entire project at one moment, and two commits that contain identical working trees share an identical root tree hash.\n\nA commit object ties a snapshot to a point in history. It is a short text record containing the hash of one root tree, the hashes of zero or more parent commits, an author line with name, email and timestamp, a committer line with the same details, and finally the commit message. The first commit in a repository has no parent, an ordinary commit has one, and a merge commit has two or more. Because each commit includes its parents' hashes, and those hashes depend on everything beneath them, the whole history forms a chain in which altering any old commit would change every descendant's name. This is the source of Git's integrity guarantees, and it explains why rewriting history with rebase or amend creates brand-new commits rather than modifying the old ones. It also clarifies that a commit does not store a diff at all. The changes you see in git show are computed on demand by comparing the commit's tree with its parent's tree.\n\nObjects are immutable and identified only by long hashes, so Git needs a human-friendly way to find the interesting ones, and that is the job of refs. A ref is simply a file whose contents are a commit hash. Your branches live under .git/refs/heads, so a branch called main is a file at .git/refs/heads/main containing forty characters and a newline. Tags live under .git/refs/tags, and remote-tracking branches such as origin/main live under .git/refs/remotes. Creating a branch is therefore almost free, because it only writes one tiny file, and making a new commit on a branch just updates that file to point at the new commit. Git may also gather many refs into a single packed-refs file for efficiency, but the idea is unchanged.\n\nThe last piece is HEAD, a file at .git/HEAD that records where you currently are. Usually it holds a symbolic reference such as ref: refs/heads/main, meaning you are on that branch, and committing moves the branch that HEAD points to. If HEAD instead contains a raw commit hash, you are in the detached HEAD state, and new commits are not tracked by any branch name. Putting it all together, a commit writes blobs for the changed files, builds trees from the index, creates a commit object pointing at the root tree and the previous commit, and finally advances the current branch ref to the new commit."
+}

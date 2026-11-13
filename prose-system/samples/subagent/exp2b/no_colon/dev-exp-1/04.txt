@@ -1,0 +1,29 @@
+A heat pump can warm your house on a freezing day because it does not make heat by burning anything. It moves heat that already exists outside and carries it indoors. That sounds impossible until you realise that cold is only a relative idea. Air at minus five degrees Celsius still holds a large amount of thermal energy. It is far above absolute zero, which is about minus 273 degrees. A heat pump extracts some of that energy and delivers it to you.
+
+The trick is the same one your fridge uses, run in the opposite direction. A sealed loop contains a refrigerant, a fluid that boils at a very low temperature. The loop has four main parts.
+
+First, the outdoor unit has a coil and a fan. Refrigerant circulating through the coil is kept colder than the outside air, so heat flows naturally from the air into the refrigerant. The refrigerant absorbs it and boils into a gas.
+
+Second, a compressor squeezes that gas. Compressing a gas raises its temperature sharply, just as a bicycle pump gets warm when you use it. The gas leaves the compressor much hotter than your radiators or indoor air need to be.
+
+Third, that hot gas passes through a heat exchanger indoors. Here it gives up its heat to your heating water or to the air in your home, and in doing so it condenses back into a liquid.
+
+Fourth, the liquid passes through an expansion valve. Its pressure drops, it becomes very cold, and it returns outside to start the cycle again.
+
+The only significant electricity goes into the compressor and fans. Everything else is heat being relocated. This is why a heat pump can deliver three or four units of heat for every one unit of electricity. Engineers call this ratio the coefficient of performance. A gas boiler, even a good condensing one, cannot beat about 90 to 95 percent efficiency, meaning it returns slightly less than one unit of heat per unit of fuel.
+
+Efficiency does fall as it gets colder, because the pump has to lift heat across a bigger temperature gap. Modern cold-climate models still work well at minus 15 degrees and some keep running far lower. At those temperatures the ratio might drop to around two, which still beats a boiler on energy delivered per unit. Over a whole winter, a well-installed system typically averages somewhere between 2.5 and 3.5.
+
+What does this mean for your decision? Several practical points matter more than the physics.
+
+Your home's insulation matters. A heat pump delivers its best efficiency when it produces warm rather than very hot water, so a draughty, poorly insulated house forces it to work harder. Fixing loft insulation and draughts first often pays off, and it reduces the size of the unit you need.
+
+Your radiators matter too. Heat pumps run at lower flow temperatures, typically 35 to 55 degrees against 70 or more for a boiler. Existing radiators may be too small to heat rooms adequately at that temperature, so some may need upgrading or replacing with larger ones. Underfloor heating suits heat pumps very well.
+
+Running costs depend on your electricity and gas prices. Electricity usually costs more per unit than gas, so the efficiency advantage has to outweigh the price gap. In many markets it does, especially with a time-of-use tariff, but check your own rates rather than assuming.
+
+Upfront cost is the main barrier. Installation commonly costs several times that of a new boiler, although government grants in many countries narrow the gap. Ask installers for a heat loss calculation, not a rule of thumb, and get at least three quotes.
+
+You also need space for an outdoor unit, and often a hot water cylinder indoors. Noise is modest but worth considering if the unit will sit near a neighbour's window.
+
+So the short answer is that a heat pump works in cold weather by moving heat, not creating it, and it multiplies each unit of electricity into several units of warmth. If your home is reasonably insulated, your radiators can be adapted, and grants are available, replacing an ageing gas boiler is often sensible. If your house is leaky and old, improve the building first and revisit the decision.

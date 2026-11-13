@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "afed045013f87d2fb",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73730,
+    "output_tokens": 1153,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:10:25.506Z",
+  "valid": true,
+  "text": "A leap second is an extra second occasionally added to the world's clocks to keep them in step with the turning of the Earth. From 2035 at the latest, it will be dropped.\n\nThe need for it arises because we keep time in two ways. Atomic clocks count the vibrations of caesium atoms and are steady to within a second over many millions of years. The older method, the rotation of the planet, is less reliable. The Earth is gradually slowing, mostly because of the drag of the Moon's tides, and it also speeds up and slows down unpredictably as its molten core, oceans and ice sheets shift.\n\nSince 1972, the official world time, known as Coordinated Universal Time or UTC, has run on atomic clocks but been nudged whenever it drifted nearly a second away from the Earth's rotation. On those occasions, the last minute of 30 June or 31 December has lasted 61 seconds, with clocks reading 23:59:60 before midnight. This has happened 27 times, most recently at the end of 2016.\n\nNobody notices an extra second in daily life, but computers do. Much software assumes that every minute has 60 seconds, and a minute with 61 can cause it to fail. The leap second in 2012 brought down a number of large websites, including Reddit, and delayed flights in Australia when an airline booking system failed. Another, at the end of 2016, disrupted part of the internet company Cloudflare's network.\n\nThe trouble is made worse because leap seconds cannot be scheduled far ahead. The Earth's rotation is too erratic, so they are announced only about six months in advance. Organisations have also adopted different workarounds. Google, for example, \"smears\" the extra second across many hours, which means that systems that are supposed to agree on the time can briefly disagree. Satellite navigation systems such as GPS ignore leap seconds altogether.\n\nA newer worry settled the argument. The Earth has recently been spinning slightly faster than usual, raising the prospect of a negative leap second, in which a second would be removed rather than added. That has never been done, and engineers fear that much of the world's software would not cope.\n\nIn November 2022, the General Conference on Weights and Measures, the body of member governments that oversees the world's units of measurement, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which governs how time signals are broadcast, backed the decision the following year.\n\nAtomic time and the Earth's rotation will then be allowed to drift apart, probably by about a minute over the next century. How to correct that larger gap, if at all, has been left for later generations to decide."
+}

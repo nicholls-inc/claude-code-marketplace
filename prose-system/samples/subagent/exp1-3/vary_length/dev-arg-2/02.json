@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab0b4f3cc05b16ae9",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72467,
+    "output_tokens": 1027,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:39:53.786Z",
+  "valid": true,
+  "text": "**Stop Estimating. Start Shipping Small.**\n\nEvery engineer has lived this scene. A manager asks how long the new billing integration will take. You say six weeks, because six sounds defensible. The number goes into a slide, then a roadmap, then a promise made to a customer. Week four arrives and you discover the vendor API doesn't do what its docs claimed. Now the estimate is a debt, and you're the one paying it.\n\nSoftware teams should stop estimating how long work will take. Not stop planning. Stop estimating.\n\nThe core problem is that estimates for novel work are mostly fiction. Building software means discovering what you didn't know, and you can't price a discovery in advance. Decades of project data say the same thing: overruns are the norm, and the errors skew one way. Tasks rarely come in at a third of the estimate. They come in at three times it. A forecast that is wrong in a predictable direction, by a large margin, isn't a forecast. It's a ritual.\n\nWorse, the ritual changes behavior. Once a number exists, it becomes a target. Engineers pad it, so work expands to fill the padding. Managers trim it, so engineers cut corners to meet the trimmed version. Everyone learns to treat the date as a negotiation rather than information. Hours go into planning poker, story-point calibration, and defending last sprint's velocity, and none of that produces a working feature.\n\nThe usual defense is that the business needs dates. Fair. But look at what the business actually does with them. It coordinates a launch, sequences dependencies, decides whether an idea is worth the cost. Each of those needs something real, and a guess isn't it.\n\nSo give them something real. Slice work until each piece is small enough that nobody argues about its size, a day or two at most. Then measure what happens. Count how many pieces the team finishes per week, and plot it. That throughput is a fact about your team, drawn from your own history, and it tells you more than any planning meeting ever did. When someone asks about the date, you can answer with a range and an honest confidence level, built on observed data rather than optimism.\n\nThis also forces the conversation that estimates let you dodge: scope. A fixed date with flexible scope is a plan you can actually execute. Ship the most valuable slice first, and keep shipping. If the deadline is real, you cut from the tail. If the work turns out harder than hoped, you learn that in week one, not week six.\n\nSome objections deserve a straight answer. Won't this break down for big, uncertain projects? Those are exactly the cases where estimates are worst, so you lose nothing by dropping them. Don't managers need budgets? Yes, and a team's weekly cost is a known number. What they're really buying is a stretch of capacity pointed at a problem, and they can decide how long to keep buying it.\n\nStopping is uncomfortable. The number gave everyone a feeling of control. But it was only a feeling.\n\nTrade it for evidence. Small slices, steady delivery, honest ranges. Your next roadmap will be less impressive, and a lot more true."
+}

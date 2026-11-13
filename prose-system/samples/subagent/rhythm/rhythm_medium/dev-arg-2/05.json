@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab765aa0dd18acb54",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28221,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 953,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:56:00.135Z",
+  "valid": true,
+  "text": "Software teams should stop estimating how long work will take, at least in the form most of them practice today. The estimate is the most expensive artifact in the typical planning process and the least reliable one, and we keep producing it because it feels like control rather than because it delivers any.\n\nConsider what an estimate actually is. It is a guess made at the moment of maximum ignorance, before anyone has touched the code, hit the surprising edge case, or discovered that the dependency does not behave as documented. Decades of experience, and a fair amount of research on planning bias, tell us that these guesses run optimistic and that the error is not random noise we can average away. The work that surprises us tends to be the work that matters most, and the surprises almost always add time rather than subtract it.\n\nThe real damage comes after the guess is made. An estimate in an engineer's mouth quickly becomes a commitment in a manager's slide deck and a deadline in a customer's calendar. When reality diverges, as it reliably does, the team faces an ugly choice between missing the date and quietly cutting corners on quality. Engineers learn to pad their numbers, managers learn to discount them, and both sides spend hours in planning meetings negotiating a fiction that nobody believes. That time could have gone into building something.\n\nDefenders will say that the business needs predictability, and they are right that it does. But predictability and estimation are not the same thing. You can get far better predictability by slicing work into small pieces, shipping them continuously, and measuring how many pieces actually finish each week. A team that has delivered five to eight small items per week for the last three months can tell you more about next month than any story-point exercise, and it costs nothing beyond the data you already have. Forecasting from observed throughput replaces opinion with history.\n\nStopping also changes the conversation in a healthy way. Instead of asking how long something will take, which invites a defensive number, leaders can ask what the smallest useful version is and what the team should drop to make room for it. That reframes scope as the lever, which is where it belongs, rather than treating the date as fixed and the quality as the thing that bends. It also forces a discipline that estimation lets us dodge: breaking big vague projects into small concrete ones, because a small concrete task needs no estimate at all.\n\nThere are fair exceptions. If you are building a rocket, signing a fixed-price contract, or coordinating a launch with a hard external deadline, you will need some rough sense of size, and a coarse range will serve you better than false precision. But that is a narrow case, and it does not justify the ritual most teams run every sprint.\n\nSo my advice to engineers and their managers is to stop the poker games and the hour-counting, ship in small increments, and let your own delivery history do the forecasting. You will lose a comforting illusion and gain back real time, honest conversations about scope, and plans that bend without breaking."
+}

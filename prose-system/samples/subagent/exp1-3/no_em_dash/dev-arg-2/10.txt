@@ -1,0 +1,19 @@
+**Stop Estimating. Start Shipping Small.**
+
+Every engineer has lived this meeting. A manager asks how long the feature will take. You say three weeks, knowing the honest answer is "somewhere between one and ten, depending on things I haven't found yet." The number gets written down. Six weeks later, someone asks why you're late.
+
+Software teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because the activity is structurally broken and its costs are larger than its benefits.
+
+Start with the accuracy problem. Software work is mostly discovery. The part you can predict, typing the code, is the small part. The rest is unknown unknowns: the legacy module that fights back, the API that behaves differently from its documentation, the requirement that changes once someone sees a demo. If we could estimate this work well, we would already have done it. Decades of research and industry experience show the same pattern. Estimates miss, and they miss in one direction, because the overruns are far larger than any underruns.
+
+Then comes the damage that happens even when estimates are good. An estimate stops being a guess the moment it leaves your mouth. It becomes a commitment, then a deadline, then a performance metric. Engineers respond rationally. They pad numbers, cut corners on tests to hit dates, and hide bad news until it can't be hidden. Managers respond rationally too, by adding more process to catch the slippage. Everyone spends hours in planning sessions debating whether something is a five or an eight, producing numbers nobody trusts.
+
+Meanwhile the real question goes unasked. The valuable question is not "how long will this take?" but "is this worth doing, and what is the smallest useful piece we can ship?"
+
+Here is the alternative, and it is not chaos. Break work into slices small enough that each takes a few days at most. Ship them continuously. Track actual throughput: how many slices finish per week, measured, not predicted. That data is a far better forecast than any planning poker session, because it reflects how your team really performs, interruptions and all. If leadership needs a date, you can offer a range based on your history, and be honest that it is a forecast, not a promise.
+
+The objection is predictable. "The business needs dates. Customers, marketing and contracts depend on them." Sometimes true. But look at what those dates actually require. Usually it is a fixed deadline with flexible scope. The answer to that is not a better estimate. It is deciding up front what gets cut if time runs short, and shipping the most important slices first. A team that delivers something real every week can hit almost any date with some version of the product. A team that delivers a big estimated batch at the end can't.
+
+Some will say this abandons planning. It does the opposite. It replaces false precision with fast feedback. You learn about problems in days, not at the deadline, and you adjust while adjusting is still cheap.
+
+Estimation persists mostly out of habit and a desire for comfort. The number feels like control. It isn't. If you want real predictability, stop asking engineers to guess the future and start measuring what they actually deliver. Small slices, steady flow, honest ranges. Your team will be calmer, your managers better informed, and your roadmap more truthful than it has ever been.

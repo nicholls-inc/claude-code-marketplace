@@ -1,0 +1,15 @@
+Software teams should stop estimating how long individual pieces of work will take. I mean the planning poker, the story points and the days written on tickets. The practice has had decades to prove itself, and the evidence for it is poor.
+
+Start with the record. Bent Flyvbjerg and Alexander Budzier studied 1,471 IT projects and published the results in Harvard Business Review in 2011. The average cost overrun was 27 per cent. One project in six overran its budget by 200 per cent and its schedule by almost 70 per cent. The errors were large, and they ran mostly in one direction. The people making those estimates were experienced and were not careless, yet their best guesses were wrong in a predictable way. The Sydney Opera House was budgeted at seven million Australian dollars and opened in 1973 at a cost of 102 million, ten years after the date first planned. Software is not built from standard parts, so there is little reason to expect better.
+
+The cause is that most of the work is unknown when the estimate is given. A ticket that says "add SSO support" hides an identity provider that returns dates in an odd format, a library nobody has maintained since 2021 and a test environment that has not started properly in a month. These are found by doing the work. An estimate made beforehand is a guess at how many surprises there will be, and that is the one thing nobody knows.
+
+Estimating also costs time. A team of eight that spends ninety minutes a fortnight on refinement and pointing uses twelve hours of engineer time each sprint. Over a year that comes to 312 hours, close to eight working weeks for one person, spent producing numbers that the Flyvbjerg data suggests will be wrong.
+
+The numbers also do harm once they exist. A manager hears "three weeks" and puts it in a plan. When the work takes five, the engineer has missed a commitment that nobody could have kept. People respond by padding, by cutting tests, or by reporting a task as nearly finished for a fortnight.
+
+The alternative is to count instead of guess. Split the work into pieces small enough that each takes a few days, then record how many the team finishes each week. Suppose a team has shipped between four and nine items a week over the last quarter. It can say that thirty remaining items will take roughly three to eight weeks, and the range comes from its own history and not from anyone's hopes. That takes a spreadsheet and ten minutes, and it gets more accurate as the data grows.
+
+The usual objection is that managers need dates. They do, and a forecast from throughput gives them one with a stated range. Some dates are fixed by a law, a contract or a trade show. In those cases the useful conversation is about scope, and an estimate does not help with it. The team asks what can be cut to meet the date and ships in order of value, so that whatever is left out is the least important work.
+
+My view is that the habit survives because it feels responsible. Producing a number looks like diligence, and refusing to produce one looks like evasion. A range drawn from what the team has actually delivered is more honest, and it takes less time to produce.

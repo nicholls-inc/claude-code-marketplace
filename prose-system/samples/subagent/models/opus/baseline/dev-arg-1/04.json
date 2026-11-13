@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a38aff2ad9f767cfd",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an opinion piece of about 800 words on whether cities should remove minimum parking requirements from their planning rules. Take a side and argue for it.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73721,
+    "output_tokens": 1686,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:08:54.370Z",
+  "valid": true,
+  "text": "**Stop Making Cities Build Homes for Cars**\n\nMost American cities have a rule that almost nobody voted for directly and few residents could explain. It says that every new apartment, restaurant, office or shop has to come with a set number of parking spaces. A typical code might ask for two spaces for each home, one for every 300 square feet of retail space, and one for every three seats in a restaurant. Planners call these minimum parking requirements. Cities should get rid of them.\n\nThe case against them starts with cost. A parking space is expensive. A space in a surface lot ties up land that could hold something else. A space in a structured garage often costs $25,000 to $50,000 to build, and an underground space can cost more. The developer doesn't pay that bill in the end. Tenants pay it in higher rents, shoppers pay it in higher prices, and workers pay it in lower wages. Because the cost is built into everything, people who don't own a car pay for parking anyway. Those are often the poorest people in a city, and they end up subsidizing the people who drive.\n\nThe requirements also block housing outright. On a small or oddly shaped lot, finding room for the required spaces can make a project impossible. A builder who could fit twelve apartments on a corner lot might fit only six once the garage ramp and turning radius are included, and at six units the numbers stop working, so nothing gets built. Old buildings run into the same problem. A vacant warehouse or a former bank can't become apartments or a café when the new use triggers a parking requirement the site has no room for. In a housing shortage, cities are turning down homes in order to protect space for cars.\n\nThen there is the question of where the numbers come from. Many codes copied their ratios from manuals that measured peak demand at suburban sites with free parking and no transit. The planner Donald Shoup, whose book *The High Cost of Free Parking* did more than anything else to start this debate, has shown how thin the evidence behind these figures is. A rule that treats a downtown apartment next to a train station the same as a cul-de-sac house will get one of them wrong, and usually both. That is why so many malls and office parks are ringed by lots that sit mostly empty all year except for a few days in December.\n\nThe usual objection is that without minimums, drivers will flood residential streets and neighbors will have nowhere to park. It is a reasonable worry, but it confuses two separate things. Removing a minimum does not ban parking. A developer who thinks tenants or customers want spaces will still build them, because spaces that people want help a building rent or sell. Lenders often require some parking anyway. The change is that the decision rests with the people who carry the cost and know the site, and not with a fixed ratio in a decades-old code. Where curb space really is crowded, the answer is to manage the curb directly through residential permits, meters with prices set by demand, and time limits. Those tools address the actual problem. Requiring garages under every new building is an expensive and indirect way to deal with an occasional fight over a curb space.\n\nThere is now real experience to go on. Buffalo dropped its citywide minimums in 2017, and studies of new projects found that developers still built parking, just less of it, and in amounts that matched each site. Minneapolis removed its requirements in 2021 as part of a wider push on housing. California passed a law in 2022 barring cities from imposing minimums near major transit stops, and Austin went further in 2023 by ending them across the city. The predicted disaster of overflowing streets and abandoned businesses has not shown up in these places. What has shown up is more flexibility: small apartment buildings on lots that once sat empty, and restaurants opening in storefronts that the old rules had made impossible to use.\n\nNone of this requires anyone to give up a car. That is the point. Parking minimums impose one way of living on every building, whether or not the people inside want it. Getting rid of them is not an attack on drivers. The government would simply stop forcing everyone to pay for something only some people use. A city that believes in markets should be glad to let builders respond to demand. A city that cares about affordability should be glad to remove a hidden tax on rent. And a city that wants walkable streets, lively storefronts and fewer empty lots should see that the current rules work against all three.\n\nCities have spent seventy years building plenty of space for cars and too little space for people. Ending parking minimums won't fix that by itself, but it is the cheapest and quickest place to start. It costs nothing to repeal a rule, and the land those rules have been holding for empty cars can go to homes and businesses."
+}

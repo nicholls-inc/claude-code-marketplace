@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa6cd965e736bbfe6",
+  "condition": "rhythm_medium",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nWrite it as plain prose with no headings or lists. Write mostly medium-length, complete sentences.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28225,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1151,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:23:56.665Z",
+  "valid": true,
+  "text": "A heat pump can warm a house on a cold day because it does not make heat by burning anything. It moves heat that already exists from one place to another. Cold is only a lower amount of heat, not an absence of it. Even air at minus ten degrees Celsius holds a good deal of thermal energy, and a heat pump is built to collect some of that energy and deliver it indoors, where it is wanted.\n\nThe principle is the same as in your refrigerator, only run in the opposite sense. A sealed loop of refrigerant circulates between an outdoor unit and an indoor heat exchanger. The refrigerant is a fluid chosen because it boils at a very low temperature, far below freezing. As it passes through the outdoor coil, which is colder than the air around it, it absorbs heat from that air and evaporates into a gas. The air may feel bitterly cold to you, but it is still warmer than the refrigerant, and heat always flows from warmer to cooler.\n\nThe gas then reaches a compressor, which squeezes it into a much smaller volume. Compressing a gas raises its temperature sharply, just as a bicycle pump warms up when you use it, so the refrigerant leaves the compressor hotter than your indoor air, often at around fifty degrees or more. This is the key step, because it lifts the heat to a temperature that is useful for the house. The hot gas flows through the indoor coil, where it gives up its heat to your radiators, underfloor heating or hot water cylinder and condenses back into a liquid. An expansion valve then drops its pressure, which cools it again, and the cycle repeats.\n\nThe compressor needs electricity, but the amount is small compared with the heat delivered. Typically a heat pump produces three to four units of heat for every unit of electricity it uses, a ratio called the coefficient of performance. A gas boiler, by contrast, can at best turn all of its fuel into heat, and in practice it manages about ninety percent. That is why heat pumps are so efficient, and why running costs can be competitive even though electricity usually costs more per unit than gas.\n\nThere are caveats worth knowing before you decide. Efficiency falls as the weather gets colder, because the compressor must lift the heat across a bigger temperature gap. Modern units still work well down to minus fifteen or lower, but on the coldest days your ratio may drop closer to two. A heat pump also works best when it delivers water at a lower temperature than a boiler does, so a poorly insulated house or one with small, old radiators may need upgrades such as larger radiators, better insulation or draught proofing to keep rooms comfortable.\n\nCosts matter as well. A heat pump is more expensive to install than a replacement boiler, although grants or subsidies may cover part of the difference depending on where you live. Over a decade or more, lower running costs and lower carbon emissions can repay that outlay, especially if your electricity comes partly from renewable sources or you can use a tariff with cheaper off-peak rates.\n\nFor a homeowner, the practical step is to ask an accredited installer for a heat loss survey of your home. That will show how much heat the house needs on a cold day, whether your radiators are adequate and what a realistic running cost would be. If the house is reasonably well insulated, a heat pump is likely to be a sound replacement for the boiler. If not, improving insulation first may be the wiser sequence, and it will make either kind of heating cheaper to run."
+}

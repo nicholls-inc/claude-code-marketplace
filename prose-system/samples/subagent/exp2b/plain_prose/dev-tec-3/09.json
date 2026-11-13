@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a8c7ed6effd0b9f13",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 9,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28203,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1000,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:51:13.087Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). The charger is a controlled source, and the cell's terminal voltage is the quantity it must watch. In the first stage the charger forces a fixed current, typically between 0.5 and 1 times the cell's capacity per hour (0.5C to 1C). The terminal voltage then rises steadily from about 3.0 V toward the upper limit, which is 4.2 V for a conventional graphite and layered-oxide cell. When the voltage reaches that limit, the charger switches to the second stage. It holds the voltage at 4.2 V and lets the current fall on its own until it drops to a small cutoff, commonly 0.05C to 0.1C. Charging is then declared complete.\n\nThe slowdown in the second stage comes from the cell's internal impedance. The terminal voltage is the cell's open-circuit voltage (set by how much lithium sits in each electrode) plus the current multiplied by the internal resistance. The open-circuit voltage rises as the cell fills, and during constant current the resistive term is also present. At the 4.2 V limit, the terminal voltage cannot be allowed to exceed the cap. As the open-circuit voltage creeps up, there is less voltage headroom left to drive current across the resistance. By Ohm's law the permitted current must fall. In the constant-voltage stage the current therefore decays roughly exponentially, much like a capacitor charging through a resistor.\n\nThe resistance is not just a metal-like ohmic term. It includes the electrolyte and separator, the interface films on the electrodes, charge-transfer kinetics at the particle surfaces, and solid-state diffusion of lithium inside the particles. The last is often the limiting step near full charge. Lithium has to diffuse into the host lattice of the graphite, and as the surface layers fill, the concentration gradient driving that diffusion becomes shallow. The surface of each particle looks full while the interior is still catching up, so the current tails off and the interior slowly equilibrates.\n\nThere are also safety and lifetime reasons for not simply forcing more current. At high state of charge the graphite anode potential approaches that of lithium metal. Pushing current in quickly can plate metallic lithium on the surface rather than intercalating it, which permanently loses capacity and can grow dendrites that short the cell. Holding a high voltage also accelerates electrolyte decomposition and cathode degradation. The voltage cap and the tapering current protect against both.\n\nFast chargers shorten the process by using higher current in the constant-current stage, where the cell accepts it readily, and by accepting that the last 20 percent takes disproportionately long. Many devices quote an 80 percent figure for this reason. Temperature matters as well, because cold cells have higher resistance and greater plating risk, so battery management systems reduce current at low temperature."
+}

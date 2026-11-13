@@ -1,0 +1,41 @@
+How a Heat Pump Heats Your Home When It's Colder Outside
+
+If you're thinking about replacing a gas boiler, the heat pump can sound like it breaks the rules. How can a machine pull warmth out of air at 0°C and use it to heat a house to 20°C? It doesn't break any rules. It works the same way as the fridge in your kitchen.
+
+Cold air still contains heat
+
+"Cold" only means less heat than we're used to. Air at 0°C still holds a lot of thermal energy. Physically, it's far above absolute zero (-273°C), so there's plenty of heat to collect. The problem is that this heat is at a low temperature, and heat only flows from warmer things to cooler things. A heat pump's job is to collect low-temperature heat and raise it to a temperature that's useful inside your home.
+
+The refrigerant cycle, step by step
+
+A heat pump moves a fluid called a refrigerant around a sealed loop. The refrigerant boils at a very low temperature, often well below -20°C. The cycle has four stages:
+
+1. Absorbing heat outside. The outdoor unit's fan blows outside air over a coil of very cold refrigerant. Even 0°C air is warmer than the refrigerant, so heat flows into it and the refrigerant boils into a gas. This is the key step: the refrigerant is made colder than the outside air, so the outside air can warm it.
+
+2. Compressing. An electric compressor squeezes the gas. Compressing a gas raises its temperature sharply, the same reason a bicycle pump gets warm. The refrigerant can leave the compressor at 50 to 70°C or more.
+
+3. Releasing heat inside. The hot gas passes through a heat exchanger connected to your radiators or underfloor heating and, usually, a hot water cylinder. The water in your heating system is cooler than the gas, so heat flows into the water. As the refrigerant gives up its heat, it condenses back into a liquid.
+
+4. Expanding. The liquid passes through an expansion valve, which drops its pressure suddenly. That makes it very cold again, ready to go back outside and collect more heat.
+
+A fridge does the same thing in reverse direction: it takes heat from inside the box and releases it through the coils at the back.
+
+Why this beats burning gas on efficiency
+
+A gas boiler turns the energy in gas into heat. A modern condensing boiler gets roughly 0.9 units of heat for every unit of gas, at best. A heat pump doesn't make heat. It moves heat, and moving heat takes much less energy than making it. The electricity runs the compressor and fans, and most of the heat delivered comes free from the outside air.
+
+This is measured by the coefficient of performance (COP). A COP of 3 means 3 kWh of heat for every 1 kWh of electricity. Across a whole year, well-installed systems typically average around 3, sometimes higher.
+
+What this means for your decision
+
+- Efficiency falls as it gets colder. The bigger the gap between outside and inside temperatures, the harder the compressor works. On a -5°C day the COP might drop to around 2. That's still about twice as efficient as a boiler, and modern units keep working down to -15°C or -20°C.
+
+- Lower flow temperatures work best. Heat pumps are most efficient heating water to 35 to 50°C, compared with 60 to 80°C for a typical boiler. Your radiators may need to be bigger, or some swapped out, so they give enough heat at that lower temperature. A good installer will do a room-by-room heat loss calculation to check.
+
+- Insulation matters. A well-insulated house needs less heat and can run on lower flow temperatures, which raises efficiency. You don't need a new-build standard, but filling obvious gaps (loft, draughts) pays off.
+
+- Running costs depend on prices. Whether you save money depends on the ratio of your electricity price to your gas price. With a COP of 3, electricity can cost up to about three times as much per kWh as gas and you'll still roughly break even or save. Heat pump tariffs and grants can change the numbers a lot, so get a quote based on your own home and usage.
+
+- The heating feels different. Heat pumps work best running steadily at a lower temperature, not blasting on for short bursts. Radiators will feel warm, not hot, but the house stays at an even temperature.
+
+In short: a heat pump heats your home in cold weather by using a refrigerant colder than the outside air to soak up heat, then compressing it to make it hot enough to heat your water. It doesn't fight the cold. It just collects the heat that's still there.

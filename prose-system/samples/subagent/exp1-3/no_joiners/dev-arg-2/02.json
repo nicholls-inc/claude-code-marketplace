@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac9202871dcd4f0e2",
+  "condition": "no_joiners",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-arg-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an opinion piece of about 500 words on whether software teams should stop estimating how long work will take. Take a side and argue for it. The readers are working engineers and their managers.\n\nDo not use dashes, semicolons, colons or parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72479,
+    "output_tokens": 2205,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:39:53.740Z",
+  "valid": true,
+  "text": "Stop Estimating. Start Slicing.\n\nSoftware teams should stop estimating how long work will take. I mean that literally, and I say it as someone who has sat through hundreds of planning meetings and watched the same ritual fail in the same way every time.\n\nStart with the track record. Decades of research and a lifetime of personal experience agree that engineers are bad at predicting how long novel work will take. The reason is not laziness or poor training. Software is a field where the hard part is discovering what you did not know when you started. An estimate is a guess about the very thing you have not yet learned. We dress the guess in story points or t shirt sizes and then treat it as a measurement.\n\nThen comes the real damage, which is what happens to the number after it leaves the room. A rough guess becomes a target. The target becomes a promise. The promise gets copied into a roadmap, a slide and a customer email. When the work takes longer, as it usually does, the team faces a choice between admitting the guess was wrong and quietly cutting corners to hit it. Many choose the corners. Tests get skipped. Review gets rushed. The estimate did not predict the outcome. It bent the outcome.\n\nEstimation also eats real time. Teams spend hours each sprint debating whether something is a three or a five. Nobody can say what they bought with those hours. Add up the meeting time across a year and you could probably have shipped a feature.\n\nNow the objection I hear most from managers. If we do not estimate, how do we plan? My answer is that you plan with what you can actually observe. Count how many small items your team finishes per week. Keep those items small, ideally a day or two of work each. Then look at the trend. This gives you a forecast built on evidence instead of opinion, and it updates itself every week without a single meeting about sizing.\n\nThe second objection is that the business needs dates. Of course it does. But a date is a commitment about scope and risk, and those are conversations worth having openly. Instead of asking when something will be done, ask what the most valuable thing is that we can ship in the next two weeks, and what we would cut if we ran short. Fixed time with flexible scope is honest. Fixed scope with a guessed date is theatre.\n\nThis approach also changes how work gets sliced. When you cannot hide behind a big number, you are forced to break work into pieces small enough that everyone understands them. Small pieces are easier to review, easier to ship and easier to reverse. Slicing is the skill that estimation was always pretending to be.\n\nTo be fair, there are narrow cases, such as work with hard external deadlines, where you need to size things up front. Those are exceptions, and even there a rough sense of big, medium and small is enough.\n\nSo try it for a quarter. Drop the pointing sessions, slice the work thin and track throughput. I expect you will get better predictions, fewer arguments and engineers who feel trusted rather than audited. That seems like a good trade for giving up a ritual that never worked."
+}

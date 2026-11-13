@@ -1,0 +1,19 @@
+Stop Estimating. Start Forecasting.
+
+Every engineering team knows the ritual. Someone asks how long a feature will take. Engineers hedge, then give a number. The number becomes a date, the date becomes a promise, and the promise becomes a measure of whether the team can be trusted. Six weeks later the work is half done, and everyone is having the same uncomfortable meeting.
+
+Teams should stop estimating how long individual pieces of work will take. Not because engineers are lazy or because planning is pointless, but because the practice fails at the one job it exists to do.
+
+Start with the evidence. Software work is mostly discovery. The parts that blow up a schedule are the parts nobody could see in advance: the undocumented dependency, the migration that touches forty services, the requirement that turns out to contradict another one. If you could list those surprises up front, you would have already done most of the work. An estimate is a guess about the unknown, delivered with the confidence of a fact.
+
+Then look at what the guess costs. Teams burn hours in planning sessions debating whether a ticket is a three or a five. Those hours produce numbers that studies and lived experience both show are barely better than a coin weighted toward optimism. Meanwhile the estimate quietly changes behavior. Engineers cut corners to hit it. Managers anchor on it and treat any overrun as a failure of discipline rather than a fact about the problem. People learn to pad, and then managers learn to discount the padding, and the whole exchange becomes theater.
+
+The strongest objection is that the business needs dates. Customers have launches, finance has budgets, and sales has commitments. That is true, and it is why I am not arguing for abandoning prediction. I am arguing for a better method.
+
+Measure instead of guess. Track how long work actually takes to flow from started to done. After a few dozen items you have a distribution, not an opinion. Slice work small enough that items are roughly comparable, count them, and forecast from your own history. Ask what range of outcomes your past throughput supports, and say so plainly: "Given our record, 85 percent of the time this lands within eight weeks." That statement is honest about uncertainty, and it is built from data that already exists in your tracker.
+
+This approach also changes the conversation for the better. Instead of defending a number, the team talks about scope. If the forecast is too late, the lever is cutting or splitting work, not pressuring people to go faster. Risk gets surfaced early because the question shifts from "how long" to "what could make this larger than it looks."
+
+Some will say that is still estimating under another name. In a narrow sense, yes. But the difference matters. Asking people to predict is unreliable. Asking a system to report what it has done is not.
+
+If you run a team, try it for one quarter. Drop the point values, keep the history, and forecast in ranges. You will spend less time in meetings, and your dates will be more believable. Honest uncertainty beats false precision every time.

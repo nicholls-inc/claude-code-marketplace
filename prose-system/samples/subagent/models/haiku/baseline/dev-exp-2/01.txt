@@ -1,0 +1,11 @@
+What is a leap second?
+
+Our clocks rest on two different ideas of time. Atomic clocks count seconds with extraordinary precision, using the vibrations of caesium atoms. The Earth does not keep such neat time. It turns unevenly, and over the long run it has been slowing, mainly because the Moon's tides drag on it. A day is therefore not quite 86,400 atomic seconds long, and the two drift apart.
+
+Coordinated Universal Time (UTC), the basis of civil time worldwide, follows the atomic seconds. To keep it close to the Earth's actual rotation, international timekeepers have occasionally inserted an extra second, a "leap second", usually at the end of June or December. The clock runs 23:59:59, then 23:59:60, then midnight. Since the system began in 1972, 27 have been added. The most recent was at the end of 2016.
+
+The main reason for stopping is that the extra second causes trouble for computers. Networks, financial trading systems, power grids, telecoms and aviation software all depend on precise timestamps, and many were never designed for a minute with 61 seconds. Software has repeatedly crashed or misbehaved at these moments. In 2012, a leap second was widely blamed for disruption at sites including Reddit and LinkedIn. Engineers often "smear" time instead, stretching each second slightly over hours. That is a workaround, and companies do it in different ways.
+
+Leap seconds are also hard to plan for. Because the Earth's spin changes irregularly, they are announced only about six months ahead, which gives engineers little time to prepare.
+
+In November 2022, the General Conference on Weights and Measures, the body that oversees the international system of units, voted to abandon them. The plan is to stop adding leap seconds by 2035 at the latest and to decide then what replaces them. Letting the gap between atomic time and the Earth's position grow means that, over centuries, clock time and the sun would drift noticeably apart. Most scientists consider that a reasonable price for reliable technology, and future generations can decide whether to correct the difference.

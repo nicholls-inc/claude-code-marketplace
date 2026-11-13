@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "abf1c0dc4b6412ac8",
+  "condition": "vary_length",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 3,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nVary your sentence length.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73751,
+    "output_tokens": 920,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:33:21.446Z",
+  "valid": true,
+  "text": "Lithium-ion cells are charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). It is easiest to think of the cell as a voltage source whose value depends on how full it is, in series with a small internal resistance.\n\nStage one is constant current. The charger forces a fixed current into the cell, typically between 0.5C and 1C, where 1C is the current that would fill the nominal capacity in one hour. Lithium ions leave the cathode, cross the electrolyte, and insert themselves between the graphite layers of the anode. Electrons travel through the external circuit to balance the charge. The terminal voltage is the cell's open-circuit voltage (OCV) plus the current times the internal resistance. As the anode fills, the OCV climbs from roughly 3.0 V toward 4.2 V for a common cobalt-based cell. The terminal voltage therefore rises throughout this stage. Most of the cell's capacity, often 70 to 80 percent, goes in here.\n\nStage two begins when the terminal voltage reaches the upper limit, commonly 4.2 V. That ceiling is a safety boundary, not a suggestion. Hold a cell above it and the electrolyte oxidizes at the cathode, lithium metal can plate onto the anode, and the cell degrades or fails dangerously. So the charger stops pushing current and instead holds the voltage fixed.\n\nThis is where the slowdown comes from. With the terminal voltage clamped, the current is whatever satisfies V_limit = OCV + I·R. As charge accumulates, the OCV creeps up toward the limit, so the term I·R must shrink. Current falls, roughly exponentially. The charger declares the cell full when the current drops to a cutoff, often 0.05C.\n\nTwo physical effects reinforce this. First, the internal resistance is not one thing. Part of it is ohmic, but part is the slow diffusion of lithium within the solid particles. Near full charge the surface of each graphite particle is already saturated, and the ions must diffuse deeper into the particle's interior before more can enter. Diffusion is slow, and the concentration gradient it relies on is flattening. Second, the OCV curve is steep near the top, so a small amount of added charge raises the voltage a lot, which uses up the remaining voltage headroom quickly.\n\nThe engineering analogy is filling a tank through a valve while the back pressure rises with the level. You can open the valve wide at first. Near the top you must throttle it, or you will exceed the pressure rating. Faster charging schemes shape the current more cleverly, but they all respect the same voltage ceiling and the same diffusion limit."
+}

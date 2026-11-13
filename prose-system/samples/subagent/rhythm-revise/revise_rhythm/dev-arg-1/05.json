@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a0120d2e6297eea98",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-arg-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d005.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/05.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37820,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2470,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:22:31.707Z",
+  "valid": true,
+  "text": "Cities should scrap minimum parking requirements, and they should do it now.\n\nThe case begins with an uncomfortable fact: parking minimums are not a neutral planning tool but a mandate that forces every developer, shop owner and landlord to build a fixed number of car spaces, regardless of what the market wants or what the neighborhood needs. A restaurant must supply spaces per hundred square feet of dining room, and an apartment block spaces per unit. These numbers were rarely derived from careful study. Many were borrowed from the manuals of traffic engineers who surveyed a handful of suburban sites at peak demand and generalized from there. Donald Shoup, the planning scholar who spent decades dismantling the logic, found that the standards often rested on remarkably thin evidence. Yet they now shape nearly every American city.\n\nThe first problem is cost, and it lands hardest on the people least able to bear it. A surface space costs a few thousand dollars to build and consumes land that could hold housing or a business, while a structured or underground space can cost tens of thousands. Those costs do not vanish; they are folded into rents, sale prices and menu prices. A tenant who owns no car still pays for parking, because the building could not be approved without it. Requirements also kill small projects outright, since a narrow infill lot that could hold a few modest apartments often cannot fit the mandated spaces and the building together, so nothing gets built. In a housing shortage, forcing developers to dedicate scarce land and money to empty asphalt is hard to defend.\n\nThe second problem is what the mandates do to the shape of a city. Requirements push buildings apart, surround them with lots, and stretch every trip beyond walking distance. The result is the familiar landscape of big-box stores marooned in seas of pavement, where a car is the only sensible way to get anywhere. That outcome then appears to justify the original rule, since everyone drives. The policy manufactures the demand it claims to be serving. Meanwhile, the lots sit mostly empty for most of the year, sized for the busiest shopping day, wasting land in the places where land is most valuable.\n\nDefenders of minimums raise a reasonable worry: if cities stop requiring parking, will streets fill with spillover cars, and will residents lose the ability to park near their own homes? It is a real concern, but it argues for better management of the curb, not for mandating private supply. Cities can price street parking so that a space or two is usually free, issue permits for residential blocks, and share revenue with the neighborhoods that generate it. That approach treats parking as a resource to be priced, which is what it is, rather than as a free good to be oversupplied by decree. Removing minimums does not ban parking; it simply lets owners decide. Developers who believe their tenants want spaces will keep building them, and many will, because lenders and buyers often expect them. The change is that the decision moves from a legislative formula to the people who bear the cost and know their customers.\n\nThe evidence from places that have tried this is encouraging rather than alarming. Buffalo eliminated its citywide minimums in 2017, and developers there have continued to build parking where it makes sense while also delivering projects that previously would have been impossible. Minneapolis, Anchorage and several other cities have followed, and a growing number of states have moved to restrict such mandates. Reports of chaos have not materialized, and what has appeared instead is flexibility: older buildings converted to new uses without having to find extra spaces, small businesses opening in storefronts that once sat vacant for lack of a parking variance, and housing proposals penciling out at lower cost.\n\nThere is also a basic matter of fairness and honesty about trade-offs. Minimums quietly transfer wealth from people who drive less to people who drive more, and from renters to property owners and drivers. They hide the true price of car dependence inside every other cost of living. A city that wants to cut emissions, lower housing prices and support local business cannot sensibly also require every building to be sized around the automobile. The goals pull in opposite directions, and the mandate wins by default because nobody voted for it recently.\n\nNone of this means cars will disappear or that parking does not matter, since plenty of residents will still need it and many projects will provide it gladly. The question is who decides and who pays, and right now the city decides and everyone pays, whether or not they benefit. Removing minimums returns the choice to builders, buyers and tenants, and lets prices tell us how much parking people actually value. After seventy years of guessing, that is a more modest and more reliable way to plan. Cities should repeal the requirements, manage the curb sensibly, and let neighborhoods grow in the shape their residents can afford."
+}

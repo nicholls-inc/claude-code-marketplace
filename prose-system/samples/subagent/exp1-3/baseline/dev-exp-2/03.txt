@@ -1,0 +1,15 @@
+**The Leap Second, and Why Time's Keepers Are Abandoning It**
+
+A leap second is a one-second adjustment added to the world's clocks, usually at the very end of June or December, so that our timekeeping stays in step with the spinning Earth.
+
+The trouble starts with the fact that there are two ways to measure time. For most of history, we judged time by the planet itself: one rotation made a day, and a day was divided into 86,400 seconds. But Earth is an imperfect clock. Tides drag on its rotation, earthquakes and shifting ice nudge it, and its speed varies unpredictably. Over the long run, days are getting slightly longer.
+
+Since the 1960s there has been a far steadier alternative: atomic clocks, which count the vibrations of atoms and lose almost nothing over millions of years. The second is now defined by those vibrations, not by the Earth's turning. Atomic time and Earth time therefore drift apart. To keep the two within 0.9 seconds of each other, international timekeepers began inserting leap seconds in 1972. Twenty-seven have been added since, the most recent at the end of 2016. On those occasions, clocks briefly read 23:59:60 before rolling over to midnight.
+
+For ordinary people, this barely mattered. For computers, it has been a recurring headache. Software generally assumes every minute has exactly 60 seconds and that time only moves forward. A minute with 61 seconds can confuse systems that do not expect it. Leap seconds have been blamed for crashes and outages at major websites and in networks, and engineers at large technology companies have invented workarounds, such as "smearing" the extra second across a whole day. Because leap seconds cannot be predicted far ahead, being announced only months in advance, systems that depend on precise timing, from financial trading to satellite navigation and power grids, must keep updating their rules.
+
+In 2022, the General Conference on Weights and Measures, the international body that oversees the definition of the second, voted to stop using leap seconds by or before 2035. The plan is to let the gap between atomic time and Earth time grow beyond one second, and to revisit the matter in the future with a new method of correction, perhaps a larger, rarer adjustment of a minute or more.
+
+A surprising development has also helped the case. Earth's rotation has recently been speeding up slightly, which could even call for a "negative" leap second, removing one. That has never been tried, and software engineers dread it more than the usual addition.
+
+In practical terms, the change will be invisible. Noon will remain near the Sun's highest point for generations. The decision simply trades a small, regular fix for a simpler, steadier clock.

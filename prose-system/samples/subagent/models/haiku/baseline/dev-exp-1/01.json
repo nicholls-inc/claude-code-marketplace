@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a26a39eb8fcf7e26c",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 73764,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 3615,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T18:59:16.979Z",
+  "valid": true,
+  "text": "How a heat pump heats a house when it is colder outside\n\nA heat pump does not create heat. It moves heat that already exists in the outside air into your home. Air at -5°C still contains plenty of heat, because heat is only absent at absolute zero, around -273°C. The task is to collect that heat and concentrate it to a useful temperature.\n\nIt does this with a refrigerant, a fluid that boils at very low temperatures. The cycle has four parts.\n\n1. Evaporator (outdoor coil). A fan draws outside air across a coil carrying liquid refrigerant. The refrigerant is held at a pressure where it boils at roughly -20°C to -30°C. Because the outside air is warmer than that, heat flows into the refrigerant and turns it into a gas.\n\n2. Compressor. The compressor squeezes the gas. Compressing a gas raises its temperature, as a bicycle pump warms when you use it. The refrigerant leaves the compressor hot, often 60°C to 90°C, well above your indoor target.\n\n3. Condenser (indoor side). The hot gas passes through a coil that air or water flows over. The heat transfers into your home, and the refrigerant condenses back into a liquid.\n\n4. Expansion valve. The liquid passes through a valve that drops its pressure and temperature sharply, so it is cold again and ready to absorb heat outdoors. The loop repeats continuously.\n\nThe compressor is the only major user of electricity. Its job is to lift heat from a low temperature to a high one. The heat itself comes from the air outside.\n\nEfficiency\n\nHeat pump performance is measured as a coefficient of performance (COP): units of heat delivered per unit of electricity used. A COP of 3 means 3 kWh of heat for 1 kWh of electricity. Air-source heat pumps typically average about 2.5 to 4 over a year, depending on climate and设置. A condensing gas boiler reaches roughly 90 to 95 percent, so it delivers at most about 0.9 kWh of heat per kWh of gas.\n\nEfficiency alone does not settle the cost. Compare prices per kWh of heat. At a COP of 3 and an efficiency of 90 percent, the heat pump is cheaper to run whenever electricity costs less than about 2.7 times the price of gas per kWh. Check your local tariffs, since this ratio varies a lot by country and contract.\n\nCold weather\n\nThe main constraint is that colder outside air means a lower evaporating temperature. The compressor then has to lift the refrigerant further, so output drops and running costs rise as temperatures fall. Cold-climate models are designed to keep producing heat at -15°C or below, and many include a backup electric element for the coldest days.\n\nOutput at your local design temperature matters more than the nameplate rating. Ask any installer for the heating capacity at that temperature, and check that the unit is sized to your heat loss rather than just swapped for the boiler's size.\n\nFrost\n\nWhen humid air meets the cold outdoor coil, frost can form. The unit periodically reverses briefly to melt it. This defrost cycle is normal and usually takes a few minutes.\n\nWhat this means for replacing a gas boiler\n\nHeat pumps work best with lower water temperatures, usually 35°C to 50°C. Many boiler systems run at 70°C to 80°C. To heat a house comfortably at the lower temperature, you may need larger radiators, or better insulation, or both. A competent survey should measure heat loss, check pipework and radiator sizes, and recommend a system size before quoting. An oversized unit cycles on and off, which lowers efficiency and wears the equipment.\n\nSummary\n\nA heat pump works like a refrigerator running in reverse. It extracts heat from cold air and uses a modest amount of electricity to concentrate it inside, so it can warm a house when outside is colder than inside. Whether it cuts your bills or emissions relative to a gas boiler depends on local energy prices, how well your home holds heat, and how carefully the system is designed for it."
+}

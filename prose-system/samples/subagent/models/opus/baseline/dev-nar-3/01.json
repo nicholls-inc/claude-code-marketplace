@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac260af122b024f24",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 1,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28161,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1554,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:01:34.282Z",
+  "valid": true,
+  "text": "The Great Molasses Flood\n\nJanuary 15, 1919, was unusually mild in Boston. After a bitter cold spell the temperature had climbed to about 40 degrees, and people in the North End were out in the noonday sun. Children played near the waterfront, workers ate lunch outdoors, and freight wagons rolled along Commercial Street. Above them stood a huge steel tank owned by the Purity Distilling Company, a subsidiary of United States Industrial Alcohol. It was 50 feet tall and 90 feet across, and it held about 2.3 million gallons of molasses. The molasses was waiting to be distilled into industrial alcohol, a key ingredient in munitions.\n\nAt around 12:30 p.m., witnesses heard a deep rumble and then a rapid crackling that some likened to machine-gun fire. The rivets holding the tank together were popping loose. Then the tank split open. A wave of molasses, estimated at up to 25 feet high and moving at about 35 miles per hour, rolled into the neighborhood.\n\nThe force was tremendous. The wave knocked buildings off their foundations and buckled the steel girders of the elevated railway; a train halted just short of the damaged section. A fire station was shoved toward the harbor. Horses, wagons and people were swept up and thrown down. People caught in the flood found it almost impossible to escape. As the cold January air chilled the molasses it grew thicker, and it held those it had trapped like glue. Anyone who struggled sank deeper, and many suffocated.\n\nHelp came fast. Sailors from the training ship USS Nantucket, docked nearby, ran into the mess, followed by police, firefighters and Red Cross volunteers. Rescuers waded through syrup up to their waists and pulled out survivors so coated they were hard to recognize. A nearby building became a makeshift hospital. The search lasted for days, and some bodies were found only much later. In all, 21 people died, among them a ten-year-old boy, and about 150 were injured.\n\nCleaning up took weeks. Crews hosed the streets down with salt water from the harbor, and the harbor water stayed brown for months. Molasses was tracked all over Boston, onto streetcars, into homes and across public telephones. For decades afterward, longtime residents said the North End smelled faintly sweet on hot summer days.\n\nBoston wanted to know why the tank had failed. The company blamed anarchists, claiming a bomb had been planted. A long civil suit, one of the first class-action cases in Massachusetts, uncovered a more mundane explanation. The tank had been built in a hurry in 1915 under the supervision of a company treasurer with no engineering training. It was never properly tested; the standard check of filling it with water was skipped. Its steel was too thin and brittle for the load. The tank had leaked from the start, so badly that local families collected the drips, and the company's answer was to paint it brown so the leaks would not show.\n\nIn 1925, a court-appointed auditor found the company responsible, and it paid roughly $628,000 to the victims and their families. The disaster helped bring in stricter rules in Boston and beyond, requiring engineers to approve and sign off on construction plans. Today a small plaque in Langone Park marks the spot."
+}

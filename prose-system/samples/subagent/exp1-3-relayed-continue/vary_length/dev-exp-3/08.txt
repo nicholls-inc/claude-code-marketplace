@@ -1,0 +1,71 @@
+**How Two Strangers Can Agree on a Secret in Public**
+
+Imagine you want to send a private message to someone you have never met. The only way to reach them is a public noticeboard, and anyone can read it. This sounds hopeless. For most of history it was. Yet every time you open a banking website, your computer does something very much like this, and it works.
+
+**The old problem**
+
+Secret codes are ancient. Julius Caesar is said to have shifted each letter of his messages three places along the alphabet, so A became D and B became E. Anyone who knew the shift could read the message. Anyone who did not saw gibberish.
+
+The shift is the "key." Both sender and receiver must hold the same one. That is fine for two generals who met before the war. It is useless for you and a shop you have never visited. How do you share the key without sending it over the very line the eavesdropper is watching? If you send the key in the open, the eavesdropper copies it. If you lock the key with another key, you face the same problem again. For centuries this looked like a wall nobody could climb.
+
+**The paint-mixing picture**
+
+In the 1970s, a few researchers found a way over the wall. The easiest way to see the idea is with paint.
+
+Suppose Alice and Bob want to end up with the same secret colour. They start by agreeing, in public, on a common colour, say yellow. Anyone can know this.
+
+Next, each of them privately picks a secret colour. Alice picks red, Bob picks blue. They never tell anyone.
+
+Alice mixes her red into the yellow and sends the resulting orange across the line. Bob mixes his blue into the yellow and sends the green. The eavesdropper, Eve, sees yellow, orange and green. That is all she gets.
+
+Now Alice takes Bob's green and adds her own secret red. Bob takes Alice's orange and adds his own secret blue. Both end up with the same muddy brown, because the same three paints went in. The order does not matter.
+
+Eve cannot do this. She has the yellow, the orange and the green, but she lacks both secret colours. And here is the crucial point: paint is easy to mix and almost impossible to un-mix. Looking at orange, you cannot say exactly how much red went into it.
+
+So the trick rests on an activity that is easy in one direction and hard to reverse. Mathematicians call this a one-way function. The real system swaps paint for numbers.
+
+**The clock that only goes one way**
+
+You know clock arithmetic, even if you have never named it. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock. You added 10 and 5, got 15, and then threw away whole laps of 12, keeping the remainder. Mathematicians call this "modular arithmetic." We write "15 mod 12 = 3."
+
+Now take a small clock with 7 hours instead of 12, and consider powers. Start with the number 3. Then 3 to the power 1 is 3. Three squared is 9, which on a 7-hour clock is 2, because 9 minus 7 is 2. Three cubed is 27, which is 6, because 27 minus 21 is 6. Keep going and the answers hop around: 3, 2, 6, 4, 5, 1, and then the pattern repeats.
+
+Here is the important feature. If I tell you the exponent, you can find the answer quickly. But if I tell you only the answer, and ask which exponent produced it, you have to try them one by one. On a clock with 7 hours, that is trivial. On a clock with a number of hours that has several hundred digits, it is hopeless. Even the fastest computers would need longer than the age of the universe.
+
+Going forward is easy. Going backward is not. That is our paint.
+
+**The real exchange, with small numbers**
+
+Let Alice and Bob publicly agree on two numbers: a clock size of 23, and a base of 5. These are like the yellow paint.
+
+Alice secretly picks 6. She computes 5 to the power 6, which is 15,625. Dividing by 23 and keeping the remainder gives 8. She sends 8 across the line. This is her orange.
+
+Bob secretly picks 15. He computes 5 to the power 15 on the same clock, and gets 19. He sends 19. This is his green.
+
+Now Alice takes Bob's 19 and raises it to her secret 6. Bob takes Alice's 8 and raises it to his secret 15. Both arrive at 2.
+
+Why does that work? Alice's final answer is 5 to the power of (15 times 6). Bob's is 5 to the power of (6 times 15). Multiplication does not care about order, so the two match. The secret number 2 was never sent. It was built separately at each end.
+
+Eve saw 23, 5, 8 and 19. With a clock this small she could try every exponent in seconds and find the secrets. That is why real systems use enormous clocks. Nothing about the method changes. Only the size does.
+
+**Locks and keys instead**
+
+Another form of the same idea is better known. Rather than agreeing on a shared secret, you can think of a padlock.
+
+Suppose Bob makes thousands of identical open padlocks and leaves them in a public place. He keeps the only key. Alice, whom Bob has never met, takes one, writes her message, puts it in a box, and snaps the padlock shut. Snapping it shut needs no key. Now only Bob can open it, even Alice cannot.
+
+Bob's padlock is his "public key." His own key is his "private key." The two are linked by mathematics, but you cannot work out the private one from the public one, because again the maths runs easily in one direction only. The most famous version, called RSA, relies on the fact that multiplying two huge prime numbers is quick, while splitting the result back into those primes is brutally slow.
+
+Alice can use this to send Bob a fresh secret key. From then on, they can both lock and unlock their messages with that shared key, which is faster than the padlock method. Your web browser does exactly this in the first fraction of a second after you connect to a site.
+
+**What this does not fix**
+
+There is one weakness, and it is worth knowing. Suppose Eve does more than listen. Suppose she intercepts the noticeboard and swaps Bob's padlock for one of her own. Alice, thinking she is writing to Bob, locks her message with Eve's padlock. Eve opens it, reads it, and passes it on to Bob in a fresh box. Neither of them notices.
+
+The maths does not prevent this. To stop it, you need some way of confirming that a padlock really belongs to Bob. The internet handles this with certificates: documents, vouched for by trusted organisations, that tie a public key to a name. It is a human problem wearing mathematical clothes.
+
+**The takeaway**
+
+Two people who have never met can build a shared secret in plain view because some operations are easy to do and almost impossible to undo. Each side mixes a private ingredient into a public one. Each sends only the mixture. The order of mixing does not matter, so both reach the same final blend, which nobody who watched the exchange can recreate.
+
+It is a small, strange idea. It also quietly guards nearly everything you do online.

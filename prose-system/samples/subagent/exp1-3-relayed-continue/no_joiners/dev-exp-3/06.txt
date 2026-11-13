@@ -1,0 +1,71 @@
+How Strangers Can Share a Secret in Public
+
+Imagine you want to agree a secret with someone you have never met. You cannot meet in person and you cannot trust the phone line, because anyone might be listening to every word. It sounds impossible. If the only thing you ever say is said out loud, how can a secret be created that the listeners do not also know?
+
+The surprising answer is that it can be done, and the trick is a piece of mathematics you already half know. This idea, called public key cryptography, protects almost everything you do online, from banking to messaging. Here is how it works, step by step.
+
+The paint analogy
+
+Start with colours of paint, because the central idea is easy to see there. Suppose Alice and Bob each have a tin of yellow paint that everyone knows about. Alice also picks a secret colour, say red, and Bob picks a secret colour, say blue. They never tell anyone these.
+
+Alice mixes her red into the shared yellow and sends the resulting orange tin to Bob. Bob mixes his blue into the same yellow and sends the green tin to Alice. A listener can see both tins travelling along the line.
+
+Now Alice adds her secret red to the green tin she received. Bob adds his secret blue to the orange tin he received. Both end up with exactly the same muddy brown, made of yellow, red and blue. The listener has yellow, orange and green, but to find the brown they would need to unmix paint, and unmixing paint is nearly impossible.
+
+That is the whole idea. Mixing is easy, unmixing is hard, and the order in which you mix does not matter. Mathematics gives us a version of this where the mixing is something a computer can do in a blink and the unmixing would take longer than the age of the universe.
+
+The mathematics of mixing
+
+The mathematical version uses clock arithmetic. On a clock with 12 hours, if it is 10 o'clock and you wait 5 hours, it becomes 3 o'clock. You went past 12 and started again. Mathematicians call this working modulo 12. You simply take the ordinary answer and keep only the remainder after dividing by 12. So 15 becomes 3.
+
+We can use a clock of any size. Our example will use a clock with 23 hours, which is a small size chosen to keep the numbers friendly. Real systems use clocks with hundreds of digits.
+
+We also need powers. Five to the power 3 means 5 times 5 times 5, which is 125. On our 23 hour clock, 125 divided by 23 leaves a remainder of 10, because 23 times 5 is 115 and 125 minus 115 is 10. So we say 5 to the power 3 is 10 on this clock.
+
+Now the exchange itself.
+
+Step one is a public agreement. Alice and Bob announce two numbers openly. The first is the clock size, 23. The second is a base number, 5. The listener, whom we will call Eve, hears both. That is fine, since these are the yellow paint.
+
+Step two is a private choice. Alice picks a secret number, 6. Bob picks a secret number, 15. They tell nobody. These are the red and blue.
+
+Step three is the mixing. Alice works out 5 to the power 6 on the clock. Five to the power 2 is 25, which is 2 on the clock. So 5 to the power 6 is 2 times 2 times 2, which is 8. Alice sends 8 to Bob.
+
+Bob works out 5 to the power 15 on the clock. After some careful steps, which a computer does instantly, the answer is 19. Bob sends 19 to Alice.
+
+Eve hears 8 and 19. These are the orange and green tins.
+
+Step four is the final mix. Alice takes Bob's number 19 and raises it to her secret power 6. Working on the clock, 19 is the same as minus 4, and minus 4 to the power 6 is 4096. Dividing 4096 by 23 leaves a remainder of 2. So Alice gets 2.
+
+Bob takes Alice's number 8 and raises it to his secret power 15. Since 8 is 2 times 2 times 2, this is the same as 2 to the power 45. A short calculation shows that 2 to the power 11 is 2048, which is exactly one more than 89 full laps of the clock, so 2 to the power 11 is just 1. Forty five is four lots of eleven plus one, so the answer is the same as 2 to the power 1, which is 2. Bob also gets 2.
+
+They have both arrived at 2, and neither ever sent it. That is their shared secret, the brown paint.
+
+Why does it work?
+
+The reason both people reach the same answer is a rule of powers you may remember from school. Raising 5 to the power 6 and then raising that result to the power 15 gives the same as raising 5 to the power 15 and then to the power 6. Both equal 5 to the power 90, because 6 times 15 is 90. Multiplication does not care about order, so the two paths meet at the same place.
+
+Alice only knows her own 6 and Bob's public 19, yet she lands on the same answer as Bob, who only knows his 15 and Alice's public 8. Each person uses their own private number as the missing piece.
+
+Why Eve is stuck
+
+In our tiny example Eve could just try every secret from 1 to 22 and find the match in seconds. Real systems defeat this by size. The clock has a number of digits in the hundreds, and the secrets are just as large.
+
+The difficulty for Eve is this. Going forwards, from a secret power to the result, is quick even for huge numbers, because a computer can use repeated squaring to take shortcuts. But going backwards, from the result to the secret power, has no known shortcut. On a clock the results jump around in a way that looks random. A result of 8 tells you nothing about whether the power was 6 or 28 or something else. This backward problem is called the discrete logarithm problem, and the best known methods for solving it on a large clock would take an unimaginable number of years.
+
+So the security does not come from hiding the method. The method is published in textbooks. It comes from a task that is easy in one direction and brutally slow in the other.
+
+Public keys and private keys
+
+The exchange above creates a shared secret, but the same thinking leads to the more famous idea of a key pair. Here each person has a private key that they never share, and a public key that they publish to the world. The two are linked by mathematics, as 6 and 8 were linked in our example, but you cannot work out the private one from the public one.
+
+Think of the public key as an open padlock. Anyone can take one of Bob's padlocks, put a message in a box and snap the lock shut. Once it is locked, nobody can open it, not even the person who locked it. Only Bob has the key. Strangers can therefore send Bob secret messages without ever having met him.
+
+One popular system for this, called RSA, uses a different hard problem. Multiplying two huge prime numbers together is easy, but taking the result and finding the two primes again is extremely hard. A prime is a number such as 7 or 13 that divides only by 1 and itself. The public key contains the product, and the private key relies on knowing the original primes.
+
+What this means in practice
+
+When your phone connects securely to a website, the two machines use these methods in the first moments of the conversation. They agree a shared secret over the open internet, then use that secret to scramble everything else quickly. The public part is slow and heavy, so it is used only to set up the secret, much as you might use a courier to deliver a single key and then use the key for everyday locking.
+
+There is one honest caveat. This system protects against listeners, but it does not on its own prove who you are talking to. If Eve could sit in the middle and pretend to be Bob to Alice, and Alice to Bob, she could run two separate exchanges. Real systems therefore add certificates, which are vouched for identities, to guard against this.
+
+The lasting lesson is a remarkable one. Secrecy does not require a secret meeting. It only requires a calculation that is easy to do and hard to undo, and a little arithmetic on a clock face.

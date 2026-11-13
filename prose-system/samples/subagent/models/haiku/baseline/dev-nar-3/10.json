@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a96be38c163209471",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73737,
+    "output_tokens": 3231,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:23:48.854Z",
+  "valid": true,
+  "text": "The Great Molasses Flood\n\nOn the afternoon of January 15, 1919, the North End of Boston was unusually warm. The temperature had climbed to around forty degrees, and the air carried the smell of the harbor and the bakeries along the narrow streets. Near the waterfront, at Commercial and Foster Streets, stood a steel tank owned by the United States Industrial Alcohol Company. It was roughly fifty feet tall and ninety feet across, and it held about 2.3 million gallons of molasses. The syrup was destined for distilleries that made alcohol for explosives in the final year of the First World War.\n\nThe tank had problems from the start. It had been built quickly in 1915, its walls were thin, and it leaked. Workers reported seams that wept sticky brown syrup and rivets that popped under pressure. The company painted the tank brown, partly to hide the stains. Neighbors complained of a constant sweet smell and a low rumbling, and some children were warned away from its base. No one with authority slowed production or ordered a proper inspection.\n\nAt about half past twelve, the tank failed. Witnesses described a sharp crack like gunfire, then a roar. The steel wall gave way, and a wave of molasses, estimated at twenty-five feet high, rushed down Commercial Street at perhaps thirty-five miles per hour. It tore buildings from their foundations, crushed a firehouse, twisted the supports of the elevated railway, and swept horses, wagons, and people into the street. Molasses is thick and heavy, and once it slowed, it held people fast. Many could not run, and some could barely breathe.\n\nRescue was chaotic. Firefighters, police officers, and sailors from nearby ships waded into the sludge, which reached chest height in places and pulled at their boots. They used shovels and their hands to dig out survivors and recover bodies. Twenty-one people died, including children, and about 150 were injured. Several horses also died. For months afterward, the harbor water near the site stayed stained brown, and residents spoke of the sweet smell lingering for years.\n\nThe cleanup took weeks. Crews hosed the streets with seawater, spread sand over the remaining syrup, and hauled away what they could in carts and trucks. Some residents later said that on hot summer days the streets still smelled faintly of molasses.\n\nThe company first denied responsibility and suggested that anarchists had sabotaged the tank, an explanation that found little public support. Families filed suit, and the litigation dragged on for years. In 1925, a judge found the company liable for negligence and ordered it to pay damages to the victims and their families. The disaster became a case study for engineers and lawyers, and it helped build the case for stricter standards in industrial construction and for holding companies accountable when their products or structures cause harm."
+}

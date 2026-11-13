@@ -1,0 +1,77 @@
+# Agreeing on a secret in public
+
+Suppose Alice and Bob have never met and can only talk over a line that a third person, Eve, hears in full. They want to end up with a number that both of them know and Eve does not. Once they have it, they can use it as the key to an ordinary cipher and scramble everything else they say.
+
+This sounds impossible. Whatever Alice tells Bob, Eve hears too, so it seems Eve must end up knowing whatever Bob knows. For most of history people assumed exactly that, and keys were carried by trusted couriers. In 1976 Whitfield Diffie and Martin Hellman published a way round it. Their method is what your phone or laptop uses, in some form, almost every time it connects to a website.
+
+The trick rests on one idea: some things are easy to do and very hard to undo.
+
+## The idea, in paint
+
+Mixing two paints is easy. Looking at the mixture and working out exactly which two colours went in is very hard.
+
+Alice and Bob agree, openly, on a common colour, say yellow. Eve hears this. Each of them then picks a private colour and tells no one. Alice picks red, Bob picks blue.
+
+Alice mixes her red into the yellow and sends Bob the resulting orange. Bob mixes his blue into the yellow and sends Alice the resulting green. Eve sees both mixtures go past.
+
+Now Alice adds her private red to the green she received. Bob adds his private blue to the orange he received. Both pots now contain yellow, red and blue in the same proportions, so they are the same muddy brown. That brown is the shared secret.
+
+Eve has yellow, orange and green. To make the brown she needs pure red or pure blue, and she cannot unmix either out of what she saw. If she stirs the orange and green together she gets a pot with two shares of yellow, which is the wrong colour.
+
+Two features of paint made this work. Mixing is hard to reverse, and the order of mixing does not matter: yellow plus red plus blue is the same as yellow plus blue plus red. The real method needs a piece of arithmetic with the same two features.
+
+## Arithmetic that is hard to undo
+
+The arithmetic is the kind you use on a clock. Four hours after ten o'clock is two o'clock, not fourteen: you go round and keep only what is left over after removing twelves. Mathematicians do the same with any clock size. On a clock with 23 positions, 25 becomes 2, because 25 divided by 23 leaves remainder 2.
+
+Now take powers on that clock. Pick a starting number, 5, and keep multiplying by 5, reducing to the remainder each time:
+
+- 5
+- 5 × 5 = 25, which leaves 2
+- 2 × 5 = 10
+- 10 × 5 = 50, which leaves 4
+- 4 × 5 = 20
+- 20 × 5 = 100, which leaves 8
+
+The results jump about: 5, 2, 10, 4, 20, 8. In ordinary arithmetic, powers of 5 grow steadily, so if I tell you a power of 5 is 15,625 you can home in on which power it is. On the clock there is no such pattern to follow. If I tell you some power of 5 leaves 19, you have little choice but to try powers one after another until 19 turns up.
+
+That is the "paint mixing". Going forwards, from the power to the remainder, is quick. Going backwards, from the remainder to the power, means searching.
+
+## The exchange, with real numbers
+
+Alice and Bob agree openly on the clock size, 23, and the starting number, 5. Eve hears both.
+
+Alice chooses a private number, 6. She works out 5 to the power 6 on the clock, which we saw is 8, and sends 8 to Bob.
+
+Bob chooses a private number, 15. He works out 5 to the power 15 on the clock, which comes to 19, and sends 19 to Alice.
+
+Now each takes the number they received and raises it to their own private power.
+
+- Alice takes Bob's 19 and raises it to her 6. On the clock, the result is 2.
+- Bob takes Alice's 8 and raises it to his 15. On the clock, the result is 2.
+
+They have both arrived at 2, and neither of them ever sent it.
+
+## Why they get the same answer
+
+Bob's 19 is really "5 multiplied by itself 15 times". When Alice raises that to the power 6, she has 5 multiplied by itself 15 × 6 = 90 times. Alice's 8 is "5 multiplied by itself 6 times", and when Bob raises it to the power 15 he has 5 multiplied by itself 6 × 15 = 90 times. Both have computed 5 to the power 90, by different routes. This is the school rule that a power of a power multiplies the exponents, and it does not matter which exponent comes first.
+
+Taking remainders along the way does not disturb this. Throwing away whole laps of the clock early or late gives the same final position.
+
+## What Eve is left with
+
+Eve knows 23, 5, 8 and 19. To get the secret she needs Alice's 6 or Bob's 15, and neither was ever spoken. The obvious things to try with what she has do not work: multiplying 8 by 19 gives 5 to the power 21, not 5 to the power 90.
+
+Her remaining option is to undo the mixing: find which power of 5 leaves 8 on the 23-clock. With a clock this small she can just try them all and will have the answer in seconds. So in practice the clock is made enormous. The clock size is a number hundreds of digits long, and the private numbers are similarly huge.
+
+At that size the two directions come apart completely. Alice and Bob can still compute their powers quickly, because there is a shortcut: squaring a number repeatedly reaches 5 to the power 2, 4, 8, 16 and so on, so a gigantic power takes only a few thousand multiplications. A computer does that in a fraction of a second. Eve has no comparable shortcut for going backwards. The best methods anyone has found would take all the world's computers far longer than the age of the universe.
+
+## Two honest caveats
+
+First, nobody has proved that the backwards problem is hard. It is believed to be hard because very able people have tried for decades to find a fast method and have not. A large enough quantum computer, of a kind not yet built, would be able to solve it, which is why replacement methods based on different hard problems are now being introduced.
+
+Second, the exchange keeps a secret from someone who only listens. It does not tell Alice that the person at the other end is really Bob. If Eve can intercept and replace messages, she can run one exchange with Alice while pretending to be Bob, and another with Bob while pretending to be Alice, and sit in the middle reading everything. Real systems therefore add a second ingredient, a digital signature, which lets Bob prove his identity. That is the job of the certificates behind the padlock in your browser.
+
+## The whole thing in a sentence
+
+Alice and Bob each keep one number private, exchange the results of a calculation that is easy to do and practically impossible to reverse, and then each combine what they received with what they kept; because the order of combining does not matter, they reach the same number, and Eve, who has only the two results, cannot.

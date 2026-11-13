@@ -1,0 +1,726 @@
+{
+ "version": "1",
+ "note": "Second pass over the 120 stored plain_prose samples. Each subagent is given the path of a copy of one draft and the instruction below.",
+ "jobs": [
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d001.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d002.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d003.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d004.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d005.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d006.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d007.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d008.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d009.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d010.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-1/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d011.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d012.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d013.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d014.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d015.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d016.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d017.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d018.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d019.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d020.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-2/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d021.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d022.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d023.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d024.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d025.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d026.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d027.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d028.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d029.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d030.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-arg-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-arg-3/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d031.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d032.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d033.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d034.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d035.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d036.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d037.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d038.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d039.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d040.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-1/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d041.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d042.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d043.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d044.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d045.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d046.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d047.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d048.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d049.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d050.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d051.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d052.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d053.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d054.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d055.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d056.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d057.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d058.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d059.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d060.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-exp-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-3/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d061.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d062.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d063.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d064.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d065.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d066.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d067.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d068.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d069.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d070.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d071.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d072.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d073.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d074.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d075.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d076.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d077.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d078.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d079.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d080.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-2/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d081.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d082.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d083.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d084.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d085.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d086.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d087.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d088.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d089.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d090.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-nar-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-3/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d091.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d092.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d093.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d094.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d095.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d096.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d097.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d098.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d099.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d100.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-1",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-1/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d101.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d102.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d103.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d104.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d105.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d106.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d107.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d108.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d109.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d110.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-2",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-2/10.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d111.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/01.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d112.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/02.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d113.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/03.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d114.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/04.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d115.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/05.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d116.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/06.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d117.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/07.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d118.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/08.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d119.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/09.txt"
+  },
+  {
+   "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d120.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+   "condition": "revise_rhythm",
+   "brief_id": "dev-tec-3",
+   "source_sample": "samples/subagent/exp2b/plain_prose/dev-tec-3/10.txt"
+  }
+ ]
+}

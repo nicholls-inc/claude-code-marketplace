@@ -1,0 +1,61 @@
+Imagine two people, Alice and Bob, who have never met. They want to share a secret number, but every message they send passes through a room full of eavesdroppers. It sounds impossible. If everything is overheard, how can anything stay hidden? The answer is a clever piece of mathematics called public-key cryptography, and the particular trick described here is known as Diffie-Hellman key exchange, after the two researchers who published it in 1976.
+
+## The paint analogy
+
+Start with colours instead of numbers. Suppose Alice and Bob agree out loud on a common starting colour, say yellow. Everyone hears this, and that is fine.
+
+Alice secretly picks a private colour, say red, and mixes it with the yellow. She sends the resulting orange mixture to Bob. Bob secretly picks a private colour of his own, say blue, mixes it with the yellow, and sends the green mixture to Alice.
+
+Now each person adds their own private colour to what they received. Alice adds her red to Bob's green mixture. Bob adds his blue to Alice's orange mixture. Both end up with exactly the same muddy brown, because both mixtures contain yellow, red and blue in the end. The order of mixing does not matter.
+
+An eavesdropper saw the yellow, the orange and the green. But paint is easy to mix and almost impossible to unmix. Looking at the orange, nobody can work out exactly which red went in, so they cannot build the final brown. The secret colour exists only at the two ends of the line.
+
+Mathematics gives us a version of this that works with numbers. We need one operation that is easy to do but very hard to undo.
+
+## Clock arithmetic
+
+You already know a form of this from reading a clock. If it is 10 o'clock and you wait 5 hours, it is 3 o'clock, not 15. When we go past 12 we wrap around to the start. Mathematicians call this working "modulo" the size of the clock. Here we use a clock with 23 positions instead of 12, so the numbers wrap around after 22 and go back to 0.
+
+We will write "17 mod 23" to mean "the remainder when 17 is divided by 23". So 30 mod 23 is 7, because 30 is one full lap of 23 plus 7 left over.
+
+The easy operation is repeated multiplication. Take a base number and multiply it by itself a chosen number of times, wrapping around the clock each time you pass 23. For example, 5 to the power 2 is 25, and 25 mod 23 is 2. Easy.
+
+The hard direction is working backwards. Suppose I tell you that 5 multiplied by itself some unknown number of times lands on 19 on our 23-position clock. Can you tell me how many times? With a small clock you can simply try every possibility until you find it. But the pattern jumps around unpredictably, with no way to see in advance which count leads to which result. With a clock of 23 positions this takes seconds. With a clock whose size has hundreds of digits, trying every possibility would take longer than the age of the universe, even on every computer on Earth. This one-way behaviour is what protects the secret.
+
+## The exchange with real numbers
+
+Alice and Bob publicly agree on two numbers. The first is the clock size, 23. The second is the base, 5. Anyone may know these, and the eavesdroppers do.
+
+Alice privately chooses the number 6. She never tells anyone. She works out 5 multiplied by itself 6 times, wrapping around the 23-position clock. The result is 8. This is her public mixture, and she sends 8 to Bob across the open line.
+
+Bob privately chooses the number 15. He works out 5 multiplied by itself 15 times on the same clock. The result is 19. He sends 19 to Alice.
+
+Now comes the clever part. Alice takes Bob's public number, 19, and multiplies it by itself 6 times (her private number), wrapping around the clock. She gets 2. Bob takes Alice's public number, 8, and multiplies it by itself 15 times (his private number). He also gets 2.
+
+Both of them now hold the number 2, a shared secret, even though neither ever sent it. They can use it as the key for a lock that scrambles their later messages.
+
+## Why they always agree
+
+The reason they land on the same number is the same reason the paint worked. Alice computes "5 multiplied by itself 15 times, and then that result multiplied by itself 6 times". That is 5 multiplied by itself 15 times 6, or 90 times in total. Bob computes "5 multiplied by itself 6 times, and then that result multiplied by itself 15 times". That is 6 times 15, which is the same 90. Since 6 times 15 equals 15 times 6, the two routes arrive at the same place. The wrapping around the clock does not disturb this, because wrapping at each step gives the same final position as wrapping only at the end.
+
+In paint terms, yellow is the base, each private colour is a private number, and the final brown is 5 multiplied by itself 90 times on the clock.
+
+## What the eavesdropper sees
+
+Think about what Eve, the eavesdropper, has gathered. She knows the clock size 23, the base 5, Alice's public number 8, and Bob's public number 19. She does not know 6 or 15.
+
+To find the secret she needs one of those private numbers. To get Alice's 6, she must work backwards from "5 multiplied by itself some number of times gives 8". On this tiny clock she just tries 1, 2, 3 and so on until she hits 6. Then she copies Alice's final step and recovers the secret. That is why 23 is a toy size and no real system would use it.
+
+In practice the clock has positions numbering more than 600 digits, and the private numbers are similarly huge. Eve has no shortcut. The best known methods are still far too slow to be practical. Meanwhile Alice and Bob can do their own multiplications quickly, because there are clever ways to multiply a number by itself billions of times without doing each step one by one. They square the number, then square the result, and so on, which takes only a few hundred steps. Doing the work is cheap, and reversing the work is ruinously expensive. That imbalance is the whole secret of the scheme.
+
+## Public and private keys
+
+The name "public-key" comes from the split between what is shared and what is kept hidden. Each person has a private number that never leaves their possession and a public number that can be shouted from the rooftops. Anyone can combine their own private number with someone else's public number to reach a result that only those two can reproduce.
+
+Related methods use the same idea in other ways. One lets you lock a message with a person's public number so that only their private number can open it. Another lets you stamp a message with your private number so that anyone can check, using your public number, that it really came from you. These are used whenever your phone or laptop talks to a bank, a shop or a messaging service.
+
+## A word of caution
+
+The exchange as described protects against eavesdroppers who only listen. It does not by itself stop someone who sits in the middle, pretending to be Bob to Alice and Alice to Bob, and runs a separate exchange with each. To defend against this, real systems add proof of identity, such as certificates that vouch for who owns a public number. Public-key cryptography solves the problem of agreeing on a secret in the open. It does not on its own solve the problem of knowing who you are talking to.
+
+Still, the central idea is remarkable. Two strangers, speaking in public, each combine something private with something shared, and finish holding the same hidden value. Easy to make, hard to undo, and the same whichever way round you mix it.

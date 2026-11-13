@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "acdbbe3ad05726c38",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28379,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 938,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T22:39:35.199Z",
+  "valid": true,
+  "text": "A lithium-ion cell is normally charged in two stages, known as constant current followed by constant voltage. The charger first pushes a fixed current into the cell, typically between 0.5 and 1 times the cell's capacity per hour, so a 3 Ah cell receives 1.5 to 3 A. The cell voltage rises during this stage, from about 3.0 V when nearly empty towards 4.2 V for a common graphite and cobalt-oxide chemistry. When the voltage reaches the 4.2 V limit, the charger stops holding the current and instead holds the voltage constant. The current then falls, and charging ends when it has dropped to a set cut-off, often around 0.05 times capacity per hour. The upper voltage limit is a safety and lifetime boundary and is held to within roughly 50 mV.\n\nCharging moves lithium ions from the cathode, through the electrolyte, and into the graphite anode, while electrons travel through the external circuit. The cell has internal resistance, made up of the electrolyte, the electrode interfaces and the diffusion of ions within the solid particles. The voltage measured at the terminals is the open-circuit voltage of the cell plus the current multiplied by that resistance. A cell with 50 milliohms of resistance carrying 2 A therefore reads 0.1 V higher than its resting voltage.\n\nThis is why the constant-voltage stage exists. Because the terminals read higher than the true resting voltage, the 4.2 V limit is reached while the cell is still short of full, perhaps at 70 to 80 per cent of capacity. If the charger kept the current fixed, the electrodes would be pushed past their safe potential. Holding the terminal voltage at 4.2 V allows the current to decay as the cell's own open-circuit voltage climbs towards that value. The driving voltage, which is the difference between the two, shrinks, and by Ohm's law the current shrinks with it.\n\nA second effect adds to this. Near full charge the graphite is mostly filled with lithium, and the remaining sites are harder to reach. Lithium must diffuse inwards through each particle, and the concentration gradient that drives this becomes smaller as the surface fills. The result is a current that decays roughly exponentially during the constant-voltage stage.\n\nThe practical consequence is that the first 70 to 80 per cent of charge takes about half the total time, and the last portion takes the remainder. Charging faster in the second stage is possible only by accepting higher voltage, which accelerates electrolyte breakdown and can deposit metallic lithium on the anode. Lithium plating reduces capacity and can cause internal short circuits. For that reason, the taper is a deliberate protection rather than a limitation of the charger."
+}

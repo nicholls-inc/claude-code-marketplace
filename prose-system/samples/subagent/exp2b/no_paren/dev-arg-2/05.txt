@@ -1,0 +1,19 @@
+Stop Estimating. Start Shipping Small.
+
+Every software team knows the ritual. Someone writes a ticket, the room argues over whether it is a five or an eight, and a number goes into a spreadsheet. Three weeks later the real answer arrives, and it bears no resemblance to the guess. Nobody is surprised. We run the ritual again next sprint.
+
+Teams should stop estimating how long work will take. Not because estimates are sometimes wrong, but because they are wrong in a predictable way that no amount of discipline fixes.
+
+Software work is mostly discovery. The tasks we can size accurately are the ones we have done before, and those are the ones we should have automated or turned into a library. What remains is new, and its cost hides in the parts we have not yet seen: the undocumented behavior of a legacy service, the migration that turns out to touch four other teams, the bug that only shows up under load. An estimate asks you to price what you do not yet know. The honest answer is usually "I will tell you after I start," and the ritual forces a number out of people anyway.
+
+That number then does damage. Managers treat it as a commitment, and engineers learn to pad it, which makes everyone's numbers meaningless. Padded estimates expand to fill the time, so the work looks on schedule when it is merely slow. Underestimated work gets rushed, and the shortcuts become next year's incident. Meanwhile the hours spent grooming, pointing and reconciling are hours not spent building anything.
+
+The usual defense is that planning requires numbers. It does, but not these numbers. Consider what you can measure without asking anyone to guess. You can count how many items your team finishes per week. You can track how long an item takes from first commit to production. After a couple of months you have a distribution drawn from reality, and it forecasts better than any planning poker session because it includes all the delays that people forget to imagine.
+
+The discipline that replaces estimating is slicing. Break work into pieces small enough that nobody wonders how long a piece will take, because it will take a day or two. If a task resists being cut down, that resistance is information. It tells you the problem is poorly understood, and the right response is a small experiment, not a bigger number. A team that ships tiny increments also learns early whether it is building the right thing, which no estimate ever told anyone.
+
+Managers worry that dropping estimates means losing visibility. In practice it improves it. A board where work moves through in small, steady steps shows progress more honestly than a burndown chart built on fiction. When a stakeholder asks for a date, you can answer with a range based on your actual throughput, and say plainly how confident you are. That is a better conversation than defending a number you both know was invented.
+
+Some contexts do need firm dates, such as a regulatory deadline or a contract with penalties. Even there the move is the same: fix the date, then negotiate scope, and cut it down to what fits. Estimating does not buy you the date. Scope control does.
+
+So try it for a quarter. Drop the points, keep the slicing, and watch the flow. You will likely find that the team did not need the numbers. It needed permission to stop pretending.

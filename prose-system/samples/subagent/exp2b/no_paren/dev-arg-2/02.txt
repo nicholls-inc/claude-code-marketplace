@@ -1,0 +1,19 @@
+Stop Estimating. Start Shipping in Slices.
+
+Every engineering team knows the ritual. Someone writes a ticket, the room argues about whether it is a five or an eight, and a number goes into a spreadsheet. Three weeks later the number is wrong, and everyone acts surprised. Teams should stop doing this. Not because estimates are sometimes off, but because the practice costs more than it returns.
+
+Start with the evidence. Decades of project data show that software estimates miss badly and miss in one direction. The work that surprises us is the work we had not thought of yet, and that is the bulk of the work. Estimating a task means predicting the unknowns inside it, which is a contradiction. We are asking people to be precise about the things they cannot see.
+
+Then consider what happens to the number once it exists. It stops being a guess and becomes a promise. Managers repeat it upward. Stakeholders plan launches around it. When reality diverges, engineers face a choice between admitting the miss and quietly cutting corners to hit the date. Tests get skipped. Refactors get deferred. The estimate does not predict the quality of the work; it corrupts it.
+
+There is also the plain cost of the meetings. Add up the hours spent in planning poker, re-estimation, and explaining variance, and you have bought a lot of ceremony for a figure nobody trusts. That time could have gone into building something.
+
+Defenders will say the business needs dates. It does, but dates and estimates are different things. A date is a decision about what to deliver by when, and you can make that decision without pretending to know task durations. Fix the date, then negotiate scope. Cut the work into thin slices that each ship something real, and order them by value. Whatever is done on the date is what ships. The conversation shifts from "why are you late" to "which slice matters most next," which is a far better argument to be having.
+
+Measuring flow beats guessing it. If you track how long small pieces of work actually take, from start to finish, you get a distribution grounded in your own history. Cycle time and throughput will forecast a quarter more honestly than any sum of story points, and they cost almost nothing to collect. When slices are small and roughly similar in size, counting them works better than sizing them.
+
+Managers, this is the part that asks something of you. You must accept a forecast stated as a range, and you must treat early scope cuts as healthy rather than as failure. You also need to look at working software every week instead of reading status reports. That visibility is what replaces the false comfort of a number.
+
+Some situations do call for upfront sizing, such as fixed-price contracts or hardware dependencies with long lead times. Fine. Estimate those narrowly, and call them what they are, which is a bet with a margin built in.
+
+For everything else, drop the ritual. Slice the work thin, ship constantly, and let the data from your own delivery do the forecasting. You will be more accurate, less stressed, and you will get your meeting hours back.

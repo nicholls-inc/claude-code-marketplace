@@ -1,0 +1,19 @@
+Stop Estimating. Start Shipping Small.
+
+Every engineering team knows the ritual. Someone pulls up a ticket, the room guesses at a number, and that number gets repeated in a planning doc until it hardens into a promise. Three weeks later the work is half done, the estimate is wrong, and everyone feels vaguely guilty. We have run this ritual for decades. It is time to stop.
+
+The problem is not that engineers are bad at guessing. The problem is that the guess is being asked to do something impossible. Software work is mostly discovery. You learn what the task is by doing it. The unknowns that blow up a schedule are, by definition, the ones nobody could see during planning. An estimate made before the learning happens is a forecast about a fog.
+
+Then there is what we do with the number. An estimate is meant to be a probability, but it gets treated as a commitment. Managers quote it upward. Other teams plan around it. By the time reality disagrees, the number has become a target, and targets change behavior. Engineers pad. They cut corners to hit the date. They quietly avoid raising the bad news. Whole careers are spent defending guesses that were never meant to be defended.
+
+The time cost is real too. Teams burn hours each sprint on pointing sessions, debates over whether something is a five or an eight, and retrospectives about why the fives turned out to be thirteens. That is effort spent producing a figure that tells you almost nothing the work itself would not tell you sooner.
+
+So what replaces it? Slice the work small. If every item can be finished in a day or two, you no longer need to guess how long it takes. You count what finishes. Throughput, the number of items completed per week, is a measured fact rather than an opinion, and it is far more stable than any story point. Forecast from it. When someone asks when a feature will land, you can say that at the current rate roughly this many items remain, and here is the range. That answer is honest about uncertainty because it is built from history.
+
+Small slices bring a second benefit. They force the conversation people actually need to have, which is about scope. Instead of asking how long the whole thing takes, you ask what we can ship first and what we can cut. Dates stay fixed and scope flexes, which is the only lever that has ever worked.
+
+The usual objection is that the business needs dates. Sometimes it does. A launch tied to a conference or a regulatory deadline is real. But that is a constraint to plan scope against, not an estimate to extract from engineers. Working backward from a fixed date and trimming the plan to fit is a different, healthier activity than guessing forward and being blamed for the miss.
+
+Managers who fear losing visibility should notice that small slices and a visible board give more of it, not less. You can see work move every day rather than trusting a number set a month ago.
+
+Stop asking how long. Ask what is next, keep it small, and let the finished work do the talking.

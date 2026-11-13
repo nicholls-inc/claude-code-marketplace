@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "afeea7df2b0a2e70b",
+  "condition": "no_em_dash",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 6,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.\n\nDo not use em dashes.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "workflow",
+  "relayed_user_request": "Continue",
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 72578,
+    "output_tokens": 912,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T17:20:35.579Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment added to official world time, usually at the end of June or December, so that our clocks stay in step with the spinning Earth. It exists because there are two ways of measuring time, and they do not agree perfectly.\n\nThe first is atomic time. Since the 1950s, scientists have counted time using the vibrations of atoms in extremely precise clocks. These clocks tick with a steadiness that is almost unimaginable, losing perhaps a second over hundreds of millions of years. The second is astronomical time, based on the rotation of the Earth. This is the older definition of a day: the time it takes the planet to turn once, so that the sun returns to the same spot in the sky.\n\nThe trouble is that the Earth is a poor timekeeper compared with an atomic clock. Its rotation is slowed by the pull of the tides and nudged by shifting ice, oceans and the molten core. Over the long run the planet loses a little speed, so a day is slightly longer than 86,400 atomic seconds. To stop the two systems drifting apart, international timekeepers began in 1972 inserting a leap second whenever the gap approached nine tenths of a second. On those occasions the final minute of the day had 61 seconds. There have been 27 so far, the last at the end of 2016.\n\nFor most people a leap second is invisible, but for computers it is a headache. Software generally assumes every minute has 60 seconds, and a sudden 61st can confuse it. Leap seconds have been blamed for crashes and outages at major websites, and for errors in financial trading systems, telecommunications networks and satellite navigation, where timestamps must be exact. Large technology companies have invented their own workarounds, such as smearing the extra second across a whole day, but these differ from one firm to another and create new inconsistencies. Because leap seconds cannot be predicted far ahead, and are announced only a few months in advance, engineers cannot simply program them in.\n\nIn 2022, the General Conference on Weights and Measures, the body that oversees the international system of units, voted to stop using leap seconds by 2035. Their reasoning was that the disruption now outweighs the benefit. Few people need clocks that track the sun to the second, and those who do, such as astronomers, can apply the small correction themselves. Another surprise helped: in recent years the Earth has been spinning slightly faster, which might one day require a negative leap second, something never tried and likely to cause even more trouble for software.\n\nAfter the change, official time will be allowed to drift from the sun for roughly a century before a larger correction, perhaps a full minute, is considered. Nobody will notice the difference in daily life, but the world's computers should sleep more soundly."
+}

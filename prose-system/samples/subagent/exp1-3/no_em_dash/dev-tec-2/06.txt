@@ -1,0 +1,71 @@
+From HTTPS Address to First Byte: What the Browser Does
+
+When you type https://www.example.com/products into a browser and press Enter, a surprising amount of work happens before a single byte of the page comes back. This write-up walks through those steps in order. Knowing them helps you reason about slow page loads, certificate errors, and why caching and CDNs matter.
+
+1. Parsing the URL
+
+The browser first breaks the address into parts. The scheme is https, the host is www.example.com, the port is implied (443 for HTTPS), and the path is /products. The scheme tells the browser to use TLS encryption. If you typed something that is not a valid URL, the browser treats it as a search query instead.
+
+Before going to the network, the browser also checks a few local things. It looks at its HSTS list, which records sites that must only be reached over HTTPS, and it checks its HTTP cache. If a fresh cached copy of the resource exists, the browser can use it immediately and no network request happens at all. Service workers, if the site registered one, may also intercept the request here and answer it themselves.
+
+2. DNS Resolution
+
+Networks route traffic by IP address, not by name, so the browser needs to turn www.example.com into something like 93.184.216.34. This is DNS (Domain Name System) resolution. The lookup checks several caches in turn: the browser's own DNS cache, the operating system's cache, and the hosts file. If none has an answer, the OS asks a recursive resolver, usually run by your ISP or a public provider.
+
+The resolver, if it has no cached answer, walks the DNS hierarchy. It asks a root server which servers handle .com, asks a .com server which servers are authoritative for example.com, and finally asks that authoritative server for the address of www.example.com. Each record carries a TTL (time to live) that says how long it may be cached. A cold lookup can take tens of milliseconds or more; a cached one is nearly instant. The answer may be an A record (IPv4), an AAAA record (IPv6), or a CNAME pointing to another name that must itself be resolved. Modern browsers often try both IPv4 and IPv6 and use whichever connects first.
+
+3. Opening a TCP Connection
+
+With an IP address, the browser opens a connection to port 443. For traditional HTTP over TCP, this uses the three-way handshake. The client sends a SYN, the server replies with SYN-ACK, and the client answers with ACK. That costs one full round trip before any data can flow. Round-trip time (RTT) is dominated by physical distance, which is one reason serving content from a nearby server helps so much.
+
+Note that HTTP/3 uses QUIC, which runs over UDP and combines the transport and encryption handshakes. The browser learns a site supports it from an Alt-Svc header on an earlier visit or from DNS records, and otherwise starts with TCP. The steps below describe the TCP and TLS path, with differences noted.
+
+4. The TLS Handshake
+
+Now the "S" in HTTPS does its work. TLS gives you three things: encryption (others cannot read the traffic), integrity (others cannot alter it unnoticed), and authentication (you are really talking to example.com).
+
+In TLS 1.3, the handshake takes one round trip:
+
+- The client sends a ClientHello. It lists the TLS versions and cipher suites it supports, a random value, and its half of a key exchange (a public value for an elliptic-curve Diffie-Hellman exchange). It also includes the Server Name Indication (SNI) extension, which states the hostname it wants. This matters because one IP address often hosts many sites, and the server needs to know which certificate to present. The ClientHello can also carry ALPN, which advertises protocols such as h2 (HTTP/2) and http/1.1.
+- The server replies with a ServerHello that picks the cipher suite and supplies its own key exchange value. From this point both sides can compute the same shared secret, and the rest of the handshake is encrypted. The server then sends its certificate chain and a signature proving it holds the private key matching the certificate, followed by a Finished message.
+- The client verifies the certificate, then sends its own Finished message. Application data can follow immediately.
+
+Certificate verification is where many developer-facing errors originate. The browser checks that the certificate chains up to a certificate authority (CA) it trusts, that none of the certificates have expired, that the hostname matches one of the names in the certificate, and, depending on the browser, that the certificate has not been revoked. A mismatched name, an expired certificate, or a missing intermediate certificate on the server produces the familiar full-page warning.
+
+Older TLS 1.2 needs two round trips for the handshake. If the browser has talked to this server recently, TLS session resumption can shorten the process, and TLS 1.3 even allows sending request data in the very first flight (0-RTT), with some replay-attack caveats that servers must handle.
+
+So far, counting a cold start on TCP with TLS 1.3, that is one RTT for TCP and one for TLS before the request is even sent. QUIC reduces this to one RTT total.
+
+5. Sending the HTTP Request
+
+With an encrypted channel in place, the browser finally sends the HTTP request. Over HTTP/1.1 it is plain text inside the encrypted tunnel:
+
+GET /products HTTP/1.1
+Host: www.example.com
+Accept: text/html
+Accept-Encoding: gzip, br
+User-Agent: ...
+Cookie: session=abc123
+
+Over HTTP/2 and HTTP/3 the same information is sent in a compressed binary format, and many requests can share one connection. The request includes headers such as the Host, the content types and encodings the browser accepts, and any cookies stored for that domain. If the browser has a stale cached copy, it may add conditional headers like If-None-Match so the server can reply with a tiny 304 Not Modified instead of the full body.
+
+6. What Happens on the Server Side
+
+The request travels across the network to the server, but it often does not reach your application directly. A typical production path might be a CDN edge node, then a load balancer, then a reverse proxy such as nginx, then your application server. Any of these layers may terminate TLS, answer from a cache, or rewrite the request. If a CDN has a cached copy, it can respond straight away from a location near the user.
+
+If the request does reach your application, it is routed to a handler. That code may read from a database, call other services, render a template, and build a response. All of that time counts toward the wait. The server then writes the status line and headers (for example HTTP/1.1 200 OK, Content-Type, Cache-Control) and starts sending the body.
+
+7. The First Byte Arrives
+
+The moment the first byte of that response reaches the browser is called Time to First Byte (TTFB). It is a useful metric because it covers everything described above: DNS lookup, TCP connection, TLS negotiation, the request's trip to the server, server processing, and the first byte's trip back. You can see each phase in your browser's developer tools, in the Network panel's timing breakdown.
+
+Practical Takeaways
+
+- Slow TTFB can come from any stage. Check the timing breakdown to see whether time went into DNS, connecting, TLS, or waiting on the server.
+- Distance is a cost you pay in round trips, which is why CDNs help.
+- Reusing connections (keep-alive, HTTP/2 multiplexing) avoids repeating the DNS, TCP, and TLS work.
+- Caching can skip the entire sequence.
+- Certificate problems are configuration issues: check expiry, hostname coverage, and that the full chain is served.
+- Preconnect and DNS-prefetch hints let the browser do the early steps before it needs them.
+
+Once the first byte arrives, a different phase begins: the browser reads headers, streams the body, and starts parsing HTML. That story is separate, but it begins exactly where this one ends.

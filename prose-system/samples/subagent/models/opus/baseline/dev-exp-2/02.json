@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a85d243cb9cfd0347",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write an explanation of about 400 words of what a leap second is and why the bodies that govern timekeeping have decided to stop adding them. The reader is a general newspaper reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 25356,
+    "cache_read_input_tokens": 48374,
+    "output_tokens": 1305,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:02:23.311Z",
+  "valid": true,
+  "text": "The Second That Time Forgot\n\nMost of us think of a day as exactly 24 hours, but the Earth does not keep perfect time. Our clocks are now governed by atomic clocks, which measure the second using the vibrations of caesium atoms. They are so steady that they lose less than a second in millions of years. The planet's spin is far less regular. Tides, shifts in the Earth's molten core, melting ice and even large earthquakes all nudge the length of the day slightly up or down.\n\nThat leaves two kinds of time that slowly drift apart: atomic time, which ticks with perfect regularity, and astronomical time, which follows the sun across the sky. The leap second was invented in 1972 to keep them together. Whenever the gap approached nine-tenths of a second, timekeepers added an extra second to the world's official clock, Coordinated Universal Time (UTC). Clocks briefly read 23:59:60 before rolling over to midnight. Twenty-seven leap seconds have been added so far. The most recent was on New Year's Eve 2016.\n\nFor most people the extra second goes unnoticed. For computers it is a real problem. Modern technology runs on precise timestamps, and much software assumes a minute can never have 61 seconds. In 2012 a leap second caused crashes at websites including Reddit and disrupted an airline booking system in Australia. In 2017 one caused an outage at the internet company Cloudflare. Leap seconds are announced only about six months ahead, so systems cannot be built around a fixed schedule. Big technology firms have resorted to \"smearing\" the extra second across a whole day, and different companies have done it in different ways, so their clocks briefly disagree.\n\nA new worry has added to the case for change. In recent years the Earth has been spinning slightly faster, so the next adjustment might have to be the first-ever negative leap second, which would mean deleting a second rather than adding one. That has never been tried, and many experts fear that untested software would handle it even worse.\n\nIn November 2022 the General Conference on Weights and Measures, the international body responsible for the metric system, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which manages global radio and broadcast time signals, endorsed the move in 2023. Atomic time and solar time will then be allowed to drift further apart, and scientists are still working out the new limit and how any eventual correction would be made.\n\nThe drift is tiny. It may take a century or more to reach a minute, and nobody will notice the sun rising a few seconds \"late.\" Officials have decided that a smoothly running clock matters more than one that precisely matches the sky."
+}

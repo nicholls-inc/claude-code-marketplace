@@ -1,0 +1,66 @@
+How Two Strangers Can Share a Secret in Public
+
+Imagine you want to send a private message to someone you have never met. You have no chance to meet beforehand and whisper a password. The only way to reach them is a line that anyone can listen to: a crowded room, a radio channel, or the internet, where messages pass through dozens of machines owned by people you do not know. Everything you say can be overheard and copied.
+
+For most of history this problem looked impossible. To scramble a message so that only your friend can unscramble it, the two of you need a shared secret, a "key". To share a key, you need a private way to talk. And if you already had a private way to talk, you would not need the key. The way out of this loop was found in the 1970s, and it is called public-key cryptography. The most direct version of the idea is the Diffie-Hellman key exchange, named after Whitfield Diffie and Martin Hellman, who published it in 1976. This explanation walks through it with nothing harder than school arithmetic.
+
+The paint-mixing picture
+
+Start with an analogy that captures the trick without any numbers.
+
+Alice and Bob want to end up with the same secret colour of paint. Eve is watching everything they send each other.
+
+1. Alice and Bob agree, in public, on a starting colour: say, yellow. Eve hears this, and that is fine.
+2. Alice picks a secret colour of her own, say red, and tells nobody. Bob picks his own secret colour, say blue.
+3. Alice mixes her red into a pot of yellow and sends the mixture (orange) to Bob. Bob mixes his blue into yellow and sends that mixture (green) to Alice. Eve sees both pots go past.
+4. Alice takes Bob's green pot and stirs in her secret red. Bob takes Alice's orange pot and stirs in his secret blue.
+
+Both of them now hold yellow plus red plus blue: the same murky brown. The order in which the paints went in does not matter.
+
+What about Eve? She has yellow, orange and green. To make the final brown she needs either Alice's red or Bob's blue, and she cannot get them, because mixed paint cannot be unmixed. She could mix orange and green together, but that gives two lots of yellow plus red plus blue, which is a different shade. The whole scheme works because mixing is easy and unmixing is, in practice, impossible.
+
+Real cryptography swaps paint for numbers. We need an operation on numbers that is easy to do and very hard to undo. That is where clock arithmetic comes in.
+
+Clock arithmetic
+
+You already use clock arithmetic. If it is 9 o'clock and you wait 5 hours, it is 2 o'clock, not 14 o'clock, because the clock wraps round after 12. In maths this is called working "modulo 12": you keep only the remainder after dividing by 12. Fourteen divided by 12 leaves a remainder of 2, so 14 becomes 2.
+
+We can use a clock of any size. Our example uses a clock with 23 positions, numbered 0 to 22. Any number, however large, gets wrapped round to its remainder after dividing by 23. For example, 125 divided by 23 is 5 with 10 left over, so on our clock 125 becomes 10.
+
+Now the important operation: take a number, raise it to a power (multiply it by itself several times), and wrap the result round the clock. Going forwards is easy. Given 5 and the power 3, you work out 5 × 5 × 5 = 125, then wrap it to get 10. But going backwards is hard. If I tell you "5 raised to some power, wrapped round a 23-hour clock, gave 10. What was the power?", there is no neat formula. The wrapping scrambles the pattern, and in general you have to try power after power until you hit the answer.
+
+With a clock of 23 positions, trying every power takes a few seconds. But real systems use clocks whose size is a number around 600 digits long. Working forwards is still quick, because there are shortcuts for raising numbers to large powers. Working backwards would take every computer on Earth longer than the age of the universe. Raising to a power and wrapping round is our paint mixing. It is easy to do and, at that scale, impossible to undo.
+
+The exchange, step by step
+
+Here is the full method with small numbers you can check by hand.
+
+Step 1: agree in public. Alice and Bob openly agree on a clock size, 23, and a starting number, 5. Eve hears both. That is expected.
+
+Step 2: pick private numbers. Alice secretly chooses 3. Bob secretly chooses 4. Neither ever sends these to anyone.
+
+Step 3: mix and send. Alice works out 5 to the power 3: 5 × 5 × 5 = 125, which wraps to 10. She sends 10 to Bob. Bob works out 5 to the power 4: 5 × 5 × 5 × 5 = 625. Dividing 625 by 23 gives 27 with 4 left over, so it wraps to 4. He sends 4 to Alice. Eve sees 10 and 4 go past.
+
+Step 4: mix in your own secret again. Alice takes Bob's 4 and raises it to her secret power 3: 4 × 4 × 4 = 64, which wraps to 18 (64 minus 46). Bob takes Alice's 10 and raises it to his secret power 4: 10 × 10 × 10 × 10 = 10,000. Dividing by 23 gives 434 with 18 left over, so it wraps to 18.
+
+Both of them arrive at 18. That is their shared secret, and it never travelled over the line.
+
+Why do they always land on the same number? Alice computed (5 to the power 4) to the power 3. Bob computed (5 to the power 3) to the power 4. Both are just 5 multiplied by itself 12 times, and the wrapping round the clock does not disturb this. This is the same as the paint: the order of mixing does not matter.
+
+What Eve is up against
+
+Eve knows the clock size 23, the starting number 5, and the two numbers that were sent, 10 and 4. To get 18 she needs Alice's secret 3 or Bob's secret 4. That means answering a question of the form "5 to what power gives 10 on this clock?". This is exactly the hard, backwards direction. Combining 10 and 4 in some other way does not help, for the same reason that mixing the two paint pots gave the wrong shade.
+
+In our toy example Eve could find the answer quickly by trial. In real use, with a 600-digit clock and secret powers just as large, she cannot. Alice and Bob each do a fraction of a second of work. Eve faces a task that no existing computer could finish.
+
+From a shared number to private conversation
+
+Once Alice and Bob share a secret number, they use it as the key for an ordinary lock-and-key cipher, which scrambles every message they send from then on. The public-key step is only used at the start, to solve the problem of agreeing a key over an open line. Your web browser does this every time a padlock icon appears in the address bar, usually using a modern relative of the same idea that works with points on curves instead of a clock.
+
+One weakness remains
+
+The method stops Eve from listening in. It does not, on its own, tell Alice that she is really talking to Bob. A more active attacker could sit in the middle, pretend to be Bob when talking to Alice and pretend to be Alice when talking to Bob, and so run two separate exchanges. To block this, real systems add a check of identity. The website presents a certificate, vouched for by a trusted organisation, that proves the public numbers really belong to it. That check uses public-key maths too, but the core idea is the one shown here.
+
+In short
+
+Two strangers agree on public numbers. Each mixes in a private number that never leaves their hands, and they swap the results. Each then mixes in their private number once more, and both end with the same answer. The listener sees every message but cannot undo the mixing, so the shared secret is created in public without ever being said aloud.

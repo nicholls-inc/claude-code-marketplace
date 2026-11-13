@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7fe17d987b056fbc",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-2",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d050.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-exp-2/10.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37145,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2398,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:27:47.279Z",
+  "valid": true,
+  "text": "A leap second is a one-second adjustment occasionally added to the world's official clocks so that they stay in step with the turning of the Earth, and it exists because there are two ways of measuring time that do not quite agree. Atomic clocks count seconds with extraordinary steadiness, using the vibrations of atoms, and they would keep perfect time for millions of years. The Earth, by contrast, is a rather unreliable timekeeper: its spin is slowed gradually by the pull of the Moon's tides, and it also speeds up and slows down in small, unpredictable ways because of earthquakes, shifting ice, ocean currents and movements in its molten core.\n\nSince 1972, the international standard known as Coordinated Universal Time has tried to serve both masters. It ticks at the pace of atomic clocks, but whenever it drifts too far from the time measured by the planet's rotation, the authorities insert an extra second, usually at the end of June or December, so that a clock goes from 23:59:59 to 23:59:60 before rolling over to midnight. Twenty-seven of these seconds have been added so far, the most recent at the end of 2016.\n\nThe trouble is that the modern world runs on computers, which dislike a minute with sixty-one seconds, because software generally assumes that every minute has exactly sixty and a leap second can therefore cause systems to freeze, crash or record events out of order. Several well-known outages have been blamed on leap seconds, affecting websites, airline systems and data centres. Large technology companies developed their own workarounds, such as spreading the extra second across the whole day, but because they did not all do it the same way, the fixes themselves created confusion. Financial markets, telecommunications networks, satellite navigation and power grids all depend on clocks that agree to tiny fractions of a second, and an irregular, unannounced insertion is a risk to each of them.\n\nThere is also a quirk in how the Earth has recently behaved. Over the past few years it has been spinning slightly faster than expected, which raises the prospect of a negative leap second, in which a second would be removed, and although that has never been tried, engineers fear it would be even more disruptive than adding one.\n\nFor these reasons, the international body that sets the measurement standards voted in 2022 to stop using leap seconds by or before 2035. After that date the gap between atomic time and the planet's rotation will be allowed to grow to a minute or so before any correction is considered, probably not for a century or more. For ordinary people nothing will change in daily life, since the Sun will still rise on schedule and the difference will be far too small to notice."
+}

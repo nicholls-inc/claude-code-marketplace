@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a7db3d692b86c4c15",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-haiku-5-5",
+  "prompt": "Write a technical description of about 800 words of how Git stores a commit, covering blobs, trees, commit objects and refs. The reader is a developer who uses Git every day and has never looked inside the .git directory.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "2f715dba71c4e020882a7b384fdf6f67dd7f7246b9d6e838bde188df5b64bfc1",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73766,
+    "output_tokens": 4417,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:15:49.201Z",
+  "valid": true,
+  "text": "# How Git Stores a Commit\n\nMost of what Git does rests on one idea: the `.git` directory is a content-addressable database plus a few named pointers into it. Once you know the four kinds of thing it stores (blobs, trees, commits and refs), commands like `commit`, `branch` and `reset` stop looking like magic.\n\n## Objects and their names\n\nEvery object is stored under a hash of its contents: SHA-1 by default, or SHA-256 in repositories created with that format. Before hashing, Git prepends a header made of the object type, a space, the byte length, and a NUL byte. A blob containing `hello\\n` is hashed as the bytes `blob 6\\0hello\\n`.\n\nThe hash is the object's name and its address. The object lives at `.git/objects/ab/cdef...`, where the first two hex digits name a directory and the rest name the file. Each file is zlib-compressed. Because names come from contents, identical content is stored once, and an object cannot change without its name changing too.\n\nYou can inspect objects directly:\n\n    echo hello | git hash-object --stdin\n    git cat-file -t <hash>     # type\n    git cat-file -p <hash>     # pretty-printed contents\n\n## Blobs\n\nA blob holds the bytes of one file and nothing else. It has no filename, mode or timestamp. Two files with identical bytes, even in different directories, share one blob. Renames cost no storage, because a rename changes only a tree entry.\n\n## Trees\n\nA tree represents one directory. Each entry has a mode (`100644` for a regular file, `100755` for an executable, `040000` for a subdirectory), a name, and the hash of either a blob or another tree. Entries are sorted by name, so the same set of files always produces the same tree hash. The root tree therefore describes the entire project snapshot, recursively.\n\n    git ls-tree HEAD\n    git ls-tree -r HEAD        # recurse into subdirectories\n\n## Commits\n\nA commit object is a short text record containing:\n\n- `tree`: the hash of the root tree, which is the snapshot\n- `parent`: the hashes of zero or more earlier commits (none for a root commit, two or more for a merge)\n- `author` and `committer`: name, email, Unix timestamp and timezone\n- a blank line followed by the commit message\n\nA commit does not store a diff. When Git shows a diff between two commits, it compares their trees. Each commit is a complete snapshot, and the parent links form a directed acyclic graph. History is a walk through that graph.\n\nBecause a commit's hash covers its tree and its parents, changing anything in history produces a new hash for that commit and for every descendant. This is what `amend` and `rebase` actually do: they write new commits and leave the old ones in place.\n\n## What happens on `git commit`\n\n1. Git reads the index (`.git/index`), the staging area. It records the path, mode and blob hash of every staged file.\n2. It builds tree objects bottom-up from the index and writes them. It also writes any blobs that do not yet exist.\n3. It writes a commit object that points at the root tree and lists the current HEAD commit as its parent.\n4. It moves the branch that HEAD refers to so that it points at the new commit.\n\nUnchanged subtrees are reused. If you edit only `src/main.c`, the root tree and the `src/` tree get new hashes, but every other subtree keeps its old hash. This is why commits are cheap.\n\n## Refs: human names for hashes\n\nA ref is a file that contains a hash. Branches live under `.git/refs/heads/`, so `main` is a file holding the 40-character hash of the tip commit. Tags live under `refs/tags/`, and remote-tracking branches under `refs/remotes/`. Refs may also be collected into `.git/packed-refs`.\n\n`HEAD` is different. It is usually a symbolic ref, a file containing `ref: refs/heads/main`, which means \"the current branch is main\". When HEAD holds a bare hash instead, you are in detached HEAD state.\n\nCreating a branch writes one small file. Moving a branch overwrites one file. Nothing is copied. Objects that no branch or tag can reach remain in the store until garbage collection removes them.\n\n    cat .git/HEAD\n    git rev-parse main         # resolve a ref to its hash\n    git cat-file -p main       # a ref name works wherever a hash does\n\n## Packing\n\nLoose objects suit everyday work, but `git gc`, `fetch` and `push` bundle objects into packfiles. A packfile stores many objects together and often saves space by storing one version of a file as a delta against another. Object names and contents do not change. Only the storage format does.\n\n## Summary\n\n- **Blob**: the bytes of a file, named by its hash.\n- **Tree**: the entries of one directory, named by its hash.\n- **Commit**: a root tree, parent hashes and metadata, named by its hash.\n- **Ref**: a file holding a hash, giving a commit a stable name.\n\nEverything else in Git is built from these four pieces."
+}

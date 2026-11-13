@@ -1,0 +1,37 @@
+On the evening of April 13, 1970, Apollo 13 was about 200,000 miles from Earth and coasting toward the Moon. It was the third lunar landing mission. The first two had gone so smoothly that television networks had stopped carrying the crew's broadcasts live. Jim Lovell, the commander, was making his fourth spaceflight. Jack Swigert, the command module pilot, had joined the crew only days earlier, after the original pilot, Ken Mattingly, was exposed to German measles. Fred Haise, the lunar module pilot, was a rookie on his first trip to space.
+
+At 9:07 p.m. Houston time, Mission Control asked the crew to stir the oxygen and hydrogen tanks in the service module. This was routine. It kept the supercold contents from stratifying. Swigert flipped the switch.
+
+Ninety-some seconds later came a bang.
+
+Lovell later said it felt like a shudder through the whole ship. Warning lights lit up. The main electrical buses were losing voltage. Then Swigert said the words that became famous in a slightly altered form: "Houston, we've had a problem." Lovell repeated it, and added that the main B bus had undervolted.
+
+At first, nobody in Houston understood how bad things were. Flight controllers watched their screens and assumed an instrument fault. Then the oxygen pressure in tank two dropped to zero. Tank one began to leak. Lovell looked out a window and saw gas streaming into space. That was the moment the mission changed. They were no longer going to the Moon. They were trying to survive.
+
+The cause lay years in the past. Oxygen tank two had been dropped during preparation at the factory, a small fall of about two inches, and had probably been damaged. Later, during ground testing, its heaters ran far longer than intended at the wrong voltage, melting the insulation on wires inside the tank. When Swigert flipped the switch, a spark flew from the bare wiring. In a tank full of liquid oxygen, a spark is catastrophic. The tank burst, and the blast blew off a panel on the side of the service module.
+
+The service module was where the spacecraft got its electricity, water, and oxygen. Losing it meant the command module, Odyssey, would soon go dead. It had batteries, but those were reserved for the final descent through the atmosphere. If the crew used them now, they would have nothing left for reentry.
+
+So the men did something that nobody had planned. They moved into the lunar module, Aquarius, a spidery craft built to carry two people for two days on the Moon. Now it would carry three people for four days, as a lifeboat.
+
+Meanwhile the flight director, Gene Kranz, gathered his controllers and gave them a standing instruction. The task was to work the problem, and no one was to make it worse by guessing. His team set up a hierarchy of questions. How do we get them home? How do we do it with what is left? Then, how do we make that last long enough?
+
+The first question was about the route. The spacecraft was on a path that would loop around the Moon and return to Earth, but only if nothing changed, and it was not aimed at a safe landing. Controllers debated whether to abort immediately and swing back, which would require firing the big service module engine, whose condition was unknown. They rejected it. Instead, they used Aquarius's descent engine, built for landing on the Moon, to speed the ship up after it passed around the far side. That shortened the trip and set the splashdown point in the Pacific.
+
+Then came the problems of staying alive. Electricity was the first. Aquarius had batteries sized for a short stay, so the crew shut down nearly everything: the guidance computer was mostly off, the heaters, the lights, the instruments. Power use dropped to a fraction of normal. Water was the second. Aquarius had little, and the crew rationed it to about six ounces per person each day. Haise grew feverish with a kidney infection. Everyone was dehydrated. The cabin dropped to around 38 degrees Fahrenheit, and condensation ran down the walls. They slept poorly, if at all.
+
+The worst problem came from the air itself. Carbon dioxide, which people exhale, builds up and poisons a closed cabin. Aquarius had filters to scrub it out, but they were designed for two people for two days. By the second day the levels were climbing toward the danger point. The command module had spare filters, but they were square, and the lunar module's receptacles were round.
+
+Engineers on the ground, working with only the items the astronauts had aboard, built an adapter. They used plastic bags, cardboard from a flight manual cover, a sock, and duct tape. They read the instructions to the crew step by step, and the crew copied them. Within hours, the carbon dioxide count began to fall.
+
+Another crisis came on the third day. The ship was drifting, and the crew had to correct its course by hand, firing the engine at the right moment with no computer help. Lovell used the Earth as a reference. He held it in the window at the right position while Haise ran the engine, and the burn worked.
+
+Then there was the problem of waking Odyssey up. Nobody had ever tested restarting the command module's systems after a shutdown of this length, and the procedure that normally took days had to be written from scratch. Mattingly, the astronaut who had been bumped from the flight, spent hours in a simulator figuring out how to do it with minimal power. The procedure worked.
+
+On April 17, the crew cast off the service module and saw, for the first time, how much damage the explosion had done. An entire side panel was gone. Lovell reported that the whole side of the spacecraft was blown out. Then they said goodbye to Aquarius, which had saved them, and let it go too. The command module would have to enter the atmosphere alone.
+
+Reentry brought one last unknown. During this phase, spacecraft lose radio contact for about three minutes because of ionized gas around the capsule. This time, the pause stretched past four minutes. Controllers stared at the silence. Then the radio crackled, and Swigert's voice came through. At 1:07 p.m. Houston time, the parachutes opened, and Odyssey settled into the South Pacific, where the recovery ship Iwo Jima waited.
+
+All three men were alive. Haise was ill but recovering, and the crew had lost a total of about thirty-one pounds among them.
+
+The mission was never going to be a success in the way its planners had hoped; no one walked on the Moon. But NASA often called Apollo 13 a successful failure. Later investigations redesigned the oxygen tanks and removed the faulty heaters. More importantly, the flight showed what a trained team could do when the plan fell apart. The people on the ground and the people in the capsule improvised, argued, tested ideas, and trusted each other. It remains one of the great rescues in the history of exploration.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ac550ed265b67a398",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 4,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28202,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 1322,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:16:43.186Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat that already exists. That is why it can warm your house even when the air outside is colder than the air inside.\n\nStart with a misconception. Cold is not an absence of heat in the way most people imagine. Any air above absolute zero, about minus 273 degrees Celsius, holds thermal energy. Air at minus 5 degrees Celsius holds a lot of it. A heat pump extracts some of that energy, concentrates it, and delivers it indoors.\n\nThe trick is a sealed loop of refrigerant, a fluid that boils at very low temperatures. The loop has four main parts, and the cycle works like this.\n\nFirst, the outdoor unit. Refrigerant circulates through a coil there, and a fan blows outside air across it. The refrigerant is colder than the outside air, say minus 20 degrees Celsius, so heat flows into it from the air, just as heat flows into a cold drink from a warm room. That heat makes the refrigerant boil into a gas.\n\nSecond, the compressor. This electric pump squeezes the gas into a much smaller volume. Compressing a gas raises its temperature sharply, the same effect that warms a bicycle pump as you use it. The refrigerant leaves the compressor at perhaps 50 to 70 degrees Celsius, far hotter than your living room.\n\nThird, the indoor coil. The hot gas passes through a heat exchanger connected to your radiators, underfloor heating, or hot water cylinder. Because the refrigerant is now hotter than the water or air around it, heat flows out of it and into your home. As it gives up that heat, it condenses back into a liquid.\n\nFourth, the expansion valve. The liquid passes through a valve that drops its pressure suddenly. Its temperature plunges below the outdoor air temperature again, and the cycle repeats.\n\nThe key point is that the compressor only needs to raise the refrigerant to a temperature higher than your target. The outdoor air does not need to be warm. It only needs to be warmer than the refrigerant at the start of the loop, and the pressure change lets you set that starting temperature as low as needed.\n\nWhy this matters for your bills. A gas boiler turns one unit of fuel energy into at most about 0.9 units of heat. A heat pump uses electricity to move heat rather than create it, so it delivers more heat than the electricity it consumes. The ratio is called the coefficient of performance. A typical figure is 3, meaning one unit of electricity yields three units of heat. In very cold weather the figure falls, perhaps to 2 or a little lower, because the compressor must work harder to lift heat across a bigger temperature gap. Over a whole winter, a good installation commonly averages between 2.5 and 3.5.\n\nWhat this means for your decision. Modern units from reputable makers keep working at outdoor temperatures well below minus 15 degrees Celsius, so cold snaps are not a reason to rule one out. The real questions are these.\n\nInsulation. A heat pump is most efficient when it runs at lower water temperatures than a boiler, so a house that loses heat quickly will need more work, or larger radiators, to stay comfortable.\n\nEmitters. Existing radiators may be too small for the gentler heat. Larger radiators or underfloor heating suit heat pumps well.\n\nRunning costs. Electricity usually costs more per unit than gas, so the efficiency advantage must outweigh that price gap. Check your local tariffs, and consider a time of use tariff if you can shift consumption.\n\nUpfront cost and support. Installation costs more than a boiler swap, but grants or subsidies may cover part of it in your area.\n\nSpace and noise. You need room outdoors for the unit, and it makes a low hum.\n\nAsk installers for a heat loss calculation of your specific house, and for a quote that states the expected seasonal efficiency. That figure tells you far more than any general rule."
+}

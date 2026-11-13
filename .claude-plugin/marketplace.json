@@ -41,6 +41,11 @@
       "name": "lever",
       "source": "./lever",
       "description": "Feedback loops for coding agents: Loop Cards, experiment arms, cross-model review, PR shepherding, autonomy and spend dials, and GitHub Actions automations. Ported from github/lever."
+    },
+    {
+      "name": "prose",
+      "source": "./prose",
+      "description": "Write and check non-fiction prose against a measured reference of human writing: several candidate drafts under a voice file, a pick by measured profile, and a check of specifics against supplied material."
     }
   ]
 }

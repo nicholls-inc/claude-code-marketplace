@@ -1,0 +1,85 @@
+**How Two Strangers Can Share a Secret in Public**
+
+**The problem**
+
+Imagine you want to agree on a secret number with someone you have never met. You cannot meet in person, and you cannot share a secret in advance. All you have is a line where everything you say can be overheard. Anyone can listen in, and you have to assume someone is.
+
+At first this looks impossible. If a secret must be agreed on, and every word is heard by a spy, surely the spy learns the secret too. For most of history people believed exactly that. Messages could be locked with a code, but both sides needed the same key, and the key had to travel somewhere safe first.
+
+In the 1970s a few mathematicians found a way round the problem. The trick is to use a kind of sum that is easy to do in one direction and extremely hard to undo. This is the heart of what is called public-key cryptography.
+
+**Paint, as a picture of the idea**
+
+Start with paint, because it gives the right feel before any numbers appear.
+
+Suppose you and a stranger agree, out loud, on a shared colour. Say it is yellow. Everyone hears this, so yellow is public.
+
+You each choose a private colour and tell nobody. You pick red. The stranger picks blue.
+
+You mix your private red into the public yellow and send the result across the line. The stranger mixes their private blue into the yellow and sends their result back. The spy sees both mixtures. But the spy cannot separate a mixture back into its ingredients. Unmixing paint is hopeless.
+
+Now you take the stranger's mixture and add your own private red. The stranger takes your mixture and adds their private blue. Both of you now hold yellow, red and blue all mixed together. Order does not matter in mixing, so you end up with exactly the same muddy shade.
+
+The spy has the yellow and has both half-mixtures, but never had red or blue alone. To reach your final shade the spy would need one of those private colours, and getting it out of a mixture is the thing that cannot be done.
+
+Real systems replace paint with arithmetic. We need a sum that behaves like mixing: easy to perform, practically impossible to reverse.
+
+**Clock arithmetic**
+
+The sum we need is based on remainders. You already know the idea from reading a clock.
+
+If it is 10 o'clock and you wait 5 hours, you do not say 15 o'clock. You say 3 o'clock. You divided 15 by 12 and kept the remainder. Mathematicians call this working modulo 12. It is nothing more than keeping the leftover after dividing.
+
+We will use a different size of clock, one with 23 positions. Whenever a number gets bigger than 22, we divide by 23 and keep only the remainder. For instance 30 becomes 7, because 30 is 23 plus 7.
+
+We also need powers. Three to the power 4 means 3 times 3 times 3 times 3, which is 81. On our 23-position clock, 81 becomes 12, because 81 is 3 lots of 23, which is 69, plus 12.
+
+**The exchange, step by step**
+
+Here is the whole procedure with real numbers. Two people, Alice and Bob, have never met.
+
+Step one. They agree in public on two numbers. The first is the clock size, 23. The second is a base number, 5. The spy hears both. That is fine, because they are not secret.
+
+Step two. Alice secretly picks 6. Bob secretly picks 15. They never say these aloud.
+
+Step three. Alice works out 5 to the power 6, on the 23-clock. That power is 15,625. Dividing by 23 leaves a remainder of 8. She announces 8.
+
+Bob works out 5 to the power 15 on the same clock. The number is huge, but the remainder comes out as 19. He announces 19.
+
+The spy now knows 23, 5, 8 and 19.
+
+Step four. Alice takes Bob's announced number, 19, raises it to her own secret power of 6, and keeps the remainder on the 23-clock. The answer is 2.
+
+Bob takes Alice's announced number, 8, raises it to his own secret power of 15, and keeps the remainder. The answer is also 2.
+
+They have both arrived at 2, and neither ever said it aloud. That number is their shared secret.
+
+**Why they always agree**
+
+It is not luck. Look at what each person actually computed. Alice's final number is 5 raised to the power 15, then raised to the power 6. Bob's is 5 raised to the power 6, then raised to the power 15. Either way, the base 5 ends up multiplied by itself 6 times 15 times, which is 90 times in total. The order of the two steps does not change the total. This is the same fact as the paint: mixing in either order gives the same result.
+
+The remainders do not spoil this. Taking remainders along the way gives the same final answer as taking one remainder at the end, which is why the clock arithmetic fits so neatly.
+
+**Why the spy is stuck**
+
+Now consider what the spy would have to do. The spy knows 23, 5, 8 and 19. To find the shared secret, the spy needs either Alice's 6 or Bob's 15.
+
+With our tiny numbers this is easy. The spy can simply try every power of 5 until one gives a remainder of 8. Within a few tries the spy finds 6. So our example is only a toy.
+
+Real systems use a clock with hundreds of digits in its size. Then the number of possible secret powers is astronomically large. Working forwards, from a secret power to a remainder, stays quick, because there are clever shortcuts for large powers. Working backwards, from a remainder to the power that made it, has no known shortcut for a well-chosen clock. The spy would have to try numbers one after another, and even all the computers on Earth working for the age of the universe would not finish.
+
+This lopsidedness is the key. Mathematicians call such a sum a one-way function. Going forward is cheap. Going back is ruinously expensive. The reason it works is not that the spy lacks information. The spy has every public number. The reason is that the spy lacks the time.
+
+**What about the name public key?**
+
+The numbers each person announces, 8 and 19 in our example, are called public keys. They are safe to publish because knowing them does not reveal the private numbers behind them. The private numbers, 6 and 15, are the private keys, and they never leave their owners.
+
+Once Alice and Bob share the secret, they use it as a password for ordinary fast scrambling of their messages. The slow clever arithmetic is used only briefly, to get that first shared secret across safely. After that, the cheaper method takes over.
+
+**A caution**
+
+One weakness remains. The spy can listen, but a bolder spy could also stand in the middle, pretending to be Bob to Alice and Alice to Bob, running a separate exchange with each. Alice and Bob would then each share a secret with the spy, not with each other. To prevent this, real systems add a way of proving who is on the other end, using certificates issued by trusted organisations. The exchange itself protects against eavesdroppers. Proving identity is a separate job.
+
+**In short**
+
+Two strangers can agree on a secret in public because some calculations are easy to do and nearly impossible to undo. Each person mixes a private number into a shared public one. Each announces the mixture. Each then adds their own private number to the other's mixture. Because the order of mixing does not matter, both reach the same result, while the listener, who never held a private number, is left facing a problem that would take far too long to solve.

@@ -1,0 +1,36 @@
+How a heat pump heats your house when it's colder outside
+
+If you're thinking of replacing a gas boiler, one question usually comes first: how can a machine pull heat out of air at 0°C, or even -10°C, and use it to warm a house to 20°C? It sounds like getting something for nothing. It isn't, but the explanation is less mysterious than it sounds.
+
+**Cold air still holds heat**
+
+"Cold" is relative. Air at 0°C feels cold to us, but it holds a lot of heat energy. Physically, things only run out of heat at absolute zero, about -273°C. On that scale, a freezing winter day is nearer to your living room than to "no heat at all." A heat pump doesn't need warm air outside. It only needs air that is warmer than the fluid inside its outdoor coil, and it makes sure that fluid is much colder.
+
+**The trick: a fluid that boils far below freezing**
+
+A heat pump circulates a refrigerant, a fluid chosen because it boils at very low temperatures. Some common refrigerants boil at around -40°C at normal pressure. The cycle has four steps:
+
+1. **Absorb.** Cold, low-pressure liquid refrigerant flows through the outdoor coil. Even on a frosty day, the outside air is warmer than the refrigerant, so heat flows into it and the liquid boils into a gas. The fan you see on the outdoor unit just moves more air past the coil.
+
+2. **Compress.** An electric compressor squeezes that gas. Compressing a gas makes it hotter, which is the same reason a bicycle pump warms up when you use it. The refrigerant leaves the compressor at high pressure and a temperature well above what your house needs.
+
+3. **Release.** The hot gas passes through a heat exchanger connected to your heating water. Heat flows from the refrigerant into the water, which then goes to your radiators or underfloor pipes. As it gives up heat, the refrigerant condenses back into a liquid.
+
+4. **Expand.** The liquid passes through an expansion valve, where its pressure drops sharply and it becomes very cold again. Then it returns outside to start over.
+
+A fridge works the same way. It moves heat out of the food compartment and releases it through the coils at the back. A heat pump is a fridge that treats the outdoors as the food compartment and your house as the coils at the back.
+
+**Why it's efficient**
+
+The electricity doesn't make the heat. It moves heat that already exists. In a typical year, a well-installed air-source heat pump delivers about 3 to 4 units of heat for each unit of electricity it uses. This ratio is called the coefficient of performance, or COP, and averaged across a year it's called the seasonal performance factor. A modern gas boiler, by comparison, turns about 90% of the gas's energy into heat.
+
+**What this means for your decision**
+
+- **Efficiency drops as it gets colder.** The bigger the gap between outside and inside, the harder the compressor works. On a -5°C day the COP may fall to around 2 to 2.5. That is still about twice as much heat per unit of energy as a boiler, and modern units keep running well below -15°C. Sizing the system for your local winter matters.
+- **Lower water temperatures.** A boiler usually sends water to radiators at 60 to 75°C. A heat pump is most efficient at 35 to 50°C. Because the water is cooler, some radiators may need to be larger, and good insulation and draught-proofing make a big difference. The heating runs longer and steadier rather than in short bursts.
+- **Running costs depend on prices.** Since a heat pump uses about a third as much energy, it costs less to run than gas when electricity costs less than about three times as much as gas per kWh. Check your local tariffs, any heat-pump electricity rates, and available installation grants.
+- **Defrosting is normal.** In damp, near-freezing weather, frost builds up on the outdoor coil. The unit briefly reverses its cycle to melt it. You may see steam, and that's normal.
+
+**The bottom line**
+
+A heat pump doesn't need warm weather. It uses a very cold refrigerant to absorb heat from outdoor air, then compresses it to a useful temperature. Whether it suits your home depends less on the physics, which works, and more on your insulation, your radiators, the quality of the installation, and your energy prices. A proper heat-loss survey before you buy will answer most of those questions.

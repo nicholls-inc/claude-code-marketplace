@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "afcb18b55d77d067a",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-nar-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-fable-5-2",
+  "prompt": "Write a narrative account of about 500 words of the Boston molasses flood of 1919. The reader is a general reader.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73711,
+    "output_tokens": 1087,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:18:19.609Z",
+  "valid": true,
+  "text": "Just after half past noon on January 15, 1919, the North End of Boston was enjoying a strange gift of weather. After days of bitter cold, the temperature had climbed above forty degrees. Workers along Commercial Street ate lunch outdoors. Children gathered sticks near the freight yards. Above them all loomed a steel tank fifty feet tall and ninety feet across, holding some 2.3 million gallons of molasses.\n\nThe tank belonged to the Purity Distilling Company, a subsidiary of United States Industrial Alcohol, which fermented molasses into industrial alcohol, much of it used in munitions during the war just ended. Built in a hurry in 1915, the tank had never been properly tested by filling it with water. It leaked from the start, so badly that neighborhood children collected the drippings in pails. Residents said it groaned when filled. The company's response was to paint it brown, which made the leaks harder to see.\n\nA fresh shipment had arrived two days earlier, topping the tank nearly to its brim. Then, with no warning, the steel gave way. Witnesses recalled a deep rumble and a rattling like machine-gun fire as rivets shot from the seams. The walls split apart, and a wave of molasses, by some estimates twenty-five feet high at its start, burst outward at around thirty-five miles an hour.\n\nNothing in its path stood a chance. The wave crushed wooden houses, swept a firehouse from its foundation, and buckled a support of the elevated railway, where an approaching train stopped just short of the twisted track. Freight cars were tossed aside. Horses, wagons, and people were swallowed. Then the molasses, thickening as it cooled in the winter air, held fast whatever it had caught.\n\nRescuers arrived within minutes. Sailors from a training ship docked nearby, along with police, firefighters, and Red Cross nurses, waded in waist-deep, struggling to reach victims who could barely be distinguished from the wreckage. Many of those trapped suffocated before help could reach them. The search went on for days. In the end, twenty-one people died and about 150 were injured. The dead included city laborers, teamsters, a firefighter, and two ten-year-old children.\n\nCleanup took weeks. Crews hosed down the streets with salt water pumped from the harbor, and the harbor itself ran brown into the summer. Molasses was tracked on shoes and clothing through the city, onto streetcar seats and into homes far from the waterfront.\n\nThe company blamed anarchists, claiming a bomb had destroyed the tank. The survivors and the families of the dead sued, and the case became one of the earliest large class-action suits in Massachusetts. After years of testimony, a court-appointed auditor concluded that the tank had simply been too weak: its steel was too thin and its construction had gone unsupervised by any engineer. The company paid out roughly $628,000 in damages.\n\nThe disaster left a lasting mark. Massachusetts and, in time, other states began requiring that engineers certify plans for major structures and that those plans be filed and inspected. For decades afterward, residents of the North End insisted that on hot summer days they could still smell molasses."
+}

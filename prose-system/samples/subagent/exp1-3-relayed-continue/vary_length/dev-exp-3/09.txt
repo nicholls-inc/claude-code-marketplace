@@ -1,0 +1,75 @@
+# How Strangers Agree on a Secret in Public
+
+Imagine you want to whisper a secret to someone you have never met. The only way to reach them is a loudspeaker, and everyone in the town square can hear every word. It sounds hopeless. Yet this is what happens every time your phone connects to a bank, and it works. The trick is a kind of maths that is easy to do in one direction and fiendishly hard to undo.
+
+## The paint analogy
+
+Start with colours, because the idea is the same and nothing here needs numbers yet.
+
+You and a stranger, Bob, agree out loud on a shared starting colour: yellow. Everyone hears this. It is not a secret.
+
+Now each of you picks a private colour and tells no one. You choose red. Bob chooses blue. You mix your red into the yellow and hand over the resulting orange. Bob mixes his blue into the yellow and hands you green. A spy watching sees the yellow, the orange and the green.
+
+Next comes the clever part. You take Bob's green and add your private red. Bob takes your orange and adds his private blue. Both of you now hold the same muddy brown: yellow, red and blue, mixed in different orders. The spy has the yellow, the orange and the green. To get the brown, the spy would need either red or blue, and those never left your hands.
+
+Why can't the spy just unmix the orange to find the red? Because mixing paint is a one-way street. Separating the exact ingredients from a finished mixture is brutally hard. Computers have no paint, but maths has operations that behave in just this way.
+
+## A one-way street made of numbers
+
+The operation we need comes from something you already know: clock arithmetic.
+
+On a 12-hour clock, 10 plus 5 gives 3, not 15. You go round the dial and land back at the start. Mathematicians call this working "modulo" 12, or "mod 12" for short. You simply keep only the remainder after dividing by the size of the clock. So 15 mod 12 is 3.
+
+Now we use a clock with more positions. Let's take 23. Why 23? It is a prime number, meaning nothing divides it evenly except 1 and itself, and primes make the trick behave well. Real systems use primes hundreds of digits long, but 23 lets us check the sums by hand.
+
+The one-way operation is raising a number to a power, then wrapping around the clock. Here is a small example. Take 5 and multiply it by itself 6 times. That is 5 × 5 × 5 × 5 × 5 × 5 = 15,625. Divide by 23 and keep the remainder. It comes out as 8. We write that 5^6 mod 23 = 8.
+
+Going forward is simple. Going backward is the problem. If I tell you "5 to some secret power, wrapped on a clock of 23, gives 8", can you find the power? With a tiny clock, yes: just try 1, 2, 3 and so on until you hit it. But the answers jump about unpredictably as the power grows, with no pattern to follow. When the clock has hundreds of digits, trying every possibility would take longer than the age of the universe. The forward calculation, meanwhile, stays quick, because computers have shortcuts for raising to big powers.
+
+That gap between "easy forward" and "impossible backward" is our paint mixing.
+
+## The exchange, step by step
+
+Here is the whole conversation using real numbers. The names are traditional: Alice and Bob.
+
+**Step one: agree publicly.** Alice and Bob announce two numbers for everyone to hear. The clock size is 23, and the starting number (our "yellow") is 5.
+
+**Step two: each picks a private number.** Alice chooses 6. Bob chooses 15. Neither says a word about it.
+
+**Step three: each makes a public mixture.** Alice computes 5^6 mod 23, which we found above is 8. She announces 8. Bob computes 5^15 mod 23, which comes to 19. He announces 19. These are the orange and the green.
+
+**Step four: each mixes in their private number.** Alice takes Bob's 19 and raises it to her private power, 6, on the 23-clock. That gives 2. Bob takes Alice's 8 and raises it to his private power, 15, on the same clock. He also gets 2.
+
+Both now hold the number 2, and nobody ever sent it.
+
+## Why the answers match
+
+This is not luck. It follows from a rule of powers you may remember from school: raising a power to a power means multiplying the exponents.
+
+Alice's final number is (5^15)^6. Bob's is (5^6)^15. Both equal 5^90, because 15 × 6 and 6 × 15 are the same. The clock wrapping does not disturb this, since wrapping can be done at any stage without changing the remainder. So the two routes always land on the same spot. The order of mixing does not matter, exactly as with paint.
+
+## What the eavesdropper sees
+
+Picture Eve, listening in. She heard 23 and 5. She heard 8 and 19. That is all.
+
+To find the secret 2, she needs Alice's 6 or Bob's 15. To find one of those, she must undo the one-way street: given 5 and 8, work out the power. With a clock of 23 she could manage that in seconds, which is exactly why real systems never use one so small. With a clock of 600 digits, she is stuck. The method is known and published. It is only the size of the numbers that protects it.
+
+Notice what has not happened. Alice and Bob never met, never swapped a password, and never trusted a courier. The only things crossing the wire were numbers that are useless without the private halves.
+
+## From a shared secret to secret messages
+
+The number 2 is not yet a message. What Alice and Bob have is a shared key, which they can feed into an ordinary scrambling method, called a cipher, that both of them run. Scrambling and unscrambling with a shared key is fast and well understood. The public-key part solves the one problem the cipher cannot: how two people get the same key to begin with.
+
+A second family of methods tackles the problem differently. The best known is called RSA, after its three inventors. Here each person makes a pair of linked keys. One, the public key, can be given to anyone. The other stays private. Something locked with the public key can only be opened with the private one, like a padlock you hand out open to the whole world while keeping the only key at home. Its one-way street is different: multiplying two huge primes is easy, but taking the answer and finding the two primes is not. Anyone can lock a box for you, and only you can open it.
+
+## The honest caveats
+
+Two warnings are worth knowing.
+
+First, a clever eavesdropper does not have to break the maths. Suppose Eve does more than listen: she cuts the line and pretends to be Bob to Alice, and Alice to Bob. Alice would then agree a secret with Eve without knowing it. The exchange proves nothing about who is on the other end. Real systems add certificates, which are like notarised ID cards vouched for by trusted organisations, to guard against this.
+
+Second, "impossible" really means "no one has found a fast method yet". Nobody has proved that none exists. And a future quantum computer could, in principle, solve some of these problems quickly, which is why researchers are already designing replacements built on different hard problems.
+
+## The short version
+
+Two people announce a shared starting point. Each hides a private number, mixes it in, and shares only the result. Each then mixes their own private number into the other's result. Because the order of mixing does not matter, both arrive at the same secret, while a listener who sees only the in-between results cannot unpick them. It is the paint trick, built from clock arithmetic, and it is why strangers can whisper in a crowded square.

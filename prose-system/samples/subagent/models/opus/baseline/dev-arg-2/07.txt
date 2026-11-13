@@ -1,0 +1,19 @@
+Keep Estimating. Stop Pretending an Estimate Is a Promise.
+
+Every few years the #NoEstimates argument comes back, and it always finds a sympathetic audience. That makes sense. Most engineers have guessed a number in a planning meeting and then seen it come back three months later as a deadline with their name on it. If that is what estimation means, getting rid of it sounds like self-defence.
+
+But the estimate is not the problem in that story. The problem is what happened to the number after the meeting. Teams that stop estimating still have that problem. They also lose the one useful thing estimation gave them.
+
+That useful thing is not the number. It is the conversation that produces it. Suppose one engineer says a ticket will take two days and another says two weeks. Neither of them is lying. One of them knows about the migration script that has to run against forty million rows, or the payment provider whose sandbox behaves differently from production. The risk sits in the gap between the two guesses, and asking for an estimate is the cheapest way to bring it out before anyone writes code. A team that skips estimation also skips that argument, and learns about the forty million rows in week three.
+
+The usual alternative is to count throughput. You split work into small pieces, measure how many finish each week, and forecast from that history. This works, and teams should do it. But look at what it requires. Someone has to judge that the pieces are roughly the same size, and that judgement is an estimate. The team has just stopped saying it out loud. Forecasting from history also only works when the future looks like the past. A rewrite, a new market or a deadline set by a regulator is exactly the kind of project where leadership needs a forecast, and exactly the kind where you have no history to forecast from.
+
+The business also has decisions to make. Whether to build a feature depends partly on whether it costs a month or a year. Finance planning a launch, sales making a promise to a customer and a founder deciding whether to raise money will all act on some guess about time. If engineers refuse to give one, someone with less information will give it instead.
+
+So keep estimating, but change the rules.
+
+Engineers: give ranges, not single numbers. "Three to eight weeks, and most of that spread is the auth integration" is more honest and more useful than "five weeks." Say what would narrow the range, and go and find it out.
+
+Managers: treat an estimate as a forecast, not a commitment. Update it when the team learns something, and say openly that you have. Never put a team's estimates next to its actuals in a performance review. Once you do, people start padding their numbers, and the estimates stop telling you anything. You still pay for the planning meeting, but you get nothing out of it.
+
+The teams that hate estimating are usually right about what they went through. They are wrong about the fix. The trouble comes from how estimates get used, not from estimating. Fix how they are used, and most teams will be glad to keep making them.

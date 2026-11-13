@@ -1,0 +1,33 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aa038e6a8f636c635",
+  "condition": "revise_rhythm",
+  "conditions_version": "1",
+  "brief_id": "dev-nar-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "The file /tmp/claude-0/-home-user-claude-code-marketplace/62eaf44b-bbc2-5494-b187-a6b289ca02d8/scratchpad/drafts/d067.txt holds a draft. Revise it so that the length of each sentence follows what it has to say. Where a short sentence sets up a longer one, combine them or recast them. Keep the content, the facts and the order. Return the full revised piece and nothing else.",
+  "source_sample": "samples/subagent/exp2b/plain_prose/dev-nar-1/07.txt",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [
+    "Read"
+  ],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 37783,
+    "cache_read_input_tokens": 119377,
+    "output_tokens": 2039,
+    "api_messages": 2
+  },
+  "timestamp_utc": "2026-11-11T21:30:16.988Z",
+  "valid": true,
+  "text": "In late August 1854, a terrible illness, cholera, took hold of Soho, a crowded district of London, bringing violent vomiting and diarrhea and draining the fluid from a healthy person so quickly that they were dead within a day or two. Within about ten days of the outbreak beginning, some five hundred people living within a few hundred yards of one another had died. Many families fled, shops closed, and the streets grew quiet.\n\nAt the time, nobody knew what caused cholera. The prevailing belief was that diseases like it spread through \"miasma,\" meaning foul air rising from rotting waste, sewers and damp ground, an idea that was sensible enough in a city that stank but was wrong. Germs, the tiny living organisms that actually cause such diseases, had not yet been widely accepted as a cause of illness, and the bacterium behind cholera had not been identified.\n\nJohn Snow was a physician who lived and worked nearby, known for pioneering the careful use of anaesthesia, and he had even attended Queen Victoria during childbirth. He had also been thinking about cholera for years, and he doubted the miasma theory, partly because of how the disease behaved: its symptoms struck the gut, not the lungs, which suggested to him that people swallowed something harmful instead of breathing it in. In 1849 he had published a short essay arguing that cholera spread through contaminated water, but few took him seriously.\n\nThe Soho outbreak gave him a chance to test his idea. Snow did not rely on theory alone; he went door to door, read the records kept by the authorities of who had died and where, and asked bereaved families what the victims had eaten and drunk. Then he did something that now seems obvious but was unusual then, marking each death on a street map with a bar drawn at the address of every household affected.\n\nThe pattern was striking. The deaths clustered thickly around a public water pump on Broad Street, where residents came to fill their buckets, and the farther one moved from the pump, the fewer the deaths. Snow noted that most people in the district drew water from it, and that many of the victims lived closer to it than to any other pump.\n\nA skeptic might say that this proves little, since people who live near a place naturally share many things besides water, so Snow looked for the exceptions, and the exceptions persuaded him more than the rule. A workhouse near the pump housed several hundred people, yet very few of them died, and Snow discovered that the workhouse had its own well and rarely used the Broad Street pump. A brewery on the same street also escaped almost untouched, because its workers, it turned out, were given free beer and did not drink from the pump. The reverse was true as well: a woman who lived far from Broad Street died of cholera, and so did her niece, and Snow learned that the woman had once lived in Soho and so liked the taste of the Broad Street water that she had it carried to her home each day, while the niece had drunk from the same supply.\n\nBy the evening of 7 September, Snow felt sure enough to act. He went to the local board of guardians, the body responsible for the parish, and urged them to disable the pump. The officials were doubtful, but they agreed to remove the pump handle, which left the pump useless. The outbreak was already fading by then, since many residents had fled and the number of new cases had been falling, and for that reason people have long argued about how much the removal really changed the outcome. But the act became famous, and rightly so, because it showed that evidence could guide a decision about public health.\n\nThe investigation did not end there. A local clergyman, the Reverend Henry Whitehead, had at first been skeptical of Snow's theory, but as he investigated for himself, he became a convert and a valuable ally. Whitehead traced the outbreak to what was probably its beginning, a baby who had fallen ill at a house on Broad Street, whose mother had washed the infant's soiled cloths and thrown the dirty water into a cesspool that lay only a few feet from the well. Inspection later showed that the brick lining of the well was cracked, allowing sewage to seep in.\n\nThe authorities were slow to accept the conclusion. An official inquiry rejected the water theory, and the pump handle was soon restored, and Snow died in 1858, still largely unrecognised for his insight. Within a few decades, though, the discovery of the cholera bacterium proved him right. Today he is often called a founder of epidemiology, the study of how disease spreads through populations, and his map, his questions and his patient attention to the exceptions remain a model of how to find a cause by following the evidence."
+}

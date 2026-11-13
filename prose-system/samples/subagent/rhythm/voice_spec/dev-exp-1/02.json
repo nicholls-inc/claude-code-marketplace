@@ -1,0 +1,31 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a343d1f5d22179b91",
+  "condition": "voice_spec",
+  "conditions_version": "1",
+  "brief_id": "dev-exp-1",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 2,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write an explanation of about 600 words of how a heat pump can heat a house when it is colder outside than inside. The reader is a homeowner deciding whether to replace a gas boiler.\n\nWrite it as plain prose with no headings or lists.\n\nWrite it in this voice: Calm, even register. Mostly medium-length, complete sentences, with length set by content rather than rhythm. No pattern of a short hook paid off by a longer sentence. Plain words over writerly ones, and lines allowed to sit flat. Numbers, names and concrete facts carry the point instead of abstractions. Em dashes, parentheticals, adverbs, doublets and parallelism kept rare. Descriptive writing states what a thing is and does, and any view is labelled as a view. British spelling.",
+  "source_sample": null,
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28385,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 2842,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T21:29:35.177Z",
+  "valid": true,
+  "text": "A heat pump does not make heat by burning anything. It moves heat from one place to another, and outdoor air at 0°C still holds a lot of it. Heat is the movement of molecules, and that movement only stops at absolute zero, which is about minus 273°C. Air at minus 5°C is therefore a usable source, even though it feels cold to you.\n\nThe machine has four main parts joined by a sealed loop of refrigerant: an outdoor coil, a compressor, an indoor coil and an expansion valve. The refrigerant is chosen because it boils at a very low temperature. Propane, used in some units, boils at about minus 42°C at normal pressure, and R32, used in many others, boils at about minus 52°C.\n\nIn the outdoor coil the refrigerant is well below the air temperature. A fan blows outside air across the coil, and heat flows from the air into the refrigerant because the refrigerant is colder. That heat makes the refrigerant boil into a gas. The outside air leaves a few degrees cooler than it arrived.\n\nThe gas then goes to the compressor, which is an electric pump. Squeezing a gas raises its temperature, so the refrigerant leaves the compressor at somewhere around 50 to 70°C. This step is what allows heat from a cold place to end up in a warm one. A bicycle pump warms up in the same way as you use it.\n\nThe hot gas passes through the indoor coil, which is in contact with your heating water. The water is cooler than the gas, so heat flows into it and the refrigerant condenses back to a liquid. The water goes round your radiators or underfloor pipes. The liquid then passes through the expansion valve, where its pressure drops and its temperature falls below that of the outside air, and the cycle starts again.\n\nElectricity is used only to run the compressor and the fans. Most of the heat is collected from outside. A well-installed unit delivers roughly three units of heat for each unit of electricity over a year, a ratio called the coefficient of performance. On a mild day of 7°C it can reach four or more. On a day of minus 5°C it may fall to around two. A gas boiler turns about 85 to 92 per cent of the energy in the gas into heat, so it delivers less than one unit of heat for each unit it takes in.\n\nFor your decision, the running cost depends on the price gap between electricity and gas. In Great Britain, electricity has recently cost about three to four times as much per kilowatt hour as gas. A heat pump with a ratio of three therefore costs about the same to run as a boiler, a little more or a little less depending on tariff and weather. Some suppliers offer cheaper heat pump or time-of-use tariffs, which can tip the balance.\n\nThe other factor is the house. A heat pump works most efficiently when it heats water to 35 to 45°C, where a boiler typically sends out 60 to 70°C. Radiators may need to be larger, and a poorly insulated house will need a bigger and more costly unit. A heat loss survey will tell you how many kilowatts your house needs on the coldest day. In my view, a well-insulated house with a boiler near the end of its life is the strongest case for replacing it. The government Boiler Upgrade Scheme offers £7,500 towards installation in England and Wales, which narrows the gap in upfront cost."
+}

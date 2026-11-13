@@ -1,0 +1,19 @@
+Stop Estimating. Start Shipping Slices.
+
+Every software team knows the ritual. A product manager brings a feature to planning, engineers squint at it, someone says "about three weeks," and everyone nods. That number then gets written into a roadmap, repeated to executives, and treated as a promise. Six weeks later, the team is explaining why it was wrong. Again.
+
+Teams should stop producing these estimates. Not because engineers are bad at math, but because the estimate is the wrong tool for the job.
+
+Start with the evidence. Decades of research on planning, from Kahneman's work on the planning fallacy to the long record of overrun studies in large projects, show the same thing: people underestimate how long creative work takes, even when they know they have underestimated before. Software makes this worse. The work is mostly discovery. You do not know what is hard until you are inside the code, and by then the estimate has already hardened into a commitment.
+
+The deeper problem is what estimates do to behavior. Once a date exists, it becomes a target, and targets distort. Engineers cut corners on tests to hit the number. Managers push back on scope discovered midstream because it threatens the date. Honest bad news gets delayed because nobody wants to be the person who breaks the plan. The estimate does not predict the work. It shapes the work, usually for the worse.
+
+Then there is the cost. Teams burn hours in planning poker, arguing whether a ticket is a five or an eight. Those hours produce numbers with enormous error bars, collected from people who will later be judged against them. Add up a year of that across a department and you have bought a lot of false precision at a very high price.
+
+The objection is predictable: without estimates, how do we plan? The answer is that you plan with measurement instead of prediction. Break work into thin slices that each ship in a few days. Track how many slices your team actually finishes per week. That throughput is real data, not a guess, and it improves as the team learns. If leadership wants to know when something will land, you can say "we finish about six slices a week, this needs roughly thirty, so five to seven weeks," and update the answer weekly as reality arrives. That forecast is honest about its uncertainty and costs almost nothing to maintain.
+
+Slicing also forces the conversation that matters. Instead of asking how long the whole thing takes, you ask what the smallest useful version is and whether it is worth building at all. Scope becomes the lever, which is where it should have been all along. Deadlines that truly are fixed, a regulatory date or a launch event, are handled by cutting scope to fit, not by pretending the estimate was accurate.
+
+Managers worry this means giving up control. It does the opposite. A weekly stream of shipped work tells you far more about progress than a Gantt chart that went stale in week two.
+
+Some coarse sizing is still fine. Knowing whether something is a day, a month, or a year is useful for choosing what to attempt. But the detailed, committed, argued-over estimate should go. Retire it, ship small, measure what happens, and let the evidence do the forecasting.

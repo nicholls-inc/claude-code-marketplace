@@ -1,0 +1,13 @@
+The extra second that timekeepers are giving up
+
+Every so often, the world's official clocks have paused for one second. At the stroke of midnight Greenwich time, usually on 30 June or 31 December, the clock has read 23:59:60 before rolling over. That inserted moment is a leap second, and 27 of them have been added since 1972. The most recent came at the end of 2016.
+
+The reason is that we keep time in two ways, and they disagree. For most of history, a second was a fraction of a day: one 86,400th of the time the Earth takes to turn once. But the Earth is an unreliable clock. The Moon's pull on the oceans acts as a brake, lengthening the day by a millisecond or two each century, and movements in the planet's molten core, melting ice and even large earthquakes make its spin wander unpredictably. Atomic clocks, which count the vibrations of caesium atoms, are vastly steadier. Since 1967 they have defined the second.
+
+Coordinated Universal Time (UTC), the standard behind every phone, train timetable and stock exchange, runs on atomic seconds. Leap seconds were the compromise that kept it tied to the sky. Whenever atomic time drifted towards 0.9 seconds ahead of the Earth's rotation, a second was added so that noon on the clock stayed close to noon by the Sun.
+
+The trouble is that computers hate a minute with 61 seconds. Because the Earth's behaviour cannot be forecast far ahead, leap seconds are announced only about six months in advance, and each one must be inserted by hand into systems designed on the assumption that time flows evenly. In 2012 a leap second knocked out websites including Reddit and disrupted Qantas's check-in systems; in 2017 it caused failures at Cloudflare. Technology companies developed their own workarounds, such as "smearing" the extra second across a day, which meant that different networks briefly disagreed about the time. Satellite navigation systems ignore leap seconds entirely.
+
+A newer worry settled the argument. The Earth has lately been spinning slightly faster, raising the prospect of a negative leap second, a minute of only 59 seconds. That has never been tried, and engineers fear what it would break.
+
+So in November 2022 the General Conference on Weights and Measures, the treaty body that oversees the world's units, voted to stop adding leap seconds by 2035. The International Telecommunication Union, which governs time signals, endorsed the move the following year. Clock time and Sun time will be allowed to drift apart, by about a minute over a century, until a larger, rarer correction is agreed. Few people will ever notice.

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "a9523d75fa7a66b1c",
+  "condition": "plain_prose",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 10,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nWrite it as plain prose with no headings or lists.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28203,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 972,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:57:07.015Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a two-stage protocol called constant-current, constant-voltage (CC-CV). A charger first forces a fixed current into the cell, typically between 0.5 and 1 C, where 1 C is the current that would fill the nominal capacity in one hour. As charge accumulates, the cell's terminal voltage rises steadily. When it reaches a set ceiling, usually 4.2 V for a graphite-anode, cobalt- or nickel-based cell, the charger stops regulating current and begins holding voltage constant. From then on the current is whatever the cell will accept, and it decays roughly exponentially. Charging is terminated when the current falls to a small cutoff, often around 0.05 C.\n\nThe reason for this behaviour lies in what the voltage represents. The terminal voltage is the cell's open-circuit voltage plus the current multiplied by the internal resistance, and the open-circuit voltage is a function of state of charge. Charging moves lithium ions from the cathode, through the electrolyte, and into the graphite anode, where they insert between carbon layers (intercalation). As the anode fills, its potential falls toward that of metallic lithium, and the cathode potential rises as it empties, so the open-circuit voltage climbs. Near full charge it is within a few tens of millivolts of the 4.2 V ceiling. In the CC stage the resistive drop, called overpotential, is what lets the terminal voltage reach the limit before the cell is truly full. It has three parts: ohmic loss in the electrodes and electrolyte, charge-transfer resistance at the particle surfaces, and concentration polarization from ions that cannot diffuse into the particles as fast as they arrive.\n\nHolding the voltage fixed means the overpotential must shrink as the open-circuit voltage creeps upward, so the current has to fall. Meanwhile the lithium concentration gradients inside the particles slowly relax, as ions diffuse from the surface into the bulk of each particle. Diffusion in solid particles is slow, so this relaxation sets the time scale of the taper. The final few percent of capacity can take as long as the first 70 to 80 percent.\n\nWhy not simply push harder? The voltage ceiling and the current are protections against degradation. Charging at high current near full charge drives the anode surface potential below 0 V against lithium, which plates metallic lithium on the graphite. That causes permanent capacity loss and can form dendrites that short the cell. Higher voltages also oxidize the electrolyte and destabilize the cathode. The taper is therefore the cell's physics enforced by the control scheme, not a limitation of the charger. Fast-charge designs lower the CC current at high state of charge, add temperature compensation, or use stepped currents, but all of them accept the same underlying slowdown."
+}

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "ab47d1915f281ea12",
+  "condition": "no_paren",
+  "conditions_version": "1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 5,
+  "model_served": "claude-sonnet-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.\n\nDo not use parentheses.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 28196,
+    "cache_read_input_tokens": 45550,
+    "output_tokens": 918,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:27:50.394Z",
+  "valid": true,
+  "text": "A lithium-ion cell is charged with a protocol called constant current, constant voltage, usually shortened to CC-CV. It has two phases, and the second one explains why the last part of a charge is slow.\n\nThe cell stores energy by moving lithium ions from the cathode, often a layered metal oxide, through a liquid electrolyte and into the graphite anode. The charger forces this by driving current in and holding a voltage across the terminals. That terminal voltage is the sum of three things: the open-circuit voltage, which rises with state of charge as the anode fills with lithium; a drop across the cell's internal resistance, equal to current times resistance; and extra polarization from slow diffusion and reaction kinetics.\n\nIn the first phase the charger holds current constant at a chosen rate, for example 0.5 C, meaning a full charge in about two hours. The charger raises its voltage as needed to push that current. The cell voltage climbs steadily as the open-circuit voltage rises and the polarization grows. This phase delivers most of the charge, often 70 to 80 percent, at full speed.\n\nThe cell then reaches its upper voltage limit, typically 4.2 V for common chemistries. This limit is a hard safety and longevity boundary. Above it the electrolyte oxidizes at the cathode, the cathode structure degrades, and at the anode lithium can plate as metal instead of intercalating. Plated lithium shortens life and can form dendrites that short the cell.\n\nIn the second phase the charger therefore holds the voltage fixed at the limit and lets the current fall on its own. This is the key point. The terminal voltage is pinned, yet the open-circuit voltage keeps creeping upward as lithium accumulates. The voltage left over to drive current, which is the terminal voltage minus the open-circuit voltage, shrinks. Current is roughly that leftover voltage divided by total resistance, so the current decays, approximately exponentially, as the cell fills.\n\nSlow solid-state diffusion makes this worse. Near full charge the graphite surface is crowded with lithium, so new ions have fewer vacant sites to enter, and the concentration gradient inside each particle flattens, which weakens the driving force for diffusion further. The cell is limited by how fast lithium can redistribute inside the particles, not by how hard the charger pushes.\n\nThe phase ends when the current falls to a cutoff, commonly 3 to 5 percent of the nominal rate, at which point the cell is declared full. The tail can take as long as the whole first phase for only the last 20 to 30 percent of capacity. Faster charging schemes shorten the first phase but cannot remove this tail without risking plating."
+}

@@ -1,0 +1,30 @@
+{
+  "route": "claude-code-subagent",
+  "agent_id": "aafadd4d67a97f6b3",
+  "condition": "baseline",
+  "conditions_version": "draft-1",
+  "brief_id": "dev-tec-3",
+  "brief_set": "dev",
+  "brief_set_version": "1",
+  "index": 7,
+  "model_served": "claude-opus-5-5",
+  "prompt": "Write a technical description of about 400 words of how a lithium-ion cell is charged and why charging slows as the cell approaches full. The reader is an engineer from another field.",
+  "context_note": "Prompt sent as the subagent's whole task. The subagent also carried the Claude Code agent system prompt, tool definitions and CLAUDE.md.",
+  "system_prompt_sha256": "b62bfb416c0a61662623dd1a0dd0e5ffe192f22ae4ada5e0f8cf734f10de778f",
+  "sampling": "harness defaults; not set by the experimenter",
+  "tools_used": [],
+  "returned_by": "handback",
+  "wrapper": "agent-tool",
+  "relayed_user_request": null,
+  "touched_experiment_files": false,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 73727,
+    "output_tokens": 1660,
+    "api_messages": 1
+  },
+  "timestamp_utc": "2026-11-11T19:20:22.843Z",
+  "valid": true,
+  "text": "**How a Lithium-Ion Cell Is Charged, and Why the Last Few Percent Take So Long**\n\nA lithium-ion cell stores energy by moving lithium ions between two host materials. When the cell charges, an external source pulls electrons out of the positive electrode, usually a layered metal oxide such as NMC, or iron phosphate (LFP). The source pushes those electrons through the external circuit into the negative electrode, which is usually graphite. To keep each electrode charge-neutral, lithium ions leave the cathode lattice, cross the liquid electrolyte and the porous separator, and slot between the graphite layers (intercalation). Discharge runs the same process in reverse.\n\nAlmost every charger uses a two-stage profile called constant-current/constant-voltage (CC-CV):\n\n1. **Constant current.** The charger supplies a fixed current, often 0.5C to 1C, where 1C fills the rated capacity in one hour. The terminal voltage rises as the cell fills. A deeply discharged cell first gets a small \"pre-charge\" current until it reaches a safe minimum voltage of about 3.0 V.\n2. **Constant voltage.** When the terminal voltage reaches the chemistry's upper limit (about 4.2 V for NMC, about 3.65 V for LFP), the charger holds it there. The current then falls on its own. Charging ends when the current drops below a cutoff, typically C/20.\n\nThe CC phase usually delivers around 70–80% of the capacity in well under an hour. The CV phase can take nearly as long again for the remaining 20–30%.\n\n**Why the rate falls**\n\nModel the cell as an ideal voltage source, the open-circuit voltage (OCV), in series with an impedance. That impedance has three main parts:\n\n- an ohmic resistance (electrolyte, current collectors, contacts)\n- a charge-transfer resistance at the electrode surfaces\n- a diffusion-limited, concentration-dependent term\n\nDuring charging, the terminal voltage equals the OCV plus the current times this impedance. OCV rises with state of charge. The charger cannot let the terminal voltage go above the limit, so as OCV approaches it, the voltage left to drive current shrinks, and the current has to drop. To an electrical engineer this looks like charging a capacitor through a resistor. The difference is that the \"resistor\" is a distributed network with several time constants, some of them minutes long.\n\nThe slow part is solid-state diffusion. Lithium enters each graphite particle at its surface and then diffuses inward slowly. At high current the particle surfaces fill up while the cores are still depleted. The concentration gradient raises the surface potential, and the cell reaches the voltage limit early, before the bulk material is full. In the CV phase, the falling current gives the particle interiors time to even out.\n\n**Why the limits are hard**\n\nBoth thresholds are set by degradation, not by efficiency:\n\n- **Above the voltage limit:** the cathode gives up too much lithium and becomes structurally unstable, and the electrolyte starts to oxidise. Both cause permanent capacity loss and produce gas.\n- **High current at high state of charge:** the graphite potential can fall below 0 V relative to lithium metal. Ions then plate out as metallic lithium instead of intercalating. Plating removes lithium from use permanently and can grow dendrites that short the cell. The risk is greatest when the cell is cold, because diffusion and reaction rates slow down.\n\nFor this reason, battery management systems reduce the current according to temperature and state of charge. It is also why fast-charging specifications are usually quoted for 10–80%: that window avoids the slow tail where these limits apply."
+}
