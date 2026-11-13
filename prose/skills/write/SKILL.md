@@ -60,6 +60,8 @@ Do not add anything else to the prompt. In particular, do not add:
 
 ### 5. Measure and pick
 
+First confirm that every candidate file exists. A subagent can finish without saving its file. Start a replacement for each missing one, and do not rank fewer than three candidates.
+
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/scripts/prose_profile.py" rank <working folder>/c*.txt --kind <kind>
 ```
