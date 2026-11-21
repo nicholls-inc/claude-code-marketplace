@@ -10,7 +10,9 @@ description: >
   result. Never submits an approving review. Use when the user says
   "pr-swarm", "swarm review", "review this PR with the swarm", or when
   review-triage calls it. Takes a PR ref, a head SHA, a round number and a
-  dry-run flag; dry-run suppresses every GitHub write.
+  dry-run flag; dry-run suppresses every GitHub write. With `--local --base
+  <ref>` it reviews the checked-out branch from git alone, makes no `gh` call,
+  and prints the JSON result instead of posting.
 allowed-tools: Bash, Read, Glob, Grep, Agent
 ---
 
@@ -136,7 +138,8 @@ identifies our own threads by this header, not by account type.
 
 ## Inputs
 
-Four inputs, **all required** when another skill invokes this one:
+Four inputs, **all required** when another skill invokes this one (under
+`--local` the PR ref drops out; see *Local mode*):
 
 | Input | Form | Meaning |
 | --- | --- | --- |
@@ -166,6 +169,35 @@ caps, same output contract. Nothing in this skill branches on "who called me"
 except the round number in the sticky-summary header and the defaulting rule
 above.
 
+### Local mode (`--local`)
+
+```
+--local --base <ref> [--head-sha <sha>] [--round <n>]
+```
+
+For a branch with no pull request, or a caller that keeps review results out
+of GitHub (Codeman's Reviews page). Under `--local`:
+
+- **No `gh` call, read or write.** The caller may blank `GH_TOKEN` and
+  `GITHUB_TOKEN`, so a `gh` call fails rather than degrades. Every input comes
+  from `git`, and a PR ref, if passed, is ignored.
+- **The diff is `git diff <base>...HEAD`** of the checked-out tree (Step 1's
+  local block). `HEAD_SHA` is `git rev-parse HEAD`, and Step 1's head-SHA rule
+  holds against it. A delegation prompt's PR number reads `local`, its repo is
+  the top-level directory's name, and its title is the newest commit subject.
+- **No automated-comment index**, because there are no PR comments. Step 5
+  skips its item 2; every other synthesis rule holds.
+- **Step 6 is skipped whole.** Nothing is posted and no payload is rendered.
+  `anchored` still reports the in-hunk test, and no finding has a
+  `comment_id`.
+- **Step 7 ends with the contract.** Print the 7b report, then the 7a object
+  in one fenced `json` block, and nothing after it, so the caller parses the
+  last block.
+
+Round history belongs to the caller: there is no sticky summary to rebuild
+prior rounds from. `--local` writes nothing to GitHub with or without
+`--dry-run`.
+
 ### Sandbox note
 
 Locally, every `gh` and `git` call in this skill needs
@@ -190,6 +222,23 @@ Each block runs in its own shell, so the line is repeated per block rather
 than set once — a block that uses `$TMPDIR` without it is the bug.
 
 ## Step 1 — Resolve the PR and gather the diff
+
+**`--local`:** run this block instead of the `gh` block below, then record
+the same fields from it. There is no automated-comment index.
+
+```bash
+TMPDIR="${TMPDIR:-${RUNNER_TEMP:-/tmp}}"
+
+git rev-parse --verify --quiet "$BASE^{commit}" >/dev/null \
+  || { echo "base $BASE does not resolve to a commit: nothing to review"; exit 1; }
+HEAD_SHA=$(git rev-parse HEAD)
+git diff "$BASE...HEAD" > "$TMPDIR/pr-swarm.diff"
+git diff --name-only "$BASE...HEAD"
+git diff --shortstat "$BASE...HEAD"
+git log --oneline "$BASE..HEAD"
+```
+
+Otherwise:
 
 ```bash
 TMPDIR="${TMPDIR:-${RUNNER_TEMP:-/tmp}}"
@@ -608,7 +657,8 @@ is something a reader should act on; everything else is the summary's job.
    `[convergent: <lens-a> + <lens-b>]`. Convergence is the strongest signal
    in the run — two independent lenses hit the same spot — so say so in the
    comment and raise confidence accordingly.
-2. **Dedupe against what is already on the PR.** Drop a finding when the
+2. **Dedupe against what is already on the PR** (skipped under `--local`:
+   there is no PR). Drop a finding when the
    automated-comment index from Step 1 already carries **the same concern**
    at the same `(path, line)` — whatever automated source posted it: a prior
    pr-swarm round, a Crosscheck-signed comment from a manual run, or another
@@ -655,6 +705,8 @@ never a GitHub approving review, and the skill never submits one. See the
 hard constraint at the top.
 
 ## Step 6 — Post to GitHub
+
+**`--local`:** skip this step entirely and go to Step 7.
 
 ### A dry run leaves no record, and the next round cannot see it
 
@@ -859,6 +911,9 @@ does not grow without bound.
 Two outputs, both required.
 
 ### 7a — The return contract (binding)
+
+Under `--local`, print it as the last fenced `json` block of the output
+(*Local mode*). The shape is the same.
 
 Return this JSON object. `review-triage` consumes exactly these fields, and a
 missing one is a contract break, not a formatting nit:

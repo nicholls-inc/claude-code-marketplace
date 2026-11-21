@@ -68,6 +68,7 @@ Reviews a single pull request using a cheap-first router that selectively delega
 - `--head-sha <sha>`: Commit SHA to anchor findings against.
 - `--round <n>`: Round number (defaults to `1`).
 - `--dry-run`: Runs the full review pipeline, computes findings and verdict, but writes **zero** bytes to GitHub. Outputs the verbatim rendered inline comments, sticky summary markdown, and exact commands that would have been executed.
+- `--local --base <ref>`: Reviews the checked-out `HEAD` against `<ref>` (`git diff <base>...HEAD`) with no pull request and no `gh` call, read or write. Prints the report and ends with the JSON return contract in a fenced `json` block. Built for Codeman's Reviews page, where many reviews are branches with no PR.
 
 #### Review Workflow
 
@@ -101,6 +102,7 @@ Processes review comments and unanchored findings, resolves feedback within appr
 - `--head-sha <sha>`: Head commit expected at start.
 - `--dry-run`: Performs triage analysis without modifying code, pushing commits, resolving threads, or arming auto-merge.
 - `--merge-strategy <strategy>`: Merge strategy (`squash`, `merge`, or `rebase`; defaults to repository standard, typically `squash`).
+- `--local --base <ref> [--push-ref <refspec>] [--push-remote <remote>]`: Triage without a pull request and without any `gh` call. Runs unattended, takes every pr-swarm finding as a unit, commits fixes with the `PR-Swarm-Automated: true` trailer, and pushes them with `git push <remote> <refspec>` only when `--push-ref` is given (`--push-remote` defaults to `origin`). Never arms a merge. Ends with a JSON result carrying the verdict, rounds, commits, dispositions (deferred items included) and the last pr-swarm contract.
 
 #### Triage Workflow
 
