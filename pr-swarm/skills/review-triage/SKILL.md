@@ -18,7 +18,10 @@ description: >
   recognises its own pushes. Never submits an approving GitHub
   review. Use when the user says "triage this PR", "review-triage", "deal
   with the review comments", or "address the review feedback". Takes an
-  optional PR number or URL, plus `--dry-run` for zero GitHub writes.
+  optional PR number or URL, plus `--dry-run` for zero GitHub writes. With
+  `--local --base <ref>` it needs no pull request and makes no `gh` call: its
+  units are pr-swarm's findings, fixes go to `--push-ref` or stay local, and
+  it ends with a JSON result.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Skill, AskUserQuestion
 ---
 
@@ -111,6 +114,32 @@ GitHub is the source of truth for every bucket decision, so both modes are
 safely restartable: a re-run re-derives state from the PR rather than from
 local memory.
 
+## Local mode (`--local`)
+
+```
+--local --base <ref> [--push-ref <refspec>] [--push-remote <remote>] [--head-sha <sha>]
+```
+
+For a branch reviewed outside GitHub, such as a review on Codeman's Reviews
+page. The run makes no `gh` call, read or write, so the caller may blank
+`GH_TOKEN` and `GITHUB_TOKEN`. Every invariant keeps its check. Each step that
+touches GitHub carries a **`--local`:** line naming its local branch, and they
+add up to this:
+
+- **Unattended.** `--local` implies `--unattended`, and the run ends with the
+  local result (Step 7).
+- **The PR is `<base>...HEAD`.** The checked-out `HEAD` is the head, `--base`
+  is the base, and git answers every read GitHub would have.
+- **Units are pr-swarm's findings, all of them.** Nothing was posted, so no
+  finding has a thread and no comment exists: every entry of `findings[]` is a
+  unit, whatever its `anchored` value.
+- **Fixes push only where told.** A verified commit is pushed with
+  `git push <push-remote> <push-ref>`; `--push-remote` defaults to `origin`,
+  and `.` updates a branch in the same repository. Without `--push-ref`,
+  commits stay on the local `HEAD`. INV-8 holds unchanged.
+- **No merge.** Step 6 is skipped, the result carries the final verdict for
+  the caller to act on, and INV-5 reports `n/a`.
+
 ## Narration
 
 Before each step, emit one terse present-tense line. Interactive: print it.
@@ -140,7 +169,14 @@ anything slow: the `pr-swarm` invocation, a push, a CI wait, a pagination walk.
    applies.
 3. Confirm `gh auth status` succeeds and the repo resolves:
    `gh repo view --json nameWithOwner -q .nameWithOwner`. If either fails,
-   stop and report — this skill cannot degrade into a no-GitHub mode.
+   stop and report — without `--local` this skill cannot degrade into a
+   no-GitHub mode.
+
+   **`--local`:** skip both `gh` reads. Confirm instead that `--base`
+   resolves (`git rev-parse --verify --quiet "<base>^{commit}"`) and that the
+   working tree is clean (`git status --porcelain` prints nothing). Either
+   failing stops the run: there is no diff to review, or a fix commit would
+   carry changes nobody reviewed.
 4. INV-1 pre-flight ban grep:
 
    ```bash
@@ -204,7 +240,8 @@ anything slow: the `pr-swarm` invocation, a push, a CI wait, a pagination walk.
    point: discovered at the push, the run has already edited the tree, run the
    tests and made a commit it must now unwind. This bites on every
    workflow-touching PR — including the one that ships pr-swarm's own
-   workflow.
+   workflow. **`--local`:** `false`, since the push uses the caller's own git
+   credentials.
 
 ## Step 1 — Resolve the PR and the diff baseline
 
@@ -218,6 +255,9 @@ gh pr view <PR_OR_EMPTY> --json number,url,headRefName,baseRefName,headRefOid,is
 ```
 
 Record: PR number, owner/repo, base, head ref, HEAD SHA, draft flag, state.
+
+**`--local`:** no `gh pr view`. HEAD SHA is `git rev-parse HEAD` and base is
+`--base`. There is no PR number, draft flag or state to check.
 
 If `state` is `MERGED` or `CLOSED`, there is nothing to triage — report and
 stop. This is a clean terminal condition, not a failure.
@@ -252,6 +292,13 @@ Then run `pr-swarm` when **either**:
 
 ```
 Skill("pr-swarm", args="<pr_number_or_url> --head-sha <HEAD_SHA> --round <round>[ --dry-run]")
+```
+
+**`--local`:** the PR ref is replaced by the base, and HEAD is re-read with
+`git rev-parse HEAD` wherever this step compares against it:
+
+```
+Skill("pr-swarm", args="--local --base <base> --head-sha <HEAD_SHA> --round <round>")
 ```
 
 PR ref, head SHA, round number, and the dry-run state (present or absent, and
@@ -380,6 +427,12 @@ its row passes every other check, and a human's thread gets resolved. Only
 the per-row fields see it, which is why INV-3 fails a row that omits them.
 
 ### The units
+
+**`--local`:** there is no fetch. The units are every entry of
+`pr_swarm_result.findings` from a `pr-swarm` run **in this round**, each built
+as an unanchored-finding unit below, and `pagination_exhausted` is `true` as
+derived from those rows. A round that kept the previous result has no units:
+its findings were dispositioned in the round that produced them.
 
 ```
 units = unresolved non-outdated review threads (paginated)
@@ -650,6 +703,13 @@ entry at all, because a reader of the report takes it for evidence. The run
 report is the record for these units, and it is sufficient: each one has a
 disposition row carrying its classification, its reason, and its commit SHA.
 
+**`--local`:** every unit is threadless, so this rule covers all of them. The
+push is `git push <push-remote> <push-ref>`, and it is skipped without
+`--push-ref`. A rejected push is not fetched or rebased: bucket the unit
+`deferred` with `gate: "error"` and the exact error, push nothing more, and
+end the loop after this round. The branch moved under the run, and the
+caller watches the branch.
+
 Bucket them by exactly the same rules; a nit on a threadless unit is
 `resolved` with its reason recorded, even though nothing was resolved on
 GitHub's side, because the bucket names this skill's disposition of the unit,
@@ -764,7 +824,10 @@ Consequences of that, all of them binding:
 The round counter belongs to Step 2 (INV-4); this step decides only whether
 there is another pass and what must settle first.
 
-After a round that pushed commits, before deciding the PR is quiet:
+After a round that pushed commits, before deciding the PR is quiet
+(**`--local`:** a round that made commits; item 1 reads `git rev-parse HEAD`,
+items 2 and 3 are skipped, since there is no CI or bot to wait on, and the
+`MERGED`/`CLOSED` exit does not apply):
 
 1. Re-read HEAD (`gh pr view --json headRefOid`). If it moved, the next round's
    Step 2 diff check runs against the new HEAD.
@@ -793,7 +856,8 @@ or new units appeared). Exit the loop when **any** of:
 
 ## Step 6 — Arm auto-merge (six preconditions, re-derived here)
 
-Skipped entirely in `--dry-run` (INV-7) and skipped when INV-2 failed.
+Skipped entirely in `--dry-run` (INV-7), under `--local`, and when INV-2
+failed.
 
 Take the five pre-arm reads — preconditions 1–4 **and 6** — **now, in this
 round**, immediately before arming. A boolean inherited from an earlier round
@@ -1127,6 +1191,21 @@ Under it, in this order:
 }
 ```
 
+**`--local`** ends the same way, with that block changed like this:
+
+- `pr` is `null` and `mode` is `"local"`. `base`, `push_remote` and
+  `push_ref` (`null` when not pushing) are added.
+- `verdict` is added: `pr_swarm_result.verdict` when
+  `pr_swarm_result.head_sha` equals `new_head_sha`, otherwise `null` with a
+  degradation saying the final HEAD was not reviewed. It is an assessment for
+  the caller, never a GitHub approval (INV-1).
+- `pr_swarm_result` is the whole return contract of the last `pr-swarm` run,
+  `findings[]` included, in place of the two counts: the caller has no PR to
+  read them from.
+- Each `commits[]` entry adds `pushed` (boolean).
+- `units_threads` and `units_top_level_comments` are `0`, `automerge` is
+  omitted, and `INV-5_automerge_gate` is `"n/a"`.
+
 `unresolved_actionable_remaining` is `true` whenever a unit that would be
 actionable could not be safely auto-fixed (`gate: "error"`), or INV-2 failed —
 the caller needs to know the actionable state is not clean. A human-gated
@@ -1198,7 +1277,7 @@ degradation is listed in the report's `degradations`.
   reject.
 - **A third-party bot silent inside its window** — note it, continue.
 - **No PR resolvable** — print a short note asking for a PR number or URL and
-  stop. Do not guess a PR.
+  stop. Do not guess a PR. (`--local` needs no PR.)
 - **Push rejected / conflict** — stop touching that unit, bucket it
   `deferred` with `gate: "error"` and the exact error, continue with the rest.
 - **HEAD moved between arming and the post-arm read** — not a degradation, a
@@ -1236,4 +1315,4 @@ degradation is listed in the report's `degradations`.
 ## Out of scope
 
 Rebasing, changing the PR base, managing labels, batch mode across several
-PRs, and reviewing non-PR working-tree diffs (that is `crosscheck:verify` from the local crosscheck plugin).
+PRs, and reviewing uncommitted working-tree changes (that is `crosscheck:verify` from the local crosscheck plugin; a committed branch with no PR is `--local`).
