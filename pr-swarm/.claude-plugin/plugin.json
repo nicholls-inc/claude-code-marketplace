@@ -1,7 +1,7 @@
 {
   "name": "pr-swarm",
   "displayName": "PR Swarm",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Multi-agent PR review swarm and review-triage skills.",
   "author": {
     "name": "nicholls-inc",

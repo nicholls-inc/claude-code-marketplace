@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/pr-swarm-v0.4.0...pr-swarm-v0.5.0) (2026-11-21)
+
+
+### Features
+
+* **pr-swarm:** add R-3 spec review step to review-triage ([#261](https://github.com/nicholls-inc/claude-code-marketplace/issues/261)) ([cd0864c](https://github.com/nicholls-inc/claude-code-marketplace/commit/cd0864c5b874b57b1bde003e03c4c070bcd15c7a))
+
 ## [0.4.0](https://github.com/nicholls-inc/claude-code-marketplace/compare/pr-swarm-v0.3.0...pr-swarm-v0.4.0) (2026-11-21)
 
 
