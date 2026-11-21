@@ -103,6 +103,7 @@ Processes review comments and unanchored findings, resolves feedback within appr
 - `--dry-run`: Performs triage analysis without modifying code, pushing commits, resolving threads, or arming auto-merge.
 - `--merge-strategy <strategy>`: Merge strategy (`squash`, `merge`, or `rebase`; defaults to repository standard, typically `squash`).
 - `--local --base <ref> [--push-ref <refspec>] [--push-remote <remote>]`: Triage without a pull request and without any `gh` call. Runs unattended, takes every pr-swarm finding as a unit, commits fixes with the `PR-Swarm-Automated: true` trailer, and pushes them with `git push <remote> <refspec>` only when `--push-ref` is given (`--push-remote` defaults to `origin`). Never arms a merge. Ends with a JSON result carrying the verdict, rounds, commits, dispositions (deferred items included) and the last pr-swarm contract.
+- `--spec <path> --poteto-skill <path>`: After the triage loop, run one R-3 step that reads poteto-mode's `SKILL.md` at `--poteto-skill` and reviews the final diff against the spec at `--spec`. It never edits code and writes nothing to GitHub. The result gains `r3: {verdict, trigger?, findings[], deviations[], tip}`, where `verdict` is `pass`, `changes`, `escalate` (with a `trigger` from a fixed list) or `unavailable` (either file unreadable, one flag without the other, or the tip moved). Works in GitHub mode and with `--local`. In GitHub mode, auto-merge is not armed unless `r3` is `pass` on the HEAD being armed.
 
 #### Triage Workflow
 
@@ -118,7 +119,8 @@ Processes review comments and unanchored findings, resolves feedback within appr
    ```
    and pushes to the PR branch.
 5. **Thread Resolution**: Replies to bot/swarm threads with commit SHAs and marks threads resolved.
-6. **Auto-Merge Preconditions**: Verifies required checks, branch protection, dismiss-stale-approvals settings, and arms auto-merge only when all safety criteria are met.
+6. **R-3 Spec Review** (with `--spec` and `--poteto-skill`): Reviews the final diff against the spec in poteto-mode, read-only, and reports a verdict with findings and deviations.
+7. **Auto-Merge Preconditions**: Verifies required checks, branch protection, dismiss-stale-approvals settings, and arms auto-merge only when all safety criteria are met.
 
 ---
 

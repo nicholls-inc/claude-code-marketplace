@@ -21,8 +21,10 @@ description: >
   optional PR number or URL, plus `--dry-run` for zero GitHub writes. With
   `--local --base <ref>` it needs no pull request and makes no `gh` call: its
   units are pr-swarm's findings, fixes go to `--push-ref` or stay local, and
-  it ends with a JSON result.
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Skill, AskUserQuestion
+  it ends with a JSON result. With `--spec <path> --poteto-skill <path>`, one
+  read-only R-3 step after the loop reviews the final diff against the spec
+  in poteto-mode and adds an `r3` verdict to the result.
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Skill, AskUserQuestion, Agent
 ---
 
 # Review Triage
@@ -85,6 +87,7 @@ Deleting a row below is a spec change, not a refactor.
 | **INV-6 Ambiguity never terminates** | An ambiguous item is never a reason to end the run early or to ask a question in unattended mode. It goes to `deferred` and is reported. | Step 4 and Step 7 | N/A — ambiguity has exactly one outlet |
 | **INV-7 Dry-run writes nothing** | With `--dry-run`, zero GitHub writes and zero pushes occur: no comment, no reply, no resolve, no `gh pr merge`, no `git push`. | Guard on every mutating command | Abort the command, report `INVARIANT_VIOLATION: INV-7` |
 | **INV-8 Commit trailer** | Every commit this skill creates carries the trailer line `PR-Swarm-Automated: true`, verbatim, in the commit message's final trailer block — no exceptions, including a rebase result, an amend, and a commit made in a round that later fails another invariant. Verified by reading the commit back (`git log -1 --format=%B`) **before** the push. The CI workflow's self-push guard matches this string, not the pushing identity. | Immediately after every `git commit`, before the matching `git push` (Step 4) | Amend to add the trailer and re-verify. If the trailer still cannot be confirmed, **do not push**: report `INVARIANT_VIOLATION: INV-8`, bucket the unit `deferred` with `gate: "error"`, and stop the loop |
+| **INV-9 R-3 never edits** | The R-3 step (Step 5b) writes nothing: no edit, no commit, no push, no GitHub write. `HEAD` and `git status --porcelain` are read before and after it and must be unchanged. Its `r3.verdict` is `pass` only on a completed review of the final tip; every other outcome is `changes`, `escalate` or `unavailable`, and an unreadable spec or poteto-mode `SKILL.md` is `unavailable`, never a failed run. | Step 5b, before and after the review | Set `r3.verdict` to `unavailable` with the reason, push nothing more, skip Step 6, report `INVARIANT_VIOLATION: INV-9` |
 
 INV-1 restated, because it is the one an eager agent rationalises away: this
 skill authors fixes. An agent that both authors a fix and approves it has
@@ -139,6 +142,21 @@ add up to this:
   commits stay on the local `HEAD`. INV-8 holds unchanged.
 - **No merge.** Step 6 is skipped, the result carries the final verdict for
   the caller to act on, and INV-5 reports `n/a`.
+
+## R-3 spec review (`--spec`, `--poteto-skill`)
+
+```
+--spec <path> --poteto-skill <path>
+```
+
+For work built against an approved spec. `--spec` is the spec file and
+`--poteto-skill` is poteto-mode's `SKILL.md`; the caller supplies both paths
+and this plugin hard-codes neither. With both, Step 5b runs once after the
+loop and reviews the final diff against the spec, read-only (INV-9), and the
+result carries an `r3` block. With neither, Step 5b does not run and `r3` is
+absent. With only one, `r3` is `unavailable`. It works in both GitHub mode
+and `--local`, combines with `--dry-run`, and writes nothing to GitHub in
+either mode.
 
 ## Narration
 
@@ -316,16 +334,16 @@ bookkeeping (INV-4, `marker_sha`) assumes it. Do not give `pr-swarm`
 the review: a fork reports back as a task notification in a later turn, which
 would leave this skill triaging a PR whose review has not landed.
 
-**This skill dispatches no subagents of its own.** `Agent` is deliberately
-absent from its `allowed-tools`: every reviewer runs inside `pr-swarm`, which
-owns the dispatch mode for all of them (see *Dispatch mode* in
+**This skill dispatches no subagents of its own, except in Step 5b.** Every
+reviewer of the loop runs inside `pr-swarm`, which owns the dispatch mode for
+all of them (see *Dispatch mode* in
 `${CLAUDE_PLUGIN_ROOT}/skills/pr-swarm/SKILL.md` — every `Agent` call there passes
 `run_in_background: false` wherever the harness offers the parameter, and
-treats its absence as a question to check rather than an answer). If a
-future change to this skill needs a subagent, it adds `Agent` to
-`allowed-tools` **and** states the same flag at the call site; inheriting the
-harness default is what turned one parallel round into 25 minutes of wakeup
-polling on PR #24.
+treats its absence as a question to check rather than an answer). `Agent` is
+in `allowed-tools` for Step 5b alone, and that call site states the same
+flag. Any later change that needs a subagent states it at its call site too;
+inheriting the harness default is what turned one parallel round into 25
+minutes of wakeup polling on PR #24.
 
 ### What comes back — a JSON object, not prose
 
@@ -854,10 +872,121 @@ or new units appeared). Exit the loop when **any** of:
 - interactive mode and the user interrupts — stop at the next checkpoint and
   print the report.
 
+## Step 5b — R-3 spec review (only with `--spec` and `--poteto-skill`)
+
+Runs once, after the loop has exited for any reason and before Step 6. It is
+skipped, and `r3` is absent from the result, when neither flag was given. A
+run that stopped on an `INVARIANT_VIOLATION` does not run it either: `r3` is
+`unavailable` with that violation as the reason.
+
+R-3 is a reviewer, not a builder. The loop above may have pushed fixes; this
+step judges the result and changes nothing, so the work it passes was not
+written by the judgment that passes it (INV-9).
+
+### The `r3` block
+
+```json
+"r3": {
+  "verdict": "pass | changes | escalate | unavailable",
+  "trigger": "<one id from the trigger table; present only on escalate>",
+  "findings": [
+    {"ref": "<spec item, e.g. Outcome 3, I4, a constraint, or null>",
+     "location": "<file:line | general>",
+     "body": "<what is wrong and why>",
+     "deferred": false}
+  ],
+  "deviations": [
+    {"ref": "<spec item or null>", "what": "<how the work departs from the spec>",
+     "why": "<why every outcome, constraint and invariant still holds>"}
+  ],
+  "tip": "<the SHA reviewed, or null when none was>",
+  "spec": "<--spec as given>",
+  "poteto_skill": "<--poteto-skill as given>",
+  "reason": "<why, on unavailable; null otherwise>"
+}
+```
+
+| `verdict` | Meaning |
+| --- | --- |
+| `pass` | The diff meets the spec's outcomes, constraints, invariants and non-goals. Deviations may be listed; each keeps all of them intact |
+| `changes` | The diff falls short of the spec in a way a builder can fix without changing the spec: a missing part of an outcome, a broken invariant with a clear fix, a missing test the spec asks for. Each finding names the gap |
+| `escalate` | The work hits one of the triggers below and needs the spec's owner. `trigger` names exactly one |
+| `unavailable` | No judgment was reached. `reason` says why |
+
+Escalation triggers, a fixed list. An `escalate` whose trigger is not one of
+these ids is not emitted: report `unavailable` with the reason instead.
+
+| `trigger` | When |
+| --- | --- |
+| `outcome-changed` | An outcome of the spec is dropped or changed |
+| `constraint-broken` | A constraint or invariant is broken by a deliberate departure from the spec. A defect a builder can fix within the spec is `changes` |
+| `undescribed-change` | Something the spec's owner sees or uses changes in a way the spec did not describe |
+| `outgrew-ticket` | The work outgrows its ticket: the part of the spec it was built for |
+| `unverifiable` | The work cannot be verified against the spec |
+
+Style, naming, how the work is split, and wording the spec did not pin down
+are not triggers and not `changes`; at most they are deviations. A finding
+from `pr-swarm`'s crosscheck lenses feeds R-3's judgment and never escalates
+on its own.
+
+### Procedure
+
+1. **Check the flags.** Exactly one of the two given ⇒ `unavailable`,
+   reason "`--spec` and `--poteto-skill` must be given together".
+2. **Read both files** with `Read`. Either missing, unreadable or empty ⇒
+   `unavailable`, reason naming the path and the error. Do not search for
+   another copy: the caller chose the path, and a guessed spec is a review
+   against the wrong contract.
+3. **Fix the tip and the diff.**
+   - `--local`: `tip = git rev-parse HEAD`; the diff is
+     `git diff <base>...<tip>`.
+   - GitHub mode: `tip` is `headRefOid` from `gh pr view <N> --json headRefOid`;
+     the diff is `gh pr diff <N>`. Both are reads.
+
+   Record `tip`, the local `git rev-parse HEAD` and `git status --porcelain`
+   now, for INV-9. In GitHub mode `tip` is the remote head and the local
+   `HEAD` may differ, so INV-9 compares both.
+4. **Review in poteto-mode.** Follow the `SKILL.md` read in item 2 as a
+   reviewer of that diff, with this step's rules winning wherever the two
+   conflict:
+   - **Read-only.** No `Edit`, no `Write` to the repository, no commit, no
+     push, no GitHub write. poteto-mode's build and PR playbooks do not apply.
+   - **No questions.** Never `AskUserQuestion`. Where poteto-mode would ask
+     the operator, record a finding with `deferred: true` instead.
+   - **Foreground, read-only subagents only.** Any `Agent` call passes
+     `run_in_background: false` (Step 2, *This skill dispatches no
+     subagents*), and the step waits for each one's result. Its brief
+     carries this step's read-only and no-questions rules, and where the
+     harness offers a read-only agent type, use it.
+   - **The checks.** Compare the diff against every outcome, constraint,
+     invariant, non-goal and acceptance check in the spec. Read
+     `pr_swarm_result` as input, the `byfuglien` and `hellebuyck` findings
+     included; when no `pr-swarm` run produced one, review without it. Read
+     code beyond the diff where a judgment needs it. A change
+     to the spec file itself is a finding that rules out `pass`: an approved
+     spec is not edited by the work it authorises.
+   - **No pass over an open question.** A `deferred` finding rules out
+     `pass`. It is `escalate` with the trigger it touches when only the
+     spec's owner can answer it, and `changes` otherwise.
+5. **Check INV-9.** Re-read the tip (the same command as item 3), the local
+   `HEAD` and `git status --porcelain`. Any of them differing from item 3 ⇒
+   `unavailable`.
+   If the change is this step's own (a dirty tree or a new local commit),
+   that is also `INVARIANT_VIOLATION: INV-9`. Push nothing.
+6. **Emit `r3`**. Under `--local`, `r3.tip` equals the result's
+   `new_head_sha` whenever it is not `null`. Narrate one line:
+   `[triage] step 5b — r3=<verdict> tip=<short> findings=<n> deviations=<n>`.
+   Every outcome other than a completed review of an unmoved tip is
+   `unavailable`. A step that never reports leaves the caller with no `r3`
+   block, and the caller reads that as `unavailable` too.
+
 ## Step 6 — Arm auto-merge (six preconditions, re-derived here)
 
 Skipped entirely in `--dry-run` (INV-7), under `--local`, and when INV-2
-failed.
+failed. Also skipped when Step 5b ran and `r3` is not `pass` with `r3.tip`
+equal to HEAD read here: an arm that outlives the run must not stand on a
+spec review that failed, did not finish, or judged another commit. Report
+that skip in `automerge.error` with the `r3` verdict and tip.
 
 Take the five pre-arm reads — preconditions 1–4 **and 6** — **now, in this
 round**, immediately before arming. A boolean inherited from an earlier round
@@ -1046,7 +1175,10 @@ Under it, in this order:
    with the command and raw output it was derived from in this round. When
    armed, print `head_sha_armed_against` and the post-arm `new_head_sha` on
    that line, so the reader sees they match without opening the JSON.
-5. **Invariant line** — `INV-1..INV-8: ok`, or each violated ID with detail.
+5. **R-3 line** — when Step 5b ran: the verdict, the trigger on `escalate`,
+   the tip, then each finding and deviation on its own line. A `deferred`
+   finding is listed with the deferred items above as well.
+6. **Invariant line** — `INV-1..INV-9: ok`, or each violated ID with detail.
 
 **Unattended** — end with exactly this JSON block and nothing after it:
 
@@ -1184,7 +1316,8 @@ Under it, in this order:
     "INV-5_automerge_gate": "ok",
     "INV-6_ambiguity_non_terminal": "ok",
     "INV-7_dry_run": "n/a",
-    "INV-8_commit_trailer": "ok"
+    "INV-8_commit_trailer": "ok",
+    "INV-9_r3_never_edits": "n/a"
   },
   "degradations": ["greptile did not report within the 5m window"],
   "narration": ["[triage] step 0 — mode=unattended dry_run=false round=0/5"]
@@ -1205,6 +1338,11 @@ Under it, in this order:
 - Each `commits[]` entry adds `pushed` (boolean).
 - `units_threads` and `units_top_level_comments` are `0`, `automerge` is
   omitted, and `INV-5_automerge_gate` is `"n/a"`.
+
+With `--spec` and `--poteto-skill`, both result shapes add the `r3` block
+from Step 5b at the top level, and `INV-9_r3_never_edits` is `ok` or the
+violation; it is `n/a` when Step 5b did not run. `r3` is never folded into
+`verdict` or `dispositions`: the caller reads the two verdicts side by side.
 
 `unresolved_actionable_remaining` is `true` whenever a unit that would be
 actionable could not be safely auto-fixed (`gate: "error"`), or INV-2 failed —
@@ -1285,6 +1423,10 @@ degradation is listed in the report's `degradations`.
   treat the new HEAD as new work. If `--disable-auto` itself fails, that is
   `INVARIANT_VIOLATION: INV-5` and the run stops — the PR is armed on evidence
   that no longer describes it, and no further automated action is safe.
+- **R-3 cannot run** (one flag without the other, an unreadable spec or
+  poteto-mode `SKILL.md`, a tip that moved during the review) — `r3.verdict`
+  is `unavailable` with the reason. The run still ends with its full report,
+  and Step 6 does not arm.
 - **A commit lands without the trailer** — this one does not degrade. Amend
   and re-verify; if the trailer still cannot be confirmed, do not push at all
   (INV-8). A push that the workflow's guard cannot recognise is how an
@@ -1309,6 +1451,8 @@ degradation is listed in the report's `degradations`.
   renamed or recomputed here. Commands there marked unproven have been
   schema-introspected, not executed; a failure from one of those is a
   degradation to report, not a reason to improvise flags.
+- **poteto-mode's `SKILL.md`**, only for Step 5b, at the path the caller
+  passes in `--poteto-skill`. This plugin ships no copy and names no path.
 - `gh` CLI (`pr`, `api`, `repo`) and `git`. Locally both need
   `dangerouslyDisableSandbox: true`.
 
